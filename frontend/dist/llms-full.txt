@@ -25,14 +25,14 @@
 | $DIS | Walt Disney Co | $116.75 | 75/100 | 66.4 | 1.62x | $106.24 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/dis.html |
 | $GM | General Motors Co | $86.16 | 75/100 | 53.9 | 1.65x | $78.41 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/gm.html |
 | $AMZN | Amazon.com Inc | $259.30 | 75/100 | 54.2 | 2.52x | $235.96 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/amzn.html |
-| $CCL | Carnival Corp | $29.58 | 75/100 | 61.4 | 1.57x | $26.92 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/ccl.html |
+| $CCL | Carnival Corp | $29.58 | 75/100 | 62.0 | 1.57x | $26.92 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/ccl.html |
 | $SBUX | Starbucks Corp | $105.41 | 75/100 | 60.2 | 1.45x | $95.92 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/sbux.html |
 | $GE | GE Aerospace | $323.24 | 75/100 | 56.7 | 1.37x | $294.15 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/ge.html |
 | $DECK | Deckers Outdoor | $86.71 | 70/100 | 56.8 | 1.11x | $78.91 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/deck.html |
 | $HOOD | Robinhood Markets | $80.91 | 70/100 | 32.0 | 2.03x | $73.63 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/hood.html |
 | $SNAP | Snap Inc | $4.96 | 70/100 | 35.4 | 1.86x | $4.51 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/snap.html |
 | $KLAC | KLA Corp | $138.49 | 70/100 | 35.1 | 2.49x | $126.03 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/klac.html |
-| $MBLY | Mobileye Global | $5.73 | 70/100 | 36.3 | 2.35x | $5.21 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mbly.html |
+| $MBLY | Mobileye Global | $5.73 | 70/100 | 36.3 | 2.36x | $5.21 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mbly.html |
 | $DUOL | Duolingo Inc | $160.42 | 65/100 | 61.1 | 6.90x | $145.98 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/duol.html |
 | $UBER | Uber Technologies | $68.59 | 65/100 | 50.3 | 2.07x | $62.42 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/uber.html |
 | $TSLA | Tesla Inc | $358.22 | 60/100 | 42.4 | 1.99x | $325.98 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/tsla.html |
@@ -60,7 +60,7 @@
 | $MPWR | Monolithic Power Systems | $1190.44 | 45/100 | 45.0 | 2.54x | $1083.30 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mpwr.html |
 | $ON | ON Semiconductor | $63.31 | 45/100 | 34.2 | 2.34x | $57.61 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/on.html |
 | $MRVL | Marvell Technology | $141.20 | 45/100 | 26.2 | 2.42x | $128.49 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mrvl.html |
-| $AMAT | Applied Materials | $332.71 | 45/100 | 30.5 | 2.10x | $302.77 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/amat.html |
+| $AMAT | Applied Materials | $332.72 | 45/100 | 30.5 | 2.10x | $302.78 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/amat.html |
 | $ARM | Arm Holdings plc | $174.62 | 45/100 | 31.1 | 2.68x | $158.90 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/arm.html |
 | $DDOG | Datadog Inc | $179.04 | 45/100 | 28.3 | 3.41x | $162.93 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/ddog.html |
 | $MU | Micron Technology | $690.00 | 45/100 | 31.3 | 2.66x | $627.90 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mu.html |
@@ -73,14 +73,14 @@
 | $PANW | Palo Alto Networks | $313.84 | 35/100 | 32.8 | 2.19x | $285.59 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/panw.html |
 | $PLTR | Palantir Technologies | $160.38 | 35/100 | 31.2 | 2.06x | $145.95 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/pltr.html |
 | $AFRM | Affirm Holdings | $68.11 | 35/100 | 41.5 | 2.33x | $61.98 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/afrm.html |
+| $PFE | Pfizer Inc | $29.39 | 35/100 | 53.5 | 1.66x | $26.74 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/pfe.html |
 | $MRNA | Moderna Inc | $254.19 | 30/100 | 63.7 | 0.98x | $231.31 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mrna.html |
 | $MDB | MongoDB Inc | $312.83 | 27/100 | 37.4 | 1.24x | $284.68 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mdb.html |
 | $ZS | Zscaler Inc | $197.66 | 25/100 | 37.5 | 1.13x | $179.87 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/zs.html |
-| $PFE | Pfizer Inc | $29.39 | 25/100 | 49.5 | 1.66x | $26.74 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/pfe.html |
 | $SHOP | Shopify Inc | $148.91 | 20/100 | 42.8 | 2.76x | $135.51 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/shop.html |
 | $XOM | Exxon Mobil Corp | $165.87 | 20/100 | 39.4 | 1.95x | $150.94 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/xom.html |
 | $OXY | Occidental Petroleum | $56.38 | 20/100 | 33.5 | 1.47x | $51.31 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/oxy.html |
-| $PARA | Paramount Global | $0.11 | 15/100 | 42.6 | 17.65x | $0.10 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/para.html |
+| $PARA | Paramount Global | $0.12 | 15/100 | 42.6 | 17.65x | $0.11 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/para.html |
 | $BA | Boeing Co | $173.40 | 15/100 | 38.5 | 5.00x | $157.79 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/ba.html |
 | $INTC | Intel Corp | $56.28 | 15/100 | 25.7 | 3.91x | $51.21 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/intc.html |
 | $SMH | VanEck Semiconductor ETF | $463.96 | 88/100 | 31.4 | 1.68x | $422.20 | EXTREME FEAR ACCUMULATION (80% BARBELL) | https://truthofmarket.com/stocks/smh.html |
