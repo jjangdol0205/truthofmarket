@@ -3490,7 +3490,7 @@ function renderModals(state) {
           <div data-legal-section="support" style="border-top:1px solid var(--border); padding-top:12px; margin-top:12px;">
             <h4 style="color:#ffffff; font-size:0.95rem; font-weight:800; margin-bottom:6px;">4. Customer Support & Billing Inquiries</h4>
             <p style="color:var(--muted);">
-              • <b>Official Support Email</b>: <a href="mailto:support@truthofmarket.com" style="color:#60a5fa; font-weight:700;">support@truthofmarket.com</a><br/>
+              • <b>Official Support Email</b>: <a href="mailto:beable9489@gmail.com" style="color:#60a5fa; font-weight:700;">beable9489@gmail.com</a><br/>
               • <b>Merchant of Record</b>: Lemon Squeezy, LLC (<a href="https://app.lemonsqueezy.com/my-orders" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;">Manage Orders & Receipts ↗</a>)<br/>
               • <b>Public Broadcast Desk</b>: <a href="https://t.me/truthofmarketss" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;">t.me/truthofmarketss (@truthofmarketss) ↗</a>
             </p>
@@ -4610,7 +4610,7 @@ function renderApp() {
           <span style="color:var(--border);">·</span>
           <a href="#legal-refund" class="btn-open-legal" data-legal-tab="refund" style="color:#93c5fd; text-decoration:none; font-weight:600;">Refund & Cancellation Policy</a>
           <span style="color:var(--border);">·</span>
-          <a href="mailto:support@truthofmarket.com" style="color:#93c5fd; text-decoration:none; font-weight:600;">Support: support@truthofmarket.com</a>
+          <a href="mailto:beable9489@gmail.com" style="color:#93c5fd; text-decoration:none; font-weight:600;">Support: beable9489@gmail.com</a>
           <span style="color:var(--border);">·</span>
           <span style="color:#cbd5e1; font-weight:600;">Operated by Yoonju Lee · KIDS-FIT Global Studio (Lemon Squeezy Store #296100 · <a href="https://kisfitglobal.com" target="_blank" rel="noopener noreferrer" style="color:#93c5fd; text-decoration:none;">kisfitglobal.com</a> &amp; <a href="https://truthofmarket.com" style="color:#93c5fd; text-decoration:none;">truthofmarket.com</a>)</span>
         </div>
