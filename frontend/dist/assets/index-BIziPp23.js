@@ -2894,6 +2894,50 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
             </button>
           </div>
         </div>
+
+        <!-- Module 04: Pro VIP 80:20 Barbell Portfolio Allocation & 1-Click Institutional Export Kit -->
+        <div style="background:#090d16; border:1px solid var(--border); border-top:2px solid #10b981; border-radius:4px; padding:18px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="font-size:0.7rem; font-family:var(--font-mono); font-weight:700; color:#34d399; letter-spacing:0.05em; text-transform:uppercase;">
+              👑 PRO VIP EXCLUSIVE · BARBELL REBALANCER & EXPORT KIT
+            </div>
+            <h3 style="font-size:1rem; font-weight:800; margin:6px 0; color:#ffffff;">
+              80:20 ($SMH : $XLV) Custom Portfolio Blueprint & 1-Click TradingView / CSV Kit
+            </h3>
+            <p style="font-size:0.78rem; color:var(--muted); margin-bottom:10px;">
+              Automatically allocates your <b class="mono" style="color:#fff;">$${proCapUsd.toLocaleString()}</b> account across core Semiconductor ETF ($SMH), Healthcare Shield ($XLV), and Top VIP Ignition slots, plus instant CSV &amp; TradingView exports:
+            </p>
+
+            <div style="background:#05080f; border:1px solid var(--border); border-radius:4px; padding:11px; font-size:0.76rem; margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.06);">
+                <span style="color:var(--muted);">⚡ Core Semiconductor ($SMH · 35%):</span>
+                <b class="mono" style="color:#34d399;">$${Math.round(proCapUsd * 0.35).toLocaleString()}</b>
+              </div>
+              <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.06);">
+                <span style="color:var(--muted);">🚀 Top 3 VIP Ignition Slots (3 × 15%):</span>
+                <b class="mono" style="color:#60a5fa;">$${Math.round(proCapUsd * 0.45).toLocaleString()} ($${perSlotUsd.toLocaleString()}/slot)</b>
+              </div>
+              <div style="display:flex; justify-content:space-between; padding:4px 0;">
+                <span style="color:var(--muted);">🛡️ Defensive Healthcare Shield ($XLV · 20%):</span>
+                <b class="mono" style="color:#fbbf24;">$${Math.round(proCapUsd * 0.20).toLocaleString()}</b>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:7px;">
+            <button type="button" class="btn btn-emerald" id="btnDownloadPro72Csv" style="width:100%; justify-content:center; padding:8px; font-weight:800;">
+              📥 Download Full 72-Stock VIP Action Sheet (.CSV)
+            </button>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:7px;">
+              <button type="button" class="btn" id="btnCopyTvWatchlist" style="justify-content:center; padding:8px; font-size:0.75rem; border-color:rgba(56,189,248,0.45); color:#38bdf8;">
+                📋 Copy TV 72-Watchlist
+              </button>
+              <button type="button" class="btn" id="btnCopyTvWebhookJson" style="justify-content:center; padding:8px; font-size:0.75rem; border-color:rgba(251,191,36,0.45); color:#fbbf24;">
+                🔔 Copy Alert Webhook JSON
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
       </div>
     </section>
@@ -5343,6 +5387,79 @@ function bindEvents() {
         showToast(`Updated Pro Position Sizing for $${rawVal.toLocaleString()} Account`);
       } else {
         showToast("Please enter an account size of at least $1,000");
+      }
+    });
+  }
+
+  // Pro VIP 1-Click 72-Stock CSV Export, TradingView Watchlist & Webhook JSON
+  const btnDownloadPro72Csv = document.getElementById("btnDownloadPro72Csv");
+  if (btnDownloadPro72Csv) {
+    btnDownloadPro72Csv.addEventListener("click", () => {
+      if (!state.isProUnlocked) {
+        openLicenseModal(false, "🔒 Upgrade to Pro VIP ($29/mo or $199 Lifetime) to download the full 72-Stock Institutional Action Sheet (.CSV).");
+        return;
+      }
+      const perSlot = Math.round((state.proPortfolioUsd || 30000) * 0.15);
+      const header = "Rank,Ticker,Company,Sector,PW_RSI_Score,Zone,Latest_Close,Entry_Trigger_MA60,Hard_Stop_Minus9Pct,Target_2X_TP1,Recommended_Shares_15Pct_Slot\n";
+      const rows = (state.stocks || []).map((s, idx) => {
+        const c = Number(s.close || 0);
+        const trig = Number(s.entry_trigger_price ?? s.ma60_price ?? c).toFixed(2);
+        const stp = Number(s.stop_loss_price ?? c * 0.91).toFixed(2);
+        const tp1 = Number(s.tp1_2x_price ?? c * 2.0).toFixed(2);
+        const sh = c > 0 ? Math.max(1, Math.floor(perSlot / c)) : 0;
+        return `${idx + 1},${s.ticker},"${(s.name_en || s.ticker).replace(/"/g, '""')}",${s.sector || "US Equity"},${s.score},${s.zone_code},${c.toFixed(2)},${trig},${stp},${tp1},${sh}`;
+      });
+      const blob = new Blob([header + rows.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `RightSideAlpha_VIP_72Stocks_${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast("📥 Downloaded Full 72-Stock VIP Action Sheet (.CSV)");
+    });
+  }
+
+  const btnCopyTvWatchlist = document.getElementById("btnCopyTvWatchlist");
+  if (btnCopyTvWatchlist) {
+    btnCopyTvWatchlist.addEventListener("click", async () => {
+      if (!state.isProUnlocked) {
+        openLicenseModal(false, "🔒 Upgrade to Pro VIP to copy the 1-Click TradingView 72-Ticker Institutional Watchlist.");
+        return;
+      }
+      const tickers = ["AMEX:SMH", "AMEX:XLV", "NASDAQ:QQQ"].concat((state.stocks || []).map((s) => s.ticker)).join(",");
+      try {
+        await navigator.clipboard.writeText(tickers);
+        showToast("📋 Copied 72-Stock + $SMH/$XLV TradingView Watchlist to Clipboard!");
+      } catch (_) {
+        showToast("TradingView Watchlist Ready");
+      }
+    });
+  }
+
+  const btnCopyTvWebhookJson = document.getElementById("btnCopyTvWebhookJson");
+  if (btnCopyTvWebhookJson) {
+    btnCopyTvWebhookJson.addEventListener("click", async () => {
+      if (!state.isProUnlocked) {
+        openLicenseModal(false, "🔒 Upgrade to Pro VIP to unlock the TradingView Automated Alert Webhook JSON.");
+        return;
+      }
+      const webhookJson = JSON.stringify({
+        platform: "truthofmarket.com",
+        signal: "RIGHT_SIDE_IGNITION",
+        ticker: "{{ticker}}",
+        close: "{{close}}",
+        volume: "{{volume}}",
+        stop_loss_9pct: "{{plot_0}}",
+        action: "BUY_15PCT_SLOT"
+      }, null, 2);
+      try {
+        await navigator.clipboard.writeText(webhookJson);
+        showToast("🔔 Copied TradingView Webhook JSON Payload to Clipboard!");
+      } catch (_) {
+        showToast("Webhook JSON Ready");
       }
     });
   }
