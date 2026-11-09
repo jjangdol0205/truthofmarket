@@ -23,14 +23,14 @@ from PIL import Image, ImageDraw, ImageFont
 FFMPEG_EXE = imageio_ffmpeg.get_ffmpeg_exe()
 
 FONT_CANDIDATES_KR = [
-    r"D:\사업아이템\src\fonts\NanumSquareRoundEB.ttf",
-    r"D:\사업아이템\src\fonts\Pretendard-ExtraBold.otf",
+    r"D:\드림컴퍼니\3사업부\src\fonts\NanumSquareRoundEB.ttf",
+    r"D:\드림컴퍼니\3사업부\src\fonts\Pretendard-ExtraBold.otf",
     r"C:\Windows\Fonts\malgunbd.ttf",
 ]
 
 FONT_CANDIDATES_EN = [
-    r"D:\사업아이템\src\fonts\Pretendard-ExtraBold.otf",
-    r"D:\사업아이템\src\fonts\NanumSquareRoundEB.ttf",
+    r"D:\드림컴퍼니\3사업부\src\fonts\Pretendard-ExtraBold.otf",
+    r"D:\드림컴퍼니\3사업부\src\fonts\NanumSquareRoundEB.ttf",
     r"C:\Windows\Fonts\arialbd.ttf",
 ]
 

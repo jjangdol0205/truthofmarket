@@ -21,13 +21,13 @@ except Exception:
     pass
 
 FFMPEG_EXE = imageio_ffmpeg.get_ffmpeg_exe()
-FONT_BOLD = Path("d:/사업아이템/src/fonts/Pretendard-Black.otf")
+FONT_BOLD = Path("D:/드림컴퍼니/3사업부/src/fonts/Pretendard-Black.otf")
 if not FONT_BOLD.exists():
     FONT_BOLD = Path("C:/Windows/Fonts/arialbd.ttf")
 
-TOM_DIR = Path("d:/투자홈페이지/1_RightSideAlpha_미국주식터미널/viral_shorts_10_output")
-KFG_DIR = Path("d:/키즈핏 영문/flow_shorts_studio/ai_shorts_output")
-WORK_DIR = Path("d:/투자홈페이지/1_RightSideAlpha_미국주식터미널/data/_clean_levelup_work")
+TOM_DIR = Path("D:/드림컴퍼니/1사업부/viral_shorts_10_output")
+KFG_DIR = Path("D:/드림컴퍼니/2사업부/flow_shorts_studio/ai_shorts_output")
+WORK_DIR = Path("D:/드림컴퍼니/1사업부/data/_clean_levelup_work")
 WORK_DIR.mkdir(parents=True, exist_ok=True)
 
 

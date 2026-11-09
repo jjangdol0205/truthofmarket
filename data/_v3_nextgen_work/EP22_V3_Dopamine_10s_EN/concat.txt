@@ -1,0 +1,4 @@
+file 'D:/드림컴퍼니/1사업부/data/_v3_nextgen_work/EP22_V3_Dopamine_10s_EN/beat_00_v.mp4'
+file 'D:/드림컴퍼니/1사업부/data/_v3_nextgen_work/EP22_V3_Dopamine_10s_EN/beat_01_v.mp4'
+file 'D:/드림컴퍼니/1사업부/data/_v3_nextgen_work/EP22_V3_Dopamine_10s_EN/beat_02_v.mp4'
+file 'D:/드림컴퍼니/1사업부/data/_v3_nextgen_work/EP22_V3_Dopamine_10s_EN/beat_03_v.mp4'

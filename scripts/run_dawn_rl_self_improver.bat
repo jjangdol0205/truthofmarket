@@ -1,4 +1,4 @@
 @echo off
-cd /d "D:\투자홈페이지\1_RightSideAlpha_미국주식터미널"
+cd /d "D:\드림컴퍼니\1사업부"
 set PYTHONIOENCODING=utf-8
-python "D:\투자홈페이지\1_RightSideAlpha_미국주식터미널\scripts\hq_dawn_rl_self_improver.py" --notify
+python "D:\드림컴퍼니\1사업부\scripts\hq_dawn_rl_self_improver.py" --notify

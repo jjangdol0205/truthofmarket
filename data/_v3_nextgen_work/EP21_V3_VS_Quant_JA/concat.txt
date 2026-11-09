@@ -1,0 +1,8 @@
+file 'D:/드림컴퍼니/1사업부/data/_v3_nextgen_work/EP21_V3_VS_Quant_JA/beat_00_v.mp4'
+file 'D:/드림컴퍼니/1사업부/data/_v3_nextgen_work/EP21_V3_VS_Quant_JA/beat_01_v.mp4'
+file 'D:/드림컴퍼니/1사업부/data/_v3_nextgen_work/EP21_V3_VS_Quant_JA/beat_02_v.mp4'
+file 'D:/드림컴퍼니/1사업부/data/_v3_nextgen_work/EP21_V3_VS_Quant_JA/beat_03_v.mp4'
+file 'D:/드림컴퍼니/1사업부/data/_v3_nextgen_work/EP21_V3_VS_Quant_JA/beat_04_v.mp4'
+file 'D:/드림컴퍼니/1사업부/data/_v3_nextgen_work/EP21_V3_VS_Quant_JA/beat_05_v.mp4'
+file 'D:/드림컴퍼니/1사업부/data/_v3_nextgen_work/EP21_V3_VS_Quant_JA/beat_06_v.mp4'
+file 'D:/드림컴퍼니/1사업부/data/_v3_nextgen_work/EP21_V3_VS_Quant_JA/beat_07_v.mp4'

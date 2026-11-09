@@ -392,6 +392,40 @@ function bindEvents() {
     });
   });
 
+  // Beginner-Friendly Profit Simulator Controls (Hero Section)
+  document.querySelectorAll(".btn-easy-cap-preset").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const cap = Math.max(500, Number(btn.getAttribute("data-cap") || 10000));
+      state.easySimCapUsd = cap;
+      state.proPortfolioUsd = cap;
+      try {
+        localStorage.setItem("rsa_pro_cap_usd", String(cap));
+      } catch (_) {}
+      renderApp();
+    });
+  });
+
+  const easySimTickerSelect = document.getElementById("easySimTickerSelect");
+  if (easySimTickerSelect) {
+    easySimTickerSelect.addEventListener("change", (e) => {
+      state.easySimTicker = e.target.value;
+      renderApp();
+    });
+  }
+
+  const easySimCapitalInput = document.getElementById("easySimCapitalInput");
+  if (easySimCapitalInput) {
+    easySimCapitalInput.addEventListener("change", (e) => {
+      const cap = Math.max(500, Number(e.target.value || 10000));
+      state.easySimCapUsd = cap;
+      state.proPortfolioUsd = cap;
+      try {
+        localStorage.setItem("rsa_pro_cap_usd", String(cap));
+      } catch (_) {}
+      renderApp();
+    });
+  }
+
   // Sort Headers with Dynamic Directional Chevrons & Active State
   const updateSortHeaderIndicators = () => {
     document.querySelectorAll(".sort-header").forEach((el) => {

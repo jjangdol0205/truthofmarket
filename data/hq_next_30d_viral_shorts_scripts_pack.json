@@ -1,0 +1,68 @@
+{
+  "generated_at_kst": "2026-11-07 21:48:00 KST",
+  "mastering_guardrail": "상·하단 고정 배너/박스 100% 금지 — 본론 구간은 깔끔한 풀스크린 자막만 배치하고, 도메인(truthofmarket.com / kisfitglobal.com / kidsfit.co.kr) 유도는 마지막 2~3초 엔딩 컷에만 단독 노출",
+  "divisions": {
+    "TOM_truthofmarket": [
+      {
+        "ep": "NEXT-01",
+        "title": "$NVDA vs $AMD — Wall Street Dark-Pool Volume Just Flipped (PW-RSI Audit) #Shorts",
+        "hook_0_3s": "Stop guessing between NVIDIA and AMD—look at the 10-day institutional volume surge right now.",
+        "body_3_25s": "While retail traders chase green candles, our Post-Washout Right-Side Ignition model tracks exact 60-day moving average reclaim and -9% hard stop-loss floors across 72 US stocks.",
+        "ending_25_28s_domain_only": "truthofmarket.com — Compare $NVDA vs $AMD & run Free Position Doctor"
+      },
+      {
+        "ep": "NEXT-02",
+        "title": "Why 90% of $SOXL Traders Blow Up (And How the 80:20 $SMH:$XLV Barbell Wins) #Shorts",
+        "hook_0_3s": "Holding 3x leveraged $SOXL through a -24% semiconductor drawdown destroys compounding.",
+        "body_3_25s": "When the CNN-Edition Semiconductor Fear & Greed Index drops below 25 into Extreme Fear, shifting from 70:30 to an 80% $SMH and 20% $XLV contrarian barbell captured +1,929% over 26.8 years.",
+        "ending_25_28s_domain_only": "truthofmarket.com — Live $SMH Fear & Greed Terminal"
+      },
+      {
+        "ep": "NEXT-03",
+        "title": "Down -15% on $TSLA or $PLTR? Check Your Exact -9% Rule 1 Stop Floor #Shorts",
+        "hook_0_3s": "Never average down on a falling knife before checking your mechanical right-side trigger.",
+        "body_3_25s": "Enter your ticker and average buy price into Position Doctor to see whether institutional volume supports a rebound or requires an immediate capital-preservation exit.",
+        "ending_25_28s_domain_only": "truthofmarket.com — Free 1-Click Position Doctor"
+      }
+    ],
+    "KFG_kisfitglobal": [
+      {
+        "ep": "NEXT-01",
+        "title": "Why Mouth Breathing at Night Cuts Your Child's Growth Hormone by 34% #Shorts",
+        "hook_0_3s": "Look at your sleeping child tonight—if their mouth is open, they are losing deep N3 growth sleep.",
+        "body_3_25s": "Pediatric airway studies show nocturnal mouth breathing fragments slow-wave sleep between 10 PM and 2 AM, blunting pituitary IGF-1 and mimicking daytime ADHD symptoms.",
+        "ending_25_28s_domain_only": "kisfitglobal.com — Free 60-Sec US CDC Height & Airway Scan"
+      },
+      {
+        "ep": "NEXT-02",
+        "title": "Smart Kid Freezing on Math Word Problems? Use the 3-Box Singapore Bar Model #Shorts",
+        "hook_0_3s": "When a bright child freezes on math word problems, it's not a math problem—it's working memory overload.",
+        "body_3_25s": "A child's prefrontal cortex can only hold 3 to 4 chunks at once. Drawing a 3-box part-whole bar model and doing a 3-minute Feynman blank-page recall boosts test retention by 150%.",
+        "ending_25_28s_domain_only": "kisfitglobal.com — 5-Axis Brain LQ & Working Memory Scan"
+      },
+      {
+        "ep": "NEXT-03",
+        "title": "Calcium Carbonate vs. Citrate + K2 MK-7: Why Most Kids' Supplements Fail #Shorts",
+        "hook_0_3s": "Giving your child standard calcium carbonate at night can cause bloating without reaching their growth plates.",
+        "body_3_25s": "Pair acid-independent Calcium Citrate with Vitamin D3, Vitamin K2 MK-7 to activate osteocalcin, and morning Chelated Zinc to stimulate hepatic IGF-1.",
+        "ending_25_28s_domain_only": "kisfitglobal.com — Personalized Auxology & Bio-Nutrition Rx"
+      }
+    ],
+    "KFK_kidsfit_kr": [
+      {
+        "ep": "NEXT-01",
+        "title": "신생아 등센서·모로반사 때문에 새벽마다 깨는 아기, 통잠 재우는 과학적 공식 #Shorts",
+        "hook_0_3s": "눕히기만 하면 자지러지게 우는 신생아 등센서, 엄마 탓이 아니라 모로반사 때문입니다.",
+        "body_3_25s": "양팔을 위로 올린 나비잠 자세 스와들업으로 자궁 속 고유수용성 압박감을 재현하고, 3D 에어메쉬 베개로 태열과 단두증을 동시에 예방하면 첫 N3 서파수면이 2배 길어집니다.",
+        "ending_25_28s_domain_only": "kidsfit.co.kr — 0세~초등 발달진단 & 육아 셀렉트샵"
+      },
+      {
+        "ep": "NEXT-02",
+        "title": "초등 전후 갑자기 살찐 아이, 성조숙증으로 최종 키 7cm 손해 보는 이유 #Shorts",
+        "hook_0_3s": "또래보다 키가 크다고 안심했는데, 사실은 성장판이 2년 먼저 닫히고 있다면 어떨까요?",
+        "body_3_25s": "체지방의 아로마타제 효소는 성호르몬 전환을 촉진해 골연령을 가속시킵니다. 지금 질병관리청 백분위와 Khamis-Roche 비방사선 성인 예측키로 골연령 위험도를 무료 점검하세요.",
+        "ending_25_28s_domain_only": "kidsfit.co.kr — 60초 무료 성인 예측키 & 성조숙증 진단"
+      }
+    ]
+  }
+}

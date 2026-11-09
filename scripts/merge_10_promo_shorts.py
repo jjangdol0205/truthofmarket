@@ -9,7 +9,7 @@
   * RightSideAlpha (https://truthofmarket.com)
   * Telegram Bot (@SemifearGreedbot)
 - Automatically picks up downloaded Google Flow (.mp4) clips from:
-  1) `d:/투자홈페이지/3_AI영상_홍보_스튜디오/ai_shorts_output/flow_clips/epXX_shot1.mp4` (or `epXX.mp4`)
+  1) `D:/드림컴퍼니/1사업부/flow_shorts_studio/ai_shorts_output/flow_clips/epXX_shot1.mp4` (or `epXX.mp4`)
   2) User's Windows `Downloads` folder (most recent `.mp4` files downloaded from Google Flow)
 - Appends the 1080x1920 Live Website UI recording as the final CTA shot (Shot 4),
   synthesizes native US voiceover (`en-US-AndrewMultilingualNeural`),

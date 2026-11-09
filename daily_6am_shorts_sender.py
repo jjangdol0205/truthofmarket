@@ -384,9 +384,10 @@ def send_episode_package_to_telegram(ep_num: int, advance_state: bool = False) -
         return ""
 
     rsa_tok = _read_env_tok(str(BASE_DIR / ".env"), "RSA_TELEGRAM_BOT_TOKEN")
-    kfg_tok = _read_env_tok(r"D:\키즈핏 영문\.env", "TELEGRAM_BOT_TOKEN")
+    env_chat_id = _read_env_tok(str(BASE_DIR / ".env"), "HQ_TELEGRAM_CHAT_ID")
+    kfg_tok = _read_env_tok(r"D:\드림컴퍼니\2사업부\.env", "TELEGRAM_BOT_TOKEN")
     token = os.environ.get("RSA_TELEGRAM_BOT_TOKEN") or rsa_tok or os.environ.get("HQ_TELEGRAM_BOT_TOKEN") or telegram_service._resolve_token() or kfg_tok
-    chat_id = os.environ.get("HQ_TELEGRAM_CHAT_ID") or "755033799"
+    chat_id = os.environ.get("HQ_TELEGRAM_CHAT_ID") or env_chat_id or "-1003834697086"
     base = f"https://api.telegram.org/bot{token}"
 
     yt_title = kit["yt_title"].replace("getbreakai.com", "truthofmarket.com")

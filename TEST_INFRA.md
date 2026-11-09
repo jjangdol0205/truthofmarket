@@ -18,7 +18,7 @@ The test suite for **RightSideAlpha** is designed and implemented as an **opaque
 
 ## 2. 4-Tier Test Architecture
 
-The E2E test suite is organized into four hierarchical verification tiers in `d:\투자홈페이지\tests_e2e\`:
+The E2E test suite is organized into four hierarchical verification tiers in `D:\드림컴퍼니\1사업부\tests_e2e\`:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -80,7 +80,7 @@ Every feature defined in `PROJECT.md` is mapped to its test tier, test module, a
 ## 4. Directory Layout
 
 ```
-d:\투자홈페이지\
+D:\드림컴퍼니\1사업부\
 ├── tests_e2e\
 │   ├── __init__.py
 │   ├── conftest.py               # Shared test client fixture, base URL detection, oracle datasets

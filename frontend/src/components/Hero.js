@@ -78,6 +78,223 @@ export function renderHero(state) {
           <div class="kpi-sub" id="kpi4_sub">${t.kpi4_sub}</div>
         </div>
       </div>
+
+      <!-- BEGINNER-FRIENDLY 10-SECOND PROFIT PLAYBOOK & INTERACTIVE DOLLAR CALCULATOR -->
+      ${renderEasyProfitSimulator(state, netCagr)}
     </section>
+  `;
+}
+
+function renderEasyProfitSimulator(state, netCagrStr) {
+  const isPro = Boolean(state.isProUnlocked);
+  const allStocks = (state.stocks || []).filter((s) => s.ticker && !String(s.ticker).includes("."));
+  const ignStocks = allStocks.filter((s) => s.zone_code === "IGNITION_ZONE");
+  const selectableStocks = isPro
+    ? (ignStocks.length > 0 ? ignStocks : allStocks.slice(0, 12))
+    : allStocks.filter((s, idx) => s.ticker === "CELH" || idx < 5);
+  const defaultTicker = state.easySimTicker || (selectableStocks[0] && selectableStocks[0].ticker) || "CELH";
+  const selectedStock =
+    allStocks.find((s) => s.ticker === defaultTicker) ||
+    selectableStocks[0] || {
+      ticker: "CELH",
+      name_en: "Celsius Holdings",
+      close: 32.5,
+      score: 14.2,
+      vol_surge_10d: 1.65,
+      hist_2x_rate: 62.5,
+      zone_code: "IGNITION_ZONE",
+    };
+
+  const capUsd = Math.max(500, Number(state.easySimCapUsd || state.proPortfolioUsd || 10000));
+  const slotPct = 0.15; // 15% per single high-conviction swing slot (max 3 slots = 45% + 35% $SMH + 20% $XLV)
+  const slotUsd = Math.round(capUsd * slotPct);
+  const entryPrice = Math.max(1, Number(selectedStock.close || 32.5));
+  const shares = Math.max(1, Math.floor(slotUsd / entryPrice));
+  const actualPositionUsd = Math.round(shares * entryPrice);
+  const stopPrice = (entryPrice * 0.91).toFixed(2);
+  const maxLossUsd = Math.round(actualPositionUsd * 0.09);
+  const target1Price = (entryPrice * 1.5).toFixed(2);
+  const profit1Usd = Math.round(actualPositionUsd * 0.5);
+  const target2Price = (entryPrice * 2.0).toFixed(2);
+  const profit2Usd = Math.round(actualPositionUsd * 1.0);
+
+  const cagrDec = Math.max(0.1, (Number(netCagrStr) || 17.81) / 100);
+  const yr1Total = Math.round(capUsd * Math.pow(1 + cagrDec, 1));
+  const yr3Total = Math.round(capUsd * Math.pow(1 + cagrDec, 3));
+  const yr5Total = Math.round(capUsd * Math.pow(1 + cagrDec, 5));
+
+  const zone = selectedStock.zone_code || "IGNITION_ZONE";
+  const plainSignal =
+    zone === "IGNITION_ZONE"
+      ? {
+          badge: "🟢 GREEN LIGHT · BUY ZONE (IGNITION)",
+          color: "#34d399",
+          bg: "rgba(16,185,129,0.12)",
+          border: "rgba(16,185,129,0.4)",
+          summary: `Bottom is confirmed and institutions are buying (${Number(selectedStock.vol_surge_10d || 1.5).toFixed(2)}x volume). Enter now with a strict -9% stop-loss.`,
+        }
+      : zone === "WASHOUT_WATCH"
+      ? {
+          badge: "🟡 YELLOW LIGHT · WAIT & WATCH",
+          color: "#fbbf24",
+          bg: "rgba(245,158,11,0.12)",
+          border: "rgba(245,158,11,0.4)",
+          summary: `Stock is cheap (PW-RSI ${Number(selectedStock.score || 22).toFixed(1)}), but institutional buying volume hasn't triggered yet. Keep on watchlist.`,
+        }
+      : {
+          badge: "🔴 RED LIGHT · DO NOT BUY YET",
+          color: "#f87171",
+          bg: "rgba(239,68,68,0.12)",
+          border: "rgba(239,68,68,0.4)",
+          summary: `Downtrend ("Falling Knife") is still active. Protect your cash until trend flips above 20-day & 60-day moving averages.`,
+        };
+
+  return `
+    <div id="easyProfitPlaybookSection" style="margin-top:16px; background:linear-gradient(180deg, rgba(16,24,44,0.96) 0%, rgba(10,14,24,0.98) 100%); border:1px solid rgba(52,211,153,0.38); border-radius:8px; padding:16px 18px; box-shadow:0 12px 32px rgba(0,0,0,0.35);">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid rgba(148,163,184,0.16);">
+        <div>
+          <div style="display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:0.68rem; font-weight:800; color:#34d399; background:rgba(16,185,129,0.14); border:1px solid rgba(16,185,129,0.35); padding:3px 9px; border-radius:999px; margin-bottom:6px;">
+            <span>💰</span>
+            <span>PLAIN-ENGLISH PROFIT PLAYBOOK · ZERO JARGON GUIDE</span>
+          </div>
+          <h2 style="font-size:1.08rem; font-weight:800; color:#ffffff; margin:0 0 4px 0;">
+            How Everyday Investors Understand &amp; Make Money Here in 3 Simple Steps
+          </h2>
+          <p style="font-size:0.8rem; color:#cbd5e1; margin:0; line-height:1.5;">
+            You don&apos;t need a PhD in quant finance. Follow the <b>Traffic-Light Signal</b> below, enter your capital, and copy the exact buy price, stop-loss, and profit target.
+          </p>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+          <span class="mono" style="font-size:0.7rem; color:#94a3b8; font-weight:700;">MY CAPITAL:</span>
+          ${[5000, 10000, 30000, 100000]
+            .map(
+              (amt) => `
+            <button type="button" class="btn btn-sm btn-easy-cap-preset" data-cap="${amt}" style="padding:4px 9px; font-size:0.72rem; font-family:var(--font-mono); font-weight:800; background:${
+                capUsd === amt ? "rgba(16,185,129,0.22)" : "rgba(15,23,42,0.8)"
+              }; border-color:${capUsd === amt ? "#10b981" : "var(--border)"}; color:${capUsd === amt ? "#34d399" : "#cbd5e1"}; cursor:pointer;">
+              $${amt.toLocaleString()}
+            </button>
+          `
+            )
+            .join("")}
+        </div>
+      </div>
+
+      <!-- 3-Step Plain-English Traffic-Light Strip -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:10px; margin-bottom:14px;">
+        <div style="background:rgba(15,23,42,0.75); border:1px solid rgba(16,185,129,0.28); border-left:3px solid #10b981; border-radius:6px; padding:10px 12px;">
+          <div style="font-size:0.72rem; font-weight:800; color:#34d399; font-family:var(--font-mono); margin-bottom:3px;">
+            STEP 1 · WHEN TO BUY (GREEN LIGHT)
+          </div>
+          <div style="font-size:0.8rem; font-weight:700; color:#ffffff; margin-bottom:3px;">
+            Buy Only &ldquo;IGNITION ZONE&rdquo; Stocks
+          </div>
+          <div style="font-size:0.74rem; color:#94a3b8; line-height:1.45;">
+            Means a great company dropped to a bargain price (<b>PW-RSI &le; 25</b>) AND big institutions just started buying heavily (<b>Volume &ge; 1.4x</b>).
+          </div>
+        </div>
+
+        <div style="background:rgba(15,23,42,0.75); border:1px solid rgba(245,158,11,0.28); border-left:3px solid #f59e0b; border-radius:6px; padding:10px 12px;">
+          <div style="font-size:0.72rem; font-weight:800; color:#fbbf24; font-family:var(--font-mono); margin-bottom:3px;">
+            STEP 2 · HOW NOT TO LOSE (-9% SHIELD)
+          </div>
+          <div style="font-size:0.8rem; font-weight:700; color:#ffffff; margin-bottom:3px;">
+            Set a -9.0% Auto Stop-Loss Immediately
+          </div>
+          <div style="font-size:0.74rem; color:#94a3b8; line-height:1.45;">
+            Amateurs lose money by holding losers down -50%. Cutting any false breakout at <b>-9.0%</b> keeps your account 99% safe to catch the next big winner.
+          </div>
+        </div>
+
+        <div style="background:rgba(15,23,42,0.75); border:1px solid rgba(56,189,248,0.28); border-left:3px solid #38bdf8; border-radius:6px; padding:10px 12px;">
+          <div style="font-size:0.72rem; font-weight:800; color:#38bdf8; font-family:var(--font-mono); margin-bottom:3px;">
+            STEP 3 · HOW TO LOCK IN BIG GAINS
+          </div>
+          <div style="font-size:0.8rem; font-weight:700; color:#ffffff; margin-bottom:3px;">
+            Take Profit at +50% to +100% (5.5x Reward)
+          </div>
+          <div style="font-size:0.74rem; color:#94a3b8; line-height:1.45;">
+            Risking $1 to make $5–$10 means even a <b>55% win rate</b> compounds your wealth at <b>+${netCagrStr}%/yr</b> after tax. Sell half at +100% so your principal is free!
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive 1:1 Dollar Action Ticket & Wealth Compounder -->
+      <div style="background:#080c15; border:1px solid rgba(56,189,248,0.3); border-radius:6px; padding:12px 14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <span class="mono" style="font-size:0.72rem; font-weight:800; color:#38bdf8;">🎯 LIVE 1:1 TRADE TICKET SIMULATOR:</span>
+            <select id="easySimTickerSelect" style="background:#0f172a; color:#ffffff; border:1px solid #38bdf8; border-radius:4px; padding:4px 8px; font-family:var(--font-mono); font-size:0.76rem; font-weight:700; cursor:pointer;">
+              ${selectableStocks
+                .map(
+                  (s) =>
+                    `<option value="${s.ticker}" ${s.ticker === selectedStock.ticker ? "selected" : ""}>$$${s.ticker} (${s.name_en || s.ticker}) — $${Number(
+                      s.close || 0
+                    ).toFixed(2)} [${s.zone_code === "IGNITION_ZONE" ? "🟢 BUY ZONE" : s.zone_code}]</option>`
+                )
+                .join("")}
+            </select>
+            <input
+              type="number"
+              id="easySimCapitalInput"
+              value="${capUsd}"
+              min="500"
+              step="500"
+              style="width:110px; background:#0f172a; color:#34d399; border:1px solid rgba(16,185,129,0.45); border-radius:4px; padding:4px 8px; font-family:var(--font-mono); font-size:0.76rem; font-weight:800;"
+              title="Enter your total portfolio capital in USD"
+            />
+          </div>
+          <span style="font-family:var(--font-mono); font-size:0.71rem; font-weight:800; color:${plainSignal.color}; background:${plainSignal.bg}; border:1px solid ${plainSignal.border}; padding:3px 9px; border-radius:4px;">
+            ${plainSignal.badge}
+          </span>
+        </div>
+
+        <div style="font-size:0.77rem; color:#e2e8f0; margin-bottom:10px; padding:7px 10px; background:rgba(30,41,59,0.55); border-radius:4px;">
+          <b>Plain-English Verdict for $${selectedStock.ticker}:</b> ${plainSignal.summary}
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(195px, 1fr)); gap:10px;">
+          <div style="background:#0d1424; border:1px solid var(--border); border-radius:5px; padding:9px 11px;">
+            <div class="mono" style="font-size:0.66rem; color:var(--muted);">① EXACT BUY AMOUNT (15% SLOT)</div>
+            <div class="mono" style="font-size:1.05rem; font-weight:800; color:#ffffff; margin-top:3px;">
+              $${actualPositionUsd.toLocaleString()} <span style="font-size:0.76rem; color:#38bdf8;">(${shares} shares)</span>
+            </div>
+            <div style="font-size:0.7rem; color:#94a3b8; margin-top:2px;">
+              Buy at <b>$${entryPrice.toFixed(2)}</b> · Keep 85% in $SMH/$XLV &amp; other slots
+            </div>
+          </div>
+
+          <div style="background:#0d1424; border:1px solid rgba(239,68,68,0.3); border-radius:5px; padding:9px 11px;">
+            <div class="mono" style="font-size:0.66rem; color:#f87171;">② IF WRONG: MAX LOSS (-9% STOP)</div>
+            <div class="mono" style="font-size:1.05rem; font-weight:800; color:#f87171; margin-top:3px;">
+              -$${maxLossUsd.toLocaleString()} <span style="font-size:0.74rem; color:#fca5a5;">(Stop @ $${stopPrice})</span>
+            </div>
+            <div style="font-size:0.7rem; color:#94a3b8; margin-top:2px;">
+              Only <b>-1.35%</b> of your total $${capUsd.toLocaleString()} portfolio!
+            </div>
+          </div>
+
+          <div style="background:#0d1424; border:1px solid rgba(16,185,129,0.35); border-radius:5px; padding:9px 11px;">
+            <div class="mono" style="font-size:0.66rem; color:#34d399;">③ IF RIGHT: TARGET PROFIT (+50% / +100%)</div>
+            <div class="mono" style="font-size:1.05rem; font-weight:800; color:#34d399; margin-top:3px;">
+              +$${profit1Usd.toLocaleString()} ~ +$${profit2Usd.toLocaleString()}
+            </div>
+            <div style="font-size:0.7rem; color:#94a3b8; margin-top:2px;">
+              +50% (@ $${target1Price}) · 2x Double (@ $${target2Price})
+            </div>
+          </div>
+
+          <div style="background:#0d1424; border:1px solid rgba(56,189,248,0.35); border-radius:5px; padding:9px 11px;">
+            <div class="mono" style="font-size:0.66rem; color:#38bdf8;">④ 5-YR PORTFOLIO COMPOUNDING (+${netCagrStr}%/YR)</div>
+            <div class="mono" style="font-size:1.05rem; font-weight:800; color:#38bdf8; margin-top:3px;">
+              $${capUsd.toLocaleString()} &rarr; $${yr5Total.toLocaleString()}
+            </div>
+            <div style="font-size:0.7rem; color:#94a3b8; margin-top:2px;">
+              1-Yr: <b>$${yr1Total.toLocaleString()}</b> · 3-Yr: <b>$${yr3Total.toLocaleString()}</b>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   `;
 }

@@ -885,7 +885,7 @@ async function evaluatePositionDoctor(data) {
         return {
           ticker: tClean,
           status_code: "TIME_STOP",
-          status_label: "⏳ 55-Day Time Stop Triggered (55일 시간 손절)",
+          status_label: "⏳ 55-Day Time Stop Triggered",
           return_pct: retPct,
           rule_triggered: "Rule 2 (55-Day Dead-Money Exit)",
           action_plan:
@@ -1967,9 +1967,7 @@ function renderHeader(state) {
 
         <div class="nav-actions">
           <div class="lang-switch" aria-label="Language Selector">
-            <button class="lang-btn ${lang === "en" ? "active" : ""}" data-lang="en">EN</button>
-            <button class="lang-btn ${lang === "jp" ? "active" : ""}" data-lang="jp">JP</button>
-            <button class="lang-btn ${lang === "kr" ? "active" : ""}" data-lang="kr">KR</button>
+            <button class="lang-btn active" data-lang="en">US · EN</button>
           </div>
 
           <span class="badge ${isPro ? "badge-ignition" : "badge-watch"}" id="proStatusBadge">
@@ -2153,7 +2151,224 @@ function renderHero(state) {
           <div class="kpi-sub" id="kpi4_sub">${t.kpi4_sub}</div>
         </div>
       </div>
+
+      <!-- BEGINNER-FRIENDLY 10-SECOND PROFIT PLAYBOOK & INTERACTIVE DOLLAR CALCULATOR -->
+      ${renderEasyProfitSimulator(state, netCagr)}
     </section>
+  `;
+}
+
+function renderEasyProfitSimulator(state, netCagrStr) {
+  const isPro = Boolean(state.isProUnlocked);
+  const allStocks = (state.stocks || []).filter((s) => s.ticker && !String(s.ticker).includes("."));
+  const ignStocks = allStocks.filter((s) => s.zone_code === "IGNITION_ZONE");
+  const selectableStocks = isPro
+    ? (ignStocks.length > 0 ? ignStocks : allStocks.slice(0, 12))
+    : allStocks.filter((s, idx) => s.ticker === "CELH" || idx < 5);
+  const defaultTicker = state.easySimTicker || (selectableStocks[0] && selectableStocks[0].ticker) || "CELH";
+  const selectedStock =
+    allStocks.find((s) => s.ticker === defaultTicker) ||
+    selectableStocks[0] || {
+      ticker: "CELH",
+      name_en: "Celsius Holdings",
+      close: 32.5,
+      score: 14.2,
+      vol_surge_10d: 1.65,
+      hist_2x_rate: 62.5,
+      zone_code: "IGNITION_ZONE",
+    };
+
+  const capUsd = Math.max(500, Number(state.easySimCapUsd || state.proPortfolioUsd || 10000));
+  const slotPct = 0.15; // 15% per single high-conviction swing slot (max 3 slots = 45% + 35% $SMH + 20% $XLV)
+  const slotUsd = Math.round(capUsd * slotPct);
+  const entryPrice = Math.max(1, Number(selectedStock.close || 32.5));
+  const shares = Math.max(1, Math.floor(slotUsd / entryPrice));
+  const actualPositionUsd = Math.round(shares * entryPrice);
+  const stopPrice = (entryPrice * 0.91).toFixed(2);
+  const maxLossUsd = Math.round(actualPositionUsd * 0.09);
+  const target1Price = (entryPrice * 1.5).toFixed(2);
+  const profit1Usd = Math.round(actualPositionUsd * 0.5);
+  const target2Price = (entryPrice * 2.0).toFixed(2);
+  const profit2Usd = Math.round(actualPositionUsd * 1.0);
+
+  const cagrDec = Math.max(0.1, (Number(netCagrStr) || 17.81) / 100);
+  const yr1Total = Math.round(capUsd * Math.pow(1 + cagrDec, 1));
+  const yr3Total = Math.round(capUsd * Math.pow(1 + cagrDec, 3));
+  const yr5Total = Math.round(capUsd * Math.pow(1 + cagrDec, 5));
+
+  const zone = selectedStock.zone_code || "IGNITION_ZONE";
+  const plainSignal =
+    zone === "IGNITION_ZONE"
+      ? {
+          badge: "🟢 GREEN LIGHT · BUY ZONE (IGNITION)",
+          color: "#34d399",
+          bg: "rgba(16,185,129,0.12)",
+          border: "rgba(16,185,129,0.4)",
+          summary: `Bottom is confirmed and institutions are buying (${Number(selectedStock.vol_surge_10d || 1.5).toFixed(2)}x volume). Enter now with a strict -9% stop-loss.`,
+        }
+      : zone === "WASHOUT_WATCH"
+      ? {
+          badge: "🟡 YELLOW LIGHT · WAIT & WATCH",
+          color: "#fbbf24",
+          bg: "rgba(245,158,11,0.12)",
+          border: "rgba(245,158,11,0.4)",
+          summary: `Stock is cheap (PW-RSI ${Number(selectedStock.score || 22).toFixed(1)}), but institutional buying volume hasn't triggered yet. Keep on watchlist.`,
+        }
+      : {
+          badge: "🔴 RED LIGHT · DO NOT BUY YET",
+          color: "#f87171",
+          bg: "rgba(239,68,68,0.12)",
+          border: "rgba(239,68,68,0.4)",
+          summary: `Downtrend ("Falling Knife") is still active. Protect your cash until trend flips above 20-day & 60-day moving averages.`,
+        };
+
+  return `
+    <div id="easyProfitPlaybookSection" style="margin-top:16px; background:linear-gradient(180deg, rgba(16,24,44,0.96) 0%, rgba(10,14,24,0.98) 100%); border:1px solid rgba(52,211,153,0.38); border-radius:8px; padding:16px 18px; box-shadow:0 12px 32px rgba(0,0,0,0.35);">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid rgba(148,163,184,0.16);">
+        <div>
+          <div style="display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:0.68rem; font-weight:800; color:#34d399; background:rgba(16,185,129,0.14); border:1px solid rgba(16,185,129,0.35); padding:3px 9px; border-radius:999px; margin-bottom:6px;">
+            <span>💰</span>
+            <span>PLAIN-ENGLISH PROFIT PLAYBOOK · ZERO JARGON GUIDE</span>
+          </div>
+          <h2 style="font-size:1.08rem; font-weight:800; color:#ffffff; margin:0 0 4px 0;">
+            How Everyday Investors Understand &amp; Make Money Here in 3 Simple Steps
+          </h2>
+          <p style="font-size:0.8rem; color:#cbd5e1; margin:0; line-height:1.5;">
+            You don&apos;t need a PhD in quant finance. Follow the <b>Traffic-Light Signal</b> below, enter your capital, and copy the exact buy price, stop-loss, and profit target.
+          </p>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+          <span class="mono" style="font-size:0.7rem; color:#94a3b8; font-weight:700;">MY CAPITAL:</span>
+          ${[5000, 10000, 30000, 100000]
+            .map(
+              (amt) => `
+            <button type="button" class="btn btn-sm btn-easy-cap-preset" data-cap="${amt}" style="padding:4px 9px; font-size:0.72rem; font-family:var(--font-mono); font-weight:800; background:${
+                capUsd === amt ? "rgba(16,185,129,0.22)" : "rgba(15,23,42,0.8)"
+              }; border-color:${capUsd === amt ? "#10b981" : "var(--border)"}; color:${capUsd === amt ? "#34d399" : "#cbd5e1"}; cursor:pointer;">
+              $${amt.toLocaleString()}
+            </button>
+          `
+            )
+            .join("")}
+        </div>
+      </div>
+
+      <!-- 3-Step Plain-English Traffic-Light Strip -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:10px; margin-bottom:14px;">
+        <div style="background:rgba(15,23,42,0.75); border:1px solid rgba(16,185,129,0.28); border-left:3px solid #10b981; border-radius:6px; padding:10px 12px;">
+          <div style="font-size:0.72rem; font-weight:800; color:#34d399; font-family:var(--font-mono); margin-bottom:3px;">
+            STEP 1 · WHEN TO BUY (GREEN LIGHT)
+          </div>
+          <div style="font-size:0.8rem; font-weight:700; color:#ffffff; margin-bottom:3px;">
+            Buy Only &ldquo;IGNITION ZONE&rdquo; Stocks
+          </div>
+          <div style="font-size:0.74rem; color:#94a3b8; line-height:1.45;">
+            Means a great company dropped to a bargain price (<b>PW-RSI &le; 25</b>) AND big institutions just started buying heavily (<b>Volume &ge; 1.4x</b>).
+          </div>
+        </div>
+
+        <div style="background:rgba(15,23,42,0.75); border:1px solid rgba(245,158,11,0.28); border-left:3px solid #f59e0b; border-radius:6px; padding:10px 12px;">
+          <div style="font-size:0.72rem; font-weight:800; color:#fbbf24; font-family:var(--font-mono); margin-bottom:3px;">
+            STEP 2 · HOW NOT TO LOSE (-9% SHIELD)
+          </div>
+          <div style="font-size:0.8rem; font-weight:700; color:#ffffff; margin-bottom:3px;">
+            Set a -9.0% Auto Stop-Loss Immediately
+          </div>
+          <div style="font-size:0.74rem; color:#94a3b8; line-height:1.45;">
+            Amateurs lose money by holding losers down -50%. Cutting any false breakout at <b>-9.0%</b> keeps your account 99% safe to catch the next big winner.
+          </div>
+        </div>
+
+        <div style="background:rgba(15,23,42,0.75); border:1px solid rgba(56,189,248,0.28); border-left:3px solid #38bdf8; border-radius:6px; padding:10px 12px;">
+          <div style="font-size:0.72rem; font-weight:800; color:#38bdf8; font-family:var(--font-mono); margin-bottom:3px;">
+            STEP 3 · HOW TO LOCK IN BIG GAINS
+          </div>
+          <div style="font-size:0.8rem; font-weight:700; color:#ffffff; margin-bottom:3px;">
+            Take Profit at +50% to +100% (5.5x Reward)
+          </div>
+          <div style="font-size:0.74rem; color:#94a3b8; line-height:1.45;">
+            Risking $1 to make $5–$10 means even a <b>55% win rate</b> compounds your wealth at <b>+${netCagrStr}%/yr</b> after tax. Sell half at +100% so your principal is free!
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive 1:1 Dollar Action Ticket & Wealth Compounder -->
+      <div style="background:#080c15; border:1px solid rgba(56,189,248,0.3); border-radius:6px; padding:12px 14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <span class="mono" style="font-size:0.72rem; font-weight:800; color:#38bdf8;">🎯 LIVE 1:1 TRADE TICKET SIMULATOR:</span>
+            <select id="easySimTickerSelect" style="background:#0f172a; color:#ffffff; border:1px solid #38bdf8; border-radius:4px; padding:4px 8px; font-family:var(--font-mono); font-size:0.76rem; font-weight:700; cursor:pointer;">
+              ${selectableStocks
+                .map(
+                  (s) =>
+                    `<option value="${s.ticker}" ${s.ticker === selectedStock.ticker ? "selected" : ""}>$$${s.ticker} (${s.name_en || s.ticker}) — $${Number(
+                      s.close || 0
+                    ).toFixed(2)} [${s.zone_code === "IGNITION_ZONE" ? "🟢 BUY ZONE" : s.zone_code}]</option>`
+                )
+                .join("")}
+            </select>
+            <input
+              type="number"
+              id="easySimCapitalInput"
+              value="${capUsd}"
+              min="500"
+              step="500"
+              style="width:110px; background:#0f172a; color:#34d399; border:1px solid rgba(16,185,129,0.45); border-radius:4px; padding:4px 8px; font-family:var(--font-mono); font-size:0.76rem; font-weight:800;"
+              title="Enter your total portfolio capital in USD"
+            />
+          </div>
+          <span style="font-family:var(--font-mono); font-size:0.71rem; font-weight:800; color:${plainSignal.color}; background:${plainSignal.bg}; border:1px solid ${plainSignal.border}; padding:3px 9px; border-radius:4px;">
+            ${plainSignal.badge}
+          </span>
+        </div>
+
+        <div style="font-size:0.77rem; color:#e2e8f0; margin-bottom:10px; padding:7px 10px; background:rgba(30,41,59,0.55); border-radius:4px;">
+          <b>Plain-English Verdict for $${selectedStock.ticker}:</b> ${plainSignal.summary}
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(195px, 1fr)); gap:10px;">
+          <div style="background:#0d1424; border:1px solid var(--border); border-radius:5px; padding:9px 11px;">
+            <div class="mono" style="font-size:0.66rem; color:var(--muted);">① EXACT BUY AMOUNT (15% SLOT)</div>
+            <div class="mono" style="font-size:1.05rem; font-weight:800; color:#ffffff; margin-top:3px;">
+              $${actualPositionUsd.toLocaleString()} <span style="font-size:0.76rem; color:#38bdf8;">(${shares} shares)</span>
+            </div>
+            <div style="font-size:0.7rem; color:#94a3b8; margin-top:2px;">
+              Buy at <b>$${entryPrice.toFixed(2)}</b> · Keep 85% in $SMH/$XLV &amp; other slots
+            </div>
+          </div>
+
+          <div style="background:#0d1424; border:1px solid rgba(239,68,68,0.3); border-radius:5px; padding:9px 11px;">
+            <div class="mono" style="font-size:0.66rem; color:#f87171;">② IF WRONG: MAX LOSS (-9% STOP)</div>
+            <div class="mono" style="font-size:1.05rem; font-weight:800; color:#f87171; margin-top:3px;">
+              -$${maxLossUsd.toLocaleString()} <span style="font-size:0.74rem; color:#fca5a5;">(Stop @ $${stopPrice})</span>
+            </div>
+            <div style="font-size:0.7rem; color:#94a3b8; margin-top:2px;">
+              Only <b>-1.35%</b> of your total $${capUsd.toLocaleString()} portfolio!
+            </div>
+          </div>
+
+          <div style="background:#0d1424; border:1px solid rgba(16,185,129,0.35); border-radius:5px; padding:9px 11px;">
+            <div class="mono" style="font-size:0.66rem; color:#34d399;">③ IF RIGHT: TARGET PROFIT (+50% / +100%)</div>
+            <div class="mono" style="font-size:1.05rem; font-weight:800; color:#34d399; margin-top:3px;">
+              +$${profit1Usd.toLocaleString()} ~ +$${profit2Usd.toLocaleString()}
+            </div>
+            <div style="font-size:0.7rem; color:#94a3b8; margin-top:2px;">
+              +50% (@ $${target1Price}) · 2x Double (@ $${target2Price})
+            </div>
+          </div>
+
+          <div style="background:#0d1424; border:1px solid rgba(56,189,248,0.35); border-radius:5px; padding:9px 11px;">
+            <div class="mono" style="font-size:0.66rem; color:#38bdf8;">④ 5-YR PORTFOLIO COMPOUNDING (+${netCagrStr}%/YR)</div>
+            <div class="mono" style="font-size:1.05rem; font-weight:800; color:#38bdf8; margin-top:3px;">
+              $${capUsd.toLocaleString()} &rarr; $${yr5Total.toLocaleString()}
+            </div>
+            <div style="font-size:0.7rem; color:#94a3b8; margin-top:2px;">
+              1-Yr: <b>$${yr1Total.toLocaleString()}</b> · 3-Yr: <b>$${yr3Total.toLocaleString()}</b>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   `;
 }
 
@@ -2430,6 +2645,20 @@ function renderStockTable(state) {
       : "";
 
   return `
+    <!-- Plain-English 5-Second Column Cheat Sheet for Everyday Investors -->
+    <div id="screenerPlainEnglishBar" style="background:rgba(13,20,36,0.9); border:1px solid rgba(56,189,248,0.22); border-radius:6px; padding:8px 12px; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:0.73rem; color:#cbd5e1;">
+      <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+        <span class="mono" style="background:rgba(56,189,248,0.14); color:#38bdf8; font-weight:800; font-size:0.66rem; padding:2px 6px; border-radius:3px;">📖 5s TABLE GUIDE</span>
+        <span><b style="color:#34d399;">IGNITION ZONE:</b> Ready to Buy Now</span>
+        <span style="color:var(--border);">|</span>
+        <span><b style="color:#fff;">PW-RSI (0–100):</b> Lower (&le;25) = Cheaper Bottom</span>
+        <span style="color:var(--border);">|</span>
+        <span><b style="color:#fff;">10d Vol:</b> &ge;1.4x = Institutions Buying</span>
+        <span style="color:var(--border);">|</span>
+        <span><b style="color:#fff;">2x Hit Rate:</b> % of Past Signals That Doubled (+100%)</span>
+      </div>
+      <span class="mono" style="font-size:0.68rem; color:#fbbf24; font-weight:700;">💡 Tip: Click any column header to sort!</span>
+    </div>
     <div class="table-wrap">
       <table class="stock-table" id="stockTable">
         <thead>
@@ -2894,6 +3123,50 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
             <button class="btn btn-purple" id="btnCopyPineScript" style="width:100%; justify-content:center; padding:9px;">
               ${t.tool3CopyBtn}
             </button>
+          </div>
+        </div>
+
+        <!-- Module 04: Pro VIP 80:20 Barbell Portfolio Allocation & 1-Click Institutional Export Kit -->
+        <div style="background:#090d16; border:1px solid var(--border); border-top:2px solid #10b981; border-radius:4px; padding:18px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="font-size:0.7rem; font-family:var(--font-mono); font-weight:700; color:#34d399; letter-spacing:0.05em; text-transform:uppercase;">
+              👑 PRO VIP EXCLUSIVE · BARBELL REBALANCER & EXPORT KIT
+            </div>
+            <h3 style="font-size:1rem; font-weight:800; margin:6px 0; color:#ffffff;">
+              80:20 ($SMH : $XLV) Custom Portfolio Blueprint & 1-Click TradingView / CSV Kit
+            </h3>
+            <p style="font-size:0.78rem; color:var(--muted); margin-bottom:10px;">
+              Automatically allocates your <b class="mono" style="color:#fff;">$${proCapUsd.toLocaleString()}</b> account across core Semiconductor ETF ($SMH), Healthcare Shield ($XLV), and Top VIP Ignition slots, plus instant CSV &amp; TradingView exports:
+            </p>
+
+            <div style="background:#05080f; border:1px solid var(--border); border-radius:4px; padding:11px; font-size:0.76rem; margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.06);">
+                <span style="color:var(--muted);">⚡ Core Semiconductor ($SMH · 35%):</span>
+                <b class="mono" style="color:#34d399;">$${Math.round(proCapUsd * 0.35).toLocaleString()}</b>
+              </div>
+              <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.06);">
+                <span style="color:var(--muted);">🚀 Top 3 VIP Ignition Slots (3 × 15%):</span>
+                <b class="mono" style="color:#60a5fa;">$${Math.round(proCapUsd * 0.45).toLocaleString()} ($${perSlotUsd.toLocaleString()}/slot)</b>
+              </div>
+              <div style="display:flex; justify-content:space-between; padding:4px 0;">
+                <span style="color:var(--muted);">🛡️ Defensive Healthcare Shield ($XLV · 20%):</span>
+                <b class="mono" style="color:#fbbf24;">$${Math.round(proCapUsd * 0.20).toLocaleString()}</b>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:7px;">
+            <button type="button" class="btn btn-emerald" id="btnDownloadPro72Csv" style="width:100%; justify-content:center; padding:8px; font-weight:800;">
+              📥 Download Full 72-Stock VIP Action Sheet (.CSV)
+            </button>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:7px;">
+              <button type="button" class="btn" id="btnCopyTvWatchlist" style="justify-content:center; padding:8px; font-size:0.75rem; border-color:rgba(56,189,248,0.45); color:#38bdf8;">
+                📋 Copy TV 72-Watchlist
+              </button>
+              <button type="button" class="btn" id="btnCopyTvWebhookJson" style="justify-content:center; padding:8px; font-size:0.75rem; border-color:rgba(251,191,36,0.45); color:#fbbf24;">
+                🔔 Copy Alert Webhook JSON
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -3492,7 +3765,7 @@ function renderModals(state) {
           <div data-legal-section="support" style="border-top:1px solid var(--border); padding-top:12px; margin-top:12px;">
             <h4 style="color:#ffffff; font-size:0.95rem; font-weight:800; margin-bottom:6px;">4. Customer Support & Billing Inquiries</h4>
             <p style="color:var(--muted);">
-              • <b>Official Support Email</b>: <a href="mailto:support@truthofmarket.com" style="color:#60a5fa; font-weight:700;">support@truthofmarket.com</a><br/>
+              • <b>Official Support Email</b>: <a href="mailto:beable9489@gmail.com" style="color:#60a5fa; font-weight:700;">beable9489@gmail.com</a><br/>
               • <b>Merchant of Record</b>: Lemon Squeezy, LLC (<a href="https://app.lemonsqueezy.com/my-orders" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;">Manage Orders & Receipts ↗</a>)<br/>
               • <b>Public Broadcast Desk</b>: <a href="https://t.me/truthofmarketss" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;">t.me/truthofmarketss (@truthofmarketss) ↗</a>
             </p>
@@ -4376,10 +4649,10 @@ const defaultView =
 // Auto-migrate any stale legacy placeholder URLs stored in localStorage
 (function migrateLegacyLocalStorage() {
   try {
-    if (localStorage.getItem("rsa_lang_v3_en") && !localStorage.getItem("rsa_lang_v4_auto")) {
-      localStorage.removeItem("rsa_lang");
-      localStorage.removeItem("rsa_lang_v3_en");
-      localStorage.setItem("rsa_lang_v4_auto", "1");
+    if (!localStorage.getItem("rsa_lang_v5_pure_en")) {
+      localStorage.setItem("rsa_lang", "en");
+      localStorage.removeItem("rsa_lang_explicit");
+      localStorage.setItem("rsa_lang_v5_pure_en", "1");
     }
     const oldSite1 = localStorage.getItem("rsa_cfg_site1_url") || "";
     if (oldSite1.includes("getbreakai.com")) {
@@ -4431,13 +4704,7 @@ const defaultView =
 
 function detectInitialLang() {
   try {
-    const saved = localStorage.getItem("rsa_lang");
-    if (saved && (saved === "kr" || saved === "en" || saved === "jp")) {
-      return saved;
-    }
-    const navLang = (navigator.language || navigator.userLanguage || "en").toLowerCase();
-    if (navLang.startsWith("ko")) return "kr";
-    if (navLang.startsWith("ja")) return "jp";
+    localStorage.setItem("rsa_lang", "en");
   } catch (_) {}
   return "en";
 }
@@ -4618,7 +4885,7 @@ function renderApp() {
           <span style="color:var(--border);">·</span>
           <a href="#legal-refund" class="btn-open-legal" data-legal-tab="refund" style="color:#93c5fd; text-decoration:none; font-weight:600;">Refund & Cancellation Policy</a>
           <span style="color:var(--border);">·</span>
-          <a href="mailto:support@truthofmarket.com" style="color:#93c5fd; text-decoration:none; font-weight:600;">Support: support@truthofmarket.com</a>
+          <a href="mailto:beable9489@gmail.com" style="color:#93c5fd; text-decoration:none; font-weight:600;">Support: beable9489@gmail.com</a>
           <span style="color:var(--border);">·</span>
           <span style="color:#cbd5e1; font-weight:600;">Operated by Yoonju Lee · KIDS-FIT Global Studio (Lemon Squeezy Store #296100 · <a href="https://kisfitglobal.com" target="_blank" rel="noopener noreferrer" style="color:#93c5fd; text-decoration:none;">kisfitglobal.com</a> &amp; <a href="https://truthofmarket.com" style="color:#93c5fd; text-decoration:none;">truthofmarket.com</a>)</span>
         </div>
@@ -4692,6 +4959,7 @@ function bindEvents() {
       if (newLang && translations[newLang]) {
         state.lang = newLang;
         localStorage.setItem("rsa_lang", newLang);
+        localStorage.setItem("rsa_lang_explicit", "1");
         renderApp();
       }
     });
@@ -4717,6 +4985,40 @@ function bindEvents() {
       renderApp();
     });
   });
+
+  // Beginner-Friendly Profit Simulator Controls (Hero Section)
+  document.querySelectorAll(".btn-easy-cap-preset").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const cap = Math.max(500, Number(btn.getAttribute("data-cap") || 10000));
+      state.easySimCapUsd = cap;
+      state.proPortfolioUsd = cap;
+      try {
+        localStorage.setItem("rsa_pro_cap_usd", String(cap));
+      } catch (_) {}
+      renderApp();
+    });
+  });
+
+  const easySimTickerSelect = document.getElementById("easySimTickerSelect");
+  if (easySimTickerSelect) {
+    easySimTickerSelect.addEventListener("change", (e) => {
+      state.easySimTicker = e.target.value;
+      renderApp();
+    });
+  }
+
+  const easySimCapitalInput = document.getElementById("easySimCapitalInput");
+  if (easySimCapitalInput) {
+    easySimCapitalInput.addEventListener("change", (e) => {
+      const cap = Math.max(500, Number(e.target.value || 10000));
+      state.easySimCapUsd = cap;
+      state.proPortfolioUsd = cap;
+      try {
+        localStorage.setItem("rsa_pro_cap_usd", String(cap));
+      } catch (_) {}
+      renderApp();
+    });
+  }
 
   // Sort Headers with Dynamic Directional Chevrons & Active State
   const updateSortHeaderIndicators = () => {
@@ -5350,6 +5652,79 @@ function bindEvents() {
         showToast(`Updated Pro Position Sizing for $${rawVal.toLocaleString()} Account`);
       } else {
         showToast("Please enter an account size of at least $1,000");
+      }
+    });
+  }
+
+  // Pro VIP 1-Click 72-Stock CSV Export, TradingView Watchlist & Webhook JSON
+  const btnDownloadPro72Csv = document.getElementById("btnDownloadPro72Csv");
+  if (btnDownloadPro72Csv) {
+    btnDownloadPro72Csv.addEventListener("click", () => {
+      if (!state.isProUnlocked) {
+        openLicenseModal(false, "🔒 Upgrade to Pro VIP ($29/mo or $199 Lifetime) to download the full 72-Stock Institutional Action Sheet (.CSV).");
+        return;
+      }
+      const perSlot = Math.round((state.proPortfolioUsd || 30000) * 0.15);
+      const header = "Rank,Ticker,Company,Sector,PW_RSI_Score,Zone,Latest_Close,Entry_Trigger_MA60,Hard_Stop_Minus9Pct,Target_2X_TP1,Recommended_Shares_15Pct_Slot\n";
+      const rows = (state.stocks || []).map((s, idx) => {
+        const c = Number(s.close || 0);
+        const trig = Number(s.entry_trigger_price ?? s.ma60_price ?? c).toFixed(2);
+        const stp = Number(s.stop_loss_price ?? c * 0.91).toFixed(2);
+        const tp1 = Number(s.tp1_2x_price ?? c * 2.0).toFixed(2);
+        const sh = c > 0 ? Math.max(1, Math.floor(perSlot / c)) : 0;
+        return `${idx + 1},${s.ticker},"${(s.name_en || s.ticker).replace(/"/g, '""')}",${s.sector || "US Equity"},${s.score},${s.zone_code},${c.toFixed(2)},${trig},${stp},${tp1},${sh}`;
+      });
+      const blob = new Blob([header + rows.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `RightSideAlpha_VIP_72Stocks_${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast("📥 Downloaded Full 72-Stock VIP Action Sheet (.CSV)");
+    });
+  }
+
+  const btnCopyTvWatchlist = document.getElementById("btnCopyTvWatchlist");
+  if (btnCopyTvWatchlist) {
+    btnCopyTvWatchlist.addEventListener("click", async () => {
+      if (!state.isProUnlocked) {
+        openLicenseModal(false, "🔒 Upgrade to Pro VIP to copy the 1-Click TradingView 72-Ticker Institutional Watchlist.");
+        return;
+      }
+      const tickers = ["AMEX:SMH", "AMEX:XLV", "NASDAQ:QQQ"].concat((state.stocks || []).map((s) => s.ticker)).join(",");
+      try {
+        await navigator.clipboard.writeText(tickers);
+        showToast("📋 Copied 72-Stock + $SMH/$XLV TradingView Watchlist to Clipboard!");
+      } catch (_) {
+        showToast("TradingView Watchlist Ready");
+      }
+    });
+  }
+
+  const btnCopyTvWebhookJson = document.getElementById("btnCopyTvWebhookJson");
+  if (btnCopyTvWebhookJson) {
+    btnCopyTvWebhookJson.addEventListener("click", async () => {
+      if (!state.isProUnlocked) {
+        openLicenseModal(false, "🔒 Upgrade to Pro VIP to unlock the TradingView Automated Alert Webhook JSON.");
+        return;
+      }
+      const webhookJson = JSON.stringify({
+        platform: "truthofmarket.com",
+        signal: "RIGHT_SIDE_IGNITION",
+        ticker: "{{ticker}}",
+        close: "{{close}}",
+        volume: "{{volume}}",
+        stop_loss_9pct: "{{plot_0}}",
+        action: "BUY_15PCT_SLOT"
+      }, null, 2);
+      try {
+        await navigator.clipboard.writeText(webhookJson);
+        showToast("🔔 Copied TradingView Webhook JSON Payload to Clipboard!");
+      } catch (_) {
+        showToast("Webhook JSON Ready");
       }
     });
   }

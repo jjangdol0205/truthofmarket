@@ -89,6 +89,20 @@ export function renderStockTable(state) {
       : "";
 
   return `
+    <!-- Plain-English 5-Second Column Cheat Sheet for Everyday Investors -->
+    <div id="screenerPlainEnglishBar" style="background:rgba(13,20,36,0.9); border:1px solid rgba(56,189,248,0.22); border-radius:6px; padding:8px 12px; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:0.73rem; color:#cbd5e1;">
+      <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+        <span class="mono" style="background:rgba(56,189,248,0.14); color:#38bdf8; font-weight:800; font-size:0.66rem; padding:2px 6px; border-radius:3px;">📖 5s TABLE GUIDE</span>
+        <span><b style="color:#34d399;">IGNITION ZONE:</b> Ready to Buy Now</span>
+        <span style="color:var(--border);">|</span>
+        <span><b style="color:#fff;">PW-RSI (0–100):</b> Lower (&le;25) = Cheaper Bottom</span>
+        <span style="color:var(--border);">|</span>
+        <span><b style="color:#fff;">10d Vol:</b> &ge;1.4x = Institutions Buying</span>
+        <span style="color:var(--border);">|</span>
+        <span><b style="color:#fff;">2x Hit Rate:</b> % of Past Signals That Doubled (+100%)</span>
+      </div>
+      <span class="mono" style="font-size:0.68rem; color:#fbbf24; font-weight:700;">💡 Tip: Click any column header to sort!</span>
+    </div>
     <div class="table-wrap">
       <table class="stock-table" id="stockTable">
         <thead>

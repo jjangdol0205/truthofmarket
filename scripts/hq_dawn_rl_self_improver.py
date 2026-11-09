@@ -43,7 +43,7 @@ DIVISIONS = [
         "yt_handle": "@rightsidealpha",
         "yt_shorts_url": "https://www.youtube.com/@rightsidealpha/shorts",
         "ig_handle": "rightsidealpha",
-        "policy_path": r"D:\투자홈페이지\1_RightSideAlpha_미국주식터미널\data\rl_social_visitor_policy.json",
+        "policy_path": r"D:\드림컴퍼니\1사업부\data\rl_social_visitor_policy.json",
         "default_arms": [
             {"id": "stop_loss_9pct", "name": "-9% 칼손절 vs -70% 비자발적 장기투자 훅", "views": 0, "likes": 0, "pulls": 2},
             {"id": "dip_trap_vs_ignition", "name": "폭락장 물타기 함정 vs 월가 우측 돌파(MA60) 훅", "views": 0, "likes": 0, "pulls": 2},
@@ -60,7 +60,7 @@ DIVISIONS = [
         "yt_handle": "@kisfitglobal",
         "yt_shorts_url": "https://www.youtube.com/@kisfitglobal/shorts",
         "ig_handle": "kisfitglobal",
-        "policy_path": r"D:\키즈핏 영문\src\data\shorts-reels-rl-policy.json",
+        "policy_path": r"D:\드림컴퍼니\2사업부\src\data\shorts-reels-rl-policy.json",
         "default_arms": [
             {"id": "paradox_smart_kid", "name": "Why Smart Kids Freeze on Math Word Problems (3D Brain)", "views": 13, "likes": 1, "pulls": 3},
             {"id": "biology_not_behavior", "name": "Why Picky Eaters Spit Out Meat (Zinc & IGF-1 Biology)", "views": 8, "likes": 0, "pulls": 2},
@@ -76,7 +76,7 @@ DIVISIONS = [
         "yt_handle": "@kidsfit01",
         "yt_shorts_url": "https://www.youtube.com/@kidsfit01/shorts",
         "ig_handle": "kids_fit1",
-        "policy_path": r"D:\사업아이템\logs\dawn_rl_policy_kr.json",
+        "policy_path": r"D:\드림컴퍼니\3사업부\logs\dawn_rl_policy_kr.json",
         "default_arms": [
             {"id": "combo_2items", "name": "2가지 꿀조합 (통잠 스와들업+두상베개 / 걸음마+몬테소리)", "views": 0, "likes": 0, "pulls": 2},
             {"id": "single_onepick", "name": "1가지 단독 원픽 집중 (하루 1방울 비타민D / 무소음 트램폴린)", "views": 0, "likes": 0, "pulls": 2},
@@ -170,10 +170,10 @@ def run_single_division_rl(div):
 
     # 2. RL paused until actual sales occur (per owner directive)
     if False and div["key"] == "KFG":
-        kfg_script = r"D:\키즈핏 영문\scripts\rl_shorts_reels_view_optimizer.py"
+        kfg_script = r"D:\드림컴퍼니\2사업부\scripts\rl_shorts_reels_view_optimizer.py"
         if os.path.exists(kfg_script):
             try:
-                subprocess.run(["python", kfg_script], cwd=r"D:\키즈핏 영문", timeout=35, capture_output=True)
+                subprocess.run(["python", kfg_script], cwd=r"D:\드림컴퍼니\2사업부", timeout=35, capture_output=True)
             except Exception:
                 pass
 
@@ -259,7 +259,7 @@ def main():
         results.append(res)
 
     # Append to master dawn RL log
-    log_path = Path(r"D:\투자홈페이지\1_RightSideAlpha_미국주식터미널\data\dawn_rl_history.jsonl")
+    log_path = Path(r"D:\드림컴퍼니\1사업부\data\dawn_rl_history.jsonl")
     log_path.parent.mkdir(parents=True, exist_ok=True)
     with open(log_path, "a", encoding="utf-8") as f:
         f.write(json.dumps({"timestamp_kst": now_kst, "results": results}, ensure_ascii=False) + "\n")
@@ -287,8 +287,8 @@ def main():
     report_msg = "\n".join(lines)
 
     if notify:
-        bridge_js = r"D:\투자홈페이지\1_RightSideAlpha_미국주식터미널\scripts\master_hq_telegram_bridge.js"
-        subprocess.run(["node", bridge_js, "--notify", report_msg], cwd=r"D:\투자홈페이지\1_RightSideAlpha_미국주식터미널")
+        bridge_js = r"D:\드림컴퍼니\1사업부\scripts\master_hq_telegram_bridge.js"
+        subprocess.run(["node", bridge_js, "--notify", report_msg], cwd=r"D:\드림컴퍼니\1사업부")
 
     print(json.dumps({"ok": True, "results": results}, ensure_ascii=False, indent=2))
 

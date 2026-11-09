@@ -24,9 +24,9 @@ if hasattr(sys.stdout, "reconfigure"):
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8")
 
-ROOT_D3 = Path(r"D:\사업아이템")
+ROOT_D3 = Path(r"D:\드림컴퍼니\3사업부")
 FONT_PATH = ROOT_D3 / "src" / "fonts" / "NanumSquareRoundEB.ttf"
-TMP_DIR = Path(r"d:\투자홈페이지\1_RightSideAlpha_미국주식터미널\tests\tmp_d3_empirical")
+TMP_DIR = Path(r"D:\드림컴퍼니\1사업부\tests\tmp_d3_empirical")
 TMP_DIR.mkdir(parents=True, exist_ok=True)
 
 # ---------------------------------------------------------------------------

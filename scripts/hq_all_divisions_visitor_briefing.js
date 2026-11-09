@@ -19,24 +19,48 @@ const path = require('path');
 const https = require('https');
 
 const LEDGER_PATH = path.resolve(__dirname, '..', 'data', 'hq_visitor_ledger.json');
+const BRIDGE_STATE_PATH = path.resolve(__dirname, '..', 'data', 'master_hq_bridge_state.json');
 
-function loadPrimaryBotToken() {
-  const candidates = [
-    'D:\\투자홈페이지\\1_RightSideAlpha_미국주식터미널\\.env',
-    'D:\\키즈핏 영문\\.env',
-    'D:\\사업아이템\\.env'
-  ];
-  for (const fp of candidates) {
-    if (fs.existsSync(fp)) {
-      const m = fs.readFileSync(fp, 'utf8').match(/(?:RSA_TELEGRAM_BOT_TOKEN|TELEGRAM_BOT_TOKEN)=([^\r\n]+)/);
+function loadEnvToken(filePath, keyPattern) {
+  try {
+    if (fs.existsSync(filePath)) {
+      const m = fs.readFileSync(filePath, 'utf8').match(keyPattern);
       if (m && m[1]) return m[1].trim().replace(/^['"]|['"]$/g, '');
     }
-  }
+  } catch (_) {}
   return '';
 }
 
-const BOT_TOKEN = loadPrimaryBotToken();
-const CHAT_ID = '755033799';
+function loadHqBotToken() {
+  try {
+    const cfgPath = path.resolve(__dirname, '..', 'data', 'telegram_config.json');
+    if (fs.existsSync(cfgPath)) {
+      const cfg = JSON.parse(fs.readFileSync(cfgPath, 'utf8'));
+      if (cfg.bot_token) return String(cfg.bot_token).trim();
+    }
+  } catch (_) {}
+  return '9291573259:AAEZXNkQ4wuEPX6FYujxKT5mwLWdQpZOnes';
+}
+
+const BOT_TOKENS_BY_DIV = {
+  HQ: loadHqBotToken(),
+  '1사업부': loadEnvToken('D:\\드림컴퍼니\\1사업부\\.env', /RSA_TELEGRAM_BOT_TOKEN=([^\r\n]+)/),
+  '2사업부': loadEnvToken('D:\\드림컴퍼니\\2사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/),
+  '3사업부': loadEnvToken('D:\\드림컴퍼니\\3사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/)
+};
+
+const BOT_TOKEN = BOT_TOKENS_BY_DIV['1사업부'] || BOT_TOKENS_BY_DIV.HQ;
+const CHAT_ID = '-1003834697086';
+
+function getActiveChatId() {
+  try {
+    if (fs.existsSync(BRIDGE_STATE_PATH)) {
+      const st = JSON.parse(fs.readFileSync(BRIDGE_STATE_PATH, 'utf8'));
+      if (st && st.groupChatId) return String(st.groupChatId);
+    }
+  } catch (_) {}
+  return CHAT_ID;
+}
 
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
@@ -141,10 +165,12 @@ function checkSiteHealth(urlStr) {
   });
 }
 
-function sendTelegramHtml(text) {
+function sendTelegramHtml(text, preferredToken = null, customChatId = null) {
+  const tok = preferredToken || BOT_TOKEN;
+  const targetChatId = customChatId || getActiveChatId();
   return new Promise((resolve) => {
     const payload = JSON.stringify({
-      chat_id: CHAT_ID,
+      chat_id: targetChatId,
       text,
       parse_mode: 'HTML',
       disable_web_page_preview: true
@@ -152,7 +178,7 @@ function sendTelegramHtml(text) {
     const req = https.request(
       {
         hostname: 'api.telegram.org',
-        path: `/bot${BOT_TOKEN}/sendMessage`,
+        path: `/bot${tok}/sendMessage`,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -355,7 +381,31 @@ async function runVisitorBriefing(options = {}) {
     } else {
       ledger.lastTelegramSentMs = nowMs;
       saveLedger(ledger);
-      await sendTelegramHtml(html);
+      // 1. 본사 총괄 매니저 (@SemifearGreedbot) 브리핑 개시 선언
+      await sendTelegramHtml(
+        `🏛️ <b>[드림컴퍼니 본사 총괄 — 정기 방문자 &amp; 전환 브리핑 개시]</b>\n` +
+          `⏰ <b>집계 시각</b>: <code>${nowStr}</code>\n` +
+          `• <b>원칙</b>: 1·2·3사업부 각 전담 봇이 모두컴퍼니 대화방을 통해 직접 실적을 보고합니다.`,
+        BOT_TOKENS_BY_DIV.HQ
+      );
+      // 2. 1·2·3사업부 각 전담 봇이 대화방(모두컴퍼니)을 통해 직접 실적을 보고
+      for (const r of results) {
+        const statusBadge = r.health.ok ? `🟢 정상 (${r.health.ms}ms)` : `🔴 점검필요`;
+        const kpiLine =
+          r.kpiType === 'PAID'
+            ? `• <b>🥈 [유료결제 전환]</b>: 오늘 결제창 클릭 <b>${r.paidClickToday}회</b> (누적 ${r.paidClickTotal}회) · 실결제 완료 <b>${r.paidMemberToday}건</b> (누적 <b>${r.paidMemberTotal}건</b>)`
+            : `• <b>🥈 [상품 구매클릭]</b>: 오늘 상품구매 클릭 <b>${r.refClickToday}회</b> (누적 레퍼럴 클릭 <b>${r.refClickTotal}회</b>)`;
+        const divHtml = [
+          `🏢 <b>[${r.code} 전담 봇 보고 — ${r.name}]</b> (<code>${r.domain}</code>)`,
+          `⏰ 집계 시각: <code>${nowStr}</code>`,
+          `━━━━━━━━━━━━━━━━━━`,
+          `• <b>🥇 [홈페이지 유입]</b>: 오늘 UV <b>${r.uvToday.toLocaleString()}명</b> (PV ${r.pvToday.toLocaleString()}회) ｜ 어제 <b>${r.uvYest.toLocaleString()}명</b> (${r.pvYest.toLocaleString()}회) ｜ 누적 <b>${r.uvTotal.toLocaleString()}명</b> (${r.pvTotal.toLocaleString()}회)`,
+          kpiLine,
+          `• <b>🎯 핵심 목표</b>: ${r.kpiGoal}`,
+          `• <b>서버 &amp; 서치콘솔</b>: ${statusBadge} | ✅ <code>${r.gscStatus}</code>`
+        ].join('\n');
+        await sendTelegramHtml(divHtml, BOT_TOKENS_BY_DIV[r.code] || BOT_TOKEN);
+      }
     }
   }
   return { results, html };

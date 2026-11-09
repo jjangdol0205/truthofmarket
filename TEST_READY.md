@@ -3,9 +3,9 @@
 - **Status**: **READY (100% PASSING · 79/79 TESTS GREEN)**
 - **Author**: `teamwork_test_writer` (`test_writer_e2e_1`)
 - **Date**: 2026-10-30T10:32:00Z
-- **Test Harness Directory**: `d:\투자홈페이지\tests_e2e\`
-- **Project Master Specification**: `d:\투자홈페이지\.agents\teamwork\orchestrator\PROJECT.md`
-- **Infrastructure Architecture**: `d:\투자홈페이지\TEST_INFRA.md`
+- **Test Harness Directory**: `D:\드림컴퍼니\1사업부\tests_e2e\`
+- **Project Master Specification**: `D:\드림컴퍼니\1사업부\.agents\teamwork\orchestrator\PROJECT.md`
+- **Infrastructure Architecture**: `D:\드림컴퍼니\1사업부\TEST_INFRA.md`
 
 ---
 
@@ -30,29 +30,29 @@ The test suite can be run at any time via two interchangeable execution methods:
 ### Method A: Unified E2E Test Runner (Formatted Summary)
 ```powershell
 # Run all 4 tiers (79 tests) with ASCII summary table
-python d:\투자홈페이지\tests_e2e\run_e2e_tests.py
+python D:\드림컴퍼니\1사업부\tests_e2e\run_e2e_tests.py
 
 # Run a specific tier (e.g. Tier 1, 2, 3, or 4)
-python d:\투자홈페이지\tests_e2e\run_e2e_tests.py --tier 1
-python d:\투자홈페이지\tests_e2e\run_e2e_tests.py --tier 4
+python D:\드림컴퍼니\1사업부\tests_e2e\run_e2e_tests.py --tier 1
+python D:\드림컴퍼니\1사업부\tests_e2e\run_e2e_tests.py --tier 4
 
 # Run against a running production/dev server on a specific port
-python d:\투자홈페이지\tests_e2e\run_e2e_tests.py --server-url http://127.0.0.1:8000
+python D:\드림컴퍼니\1사업부\tests_e2e\run_e2e_tests.py --server-url http://127.0.0.1:8000
 
 # Verbose output with full test names
-python d:\투자홈페이지\tests_e2e\run_e2e_tests.py -v
+python D:\드림컴퍼니\1사업부\tests_e2e\run_e2e_tests.py -v
 ```
 
 ### Method B: Standard Pytest Command
 ```powershell
 # Run full E2E test suite
-pytest d:\투자홈페이지\tests_e2e -v
+pytest D:\드림컴퍼니\1사업부\tests_e2e -v
 
 # Run single tier file
-pytest d:\투자홈페이지\tests_e2e\test_tier1_features.py -v
-pytest d:\투자홈페이지\tests_e2e\test_tier2_boundaries.py -v
-pytest d:\투자홈페이지\tests_e2e\test_tier3_interactions.py -v
-pytest d:\투자홈페이지\tests_e2e\test_tier4_scenarios.py -v
+pytest D:\드림컴퍼니\1사업부\tests_e2e\test_tier1_features.py -v
+pytest D:\드림컴퍼니\1사업부\tests_e2e\test_tier2_boundaries.py -v
+pytest D:\드림컴퍼니\1사업부\tests_e2e\test_tier3_interactions.py -v
+pytest D:\드림컴퍼니\1사업부\tests_e2e\test_tier4_scenarios.py -v
 ```
 
 ---

@@ -74,7 +74,7 @@ def git_commit_and_push_market_data(as_of_date: str) -> str:
         return f"커밋 생략: {c_out[-160:]}"
 
     pushed = []
-    for remote in ["truthofmarket", "origin"]:
+    for remote in ["truthofmarket"]:
         p_code, _ = run_cmd(["git", "push", remote, "main"])
         if p_code == 0:
             pushed.append(remote)

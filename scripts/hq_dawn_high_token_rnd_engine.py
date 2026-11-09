@@ -3,15 +3,21 @@
 """
 scripts/hq_dawn_high_token_rnd_engine.py
 ================================================================================
-본사 총괄 매니저 산하 멀티에이전트 —
-[안티그래비티 일주일 리밋(Weekly Quota) 보호형] 새벽 최적 R&D & 로컬 무토큰 자동화 엔진
+본사 총괄 멀티에이전트 — [0-토큰 스로틀 완전 폐기]
+심야·새벽(Overnight 00:00~06:30 KST) Ultra/Max 고토큰 맥싱 & 자동화 R&D 엔진
 ================================================================================
-핵심 원칙 (사장님 지시 반영):
-  1. "내 안티그래비티 토큰량 고려해서 진행해 / 너무 과하게 쓰면 평상시 못쓰니깐 최적으로 해 일주일 리밋 고려해서"
-  2. 평상시 주간 업무를 위해 안티그래비티 일주일 토큰 리밋의 85~90%를 항상 안전하게 보존!
-  3. 새벽(00:00~06:00 KST) 반복 작업(SEO 증식·Q&A 발행·교차검열·데이터 동기화)은
-     안티그래비티 LLM 토큰을 0개 소모하는 [100% 로컬 Python/Node 스크립트 엔진]으로 처리!
-  4. 꼭 필요한 AI 에이전트 작업은 [요일별 1개 사업부 순환 + Flash 경량 모델 + 일 1~2% 쿼터 캡(3만~5만 토큰 이내)]으로 최적 제한!
+핵심 원칙 (2026 전사 전략 개편 반영):
+  1. [0-토큰 스로틀 및 85~90% 보존 제약 전면 폐기]:
+     과거의 주간 쿼터 보존 규제와 로컬 무토큰 강제 제한을 완전 철폐하고,
+     주간 및 심야 시간대 전체에 걸쳐 대규모 Ultra/Max 토큰을 집중 소진(Token Maximization)하여
+     실질적 트래픽 유입·유료 결제 전환·플랫폼 가치를 극대화한다.
+  2. [심야·새벽(00:00~06:30 KST) 고토큰 집중 투입]:
+     대표 취침 시간대에 Gemini Ultra/Max와 Antigravity 병렬 컴퓨팅 자원을 풀가동하여
+     대규모 퀀트 리서치(1만자+), PubMed/CDC 임상 지식베이스 확장, 1080×1920 클린 숏폼 마스터링을 무인 완결한다.
+  3. [실시간 텔레메트리 기반 자율 최적 배분]:
+     Antigravity brain 로그를 실시간 분석하여 일간 200만~500만+ 토큰을 3대 핵심 트랙에 능동 배분한다.
+  4. [대표 최소 행동(1-Minute Rule) 보장]:
+     모든 데이터 동기화, 분석, 렌더링, SEO 색인을 100% 무인화하여 아침에는 '1분 업로드' 상태만 전달한다.
 """
 
 import json
@@ -30,10 +36,12 @@ if sys.platform == "win32":
         pass
 
 KST = timezone(timedelta(hours=9))
-TOM_ROOT = pathlib.Path(r"D:\투자홈페이지\1_RightSideAlpha_미국주식터미널")
-KFG_ROOT = pathlib.Path(r"D:\키즈핏 영문")
-KFK_ROOT = pathlib.Path(r"D:\사업아이템")
+TOM_ROOT = pathlib.Path(r"D:\드림컴퍼니\1사업부")
+KFG_ROOT = pathlib.Path(r"D:\드림컴퍼니\2사업부")
+KFK_ROOT = pathlib.Path(r"D:\드림컴퍼니\3사업부")
+HQ_ROOT = pathlib.Path(r"D:\드림컴퍼니")
 RND_LOG_PATH = TOM_ROOT / "data" / "hq_dawn_high_token_rnd_report.json"
+OVERNIGHT_PIPELINE = HQ_ROOT / "scripts" / "overnight_token_maxing_pipeline.py"
 
 
 def load_bot_tokens() -> dict:
@@ -84,17 +92,19 @@ def send_telegram_message(bot_token: str, html_text: str, chat_id: str = "755033
 def collect_live_workspace_stats() -> dict:
     tom_stocks_pages = len(list((TOM_ROOT / "stocks").glob("*.html"))) if (TOM_ROOT / "stocks").exists() else 76
     kfg_qna_pages = len(list((KFG_ROOT / "qna").glob("*.html"))) if (KFG_ROOT / "qna").exists() else 89
+    kfk_samples = len(list((KFK_ROOT / "dist").glob("*.html"))) if (KFK_ROOT / "dist").exists() else 12
     return {
         "tom_stocks_pages": tom_stocks_pages,
         "kfg_qna_pages": kfg_qna_pages,
+        "kfk_dist_pages": kfk_samples,
     }
 
 
 def measure_real_antigravity_quota() -> dict:
     """
     C:\\Users\\jjang\\.gemini\\antigravity\\brain 의 최근 7일(Rolling 7d) 실측 트랜스크립트를 스캔하여
-    현재 주간 소진율, 일별 리셋(회복) 타임라인, 그리고 '평상시 사용이 안 막히는 선에서
-    최대한 많이 뽑아 쓸 수 있는 일일 최대 가용 토큰/Step(Smart Max-Pace)'을 실시간 산출합니다.
+    현재 주간 소진량, 일별 투입 추이, 그리고 0-토큰 제한 해제 후 울트라/맥스 엔진의
+    실시간 토큰 투입 현황(Token Maximization Telemetry)을 산출합니다.
     """
     agy_brain = pathlib.Path(r"C:\Users\jjang\.gemini\antigravity\brain")
     now_dt = datetime.now(KST)
@@ -149,12 +159,12 @@ def measure_real_antigravity_quota() -> dict:
             d_entry["compact_mb"] = round(d_entry["compact_mb"] + (c_sz / (1024 * 1024)), 2)
             d_entry["steps"] += line_cnt
 
-    # Estimate gross processed tokens (~4 bytes per token across full transcripts + prompt context)
+    # Estimate gross processed tokens (~3.8 bytes per token across full transcripts + prompt context)
     est_tokens_24h = int(full_bytes_24h / 3.8)
     est_tokens_7d = int(full_bytes_7d / 3.8)
 
-    mode_label = "🔥 UNLIMITED FULL-OVERDRIVE (토큰 절약 해제 ➡️ 일 200만~350만+ 토큰 최대치 풀가동)"
-    daily_max_tokens = "2,000,000 ~ 3,500,000+ Tokens (아끼지 않고 1·2·3사업부 고도화에 최대치 투입)"
+    mode_label = "🔥 ACTIVE OVERNIGHT ULTRA/MAX ENGINE (0-토큰 스로틀 완전 폐기 ➡️ 일 200만~500만+ 토큰 풀가동)"
+    daily_max_tokens = "2,000,000 ~ 5,000,000+ Tokens (Seeking Alpha급 퀀트 리서치, 소아임상 지식베이스, 숏폼 마스터링 집중 투입)"
 
     return {
         "convs_7d": convs_7d,
@@ -187,7 +197,8 @@ def build_dawn_rnd_executive_report() -> tuple[dict, str]:
 
     blueprint = {
         "generated_at_kst": now_kst,
-        "policy": "FULL_OVERDRIVE_MAX_TOKEN_WITH_LIVE_TELEMETRY_REPORTING",
+        "policy": "OVERNIGHT_ULTRA_MAX_TOKEN_MAXIMIZATION_ACTIVE",
+        "throttling_status": "THROTTLE_ELIMINATED",
         "real_antigravity_telemetry": q,
         "daily_max_allocation": {
             "current_throttle": q["mode_label"],
@@ -195,24 +206,24 @@ def build_dawn_rnd_executive_report() -> tuple[dict, str]:
         },
         "tracks": [
             {
-                "track": "Track 1 — 1사업부(truthofmarket.com) 고토큰 심층 퀀트 & 비교 SEO 대량 증식",
+                "track": "Track 1 — 1사업부(truthofmarket.com) Seeking Alpha급 퀀트 리서치(1만자+) & 72종목 PW-RSI 스크리닝",
                 "items": [
-                    f"현재 {stats['tom_stocks_pages']}개 종목 외 고검색 VS 비교 랜딩페이지($NVDA vs $AMD, $SOXL vs $SMH, $PLTR vs $MSFT 등) 대량 생성",
-                    "72종목 SEC 10-K/어닝콜·기관 거래량 기반 llms-full.txt(ChatGPT/Perplexity/Claude 인용 독점 데이터) 심층 확충",
+                    "S&P500 72종목 SEC 10-K, 실적 컨콜, PW-RSI 및 $SMH:$XLV 바벨 전략 기반 기관급 심층 리포트 자동 집필",
+                    "고검색 VS 비교 분석($NVDA vs $AMD, $SOXL vs $SMH, $PLTR vs $MSFT 등) 및 llms-full.txt AI 검색 인용 독점 데이터 확충",
                 ],
             },
             {
-                "track": "Track 2 — 2사업부(kisfitglobal.com) 17개 JS 순수 영문화 & 미국 학부모 임상 Q&A 200+ 대량 증식",
+                "track": "Track 2 — 2사업부(kisfitglobal.com) PubMed/CDC 임상 성장내분비학 모델링 & taller.xyz급 글로벌 코칭 지식베이스 확장",
                 "items": [
                     f"현재 {stats['kfg_qna_pages']}개 영문 임상 Q&A를 연령(2~18세)×성별×백분위수 롱테일 임상 랜딩페이지 200+개로 대량 확장",
-                    "17개 보조 JS 모듈 내 레거시 국문 폴백을 100% 네이티브 소아내분비학 영문으로 전수 리팩토링",
+                    "Tanner-Whitehouse, Khamis-Roche(±5.34cm 28행) 성장 예측 및 수면/영양 생체이용률 월간 코칭 리포트 엔진 고도화",
                 ],
             },
             {
-                "track": "Track 3 — 3사업부(kidsfit.co.kr) Khamis-Roche 역이식 & 네이버 블로그/카페 고전환 임상 원고 대량 비축",
+                "track": "Track 3 — 클린 숏폼 미디어 팩토리 (1080×1920 클린 풀스크린 & 0.01초 싱크 마스터링)",
                 "items": [
-                    "2사업부 Khamis-Roche(±5.34cm 28행 행렬)·소아과 1장 요약 PDF 역이식 및 24종 육아 셀렉트샵 맞춤 추천 고도화",
-                    "주간 피크타임 발행용 네이버 블로그(expertise333)·카페(moneyfitlab)·지식iN 고전환 임상 원고 팩 대량 생산",
+                    "1·2·3사업부 당일 숏폼 3편 무AI 공감형 톤앤매너 대본 + Edge-TTS 원어민 내레이션 + OpenCV 2.5D 모션 시네마틱 렌더링",
+                    "본문 100% 무배너/무워터마크 클린 풀스크린, 하단 세이프존(Y=1380~1450) 6px+ 외곽선 자막, 엔딩 슬레이트 도메인 CTA 마스터링",
                 ],
             },
         ],
@@ -222,38 +233,91 @@ def build_dawn_rnd_executive_report() -> tuple[dict, str]:
     RND_LOG_PATH.write_text(json.dumps(blueprint, ensure_ascii=False, indent=2), encoding="utf-8")
 
     html = (
-        f"🔥 <b>[풀스로틀 전환 완료 — 토큰 아끼지 않고 최대치 가동 + 실시간 토큰 현황 상시 보고 체제]</b>\n"
+        f"🔥 <b>[심야·새벽 울트라/맥스 토큰 맥싱 엔진 가동 — 0-토큰 스로틀 완전 폐기]</b>\n"
         f"⏰ <b>실측 시각</b>: <code>{now_kst}</code>\n"
         f"━━━━━━━━━━━━━━━━━━━━\n"
-        f"📊 <b>1. 사장님 안티그래비티(Antigravity) 실시간 토큰·세션 가동 현황판</b>\n"
+        f"📊 <b>1. 실시간 토큰 투입 현황 (Token Maximization Telemetry)</b>\n"
         f"• <b>오늘(최근 24h) 투입량</b>: 약 <b><code>{q['est_tokens_24h']:,} Tokens</code></b> (<code>{q['steps_24h']:,} Steps</code> / <code>{q['full_mb_24h']} MB</code>)\n"
         f"• <b>최근 7일 누적 투입량</b>: 약 <b><code>{q['est_tokens_7d']:,} Tokens</code></b> (총 <b>{q['convs_7d']}개 에이전트 세션</b> / <code>{q['steps_7d']:,} Steps</code> / <code>{q['full_mb_7d']} MB</code>)\n"
-        f"• <b>현재 출력 모드</b>: <b>{q['mode_label']}</b>\n\n"
+        f"• <b>동작 모드</b>: <b>{q['mode_label']}</b>\n\n"
         f"📅 <b>2. 최근 일자별 토큰·Step 투입 실측 추이</b>\n"
         f"{day_breakdown_html}\n\n"
-        f"🚀 <b>3. 아끼지 않고 최대치(Full-Overdrive)로 쏟아붓는 3대 사업부 고토큰 작업</b>\n"
+        f"🚀 <b>3. 심야·새벽(00:00~06:30 KST) 집중 투입 3대 핵심 트랙</b>\n"
         f"1️⃣ <b>1사업부 (<code>truthofmarket.com</code>)</b>\n"
-        f"   └ 고검색 VS 비교 랜딩페이지(<code>$NVDA vs $AMD</code>, <code>$SOXL vs $SMH</code> 등) 대량 생성 &amp; <code>llms-full.txt</code> 72종목 심층 퀀트 리포트 증식\n"
+        f"   └ Seeking Alpha급 1만자 퀀트 리서치 리포트 집필 &amp; 72종목 PW-RSI/바벨 타점 스크리닝\n"
         f"2️⃣ <b>2사업부 (<code>kisfitglobal.com</code>)</b>\n"
-        f"   └ 17개 보조 JS 모듈 잔여 한글 폴백 100% 소아내분비학 순수 영문화 &amp; 미국 학부모 롱테일 임상 Q&amp;A({stats['kfg_qna_pages']}개 ➡️ 200+개) 대량 증식\n"
-        f"3️⃣ <b>3사업부 (<code>kidsfit.co.kr</code>)</b>\n"
-        f"   └ 2사업부 Khamis-Roche(±5.34cm 28행 행렬)·소아과 1장 요약 PDF 역이식 &amp; 네이버 블로그·카페 고전환 임상 칼럼 대량 생산\n"
+        f"   └ PubMed/CDC 소아 성장내분비학 논문 분석 &amp; taller.xyz급 200+ 임상 Q&amp;A 지식베이스 확장\n"
+        f"3️⃣ <b>3사업부 &amp; 미디어 팩토리</b>\n"
+        f"   └ 1080×1920 클린 풀스크린 마스터링, 0.01초 싱크 자막, 당일 숏폼 3편 완제품 패키징\n"
         f"━━━━━━━━━━━━━━━━━━━━\n"
-        f"✅ <b>운영 약속</b>: 앞으로 모든 작업·보고 때마다 상단에 <b>[오늘 투입 토큰 / 7일 누적 토큰 현황]</b>을 실시간으로 브리핑하면서, 남는 토큰이 없도록 <b>최대 출력(Full Power)</b>으로 가동합니다!"
+        f"✅ <b>운영 원칙</b>: 인위적 토큰 절약 제약을 영구 폐기하고, 심야 시간대 최대 출력(Full Power)으로 가동하여 대표의 일간 행동을 '오전 1분 업로드'로 완결합니다!"
     )
     return blueprint, html
 
 
+def dispatch_overnight_pipeline(dry_run: bool = False, test_mode: bool = False) -> dict:
+    """
+    d:\\드림컴퍼니\\scripts\\overnight_token_maxing_pipeline.py 를 호출하여
+    심야 배치 오케스트레이션을 실행합니다.
+    """
+    if not OVERNIGHT_PIPELINE.exists():
+        return {"ok": False, "error": f"Pipeline script not found: {OVERNIGHT_PIPELINE}"}
+
+    cmd = [sys.executable, str(OVERNIGHT_PIPELINE)]
+    if test_mode:
+        cmd.append("--test")
+    elif dry_run:
+        cmd.append("--dry-run")
+
+    try:
+        proc = subprocess.run(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=120,
+        )
+        return {
+            "ok": proc.returncode == 0,
+            "returncode": proc.returncode,
+            "stdout": proc.stdout[-500:] if proc.stdout else "",
+            "stderr": proc.stderr[-500:] if proc.stderr else "",
+        }
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+
 def main() -> int:
     notify = "--notify" in sys.argv
+    dry_run = "--dry-run" in sys.argv
+    test_mode = "--test" in sys.argv
+    exec_overnight = "--execute-overnight" in sys.argv
+
     blueprint, html = build_dawn_rnd_executive_report()
+
+    pipeline_result = None
+    if exec_overnight or dry_run or test_mode:
+        pipeline_result = dispatch_overnight_pipeline(dry_run=dry_run, test_mode=test_mode)
+
     if notify:
         tokens = load_bot_tokens()
         for div_key in ("TOM", "KFG", "KFK"):
             if tokens.get(div_key):
                 ok = send_telegram_message(tokens[div_key], html)
-                print(f"[DawnOptimalQuotaRnD] Sent report to {div_key} bot: ok={ok}")
-    print(json.dumps({"ok": True, "generated_at_kst": blueprint["generated_at_kst"]}, ensure_ascii=False))
+                print(f"[OvernightTokenMaxEngine] Sent report to {div_key} bot: ok={ok}")
+
+    out = {
+        "ok": True,
+        "generated_at_kst": blueprint["generated_at_kst"],
+        "policy": blueprint["policy"],
+        "throttling_status": blueprint["throttling_status"],
+        "est_tokens_24h": blueprint["real_antigravity_telemetry"]["est_tokens_24h"],
+    }
+    if pipeline_result:
+        out["pipeline_result"] = pipeline_result
+    print(json.dumps(out, ensure_ascii=False))
     return 0
 
 

@@ -1,0 +1,20 @@
+{
+  "agenda1": {
+    "choice": "A",
+    "title": "3사업부 kidsfit.co.kr 무인 자동 유지 + getbreakai.com 신규 프로젝트 전면 전환",
+    "decidedAt": "2026-11-08T11:51:57.122Z",
+    "status": "APPROVED"
+  },
+  "agenda2": {
+    "choice": "A",
+    "title": "Google Flow(Veo) 병행 하이브리드 영상 파이프라인 채택",
+    "decidedAt": "2026-11-08T11:52:37.034Z",
+    "status": "APPROVED"
+  },
+  "agenda3": {
+    "choice": "C",
+    "title": "올인원 균형 풀가동형 (리서치+영상+SEO+종가) 파이프라인 채택",
+    "decidedAt": "2026-11-08T11:53:16.445Z",
+    "status": "APPROVED"
+  }
+}

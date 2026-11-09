@@ -22,9 +22,9 @@ except Exception:
 
 KST = timezone(timedelta(hours=9))
 
-TOM_ROOT = pathlib.Path(r"D:\투자홈페이지\1_RightSideAlpha_미국주식터미널")
-KFG_ROOT = pathlib.Path(r"D:\키즈핏 영문")
-KFK_ROOT = pathlib.Path(r"D:\사업아이템")
+TOM_ROOT = pathlib.Path(r"D:\드림컴퍼니\1사업부")
+KFG_ROOT = pathlib.Path(r"D:\드림컴퍼니\2사업부")
+KFK_ROOT = pathlib.Path(r"D:\드림컴퍼니\3사업부")
 AUDIT_LOG_PATH = TOM_ROOT / "data" / "hq_hourly_cross_audit_log.json"
 
 
@@ -162,7 +162,7 @@ def audit_and_heal_kfg() -> dict:
         else:
             healed.append("⚠️ [검열감지] 2사업부 첫 화면 쇼츠 토픽 1초 스캔 바 누락")
 
-    # 3. 최신 Q&A 칼럼(post-seq-XXX.html)이 D:\사업아이템\dist-global\qna\에 동기화되어 있는지 검열
+    # 3. 최신 Q&A 칼럼(post-seq-XXX.html)이 D:\드림컴퍼니\3사업부\dist-global\qna\에 동기화되어 있는지 검열
     qna_src_dir = KFG_ROOT / "qna"
     qna_dst_dir = KFK_ROOT / "dist-global" / "qna"
     if qna_src_dir.exists() and qna_dst_dir.exists():

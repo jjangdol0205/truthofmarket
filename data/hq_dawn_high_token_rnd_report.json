@@ -1,60 +1,50 @@
 {
-  "generated_at_kst": "2026-11-07 21:25:09 KST",
-  "policy": "DYNAMIC_MAX_UTILIZATION_WITH_REALTIME_QUOTA_TELEMETRY",
+  "generated_at_kst": "2026-11-09 04:00:15 KST",
+  "policy": "OVERNIGHT_ULTRA_MAX_TOKEN_MAXIMIZATION_ACTIVE",
+  "throttling_status": "THROTTLE_ELIMINATED",
   "real_antigravity_telemetry": {
-    "convs_7d": 245,
-    "steps_7d": 47422,
-    "steps_24h": 23982,
-    "compact_mb_7d": 67.82,
-    "full_mb_7d": 110.91,
-    "full_mb_24h": 60.05,
-    "used_pct": 69.7,
-    "remaining_steps": 20578,
-    "owner_buffer_steps": 7500,
-    "max_burnable_rnd_steps": 13078,
-    "mode_label": "⚡ SMART MAX-PACE (주간 70%대 구간 ➡️ 안전마진 제외 잔여 한도 최대치 가동)",
-    "daily_max_tokens": "350,000 ~ 550,000 Tokens (약 3,269 Steps/일 · 11/12 대량 리셋 전 최대치)",
+    "convs_7d": 43,
+    "steps_7d": 7484,
+    "steps_24h": 7484,
+    "compact_mb_7d": 10.12,
+    "full_mb_7d": 15.33,
+    "full_mb_24h": 15.33,
+    "est_tokens_24h": 4230499,
+    "est_tokens_7d": 4230499,
+    "mode_label": "🔥 ACTIVE OVERNIGHT ULTRA/MAX ENGINE (0-토큰 스로틀 완전 폐기 ➡️ 일 200만~500만+ 토큰 풀가동)",
+    "daily_max_tokens": "2,000,000 ~ 5,000,000+ Tokens (Seeking Alpha급 퀀트 리서치, 소아임상 지식베이스, 숏폼 마스터링 집중 투입)",
     "by_day": {
-      "2026-11-07": {
-        "convs": 113,
-        "compact_mb": 35.1,
-        "steps": 23982
-      },
-      "2026-11-05": {
-        "convs": 62,
-        "compact_mb": 19.04,
-        "steps": 12936
-      },
-      "2026-11-06": {
-        "convs": 69,
-        "compact_mb": 12.35,
-        "steps": 8875
-      },
-      "2026-11-04": {
-        "convs": 1,
-        "compact_mb": 1.36,
-        "steps": 1629
+      "2026-11-08": {
+        "convs": 43,
+        "compact_mb": 10.15,
+        "steps": 7484
       }
     }
   },
   "daily_max_allocation": {
-    "current_throttle": "⚡ SMART MAX-PACE (주간 70%대 구간 ➡️ 안전마진 제외 잔여 한도 최대치 가동)",
-    "daily_max_llm_budget": "350,000 ~ 550,000 Tokens (약 3,269 Steps/일 · 11/12 대량 리셋 전 최대치)",
-    "post_reset_boost_date": "2026-11-12 (11/05~11/07 대량 소모분 순차 소멸 시 일 1.0M~1.5M 토큰 풀스로틀 자동 복귀)"
+    "current_throttle": "🔥 ACTIVE OVERNIGHT ULTRA/MAX ENGINE (0-토큰 스로틀 완전 폐기 ➡️ 일 200만~500만+ 토큰 풀가동)",
+    "daily_max_llm_budget": "2,000,000 ~ 5,000,000+ Tokens (Seeking Alpha급 퀀트 리서치, 소아임상 지식베이스, 숏폼 마스터링 집중 투입)"
   },
   "tracks": [
     {
-      "track": "1. 고부가가치 AI R&D (실시간 가용 토큰 최대치 투입 — 일 35만~55만 토큰, 11/12 이후 일 100만~150만 토큰)",
+      "track": "Track 1 — 1사업부(truthofmarket.com) Seeking Alpha급 퀀트 리서치(1만자+) & 72종목 PW-RSI 스크리닝",
       "items": [
-        "1사업부(truthofmarket.com): 76개 종목 외 고검색 VS 비교 랜딩페이지($NVDA vs $AMD, $SOXL vs $SMH) & ChatGPT/Perplexity 인용용 llms-full.txt 심층 퀀트 해설 대량 증식",
-        "2사업부(kisfitglobal.com): 17개 보조 JS 모듈 잔여 한글 폴백 100% 소아내분비학 순수 영문화 & 미국 학부모 롱테일 임상 Q&A(92개 → 200+개) 확장",
-        "3사업부(kidsfit.co.kr): 2사업부 Khamis-Roche(±5.34cm 28행 행렬)·소아과 1장 요약 PDF 역이식 & 주간 피크타임용 네이버 블로그·카페·지식iN 고전환 임상 원고 대량 비축"
+        "S&P500 72종목 SEC 10-K, 실적 컨콜, PW-RSI 및 $SMH:$XLV 바벨 전략 기반 기관급 심층 리포트 자동 집필",
+        "고검색 VS 비교 분석($NVDA vs $AMD, $SOXL vs $SMH, $PLTR vs $MSFT 등) 및 llms-full.txt AI 검색 인용 독점 데이터 확충"
       ]
     },
     {
-      "track": "2. 반복 운영/검열/배포 (로컬 Python/Node 0-Token 처리로 AI 토큰 낭비 차단)",
+      "track": "Track 2 — 2사업부(kisfitglobal.com) PubMed/CDC 임상 성장내분비학 모델링 & taller.xyz급 글로벌 코칭 지식베이스 확장",
       "items": [
-        "매시간 1·2·3사업부 순차 홍보 & 16개 전환/결제 퍼널 상호 교차검열·자가수리는 로컬 스크립트(0 토큰)로 처리해, 아낀 AI 토큰을 전부 1번 고부가가치 R&D에 몰아줍니다."
+        "현재 222개 영문 임상 Q&A를 연령(2~18세)×성별×백분위수 롱테일 임상 랜딩페이지 200+개로 대량 확장",
+        "Tanner-Whitehouse, Khamis-Roche(±5.34cm 28행) 성장 예측 및 수면/영양 생체이용률 월간 코칭 리포트 엔진 고도화"
+      ]
+    },
+    {
+      "track": "Track 3 — 클린 숏폼 미디어 팩토리 (1080×1920 클린 풀스크린 & 0.01초 싱크 마스터링)",
+      "items": [
+        "1·2·3사업부 당일 숏폼 3편 무AI 공감형 톤앤매너 대본 + Edge-TTS 원어민 내레이션 + OpenCV 2.5D 모션 시네마틱 렌더링",
+        "본문 100% 무배너/무워터마크 클린 풀스크린, 하단 세이프존(Y=1380~1450) 6px+ 외곽선 자막, 엔딩 슬레이트 도메인 CTA 마스터링"
       ]
     }
   ]

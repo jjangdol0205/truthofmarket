@@ -1,6 +1,6 @@
 {
-  "lastUpdatedKst": "2026-11-07 13:20:44 KST",
-  "lastTelegramSentMs": 1794025244426,
+  "lastUpdatedKst": "2026-11-09 08:30:30 KST",
+  "lastTelegramSentMs": 1794180630811,
   "divisions": {
     "tom_truthofmarket": {
       "days": {
@@ -26,8 +26,22 @@
           "refClick": 0
         },
         "2026-11-07": {
-          "uv": 4,
-          "pv": 5,
+          "uv": 12,
+          "pv": 33,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-08": {
+          "uv": 7,
+          "pv": 13,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-09": {
+          "uv": 5,
+          "pv": 7,
           "paidClick": 0,
           "paidMember": 0,
           "refClick": 0
@@ -72,8 +86,22 @@
           "refClick": 0
         },
         "2026-11-07": {
-          "uv": 5,
-          "pv": 5,
+          "uv": 7,
+          "pv": 7,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-08": {
+          "uv": 6,
+          "pv": 6,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-09": {
+          "uv": 0,
+          "pv": 0,
           "paidClick": 0,
           "paidMember": 0,
           "refClick": 0
@@ -111,8 +139,22 @@
           "refClick": 0
         },
         "2026-11-07": {
+          "uv": 5,
+          "pv": 5,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-08": {
           "uv": 4,
-          "pv": 4,
+          "pv": 5,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 1
+        },
+        "2026-11-09": {
+          "uv": 1,
+          "pv": 2,
           "paidClick": 0,
           "paidMember": 0,
           "refClick": 0

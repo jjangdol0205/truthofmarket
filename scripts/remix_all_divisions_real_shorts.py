@@ -31,9 +31,9 @@ FPS = 30
 SAMPLE_RATE = 48000
 SAMPLES_PER_FRAME = SAMPLE_RATE // FPS
 
-TOM_ROOT = Path("d:/투자홈페이지/1_RightSideAlpha_미국주식터미널")
-KFG_ROOT = Path("d:/키즈핏 영문")
-FONT_BOLD = Path("d:/사업아이템/src/fonts/Pretendard-Black.otf")
+TOM_ROOT = Path("D:/드림컴퍼니/1사업부")
+KFG_ROOT = Path("D:/드림컴퍼니/2사업부")
+FONT_BOLD = Path("D:/드림컴퍼니/3사업부/src/fonts/Pretendard-Black.otf")
 if not FONT_BOLD.exists():
     FONT_BOLD = Path("C:/Windows/Fonts/arialbd.ttf")
 
