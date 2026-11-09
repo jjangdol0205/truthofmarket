@@ -133,6 +133,15 @@ export function renderPricing(state) {
 
   return `
     <div id="pricingSection">
+      <div style="background:linear-gradient(135deg, rgba(139,92,246,0.16) 0%, rgba(16,185,129,0.12) 100%); border:1px solid rgba(139,92,246,0.5); border-left:4px solid #8b5cf6; border-radius:8px; padding:12px 16px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div style="font-size:0.8rem; color:#e2e8f0; line-height:1.45;">
+          <span class="mono" style="color:#fbbf24; font-weight:800; font-size:0.72rem;">🎁 2-IN-1 DUAL TERMINAL PRO BUNDLE INCLUDED:</span>
+          Every <b>$29/mo</b> or <b>$199 Lifetime</b> license key (Store #296100) unlocks <b>BOTH TruthOfMarket.com</b> (60-Day PW-RSI &amp; $SMH:$XLV Barbell) <b>AND <a href="https://getbreakai.com/?utm_source=truthofmarket&utm_medium=pricing_bundle" target="_blank" rel="noopener noreferrer" style="color:#c4b5fd; font-weight:800; text-decoration:underline;">GetBreakAI.com</a></b> (1–15 Day Earnings Catalyst, Form-4 Whale &amp; Gamma Squeeze Terminal)!
+        </div>
+        <a href="https://getbreakai.com/?utm_source=truthofmarket&utm_medium=pricing_bundle" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background:rgba(139,92,246,0.2); border-color:rgba(139,92,246,0.55); color:#ddd6fe; font-weight:800; white-space:nowrap;">
+          ⚡ Explore GetBreakAI.com ↗
+        </a>
+      </div>
       <div class="pricing-grid">
         <!-- Tier 1: Pro Monthly -->
         <div class="price-card featured">

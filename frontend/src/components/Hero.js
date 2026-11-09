@@ -53,6 +53,9 @@ export function renderHero(state) {
           <a href="#stockTable" class="btn btn-sm" id="btnHeroJumpFreeSample" style="background:rgba(56,189,248,0.1); border-color:rgba(56,189,248,0.35); color:#38bdf8; font-weight:700; padding:5px 10px; font-size:0.73rem; text-decoration:none;">
             🔥 #1 Free Sample ($CELH) ↓
           </a>
+          <a href="https://getbreakai.com/?utm_source=truthofmarket&utm_medium=hero_sister" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background:rgba(139,92,246,0.15); border-color:rgba(139,92,246,0.5); color:#c4b5fd; font-weight:800; padding:5px 10px; font-size:0.73rem; text-decoration:none;" title="Open Sister Event-Driven Catalyst & Options Gamma Squeeze Terminal">
+            ⚡ 1–15d Earnings &amp; Gamma Squeeze → GetBreakAI.com ↗
+          </a>
         </div>
       </div>
 

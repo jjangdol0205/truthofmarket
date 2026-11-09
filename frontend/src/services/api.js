@@ -392,7 +392,7 @@ export async function validateLicense(licenseKey) {
           message: "Please enter a valid Lemon Squeezy license key.",
         };
       }
-      if (/^RSA-(PRO|LTD|VIP)-2026-[A-Z0-9-]+$/i.test(key)) {
+      if (/^(RSA|GBA)-(PRO|LTD|VIP)-2026-[A-Z0-9-]+$/i.test(key)) {
         return {
           valid: true,
           license_key: key.toUpperCase(),

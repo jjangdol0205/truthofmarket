@@ -46,7 +46,8 @@ const BOT_TOKENS_BY_DIV = {
   HQ: loadHqBotToken(),
   '1사업부': loadEnvToken('D:\\드림컴퍼니\\1사업부\\.env', /RSA_TELEGRAM_BOT_TOKEN=([^\r\n]+)/),
   '2사업부': loadEnvToken('D:\\드림컴퍼니\\2사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/),
-  '3사업부': loadEnvToken('D:\\드림컴퍼니\\3사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/)
+  '3사업부': loadEnvToken('D:\\드림컴퍼니\\3사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/),
+  '4사업부': loadHqBotToken()
 };
 
 const BOT_TOKEN = BOT_TOKENS_BY_DIV['1사업부'] || BOT_TOKENS_BY_DIV.HQ;
@@ -331,6 +332,17 @@ async function runVisitorBriefing(options = {}) {
       kpiGoal: '상품 구매 클릭으로 상품 레퍼럴(쿠팡/셀렉트샵) 확대',
       gscStatus: '소유권 인증 완료 · Sitemap 32p & RSS 27p 성공',
       channels: 'IG @kids_fit1 · YT @kidsfit01 · 무료진단 + 상품레퍼럴'
+    },
+    {
+      code: '4사업부',
+      name: 'GetBreakAI 이벤트·감마 퀀트 터미널',
+      domain: 'getbreakai.com',
+      url: 'https://getbreakai.com/',
+      ns: 'gba_getbreakai',
+      kpiType: 'PAID',
+      kpiGoal: '유료화 회원수 증대 ($29/mo & $199 Lifetime 듀얼 번들)',
+      gscStatus: '커스텀 도메인 HTTPS 개통 · Sitemap & JSON-LD 등록 완료',
+      channels: 'TG @SemifearGreedbot · X/YT Shorts · TruthOfMarket 크로스번들'
     }
   ];
 

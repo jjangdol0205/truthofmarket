@@ -322,6 +322,21 @@ const DIVISIONS = {
       "KFK-Naver-Viral-Agent (expertise333 블로그 · moneyfitlab 카페 · 지식iN · @kidsfit01 쇼츠)",
     ],
   },
+  GBA: {
+    code: "GBA",
+    name: "4사업부: GetBreakAI (getbreakai.com)",
+    domain: "https://getbreakai.com",
+    cwd: "D:\\드림컴퍼니\\4사업부",
+    conversationId: MASTER_CONVERSATION_ID,
+    botToken: SEMI_BOT_TOKEN,
+    botHandle: "@SemifearGreedbot",
+    managerTitle: "4사업부 이벤트·감마 퀀트 부문장 (GBA Division Lead)",
+    multiAgents: [
+      "GBA-Catalyst-NLP-Agent (SEC 8-K/10-K 어닝 NLP & 포렌식 감사 스캐너)",
+      "GBA-Whale-GEX-Agent (SEC Form-4 임원 매수 클러스터 & 옵션 감마 익스포저 GEX 엔진)",
+      "GBA-ATR-Execution-Agent (2.0x ATR 변동성 손절 · 5D IV 예상변동폭 · VIP 금고 데스크)",
+    ],
+  },
 };
 
 function getLiveTokenTelemetryBanner() {
@@ -368,7 +383,7 @@ function resolveDivisionByBotToken(botToken, includeHqAsAll = false) {
   if (RSA_BOT_TOKEN && botToken === RSA_BOT_TOKEN) return "TOM";
   if (KFG_BOT_TOKEN && botToken === KFG_BOT_TOKEN) return "KFG";
   if (KFK_BOT_TOKEN && botToken === KFK_BOT_TOKEN) return "KFK";
-  if (includeHqAsAll && SEMI_BOT_TOKEN && botToken === SEMI_BOT_TOKEN) return "ALL";
+  if (includeHqAsAll && SEMI_BOT_TOKEN && botToken === SEMI_BOT_TOKEN) return "GBA";
   return null;
 }
 
@@ -388,7 +403,8 @@ const HQ_KEYBOARD = {
     ],
     [
       { text: "🇰🇷 3사업부 (키즈핏 코리아)", callback_data: "/mode_kfk" },
-      { text: "📊 3대 사업부 & 채널 상태", callback_data: "/status" },
+      { text: "📊 1·2·3·4사업부 & 채널 상태", callback_data: "/status" },
+      { text: "⚡ 4사업부 (GetBreakAI)", callback_data: "/mode_gba" },
     ],
     [
       { text: "📰 미국주식·SMH·XLV VIP뉴스 발송", callback_data: "/tom_news" },
@@ -614,6 +630,7 @@ async function sendDivisionReportsAll(state, explicitChatId = null) {
     if (r.code === "1사업부") rMap.TOM = r;
     if (r.code === "2사업부") rMap.KFG = r;
     if (r.code === "3사업부") rMap.KFK = r;
+    if (r.code === "4사업부") rMap.GBA = r;
   }
   const commonData = loadCommonDirectives();
   const activeDiv = DIVISIONS[state?.activeDivision] || DIVISIONS.ALL;
@@ -679,6 +696,21 @@ async function sendDivisionReportsAll(state, explicitChatId = null) {
     KFK_BOT_TOKEN,
     explicitChatId
   );
+
+  // 5. 4사업부 (@SemifearGreedbot)
+  const r4 = rMap.GBA || { uvToday: 0, pvToday: 0, uvTotal: 0, pvTotal: 0, paidClickToday: 0, paidClickTotal: 0, paidMemberTotal: 0, health: { ok: true, ms: 120 } };
+  await sendHqMessage(
+    `⚡ <b>[4사업부 보고 — GetBreakAI 이벤트·감마 퀀트 터미널 (@SemifearGreedbot)]</b>\n` +
+      `━━━━━━━━━━━━━━━━━━━━\n` +
+      `• <b>도메인 / 경로</b>: https://getbreakai.com (<code>${DIVISIONS.GBA.cwd}</code>)\n` +
+      `• <b>서버 상태</b>: ${r4.health?.ok ? `🟢 정상 가동 (${r4.health.ms}ms)` : "🔴 점검 필요"} | SEC 8-K NLP · Form-4 · GEX\n` +
+      `• <b>오늘 방문자(UV/PV)</b>: <b>${r4.uvToday}명</b> (${r4.pvToday}회) | 누적 <b>${r4.uvTotal}명</b> (${r4.pvTotal}회)\n` +
+      `• <b>유료화 전환($29/$199)</b>: 오늘 결제클릭 <b>${r4.paidClickToday}회</b> (누적 ${r4.paidClickTotal}회 / 실결제 ${r4.paidMemberTotal}건)\n` +
+      `• <b>전담 에이전트</b>: 어닝 서프라이즈 NLP · 임원 매수 클러스터 · 2.0x ATR &amp; IV 감마 스퀴즈`,
+    true,
+    SEMI_BOT_TOKEN,
+    explicitChatId
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -706,6 +738,9 @@ function detectDivisionFromText(text, fallbackDiv) {
   if (/^(\[?3사업부\]?|3사업부\s*:|\[?kfk\]?|kfk\s*:)/.test(firstLine)) {
     return "KFK";
   }
+  if (/^(\[?4사업부\]?|4사업부\s*:|\[?gba\]?|gba\s*:|\[?getbreakai\]?|getbreakai\s*:)/.test(firstLine)) {
+    return "GBA";
+  }
 
   // 2. Strong all-divisions natural language keywords anywhere in the text
   const t = (text || "").toLowerCase();
@@ -723,6 +758,9 @@ function detectDivisionFromText(text, fallbackDiv) {
   }
 
   // 4. Domain / division keyword fallback
+  if (t.includes("getbreakai") || t.includes("getbreak") || t.includes("4사업")) {
+    return "GBA";
+  }
   if (t.includes("kidsfit.co.kr") || t.includes("사업아이템") || t.includes("3사업")) {
     return "KFK";
   }
@@ -898,7 +936,8 @@ async function handleCommand(rawText, state, botToken = null, opts = {}) {
         `👑 <b>본사 총괄 &amp; 전 사업부 공통</b>: <code>@SemifearGreedbot</code> (전 사업부 공통 지시·실결제 감시·새벽 R&amp;D)\n` +
         `1️⃣ <b>1사업부 전용 봇</b>: <code>@RigjtsideAlphabot</code> → <code>truthofmarket.com</code>\n` +
         `2️⃣ <b>2사업부 전용 봇</b>: <code>@kidsfittbot</code> → <code>kisfitglobal.com</code>\n` +
-        `3️⃣ <b>3사업부 전용 봇</b>: <code>@Moneyfiityyy_bot</code> → <code>kidsfit.co.kr</code>\n\n` +
+        `3️⃣ <b>3사업부 전용 봇</b>: <code>@Moneyfiityyy_bot</code> → <code>kidsfit.co.kr</code>\n` +
+        `4️⃣ <b>4사업부 전용 봇 (겸 본사)</b>: <code>@SemifearGreedbot</code> → <code>getbreakai.com</code>\n\n` +
         `<b>[현재 모드 산하 멀티에이전트]</b>\n` +
         (activeDiv.multiAgents || []).map((a) => `• <code>${a}</code>`).join("\n") +
         `\n━━━━━━━━━━━━━━━━━━━━\n` +
@@ -979,6 +1018,8 @@ async function handleCommand(rawText, state, botToken = null, opts = {}) {
         DIVISIONS.KFG.multiAgents.map((a) => `   ├ ${a}`).join("\n") +
         `\n\n🇰🇷 <b>3사업부 부문장 (@Moneyfiityyy_bot · kidsfit.co.kr)</b>\n` +
         DIVISIONS.KFK.multiAgents.map((a) => `   ├ ${a}`).join("\n") +
+        `\n\n⚡ <b>4사업부 부문장 (@SemifearGreedbot · getbreakai.com)</b>\n` +
+        DIVISIONS.GBA.multiAgents.map((a) => `   ├ ${a}`).join("\n") +
         `\n━━━━━━━━━━━━━━━━━━━━\n` +
         `✅ <b>운영 원칙</b>: 24시간 홍보·검열·종가동기화는 <b>안티그래비티 토큰 0%</b> 로컬 스크립트로만 구동!`,
       true,
@@ -1017,7 +1058,9 @@ async function handleCommand(rawText, state, botToken = null, opts = {}) {
     text === "전사업부모드" ||
     text === "/mode_tom" ||
     text === "/mode_kfg" ||
-    text === "/mode_kfk"
+    text === "/mode_kfk" ||
+    text === "/mode_gba" ||
+    text === "4사업부모드"
   ) {
     const map = {
       "/mode_all": "ALL",
@@ -1027,6 +1070,8 @@ async function handleCommand(rawText, state, botToken = null, opts = {}) {
       "/mode_tom": "TOM",
       "/mode_kfg": "KFG",
       "/mode_kfk": "KFK",
+      "/mode_gba": "GBA",
+      "4사업부모드": "GBA",
     };
     state.activeDivision = map[text] || "ALL";
     saveState(state);
@@ -1616,7 +1661,7 @@ async function pollBotTokenOnce(botToken, state) {
           const replyBotUsername = String(upd.message.reply_to_message?.from?.username || "").toLowerCase();
           if (/semifeargreedbot/i.test(rawMsg) || replyBotUsername === "semifeargreedbot") {
             targetBotToken = SEMI_BOT_TOKEN;
-            explicitDiv = "ALL";
+            explicitDiv = "GBA";
           } else if (/rigjtsidealphabot/i.test(rawMsg) || replyBotUsername === "rigjtsidealphabot") {
             targetBotToken = RSA_BOT_TOKEN;
             explicitDiv = "TOM";
@@ -1671,6 +1716,7 @@ async function main() {
       if (/1사업부|truthofmarket|rightsidealpha/i.test(msg) && !/2사업부|3사업부/.test(msg)) divArg = "TOM";
       else if (/2사업부|kisfitglobal|키즈핏 영문/i.test(msg) && !/1사업부|3사업부/.test(msg)) divArg = "KFG";
       else if (/3사업부|kidsfit\.co\.kr|사업아이템|키즈핏 코리아/i.test(msg) && !/1사업부|2사업부/.test(msg)) divArg = "KFK";
+      else if (/4사업부|getbreakai/i.test(msg)) divArg = "GBA";
       else divArg = "ALL";
     }
     const targetToken =
