@@ -11,6 +11,11 @@ import {
   verifyAdminCredentials,
   fetchPineScript,
   evaluatePositionDoctor,
+  evaluatePortfolioDoctor,
+  fetchSectorMatrix,
+  getVipWatchlist,
+  saveVipWatchlist,
+  SECTOR_REGIME_MAP,
   fetchReferralConfig,
   updateReferralConfig,
   fetchSemiOverview,
@@ -32,7 +37,7 @@ import { renderHero } from "./components/Hero.js";
 import { renderProofCard } from "./components/ProofCard.js";
 import { renderScreenerControls, renderStockTable, renderStockRows } from "./components/StockTable.js";
 import { renderProVault } from "./components/ProVault.js";
-import { formatDoctorResult } from "./components/PositionDoctor.js";
+import { formatDoctorResult, renderPortfolioDoctorForm, formatPortfolioDoctorResult } from "./components/PositionDoctor.js";
 import { renderPricing } from "./components/Pricing.js";
 import { renderModals } from "./components/Modals.js";
 import { renderSemiFearGreedView } from "./components/SemiFearGreedView.js";
@@ -130,6 +135,16 @@ const state = {
   zoneFilter: initialFilterParam === "ignition" || initialFilterParam === "ignition_zone" ? "IGNITION_ZONE" : initialFilterParam === "washout" ? "WASHOUT_WATCH" : "ALL",
   sortCol: "score",
   sortAsc: false,
+  sectorFilter: "ALL",
+  vipWatchlist: getVipWatchlist(),
+  portfolioPositions: [
+    { ticker: "CELH", entry_price: 28.5, shares: 100, days_held: 35, current_price: 27.93 },
+    { ticker: "CCL", entry_price: 19.2, shares: 200, days_held: 25, current_price: 21.4 },
+    { ticker: "TSLA", entry_price: 215.0, shares: 50, days_held: 45, current_price: 228.0 },
+    { ticker: "UPST", entry_price: 38.0, shares: 150, days_held: 20, current_price: 44.5 },
+  ],
+  portfolioDocResult: null,
+  sectorMatrix: null,
   // SemiFearGreed state
   semiOverview: null,
   semiHistory: null,
@@ -188,12 +203,22 @@ function showToast(msg) {
 
 function applyClientFilterAndSort() {
   const q = (state.searchQuery || "").trim().toLowerCase();
-  const z = state.zoneFilter;
+  const z = state.zoneFilter || "ALL";
+  const secFilter = state.sectorFilter || "ALL";
+  const vipList = state.vipWatchlist || [];
 
   let list = state.stocks.filter((s) => {
     // Strictly US-listed equities only
     if (!s.ticker || String(s.ticker).includes(".")) return false;
-    if (z !== "ALL" && s.zone_code !== z) return false;
+    if (z === "VIP_WATCHLIST") {
+      if (!vipList.includes(s.ticker)) return false;
+    } else if (z !== "ALL" && s.zone_code !== z) {
+      return false;
+    }
+    if (secFilter !== "ALL") {
+      const sRegime = (SECTOR_REGIME_MAP && SECTOR_REGIME_MAP[s.sector]) || s.sector || "Other";
+      if (sRegime !== secFilter) return false;
+    }
     if (q) {
       const isLockedRow = !state.isProUnlocked && s.zone_code === "IGNITION_ZONE" && s.ticker !== "CELH";
       const hay = isLockedRow
@@ -657,26 +682,16 @@ function bindEvents() {
     }
   });
 
-  document.querySelectorAll(".lemonsqueezy-button").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      const href = btn.getAttribute("href") || "";
-      const isDirectModalBtn = true; // Always open Lemon Squeezy live checkout directly without free trial modal interception
-      if (!isDirectModalBtn) {
-        e.preventDefault();
-        const isLtd = href.includes("00c9f6e1") || href.includes("667aa482") || (btn.id || "").toLowerCase().includes("ltd");
-        openLicenseModal(
-          false,
-          isLtd
-            ? "💎 Selected: Lifetime Pass ($199) — Proceed to Lemon Squeezy Checkout above, or enter your email for an instant 7-Day Pro Founding Pass!"
-            : "🍋 Selected: Pro Monthly ($29/mo) — Proceed to Lemon Squeezy Checkout above, or enter your email for an instant 7-Day Pro Founding Pass!"
-        );
-        return;
-      }
-      if (window.LemonSqueezy && window.LemonSqueezy.Url && typeof window.LemonSqueezy.Url.Open === "function") {
-        e.preventDefault();
-        window.LemonSqueezy.Url.Open(href);
-      }
-    });
+  // Delegated Lemon Squeezy Checkout Overlay Interceptor
+  // Handles both static and dynamically rendered checkout buttons (e.g. inside #docOutput)
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".lemonsqueezy-button");
+    if (!btn) return;
+    const href = btn.getAttribute("href") || "";
+    if (window.LemonSqueezy && window.LemonSqueezy.Url && typeof window.LemonSqueezy.Url.Open === "function") {
+      e.preventDefault();
+      window.LemonSqueezy.Url.Open(href);
+    }
   });
 
   // Admin Login & Config Modal Controls
@@ -1156,7 +1171,7 @@ function bindEvents() {
           days_held: daysHeld,
         });
         state.docLastResult = res;
-        if (outEl) outEl.innerHTML = formatDoctorResult(res);
+        if (outEl) outEl.innerHTML = formatDoctorResult(res, state);
       } catch (e) {
         // Ignore
       }
@@ -1186,11 +1201,236 @@ function bindEvents() {
         });
         state.docLastResult = res;
         if (outEl) {
-          outEl.innerHTML = formatDoctorResult(res);
+          outEl.innerHTML = formatDoctorResult(res, state);
         }
       } catch (err) {
         if (outEl) {
           outEl.innerHTML = `<div style="color:var(--fin-down);">Please enter a valid positive cost basis ($) and non-negative trading days.</div>`;
+        }
+      }
+    });
+  }
+
+  // Sector Regime Matrix Quick Filter Select
+  const sectorFilterSelect = document.getElementById("sectorFilterSelect");
+  if (sectorFilterSelect) {
+    sectorFilterSelect.addEventListener("change", (e) => {
+      state.sectorFilter = e.target.value;
+      applyClientFilterAndSort();
+      renderApp();
+    });
+  }
+
+  // 1-Click VIP Watchlist CSV Export
+  const exportWatchlistCsv = () => {
+    if (!state.isProUnlocked) {
+      openLicenseModal(false, "Save custom VIP watchlists and get breakout alerts with Pro VIP.");
+      return;
+    }
+    const starredList = state.vipWatchlist || [];
+    const starredStocks = (state.stocks || []).filter((s) => starredList.includes(s.ticker));
+    if (!starredStocks.length) {
+      showToast("Your VIP Watchlist is empty. Star tickers using ⭐ to export.");
+      return;
+    }
+    const perSlot = Math.round((state.proPortfolioUsd || 30000) * 0.15);
+    const header = "Rank,Ticker,Company,Sector,PW_RSI_Score,Zone,Close,Entry_Trigger,Stop_Loss_9Pct,Target_2X_TP1,Recommended_Shares_15Pct_Slot\n";
+    const rows = starredStocks.map((s, idx) => {
+      const c = Number(s.close || 0);
+      const trig = Number(s.entry_trigger_price ?? s.ma60_price ?? c).toFixed(2);
+      const stp = Number(s.stop_loss_price ?? c * 0.91).toFixed(2);
+      const tp1 = Number(s.tp1_2x_price ?? c * 2.0).toFixed(2);
+      const sh = c > 0 ? Math.max(1, Math.floor(perSlot / c)) : 0;
+      return `${idx + 1},${s.ticker},"${(s.name_en || s.ticker).replace(/"/g, '""')}",${s.sector || "US Equity"},${s.score},${s.zone_code},${c.toFixed(2)},${trig},${stp},${tp1},${sh}`;
+    });
+    const blob = new Blob([header + rows.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `RightSideAlpha_VIP_Watchlist_${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast(`📥 Exported ${starredStocks.length} Starred Watchlist Tickers (.CSV)`);
+  };
+
+  const btnExportVipWatchlistCsv = document.getElementById("btnExportVipWatchlistCsv");
+  if (btnExportVipWatchlistCsv) {
+    btnExportVipWatchlistCsv.addEventListener("click", exportWatchlistCsv);
+  }
+  const btnVaultExportWatchlistCsv = document.getElementById("btnVaultExportWatchlistCsv");
+  if (btnVaultExportWatchlistCsv) {
+    btnVaultExportWatchlistCsv.addEventListener("click", exportWatchlistCsv);
+  }
+
+  // Filter Table by Sector from ProVault Card
+  document.querySelectorAll(".btn-filter-sector-card").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const sec = btn.getAttribute("data-sector") || "ALL";
+      state.sectorFilter = sec;
+      state.zoneFilter = "ALL";
+      applyClientFilterAndSort();
+      renderApp();
+      const screenerSec = document.querySelector(".screener-panel") || document.getElementById("stockTable");
+      if (screenerSec && typeof screenerSec.scrollIntoView === "function") {
+        screenerSec.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      showToast(`Filtered Screener to: ${sec}`);
+    });
+  });
+
+  // Vault Go to VIP Watchlist Button
+  const btnVaultGoWatchlist = document.getElementById("btnVaultGoWatchlist");
+  if (btnVaultGoWatchlist) {
+    btnVaultGoWatchlist.addEventListener("click", () => {
+      state.zoneFilter = "VIP_WATCHLIST";
+      state.sectorFilter = "ALL";
+      applyClientFilterAndSort();
+      renderApp();
+      const screenerSec = document.querySelector(".screener-panel") || document.getElementById("stockTable");
+      if (screenerSec && typeof screenerSec.scrollIntoView === "function") {
+        screenerSec.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      showToast("Filtered Screener to ⭐ VIP Watchlist");
+    });
+  }
+
+  // Helper: Read Portfolio Doctor 2.0 Positions from DOM
+  const getPortfolioPositionsFromDOM = () => {
+    const rows = document.querySelectorAll(".port-input-row");
+    const positions = [];
+    rows.forEach((row) => {
+      const ticker = (row.querySelector(".port-row-ticker")?.value || "").trim().toUpperCase();
+      const entry_price = parseFloat(row.querySelector(".port-row-entry")?.value || "0");
+      const shares = parseFloat(row.querySelector(".port-row-shares")?.value || "1");
+      const days_held = parseInt(row.querySelector(".port-row-days")?.value || "0", 10);
+      const curVal = row.querySelector(".port-row-cur")?.value;
+      const current_price = curVal !== undefined && curVal !== null && curVal !== "" && Number(curVal) > 0 ? parseFloat(curVal) : null;
+      if (ticker && entry_price > 0) {
+        positions.push({ ticker, entry_price, shares, days_held, current_price });
+      }
+    });
+    return positions;
+  };
+
+  // Add Position Row
+  const btnAddPortRow = document.getElementById("btnAddPortRow");
+  if (btnAddPortRow) {
+    btnAddPortRow.addEventListener("click", () => {
+      const currentPositions = getPortfolioPositionsFromDOM();
+      if (currentPositions.length >= 10) {
+        showToast("Maximum 10 positions allowed in Portfolio Doctor 2.0");
+        return;
+      }
+      currentPositions.push({ ticker: "", entry_price: 25.0, shares: 100, days_held: 15, current_price: null });
+      state.portfolioPositions = currentPositions;
+      renderApp();
+      const newInputs = document.querySelectorAll(".port-row-ticker");
+      if (newInputs.length > 0) newInputs[newInputs.length - 1].focus();
+    });
+  }
+
+  // Remove Position Row
+  document.querySelectorAll(".btn-remove-port-row").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const idx = parseInt(btn.getAttribute("data-row-idx") || "0", 10);
+      const currentPositions = getPortfolioPositionsFromDOM();
+      currentPositions.splice(idx, 1);
+      state.portfolioPositions = currentPositions;
+      renderApp();
+    });
+  });
+
+  // Preset: Load Current Ignition Leaders
+  const btnLoadPresetIgnition = document.getElementById("btnLoadPresetIgnition");
+  if (btnLoadPresetIgnition) {
+    btnLoadPresetIgnition.addEventListener("click", () => {
+      const celh = state.stocks.find((s) => s.ticker === "CELH");
+      const ccl = state.stocks.find((s) => s.ticker === "CCL");
+      const tsla = state.stocks.find((s) => s.ticker === "TSLA");
+      const upst = state.stocks.find((s) => s.ticker === "UPST");
+      state.portfolioPositions = [
+        { ticker: "CELH", entry_price: celh ? Number(celh.close) : 28.5, shares: 100, days_held: 35, current_price: celh ? Number(celh.close) : 27.93 },
+        { ticker: "CCL", entry_price: ccl ? Number(ccl.close) : 19.2, shares: 200, days_held: 25, current_price: ccl ? Number(ccl.close) : 21.4 },
+        { ticker: "TSLA", entry_price: tsla ? Number(tsla.close) : 215.0, shares: 50, days_held: 45, current_price: tsla ? Number(tsla.close) : 228.0 },
+        { ticker: "UPST", entry_price: upst ? Number(upst.close) : 38.0, shares: 150, days_held: 20, current_price: upst ? Number(upst.close) : 44.5 },
+      ];
+      renderApp();
+      showToast("🚀 Loaded Current Ignition Leaders Preset");
+    });
+  }
+
+  // Preset: Load Sample Tech Basket
+  const btnLoadPresetTech = document.getElementById("btnLoadPresetTech");
+  if (btnLoadPresetTech) {
+    btnLoadPresetTech.addEventListener("click", () => {
+      const nvda = state.stocks.find((s) => s.ticker === "NVDA");
+      const amd = state.stocks.find((s) => s.ticker === "AMD");
+      const pltr = state.stocks.find((s) => s.ticker === "PLTR");
+      const crwd = state.stocks.find((s) => s.ticker === "CRWD");
+      state.portfolioPositions = [
+        { ticker: "NVDA", entry_price: nvda ? Number(nvda.close) : 135.0, shares: 75, days_held: 40, current_price: nvda ? Number(nvda.close) : 138.5 },
+        { ticker: "AMD", entry_price: amd ? Number(amd.close) : 155.0, shares: 60, days_held: 60, current_price: amd ? Number(amd.close) : 158.0 },
+        { ticker: "PLTR", entry_price: pltr ? Number(pltr.close) : 42.0, shares: 200, days_held: 30, current_price: pltr ? Number(pltr.close) : 44.2 },
+        { ticker: "CRWD", entry_price: crwd ? Number(crwd.close) : 310.0, shares: 30, days_held: 15, current_price: crwd ? Number(crwd.close) : 322.0 },
+      ];
+      renderApp();
+      showToast("💻 Loaded Sample Tech Basket Preset");
+    });
+  }
+
+  // Clear All Position Rows
+  const btnClearPortRows = document.getElementById("btnClearPortRows");
+  if (btnClearPortRows) {
+    btnClearPortRows.addEventListener("click", () => {
+      state.portfolioPositions = [
+        { ticker: "", entry_price: 0, shares: 100, days_held: 0, current_price: null },
+      ];
+      state.portfolioDocResult = null;
+      renderApp();
+      showToast("Cleared Portfolio Positions");
+    });
+  }
+
+  // Submit VIP Portfolio Diagnostic
+  const btnRunPortfolioDoctor = document.getElementById("btnRunPortfolioDoctor");
+  if (btnRunPortfolioDoctor) {
+    btnRunPortfolioDoctor.addEventListener("click", async () => {
+      if (!state.isProUnlocked) {
+        openLicenseModal(false, "Upgrade to Pro to unlock the Multi-Position Portfolio Doctor 2.0 & Volatility Stress Testing.");
+        return;
+      }
+      const positions = getPortfolioPositionsFromDOM();
+      if (!positions.length) {
+        showToast("Please enter at least 1 valid stock position with ticker and cost basis.");
+        return;
+      }
+      state.portfolioPositions = positions;
+      const totalCap = parseFloat(document.getElementById("portTotalCapital")?.value || "50000") || 50000;
+      state.proPortfolioUsd = totalCap;
+      try {
+        localStorage.setItem("rsa_pro_cap_usd", String(totalCap));
+      } catch (_) {}
+
+      const outEl = document.getElementById("portfolioDocOutput");
+      if (outEl) {
+        outEl.innerHTML = `<div class="mono" style="padding:14px; color:#93c5fd; font-size:0.8rem; background:#05080f; border-radius:4px;">⏳ Running quant health diagnostic & macro stress testing on ${positions.length} positions...</div>`;
+      }
+
+      try {
+        const res = await evaluatePortfolioDoctor({
+          positions: positions,
+          total_capital: totalCap,
+        });
+        state.portfolioDocResult = res;
+        if (outEl) {
+          outEl.innerHTML = formatPortfolioDoctorResult(res, state);
+        }
+        showToast(`🩺 Portfolio Health Score: ${res.health_score}/100`);
+      } catch (err) {
+        if (outEl) {
+          outEl.innerHTML = `<div style="color:var(--fin-down); padding:12px; font-size:0.8rem;">Diagnostic evaluation error. Please ensure all tickers and entry prices are positive.</div>`;
         }
       }
     });
@@ -1595,6 +1835,43 @@ function bindRowEvents() {
           inputEl.value = state.licenseKey || "";
         }
       }
+    });
+  });
+
+  // Watchlist Star Toggles on Screener Table Rows
+  document.querySelectorAll(".btn-watchlist-star").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (!state.isProUnlocked) {
+        const licenseModal = document.getElementById("licenseModal");
+        if (licenseModal) {
+          licenseModal.style.display = "flex";
+          const inputEl = document.getElementById("licenseInput");
+          const msgEl = document.getElementById("licenseMsg");
+          if (inputEl && !inputEl.value.trim()) {
+            inputEl.value = state.licenseKey || "";
+          }
+          if (msgEl) {
+            msgEl.style.color = "#93c5fd";
+            msgEl.textContent = "Save custom VIP watchlists and get breakout alerts with Pro VIP.";
+          }
+        }
+        return;
+      }
+      const ticker = (btn.getAttribute("data-ticker") || "").trim().toUpperCase();
+      if (!ticker) return;
+      const currentList = new Set(state.vipWatchlist || []);
+      if (currentList.has(ticker)) {
+        currentList.delete(ticker);
+        showToast(`Removed $${ticker} from VIP Watchlist`);
+      } else {
+        currentList.add(ticker);
+        showToast(`Added $${ticker} to ⭐ VIP Watchlist`);
+      }
+      state.vipWatchlist = Array.from(currentList);
+      saveVipWatchlist(state.vipWatchlist);
+      applyClientFilterAndSort();
+      renderApp();
     });
   });
 

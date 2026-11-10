@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-08T13:23:35.823Z",
+  "updatedAt": "2026-11-09T21:42:47.626Z",
   "telegramDedicatedConversationId": "1921e31e-ab59-4720-9419-93cac770374d",
   "pcDirectConversationId": "dbc61f0a-76cb-48e3-b617-a616c069564c",
   "standingDirectives": [
@@ -12,21 +12,32 @@
     {
       "id": 2,
       "title": "전 사업부 결제·수익화 가드레일 절대 보호",
-      "rule": "1사업부(truthofmarket.com) 및 2사업부(kisfitglobal.com)의 Lemon Squeezy 실결제 Live UUID(#296100)와 3사업부(kidsfit.co.kr)의 쿠팡 파트너스(AF7865143)·링크프라이스(A100708867) 수익 코드 및 공정위 고지문, 금지어(최저가·할인율·특가·폭탄세일 사용 금지)를 절대 훼손하지 않는다.",
+      "rule": "1사업부(truthofmarket.com), 2사업부(kisfitglobal.com), 3사업부(getbreakai.com)의 Lemon Squeezy 실결제 Store #296100 및 플랜, 4사업부(paradise-hero.com) 골드 VIP·황금 응원 전광판 퍼널, 5사업부(kidsfit.co.kr)의 쿠팡 파트너스(AF7865143)·링크프라이스(A100708867) 수익 코드 및 공정위 고지문, 금지어(최저가·할인율·특가·폭탄세일 사용 금지)를 절대 훼손하지 않는다.",
       "createdAt": "2026-11-08T22:12:00+09:00"
     },
     {
       "id": 3,
-      "title": "전 사업부 클린 숏폼(1080×1920) V3 마스터링 표준",
-      "rule": "1·2·3사업부 모든 숏폼 영상은 양산형 상·하단 흰색/검은색 박스·배너·워터마크를 배제한 본문 100% 클린 풀스크린(1080×1920), A/B/C 3안 대본 비교 후 최고 도파민 훅 채택, 1.2배속(+18~20%) 무공백(Zero-Silence) 호흡, 1.8~2.2초 단위 고속 컷·자막 동시 전환, 포인트 효과음(SFX) 및 클리핑 방지(-0.5dBFS), 하단 세이프존(Y=1380~1450) 두꺼운 외곽선 자막(stroke_width >= 8), 종료 2.5~3.8초 엔딩 슬레이트 도메인 콜아웃, 1소스 다국어(EN/KR/JA) 확장 규격을 준수한다.",
+      "title": "전 사업부 클린 비디오(숏폼 V3 & 4사업부 롱폼 라디오) 마스터링 표준",
+      "rule": "1·2·3·5사업부 모든 숏폼 영상은 양산형 상·하단 흰색/검은색 박스·배너·워터마크를 배제한 본문 100% 클린 풀스크린(1080×1920), A/B/C 3안 대본 비교 후 최고 도파민 훅 채택, 1.2배속(+18~20%) 무공백(Zero-Silence) 호흡, 1.8~2.2초 단위 고속 컷·자막 동시 전환, 포인트 효과음(SFX) 및 클리핑 방지(-0.5dBFS), 하단 세이프존(Y=1380~1465) 두꺼운 외곽선 자막(stroke_width >= 8), 종료 2.5~3.8초 엔딩 슬레이트 도메인 콜아웃 규격을 준수하며, 4사업부(@김쌤의영웅라디오)는 시니어 친화 1920×1080 롱폼 라디오 및 초대형 노란색/흰색 가사·사연 자막 규격을 준수한다.",
       "createdAt": "2026-11-08T22:12:00+09:00"
     },
     {
       "id": 4,
-      "title": "전 사업부 1:1 전담 봇 결과 보고 및 라이브 검증 원칙",
-      "rule": "작업 완료 시 반드시 빌드 및 라이브/로컬 전수 검증을 마친 뒤, 본사 총괄(@SemifearGreedbot), 1사업부(@RigjtsideAlphabot), 2사업부(@kidsfittbot), 3사업부(@Moneyfiityyy_bot) 중 해당 전용 봇으로 핵심 요약 결과를 즉시 답장한다.",
+      "title": "1~5사업부 1:1 전담 봇 결과 보고 및 라이브 검증 원칙",
+      "rule": "작업 완료 시 반드시 빌드 및 라이브/로컬 전수 검증을 마친 뒤, 본사 총괄(@SemifearGreedbot), 1사업부(@RigjtsideAlphabot), 2사업부(@kidsfittbot), 3사업부(@SemifearGreedbot), 4사업부(@inves123_bot), 5사업부(@Moneyfiityyy_bot) 중 해당 전용 봇으로 핵심 요약 결과를 즉시 답장한다.",
       "createdAt": "2026-11-08T22:12:00+09:00"
     }
   ],
-  "recentCommonOrders": []
+  "recentCommonOrders": [
+    {
+      "text": "1회 영상 봤는데 목소리가 너무 빠른거 아냐? 그리고 자막 다 읽은거야?",
+      "status": "DISPATCHED",
+      "createdAt": "2026-11-09 21:42:47"
+    },
+    {
+      "text": "1화 영상 보내줘",
+      "status": "DISPATCHED",
+      "createdAt": "2026-11-09 21:34:36"
+    }
+  ]
 }

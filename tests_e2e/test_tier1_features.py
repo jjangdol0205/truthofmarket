@@ -458,3 +458,69 @@ def test_t1_semi_pro_csv_download_gated(client):
     assert auth.status_code == 200
     assert "Date,SMH_Close,XLV_Close" in auth.text[:200]
 
+
+# ==============================================================================
+# Feature 8: VIP Portfolio Doctor 2.0, Sector Matrix & Watchlist Gating (F4)
+# ==============================================================================
+
+def test_t1_portfolio_doctor_unauthenticated_blocked(client):
+    """POST /api/pro/portfolio-doctor returns 401 Unauthorized without auth."""
+    payload = {
+        "positions": [
+            {"ticker": "CELH", "entry_price": 35.0, "shares": 100, "days_held": 45, "current_price": 28.5}
+        ],
+        "total_capital": 10000.0,
+    }
+    resp = client.post("/api/pro/portfolio-doctor", json=payload)
+    assert resp.status_code == 401, f"Expected 401, got {resp.status_code}: {resp.text}"
+
+
+def test_t1_sector_matrix_unauthenticated_blocked(client):
+    """GET /api/pro/sector-matrix returns 401 Unauthorized without auth."""
+    resp = client.get("/api/pro/sector-matrix")
+    assert resp.status_code == 401, f"Expected 401, got {resp.status_code}: {resp.text}"
+
+
+def test_t1_watchlist_unauthenticated_blocked(client):
+    """POST /api/pro/watchlist returns 401 Unauthorized without auth."""
+    resp = client.post("/api/pro/watchlist", json={"tickers": ["NVDA", "CELH"]})
+    assert resp.status_code == 401, f"Expected 401, got {resp.status_code}: {resp.text}"
+
+
+def test_t1_portfolio_doctor_demo_key_unlocked(client):
+    """POST /api/pro/portfolio-doctor with Bearer PRO-DEMO-2026 returns 200 with valid health score, items, and stress scenarios."""
+    headers = {"Authorization": "Bearer PRO-DEMO-2026"}
+    payload = {
+        "positions": [
+            {"ticker": "CELH", "entry_price": 35.0, "shares": 100, "days_held": 45, "current_price": 28.5},
+            {"ticker": "NVDA", "entry_price": 120.0, "shares": 50, "days_held": 20, "current_price": 135.0},
+        ],
+        "total_capital": 20000.0,
+    }
+    resp = client.post("/api/pro/portfolio-doctor", headers=headers, json=payload)
+    assert resp.status_code == 200, f"Expected 200, got {resp.status_code}: {resp.text}"
+    data = resp.json()
+    assert "health_score" in data
+    assert isinstance(data["health_score"], int)
+    assert 0 <= data["health_score"] <= 100
+    assert "items" in data
+    assert len(data["items"]) == 2
+    assert "stress_scenarios" in data
+    assert len(data["stress_scenarios"]) == 3
+    assert "rebalance_recommendations" in data
+    assert len(data["rebalance_recommendations"]) > 0
+
+
+def test_t1_sector_matrix_demo_key_unlocked(client):
+    """GET /api/pro/sector-matrix with Bearer PRO-DEMO-2026 returns 200 with 8 sector regimes."""
+    headers = {"Authorization": "Bearer PRO-DEMO-2026"}
+    resp = client.get("/api/pro/sector-matrix", headers=headers)
+    assert resp.status_code == 200, f"Expected 200, got {resp.status_code}: {resp.text}"
+    data = resp.json()
+    assert "sectors" in data
+    sectors = data["sectors"]
+    assert len(sectors) == 8, f"Expected 8 sectors, got {len(sectors)}"
+    total_stocks = sum(s.get("count", 0) for s in sectors)
+    assert total_stocks == 72, f"Expected 72 stocks across all sectors, got {total_stocks}"
+
+

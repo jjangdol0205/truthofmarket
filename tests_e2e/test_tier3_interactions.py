@@ -12,6 +12,10 @@ Covers pairwise feature interplay:
 Total: 7 Pairwise Interaction Test Cases
 """
 
+import csv
+import io
+from pathlib import Path
+import re
 import pytest
 
 
@@ -186,3 +190,165 @@ def test_t3_pairwise_query_param_auth_unmasks_stocks(client):
     assert len(stocks) >= 5
     assert stocks[4]["is_pro_locked"] is False
     assert stocks[4]["stop_loss_price"] is not None
+
+
+def test_t3_pairwise_vip_watchlist_lifecycle_and_export(client):
+    """
+    Interaction 8:
+    1. Authenticate with Bearer PRO-DEMO-2026.
+    2. Set synchronized watchlist tickers to ['NVDA', 'CELH'].
+    3. Add 'TSLA' via action='add'.
+    4. Remove 'CELH' via action='remove'.
+    5. Query GET /api/pro/watchlist to verify state is ['NVDA', 'TSLA'].
+    6. Verify CSV export generation with standard screener fields.
+    7. Clear watchlist with action='clear'.
+    """
+    headers = {"Authorization": "Bearer PRO-DEMO-2026"}
+
+    # Step 1: Set initial watchlist
+    r_set = client.post(
+        "/api/pro/watchlist",
+        headers=headers,
+        json={"tickers": ["NVDA", "CELH"], "action": "set"},
+    )
+    assert r_set.status_code == 200
+    assert r_set.json()["count"] == 2
+    assert "NVDA" in r_set.json()["watchlist"]
+    assert "CELH" in r_set.json()["watchlist"]
+
+    # Step 2: Add ticker
+    r_add = client.post(
+        "/api/pro/watchlist",
+        headers=headers,
+        json={"tickers": ["TSLA"], "action": "add"},
+    )
+    assert r_add.status_code == 200
+    assert r_add.json()["count"] == 3
+    assert "TSLA" in r_add.json()["watchlist"]
+
+    # Step 3: Remove ticker
+    r_rem = client.post(
+        "/api/pro/watchlist",
+        headers=headers,
+        json={"tickers": ["CELH"], "action": "remove"},
+    )
+    assert r_rem.status_code == 200
+    assert r_rem.json()["count"] == 2
+    assert "CELH" not in r_rem.json()["watchlist"]
+
+    # Step 4: Get synchronized watchlist
+    r_get = client.get("/api/pro/watchlist", headers=headers)
+    assert r_get.status_code == 200
+    active_watchlist = r_get.json()["watchlist"]
+    assert len(active_watchlist) == 2
+    assert "NVDA" in active_watchlist
+    assert "TSLA" in active_watchlist
+
+    # Step 5: Verify CSV Export Structure
+    # Retrieve unmasked stock metrics for active watchlist items
+    r_stocks = client.get("/api/stocks", headers=headers)
+    assert r_stocks.status_code == 200
+    stocks_dict = {s["ticker"]: s for s in r_stocks.json()}
+
+    # Construct standard Watchlist CSV export
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["Ticker", "Name", "Close", "Zone", "Score", "StopLoss", "TP1_2X"])
+
+    for ticker in active_watchlist:
+        assert ticker in stocks_dict, f"Watchlist ticker {ticker} not found in universe"
+        s = stocks_dict[ticker]
+        writer.writerow([
+            s["ticker"],
+            s.get("name", s["ticker"]),
+            f"{s['close']:.2f}",
+            s.get("zone_code", "N/A"),
+            f"{s.get('score', 0):.1f}",
+            f"{s.get('stop_loss_price', 0):.2f}",
+            f"{s.get('tp1_2x_price', 0):.2f}",
+        ])
+
+    csv_text = output.getvalue()
+    lines = [ln.strip() for ln in csv_text.strip().split("\n") if ln.strip()]
+    assert len(lines) == 3  # Header + 2 data rows
+    assert lines[0] == "Ticker,Name,Close,Zone,Score,StopLoss,TP1_2X"
+    assert "NVDA" in csv_text
+    assert "TSLA" in csv_text
+    assert "undefined" not in csv_text.lower()
+    assert "nan" not in csv_text.lower()
+
+    # Step 6: Clear watchlist
+    r_clr = client.post("/api/pro/watchlist", headers=headers, json={"action": "clear"})
+    assert r_clr.status_code == 200
+    assert r_clr.json()["count"] == 0
+
+
+def test_t3_lemonsqueezy_store_296100_invariants_preserved():
+    """
+    Interaction 9:
+    Explicitly verifies that Lemon Squeezy Store #296100 Live Mode checkout links
+    and overlay embed parameter are preserved intact across source and bundles:
+    - Monthly VIP ($29/mo): bad98d00-7175-41f6-9d58-eeb2471d0da4
+    - Lifetime VIP ($199): 00c9f6e1-c8be-42a4-b5a5-e05af1a41ed9
+    - In-page checkout overlay: embed=1
+    """
+    project_root = Path(__file__).resolve().parent.parent
+
+    monthly_uuid = "bad98d00-7175-41f6-9d58-eeb2471d0da4"
+    lifetime_uuid = "00c9f6e1-c8be-42a4-b5a5-e05af1a41ed9"
+
+    # 1. Source verification: frontend/src/components/Pricing.js
+    pricing_js = (project_root / "frontend" / "src" / "components" / "Pricing.js").read_text(encoding="utf-8")
+    assert monthly_uuid in pricing_js, "Monthly VIP UUID missing in Pricing.js"
+    assert lifetime_uuid in pricing_js, "Lifetime VIP UUID missing in Pricing.js"
+    assert "truthofmarket.lemonsqueezy.com/checkout/buy" in pricing_js
+
+    # 2. Source verification: frontend/src/components/Modals.js
+    modals_js = (project_root / "frontend" / "src" / "components" / "Modals.js").read_text(encoding="utf-8")
+    assert monthly_uuid in modals_js, "Monthly VIP UUID missing in Modals.js"
+    assert lifetime_uuid in modals_js, "Lifetime VIP UUID missing in Modals.js"
+    assert "embed=1" in modals_js, "embed=1 parameter missing in Modals.js"
+
+    # 3. Source verification: frontend/src/components/StockTable.js
+    stock_table_js = (project_root / "frontend" / "src" / "components" / "StockTable.js").read_text(encoding="utf-8")
+    assert monthly_uuid in stock_table_js, "Monthly VIP UUID missing in StockTable.js"
+    assert "embed=1" in stock_table_js, "embed=1 parameter missing in StockTable.js"
+
+    # 4. Source verification: frontend/src/services/api.js
+    api_js = (project_root / "frontend" / "src" / "services" / "api.js").read_text(encoding="utf-8")
+    assert monthly_uuid in api_js, "Monthly VIP UUID missing in api.js"
+
+    # 5. Production bundle verification: active bundle referenced by index.html across assets/, dist/assets/, frontend/dist/assets/
+    index_html_content = (project_root / "index.html").read_text(encoding="utf-8")
+    js_match = re.search(r'assets/(index-[A-Za-z0-9_-]+\.js)', index_html_content)
+    assert js_match, "Active JS bundle not found in index.html"
+    active_bundle_name = js_match.group(1)
+
+    bundle_dirs = [
+        project_root / "assets",
+        project_root / "dist" / "assets",
+        project_root / "frontend" / "dist" / "assets",
+    ]
+    for b_dir in bundle_dirs:
+        assert b_dir.exists(), f"Bundle directory missing: {b_dir}"
+        js_file = b_dir / active_bundle_name
+        assert js_file.exists(), f"Active bundle {active_bundle_name} missing in {b_dir}"
+        js_content = js_file.read_text(encoding="utf-8")
+        assert monthly_uuid in js_content, f"Monthly VIP UUID missing in {js_file}"
+        assert lifetime_uuid in js_content, f"Lifetime VIP UUID missing in {js_file}"
+        assert "embed=1" in js_content, f"embed=1 parameter missing in {js_file}"
+
+    # 6. HTML shells verification: index.html & dist/index.html & frontend/dist/index.html
+    html_targets = [
+        project_root / "index.html",
+        project_root / "dist" / "index.html",
+        project_root / "frontend" / "dist" / "index.html",
+    ]
+    for html_file in html_targets:
+        assert html_file.exists(), f"Target HTML file missing: {html_file}"
+        content = html_file.read_text(encoding="utf-8")
+        assert "assets.lemonsqueezy.com/lemon.js" in content, f"Missing lemon.js in {html_file.name}"
+        assert active_bundle_name in content, f"Missing {active_bundle_name} script link in {html_file.name}"
+
+
+

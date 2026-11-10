@@ -10,6 +10,11 @@ from backend.app.models.auth import (
     PineScriptResponse,
     ProPositionDoctorRequest,
     ProPositionDoctorResponse,
+    PortfolioDoctorRequest,
+    PortfolioDoctorResponse,
+    SectorMatrixResponse,
+    WatchlistRequest,
+    WatchlistResponse,
 )
 from backend.app.models.stock import StockResponse
 from backend.app.services.quant_engine import quant_engine
@@ -156,3 +161,60 @@ def evaluate_position_doctor(payload: ProPositionDoctorRequest):
             tp1_price=tp1_price,
             as_of_date=as_of_date,
         )
+
+
+@router.post("/portfolio-doctor", response_model=PortfolioDoctorResponse)
+def evaluate_portfolio_doctor(
+    payload: PortfolioDoctorRequest,
+    _: bool = Depends(require_pro),
+):
+    """
+    VIP Multi-Position Portfolio Doctor:
+    Gated endpoint diagnosing up to 10 positions against Rule 1 (-9% hard stop),
+    Rule 2 (55D time stop), Rule 3 (+100% TP1), and Rule 4 (active hold).
+    Computes Portfolio Health Score (0-100), Aggregate Capital at Risk, 3 Macro Stress Scenarios,
+    and 1.35% Risk Parity Rebalancing recommendations.
+    Requires verified Pro license (e.g. PRO-DEMO-2026 or valid RSA key).
+    """
+    return quant_engine.diagnose_portfolio(
+        positions=payload.positions,
+        total_capital=payload.total_capital or 10000.0,
+    )
+
+
+@router.get("/sector-matrix", response_model=SectorMatrixResponse)
+def get_sector_regime_matrix(_: bool = Depends(require_pro)):
+    """
+    VIP 72-Stock Sector Regime Matrix & Heatmap:
+    Gated endpoint categorizing all 72 US equities across 8 sectors and 4 technical zones.
+    Computes average PW-RSI composite scores, momentum trends, and active ignition counts.
+    Requires verified Pro license.
+    """
+    return quant_engine.get_sector_regime_matrix()
+
+
+@router.post("/watchlist", response_model=WatchlistResponse)
+def update_pro_watchlist(
+    payload: WatchlistRequest,
+    _: bool = Depends(require_pro),
+):
+    """
+    VIP Watchlist Tracker:
+    Gated endpoint for updating synchronized VIP watchlist tickers (set, add, remove, clear).
+    Requires verified Pro license.
+    """
+    return quant_engine.update_watchlist(
+        tickers=payload.tickers,
+        action=payload.action or "set",
+    )
+
+
+@router.get("/watchlist", response_model=WatchlistResponse)
+def get_pro_watchlist(_: bool = Depends(require_pro)):
+    """
+    VIP Watchlist Tracker:
+    Gated endpoint returning synchronized VIP watchlist tickers.
+    Requires verified Pro license.
+    """
+    return quant_engine.get_watchlist()
+

@@ -583,6 +583,466 @@ export async function evaluatePositionDoctor(data) {
   );
 }
 
+export const SECTOR_REGIME_MAP = {
+  // 1. AI & Semiconductors
+  "AI Semiconductors": "AI & Semiconductors",
+  "Semiconductors": "AI & Semiconductors",
+  "Semiconductor Equip": "AI & Semiconductors",
+  "Semiconductor IP": "AI & Semiconductors",
+  "Memory Semiconductors": "AI & Semiconductors",
+  "Power Semiconductors": "AI & Semiconductors",
+  "Power & Auto Chips": "AI & Semiconductors",
+  "Foundry Semis": "AI & Semiconductors",
+  "AI Server Hardware": "AI & Semiconductors",
+  "ADAS & Autonomous": "AI & Semiconductors",
+
+  // 2. Cloud & Enterprise Software
+  "Enterprise AI": "Cloud & Enterprise Software",
+  "Cloud Security": "Cloud & Enterprise Software",
+  "Cybersecurity": "Cloud & Enterprise Software",
+  "Cloud Observability": "Cloud & Enterprise Software",
+  "Database Software": "Cloud & Enterprise Software",
+  "Data Cloud SaaS": "Cloud & Enterprise Software",
+  "Edge Cloud & Security": "Cloud & Enterprise Software",
+  "3D Engine Software": "Cloud & Enterprise Software",
+
+  // 3. Internet & Digital Media
+  "Internet & AI": "Internet & Digital Media",
+  "Internet & Social": "Internet & Digital Media",
+  "Social Media": "Internet & Digital Media",
+  "Streaming Media": "Internet & Digital Media",
+  "Media & Entertainment": "Internet & Digital Media",
+  "Legacy Media": "Internet & Digital Media",
+  "Connected TV": "Internet & Digital Media",
+  "Audio Streaming": "Internet & Digital Media",
+  "AdTech & AI Software": "Internet & Digital Media",
+
+  // 4. Fintech & Digital Finance
+  "Fintech & BNPL": "Fintech & Digital Finance",
+  "Digital Assets & Fin": "Fintech & Digital Finance",
+  "Fintech & Brokerage": "Fintech & Digital Finance",
+  "Digital Payments": "Fintech & Digital Finance",
+  "Digital Banking": "Fintech & Digital Finance",
+  "AI Lending Fintech": "Fintech & Digital Finance",
+
+  // 5. Consumer & Retail
+  "Consumer Beverages": "Consumer & Retail",
+  "Leisure & Cruise": "Consumer & Retail",
+  "Consumer Footwear": "Consumer & Retail",
+  "Consumer Apparel": "Consumer & Retail",
+  "Athletic Apparel": "Consumer & Retail",
+  "Consumer Retail": "Consumer & Retail",
+  "Consumer EdTech": "Consumer & Retail",
+  "E-Commerce SaaS": "Consumer & Retail",
+  "Cloud & E-Commerce": "Consumer & Retail",
+  "Auto E-Commerce": "Consumer & Retail",
+
+  // 6. Mobility, EV & CleanTech
+  "EV & Robotics": "Mobility, EV & CleanTech",
+  "Mobility Platform": "Mobility, EV & CleanTech",
+  "Automotive": "Mobility, EV & CleanTech",
+  "Solar & CleanTech": "Mobility, EV & CleanTech",
+  "Solar Inverters": "Mobility, EV & CleanTech",
+  "Solar Modules": "Mobility, EV & CleanTech",
+  "Grid Energy Storage": "Mobility, EV & CleanTech",
+
+  // 7. Healthcare & Biotechnology
+  "Biopharma": "Healthcare & Biotechnology",
+  "Pharmaceuticals": "Healthcare & Biotechnology",
+  "Biotechnology": "Healthcare & Biotechnology",
+
+  // 8. Energy & Industrials
+  "Aerospace & Defense": "Energy & Industrials",
+  "Passenger Airlines": "Energy & Industrials",
+  "Oil & Gas E&P": "Energy & Industrials",
+  "Integrated Energy": "Energy & Industrials",
+  "Specialty Chemicals": "Energy & Industrials",
+};
+
+export const VALUE_TRAPS = new Set(["INTC", "BA", "PFE", "PARA", "WBD", "NKE", "ALB"]);
+
+export function getVipWatchlist() {
+  if (typeof localStorage === "undefined") return ["CELH", "CCL", "TSLA", "SPOT", "NVDA"];
+  try {
+    const raw = localStorage.getItem("rsa_vip_watchlist");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch (_) {}
+  return ["CELH", "CCL", "TSLA", "SPOT", "NVDA"];
+}
+
+export async function saveVipWatchlist(tickers) {
+  const cleaned = [...new Set((tickers || []).map((t) => String(t || "").trim().toUpperCase()).filter(Boolean))];
+  if (typeof localStorage !== "undefined") {
+    try {
+      localStorage.setItem("rsa_vip_watchlist", JSON.stringify(cleaned));
+    } catch (_) {}
+  }
+  if (!isStaticHost() && isProActive()) {
+    try {
+      await fetch("/api/pro/watchlist", {
+        method: "POST",
+        headers: {
+          ...getAuthHeader(),
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ tickers: cleaned, action: "set" }),
+      });
+    } catch (_) {}
+  }
+  return cleaned;
+}
+
+export async function fetchSectorMatrix() {
+  return fetchJsonWithFallback(
+    "/api/pro/sector-matrix",
+    {
+      headers: {
+        ...getAuthHeader(),
+        Accept: "application/json",
+      },
+    },
+    async () => {
+      const all = await getStaticStocksForCurrentUser();
+      const sectorsMap = {};
+      for (const s of all) {
+        if (!s.ticker || String(s.ticker).includes(".")) continue;
+        const secName = SECTOR_REGIME_MAP[s.sector] || s.sector || "Other";
+        if (!sectorsMap[secName]) sectorsMap[secName] = [];
+        sectorsMap[secName].push(s);
+      }
+      const items = [];
+      for (const [secName, sList] of Object.entries(sectorsMap)) {
+        const sumScore = sList.reduce((acc, x) => acc + Number(x.score || 0), 0);
+        const avgSc = Math.round((sumScore / sList.length) * 10) / 10;
+        const ignCount = sList.filter((x) => x.zone_code === "IGNITION_ZONE").length;
+        const trend = avgSc >= 50.0 ? "BULLISH" : avgSc < 40.0 ? "BEARISH" : "NEUTRAL";
+        items.push({
+          name: secName,
+          count: sList.length,
+          avg_score: avgSc,
+          momentum_trend: trend,
+          ignition_count: ignCount,
+          tickers: sList.map((x) => x.ticker),
+        });
+      }
+      items.sort((a, b) => b.ignition_count - a.ignition_count || b.avg_score - a.avg_score);
+      return { sectors: items };
+    }
+  );
+}
+
+export async function evaluatePortfolioDoctor(payload) {
+  return fetchJsonWithFallback(
+    "/api/pro/portfolio-doctor",
+    {
+      method: "POST",
+      headers: {
+        ...getAuthHeader(),
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(payload),
+    },
+    async () => {
+      const all = await getStaticStocksForCurrentUser();
+      const stocksByTicker = {};
+      for (const s of all) {
+        if (s.ticker) stocksByTicker[s.ticker.trim().toUpperCase()] = s;
+      }
+
+      const rawPositions = (payload && payload.positions) || [];
+      const positions = rawPositions.filter((p) => p && p.ticker && String(p.ticker).trim());
+
+      if (!positions.length) {
+        return {
+          health_score: 100,
+          total_invested: 0.0,
+          total_unrealized_pnl: 0.0,
+          total_unrealized_pnl_pct: 0.0,
+          capital_at_risk: 0.0,
+          items: [],
+          stress_scenarios: [
+            {
+              name: "Semi Extreme Fear Shock (-15%)",
+              projected_pnl_pct: 0.0,
+              impact_usd: 0.0,
+              verdict: "Neutral",
+            },
+            {
+              name: "Defensive Safe-Haven Rotation ($XLV +5%)",
+              projected_pnl_pct: 0.0,
+              impact_usd: 0.0,
+              verdict: "Neutral",
+            },
+            {
+              name: "Right-Side Ignition Wave (+25%)",
+              projected_pnl_pct: 0.0,
+              impact_usd: 0.0,
+              verdict: "Neutral",
+            },
+          ],
+          rebalance_recommendations: [
+            {
+              action: "MAINTAIN",
+              ticker: null,
+              target_ticker: null,
+              amount_usd: 0.0,
+              allocation_pct: 100.0,
+              reason: "No active holdings in portfolio; ready for Right-Side Ignition deployment.",
+              setup_type: "CASH_RESERVE",
+            },
+          ],
+        };
+      }
+
+      const diagnostics = [];
+      let hardStopCount = 0;
+      let deadMoneyCount = 0;
+
+      for (const item of positions) {
+        const tClean = String(item.ticker).trim().toUpperCase();
+        const stock = stocksByTicker[tClean];
+        const entryP = Math.max(0.01, parseFloat(item.entry_price || 0));
+        const shares = Math.max(0.001, parseFloat(item.shares > 0 ? item.shares : 1.0));
+        const days = Math.max(0, parseInt(item.days_held >= 0 ? item.days_held : 0, 10));
+
+        let curP = entryP;
+        if (item.current_price !== undefined && item.current_price !== null && Number(item.current_price) > 0) {
+          curP = parseFloat(item.current_price);
+        } else if (stock && stock.close !== undefined && stock.close !== null) {
+          curP = parseFloat(stock.close);
+        }
+
+        const hardStopP = Math.round(entryP * 0.91 * 100) / 100;
+        const retPct = Math.round(((curP / entryP) - 1.0) * 10000) / 100;
+        const investedVal = Math.round(curP * shares * 100) / 100;
+        const costVal = Math.round(entryP * shares * 100) / 100;
+        const unrealizedPnl = Math.round((investedVal - costVal) * 100) / 100;
+
+        let statusCode = "HOLD";
+        let action = "ACTIVE_HOLD";
+        let isCritical = false;
+        let directive = "";
+
+        if (retPct <= -9.0) {
+          statusCode = "HARD_STOP";
+          action = "CRITICAL_STOP_EXIT";
+          isCritical = true;
+          directive = `RULE 1: -9% Hard Stop breached (${retPct.toFixed(2)}%). Exit full position immediately.`;
+          hardStopCount += 1;
+        } else if (days >= 55 && retPct < 8.0) {
+          statusCode = "TIME_STOP";
+          action = "DEAD_MONEY_ROTATE";
+          isCritical = false;
+          directive = `RULE 2: 55-Day Dead-Money holding (${days} days, ${retPct >= 0 ? "+" : ""}${retPct.toFixed(2)}%). Reallocate to active ignition candidates.`;
+          deadMoneyCount += 1;
+        } else if (retPct >= 100.0) {
+          statusCode = "TP1_HARVEST";
+          action = "TP1_TAKE_PROFIT";
+          isCritical = false;
+          directive = `RULE 3: +100% TP1 achieved (+${retPct.toFixed(2)}%). Sell 50% to recoup 100% principal; trail stop on remaining.`;
+        } else {
+          statusCode = "HOLD";
+          action = "ACTIVE_HOLD";
+          isCritical = false;
+          directive = `RULE 4: Healthy active trend follow (${retPct >= 0 ? "+" : ""}${retPct.toFixed(2)}%). Trailing stop floor at $${hardStopP.toFixed(2)}.`;
+        }
+
+        diagnostics.push({
+          ticker: tClean,
+          status_code: statusCode,
+          action: action,
+          current_return_pct: retPct,
+          hard_stop_price: hardStopP,
+          is_critical: isCritical,
+          directive: directive,
+          entry_price: Math.round(entryP * 100) / 100,
+          current_price: Math.round(curP * 100) / 100,
+          shares: shares,
+          days_held: days,
+          invested_value: investedVal,
+          unrealized_pnl: unrealizedPnl,
+        });
+      }
+
+      const rawHealth = 100 - (30 * hardStopCount) - (15 * deadMoneyCount);
+      const healthScore = Math.max(0, Math.min(100, rawHealth));
+
+      const totalInvested = Math.round(diagnostics.reduce((acc, d) => acc + d.invested_value, 0) * 100) / 100;
+      const totalCost = Math.round(
+        positions.reduce((acc, p) => acc + (parseFloat(p.entry_price || 0) * (parseFloat(p.shares > 0 ? p.shares : 1.0))), 0) * 100
+      ) / 100;
+      const totalUnrealizedPnl = Math.round(diagnostics.reduce((acc, d) => acc + d.unrealized_pnl, 0) * 100) / 100;
+      const totalUnrealizedPnlPct = totalCost > 0 ? Math.round((totalUnrealizedPnl / totalCost) * 10000) / 100 : 0.0;
+
+      const capitalAtRisk = Math.round(
+        positions.reduce((acc, p) => {
+          const ep = parseFloat(p.entry_price || 0);
+          const sh = parseFloat(p.shares > 0 ? p.shares : 1.0);
+          const stp = Math.round(ep * 0.91 * 100) / 100;
+          return acc + Math.max(0.0, ep - stp) * sh;
+        }, 0) * 100
+      ) / 100;
+
+      const stressScenarios = [];
+      if (totalInvested <= 0) {
+        stressScenarios.push(
+          { name: "Semi Extreme Fear Shock (-15%)", projected_pnl_pct: 0.0, impact_usd: 0.0, verdict: "Neutral" },
+          { name: "Defensive Safe-Haven Rotation ($XLV +5%)", projected_pnl_pct: 0.0, impact_usd: 0.0, verdict: "Neutral" },
+          { name: "Right-Side Ignition Wave (+25%)", projected_pnl_pct: 0.0, impact_usd: 0.0, verdict: "Neutral" }
+        );
+      } else {
+        // 1. Semi Extreme Fear Shock (-15%)
+        let impactS1 = 0.0;
+        for (const d of diagnostics) {
+          const sRef = stocksByTicker[d.ticker];
+          const sec = SECTOR_REGIME_MAP[sRef ? sRef.sector : ""] || "Other";
+          if (sec === "AI & Semiconductors" || sec === "Cloud & Enterprise Software" || sec === "Internet & Digital Media") {
+            impactS1 += d.invested_value * -0.15;
+          } else if (sec === "Healthcare & Biotechnology" || sec === "Consumer & Retail") {
+            impactS1 += d.invested_value * 0.015;
+          } else {
+            impactS1 += d.invested_value * -0.05;
+          }
+        }
+        const pnlPctS1 = Math.round((impactS1 / totalInvested) * 10000) / 100;
+        const verdictS1 = pnlPctS1 <= -8.0 ? "Vulnerable" : pnlPctS1 <= -3.0 ? "Moderate Risk" : "Resilient";
+        stressScenarios.push({
+          name: "Semi Extreme Fear Shock (-15%)",
+          projected_pnl_pct: pnlPctS1,
+          impact_usd: Math.round(impactS1 * 100) / 100,
+          verdict: verdictS1,
+        });
+
+        // 2. Defensive Safe-Haven Rotation ($XLV +5%)
+        let impactS2 = 0.0;
+        for (const d of diagnostics) {
+          const sRef = stocksByTicker[d.ticker];
+          const sec = SECTOR_REGIME_MAP[sRef ? sRef.sector : ""] || "Other";
+          if (sec === "Healthcare & Biotechnology" || sec === "Consumer & Retail") {
+            impactS2 += d.invested_value * 0.05;
+          } else if (sec === "AI & Semiconductors" || sec === "Cloud & Enterprise Software" || sec === "Internet & Digital Media") {
+            impactS2 += d.invested_value * -0.02;
+          }
+        }
+        const pnlPctS2 = Math.round((impactS2 / totalInvested) * 10000) / 100;
+        const verdictS2 = pnlPctS2 >= 1.0 ? "Resilient" : pnlPctS2 >= -2.0 ? "Neutral" : "Vulnerable";
+        stressScenarios.push({
+          name: "Defensive Safe-Haven Rotation ($XLV +5%)",
+          projected_pnl_pct: pnlPctS2,
+          impact_usd: Math.round(impactS2 * 100) / 100,
+          verdict: verdictS2,
+        });
+
+        // 3. Right-Side Ignition Wave (+25%)
+        let impactS3 = 0.0;
+        for (const d of diagnostics) {
+          const sRef = stocksByTicker[d.ticker];
+          const zcode = sRef ? sRef.zone_code : "WASHOUT_WATCH";
+          if (zcode === "IGNITION_ZONE") {
+            impactS3 += d.invested_value * 0.25;
+          } else if (zcode === "WASHOUT_WATCH") {
+            impactS3 += d.invested_value * 0.10;
+          } else {
+            impactS3 += d.invested_value * 0.02;
+          }
+        }
+        const pnlPctS3 = Math.round((impactS3 / totalInvested) * 10000) / 100;
+        const verdictS3 = pnlPctS3 >= 12.0 ? "High Upside" : pnlPctS3 >= 5.0 ? "Moderate Upside" : "Low Momentum";
+        stressScenarios.push({
+          name: "Right-Side Ignition Wave (+25%)",
+          projected_pnl_pct: pnlPctS3,
+          impact_usd: Math.round(impactS3 * 100) / 100,
+          verdict: verdictS3,
+        });
+      }
+
+      // Automated Rebalancing Recommendations
+      const rebalanceRecommendations = [];
+      const stoppedPositions = diagnostics.filter((d) => d.status_code === "HARD_STOP" || d.status_code === "TIME_STOP");
+      let totalHarvested = 0.0;
+
+      for (const sp of stoppedPositions) {
+        const reason = sp.status_code === "HARD_STOP" ? "Hard stop exit capital recovery" : "Time stop dead money capital recovery";
+        rebalanceRecommendations.push({
+          action: "HARVEST",
+          ticker: sp.ticker,
+          target_ticker: null,
+          amount_usd: sp.invested_value,
+          allocation_pct: null,
+          reason: reason,
+          setup_type: sp.status_code,
+        });
+        totalHarvested += sp.invested_value;
+      }
+
+      totalHarvested = Math.round(totalHarvested * 100) / 100;
+      const currentTickers = new Set(diagnostics.map((d) => d.ticker));
+      const ignitionCandidates = all.filter(
+        (s) => s.zone_code === "IGNITION_ZONE" && !currentTickers.has(s.ticker) && !VALUE_TRAPS.has(s.ticker)
+      );
+      ignitionCandidates.sort((a, b) => (Number(b.score) || 0) - (Number(a.score) || 0));
+
+      if (totalHarvested > 0) {
+        if (ignitionCandidates.length > 0) {
+          const reallocCount = Math.min(3, ignitionCandidates.length);
+          const perTargetUsd = Math.round((totalHarvested / reallocCount) * 100) / 100;
+          const perTargetPct = Math.round((100.0 / reallocCount) * 10) / 10;
+          for (let i = 0; i < reallocCount; i++) {
+            const cand = ignitionCandidates[i];
+            rebalanceRecommendations.push({
+              action: "REALLOCATE",
+              ticker: null,
+              target_ticker: cand.ticker,
+              amount_usd: perTargetUsd,
+              allocation_pct: perTargetPct,
+              reason: "1.35% risk parity allocation into active Right-Side Ignition setup",
+              setup_type: `IGNITION_ZONE (Score ${cand.score})`,
+            });
+          }
+        } else {
+          rebalanceRecommendations.push({
+            action: "REALLOCATE",
+            ticker: null,
+            target_ticker: "CASH_RESERVE",
+            amount_usd: totalHarvested,
+            allocation_pct: 100.0,
+            reason: "Harvested capital held in cash safe-haven awaiting fresh Ignition triggers",
+            setup_type: "CASH_SAFE_HAVEN",
+          });
+        }
+      } else {
+        if (!stoppedPositions.length && diagnostics.length > 0) {
+          rebalanceRecommendations.push({
+            action: "MAINTAIN",
+            ticker: null,
+            target_ticker: null,
+            amount_usd: 0.0,
+            allocation_pct: 100.0,
+            reason: "Portfolio positions aligned with quant criteria; maintain active trailing stops.",
+            setup_type: "ACTIVE_PORTFOLIO",
+          });
+        }
+      }
+
+      return {
+        health_score: healthScore,
+        total_invested: totalInvested,
+        total_unrealized_pnl: totalUnrealizedPnl,
+        total_unrealized_pnl_pct: totalUnrealizedPnlPct,
+        capital_at_risk: capitalAtRisk,
+        items: diagnostics,
+        stress_scenarios: stressScenarios,
+        rebalance_recommendations: rebalanceRecommendations,
+      };
+    }
+  );
+}
+
 export async function fetchReferralConfig() {
   return fetchJsonWithFallback(
     "/api/referral/config",

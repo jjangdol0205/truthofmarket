@@ -95,8 +95,8 @@ def publish_telegraph_quant_note(semi: dict, stocks: list, force_new: bool = Fal
     as_of = semi.get("date", datetime.now(timezone.utc).strftime("%Y-%m-%d"))
     hour_slot = datetime.now(timezone.utc).strftime("%Y-%m-%d_%H")
     registry = load_json(BACKLINKS_LOG_PATH, [])
-    if not force_new and any(r.get("date") == as_of for r in registry):
-        last_url = next((r.get("url") for r in reversed(registry) if r.get("date") == as_of), "")
+    if not force_new and any(r.get("hour_slot") == hour_slot for r in registry):
+        last_url = next((r.get("url") for r in reversed(registry) if r.get("hour_slot") == hour_slot), "")
         return f"Already published high-quality report this hour ({last_url})"
 
     acct = load_json(TELEGRAPH_ACCT_PATH, {})
@@ -313,15 +313,20 @@ def ping_search_engines() -> str:
             "keyLocation": f"https://truthofmarket.com/{indexnow_key}.txt",
             "urlList": urls,
         }).encode("utf-8")
-        req_in = urllib.request.Request(
-            "https://api.indexnow.org/indexnow",
-            data=in_payload,
-            headers={"Content-Type": "application/json; charset=utf-8"},
-            method="POST",
-        )
-        with urllib.request.urlopen(req_in, timeout=10) as r_in:
-            if r_in.status in (200, 202):
-                pinged.append(f"IndexNow({len(urls)} URLs)")
+        for ep in ["https://api.indexnow.org/indexnow", "https://yandex.com/indexnow", "https://search.seznam.cz/indexnow"]:
+            try:
+                req_in = urllib.request.Request(
+                    ep,
+                    data=in_payload,
+                    headers={"Content-Type": "application/json; charset=utf-8", "User-Agent": "Mozilla/5.0"},
+                    method="POST",
+                )
+                with urllib.request.urlopen(req_in, timeout=10) as r_in:
+                    if r_in.status in (200, 202):
+                        pinged.append(f"IndexNow({len(urls)} URLs)")
+                        break
+            except Exception:
+                pass
     except Exception:
         pass
     # 2) Google WebSub Hub ping for RSS feed
@@ -339,10 +344,12 @@ def ping_search_engines() -> str:
 
 
 def main():
+    import sys
+    force_new = "--force" in sys.argv
     semi = load_json(SEMI_PATH, {})
     stocks = load_json(STOCKS_PATH, [])
     as_of = update_llms_txt(semi, stocks)
-    tg_res = publish_telegraph_quant_note(semi, stocks)
+    tg_res = publish_telegraph_quant_note(semi, stocks, force_new=force_new)
     ping_res = ping_search_engines()
     print(f"[TOM Auto-Promo] llms.txt updated ({as_of}) | {tg_res} | IndexPing: {ping_res}")
 

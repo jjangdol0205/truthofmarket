@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-11-08 17:03:35 KST",
+  "timestamp": "2026-11-10 22:08:09 KST",
   "results": [
     {
-      "division": "1사업부 (truthofmarket.com)",
+      "division": "1사업부 (truthofmarket.com · @RigjtsideAlphabot)",
       "auditors": "2·3사업부 교차검열단",
       "checks": [
         "✅ [결제검열] #licenseModal 무료 프리패스 백도어 완전 차단 확인",
@@ -15,8 +15,8 @@
       "healed": []
     },
     {
-      "division": "2사업부 (kisfitglobal.com)",
-      "auditors": "1·3사업부 교차검열단",
+      "division": "2사업부 (kisfitglobal.com · @kidsfittbot)",
+      "auditors": "1·5사업부 교차검열단",
       "checks": [
         "✅ [결제검열] $8.99/$19.99 결제 모달 무료 백도어 차단 & Live UUID 정상",
         "✅ [퍼널검열] 유튜브 프로필 링크 유입용 1초 쇼츠 토픽 스캔 바(구강호흡·수면) 정상",
@@ -26,7 +26,24 @@
       "healed": []
     },
     {
-      "division": "3사업부 (kidsfit.co.kr)",
+      "division": "3사업부 (getbreakai.com · @SemifearGreedbot)",
+      "auditors": "1·2사업부 교차검열단",
+      "checks": [
+        "✅ [라이브검열] getbreakai.com/jp/ 응답 HTTP 200"
+      ],
+      "healed": []
+    },
+    {
+      "division": "4사업부 (paradise-hero.com · @inves123_bot)",
+      "auditors": "2·3사업부 교차검열단",
+      "checks": [
+        "✅ [웹플랫폼] paradise-hero.com 시니어 WCAG AAA 6대 페이지 & CNAME/Sitemap 정상",
+        "✅ [롱폼라디오] @김쌤의영웅라디오 1회차 마스터 MP4·오디오·대본 패키지 정상"
+      ],
+      "healed": []
+    },
+    {
+      "division": "5사업부 (kidsfit.co.kr · @Moneyfiityyy_bot)",
       "auditors": "1·2사업부 교차검열단",
       "checks": [
         "✅ [전환검열] 상품 카드 클릭 시 모달 장벽 없이 쿠팡 파트너스 원클릭 새 탭 직행 정상",

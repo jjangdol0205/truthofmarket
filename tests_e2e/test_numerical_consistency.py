@@ -142,6 +142,54 @@ def test_all_api_endpoints_zero_undefined_and_latest_close_sync():
             assert tr["smh_shares"] == math.floor(tr["smh_usd"] / lump["smh_close"])
             assert tr["xlv_shares"] == math.floor(tr["xlv_usd"] / lump["xlv_close"])
 
+    # 8. VIP Portfolio Doctor 2.0 Multi-Position Diagnostic Engine
+    r_port_doc = client.post(
+        "/api/pro/portfolio-doctor",
+        headers={"Authorization": "Bearer PRO-DEMO-2026"},
+        json={
+            "positions": [
+                {"ticker": "CELH", "entry_price": 35.0, "shares": 100, "days_held": 45, "current_price": 27.93},
+                {"ticker": "NVDA", "entry_price": 120.0, "shares": 50, "days_held": 20, "current_price": 228.29},
+            ],
+            "total_capital": 20000.0,
+        },
+    )
+    assert r_port_doc.status_code == 200
+    port_doc = r_port_doc.json()
+    assert 0 <= port_doc["health_score"] <= 100
+    assert len(port_doc["items"]) == 2
+    assert len(port_doc["stress_scenarios"]) == 3
+    assert len(port_doc["rebalance_recommendations"]) > 0
+    port_doc_str = json.dumps(port_doc, allow_nan=False)
+    assert "undefined" not in port_doc_str.lower()
+    assert "NaN" not in port_doc_str
+
+    # 9. VIP 72-Stock Sector Regime Matrix & Heatmap
+    r_mat = client.get(
+        "/api/pro/sector-matrix",
+        headers={"Authorization": "Bearer PRO-DEMO-2026"},
+    )
+    assert r_mat.status_code == 200
+    mat = r_mat.json()
+    assert len(mat["sectors"]) == 8
+    assert sum(s["count"] for s in mat["sectors"]) == 72
+    mat_str = json.dumps(mat, allow_nan=False)
+    assert "undefined" not in mat_str.lower()
+    assert "NaN" not in mat_str
+
+    # 10. VIP Watchlist Tracker
+    r_wl = client.get(
+        "/api/pro/watchlist",
+        headers={"Authorization": "Bearer PRO-DEMO-2026"},
+    )
+    assert r_wl.status_code == 200
+    wl = r_wl.json()
+    assert isinstance(wl["watchlist"], list)
+    wl_str = json.dumps(wl, allow_nan=False)
+    assert "undefined" not in wl_str.lower()
+    assert "NaN" not in wl_str
+
+
 
 def test_frontend_rendered_html_zero_undefined_or_nan():
     """
@@ -156,6 +204,17 @@ def test_frontend_rendered_html_zero_undefined_or_nan():
     semi_reb = client.post("/api/semi/rebalance", json={"total_capital_usd": 100000}).json()
     semi_lump = client.post("/api/semi/lump-sum", json={"capital_usd": 50000}).json()
     doc_res = client.post("/api/stocks/diagnose", json={"ticker": "CELH", "entry_price": 27.93, "days_held": 42}).json()
+    port_res = client.post(
+        "/api/pro/portfolio-doctor",
+        headers={"Authorization": "Bearer PRO-DEMO-2026"},
+        json={
+            "positions": [
+                {"ticker": "CELH", "entry_price": 35.0, "shares": 100, "days_held": 45, "current_price": 27.93},
+                {"ticker": "NVDA", "entry_price": 120.0, "shares": 50, "days_held": 20, "current_price": 228.29},
+            ],
+            "total_capital": 20000.0,
+        },
+    ).json()
 
     payload = json.dumps({
         "stocks": stocks,
@@ -165,6 +224,7 @@ def test_frontend_rendered_html_zero_undefined_or_nan():
         "semiRebalanceResult": semi_reb,
         "semiLumpSumResult": semi_lump,
         "docLastResult": doc_res,
+        "portfolioDocResult": port_res,
     })
 
     node_script = """
@@ -175,7 +235,7 @@ import { renderHero } from './frontend/src/components/Hero.js';
 import { renderProofCard } from './frontend/src/components/ProofCard.js';
 import { renderScreenerControls, renderStockTable } from './frontend/src/components/StockTable.js';
 import { renderProVault } from './frontend/src/components/ProVault.js';
-import { formatDoctorResult } from './frontend/src/components/PositionDoctor.js';
+import { formatDoctorResult, formatPortfolioDoctorResult } from './frontend/src/components/PositionDoctor.js';
 import { renderPricing } from './frontend/src/components/Pricing.js';
 import { renderModals } from './frontend/src/components/Modals.js';
 import { renderSemiFearGreedView } from './frontend/src/components/SemiFearGreedView.js';
@@ -196,6 +256,7 @@ for (const lang of ['en', 'jp', 'kr']) {
       semiRebalanceResult: data.semiRebalanceResult,
       semiLumpSumResult: data.semiLumpSumResult,
       docLastResult: data.docLastResult,
+      portfolioDocResult: data.portfolioDocResult,
       zoneFilter: 'ALL',
       searchQuery: '',
       semiGaugeTab: 'overview',
@@ -224,6 +285,7 @@ for (const lang of ['en', 'jp', 'kr']) {
       renderStockTable(state),
       renderProVault(state),
       formatDoctorResult(data.docLastResult),
+      formatPortfolioDoctorResult(data.portfolioDocResult, state),
       renderPricing(state),
       renderModals(state),
       renderSemiFearGreedView(state),

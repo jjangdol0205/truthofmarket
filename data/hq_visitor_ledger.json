@@ -1,6 +1,6 @@
 {
-  "lastUpdatedKst": "2026-11-09 08:30:30 KST",
-  "lastTelegramSentMs": 1794180630811,
+  "lastUpdatedKst": "2026-11-09 21:00:43 KST",
+  "lastTelegramSentMs": 1794225643196,
   "divisions": {
     "tom_truthofmarket": {
       "days": {
@@ -40,8 +40,8 @@
           "refClick": 0
         },
         "2026-11-09": {
-          "uv": 5,
-          "pv": 7,
+          "uv": 13,
+          "pv": 24,
           "paidClick": 0,
           "paidMember": 0,
           "refClick": 0
@@ -100,8 +100,8 @@
           "refClick": 0
         },
         "2026-11-09": {
-          "uv": 0,
-          "pv": 0,
+          "uv": 3,
+          "pv": 3,
           "paidClick": 0,
           "paidMember": 0,
           "refClick": 0
@@ -153,8 +153,44 @@
           "refClick": 1
         },
         "2026-11-09": {
-          "uv": 1,
-          "pv": 2,
+          "uv": 4,
+          "pv": 5,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        }
+      }
+    },
+    "gba_getbreakai": {
+      "days": {
+        "2026-11-09": {
+          "uv": 2,
+          "pv": 6,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-08": {
+          "uv": 0,
+          "pv": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        }
+      }
+    },
+    "hero_paradisehero": {
+      "days": {
+        "2026-11-09": {
+          "uv": 0,
+          "pv": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-08": {
+          "uv": 0,
+          "pv": 0,
           "paidClick": 0,
           "paidMember": 0,
           "refClick": 0

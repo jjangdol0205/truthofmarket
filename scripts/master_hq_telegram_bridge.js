@@ -1,12 +1,16 @@
 #!/usr/bin/env node
 /**
- * MASTER HQ TELEGRAM BRIDGE — Unified 3-Business Sequential Controller (Sleep/Wake Proof)
- * (1. truthofmarket.com | 2. kisfitglobal.com | 3. kidsfit.co.kr)
+ * MASTER HQ TELEGRAM BRIDGE — Unified HQ Chief & Auditor + 1~5 Divisions Controller
  *
- * - Single lightweight polling process with hard 15s socket watchdog (survives Windows Sleep/Wake)
- * - Listens across @kidsfittbot, @RigjtsideAlphabot, and @SemifearGreedbot in 1 process
- * - Strictly 1-at-a-time Sequential Queue (taskQueue) across all 3 businesses
- * - Supports `--notify "<msg>"` so Antigravity agents reply back upon task completion
+ * [핵심 운영 방식 (사장님 맞춤 개편)]
+ * 1. 새벽 맥스 토큰(Dawn Max-Token) 및 불필요한 자동 스케줄러 전면 제거 (사장님 수동/직접 지시 중심)
+ * 2. 본사 총괄·감사 봇(@SemifearGreedbot):
+ *    - "1사업부 피드백 줘", "2사업부 피드백 줘", "/fb1"~"/fb5", "/감사 1사업부" 입력 시
+ *      본사 감사관이 해당 사업부를 즉시 정밀 감사하여 [개선 피드백 Top 3 + 복사해서 쓸 수 있는 지시 예시] 보고
+ * 3. 모두컴퍼니 본부 방(-1003834697086) & 각 사업부 1:1 봇 방 완벽 양방향 작동:
+ *    - 모두컴퍼니 방에서 `/전사업부 지시`, `/1사업부 지시`, `/2사업부 지시`, `/3사업부 지시`, `/4사업부 지시`, `/5사업부 지시`
+ *      (또는 `/all 지시`, `/div1 지시` ~ `/div5 지시`) 입력 시 그 방에서 즉시 접수 및 결과 보고
+ *    - 각 사업부 1:1 텔레봇(@RigjtsideAlphabot 등)에 직접 지시해도 해당 1:1 방과 모두컴퍼니 본부 방 양쪽에 즉시 응답 및 결과 보고
  */
 
 const fs = require("fs");
@@ -38,28 +42,33 @@ function loadJsonFile(filePath) {
   return {};
 }
 
+const tomEnv = loadEnvFile("D:\\드림컴퍼니\\1사업부\\.env");
 const kfgEnv = loadEnvFile("D:\\드림컴퍼니\\2사업부\\.env");
-const kfkEnv = loadEnvFile("D:\\드림컴퍼니\\3사업부\\.env");
-const tomEnv = loadEnvFile(path.resolve(__dirname, "..", ".env"));
+const gbaEnv = loadEnvFile("D:\\드림컴퍼니\\3사업부\\.env");
+const heroEnv = loadEnvFile("D:\\드림컴퍼니\\4사업부\\.env");
+const kfkEnv = loadEnvFile("D:\\드림컴퍼니\\5사업부\\.env");
 const tomTgCfg = loadJsonFile(path.resolve(__dirname, "..", "data", "telegram_config.json"));
 
 const OWNER_USER_ID = "755033799";
 const DEFAULT_GROUP_CHAT_ID = "-1003834697086";
 const CHAT_ID = process.env.HQ_TELEGRAM_CHAT_ID || tomEnv.HQ_TELEGRAM_CHAT_ID || DEFAULT_GROUP_CHAT_ID;
 
-// Dedicated Non-Overlapping Bot Tokens per Division:
-// - Div 1 Bot (@RigjtsideAlphabot): Division 1 (truthofmarket.com) Dedicated Bot
-// - Div 2 Bot (@kidsfittbot): Division 2 (kisfitglobal.com) Dedicated Bot
-// - Div 3 Bot (@Moneyfiityyy_bot): Division 3 (kidsfit.co.kr) Dedicated Bot
-const SEMI_BOT_TOKEN = tomTgCfg.bot_token || "9291573259:AAEZXNkQ4wuEPX6FYujxKT5mwLWdQpZOnes";
+// Dedicated 1:1 Bot Tokens per Division (1~5사업부):
+// - 본사 총괄·감사 & 3사업부 (GBA — getbreakai.com 일본): @SemifearGreedbot
+// - 1사업부 (TOM — truthofmarket.com): @RigjtsideAlphabot
+// - 2사업부 (KFG — kisfitglobal.com): @kidsfittbot
+// - 4사업부 (HERO — paradise-hero.com & @김쌤의영웅라디오): @inves123_bot
+// - 5사업부 (KFK — kidsfit.co.kr 패시브 자동화): @Moneyfiityyy_bot
 const RSA_BOT_TOKEN = tomEnv.RSA_TELEGRAM_BOT_TOKEN || "";
 const KFG_BOT_TOKEN = kfgEnv.TELEGRAM_BOT_TOKEN || "";
+const SEMI_BOT_TOKEN = gbaEnv.TELEGRAM_BOT_TOKEN || tomTgCfg.bot_token || "9291573259:AAEZXNkQ4wuEPX6FYujxKT5mwLWdQpZOnes";
+const HERO_BOT_TOKEN = heroEnv.TELEGRAM_BOT_TOKEN || "8899653516:AAEr6ZWcfkXObdiU83o-LYaw3eHL9J0QbHU";
 const KFK_BOT_TOKEN = kfkEnv.TELEGRAM_BOT_TOKEN || "";
-const PRIMARY_BOT_TOKEN = RSA_BOT_TOKEN || KFG_BOT_TOKEN || KFK_BOT_TOKEN || "";
+const PRIMARY_BOT_TOKEN = SEMI_BOT_TOKEN || RSA_BOT_TOKEN || KFG_BOT_TOKEN || HERO_BOT_TOKEN || KFK_BOT_TOKEN || "";
 
-// Collect active bot tokens (deduplicated: Div 1 + Div 2 + Div 3 + HQ)
+// Collect all 5 active bot tokens
 const BOT_TOKENS = Array.from(
-  new Set([RSA_BOT_TOKEN, KFG_BOT_TOKEN, KFK_BOT_TOKEN, SEMI_BOT_TOKEN].filter((t) => t && t.includes(":")))
+  new Set([SEMI_BOT_TOKEN, RSA_BOT_TOKEN, KFG_BOT_TOKEN, HERO_BOT_TOKEN, KFK_BOT_TOKEN].filter((t) => t && t.includes(":")))
 );
 
 const DATA_DIR = path.resolve(__dirname, "..", "data");
@@ -97,20 +106,20 @@ const DEFAULT_STANDING_DIRECTIVES = [
   {
     id: 2,
     title: "전 사업부 결제·수익화 가드레일 절대 보호",
-    rule: "1사업부(truthofmarket.com) 및 2사업부(kisfitglobal.com)의 Lemon Squeezy 실결제 Live UUID(#296100)와 3사업부(kidsfit.co.kr)의 쿠팡 파트너스(AF7865143)·링크프라이스(A100708867) 수익 코드 및 공정위 고지문, 금지어(최저가·할인율·특가·폭탄세일 사용 금지)를 절대 훼손하지 않는다.",
+    rule: "1사업부(truthofmarket.com), 2사업부(kisfitglobal.com), 3사업부(getbreakai.com)의 Lemon Squeezy 실결제 Live UUID(#296100)와 4사업부(paradise-hero.com) 골드 VIP/후원 퍼널, 5사업부(kidsfit.co.kr)의 쿠팡 파트너스(AF7865143)·링크프라이스(A100708867) 수익 코드 및 공정위 고지문, 금지어(최저가·할인율·특가·폭탄세일 사용 금지)를 절대 훼손하지 않는다.",
     createdAt: "2026-11-08T22:12:00+09:00",
   },
   {
     id: 3,
-    title: "전 사업부 클린 숏폼(1080×1920) 마스터링 표준",
-    rule: "1·2·3사업부 모든 숏폼 영상은 본문 100% 클린 풀스크린(상·하단 배너 및 워터마크 금지), 하단 세이프존(Y=1380~1450) 두꺼운 외곽선 자막(stroke_width >= 6), 종료 2.5~3.8초 엔딩 슬레이트 도메인 콜아웃 규격을 준수한다.",
+    title: "전 사업부 클린 비디오(숏폼 V3 & 4사업부 롱폼 라디오) 마스터링 표준",
+    rule: "1·2·3·5사업부 모든 숏폼 영상은 본문 100% 클린 풀스크린(1080×1920, 상·하단 배너 및 워터마크 금지), 하단 세이프존(Y=1380~1465) 두꺼운 외곽선 자막(stroke_width >= 8), 종료 2.5~3.8초 엔딩 슬레이트 도메인 콜아웃 규격을 준수하며, 4사업부(@김쌤의영웅라디오)는 시니어 친화 1920×1080 롱폼 라디오 및 초대형 노란색/흰색 가사·사연 자막 규격을 준수한다.",
     createdAt: "2026-11-08T22:12:00+09:00",
   },
   {
     id: 4,
-    title: "전 사업부 1:1 전담 봇 결과 보고 및 라이브 검증 원칙",
-    rule: "작업 완료 시 반드시 빌드 및 라이브/로컬 전수 검증을 마친 뒤, 본사 총괄(@SemifearGreedbot), 1사업부(@RigjtsideAlphabot), 2사업부(@kidsfittbot), 3사업부(@Moneyfiityyy_bot) 중 해당 전용 봇으로 핵심 요약 결과를 즉시 답장한다.",
-    createdAt: "2026-11-08T22:12:00+09:00",
+    title: "본사 총괄·감사 피드백 → 사장님 지시 → 1~5사업부 전담 봇 수행 원칙",
+    rule: "본사(@SemifearGreedbot)는 총괄 및 감사 역할로서 사업부별 피드백 요청 시 문제점과 개선 지시 예시를 보고하고, 사장님이 모두컴퍼니 본부 방(/전사업부, /1사업부~5사업부)이나 각 사업부 텔레봇으로 지시하면 해당 사업부 전담 봇이 즉시 수정 후 결과를 보고한다.",
+    createdAt: "2026-11-09T22:20:00+09:00",
   },
 ];
 
@@ -150,15 +159,15 @@ function syncCommonDirectivesMarkdown(data) {
     const mdLines = [
       `# 📌 드림컴퍼니 (Dream Company) 전 사업부 공통 지시사항 원장 (HQ Common Directives)`,
       ``,
-      `> 이 문서는 텔레그램 본사 총괄 리모컨(\`@SemifearGreedbot\` · \`/directives\` · \`/mode_all\`)과 연동되어 **1사업부(\`truthofmarket.com\`) · 2사업부(\`kisfitglobal.com\`) · 3사업부(\`kidsfit.co.kr\`)** 전 사업부 에이전트에게 공통으로 강제 주입되는 지시사항 원장입니다.`,
+      `> 이 문서는 텔레그램 본사 총괄·감사 리모컨(\`@SemifearGreedbot\` · \`/directives\` · \`/mode_all\`)과 연동되어 **1사업부(\`truthofmarket.com\`) · 2사업부(\`kisfitglobal.com\`) · 3사업부(\`getbreakai.com\`) · 4사업부(\`paradise-hero.com\`) · 5사업부(\`kidsfit.co.kr\`)** 전 사업부 에이전트에게 공통으로 강제 주입되는 지시사항 원장입니다.`,
       ``,
       `---`,
       ``,
-      `## 🖥️ 1. 안티그래비티 작업 채널 이원화 (Channel Separation)`,
+      `## 🖥️ 1. 안티그래비티 작업 채널 이원화 (Channel Separation) 및 1~5사업부 봇 매핑`,
       ``,
       `| 구분 | 안티그래비티 Conversation ID | 용도 및 운영 원칙 |`,
       `| :--- | :--- | :--- |`,
-      `| **📱 텔레그램 원격 전용 채널** | \`${MASTER_CONVERSATION_ID}\` | 텔레그램(\`@SemifearGreedbot\`, \`@RigjtsideAlphabot\`, \`@kidsfittbot\`, \`@Moneyfiityyy_bot\`)에서 인입되는 전 사업부 공통 및 개별 사업부 원격 작업 100% 전담 수행 |`,
+      `| **📱 텔레그램 원격 전용 채널** | \`${MASTER_CONVERSATION_ID}\` | 텔레그램 5개 봇(\`@RigjtsideAlphabot\`, \`@kidsfittbot\`, \`@SemifearGreedbot\`, \`@inves123_bot\`, \`@Moneyfiityyy_bot\`)에서 인입되는 본사 총괄·감사 및 1~5사업부 원격 작업 100% 전담 수행 |`,
       `| **💻 컴퓨터(PC) 직접 작업 채널** | \`${PC_DIRECT_CONVERSATION_ID}\` | 사장님 PC 직접 지시 및 대화 전용 채널 (텔레그램 브릿지 발송 원천 차단 · 간섭 0%) |`,
       ``,
       `---`,
@@ -175,20 +184,22 @@ function syncCommonDirectivesMarkdown(data) {
       `## 🕒 3. 최근 하달된 전 사업부 공통 작업 이력 (Recent All-Division Orders)`,
       ``,
       ...(orders.length > 0
-        ? orders.slice(0, 10).map((o, idx) => `- **[${o.createdAt}]** ${o.text} (\`${o.status || "DISPATCHED"}\`)`)
+        ? orders.slice(0, 10).map((o) => `- **[${o.createdAt}]** ${o.text} (\`${o.status || "DISPATCHED"}\`)`)
         : [`- 아직 기록된 일괄 작업 이력이 없습니다.`]),
       ``,
       `---`,
       ``,
-      `## 💬 4. 텔레그램 전 사업부 공통 지시사항 명령어 가이드`,
+      `## 💬 4. 모두컴퍼니 본부 방 직통 명령어 & 감사 피드백 가이드`,
       ``,
-      `- **리모컨 버튼**:`,
-      `  - \`🏛️ 전 사업부 공통 지시 모드\` (\`/mode_all\`): 이후 입력하는 모든 일반 메시지를 1·2·3사업부 전체 공통 작업으로 하달`,
-      `  - \`📌 전 사업부 공통 지시사항\` (\`/directives\`): 현재 등록된 영구 공통 지시사항 및 최근 공통 작업 내역 조회`,
-      `- **텍스트 간편 명령어 (어느 모드에서든 즉시 작동)**:`,
-      `  - \`[공통] <지시내용>\` 또는 \`전사업부: <지시내용>\` 또는 \`공통: <지시내용>\` → 1·2·3사업부 전체 일괄 실행`,
-      `  - \`공통등록: <규칙내용>\` 또는 \`/공통추가 <규칙내용>\` → 영구 공통 지시사항 추가 (전 사업부 프롬프트 자동 주입)`,
-      `  - \`공통삭제 <번호>\` 또는 \`/공통삭제 <번호>\` → 등록된 영구 공통 지시사항 삭제`,
+      `- **본사 총괄·감사 피드백 요청**:`,
+      `  - \`1사업부 피드백 줘\` / \`2사업부 피드백 줘\` / \`3사업부 피드백 줘\` / \`4사업부 피드백 줘\` / \`전사업부 피드백 줘\` (또는 \`/fb1\` ~ \`/fb5\`, \`/fb_all\`)`,
+      `- **모두컴퍼니 방에서 사업부별 즉시 지시**:`,
+      `  - \`/전사업부 <지시내용>\` (또는 \`/all <지시내용>\`, \`[공통] <지시내용>\`)`,
+      `  - \`/1사업부 <지시내용>\` (또는 \`/div1 <지시내용>\`) → 1사업부(\`@RigjtsideAlphabot\`) 즉시 수행`,
+      `  - \`/2사업부 <지시내용>\` (또는 \`/div2 <지시내용>\`) → 2사업부(\`@kidsfittbot\`) 즉시 수행`,
+      `  - \`/3사업부 <지시내용>\` (또는 \`/div3 <지시내용>\`) → 3사업부(\`@SemifearGreedbot\`) 즉시 수행`,
+      `  - \`/4사업부 <지시내용>\` (또는 \`/div4 <지시내용>\`) → 4사업부(\`@inves123_bot\`) 즉시 수행`,
+      `  - \`/5사업부 <지시내용>\` (또는 \`/div5 <지시내용>\`) → 5사업부(\`@Moneyfiityyy_bot\`) 즉시 수행`,
       ``,
     ];
     fs.mkdirSync(path.dirname(HQ_COMMON_DIRECTIVES_MD), { recursive: true });
@@ -201,7 +212,6 @@ function saveCommonDirectives(data) {
     data.updatedAt = new Date().toISOString();
     data.telegramDedicatedConversationId = MASTER_CONVERSATION_ID;
     data.pcDirectConversationId = PC_DIRECT_CONVERSATION_ID;
-    // Re-index standingDirectives IDs cleanly 1..N
     if (Array.isArray(data.standingDirectives)) {
       data.standingDirectives = data.standingDirectives.map((item, idx) => ({
         ...item,
@@ -263,130 +273,123 @@ function recordCommonOrder(orderText, status = "DISPATCHED") {
 const DIVISIONS = {
   ALL: {
     code: "ALL",
-    name: "전 사업부 공통 (1·2·3사업부 통합 지휘 · 드림컴퍼니 HQ)",
-    domain: "https://truthofmarket.com | https://kisfitglobal.com | https://kidsfit.co.kr",
+    num: "전사업부",
+    name: "전 사업부 공통 (본사 총괄 · 감사 | 드림컴퍼니 HQ)",
+    domain: "https://truthofmarket.com | https://kisfitglobal.com | https://getbreakai.com | https://paradise-hero.com | https://kidsfit.co.kr",
     cwd: HQ_ROOT_DIR,
     conversationId: MASTER_CONVERSATION_ID,
+    dedicatedConversationId: "1921e31e-ab59-4720-9419-93cac770374d",
+    conversationTitle: "모두컴퍼니 본부",
     botToken: SEMI_BOT_TOKEN,
     botHandle: "@SemifearGreedbot",
-    managerTitle: "드림컴퍼니 본사 총괄 매니저 (HQ Chief Executive Agent)",
+    managerTitle: "드림컴퍼니 본사 총괄 & 감사관 (HQ Chief Executive & Auditor)",
     multiAgents: [
-      "HQ-Common-Directive-Controller (전 사업부 공통 지시사항 등록·강제 적용 및 1·2·3사업부 일괄 하달)",
-      "TOM-Division-Lead (1사업부 truthofmarket.com — 72종목 PW-RSI & $SMH:$XLV 바벨 · VIP 속보)",
-      "KFG-Division-Lead (2사업부 kisfitglobal.com — US CDC 2000 LMS · 영문 임상 Q&A · 글로벌 쇼츠)",
-      "KFK-Division-Lead (3사업부 kidsfit.co.kr — 2017 질병관리청 성장 · 24종 큐레이션 · 네이버 바이럴)",
+      "HQ-Chief-Auditor (1~5사업부 실시간 감사 피드백 도출 및 사장님 지시문 설계)",
+      "HQ-Common-Directive-Controller (전 사업부 공통 지시사항 등록·강제 적용 및 1~5사업부 일괄 하달)",
     ],
   },
   TOM: {
     code: "TOM",
-    name: "1사업부: RightSideAlpha (truthofmarket.com)",
+    num: "1사업부",
+    name: "1사업부: TruthOfMarket (truthofmarket.com)",
     domain: "https://truthofmarket.com",
     cwd: "D:\\드림컴퍼니\\1사업부",
     conversationId: MASTER_CONVERSATION_ID,
+    dedicatedConversationId: "f24bd054-1b51-4346-b561-56996bc93686",
+    conversationTitle: "1사업부(truthofmarekt)",
     botToken: RSA_BOT_TOKEN,
     botHandle: "@RigjtsideAlphabot",
-    managerTitle: "1사업부 퀀트·반도체 부문장 (TOM Division Lead)",
+    managerTitle: "1사업부 미국주식·반도체 퀀트 부문장 (TOM Division Lead)",
     multiAgents: [
       "TOM-Quant-Agent (72종목 PW-RSI & $SMH:$XLV 80:20 바벨 퀀트 엔진)",
-      "TOM-GEO-Promo-Agent (Telegra.ph 월가 백링크 · llms.txt · IndexNow 78개 URL 색인)",
+      "TOM-GEO-Promo-Agent (Telegra.ph 월가 백링크 · llms.txt · IndexNow URL 색인)",
       "TOM-Media-VIP-Agent (@rightsidealpha 쇼츠·릴스 & @truthofmarketss VIP 속보 데스크)",
     ],
   },
   KFG: {
     code: "KFG",
+    num: "2사업부",
     name: "2사업부: KISFIT Global (kisfitglobal.com)",
     domain: "https://kisfitglobal.com",
     cwd: "D:\\드림컴퍼니\\2사업부",
     conversationId: resolveSafeTelegramConversationId(kfgEnv.ANTIGRAVITY_CONVERSATION_ID),
+    dedicatedConversationId: "28de4b55-9677-4f05-b1ff-f98015cc6d29",
+    conversationTitle: "2사업부(kisfitglobal)",
     botToken: KFG_BOT_TOKEN,
     botHandle: "@kidsfittbot",
     managerTitle: "2사업부 글로벌 소아성장 부문장 (KFG Division Lead)",
     multiAgents: [
       "KFG-Auxology-Agent (US CDC 2000 LMS & Khamis-Roche 성인키 정밀 예측 엔진)",
-      "KFG-GlobalSEO-Agent (89+ 영문 임상 Q&A 증식 · Zero-Hangul 검열 · 글로벌 색인)",
+      "KFG-GlobalSEO-Agent (영문 임상 Q&A 증식 · Zero-Hangul 검열 · 글로벌 색인)",
       "KFG-Media-Agent (@kisfitglobal 3D 의학 다큐 쇼츠·릴스 마스터링 에이전트)",
-    ],
-  },
-  KFK: {
-    code: "KFK",
-    name: "3사업부: 키즈핏 코리아 (kidsfit.co.kr)",
-    domain: "https://kidsfit.co.kr",
-    cwd: "D:\\드림컴퍼니\\3사업부",
-    conversationId: resolveSafeTelegramConversationId(kfkEnv.ANTIGRAVITY_CONVERSATION_ID),
-    botToken: KFK_BOT_TOKEN,
-    botHandle: "@Moneyfiityyy_bot",
-    managerTitle: "3사업부 국내 육아·커머스 부문장 (KFK Division Lead)",
-    multiAgents: [
-      "KFK-KDCA-Agent (2017 질병관리청 성장도표 & K-DST 발달 6축 진단 엔진)",
-      "KFK-Commerce-Agent (24종 셀렉트샵 쿠팡 AF7865143 · 링크프라이스 A100708867 수익화)",
-      "KFK-Naver-Viral-Agent (expertise333 블로그 · moneyfitlab 카페 · 지식iN · @kidsfit01 쇼츠)",
     ],
   },
   GBA: {
     code: "GBA",
-    name: "4사업부: GetBreakAI (getbreakai.com)",
+    num: "3사업부",
+    name: "3사업부: GetBreakAI 일본 퀀트 (getbreakai.com)",
     domain: "https://getbreakai.com",
-    cwd: "D:\\드림컴퍼니\\4사업부",
-    conversationId: MASTER_CONVERSATION_ID,
+    cwd: "D:\\드림컴퍼니\\3사업부",
+    conversationId: resolveSafeTelegramConversationId(gbaEnv.ANTIGRAVITY_CONVERSATION_ID),
+    dedicatedConversationId: "ec5f83c2-178c-4ca1-b225-26fc1a459bd8",
+    conversationTitle: "3사업부(getbreakai)",
     botToken: SEMI_BOT_TOKEN,
     botHandle: "@SemifearGreedbot",
-    managerTitle: "4사업부 이벤트·감마 퀀트 부문장 (GBA Division Lead)",
+    managerTitle: "3사업부 일본 퀀트·인스타·유튜브 부문장 (GBA Division Lead)",
     multiAgents: [
-      "GBA-Catalyst-NLP-Agent (SEC 8-K/10-K 어닝 NLP & 포렌식 감사 스캐너)",
-      "GBA-Whale-GEX-Agent (SEC Form-4 임원 매수 클러스터 & 옵션 감마 익스포저 GEX 엔진)",
-      "GBA-ATR-Execution-Agent (2.0x ATR 변동성 손절 · 5D IV 예상변동폭 · VIP 금고 데스크)",
+      "GBA-JP-Quant-Agent (일본 투자자용 新NISA 0% vs 특정계좌 20.315% 세후 수익 시뮬레이터)",
+      "GBA-JP-Media-Agent (일본 타깃 인스타 릴스·유튜브 쇼츠 9:16 숏폼 엔진)",
+      "GBA-JP-Syndication-Agent (/jp/feed.xml · /jp/x-feed.xml 기반 일본 SNS 자동 배포)",
+    ],
+  },
+  HERO: {
+    code: "HERO",
+    num: "4사업부",
+    name: "4사업부: 파라다이스히어로 · 영웅라디오 (paradise-hero.com)",
+    domain: "https://paradise-hero.com",
+    cwd: "D:\\드림컴퍼니\\4사업부",
+    conversationId: resolveSafeTelegramConversationId(heroEnv.ANTIGRAVITY_CONVERSATION_ID),
+    dedicatedConversationId: "dbc61f0a-76cb-48e3-b617-a616c069564c",
+    conversationTitle: "4사업부(paradise)",
+    botToken: HERO_BOT_TOKEN,
+    botHandle: "@inves123_bot",
+    managerTitle: "4사업부 황영웅 플랫폼 & 롱폼 라디오 부문장 (HERO Division Lead)",
+    multiAgents: [
+      "HERO-Platform-Agent (paradise-hero.com 시니어 WCAG AAA 웹 플랫폼 & 황영웅 골드 VIP 멤버십)",
+      "HERO-Radio-Longform-Agent (@김쌤의영웅라디오 15분 롱폼 사연 대본·TTS·BGM·1080p 비디오 엔진)",
+      "HERO-Commerce-Billboard-Agent (황금 응원 전광판 소액후원 & 5070 시니어 큐레이션 커머스)",
+    ],
+  },
+  KFK: {
+    code: "KFK",
+    num: "5사업부",
+    name: "5사업부: 키즈핏 코리아 패시브 (kidsfit.co.kr)",
+    domain: "https://kidsfit.co.kr",
+    cwd: "D:\\드림컴퍼니\\5사업부",
+    conversationId: resolveSafeTelegramConversationId(kfkEnv.ANTIGRAVITY_CONVERSATION_ID),
+    dedicatedConversationId: "c6a94ac9-5ae4-4e50-9155-2dc9c1243b57",
+    conversationTitle: "5사업부(kidsfit)",
+    botToken: KFK_BOT_TOKEN,
+    botHandle: "@Moneyfiityyy_bot",
+    managerTitle: "5사업부 무인 패시브 자동화 부문장 (KFK Passive Lead)",
+    multiAgents: [
+      "KFK-Passive-Guard-Agent (kidsfit.co.kr 100% 패시브 무인 유지보수 & 쿠팡/링크프라이스 보존)",
+      "KFK-Zero-Touch-Healer (금지어 Zero-Tolerance 감시 및 무인 헬스체크 경보 전용 에이전트)",
     ],
   },
 };
-
-function getLiveTokenTelemetryBanner() {
-  try {
-    const agyBrain = "C:\\Users\\jjang\\.gemini\\antigravity\\brain";
-    if (!fs.existsSync(agyBrain)) return "";
-    const nowMs = Date.now();
-    const cutoff7d = nowMs - 7 * 86400 * 1000;
-    const cutoff24h = nowMs - 24 * 3600 * 1000;
-    let convs7d = 0;
-    let fullBytes7d = 0;
-    let fullBytes24h = 0;
-    for (const dirName of fs.readdirSync(agyBrain)) {
-      const logsDir = path.join(agyBrain, dirName, ".system_generated", "logs");
-      const tfull = path.join(logsDir, "transcript_full.jsonl");
-      const tf = path.join(logsDir, "transcript.jsonl");
-      const target = fs.existsSync(tfull) ? tfull : fs.existsSync(tf) ? tf : null;
-      if (!target) continue;
-      const st = fs.statSync(target);
-      if (st.mtimeMs >= cutoff7d) {
-        convs7d += 1;
-        fullBytes7d += st.size;
-        if (st.mtimeMs >= cutoff24h) fullBytes24h += st.size;
-      }
-    }
-    const tok24h = Math.round(fullBytes24h / 3.8).toLocaleString();
-    const tok7d = Math.round(fullBytes7d / 3.8).toLocaleString();
-    const mb24h = (fullBytes24h / (1024 * 1024)).toFixed(1);
-    const mb7d = (fullBytes7d / (1024 * 1024)).toFixed(1);
-    return (
-      `\n━━━━━━━━━━━━━━━━━━━━\n` +
-      `📊 <b>[실시간 안티그래비티 토큰 현황 보고]</b>\n` +
-      `• <b>오늘(24h) 투입</b>: 약 <code>${tok24h} Tokens</code> (<code>${mb24h} MB</code>)\n` +
-      `• <b>최근 7일 누적</b>: 약 <code>${tok7d} Tokens</code> (<b>${convs7d}개 에이전트 세션</b> / <code>${mb7d} MB</code>)\n` +
-      `• <b>가동 출력</b>: 🔥 <b>토큰 절약 해제 · 최대치 풀가동(Full-Overdrive)</b>`
-    );
-  } catch (_) {
-    return "";
-  }
-}
 
 function resolveDivisionByBotToken(botToken, includeHqAsAll = false) {
   if (!botToken) return null;
   if (RSA_BOT_TOKEN && botToken === RSA_BOT_TOKEN) return "TOM";
   if (KFG_BOT_TOKEN && botToken === KFG_BOT_TOKEN) return "KFG";
+  if (HERO_BOT_TOKEN && botToken === HERO_BOT_TOKEN) return "HERO";
   if (KFK_BOT_TOKEN && botToken === KFK_BOT_TOKEN) return "KFK";
-  if (includeHqAsAll && SEMI_BOT_TOKEN && botToken === SEMI_BOT_TOKEN) return "GBA";
+  if (SEMI_BOT_TOKEN && botToken === SEMI_BOT_TOKEN) return includeHqAsAll ? "GBA" : null;
   return null;
 }
 
+// 본사 총괄·감사 & 모두컴퍼니 본부 방 전용 심플 리모컨 (1~5사업부 전 사업부 지원)
 const HQ_KEYBOARD = {
   inline_keyboard: [
     [
@@ -394,33 +397,32 @@ const HQ_KEYBOARD = {
       { text: "📌 전 사업부 공통 지시사항", callback_data: "/directives" },
     ],
     [
-      { text: "📋 1·2·3사업부 봇 일제 보고", callback_data: "/report" },
-      { text: "🏢 전사 멀티에이전트 조직도", callback_data: "/company" },
+      { text: "🕵️‍♂️ 전사업부 종합 감사 피드백", callback_data: "/fb_all" },
+      { text: "📋 1~5사업부 봇 일제 보고", callback_data: "/report" },
     ],
     [
-      { text: "📈 1사업부 (RightSideAlpha)", callback_data: "/mode_tom" },
-      { text: "🌍 2사업부 (KISFIT Global)", callback_data: "/mode_kfg" },
+      { text: "🔍 1사업부 감사 피드백", callback_data: "/fb1" },
+      { text: "🔍 2사업부 감사 피드백", callback_data: "/fb2" },
     ],
     [
-      { text: "🇰🇷 3사업부 (키즈핏 코리아)", callback_data: "/mode_kfk" },
-      { text: "📊 1·2·3·4사업부 & 채널 상태", callback_data: "/status" },
-      { text: "⚡ 4사업부 (GetBreakAI)", callback_data: "/mode_gba" },
+      { text: "🔍 3사업부 감사 피드백", callback_data: "/fb3" },
+      { text: "🔍 4사업부 감사 피드백", callback_data: "/fb4" },
     ],
     [
-      { text: "📰 미국주식·SMH·XLV VIP뉴스 발송", callback_data: "/tom_news" },
-      { text: "🎬 1사업부 Flow 릴스 1건 실행", callback_data: "/flow_tom" },
+      { text: "🔍 5사업부 감사 피드백", callback_data: "/fb5" },
+      { text: "📈 1~5사업부 방문자 브리핑", callback_data: "/visitors" },
     ],
     [
-      { text: "🎬 2사업부(영문) Flow 릴스 1건", callback_data: "/flow_kfg" },
-      { text: "🎬 3사업부(국내) Flow 릴스 1건", callback_data: "/flow_kfk" },
+      { text: "🎯 /1사업부 바로 지시", callback_data: "/ask_tom" },
+      { text: "🎯 /2사업부 바로 지시", callback_data: "/ask_kfg" },
     ],
     [
-      { text: "📈 전사업부 방문자·봇별 브리핑", callback_data: "/visitors" },
-      { text: "🛡️ 전사업부 무토큰 교차검열", callback_data: "/audit" },
+      { text: "🎯 /3사업부 바로 지시", callback_data: "/ask_gba" },
+      { text: "🎯 /4사업부 바로 지시", callback_data: "/ask_hero" },
     ],
     [
-      { text: "🕒 24시간 1·2·3사업부 스케줄", callback_data: "/schedule24" },
-      { text: "🍋 레몬스퀴지 승인·실결제 즉시조회", callback_data: "/ls" },
+      { text: "🎯 /5사업부 바로 지시", callback_data: "/ask_kfk" },
+      { text: "🎯 /전사업부 바로 지시", callback_data: "/ask_all" },
     ],
   ],
 };
@@ -436,20 +438,6 @@ function ensureSingleInstance() {
         } catch (_) {}
       }
     }
-    for (const legacyPidFile of [
-      "D:\\드림컴퍼니\\3사업부\\logs\\telegram_bridge.pid",
-      "D:\\드림컴퍼니\\3사업부\\logs\\telegram_bridge.pid",
-      "D:\\드림컴퍼니\\2사업부\\logs\\telegram_bridge.pid",
-    ]) {
-      if (fs.existsSync(legacyPidFile)) {
-        const lPid = Number(fs.readFileSync(legacyPidFile, "utf8").trim());
-        if (lPid && lPid !== process.pid) {
-          try {
-            process.kill(lPid, "SIGTERM");
-          } catch (_) {}
-        }
-      }
-    }
     fs.writeFileSync(PID_FILE, String(process.pid), "utf8");
   } catch (_) {}
 }
@@ -460,14 +448,15 @@ function loadState() {
       const parsed = JSON.parse(fs.readFileSync(STATE_FILE, "utf8"));
       if (!parsed.offsets) parsed.offsets = {};
       if (!parsed.lastAutoRunDate) parsed.lastAutoRunDate = {};
-      if (!parsed.activeDivision) parsed.activeDivision = "TOM";
+      if (!parsed.activeDivision) parsed.activeDivision = "ALL";
       return parsed;
     }
   } catch (_) {}
   return {
     lastUpdateId: 0,
     offsets: {},
-    activeDivision: "TOM",
+    activeDivision: "ALL",
+    lastCommandChatId: DEFAULT_GROUP_CHAT_ID,
     lastAutoRunDate: {},
   };
 }
@@ -479,9 +468,6 @@ function saveState(st) {
   } catch (_) {}
 }
 
-/**
- * Sleep/Wake-Proof Telegram API request with hard JS watchdog timer (15 seconds max)
- */
 function tgApiWithToken(botToken, method, payload = null, hardTimeoutMs = 15000) {
   return new Promise((resolve) => {
     let settled = false;
@@ -551,25 +537,43 @@ function getTargetChatId() {
   return String(DEFAULT_GROUP_CHAT_ID);
 }
 
-async function sendHqMessage(htmlText, withKeyboard = true, preferredToken = null, explicitChatId = null) {
-  const tokenToUse = preferredToken || RSA_BOT_TOKEN || PRIMARY_BOT_TOKEN || BOT_TOKENS[0];
-  const targetChat = explicitChatId || getTargetChatId();
+/**
+ * Sends message to explicitChatId (where the command came from).
+ * If the command came from a 1:1 chat (OWNER_USER_ID) and alsoSyncGroup is true,
+ * it replies in the 1:1 chat AND mirrors to 모두컴퍼니 group chat so both places are always in sync!
+ */
+async function sendHqMessage(htmlText, withKeyboard = true, preferredToken = null, explicitChatId = null, customReplyMarkup = null) {
+  const tokenToUse = preferredToken || SEMI_BOT_TOKEN || RSA_BOT_TOKEN || PRIMARY_BOT_TOKEN || BOT_TOKENS[0];
+  const groupChat = getTargetChatId();
+  const targetChat = explicitChatId || groupChat;
+
   const payload = {
     chat_id: targetChat,
     text: htmlText,
     parse_mode: "HTML",
     disable_web_page_preview: true,
   };
-  if (withKeyboard) payload.reply_markup = HQ_KEYBOARD;
-  const res = await tgApiWithToken(tokenToUse, "sendMessage", payload, 12000);
-  if (!res.ok && tokenToUse !== RSA_BOT_TOKEN && RSA_BOT_TOKEN) {
-    // Fallback to Div 1 bot if the preferred token is not a member of the group chat
-    const fallbackRes = await tgApiWithToken(RSA_BOT_TOKEN, "sendMessage", payload, 12000);
-    if (fallbackRes.ok) return fallbackRes;
+  if (customReplyMarkup) {
+    payload.reply_markup = customReplyMarkup;
+  } else if (withKeyboard) {
+    payload.reply_markup = HQ_KEYBOARD;
   }
-  if (!res.ok && targetChat !== String(OWNER_USER_ID)) {
+
+  const res = await tgApiWithToken(tokenToUse, "sendMessage", payload, 12000);
+  if (res.ok) return res;
+
+  // Fallback to HQ / Div1 bot if preferred bot failed in targetChat
+  if (tokenToUse !== SEMI_BOT_TOKEN && SEMI_BOT_TOKEN) {
+    const fb1 = await tgApiWithToken(SEMI_BOT_TOKEN, "sendMessage", payload, 12000);
+    if (fb1.ok) return fb1;
+  }
+  if (tokenToUse !== RSA_BOT_TOKEN && RSA_BOT_TOKEN) {
+    const fb2 = await tgApiWithToken(RSA_BOT_TOKEN, "sendMessage", payload, 12000);
+    if (fb2.ok) return fb2;
+  }
+  if (targetChat !== String(OWNER_USER_ID)) {
     payload.chat_id = String(OWNER_USER_ID);
-    return await tgApiWithToken(RSA_BOT_TOKEN || tokenToUse, "sendMessage", payload, 12000);
+    return await tgApiWithToken(tokenToUse, "sendMessage", payload, 12000);
   }
   return res;
 }
@@ -594,31 +598,31 @@ function formatCommonDirectivesBoard(state) {
     orders.length > 0
       ? orders
           .slice(0, 5)
-          .map((o, i) => `• <code>[${o.createdAt}]</code> ${o.text}`)
+          .map((o) => `• <code>[${o.createdAt}]</code> ${o.text}`)
           .join("\n")
       : "• 최근 일괄 지시 이력이 없습니다.";
 
   return (
-    `📌 <b>[드림컴퍼니 전 사업부 공통 지시사항 컨트롤 보드 (@SemifearGreedbot)]</b>\n` +
+    `📌 <b>[드림컴퍼니 본사 총괄·감사 &amp; 공통 지시사항 보드 (@SemifearGreedbot)]</b>\n` +
     `━━━━━━━━━━━━━━━━━━━━\n` +
     `🖥️ <b>[안티그래비티 작업 채널 완벽 분리 현황]</b>\n` +
-    `• 📱 <b>텔레그램 원격 전용 채널</b>: <code>${MASTER_CONVERSATION_ID}</code> (<b>현재 100% 전담 연결</b>)\n` +
-    `• 💻 <b>컴퓨터(PC) 직접 작업 채널</b>: <code>${PC_DIRECT_CONVERSATION_ID}</code> (<b>독립 분리 · 원격 간섭 0%</b>)\n` +
-    `• 🎯 <b>현재 리모컨 지시 대상</b>: <b>${activeDiv.name}</b>\n\n` +
+    `• 📱 <b>텔레그램 원격 전용 채널</b>: <code>${MASTER_CONVERSATION_ID}</code> (<b>100% 전담 연결</b>)\n` +
+    `• 💻 <b>컴퓨터(PC) 직접 작업 채널</b>: <code>${PC_DIRECT_CONVERSATION_ID}</code> (<b>독립 분리 · 간섭 0%</b>)\n` +
+    `• 🎯 <b>현재 지시 대상</b>: <b>${activeDiv.name}</b>\n\n` +
     `📜 <b>[영구 적용 전 사업부 공통 지시사항 (${directives.length}건)]</b>\n` +
-    `<i>(1·2·3사업부 모든 원격 작업 시 프롬프트에 자동 강제 주입됩니다)</i>\n` +
     `${standingLines}\n\n` +
     `🕒 <b>[최근 하달된 전 사업부 공통 작업 이력]</b>\n` +
     `${recentOrderLines}\n` +
     `━━━━━━━━━━━━━━━━━━━━\n` +
-    `💡 <b>[텔레그램에서 전 사업부 공통 지시 내리는 법]</b>\n` +
-    `1️⃣ <b>전 사업부 일괄 작업 지시</b>:\n` +
-    `   • 상단 <b>[🏛️ 전 사업부 공통 지시 모드]</b> 버튼 클릭 후 일반 메시지 입력\n` +
-    `   • 또는 모드 상관없이 <code>[공통] 지시내용</code> / <code>전사업부: 지시내용</code> / <code>공통지시: 지시내용</code> 입력\n` +
-    `2️⃣ <b>영구 공통 지시사항(수칙) 추가</b>:\n` +
-    `   • <code>공통등록: 앞으로 모든 사업부는 ~게 작업해</code> (또는 <code>/공통추가 내용</code>)\n` +
-    `3️⃣ <b>영구 공통 지시사항 삭제</b>:\n` +
-    `   • <code>공통삭제 번호</code> (예: <code>공통삭제 5</code>)`
+    `💡 <b>[모두컴퍼니 본부 방 직통 사용법]</b>\n` +
+    `1️⃣ <b>본사 총괄·감사에게 피드백 받기</b>:\n` +
+    `   • <code>1사업부 피드백 줘</code> / <code>2사업부 피드백 줘</code> / <code>3사업부 피드백 줘</code> / <code>4사업부 피드백 줘</code> (또는 하단 버튼 <code>🔍 감사 피드백</code> 클릭)\n` +
+    `2️⃣ <b>모두컴퍼니 방에서 바로 작업 지시하기</b>:\n` +
+    `   • <code>/전사업부 지시내용</code> (또는 <code>/all 지시내용</code>)\n` +
+    `   • <code>/1사업부 지시내용</code> (또는 <code>/div1 지시내용</code>)\n` +
+    `   • <code>/2사업부 지시내용</code> (또는 <code>/div2 지시내용</code>)\n` +
+    `   • <code>/3사업부 지시내용</code> (또는 <code>/div3 지시내용</code>)\n` +
+    `   • <code>/4사업부 지시내용</code> (또는 <code>/div4 지시내용</code>)`
   );
 }
 
@@ -629,139 +633,278 @@ async function sendDivisionReportsAll(state, explicitChatId = null) {
   for (const r of results || []) {
     if (r.code === "1사업부") rMap.TOM = r;
     if (r.code === "2사업부") rMap.KFG = r;
-    if (r.code === "3사업부") rMap.KFK = r;
-    if (r.code === "4사업부") rMap.GBA = r;
+    if (r.code === "3사업부") rMap.GBA = r;
+    if (r.code === "4사업부") rMap.HERO = r;
+    if (r.code === "5사업부") rMap.KFK = r;
   }
-  const commonData = loadCommonDirectives();
   const activeDiv = DIVISIONS[state?.activeDivision] || DIVISIONS.ALL;
+  const targetChat = explicitChatId || getTargetChatId();
 
-  // 1. 본사 총괄 매니저 (@SemifearGreedbot)
+  // 0. 본사 총괄·감사 (@SemifearGreedbot)
   await sendHqMessage(
-    `🏛️ <b>[드림컴퍼니 본사 총괄 매니저 보고 (@SemifearGreedbot)]</b>\n` +
+    `🏛️ <b>[드림컴퍼니 본사 총괄·감사 보고 (@SemifearGreedbot)]</b>\n` +
       `━━━━━━━━━━━━━━━━━━━━\n` +
-      `• <b>통합 대화방</b>: <b>모두컴퍼니</b> (<code>-1003834697086</code> · https://t.me/+gqQ4uTZpDW04Y2Nl)\n` +
-      `• <b>통합 워크스페이스</b>: <code>D:\\드림컴퍼니</code> (1·2·3사업부 편제 완료)\n` +
-      `• 📱 <b>텔레그램 전용 대화창</b>: <code>${MASTER_CONVERSATION_ID}</code> (<b>이쪽 채널로 전담 작업 중</b>)\n` +
-      `• 💻 <b>컴퓨터(PC) 작업 대화창</b>: <code>${PC_DIRECT_CONVERSATION_ID}</code> (<b>기존 채널 · PC 전용 분리</b>)\n` +
-      `• 🎯 <b>현재 리모컨 지시 모드</b>: <b>${activeDiv.name}</b>\n` +
-      `• 📌 <b>전 사업부 공통 지시사항</b>: 영구 수칙 <b>${(commonData.standingDirectives || []).length}건</b> 상시 적용 중 (<code>/directives</code>)\n` +
-      `• <b>현재 작업 대기열</b>: ${currentTask ? currentTask.title : "대기 중 (즉시 지시 가능)"} (대기 ${taskQueue.length}건)\n` +
-      `<i>👇 이어서 1사업부 · 2사업부 · 3사업부 전담 봇이 차례대로 현황을 보고합니다.</i>`,
+      `• <b>본부 대화방</b>: <b>모두컴퍼니</b> (<code>-1003834697086</code>)\n` +
+      `• <b>본사 역할</b>: <b>총괄 지휘 &amp; 1~5사업부 감사 피드백 전담</b>\n` +
+      `• 🎯 <b>현재 지시 모드</b>: <b>${activeDiv.name}</b>\n` +
+      `• 💡 <b>빠른 명령</b>: <code>1사업부 피드백 줘</code> | <code>/1사업부 지시내용</code> ~ <code>/4사업부 지시내용</code> | <code>/전사업부 지시내용</code>\n` +
+      `<i>👇 이어서 1~5사업부 전담 봇이 현황을 보고합니다.</i>`,
     false,
     SEMI_BOT_TOKEN,
-    explicitChatId
+    targetChat
   );
 
-  // 2. 1사업부 (@RigjtsideAlphabot)
+  // 1. 1사업부 (@RigjtsideAlphabot)
   const r1 = rMap.TOM || { uvToday: 0, pvToday: 0, uvTotal: 0, pvTotal: 0, paidClickToday: 0, paidClickTotal: 0, paidMemberTotal: 0, health: { ok: true, ms: 120 } };
   await sendHqMessage(
-    `📈 <b>[1사업부 보고 — RightSideAlpha × SemiFearGreed (@RigjtsideAlphabot)]</b>\n` +
-      `━━━━━━━━━━━━━━━━━━━━\n` +
-      `• <b>도메인 / 경로</b>: https://truthofmarket.com (<code>${DIVISIONS.TOM.cwd}</code>)\n` +
-      `• <b>서버 상태</b>: ${r1.health?.ok ? `🟢 정상 가동 (${r1.health.ms}ms)` : "🔴 점검 필요"} | SEO 128개 URL 색인\n` +
-      `• <b>오늘 방문자(UV/PV)</b>: <b>${r1.uvToday}명</b> (${r1.pvToday}회) | 누적 <b>${r1.uvTotal}명</b> (${r1.pvTotal}회)\n` +
-      `• <b>유료화 전환(PRO)</b>: 오늘 결제클릭 <b>${r1.paidClickToday}회</b> (누적 ${r1.paidClickTotal}회 / 실결제 ${r1.paidMemberTotal}건)\n` +
-      `• <b>전담 에이전트</b>: 72종목 PW-RSI 타점 · $SMH:$XLV 바벨 · @truthofmarketss VIP 속보`,
+    `📈 <b>[1사업부 보고 — TruthOfMarket 미국주식 (@RigjtsideAlphabot)]</b>\n` +
+      `• <b>도메인</b>: https://truthofmarket.com (${r1.health?.ok ? `🟢 정상 ${r1.health.ms}ms` : "🟡 점검"})\n` +
+      `• <b>방문자(UV/PV)</b>: 오늘 <b>${r1.uvToday}명</b> (${r1.pvToday}회) | 누적 <b>${r1.uvTotal}명</b>\n` +
+      `• <b>지시 명령어</b>: <code>/1사업부 지시내용</code> (또는 <code>1사업부 피드백 줘</code>)`,
     false,
     RSA_BOT_TOKEN,
-    explicitChatId
+    targetChat
   );
 
-  // 3. 2사업부 (@kidsfittbot)
+  // 2. 2사업부 (@kidsfittbot)
   const r2 = rMap.KFG || { uvToday: 0, pvToday: 0, uvTotal: 0, pvTotal: 0, paidClickToday: 0, paidClickTotal: 0, paidMemberTotal: 0, health: { ok: true, ms: 120 } };
   await sendHqMessage(
-    `🌍 <b>[2사업부 보고 — KISFIT Global 영문 스튜디오 (@kidsfittbot)]</b>\n` +
-      `━━━━━━━━━━━━━━━━━━━━\n` +
-      `• <b>도메인 / 경로</b>: https://kisfitglobal.com (<code>${DIVISIONS.KFG.cwd}</code>)\n` +
-      `• <b>서버 상태</b>: ${r2.health?.ok ? `🟢 정상 가동 (${r2.health.ms}ms)` : "🔴 점검 필요"} | US CDC 임상 Q&amp;A 222개 동기화\n` +
-      `• <b>오늘 방문자(UV/PV)</b>: <b>${r2.uvToday}명</b> (${r2.pvToday}회) | 누적 <b>${r2.uvTotal}명</b> (${r2.pvTotal}회)\n` +
-      `• <b>유료 리포트($8.99/$19.99)</b>: 오늘 결제클릭 <b>${r2.paidClickToday}회</b> (누적 ${r2.paidClickTotal}회 / 실결제 ${r2.paidMemberTotal}건)\n` +
-      `• <b>전담 에이전트</b>: US CDC 2000 LMS · Khamis-Roche 성인키 예측 · @kisfitglobal 쇼츠`,
+    `🌍 <b>[2사업부 보고 — KISFIT Global 영문 (@kidsfittbot)]</b>\n` +
+      `• <b>도메인</b>: https://kisfitglobal.com (${r2.health?.ok ? `🟢 정상 ${r2.health.ms}ms` : "🟡 점검"})\n` +
+      `• <b>방문자(UV/PV)</b>: 오늘 <b>${r2.uvToday}명</b> (${r2.pvToday}회) | 누적 <b>${r2.uvTotal}명</b>\n` +
+      `• <b>지시 명령어</b>: <code>/2사업부 지시내용</code> (또는 <code>2사업부 피드백 줘</code>)`,
     false,
     KFG_BOT_TOKEN,
-    explicitChatId
+    targetChat
   );
 
-  // 4. 3사업부 (@Moneyfiityyy_bot)
-  const r3 = rMap.KFK || { uvToday: 0, pvToday: 0, uvTotal: 0, pvTotal: 0, refClickToday: 0, refClickTotal: 0, health: { ok: true, ms: 120 } };
+  // 3. 3사업부 (@SemifearGreedbot)
+  const r3 = rMap.GBA || { uvToday: 0, pvToday: 0, uvTotal: 0, pvTotal: 0, paidClickToday: 0, paidClickTotal: 0, paidMemberTotal: 0, health: { ok: true, ms: 120 } };
   await sendHqMessage(
-    `🇰🇷 <b>[3사업부 보고 — 키즈핏 코리아 국내·커머스 (@Moneyfiityyy_bot)]</b>\n` +
-      `━━━━━━━━━━━━━━━━━━━━\n` +
-      `• <b>도메인 / 경로</b>: https://kidsfit.co.kr (<code>${DIVISIONS.KFK.cwd}</code>)\n` +
-      `• <b>서버 상태</b>: ${r3.health?.ok ? `🟢 정상 가동 (${r3.health.ms}ms)` : "🔴 점검 필요"} | 2017 질병관리청 성장도표 &amp; K-DST\n` +
-      `• <b>오늘 방문자(UV/PV)</b>: <b>${r3.uvToday}명</b> (${r3.pvToday}회) | 누적 <b>${r3.uvTotal}명</b> (${r3.pvTotal}회)\n` +
-      `• <b>제휴 커머스(쿠팡/링크프라이스)</b>: 오늘 상품클릭 <b>${r3.refClickToday}회</b> (누적 레퍼럴 <b>${r3.refClickTotal}회</b>)\n` +
-      `• <b>전담 에이전트</b>: 24종 에디터 큐레이션 · 네이버 블로그/카페/지식iN · @kidsfit01 쇼츠`,
+    `🇯🇵 <b>[3사업부 보고 — GetBreakAI 일본 퀀트 (@SemifearGreedbot)]</b>\n` +
+      `• <b>도메인</b>: https://getbreakai.com/jp/ (${r3.health?.ok ? `🟢 정상 ${r3.health.ms}ms` : "🟡 점검"})\n` +
+      `• <b>방문자(UV/PV)</b>: 오늘 <b>${r3.uvToday}명</b> (${r3.pvToday}회) | 누적 <b>${r3.uvTotal}명</b>\n` +
+      `• <b>지시 명령어</b>: <code>/3사업부 지시내용</code> (또는 <code>3사업부 피드백 줘</code>)`,
+    false,
+    SEMI_BOT_TOKEN,
+    targetChat
+  );
+
+  // 4. 4사업부 (@inves123_bot)
+  const r4 = rMap.HERO || { uvToday: 0, pvToday: 0, uvTotal: 0, pvTotal: 0, paidClickToday: 0, paidClickTotal: 0, paidMemberTotal: 0, health: { ok: true, ms: 120 } };
+  await sendHqMessage(
+    `👑 <b>[4사업부 보고 — 파라다이스히어로 · 영웅라디오 (@inves123_bot)]</b>\n` +
+      `• <b>도메인 / 채널</b>: https://paradise-hero.com &amp; <code>@김쌤의영웅라디오</code>\n` +
+      `• <b>방문자(UV/PV)</b>: 오늘 <b>${r4.uvToday}명</b> (${r4.pvToday}회) | 누적 <b>${r4.uvTotal}명</b>\n` +
+      `• <b>지시 명령어</b>: <code>/4사업부 지시내용</code> (또는 <code>4사업부 피드백 줘</code>)`,
+    false,
+    HERO_BOT_TOKEN,
+    targetChat
+  );
+
+  // 5. 5사업부 (@Moneyfiityyy_bot)
+  const r5 = rMap.KFK || { uvToday: 0, pvToday: 0, uvTotal: 0, pvTotal: 0, refClickToday: 0, refClickTotal: 0, health: { ok: true, ms: 120 } };
+  await sendHqMessage(
+    `🤖 <b>[5사업부 보고 — KidsFit Korea 패시브 (@Moneyfiityyy_bot)]</b>\n` +
+      `• <b>도메인</b>: https://kidsfit.co.kr (${r5.health?.ok ? `🟢 무인 정상 ${r5.health.ms}ms` : "🟡 점검"})\n` +
+      `• <b>패시브 레퍼럴</b>: 오늘 상품클릭 <b>${r5.refClickToday}회</b> (누적 <b>${r5.refClickTotal}회</b>)\n` +
+      `• <b>지시 명령어</b>: <code>/5사업부 지시내용</code>`,
     true,
     KFK_BOT_TOKEN,
-    explicitChatId
-  );
-
-  // 5. 4사업부 (@SemifearGreedbot)
-  const r4 = rMap.GBA || { uvToday: 0, pvToday: 0, uvTotal: 0, pvTotal: 0, paidClickToday: 0, paidClickTotal: 0, paidMemberTotal: 0, health: { ok: true, ms: 120 } };
-  await sendHqMessage(
-    `⚡ <b>[4사업부 보고 — GetBreakAI 이벤트·감마 퀀트 터미널 (@SemifearGreedbot)]</b>\n` +
-      `━━━━━━━━━━━━━━━━━━━━\n` +
-      `• <b>도메인 / 경로</b>: https://getbreakai.com (<code>${DIVISIONS.GBA.cwd}</code>)\n` +
-      `• <b>서버 상태</b>: ${r4.health?.ok ? `🟢 정상 가동 (${r4.health.ms}ms)` : "🔴 점검 필요"} | SEC 8-K NLP · Form-4 · GEX\n` +
-      `• <b>오늘 방문자(UV/PV)</b>: <b>${r4.uvToday}명</b> (${r4.pvToday}회) | 누적 <b>${r4.uvTotal}명</b> (${r4.pvTotal}회)\n` +
-      `• <b>유료화 전환($29/$199)</b>: 오늘 결제클릭 <b>${r4.paidClickToday}회</b> (누적 ${r4.paidClickTotal}회 / 실결제 ${r4.paidMemberTotal}건)\n` +
-      `• <b>전담 에이전트</b>: 어닝 서프라이즈 NLP · 임원 매수 클러스터 · 2.0x ATR &amp; IV 감마 스퀴즈`,
-    true,
-    SEMI_BOT_TOKEN,
-    explicitChatId
+    targetChat
   );
 }
 
 // ---------------------------------------------------------------------------
-// SEQUENTIAL 1-AT-A-TIME TASK QUEUE (Prevents PC Overload)
+// SEQUENTIAL 1-AT-A-TIME TASK QUEUE
 // ---------------------------------------------------------------------------
 const taskQueue = [];
 let currentTask = null;
 
+/**
+ * Parses slash prefixes like `/전사업부 ...`, `/1사업부 ...`, `/2사업부 ...`, `/3사업부 ...`, `/4사업부 ...`, `/5사업부 ...`,
+ * `/div1 ...` ~ `/div5 ...`, `/all ...`, `[1사업부] ...`, `1사업부: ...`
+ */
+function parseSlashOrPrefixCommand(rawText) {
+  const trimmed = String(rawText || "").trim();
+  const m = trimmed.match(
+    /^(?:\/|\s*\[)?(전\s*사업부|전사업부|공통|전체|본사|총괄|all|hq|1사업부|div1|tom|1|2사업부|div2|kfg|2|3사업부|div3|gba|3|4사업부|div4|hero|4|5사업부|div5|kfk|5)(?:\]|\s*:)?(?:\s+([\s\S]+))?$/i
+  );
+  if (!m) return null;
+  const rawKey = m[1].replace(/\s+/g, "").toLowerCase();
+  // Only treat single digits 1..5 as division commands if they started with `/` (e.g. `/1 ...`)
+  if (/^[1-5]$/.test(rawKey) && !trimmed.startsWith("/")) {
+    return null;
+  }
+  const map = {
+    전사업부: "ALL",
+    공통: "ALL",
+    전체: "ALL",
+    본사: "ALL",
+    총괄: "ALL",
+    all: "ALL",
+    hq: "ALL",
+    "1사업부": "TOM",
+    div1: "TOM",
+    tom: "TOM",
+    "1": "TOM",
+    "2사업부": "KFG",
+    div2: "KFG",
+    kfg: "KFG",
+    "2": "KFG",
+    "3사업부": "GBA",
+    div3: "GBA",
+    gba: "GBA",
+    "3": "GBA",
+    "4사업부": "HERO",
+    div4: "HERO",
+    hero: "HERO",
+    "4": "HERO",
+    "5사업부": "KFK",
+    div5: "KFK",
+    kfk: "KFK",
+    "5": "KFK",
+  };
+  const divCode = map[rawKey];
+  if (!divCode) return null;
+  return {
+    divCode,
+    restText: (m[2] || "").trim(),
+  };
+}
+
+/**
+ * Checks if the user is asking HQ Chief/Auditor for feedback/audit on a division
+ * e.g. "1사업부 피드백 줘", "2사업부 감사해줘", "/fb1", "/감사 1사업부", "/1사업부 피드백"
+ */
+function parseAuditFeedbackRequest(rawText) {
+  const t = String(rawText || "").trim();
+  const lower = t.toLowerCase();
+
+  const directMap = {
+    "/fb": "ALL",
+    "/fb_all": "ALL",
+    "/feedback": "ALL",
+    "/피드백": "ALL",
+    "/감사": "ALL",
+    "/fb1": "TOM",
+    "/audit1": "TOM",
+    "/fb2": "KFG",
+    "/audit2": "KFG",
+    "/fb3": "GBA",
+    "/audit3": "GBA",
+    "/fb4": "HERO",
+    "/audit4": "HERO",
+    "/fb5": "KFK",
+    "/audit5": "KFK",
+  };
+  if (directMap[lower]) {
+    return { isAudit: true, divCode: directMap[lower], customQuestion: "" };
+  }
+
+  // Match patterns like "1사업부 피드백 줘", "/1사업부 피드백", "2사업부 감사 피드백 줘", "전사업부 피드백 줘"
+  if (/(피드백|감사\s*결과|감사\s*보고|감사\s*피드백|진단\s*피드백|점검\s*피드백|어때\s*\??|문제점\s*찾아|감사해\s*줘|피드백\s*줘|피드백\s*부탁)/.test(t)) {
+    let divCode = "ALL";
+    if (/1\s*사업부|truthofmarket|tom/i.test(t)) divCode = "TOM";
+    else if (/2\s*사업부|kisfitglobal|kfg/i.test(t)) divCode = "KFG";
+    else if (/3\s*사업부|getbreakai|gba|일본/i.test(t)) divCode = "GBA";
+    else if (/4\s*사업부|paradise-hero|황영웅|영웅라디오|hero/i.test(t)) divCode = "HERO";
+    else if (/5\s*사업부|kidsfit\.co\.kr|kfk/i.test(t)) divCode = "KFK";
+
+    // Check if it's a pure general feedback request or has a specific topic
+    const stripped = t
+      .replace(/^\/?(전\s*사업부|[1-5]\s*사업부|본사|총괄)\s*/i, "")
+      .replace(/(에\s*대해(서)?|관련(해서)?|한번|좀|전체적으로|감사|피드백|진단|점검|줘|해줘|해주세요|알려줘|부탁해|보고해)\s*/gi, "")
+      .trim();
+
+    return {
+      isAudit: true,
+      divCode,
+      customQuestion: stripped.length >= 6 ? t : "",
+    };
+  }
+
+  return null;
+}
+
+/**
+ * Checks if the user is requesting an episode video + upload kit on demand
+ * e.g. "9화 영상 보내줘", "1화 영상 보내줘", "/1사업부 10화 영상 보내줘", "2회 쇼츠 보내줘"
+ */
+function parseEpisodeVideoRequest(rawText, fallbackDivCode = "TOM") {
+  const t = String(rawText || "").trim();
+  const slash = parseSlashOrPrefixCommand(t);
+  const body = slash && slash.restText ? slash.restText.trim() : t;
+
+  const m = body.match(
+    /^(?:제\s*)?(\d{1,2})\s*(?:화|회|회차|편)\s*(?:영상|쇼츠|릴스|비디오|동영상|클립)?\s*(?:다시\s*)?(?:보내\s*줘|보내줘|보내|전송해\s*줘|전송|달라|줘|주세요|올려줘)?$/i
+  );
+  if (!m) return null;
+
+  const epNum = parseInt(m[1], 10);
+  if (!epNum || epNum < 1 || epNum > 50) return null;
+
+  let divCode = slash && slash.divCode ? slash.divCode : fallbackDivCode;
+  if (!divCode || divCode === "ALL") {
+    divCode = detectDivisionFromText(t, "GBA");
+    if (divCode === "ALL") divCode = "GBA";
+  }
+  return {
+    epNum,
+    divCode,
+  };
+}
+
 function detectDivisionFromText(text, fallbackDiv) {
+  const parsed = parseSlashOrPrefixCommand(text);
+  if (parsed && parsed.divCode) {
+    return parsed.divCode;
+  }
+
   const firstLine = (text || "").trim().split(/\r?\n/)[0].toLowerCase();
-  // 1. Explicit division or common directive prefix on first line
   if (
-    /^(\[?(공통|전\s*사업부|전사업부|전체|본사|all|hq)\]?|(공통|공통\s*지시|공통지시사항|전\s*사업부|전사업부|전체\s*사업부|전체|all|hq)\s*:)/.test(
+    /^(\/?\[?(공통|전\s*사업부|전사업부|전체|본사|all|hq)\]?|(공통|공통\s*지시|공통지시사항|전\s*사업부|전사업부|전체\s*사업부|전체|all|hq)\s*:)/.test(
       firstLine
     )
   ) {
     return "ALL";
   }
-  if (/^(\[?1사업부\]?|1사업부\s*:|\[?tom\]?|tom\s*:)/.test(firstLine)) {
+  if (/^(\/?\[?1사업부\]?|1사업부\s*:|\/?\[?tom\]?|tom\s*:|\/div1\b)/.test(firstLine)) {
     return "TOM";
   }
-  if (/^(\[?2사업부\]?|2사업부\s*:|\[?kfg\]?|kfg\s*:)/.test(firstLine)) {
+  if (/^(\/?\[?2사업부\]?|2사업부\s*:|\/?\[?kfg\]?|kfg\s*:|\/div2\b)/.test(firstLine)) {
     return "KFG";
   }
-  if (/^(\[?3사업부\]?|3사업부\s*:|\[?kfk\]?|kfk\s*:)/.test(firstLine)) {
-    return "KFK";
-  }
-  if (/^(\[?4사업부\]?|4사업부\s*:|\[?gba\]?|gba\s*:|\[?getbreakai\]?|getbreakai\s*:)/.test(firstLine)) {
+  if (/^(\/?\[?3사업부\]?|3사업부\s*:|\/?\[?gba\]?|gba\s*:|\/?\[?getbreakai\]?|getbreakai\s*:|\/div3\b)/.test(firstLine)) {
     return "GBA";
   }
+  if (/^(\/?\[?4사업부\]?|4사업부\s*:|\/?\[?hero\]?|hero\s*:|\/?\[?황영웅\]?|황영웅\s*:|\/?\[?영웅라디오\]?|영웅라디오\s*:|\/div4\b)/.test(firstLine)) {
+    return "HERO";
+  }
+  if (/^(\/?\[?5사업부\]?|5사업부\s*:|\/?\[?kfk\]?|kfk\s*:|\/div5\b)/.test(firstLine)) {
+    return "KFK";
+  }
 
-  // 2. Strong all-divisions natural language keywords anywhere in the text
   const t = (text || "").toLowerCase();
   if (
-    /전\s*사업부|모든\s*사업부|1\s*[·.,/]\s*2\s*[·.,/]\s*3\s*사업부|3개\s*사업부\s*(모두|전부|전체|공통)|전사\s*공통|공통\s*지시/.test(
+    /전\s*사업부|모든\s*사업부|1\s*[·.,/~-]\s*5\s*사업부|1\s*[·.,/]\s*2\s*[·.,/]\s*3\s*사업부|5개\s*사업부\s*(모두|전부|전체|공통)|3개\s*사업부\s*(모두|전부|전체|공통)|전사\s*공통|공통\s*지시/.test(
       t
     )
   ) {
     return "ALL";
   }
 
-  // 3. Respect active remote button mode if selected (ALL, TOM, KFG, KFK)
   if (fallbackDiv && DIVISIONS[fallbackDiv]) {
     return fallbackDiv;
   }
 
-  // 4. Domain / division keyword fallback
-  if (t.includes("getbreakai") || t.includes("getbreak") || t.includes("4사업")) {
+  if (t.includes("paradise-hero") || t.includes("황영웅") || t.includes("영웅라디오") || t.includes("김쌤") || t.includes("4사업")) {
+    return "HERO";
+  }
+  if (t.includes("getbreakai") || t.includes("getbreak") || t.includes("3사업")) {
     return "GBA";
   }
-  if (t.includes("kidsfit.co.kr") || t.includes("사업아이템") || t.includes("3사업")) {
+  if (t.includes("kidsfit.co.kr") || t.includes("키즈핏 코리아") || t.includes("5사업")) {
     return "KFK";
   }
   if (t.includes("kisfitglobal.com") || t.includes("kidsfitglobal.com") || t.includes("키즈핏 영문") || t.includes("2사업")) {
@@ -770,17 +913,18 @@ function detectDivisionFromText(text, fallbackDiv) {
   return "TOM";
 }
 
-function enqueueTask(task, botToken) {
+function enqueueTask(task, botToken, replyChatId = null) {
   task.botToken = botToken;
+  task.replyChatId = replyChatId || getTargetChatId();
   taskQueue.push(task);
   if (currentTask) {
     sendHqMessage(
-      `⏳ <b>[대기열 등록 완료 — 동시 실행 방지]</b>\n` +
+      `⏳ <b>[대기열 등록 완료 — 순차 실행]</b>\n` +
         `• 현재 실행 중: <b>${currentTask.title}</b>\n` +
-        `• 대기 등록됨 (#${taskQueue.length}): <b>${task.title}</b>\n` +
-        `<i>컴퓨터 과부하 방지를 위해 앞 작업이 끝나는 즉시 순서대로 자동 실행됩니다.</i>`,
+        `• 대기 등록됨 (#${taskQueue.length}): <b>${task.title}</b>`,
       false,
-      botToken
+      botToken,
+      task.replyChatId
     );
     return;
   }
@@ -792,35 +936,29 @@ async function processNextTask() {
   currentTask = taskQueue.shift();
 
   await sendHqMessage(
-    `🚦 <b>[본사 순차 실행 시작 (1/1 단독 가동)]</b>\n` +
-      `• <b>사업부</b>: ${currentTask.division.name}\n` +
-      `• <b>작업 내용</b>: ${currentTask.title}\n` +
-      `• <b>남은 대기열</b>: ${taskQueue.length}건`,
+    `🚦 <b>[${currentTask.division.name} — 작업 시작]</b>\n` +
+      `• <b>전담 봇</b>: ${currentTask.division.botHandle}\n` +
+      `• <b>작업 내용</b>: ${currentTask.title}`,
     false,
-    currentTask.botToken
+    currentTask.botToken,
+    currentTask.replyChatId
   );
 
   try {
     await currentTask.run();
   } catch (err) {
-    await sendHqMessage(`⚠️ <b>[작업 오류]</b> ${currentTask.title}: ${err.message}`, true, currentTask.botToken);
+    await sendHqMessage(
+      `⚠️ <b>[작업 오류]</b> ${currentTask.title}: ${err.message}`,
+      true,
+      currentTask.botToken,
+      currentTask.replyChatId
+    );
   } finally {
     currentTask = null;
     if (taskQueue.length > 0) {
-      setTimeout(processNextTask, 2500);
+      setTimeout(processNextTask, 2000);
     }
   }
-}
-
-function runNodeScriptAsync(scriptPath, args = [], cwd = DIVISIONS.TOM.cwd) {
-  return new Promise((resolve) => {
-    const proc = spawn("node", [scriptPath, ...args], { cwd, encoding: "utf8" });
-    let out = "";
-    proc.stdout.on("data", (d) => (out += d.toString()));
-    proc.stderr.on("data", (d) => (out += d.toString()));
-    proc.on("close", (code) => resolve({ code, output: out.slice(-800) }));
-    proc.on("error", (err) => resolve({ code: 1, output: err.message }));
-  });
 }
 
 function runPythonScriptAsync(scriptPath, args = [], cwd = DIVISIONS.TOM.cwd) {
@@ -829,27 +967,48 @@ function runPythonScriptAsync(scriptPath, args = [], cwd = DIVISIONS.TOM.cwd) {
     let out = "";
     proc.stdout.on("data", (d) => (out += d.toString()));
     proc.stderr.on("data", (d) => (out += d.toString()));
-    proc.on("close", (code) => resolve({ code, output: out.slice(-800) }));
+    proc.on("close", (code) => resolve({ code, output: out }));
     proc.on("error", (err) => resolve({ code: 1, output: err.message }));
   });
 }
 
-function buildAntigravityPromptText(div, promptText) {
+function buildAntigravityPromptText(div, promptText, isAuditMode = false) {
   const agentList = (div.multiAgents || []).map((a, i) => `   - Subagent #${i + 1}: ${a}`).join("\n");
   const commonData = loadCommonDirectives();
   const standingRules = (commonData.standingDirectives || [])
     .map((d, idx) => `   ${idx + 1}. [${d.title || `공통수칙 #${idx + 1}`}] ${d.rule}`)
     .join("\n");
 
+  if (isAuditMode) {
+    return [
+      `[UNIFIED AI COMPANY · 🕵️‍♂️ 본사 총괄·감사 모드 (HQ Chief Auditor) — 총괄매니저 대상: ${div.name}]`,
+      `보고 텔레그램 봇: @SemifearGreedbot (드림컴퍼니 본사 총괄·감사 봇)`,
+      `텔레그램 원격 전용 채널 ID: ${MASTER_CONVERSATION_ID} (PC 작업 전용 채널 ${PC_DIRECT_CONVERSATION_ID} 간섭 절대 금지)`,
+      `감사 대상 사업부 폴더 및 도메인: ${div.cwd} (${div.domain})`,
+      `대상 사업부 전담 안티그래비티 대화방: ${div.conversationTitle || div.num} (${div.dedicatedConversationId || MASTER_CONVERSATION_ID})`,
+      ``,
+      `사장님이 본사 총괄매니저·감사관인 당신에게 다음 감사/피드백 및 사업부 지시를 요청하셨습니다:`,
+      `"${promptText}"`,
+      ``,
+      `총괄매니저 감사 및 사업부 업무 지시 원칙:`,
+      `1. 가드레일 코드를 임의로 수정하지 말고, 먼저 해당 사업부(${div.cwd})의 실제 화면·코드·수익화 퍼널·콘텐츠 파이프라인에서 부족한 점이 무엇인지 날카롭게 분석하세요.`,
+      `2. 분석이 끝나면 사장님이 직접 복사해 지시하실 필요 없이, 총괄매니저인 당신이 직접 해당 사업부 전담 대화방(${div.dedicatedConversationId || MASTER_CONVERSATION_ID}, ${div.conversationTitle || div.num})에 send_message 도구로 구체적인 수정·보완 업무를 지시하거나 직접 수정·검증을 완수하세요.`,
+      `3. 분석 및 사업부 업무 지시(또는 수정 검증)가 완료되면 반드시 아래 명령어로 본사 총괄·감사 봇(@SemifearGreedbot)을 통해 보고하세요:`,
+      `   node "${BRIDGE_SCRIPT_PATH}" --div HQ --notify "[🕵️‍♂️ ${div.num} 총괄매니저 감사 분석 및 사업부 업무 지시 완료]\n<부족한 점 분석 요약 및 해당 사업부 지시/조치 내역>"`,
+    ].join("\n");
+  }
+
   if (div.code === "ALL") {
     return [
-      `[UNIFIED AI COMPANY · 🏛️ 전 사업부 공통 지시사항 (1·2·3사업부 일괄 총괄) — ${div.managerTitle}]`,
+      `[UNIFIED AI COMPANY · 🏛️ 전 사업부 공통 지시사항 (1~5사업부 일괄 총괄) — ${div.managerTitle}]`,
       `전담 텔레그램 봇: ${div.botHandle} (드림컴퍼니 본사 총괄 지휘 채널)`,
       `텔레그램 원격 전용 채널 ID: ${MASTER_CONVERSATION_ID} (PC 작업 전용 채널 ${PC_DIRECT_CONVERSATION_ID} 간섭 절대 금지)`,
-      `산하 지휘 대상 3대 사업부:`,
+      `산하 지휘 대상 5대 사업부:`,
       `   - 1사업부 (TOM): D:\\드림컴퍼니\\1사업부 (https://truthofmarket.com · @RigjtsideAlphabot)`,
       `   - 2사업부 (KFG): D:\\드림컴퍼니\\2사업부 (https://kisfitglobal.com · @kidsfittbot)`,
-      `   - 3사업부 (KFK): D:\\드림컴퍼니\\3사업부 (https://kidsfit.co.kr · @Moneyfiityyy_bot)`,
+      `   - 3사업부 (GBA): D:\\드림컴퍼니\\3사업부 (https://getbreakai.com 일본 · @SemifearGreedbot)`,
+      `   - 4사업부 (HERO): D:\\드림컴퍼니\\4사업부 (https://paradise-hero.com & @김쌤의영웅라디오 · @inves123_bot)`,
+      `   - 5사업부 (KFK): D:\\드림컴퍼니\\5사업부 (https://kidsfit.co.kr 패시브 무인 자동화 · @Moneyfiityyy_bot)`,
       ``,
       `📌 [전 사업부 공통 지시사항 (HQ Standing Common Directives — 전 사업부 필수 준수)]:`,
       standingRules,
@@ -858,10 +1017,10 @@ function buildAntigravityPromptText(div, promptText) {
       `"${promptText}"`,
       ``,
       `총괄 실행 원칙:`,
-      `1. 통합 본사 폴더(D:\\드림컴퍼니)에서 1사업부(D:\\드림컴퍼니\\1사업부), 2사업부(D:\\드림컴퍼니\\2사업부), 3사업부(D:\\드림컴퍼니\\3사업부) 전체에 사장님의 공통 지시사항을 빠짐없이 순차 적용·점검하세요.`,
+      `1. 통합 본사 폴더(D:\\드림컴퍼니)에서 1사업부~5사업부 전체에 사장님의 공통 지시사항을 빠짐없이 순차 적용·점검하세요.`,
       `2. 만약 사장님의 지시가 앞으로도 계속 지켜야 할 전사 공통 수칙이라면 D:\\드림컴퍼니\\data\\hq_common_directives.json 및 GEMINI.md 에도 반영하세요.`,
       `3. 전 사업부 적용 및 검증이 완료되면 반드시 아래 명령어를 실행하여 본사 총괄 봇(@SemifearGreedbot)으로 결과를 보고하세요:`,
-      `   node "${BRIDGE_SCRIPT_PATH}" --div HQ --notify "[전 사업부 공통 지시 완료] <1·2·3사업부 수행 요약>"`,
+      `   node "${BRIDGE_SCRIPT_PATH}" --div HQ --notify "[전 사업부 공통 지시 완료] <1~5사업부 수행 요약>"`,
     ].join("\n");
   }
 
@@ -875,26 +1034,27 @@ function buildAntigravityPromptText(div, promptText) {
     `📌 [전 사업부 공통 지시사항 (HQ Standing Common Directives — 전 사업부 필수 준수)]:`,
     standingRules,
     ``,
-    `사장님이 외부에서 텔레그램(${div.botHandle})으로 다음 작업을 지시하셨습니다:`,
+    `사장님이 텔레그램(${div.botHandle})으로 [${div.name}]에 다음 수정/작업을 지시하셨습니다:`,
     `"${promptText}"`,
     ``,
     `운영 원칙:`,
-    `1. 현재 사업부 작업 폴더(${div.cwd})에서 위 [전 사업부 공통 지시사항]을 엄격히 준수하며 산하 멀티에이전트를 지휘하여 단독 실행하세요.`,
+    `1. 현재 사업부 작업 폴더(${div.cwd})에서 위 [전 사업부 공통 지시사항]을 엄격히 준수하며 지시하신 사항을 즉시 수정·빌드·검증하세요.`,
     `2. 작업이 완료되면 반드시 아래 명령어를 실행하여 해당 사업부 전용 텔레그램 봇(${div.botHandle})으로 완료 결과를 답장하세요:`,
-    `   node "${BRIDGE_SCRIPT_PATH}" --div ${div.code} --notify "[${div.name} 완료] <수행한 작업 요약>"`,
+    `   node "${BRIDGE_SCRIPT_PATH}" --div ${div.code} --notify "[${div.name} 수정 완료] <수행한 작업 요약>"`,
   ].join("\n");
 }
 
-function dispatchAntigravityPrompt(div, promptText) {
+function dispatchAntigravityPrompt(div, promptText, isAuditMode = false) {
   return new Promise((resolve) => {
     const binPath = fs.existsSync(LANGUAGE_SERVER_EXE) ? LANGUAGE_SERVER_EXE : AGENTAPI_BAT;
     const useDirect = fs.existsSync(LANGUAGE_SERVER_EXE);
-    const fullPrompt = buildAntigravityPromptText(div, promptText);
+    const fullPrompt = buildAntigravityPromptText(div, promptText, isAuditMode);
     const targetConvId = resolveSafeTelegramConversationId(div.conversationId);
+    const titleTag = isAuditMode ? `HQ Audit (${div.code})` : `HQ Remote (${div.code})`;
 
     const sendArgs = useDirect
-      ? ["agentapi", "send-message", `--title=HQ Remote (${div.code})`, targetConvId, fullPrompt]
-      : ["send-message", `--title=HQ Remote (${div.code})`, targetConvId, fullPrompt];
+      ? ["agentapi", "send-message", `--title=${titleTag}`, targetConvId, fullPrompt]
+      : ["send-message", `--title=${titleTag}`, targetConvId, fullPrompt];
 
     const res = spawnSync(binPath, sendArgs, {
       cwd: div.cwd,
@@ -913,8 +1073,94 @@ async function handleCommand(rawText, state, botToken = null, opts = {}) {
   const text = (rawText || "").trim();
   if (!text) return;
 
-  // Only bind division automatically from botToken when the user explicitly messaged/mentioned a bot (not on random group race or callback buttons)
-  const explicitBotBoundDiv = opts.explicitDiv || (!opts.isGroup && !opts.isCallback ? resolveDivisionByBotToken(botToken, true) : null);
+  const replyChatId = opts.incomingChatId || getTargetChatId();
+  if (opts.incomingChatId) {
+    state.lastCommandChatId = String(opts.incomingChatId);
+    saveState(state);
+  }
+
+  // 1. Interactive Force-Reply prompt buttons in 모두컴퍼니 (`/ask_all`, `/ask_tom`, `/ask_kfg`, `/ask_gba`, `/ask_hero`, `/ask_kfk`)
+  const askMap = {
+    "/ask_all": "ALL",
+    "/ask_tom": "TOM",
+    "/ask_kfg": "KFG",
+    "/ask_gba": "GBA",
+    "/ask_hero": "HERO",
+    "/ask_kfk": "KFK",
+  };
+  if (askMap[text]) {
+    const targetCode = askMap[text];
+    const d = DIVISIONS[targetCode];
+    state.activeDivision = targetCode;
+    saveState(state);
+    await sendHqMessage(
+      `🎯 <b>[${d.name} 직통 지시 입력 대기 중 (${d.botHandle})]</b>\n` +
+        `━━━━━━━━━━━━━━━━━━━━\n` +
+        `👇 <b>이 메시지에 그대로 답장(또는 바로 아래 입력창에 입력)</b>하시면 모두컴퍼니 방에서 즉시 <b>${d.num}</b> 작업이 실행됩니다!`,
+      false,
+      d.botToken || SEMI_BOT_TOKEN,
+      replyChatId,
+      {
+        force_reply: true,
+        selective: true,
+        input_field_placeholder: `${d.num}에 지시할 내용을 입력하세요...`,
+      }
+    );
+    return;
+  }
+
+  // 2. Check if user typed a standalone division command (e.g., `/전사업부`, `/1사업부`, `/2사업부`, `/3사업부`, `/4사업부`, `/5사업부`, `/div1`~`/div5`, `/all`) WITHOUT restText
+  const slashParsed = parseSlashOrPrefixCommand(text);
+  if (slashParsed && !slashParsed.restText) {
+    const d = DIVISIONS[slashParsed.divCode] || DIVISIONS.ALL;
+    state.activeDivision = d.code;
+    saveState(state);
+    await sendHqMessage(
+      `✅ <b>[모두컴퍼니 본부 방 → ${d.name} 지시 모드 전환 완료]</b>\n` +
+        `• <b>담당 봇</b>: <code>${d.botHandle}</code>\n` +
+        `• <b>대상 도메인</b>: ${d.domain}\n` +
+        `━━━━━━━━━━━━━━━━━━━━\n` +
+        `💡 바로 이어서 지시 내용을 입력하시거나, 한 줄로 <code>/${d.num} 수정할내용</code> (또는 <code>/div${d.num.replace(/[^0-9]/g, "") || "1"} 수정할내용</code>) 형태로 보내시면 이 방에서 즉시 작동합니다!`,
+      false,
+      d.botToken || SEMI_BOT_TOKEN,
+      replyChatId,
+      {
+        force_reply: true,
+        selective: true,
+        input_field_placeholder: `${d.num}에 지시할 내용을 입력하세요...`,
+      }
+    );
+    return;
+  }
+
+  // 3. Check if the user is requesting HQ Chief/Auditor Feedback ("1사업부 피드백 줘", "/fb1"~"/fb5", "/감사", etc.)
+  const auditReq = parseAuditFeedbackRequest(text);
+  if (auditReq && auditReq.isAudit) {
+    const targetDiv = DIVISIONS[auditReq.divCode] || DIVISIONS.ALL;
+    const res = await runPythonScriptAsync("scripts/hq_division_auditor.py", ["--div", targetDiv.code], DIVISIONS.TOM.cwd);
+    const reportHtml = (res.output || "").trim() || `🕵️‍♂️ <b>[${targetDiv.name} 감사 피드백]</b> 점검 완료`;
+    await sendHqMessage(reportHtml, true, SEMI_BOT_TOKEN, replyChatId);
+
+    // As HQ General Manager, automatically dispatch analysis & direct division task instruction!
+    const directiveQuestion =
+      auditReq.customQuestion ||
+      `${targetDiv.name}에서 현재 부족한 점을 정밀 분석하고, 해당 사업부(${targetDiv.conversationTitle})에 즉시 개선 작업을 지시하여 수정·검증까지 진행해줘`;
+    enqueueTask(
+      {
+        division: DIVISIONS.ALL,
+        title: `본사 총괄매니저 감사 분석 & ${targetDiv.num} 업무 지시: "${directiveQuestion.slice(0, 40)}"`,
+        run: async () => {
+          await dispatchAntigravityPrompt(targetDiv, directiveQuestion, true);
+        },
+      },
+      SEMI_BOT_TOKEN,
+      replyChatId
+    );
+    return;
+  }
+
+  const explicitBotBoundDiv =
+    opts.explicitDiv || (!opts.isGroup && !opts.isCallback ? resolveDivisionByBotToken(botToken, true) : null);
   if (explicitBotBoundDiv && DIVISIONS[explicitBotBoundDiv]) {
     state.activeDivision = explicitBotBoundDiv;
     saveState(state);
@@ -922,28 +1168,29 @@ async function handleCommand(rawText, state, botToken = null, opts = {}) {
 
   if (text === "/start" || text === "/help" || text === "도움말" || text === "메뉴" || text === "연결") {
     const activeDiv = DIVISIONS[explicitBotBoundDiv || state.activeDivision] || DIVISIONS.ALL;
-    const isDedicatedDivBot = Boolean(explicitBotBoundDiv && explicitBotBoundDiv !== "ALL");
     await sendHqMessage(
-      (isDedicatedDivBot
-        ? `🟢 <b>[${activeDiv.name} 전용 텔레그램 지휘소 (${activeDiv.botHandle})]</b>\n`
-        : `🏛️ <b>[본사 총괄 매니저 지휘소 (@SemifearGreedbot) — 멀티에이전트 통합 회사]</b>\n`) +
+      `🏛️ <b>[드림컴퍼니 본사 총괄·감사 지휘소 (@SemifearGreedbot) — 모두컴퍼니 직통]</b>\n` +
         `━━━━━━━━━━━━━━━━━━━━\n` +
-        `• 🎯 <b>현재 지휘 모드</b>: <b>${activeDiv.name}</b>\n` +
-        `• 👤 <b>담당 부문장</b>: <b>${activeDiv.managerTitle}</b>\n` +
-        `• 📱 <b>텔레그램 전용 대화창</b>: <code>${MASTER_CONVERSATION_ID}</code> (전담 가동)\n` +
-        `• 💻 <b>컴퓨터(PC) 작업 대화창</b>: <code>${PC_DIRECT_CONVERSATION_ID}</code> (독립 분리)\n\n` +
-        `<b>[봇별 겹침 없는 1:1 전담 배정 현황]</b>\n` +
-        `👑 <b>본사 총괄 &amp; 전 사업부 공통</b>: <code>@SemifearGreedbot</code> (전 사업부 공통 지시·실결제 감시·새벽 R&amp;D)\n` +
-        `1️⃣ <b>1사업부 전용 봇</b>: <code>@RigjtsideAlphabot</code> → <code>truthofmarket.com</code>\n` +
-        `2️⃣ <b>2사업부 전용 봇</b>: <code>@kidsfittbot</code> → <code>kisfitglobal.com</code>\n` +
-        `3️⃣ <b>3사업부 전용 봇</b>: <code>@Moneyfiityyy_bot</code> → <code>kidsfit.co.kr</code>\n` +
-        `4️⃣ <b>4사업부 전용 봇 (겸 본사)</b>: <code>@SemifearGreedbot</code> → <code>getbreakai.com</code>\n\n` +
-        `<b>[현재 모드 산하 멀티에이전트]</b>\n` +
-        (activeDiv.multiAgents || []).map((a) => `• <code>${a}</code>`).join("\n") +
-        `\n━━━━━━━━━━━━━━━━━━━━\n` +
-        `👇 <b>[🏛️ 전 사업부 공통 지시 모드]</b>를 누르거나 <code>[공통] 지시내용</code>을 보내시면 1·2·3사업부 전체에 일괄 적용됩니다!`,
+        `• 👑 <b>본사 총괄·감사 역할</b>: 1~5사업부 상태 감사 피드백 제공 &amp; 전 사업부 공통 지휘\n` +
+        `• 🎯 <b>현재 지시 대상</b>: <b>${activeDiv.name}</b>\n\n` +
+        `<b>1️⃣ [본사 감사관에게 사업부별 피드백 받기]</b>\n` +
+        `• <code>1사업부 피드백 줘</code> (또는 <code>/fb1</code>)\n` +
+        `• <code>2사업부 피드백 줘</code> (또는 <code>/fb2</code>)\n` +
+        `• <code>3사업부 피드백 줘</code> (또는 <code>/fb3</code>)\n` +
+        `• <code>4사업부 피드백 줘</code> (또는 <code>/fb4</code>)\n` +
+        `• <code>5사업부 피드백 줘</code> (또는 <code>/fb5</code>)\n` +
+        `• <code>전사업부 피드백 줘</code> (또는 <code>/fb_all</code>)\n\n` +
+        `<b>2️⃣ [모두컴퍼니 본부 방에서 바로 사업부 지시하기]</b>\n` +
+        `• <code>/전사업부 지시내용</code> (또는 <code>/all 지시내용</code>)\n` +
+        `• <code>/1사업부 지시내용</code> (또는 <code>/div1 지시내용</code>) → <code>@RigjtsideAlphabot</code>\n` +
+        `• <code>/2사업부 지시내용</code> (또는 <code>/div2 지시내용</code>) → <code>@kidsfittbot</code>\n` +
+        `• <code>/3사업부 지시내용</code> (또는 <code>/div3 지시내용</code>) → <code>@SemifearGreedbot</code>\n` +
+        `• <code>/4사업부 지시내용</code> (또는 <code>/div4 지시내용</code>) → <code>@inves123_bot</code>\n` +
+        `• <code>/5사업부 지시내용</code> (또는 <code>/div5 지시내용</code>) → <code>@Moneyfiityyy_bot</code>\n` +
+        `<i>※ 각 사업부 1:1 텔레봇에 직접 명령하셔도 그 방과 모두컴퍼니 방에서 즉시 작동합니다!</i>`,
       true,
-      botToken
+      botToken || SEMI_BOT_TOKEN,
+      replyChatId
     );
     return;
   }
@@ -958,7 +1205,7 @@ async function handleCommand(rawText, state, botToken = null, opts = {}) {
     text === "공통수칙" ||
     text === "전사업부공통"
   ) {
-    await sendHqMessage(formatCommonDirectivesBoard(state), true, SEMI_BOT_TOKEN || botToken);
+    await sendHqMessage(formatCommonDirectivesBoard(state), true, SEMI_BOT_TOKEN || botToken, replyChatId);
     return;
   }
 
@@ -970,12 +1217,11 @@ async function handleCommand(rawText, state, botToken = null, opts = {}) {
       const addedItem = updated.standingDirectives[updated.standingDirectives.length - 1];
       await sendHqMessage(
         `✅ <b>[전 사업부 영구 공통 지시사항 등록 완료 (#${addedItem.id})]</b>\n` +
-          `━━━━━━━━━━━━━━━━━━━━\n` +
-          `• <b>신규 등록 수칙</b>: "${addedItem.rule}"\n` +
-          `• <b>적용 범위</b>: 1사업부(<code>truthofmarket.com</code>) · 2사업부(<code>kisfitglobal.com</code>) · 3사업부(<code>kidsfit.co.kr</code>) 전 에이전트 프롬프트에 즉시 영구 주입 완료!\n\n` +
+          `• <b>신규 등록 수칙</b>: "${addedItem.rule}"\n\n` +
           formatCommonDirectivesBoard(state),
         true,
-        SEMI_BOT_TOKEN || botToken
+        SEMI_BOT_TOKEN || botToken,
+        replyChatId
       );
       return;
     }
@@ -991,14 +1237,15 @@ async function handleCommand(rawText, state, botToken = null, opts = {}) {
           `• <b>삭제된 수칙</b>: "${res.removed.rule}"\n\n` +
           formatCommonDirectivesBoard(state),
         true,
-        SEMI_BOT_TOKEN || botToken
+        SEMI_BOT_TOKEN || botToken,
+        replyChatId
       );
     } else {
       await sendHqMessage(
-        `⚠️ <b>[삭제 실패]</b> 번호 <code>#${targetNum}</code>에 해당하는 공통 지시사항이 없습니다.\n\n` +
-          formatCommonDirectivesBoard(state),
+        `⚠️ <b>[삭제 실패]</b> 번호 <code>#${targetNum}</code>에 해당하는 공통 지시사항이 없습니다.`,
         true,
-        SEMI_BOT_TOKEN || botToken
+        SEMI_BOT_TOKEN || botToken,
+        replyChatId
       );
     }
     return;
@@ -1006,47 +1253,19 @@ async function handleCommand(rawText, state, botToken = null, opts = {}) {
 
   if (text === "/company" || text === "/agents" || text === "조직도" || text === "회사" || text === "멀티에이전트") {
     await sendHqMessage(
-      `🏛️ <b>[KIDS-FIT &amp; TruthOfMarket — 총괄 매니저 산하 무토큰(0-Token) 로컬 엔진 &amp; 조직도]</b>\n` +
+      `🏛️ <b>[드림컴퍼니 본사 총괄·감사 &amp; 1~5사업부 전담 봇 체계]</b>\n` +
         `━━━━━━━━━━━━━━━━━━━━\n` +
-        `👑 <b>본사 총괄 매니저 (HQ Chief Manager · @SemifearGreedbot)</b>\n` +
-        `   ├ <code>HQ-Common-Directive-Controller</code>: 전 사업부 공통 지시사항 등록·강제 주입 및 1·2·3사업부 일괄 지휘\n` +
-        `   ├ <code>HQ-CrossAudit-Healer</code>: 매시간 1·2·3사업부 상호 교차검열 &amp; 무결점 자동수리 (<b>안티그래비티 토큰 0</b>)\n` +
-        `   └ <code>HQ-Channel-Isolator</code>: 텔레그램 전용(<code>${MASTER_CONVERSATION_ID}</code>) vs PC 전용(<code>${PC_DIRECT_CONVERSATION_ID}</code>) 완벽 분리\n\n` +
-        `📈 <b>1사업부 부문장 (@RigjtsideAlphabot · truthofmarket.com)</b>\n` +
-        DIVISIONS.TOM.multiAgents.map((a) => `   ├ ${a}`).join("\n") +
-        `\n\n🌍 <b>2사업부 부문장 (@kidsfittbot · kisfitglobal.com)</b>\n` +
-        DIVISIONS.KFG.multiAgents.map((a) => `   ├ ${a}`).join("\n") +
-        `\n\n🇰🇷 <b>3사업부 부문장 (@Moneyfiityyy_bot · kidsfit.co.kr)</b>\n` +
-        DIVISIONS.KFK.multiAgents.map((a) => `   ├ ${a}`).join("\n") +
-        `\n\n⚡ <b>4사업부 부문장 (@SemifearGreedbot · getbreakai.com)</b>\n` +
-        DIVISIONS.GBA.multiAgents.map((a) => `   ├ ${a}`).join("\n") +
-        `\n━━━━━━━━━━━━━━━━━━━━\n` +
-        `✅ <b>운영 원칙</b>: 24시간 홍보·검열·종가동기화는 <b>안티그래비티 토큰 0%</b> 로컬 스크립트로만 구동!`,
+        `👑 <b>본사 총괄 &amp; 감사관 (@SemifearGreedbot)</b>\n` +
+        `   ├ 역할: 1~5사업부 감사 피드백 제공 (<code>1사업부 피드백 줘</code> ~ <code>5사업부 피드백 줘</code>)\n` +
+        `   └ 역할: 전 사업부 공통 지시 하달 (<code>/전사업부 지시내용</code>)\n\n` +
+        `1️⃣ <b>1사업부 (@RigjtsideAlphabot · truthofmarket.com)</b> → <code>/1사업부 지시내용</code>\n` +
+        `2️⃣ <b>2사업부 (@kidsfittbot · kisfitglobal.com)</b> → <code>/2사업부 지시내용</code>\n` +
+        `3️⃣ <b>3사업부 (@SemifearGreedbot · getbreakai.com 일본)</b> → <code>/3사업부 지시내용</code>\n` +
+        `4️⃣ <b>4사업부 (@inves123_bot · paradise-hero.com &amp; 영웅라디오)</b> → <code>/4사업부 지시내용</code>\n` +
+        `5️⃣ <b>5사업부 (@Moneyfiityyy_bot · kidsfit.co.kr 패시브)</b> → <code>/5사업부 지시내용</code>`,
       true,
-      botToken
-    );
-    return;
-  }
-
-  if (
-    text === "/night" ||
-    text === "/rnd" ||
-    text === "/token" ||
-    text === "토큰" ||
-    text === "리밋" ||
-    text === "토큰절약" ||
-    text === "새벽연구" ||
-    text === "야간연구"
-  ) {
-    enqueueTask(
-      {
-        division: DIVISIONS.TOM,
-        title: "본사 총괄 매니저 — 안티그래비티 주간 리밋(Weekly Quota) 보호 & 무토큰(0 Token) 로컬 엔진 현황 보고",
-        run: async () => {
-          await runPythonScriptAsync("scripts/hq_dawn_high_token_rnd_engine.py", ["--notify"], DIVISIONS.TOM.cwd);
-        },
-      },
-      botToken || PRIMARY_BOT_TOKEN
+      botToken || SEMI_BOT_TOKEN,
+      replyChatId
     );
     return;
   }
@@ -1057,10 +1276,15 @@ async function handleCommand(rawText, state, botToken = null, opts = {}) {
     text === "공통모드" ||
     text === "전사업부모드" ||
     text === "/mode_tom" ||
+    text === "1사업부모드" ||
     text === "/mode_kfg" ||
-    text === "/mode_kfk" ||
+    text === "2사업부모드" ||
     text === "/mode_gba" ||
-    text === "4사업부모드"
+    text === "3사업부모드" ||
+    text === "/mode_hero" ||
+    text === "4사업부모드" ||
+    text === "/mode_kfk" ||
+    text === "5사업부모드"
   ) {
     const map = {
       "/mode_all": "ALL",
@@ -1068,61 +1292,32 @@ async function handleCommand(rawText, state, botToken = null, opts = {}) {
       공통모드: "ALL",
       전사업부모드: "ALL",
       "/mode_tom": "TOM",
+      "1사업부모드": "TOM",
       "/mode_kfg": "KFG",
-      "/mode_kfk": "KFK",
+      "2사업부모드": "KFG",
       "/mode_gba": "GBA",
-      "4사업부모드": "GBA",
+      "3사업부모드": "GBA",
+      "/mode_hero": "HERO",
+      "4사업부모드": "HERO",
+      "/mode_kfk": "KFK",
+      "5사업부모드": "KFK",
     };
     state.activeDivision = map[text] || "ALL";
     saveState(state);
     const d = DIVISIONS[state.activeDivision];
-    if (d.code === "ALL") {
-      const commonData = loadCommonDirectives();
-      await sendHqMessage(
-        `🏛️ <b>[전 사업부 공통 지시 모드 활성화 (@SemifearGreedbot)]</b>\n` +
-          `━━━━━━━━━━━━━━━━━━━━\n` +
-          `• <b>지휘 범위</b>: <b>1사업부(truthofmarket.com) + 2사업부(kisfitglobal.com) + 3사업부(kidsfit.co.kr) 전체</b>\n` +
-          `• <b>통합 경로</b>: <code>${d.cwd}</code>\n` +
-          `• <b>텔레그램 전용 채널</b>: <code>${MASTER_CONVERSATION_ID}</code> (PC 채널 <code>${PC_DIRECT_CONVERSATION_ID}</code> 분리 보호)\n` +
-          `• <b>적용 중인 영구 공통 수칙</b>: <b>${(commonData.standingDirectives || []).length}건</b>\n` +
-          `━━━━━━━━━━━━━━━━━━━━\n` +
-          `👇 이제 채팅창에 입력하시는 모든 지시사항은 <b>1·2·3사업부 전체 공통 지시사항</b>으로 접수되어 전 사업부에 일괄 반영됩니다!\n` +
-          `<i>(영구 수칙으로 추가하려면 <code>공통등록: 내용</code>, 수칙 목록 보기는 <b>[📌 전 사업부 공통 지시사항]</b> 클릭)</i>`,
-        true,
-        SEMI_BOT_TOKEN || botToken
-      );
-      return;
-    }
     await sendHqMessage(
-      `✅ <b>현재 원격 지시 대상이 [${d.name}]으로 전환되었습니다.</b>\n` +
-        `• <b>대상 도메인</b>: <b>${d.domain}</b> (<code>${d.cwd}</code>)\n` +
-        `• <b>텔레그램 전용 대화창</b>: <code>${MASTER_CONVERSATION_ID}</code> (전 사업부 공통 수칙 자동 적용)\n` +
-        `이제 채팅창에 입력하시는 지시는 해당 사업부 전담 멀티에이전트로 전달됩니다.`,
+      `✅ <b>현재 지시 대상이 [${d.name}]으로 전환되었습니다.</b>\n` +
+        `• <b>전담 봇</b>: <code>${d.botHandle}</code>\n` +
+        `• <b>대상 도메인</b>: <b>${d.domain}</b> (<code>${d.cwd}</code>)`,
       true,
-      d.botToken || botToken
+      d.botToken || botToken,
+      replyChatId
     );
     return;
   }
 
-  if (text === "/report" || text === "/all" || text === "전체보고" || text === "보고" || text === "일제보고") {
-    await sendDivisionReportsAll(state);
-    return;
-  }
-
-  if (text === "/1on1" || text === "1대1" || text === "개인톡") {
-    state.groupChatId = null;
-    saveState(state);
-    await sendHqMessage(
-      `✅ <b>[1:1 개인 대화방 모드로 전환 완료]</b>\n이제 본사 및 1·2·3사업부 봇들이 사장님 개인 텔레그램(<code>${CHAT_ID}</code>)으로 보고합니다.`,
-      true,
-      botToken,
-      CHAT_ID
-    );
-    return;
-  }
-
-  if (text === "/status" || text === "상태") {
-    await sendDivisionReportsAll(state);
+  if (text === "/report" || text === "전체보고" || text === "보고" || text === "일제보고" || text === "/status" || text === "상태") {
+    await sendDivisionReportsAll(state, replyChatId);
     return;
   }
 
@@ -1132,259 +1327,54 @@ async function handleCommand(rawText, state, botToken = null, opts = {}) {
     return;
   }
 
-  if (text === "/schedule24" || text === "스케줄" || text === "24시간") {
-    enqueueTask(
-      {
-        division: DIVISIONS.TOM,
-        title: "24시간 1·2·3사업부 1시간 단위 순환 교대근무 실행 및 전체 스케줄표 브리핑",
-        run: async () => {
-          await runPythonScriptAsync("scripts/hq_24h_hourly_scheduler.py", ["--table", "--notify"], DIVISIONS.TOM.cwd);
-        },
-      },
-      botToken
-    );
-    return;
-  }
-
-  if (text === "/rl" || text === "모니터링" || text === "유튜브" || text === "인스타") {
-    enqueueTask(
-      {
-        division: DIVISIONS.TOM,
-        title: "전사업부(1·2·3사업부) 유튜브 쇼츠·인스타 릴스·방문수·결제전환 실시간 모니터링 (강화학습 보류)",
-        run: async () => {
-          await runPythonScriptAsync("scripts/hq_dawn_rl_self_improver.py", ["--notify"], DIVISIONS.TOM.cwd);
-        },
-      },
-      botToken
-    );
-    return;
-  }
-
-  if (text === "/tom_news" || text === "뉴스") {
-    enqueueTask(
-      {
-        division: DIVISIONS.TOM,
-        title: "TruthOfMarket 미국장 종가 동기화 + 정적번들(dist) 빌드·라이브 배포 + VIP 채널 발송",
-        run: async () => {
-          const res = await runPythonScriptAsync("scripts/run_daily_market_close_sync.py", ["--broadcast"], DIVISIONS.TOM.cwd);
-          await sendHqMessage(
-            `✅ <b>[1사업부 TruthOfMarket 일일 종가 동기화 &amp; 배포 완료]</b>\n` +
-              `• 최신 미국장 72종목 &amp; $SMH/$XLV 종가 동기화 + 정적번들(dist) 빌드 + 라이브 배포 완료\n` +
-              `• 유료 VIP 전용 채널로 <b>$SMH·$XLV 및 주요 종목 실시간 월가 뉴스 + 타점 오더북</b> 발송 및 상단 고정 완료!\n` +
-              `<code>${res.output.trim().slice(-320)}</code>`,
-            true,
-            botToken
-          );
-        },
-      },
-      botToken
-    );
-    return;
-  }
-
-  if (text === "/flow_tom" || text === "/flow_kfg" || text === "/flow_kfk") {
-    const map = { "/flow_tom": "TOM", "/flow_kfg": "KFG", "/flow_kfk": "KFK" };
-    const div = DIVISIONS[map[text]];
-    enqueueTask(
-      {
-        division: div,
-        title: `${div.name} — 오늘의 Flow 유튜브 쇼츠(_YT_Shorts) & 인스타 릴스(_IG_Reels) 2종 발송`,
-        run: async () => {
-          let res;
-          if (div.code === "TOM") {
-            res = await runPythonScriptAsync("daily_6am_shorts_sender.py", [], DIVISIONS.TOM.cwd);
-          } else if (div.code === "KFG") {
-            res = await runNodeScriptAsync("scripts/send_daily_6am_shorts_reels.js", [], DIVISIONS.KFG.cwd);
-          } else {
-            res = await runNodeScriptAsync("scripts/send_daily_6am_shorts_telegram.js", [], DIVISIONS.KFK.cwd);
-          }
-          await sendHqMessage(
-            `🎬 <b>[${div.name}] Flow 쇼츠·릴스 2종(YT/IG) 발송 완료!</b>\n` +
-              `• 대상 도메인: ${div.domain}\n` +
-              `• 결과: <code>${(res.output || "발송 완료").trim().slice(-240)}</code>`,
-            true,
-            botToken
-          );
-        },
-      },
-      botToken
-    );
-    return;
-  }
-
-  if (text === "/ls" || text === "/lemonsqueezy" || text === "레몬스퀴지") {
-    await checkLemonSqueezyLiveStatus(state, true, botToken);
-    return;
-  }
-
-  if (text === "/naver" || text === "네이버자동" || text === "블로그발행") {
-    enqueueTask(
-      {
-        division: DIVISIONS.KFK,
-        title: "3사업부(kidsfit.co.kr) — 네이버 블로그 학술 칼럼 발행 & 지식iN 자동 답변",
-        run: async () => {
-          const res = await runPythonScriptAsync("scripts/naver_cdp_live_runner.py", ["--all"], DIVISIONS.KFK.cwd);
-          await sendHqMessage(
-            `📝 <b>[3사업부 네이버 블로그 &amp; 지식iN 자동 수행 완료!]</b>\n` +
-              `<code>${(res.output || "완료").trim().slice(-350)}</code>`,
-            true,
-            botToken
-          );
-        },
-      },
-      botToken
-    );
-    return;
-  }
-
-  if (/^(인증\s*[A-Za-z0-9]{4,6}|[A-Za-z0-9]{5})$/.test(text)) {
-    const cleanCode = text.replace(/^인증\s*/, "").trim().toUpperCase();
-    enqueueTask(
-      {
-        division: DIVISIONS.KFK,
-        title: `3사업부(kidsfit.co.kr) — 네이버 서치어드바이저 소유확인 보안문자(${cleanCode}) 제출 & 사이트맵/RSS 등록`,
-        run: async () => {
-          await runPythonScriptAsync("scripts/naver_search_advisor_helper.py", ["--submit-code", cleanCode], DIVISIONS.KFK.cwd);
-        },
-      },
-      botToken
-    );
-    return;
-  }
-
   if (text === "/audit" || text === "검열" || text === "교차검열" || text === "전체점검" || text === "점검") {
-    enqueueTask(
-      {
-        division: DIVISIONS.TOM,
-        title: "전 사업부(1·2·3사업부) 16개 전환·결제 퍼널 상호 교차검열 및 자동수리 (안티그래비티 토큰 0)",
-        run: async () => {
-          const res = await runPythonScriptAsync("scripts/hq_hourly_cross_audit_healer.py", [], DIVISIONS.TOM.cwd);
-          await sendHqMessage(
-            `🛡️ <b>[전 사업부 무토큰(0 Token) 로컬 교차검열 &amp; 자동수리 완료]</b>\n` +
-              `<code>${(res.output || "16/16 정상").trim().slice(-400)}</code>`,
-            true,
-            botToken || PRIMARY_BOT_TOKEN
-          );
-        },
-      },
-      botToken || PRIMARY_BOT_TOKEN
-    );
+    const res = await runPythonScriptAsync("scripts/hq_division_auditor.py", ["--div", "ALL"], DIVISIONS.TOM.cwd);
+    await sendHqMessage((res.output || "점검 완료").trim(), true, SEMI_BOT_TOKEN, replyChatId);
     return;
   }
 
-  // ─── 3대 핵심 결재 안건 콜백 핸들러 (R1 / R4) ───────────────────────────
-  if (text.startsWith("/approve_agenda")) {
-    const decisionLogPath = path.join(DATA_DIR, "ceo_agendas_decision.json");
-    let currentDecisions = {};
-    try {
-      if (fs.existsSync(decisionLogPath)) {
-        currentDecisions = JSON.parse(fs.readFileSync(decisionLogPath, "utf8"));
-      }
-    } catch (_) {}
-
-    const nowIso = new Date().toISOString();
-    let replyMsg = "";
-
-    if (text === "/approve_agenda1_optA") {
-      currentDecisions["agenda1"] = {
-        choice: "A",
-        title: "3사업부 kidsfit.co.kr 무인 자동 유지 + getbreakai.com 신규 프로젝트 전면 전환",
-        decidedAt: nowIso,
-        status: "APPROVED",
-      };
-      replyMsg = `✅ <b>[대표 결재 승인 완료 — 안건 1호]</b>\n` +
-        `• <b>선택안</b>: <b>선택지 A (getbreakai.com 신규 전환 + kidsfit.co.kr 무인 유지)</b>\n` +
-        `• <b>집행 조치</b>: kidsfit.co.kr은 추가 리소스 0 무인 상태로 유지하고, 에이전트 인프라를 getbreakai.com 글로벌 퀀트 SaaS 인프라 세팅으로 즉시 전환합니다!`;
-    } else if (text === "/approve_agenda1_optB") {
-      currentDecisions["agenda1"] = {
-        choice: "B",
-        title: "3사업부 kidsfit.co.kr 자체 유료화 수익 모델 전면 개편",
-        decidedAt: nowIso,
-        status: "APPROVED",
-      };
-      replyMsg = `✅ <b>[대표 결재 승인 완료 — 안건 1호]</b>\n` +
-        `• <b>선택안</b>: <b>선택지 B (kidsfit.co.kr 자체 유료화 개편)</b>\n` +
-        `• <b>집행 조치</b>: kidsfit.co.kr K-DST 정밀 성장진단서 및 월간 패스 유료 결제 모듈 세팅에 착수합니다!`;
-    } else if (text === "/approve_agenda2_optA") {
-      currentDecisions["agenda2"] = {
-        choice: "A",
-        title: "Google Flow(Veo) 병행 하이브리드 영상 파이프라인 채택",
-        decidedAt: nowIso,
-        status: "APPROVED",
-      };
-      replyMsg = `✅ <b>[대표 결재 승인 완료 — 안건 2호]</b>\n` +
-        `• <b>선택안</b>: <b>선택지 A (Flow 병행 최고 화질 3D 모션)</b>\n` +
-        `• <b>집행 조치</b>: 에이전트가 극실사 프롬프트/스틸컷을 대기시키고 후반 마스터링을 전담합니다!`;
-    } else if (text === "/approve_agenda2_optB") {
-      currentDecisions["agenda2"] = {
-        choice: "B",
-        title: "토큰 맥싱 기반 100% 완전 자동 무인 실사급 영상 파이프라인 채택",
-        decidedAt: nowIso,
-        status: "APPROVED",
-      };
-      replyMsg = `✅ <b>[대표 결재 승인 완료 — 안건 2호]</b>\n` +
-        `• <b>선택안</b>: <b>선택지 B (100% 완전 자동 무인 실사급 영상)</b>\n` +
-        `• <b>집행 조치</b>: 사람 개입 0%로 심야 시간대에 매일 3편의 완성 영상을 완전 자동 렌더링하여 아침 텔레그램으로 배달합니다!`;
-    } else if (text === "/approve_agenda3_optA") {
-      currentDecisions["agenda3"] = {
-        choice: "A",
-        title: "대규모 리서치 & 지식자산 확장 올인형 파이프라인 채택",
-        decidedAt: nowIso,
-        status: "APPROVED",
-      };
-      replyMsg = `✅ <b>[대표 결재 승인 완료 — 안건 3호]</b>\n` +
-        `• <b>선택안</b>: <b>선택지 A (대규모 리서치 & 지식자산 올인)</b>\n` +
-        `• <b>집행 조치</b>: 심야 시간대에 Seeking Alpha급 리포트 및 의학 논문 분석 대규모 집필을 풀가동합니다!`;
-    } else if (text === "/approve_agenda3_optB") {
-      currentDecisions["agenda3"] = {
-        choice: "B",
-        title: "숏폼 영상 & 미디어 팩토리 올인형 파이프라인 채택",
-        decidedAt: nowIso,
-        status: "APPROVED",
-      };
-      replyMsg = `✅ <b>[대표 결재 승인 완료 — 안건 3호]</b>\n` +
-        `• <b>선택안</b>: <b>선택지 B (숏폼 영상 팩토리 올인)</b>\n` +
-        `• <b>집행 조치</b>: 심야 시간대에 3개 사업부 숏폼 영상 및 카드뉴스를 대량 마스터링합니다!`;
-    } else if (text === "/approve_agenda3_optC") {
-      currentDecisions["agenda3"] = {
-        choice: "C",
-        title: "올인원 균형 풀가동형 (리서치+영상+SEO+종가) 파이프라인 채택",
-        decidedAt: nowIso,
-        status: "APPROVED",
-      };
-      replyMsg = `✅ <b>[대표 결재 승인 완료 — 안건 3호]</b>\n` +
-        `• <b>선택안</b>: <b>선택지 C (올인원 균형 풀가동 통합 파이프라인 - 추천안)</b>\n` +
-        `• <b>집행 조치</b>: 심야 00:00~06:30 리서치, 숏폼 영상 3편 렌더링, SEO 색인 푸시, 종가 동기화 후 06:30 아침에 완제품 배달 체제로 가동합니다!`;
-    }
-
-    try {
-      fs.writeFileSync(decisionLogPath, JSON.stringify(currentDecisions, null, 2), "utf8");
-    } catch (_) {}
-
-    if (replyMsg) {
-      await sendHqMessage(replyMsg, true, botToken || PRIMARY_BOT_TOKEN);
-      return;
-    }
-  }
-
-  if (state.lastDispatchedText === text && Date.now() - (state.lastDispatchedAt || 0) < 60000) {
-    console.log(`[Bridge] Deduplicated identical prompt within 60s: "${text}"`);
+  // Deduplicate identical prompt within 30s (scoped by botToken + chatId so cross-bot requests are never blocked)
+  const dedupeSig = `${botToken || ""}:${replyChatId || ""}:${text}`;
+  if (state.lastDispatchedText === dedupeSig && Date.now() - (state.lastDispatchedAt || 0) < 30000) {
+    console.log(`[Bridge] Deduplicated identical prompt within 30s: "${dedupeSig}"`);
     return;
   }
-  state.lastDispatchedText = text;
+  state.lastDispatchedText = dedupeSig;
   state.lastDispatchedAt = Date.now();
 
   const targetCode = detectDivisionFromText(text, explicitBotBoundDiv || state.activeDivision);
   const targetDiv = DIVISIONS[targetCode] || DIVISIONS.ALL;
+  const cleanInstruction = slashParsed && slashParsed.restText ? slashParsed.restText : text;
   const replyBotToken = targetDiv.botToken || botToken || PRIMARY_BOT_TOKEN;
   state.activeDivision = targetCode;
   saveState(state);
 
+  // Instant On-Demand Episode Video & Copy Kit Handler ("9화 영상 보내줘", "1화 영상 보내줘", "/1사업부 10화 영상 보내줘" etc.)
+  const epReq = parseEpisodeVideoRequest(text, targetCode);
+  if (epReq) {
+    const epDiv = DIVISIONS[epReq.divCode] || DIVISIONS.TOM;
+    const epBotToken = epDiv.botToken || replyBotToken;
+    await sendHqMessage(
+      `🎬 <b>[${epDiv.name} · 제${epReq.epNum}화 영상 &amp; 원터치 복사 키트 즉시 전송 중...]</b>\n` +
+        `• <b>전담 봇</b>: <code>${epDiv.botHandle}</code>\n` +
+        `• 잠시만 기다려주시면 MP4 영상과 제목·설명·고정댓글·릴스 복사블록이 도착합니다!`,
+      false,
+      epBotToken,
+      replyChatId
+    );
+    const groupChat = getTargetChatId();
+    const chatArgs = ["--div", epDiv.code, "--ep", String(epReq.epNum), "--chat-id", String(replyChatId)];
+    if (String(replyChatId) !== String(groupChat)) {
+      chatArgs.push("--chat-id", String(groupChat));
+    }
+    runPythonScriptAsync("D:\\드림컴퍼니\\scripts\\deliver_episode_on_demand.py", chatArgs, HQ_ROOT_DIR).catch(() => {});
+    return;
+  }
+
   if (targetCode === "ALL") {
-    recordCommonOrder(text, "DISPATCHED");
-    // If prefixed with 공통지시: or 공통규칙:, also persist as a standing directive automatically
-    if (/^(공통\s*지시|공통지시사항|공통\s*규칙|공통\s*수칙)\s*:/i.test(text)) {
-      const ruleBody = text.replace(/^(공통\s*지시|공통지시사항|공통\s*규칙|공통\s*수칙)\s*:\s*/i, "").trim();
+    recordCommonOrder(cleanInstruction, "DISPATCHED");
+    if (/^(공통\s*지시|공통지시사항|공통\s*규칙|공통\s*수칙)\s*:/i.test(cleanInstruction)) {
+      const ruleBody = cleanInstruction.replace(/^(공통\s*지시|공통지시사항|공통\s*규칙|공통\s*수칙)\s*:\s*/i, "").trim();
       if (ruleBody) addStandingDirective(ruleBody);
     }
   }
@@ -1392,190 +1382,27 @@ async function handleCommand(rawText, state, botToken = null, opts = {}) {
   enqueueTask(
     {
       division: targetDiv,
-      title: `${targetDiv.name} 원격 지시: "${text.slice(0, 40)}"`,
+      title: `${targetDiv.name} 지시: "${cleanInstruction.slice(0, 45)}"`,
       run: async () => {
-        const r = await dispatchAntigravityPrompt(targetDiv, text);
-        await sendHqMessage(
+        await dispatchAntigravityPrompt(targetDiv, cleanInstruction, false);
+        const ackHtml =
           (targetCode === "ALL"
-            ? `🏛️ <b>[전 사업부 공통 지시사항 접수 &amp; 1·2·3사업부 일괄 가동 (@SemifearGreedbot)]</b>\n`
-            : `✅ <b>[${targetDiv.name}] 전담 봇(${targetDiv.botHandle}) 작업 접수 &amp; 멀티에이전트 풀가동</b>\n`) +
-            `• <b>지시 내용</b>: "${text}"\n` +
-            `• <b>담당 부문장</b>: ${targetDiv.managerTitle}\n` +
-            `• <b>텔레그램 전용 대화창</b>: <code>${MASTER_CONVERSATION_ID}</code> (PC 채널 분리됨)` +
-            getLiveTokenTelemetryBanner(),
-          true,
-          replyBotToken
-        );
+            ? `🏛️ <b>[전 사업부 공통 지시 접수 &amp; 1~5사업부 일괄 가동 (@SemifearGreedbot)]</b>\n`
+            : `✅ <b>[${targetDiv.name}] 전담 봇(${targetDiv.botHandle}) 지시 접수 &amp; 수정 착수</b>\n`) +
+          `• <b>지시 내용</b>: "${cleanInstruction}"\n` +
+          `• <b>작업 경로</b>: <code>${targetDiv.cwd}</code>\n` +
+          `• <b>완료 보고</b>: 수정 및 검증 완료 즉시 이 대화방으로 결과를 보고합니다.`;
+        await sendHqMessage(ackHtml, true, replyBotToken, replyChatId);
+        // If commanded in 1:1 bot chat, also mirror receipt to 모두컴퍼니 본부 방 so the HQ room stays in sync
+        const groupChat = getTargetChatId();
+        if (replyChatId !== groupChat) {
+          await sendHqMessage(ackHtml, false, replyBotToken, groupChat);
+        }
       },
     },
-    replyBotToken
+    replyBotToken,
+    replyChatId
   );
-}
-
-function checkDailyStaggeredSchedule(state) {
-  const now = new Date();
-  const ymd = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
-  const hhmm = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
-
-  if (!state.lastAutoRunDate) state.lastAutoRunDate = {};
-  // [DEPRECATED & SEVERED per R1 / Worker M1]:
-  // 매시간 00분 정각 스팸 회전 루틴(hq_24h_hourly_scheduler.py) 전면 영구 중단.
-  // 텔레그램 알림 공해(하루 96회 발송) 방지 및 무인 심야 토큰 맥싱 파이프라인으로 전면 이관.
-  // Windows 작업 스케줄러(HQ_24H_Hourly_Rotation)와 함께 내부 타이머도 완전히 차단되었습니다.
-
-
-  // 새벽 04:00: 실시간 안티그래비티 잔여 쿼터를 계측하여 평상시 안전마진 제외 가용 최대치(Smart Max-Pace)로 R&D 가동
-  if (hhmm >= "04:00" && hhmm < "04:30" && state.lastAutoRunDate.DAWN_HIGH_TOKEN_RND !== ymd) {
-    state.lastAutoRunDate.DAWN_HIGH_TOKEN_RND = ymd;
-    saveState(state);
-    handleCommand("/night", state, PRIMARY_BOT_TOKEN);
-  }
-
-  if (false && hhmm >= "05:00" && hhmm < "05:30" && state.lastAutoRunDate.DAWN_RL !== ymd) {
-    state.lastAutoRunDate.DAWN_RL = ymd;
-    saveState(state);
-    handleCommand("/rl", state);
-  }
-  // 전 사업부(1·2·3사업부) 일일 영상 06:00 KST 발송 (지터 방지: 06:00 ~ 06:30 가드 윈도우 & 일일 1회 래칭)
-  if (hhmm >= "06:00" && hhmm < "06:30" && state.lastAutoRunDate.DAILY_6AM_VIDEOS !== ymd) {
-    state.lastAutoRunDate.DAILY_6AM_VIDEOS = ymd;
-    state.lastAutoRunDate.FLOW_TOM = ymd;
-    state.lastAutoRunDate.FLOW_KFG = ymd;
-    state.lastAutoRunDate.FLOW_KFK = ymd;
-    saveState(state);
-    const commuteScript = path.resolve(HQ_ROOT_DIR, "scripts", "deliver_episode_8_commute.py");
-    if (fs.existsSync(commuteScript)) {
-      enqueueTask(
-        {
-          division: DIVISIONS.TOM,
-          title: "전 사업부(1·2·3사업부) 8화 출근시간 06:00 모바일 최적화 일괄 발송",
-          run: async () => {
-            await runPythonScriptAsync("scripts/deliver_episode_8_commute.py", ["--send"], HQ_ROOT_DIR);
-          },
-        },
-        PRIMARY_BOT_TOKEN
-      );
-    } else {
-      handleCommand("/flow_tom", state, DIVISIONS.TOM.botToken);
-      handleCommand("/flow_kfg", state, DIVISIONS.KFG.botToken);
-      handleCommand("/flow_kfk", state, DIVISIONS.KFK.botToken);
-    }
-  }
-  if (hhmm >= "06:30" && state.lastAutoRunDate.TOM !== ymd) {
-    state.lastAutoRunDate.TOM = ymd;
-    saveState(state);
-    handleCommand("/tom_news", state, DIVISIONS.TOM.botToken);
-  }
-  if (hhmm >= "07:30" && state.lastAutoRunDate.TOM_CLOSE_VERIFY !== ymd) {
-    state.lastAutoRunDate.TOM_CLOSE_VERIFY = ymd;
-    saveState(state);
-    enqueueTask(
-      {
-        division: DIVISIONS.TOM,
-        title: "TruthOfMarket 미국장 최종 정산 종가 재검증 및 정적번들 자동 배포",
-        run: async () => {
-          await runPythonScriptAsync("scripts/run_daily_market_close_sync.py", [], DIVISIONS.TOM.cwd);
-        },
-      },
-      DIVISIONS.TOM.botToken
-    );
-  }
-  if (hhmm === "08:30" && state.lastAutoRunDate.VISITOR_AM !== ymd) {
-    state.lastAutoRunDate.VISITOR_AM = ymd;
-    saveState(state);
-    handleCommand("/visitors", state);
-  }
-  if (hhmm === "21:00" && state.lastAutoRunDate.VISITOR_PM !== ymd) {
-    state.lastAutoRunDate.VISITOR_PM = ymd;
-    saveState(state);
-    handleCommand("/visitors", state);
-  }
-  checkLemonSqueezyLiveStatus(state).catch(() => {});
-}
-
-let lastLsPollMs = 0;
-async function checkLemonSqueezyLiveStatus(state, forceNotify = false, botToken = null) {
-  const nowMs = Date.now();
-  if (!forceNotify && nowMs - lastLsPollMs < 180000) return;
-  lastLsPollMs = nowMs;
-
-  const lsKey = kfgEnv.LEMONSQUEEZY_API_KEY || tomEnv.LEMONSQUEEZY_API_KEY || "";
-  if (!lsKey) return;
-
-  const fetchJson = (url, headers = {}) =>
-    new Promise((resolve) => {
-      const req = https.get(url, { headers, timeout: 8000 }, (res) => {
-        let raw = "";
-        res.on("data", (c) => (raw += c));
-        res.on("end", () => {
-          try {
-            resolve({ status: res.statusCode, data: JSON.parse(raw) });
-          } catch (_) {
-            resolve({ status: res.statusCode, raw });
-          }
-        });
-      });
-      req.on("error", () => resolve({ status: 0 }));
-      req.on("timeout", () => {
-        req.destroy();
-        resolve({ status: 0 });
-      });
-    });
-
-  const storeRes = await fetchJson("https://api.lemonsqueezy.com/v1/stores/296100", {
-    Authorization: `Bearer ${lsKey}`,
-    Accept: "application/vnd.api+json",
-  });
-  const chkRes = await fetchJson("https://truthofmarket.lemonsqueezy.com/checkout/buy/bad98d00-7175-41f6-9d58-eeb2471d0da4");
-
-  const attr = storeRes?.data?.data?.attributes || {};
-  const plan = attr.plan || "free";
-  const totalSales = Number(attr.total_sales || 0);
-  const totalRevenueCents = Number(attr.total_revenue || 0);
-  const isCheckoutLive = chkRes.status === 200 || (plan && plan !== "free");
-
-  if (typeof state.lsActivated === "undefined") state.lsActivated = false;
-  if (typeof state.lsTotalSales === "undefined") state.lsTotalSales = 0;
-
-  if (isCheckoutLive && !state.lsActivated) {
-    state.lsActivated = true;
-    saveState(state);
-    await sendHqMessage(
-      `🎉 <b>[레몬스퀴지(Lemon Squeezy) 본심사 최종 승인 &amp; 실결제 개통 완료!]</b>\n\n` +
-        `• <b>스토어</b>: KIDS-FIT Global Studio (<code>#296100</code>)\n` +
-        `• <b>스토어 플랜 상태</b>: <code>${plan}</code> (체크아웃 HTTP ${chkRes.status})\n` +
-        `• <b>1사업부(truthofmarket.com)</b>: Pro $29/mo · Lifetime $199 실결제 카드창 즉시 결제 가능!\n` +
-        `• <b>2사업부(kisfitglobal.com)</b>: Single $8.99 · 6-Month $19.99 실결제 카드창 즉시 결제 가능!`,
-      true,
-      botToken
-    );
-  }
-
-  if (totalSales > state.lsTotalSales) {
-    const prevSales = state.lsTotalSales;
-    state.lsTotalSales = totalSales;
-    saveState(state);
-    await sendHqMessage(
-      `💰 <b>[레몬스퀴지(Lemon Squeezy) 신규 실결제 매출 발생 알림!]</b>\n\n` +
-        `• <b>누적 결제 건수</b>: ${prevSales}건 ➡️ <b>${totalSales}건</b>\n` +
-        `• <b>누적 결제 매출</b>: <b>$${(totalRevenueCents / 100).toFixed(2)} USD</b>\n` +
-        `• <b>스토어</b>: #296100 (truthofmarket.com &amp; kisfitglobal.com)`,
-      true,
-      botToken
-    );
-  }
-
-  if (forceNotify) {
-    await sendHqMessage(
-      `🍋 <b>[레몬스퀴지(Lemon Squeezy) 스토어 #296100 실시간 상태]</b>\n` +
-        `• <b>온보딩 심사 상태</b>: ${isCheckoutLive ? "✅ 최종 승인 완료 (실결제 가동 중)" : "⏳ 온보딩팀 답장 검토 중 (승인 시 즉시 자동 알림 발송)"}\n` +
-        `• <b>1·2사업부 체크아웃 UUID</b>: ✅ Live Mode UUID 전환 배포 완료\n` +
-        `• <b>실결제 누적 건수 / 매출</b>: ${totalSales}건 / $${(totalRevenueCents / 100).toFixed(2)} USD\n` +
-        `<i>※ 3분 주기로 레몬스퀴지 API 및 체크아웃 응답을 24시간 자동 감시하며, 개통 및 첫 결제 발생 즉시 텔레그램으로 알림을 보내드립니다.</i>`,
-      true,
-      botToken
-    );
-  }
 }
 
 const seenGroupMessages = new Set();
@@ -1611,7 +1438,7 @@ async function pollBotTokenOnce(botToken, state) {
           state.groupChatId = cbChatId;
           saveState(state);
         }
-        console.log(`[HQ Bridge] Button Click (${botKey}): ${cb.data}`);
+        console.log(`[HQ Bridge] Button Click (${botKey}) in ${cbChatId}: ${cb.data}`);
         await tgApiWithToken(
           botToken,
           "answerCallbackQuery",
@@ -1621,14 +1448,17 @@ async function pollBotTokenOnce(botToken, state) {
           },
           5000
         );
-        await handleCommand(cb.data || "", state, botToken, { isCallback: true, isGroup: isGroupCb });
+        await handleCommand(cb.data || "", state, botToken, {
+          isCallback: true,
+          isGroup: isGroupCb,
+          incomingChatId: cbChatId || getTargetChatId(),
+        });
       } else if (upd.message) {
         const incomingChatId = String(upd.message.chat?.id || "");
         const senderId = String(upd.message.from?.id || "");
         const chatType = String(upd.message.chat?.type || "");
         const isGroup = chatType === "group" || chatType === "supergroup" || incomingChatId.startsWith("-");
 
-        // Deduplicate identical group messages received across multiple bots in the same room
         const msgDedupeKey = `${incomingChatId}_${upd.message.message_id}`;
         if (isGroup && upd.message.message_id) {
           if (seenGroupMessages.has(msgDedupeKey)) continue;
@@ -1639,46 +1469,72 @@ async function pollBotTokenOnce(botToken, state) {
           }
         }
 
-        // If owner (755033799) adds the bots to a group chat or sends a message in a group chat, bind groupChatId automatically!
-        // Ignore legacy pre-supergroup ID (-5459339357) after migration to supergroup (-1003834697086)
         const resolvedGroupId = upd.message.migrate_to_chat_id ? String(upd.message.migrate_to_chat_id) : incomingChatId;
         if (isGroup && senderId === String(OWNER_USER_ID) && resolvedGroupId && resolvedGroupId !== "-5459339357") {
-          const isNewGroup = state.groupChatId !== resolvedGroupId;
           state.groupChatId = resolvedGroupId;
           saveState(state);
-          if (isNewGroup && upd.message.new_chat_members && upd.message.new_chat_members.length > 0) {
-            console.log(`[HQ Bridge] Bound to Unified Telegram Group Chat: ${resolvedGroupId}`);
-            await sendDivisionReportsAll(state, resolvedGroupId);
-            continue;
-          }
         }
 
         if (upd.message.text) {
           const rawMsg = upd.message.text;
           let targetBotToken = botToken;
           let explicitDiv = null;
-          // If the message mentions or replies to a specific bot in the group, route to that bot's division
+
+          // 1. Check slash/prefix command first (e.g., `/1사업부 ...`, `/2사업부 ...`, `/3사업부 ...`, `/4사업부 ...`, `/5사업부 ...`, `/전사업부 ...`)
+          const slashCmd = parseSlashOrPrefixCommand(rawMsg.replace(/@(?:RigjtsideAlphabot|kidsfittbot|SemifearGreedbot|inves123_bot|Moneyfiityyy_bot)\b/gi, "").trim());
           const replyBotUsername = String(upd.message.reply_to_message?.from?.username || "").toLowerCase();
-          if (/semifeargreedbot/i.test(rawMsg) || replyBotUsername === "semifeargreedbot") {
-            targetBotToken = SEMI_BOT_TOKEN;
+          const replyMsgText = String(upd.message.reply_to_message?.text || "");
+
+          if (slashCmd && slashCmd.divCode) {
+            explicitDiv = slashCmd.divCode;
+            targetBotToken = DIVISIONS[explicitDiv]?.botToken || SEMI_BOT_TOKEN;
+          } else if (/1사업부 직통 지시 입력 대기 중/.test(replyMsgText)) {
+            explicitDiv = "TOM";
+            targetBotToken = RSA_BOT_TOKEN;
+          } else if (/2사업부.*직통 지시 입력 대기 중/.test(replyMsgText)) {
+            explicitDiv = "KFG";
+            targetBotToken = KFG_BOT_TOKEN;
+          } else if (/3사업부.*직통 지시 입력 대기 중/.test(replyMsgText)) {
             explicitDiv = "GBA";
+            targetBotToken = SEMI_BOT_TOKEN;
+          } else if (/4사업부.*직통 지시 입력 대기 중/.test(replyMsgText)) {
+            explicitDiv = "HERO";
+            targetBotToken = HERO_BOT_TOKEN;
+          } else if (/5사업부.*직통 지시 입력 대기 중/.test(replyMsgText)) {
+            explicitDiv = "KFK";
+            targetBotToken = KFK_BOT_TOKEN;
+          } else if (/전 사업부 공통.*직통 지시 입력 대기 중/.test(replyMsgText)) {
+            explicitDiv = "ALL";
+            targetBotToken = SEMI_BOT_TOKEN;
           } else if (/rigjtsidealphabot/i.test(rawMsg) || replyBotUsername === "rigjtsidealphabot") {
             targetBotToken = RSA_BOT_TOKEN;
             explicitDiv = "TOM";
           } else if (/kidsfittbot/i.test(rawMsg) || replyBotUsername === "kidsfittbot") {
             targetBotToken = KFG_BOT_TOKEN;
             explicitDiv = "KFG";
+          } else if (/inves123_bot/i.test(rawMsg) || replyBotUsername === "inves123_bot") {
+            targetBotToken = HERO_BOT_TOKEN;
+            explicitDiv = "HERO";
           } else if (/moneyfiityyy_bot/i.test(rawMsg) || replyBotUsername === "moneyfiityyy_bot") {
             targetBotToken = KFK_BOT_TOKEN;
             explicitDiv = "KFK";
+          } else if (/semifeargreedbot/i.test(rawMsg) || replyBotUsername === "semifeargreedbot") {
+            targetBotToken = SEMI_BOT_TOKEN;
+            explicitDiv = detectDivisionFromText(rawMsg, state.activeDivision);
           } else if (!isGroup) {
             explicitDiv = resolveDivisionByBotToken(botToken, true);
+            targetBotToken = DIVISIONS[explicitDiv]?.botToken || botToken;
           }
 
-          const cleanCmd = rawMsg.replace(/@[A-Za-z0-9_]+/g, "").trim();
+          const cleanCmd = rawMsg.replace(/@(?:RigjtsideAlphabot|kidsfittbot|SemifearGreedbot|inves123_bot|Moneyfiityyy_bot)\b/gi, "").trim();
           console.log(`[HQ Bridge] Message (${botKey}) from ${senderId} in ${incomingChatId}: ${cleanCmd}`);
           if (incomingChatId === String(OWNER_USER_ID) || senderId === String(OWNER_USER_ID)) {
-            await handleCommand(cleanCmd, state, targetBotToken, { isCallback: false, isGroup, explicitDiv });
+            await handleCommand(cleanCmd, state, targetBotToken, {
+              isCallback: false,
+              isGroup,
+              explicitDiv,
+              incomingChatId,
+            });
           }
         }
       }
@@ -1692,38 +1548,47 @@ async function main() {
     process.exit(1);
   }
 
-  // CLI helper mode: `--report-all` triggers sequential reports from HQ, 1사업부, 2사업부, and 3사업부 bots
   if (process.argv.includes("--report-all")) {
     const state = loadState();
     await sendDivisionReportsAll(state);
     return;
   }
 
-  // CLI helper mode: `--directives` sends the All-Divisions Common Directives Board to Telegram
   if (process.argv.includes("--directives")) {
     const state = loadState();
     await sendHqMessage(formatCommonDirectivesBoard(state), true, SEMI_BOT_TOKEN || PRIMARY_BOT_TOKEN);
     return;
   }
 
-  // CLI helper mode: `--notify "message" [--div TOM|KFG|KFK|HQ|ALL]` sends a message via the dedicated division bot
+  // CLI helper mode: `--notify "message" [--div TOM|KFG|GBA|HERO|KFK|HQ|ALL]`
   const notifyIdx = process.argv.indexOf("--notify");
   if (notifyIdx !== -1 && process.argv[notifyIdx + 1]) {
     const msg = process.argv[notifyIdx + 1];
     const divIdx = process.argv.indexOf("--div");
     let divArg = divIdx !== -1 && process.argv[divIdx + 1] ? process.argv[divIdx + 1].toUpperCase() : "";
     if (!divArg) {
-      if (/1사업부|truthofmarket|rightsidealpha/i.test(msg) && !/2사업부|3사업부/.test(msg)) divArg = "TOM";
-      else if (/2사업부|kisfitglobal|키즈핏 영문/i.test(msg) && !/1사업부|3사업부/.test(msg)) divArg = "KFG";
-      else if (/3사업부|kidsfit\.co\.kr|사업아이템|키즈핏 코리아/i.test(msg) && !/1사업부|2사업부/.test(msg)) divArg = "KFK";
-      else if (/4사업부|getbreakai/i.test(msg)) divArg = "GBA";
+      if (/1사업부|truthofmarket|rightsidealpha/i.test(msg) && !/2사업부|3사업부|4사업부|5사업부/.test(msg)) divArg = "TOM";
+      else if (/2사업부|kisfitglobal|키즈핏 영문/i.test(msg) && !/1사업부|3사업부|4사업부|5사업부/.test(msg)) divArg = "KFG";
+      else if (/3사업부|getbreakai/i.test(msg) && !/1사업부|2사업부|4사업부|5사업부/.test(msg)) divArg = "GBA";
+      else if (/4사업부|paradise-hero|황영웅|영웅라디오/i.test(msg) && !/1사업부|2사업부|3사업부|5사업부/.test(msg)) divArg = "HERO";
+      else if (/5사업부|kidsfit\.co\.kr|키즈핏 코리아/i.test(msg) && !/1사업부|2사업부|3사업부|4사업부/.test(msg)) divArg = "KFK";
       else divArg = "ALL";
     }
     const targetToken =
       divArg === "HQ" || divArg === "ALL"
         ? SEMI_BOT_TOKEN
         : DIVISIONS[divArg]?.botToken || SEMI_BOT_TOKEN || PRIMARY_BOT_TOKEN;
-    await sendHqMessage(`📬 <b>[작업 완료 보고]</b>\n${msg}${getLiveTokenTelemetryBanner()}`, true, targetToken);
+
+    const state = loadState();
+    const groupChat = getTargetChatId();
+    const lastChat = state.lastCommandChatId || groupChat;
+    const htmlOut = `📬 <b>[작업 완료 보고]</b>\n${msg}`;
+
+    // Always send to 모두컴퍼니 본부 방, and if the last command was in a 1:1 chat, send there too!
+    await sendHqMessage(htmlOut, true, targetToken, groupChat);
+    if (lastChat && lastChat !== groupChat) {
+      await sendHqMessage(htmlOut, true, targetToken, lastChat);
+    }
     return;
   }
 
@@ -1735,8 +1600,7 @@ async function main() {
     if (process.argv.includes("--once")) return;
   }
 
-  console.log(`[Master HQ Bridge] Active & Watchdog-Protected on Chat ID ${CHAT_ID} (${BOT_TOKENS.length} bots) | Telegram Conv: ${MASTER_CONVERSATION_ID} (PC Conv ${PC_DIRECT_CONVERSATION_ID} isolated)...`);
-  setInterval(() => checkDailyStaggeredSchedule(state), 25000);
+  console.log(`[Master HQ Bridge] Active (Manual & Audit Mode) on Chat ID ${CHAT_ID} (${BOT_TOKENS.length} bots) | Telegram Conv: ${MASTER_CONVERSATION_ID} (PC Conv ${PC_DIRECT_CONVERSATION_ID} isolated)...`);
 
   while (true) {
     try {
@@ -1753,10 +1617,14 @@ if (require.main === module) {
 module.exports = {
   MASTER_CONVERSATION_ID,
   PC_DIRECT_CONVERSATION_ID,
+  BOT_TOKENS,
   DIVISIONS,
   HQ_KEYBOARD,
   resolveSafeTelegramConversationId,
   resolveDivisionByBotToken,
+  parseSlashOrPrefixCommand,
+  parseAuditFeedbackRequest,
+  parseEpisodeVideoRequest,
   detectDivisionFromText,
   loadCommonDirectives,
   saveCommonDirectives,

@@ -1,54 +1,96 @@
-import { formatCheckoutUrl } from "../services/api.js";
+import { formatCheckoutUrl, SECTOR_REGIME_MAP } from "../services/api.js";
 
 export function renderScreenerControls(state) {
-  const t = state.t;
-  const f = state.zoneFilter;
+  const t = state.t || {};
+  const f = state.zoneFilter || "ALL";
+  const secFilter = state.sectorFilter || "ALL";
   const allStocks = (state.stocks || []).filter((s) => !String(s.ticker).includes("."));
   const cAll = allStocks.length;
   const cIgn = allStocks.filter((s) => s.zone_code === "IGNITION_ZONE").length;
   const cWatch = allStocks.filter((s) => s.zone_code === "WASHOUT_WATCH").length;
   const cKnife = allStocks.filter((s) => s.zone_code === "LEFT_SIDE_KNIFE").length;
   const cTrap = allStocks.filter((s) => s.zone_code === "VALUE_TRAP_FILTERED").length;
+  const vipList = state.vipWatchlist || [];
+  const cWatchlist = allStocks.filter((s) => vipList.includes(s.ticker)).length;
+
+  const sectorsList = [
+    "AI & Semiconductors",
+    "Cloud & Enterprise Software",
+    "Internet & Digital Media",
+    "Fintech & Digital Finance",
+    "Consumer & Retail",
+    "Mobility, EV & CleanTech",
+    "Healthcare & Biotechnology",
+    "Energy & Industrials",
+  ];
 
   return `
     <div class="screener-header-bar">
-      <div class="controls">
-        <div class="search-wrap">
-          <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input
-            type="text"
-            class="search-box"
-            id="searchInput"
-            placeholder="${t.searchPlaceholder}"
-            value="${state.searchQuery || ""}"
-          />
+      <div class="controls" style="display:flex; flex-direction:column; gap:8px; width:100%;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; width:100%;">
+          <div class="search-wrap" style="flex:1; min-width:260px;">
+            <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input
+              type="text"
+              class="search-box"
+              id="searchInput"
+              placeholder="${t.searchPlaceholder || "Filter by US Ticker, Company, or Sector..."}"
+              value="${state.searchQuery || ""}"
+            />
+          </div>
+
+          <!-- Sector Regime Matrix Quick Filter & Watchlist CSV Export -->
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <div style="display:flex; align-items:center; gap:5px;">
+              <label for="sectorFilterSelect" class="mono" style="font-size:0.68rem; color:var(--muted); font-weight:700;">SECTOR:</label>
+              <select id="sectorFilterSelect" class="search-box" style="padding:5px 8px; font-size:0.72rem; background:#05080f; border:1px solid var(--border); color:#fff; border-radius:3px; font-family:var(--font-sans);">
+                <option value="ALL" ${secFilter === "ALL" ? "selected" : ""}>All 8 Sectors (${cAll})</option>
+                ${sectorsList
+                  .map((sec) => {
+                    const cnt = allStocks.filter((s) => (SECTOR_REGIME_MAP && SECTOR_REGIME_MAP[s.sector] ? SECTOR_REGIME_MAP[s.sector] : s.sector) === sec).length;
+                    return `<option value="${sec}" ${secFilter === sec ? "selected" : ""}>${sec} (${cnt})</option>`;
+                  })
+                  .join("")}
+              </select>
+            </div>
+
+            <button type="button" class="btn btn-sm" id="btnExportVipWatchlistCsv" style="background:rgba(251,191,36,0.12); border-color:rgba(251,191,36,0.4); color:#fbbf24; font-weight:700; padding:5px 9px; font-size:0.72rem;" title="Download CSV of starred VIP Watchlist tickers">
+              ⭐ Export Watchlist CSV (${cWatchlist})
+            </button>
+          </div>
         </div>
-        <div class="filter-tabs">
+
+        <div class="filter-tabs" style="flex-wrap:wrap;">
           <button class="filter-tab ${f === "ALL" ? "active" : ""}" data-zone="ALL">
-            <span>${t.filterAll}</span>
+            <span>${t.filterAll || "All US Equities"}</span>
             <span class="tab-count">${cAll}</span>
           </button>
           <button class="filter-tab ${f === "IGNITION_ZONE" ? "active" : ""}" data-zone="IGNITION_ZONE">
             <span style="width:6px; height:6px; border-radius:50%; background:var(--fin-up); display:inline-block;"></span>
-            <span>${t.filterIgnition}</span>
+            <span>${t.filterIgnition || "Right-Side Ignition"}</span>
             <span class="tab-count">${cIgn}</span>
           </button>
           <button class="filter-tab ${f === "WASHOUT_WATCH" ? "active" : ""}" data-zone="WASHOUT_WATCH">
             <span style="width:6px; height:6px; border-radius:50%; background:var(--fin-amber); display:inline-block;"></span>
-            <span>${t.filterWatch}</span>
+            <span>${t.filterWatch || "Washout Base Watch"}</span>
             <span class="tab-count">${cWatch}</span>
           </button>
           <button class="filter-tab ${f === "LEFT_SIDE_KNIFE" ? "active" : ""}" data-zone="LEFT_SIDE_KNIFE">
             <span style="width:6px; height:6px; border-radius:50%; background:var(--fin-down); display:inline-block;"></span>
-            <span>${t.filterKnife}</span>
+            <span>${t.filterKnife || "Downtrend / Avoid"}</span>
             <span class="tab-count">${cKnife}</span>
           </button>
           <button class="filter-tab ${f === "VALUE_TRAP_FILTERED" ? "active" : ""}" data-zone="VALUE_TRAP_FILTERED">
-            <span>${t.filterTrap}</span>
+            <span>${t.filterTrap || "Value Trap Excluded"}</span>
             <span class="tab-count">${cTrap}</span>
+          </button>
+          <button class="filter-tab ${f === "VIP_WATCHLIST" ? "active" : ""}" data-zone="VIP_WATCHLIST" style="border-color:rgba(251,191,36,0.35);">
+            <span style="color:#fbbf24; font-size:0.8rem;">⭐</span>
+            <span style="color:#fef08a;">VIP Watchlist</span>
+            <span class="tab-count" style="background:rgba(251,191,36,0.2); color:#fef08a;">${cWatchlist}</span>
           </button>
         </div>
       </div>
@@ -217,8 +259,20 @@ export function renderStockRows(state) {
       const saUrl = `https://seekingalpha.com/symbol/${encodeURIComponent(s.ticker)}/earnings?source=${saSource}`;
       const brokerUrl = `${rawBrokerUrl}${brokerSep}symbol=${encodeURIComponent(s.ticker)}`;
 
+      const vipWatchlist = state.vipWatchlist || [];
+      const isStarred = vipWatchlist.includes(s.ticker);
+
       const tickerCellHtml = `<div>
-        <div style="display:flex; align-items:center; gap:7px;">
+        <div style="display:flex; align-items:center; gap:6px;">
+          <button
+            type="button"
+            class="btn-watchlist-star"
+            data-ticker="${s.ticker}"
+            title="${isStarred ? "Remove from VIP Watchlist" : "Add to VIP Watchlist"}"
+            style="background:none; border:none; cursor:pointer; font-size:0.92rem; padding:0; line-height:1; vertical-align:middle; color:${isStarred ? "#fbbf24" : "var(--muted)"}; display:inline-flex; align-items:center;"
+          >
+            ${isStarred ? "⭐" : "☆"}
+          </button>
           <span class="mono" style="font-weight:800; font-size:0.9rem; color:#ffffff;">${s.ticker}</span>
           <span style="font-size:0.62rem; font-family:var(--font-mono); padding:1px 4px; background:#141d2f; border:1px solid #24324d; color:#93c5fd; border-radius:2px;">US</span>
           ${

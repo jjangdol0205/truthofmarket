@@ -933,6 +933,460 @@ async function evaluatePositionDoctor(data) {
     }
   );
 }
+const SECTOR_REGIME_MAP = {
+  // 1. AI & Semiconductors
+  "AI Semiconductors": "AI & Semiconductors",
+  "Semiconductors": "AI & Semiconductors",
+  "Semiconductor Equip": "AI & Semiconductors",
+  "Semiconductor IP": "AI & Semiconductors",
+  "Memory Semiconductors": "AI & Semiconductors",
+  "Power Semiconductors": "AI & Semiconductors",
+  "Power & Auto Chips": "AI & Semiconductors",
+  "Foundry Semis": "AI & Semiconductors",
+  "AI Server Hardware": "AI & Semiconductors",
+  "ADAS & Autonomous": "AI & Semiconductors",
+
+  // 2. Cloud & Enterprise Software
+  "Enterprise AI": "Cloud & Enterprise Software",
+  "Cloud Security": "Cloud & Enterprise Software",
+  "Cybersecurity": "Cloud & Enterprise Software",
+  "Cloud Observability": "Cloud & Enterprise Software",
+  "Database Software": "Cloud & Enterprise Software",
+  "Data Cloud SaaS": "Cloud & Enterprise Software",
+  "Edge Cloud & Security": "Cloud & Enterprise Software",
+  "3D Engine Software": "Cloud & Enterprise Software",
+
+  // 3. Internet & Digital Media
+  "Internet & AI": "Internet & Digital Media",
+  "Internet & Social": "Internet & Digital Media",
+  "Social Media": "Internet & Digital Media",
+  "Streaming Media": "Internet & Digital Media",
+  "Media & Entertainment": "Internet & Digital Media",
+  "Legacy Media": "Internet & Digital Media",
+  "Connected TV": "Internet & Digital Media",
+  "Audio Streaming": "Internet & Digital Media",
+  "AdTech & AI Software": "Internet & Digital Media",
+
+  // 4. Fintech & Digital Finance
+  "Fintech & BNPL": "Fintech & Digital Finance",
+  "Digital Assets & Fin": "Fintech & Digital Finance",
+  "Fintech & Brokerage": "Fintech & Digital Finance",
+  "Digital Payments": "Fintech & Digital Finance",
+  "Digital Banking": "Fintech & Digital Finance",
+  "AI Lending Fintech": "Fintech & Digital Finance",
+
+  // 5. Consumer & Retail
+  "Consumer Beverages": "Consumer & Retail",
+  "Leisure & Cruise": "Consumer & Retail",
+  "Consumer Footwear": "Consumer & Retail",
+  "Consumer Apparel": "Consumer & Retail",
+  "Athletic Apparel": "Consumer & Retail",
+  "Consumer Retail": "Consumer & Retail",
+  "Consumer EdTech": "Consumer & Retail",
+  "E-Commerce SaaS": "Consumer & Retail",
+  "Cloud & E-Commerce": "Consumer & Retail",
+  "Auto E-Commerce": "Consumer & Retail",
+
+  // 6. Mobility, EV & CleanTech
+  "EV & Robotics": "Mobility, EV & CleanTech",
+  "Mobility Platform": "Mobility, EV & CleanTech",
+  "Automotive": "Mobility, EV & CleanTech",
+  "Solar & CleanTech": "Mobility, EV & CleanTech",
+  "Solar Inverters": "Mobility, EV & CleanTech",
+  "Solar Modules": "Mobility, EV & CleanTech",
+  "Grid Energy Storage": "Mobility, EV & CleanTech",
+
+  // 7. Healthcare & Biotechnology
+  "Biopharma": "Healthcare & Biotechnology",
+  "Pharmaceuticals": "Healthcare & Biotechnology",
+  "Biotechnology": "Healthcare & Biotechnology",
+
+  // 8. Energy & Industrials
+  "Aerospace & Defense": "Energy & Industrials",
+  "Passenger Airlines": "Energy & Industrials",
+  "Oil & Gas E&P": "Energy & Industrials",
+  "Integrated Energy": "Energy & Industrials",
+  "Specialty Chemicals": "Energy & Industrials",
+};
+const VALUE_TRAPS = new Set(["INTC", "BA", "PFE", "PARA", "WBD", "NKE", "ALB"]);
+function getVipWatchlist() {
+  if (typeof localStorage === "undefined") return ["CELH", "CCL", "TSLA", "SPOT", "NVDA"];
+  try {
+    const raw = localStorage.getItem("rsa_vip_watchlist");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch (_) {}
+  return ["CELH", "CCL", "TSLA", "SPOT", "NVDA"];
+}
+async function saveVipWatchlist(tickers) {
+  const cleaned = [...new Set((tickers || []).map((t) => String(t || "").trim().toUpperCase()).filter(Boolean))];
+  if (typeof localStorage !== "undefined") {
+    try {
+      localStorage.setItem("rsa_vip_watchlist", JSON.stringify(cleaned));
+    } catch (_) {}
+  }
+  if (!isStaticHost() && isProActive()) {
+    try {
+      await fetch("/api/pro/watchlist", {
+        method: "POST",
+        headers: {
+          ...getAuthHeader(),
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ tickers: cleaned, action: "set" }),
+      });
+    } catch (_) {}
+  }
+  return cleaned;
+}
+async function fetchSectorMatrix() {
+  return fetchJsonWithFallback(
+    "/api/pro/sector-matrix",
+    {
+      headers: {
+        ...getAuthHeader(),
+        Accept: "application/json",
+      },
+    },
+    async () => {
+      const all = await getStaticStocksForCurrentUser();
+      const sectorsMap = {};
+      for (const s of all) {
+        if (!s.ticker || String(s.ticker).includes(".")) continue;
+        const secName = SECTOR_REGIME_MAP[s.sector] || s.sector || "Other";
+        if (!sectorsMap[secName]) sectorsMap[secName] = [];
+        sectorsMap[secName].push(s);
+      }
+      const items = [];
+      for (const [secName, sList] of Object.entries(sectorsMap)) {
+        const sumScore = sList.reduce((acc, x) => acc + Number(x.score || 0), 0);
+        const avgSc = Math.round((sumScore / sList.length) * 10) / 10;
+        const ignCount = sList.filter((x) => x.zone_code === "IGNITION_ZONE").length;
+        const trend = avgSc >= 50.0 ? "BULLISH" : avgSc < 40.0 ? "BEARISH" : "NEUTRAL";
+        items.push({
+          name: secName,
+          count: sList.length,
+          avg_score: avgSc,
+          momentum_trend: trend,
+          ignition_count: ignCount,
+          tickers: sList.map((x) => x.ticker),
+        });
+      }
+      items.sort((a, b) => b.ignition_count - a.ignition_count || b.avg_score - a.avg_score);
+      return { sectors: items };
+    }
+  );
+}
+async function evaluatePortfolioDoctor(payload) {
+  return fetchJsonWithFallback(
+    "/api/pro/portfolio-doctor",
+    {
+      method: "POST",
+      headers: {
+        ...getAuthHeader(),
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(payload),
+    },
+    async () => {
+      const all = await getStaticStocksForCurrentUser();
+      const stocksByTicker = {};
+      for (const s of all) {
+        if (s.ticker) stocksByTicker[s.ticker.trim().toUpperCase()] = s;
+      }
+
+      const rawPositions = (payload && payload.positions) || [];
+      const positions = rawPositions.filter((p) => p && p.ticker && String(p.ticker).trim());
+
+      if (!positions.length) {
+        return {
+          health_score: 100,
+          total_invested: 0.0,
+          total_unrealized_pnl: 0.0,
+          total_unrealized_pnl_pct: 0.0,
+          capital_at_risk: 0.0,
+          items: [],
+          stress_scenarios: [
+            {
+              name: "Semi Extreme Fear Shock (-15%)",
+              projected_pnl_pct: 0.0,
+              impact_usd: 0.0,
+              verdict: "Neutral",
+            },
+            {
+              name: "Defensive Safe-Haven Rotation ($XLV +5%)",
+              projected_pnl_pct: 0.0,
+              impact_usd: 0.0,
+              verdict: "Neutral",
+            },
+            {
+              name: "Right-Side Ignition Wave (+25%)",
+              projected_pnl_pct: 0.0,
+              impact_usd: 0.0,
+              verdict: "Neutral",
+            },
+          ],
+          rebalance_recommendations: [
+            {
+              action: "MAINTAIN",
+              ticker: null,
+              target_ticker: null,
+              amount_usd: 0.0,
+              allocation_pct: 100.0,
+              reason: "No active holdings in portfolio; ready for Right-Side Ignition deployment.",
+              setup_type: "CASH_RESERVE",
+            },
+          ],
+        };
+      }
+
+      const diagnostics = [];
+      let hardStopCount = 0;
+      let deadMoneyCount = 0;
+
+      for (const item of positions) {
+        const tClean = String(item.ticker).trim().toUpperCase();
+        const stock = stocksByTicker[tClean];
+        const entryP = Math.max(0.01, parseFloat(item.entry_price || 0));
+        const shares = Math.max(0.001, parseFloat(item.shares > 0 ? item.shares : 1.0));
+        const days = Math.max(0, parseInt(item.days_held >= 0 ? item.days_held : 0, 10));
+
+        let curP = entryP;
+        if (item.current_price !== undefined && item.current_price !== null && Number(item.current_price) > 0) {
+          curP = parseFloat(item.current_price);
+        } else if (stock && stock.close !== undefined && stock.close !== null) {
+          curP = parseFloat(stock.close);
+        }
+
+        const hardStopP = Math.round(entryP * 0.91 * 100) / 100;
+        const retPct = Math.round(((curP / entryP) - 1.0) * 10000) / 100;
+        const investedVal = Math.round(curP * shares * 100) / 100;
+        const costVal = Math.round(entryP * shares * 100) / 100;
+        const unrealizedPnl = Math.round((investedVal - costVal) * 100) / 100;
+
+        let statusCode = "HOLD";
+        let action = "ACTIVE_HOLD";
+        let isCritical = false;
+        let directive = "";
+
+        if (retPct <= -9.0) {
+          statusCode = "HARD_STOP";
+          action = "CRITICAL_STOP_EXIT";
+          isCritical = true;
+          directive = `RULE 1: -9% Hard Stop breached (${retPct.toFixed(2)}%). Exit full position immediately.`;
+          hardStopCount += 1;
+        } else if (days >= 55 && retPct < 8.0) {
+          statusCode = "TIME_STOP";
+          action = "DEAD_MONEY_ROTATE";
+          isCritical = false;
+          directive = `RULE 2: 55-Day Dead-Money holding (${days} days, ${retPct >= 0 ? "+" : ""}${retPct.toFixed(2)}%). Reallocate to active ignition candidates.`;
+          deadMoneyCount += 1;
+        } else if (retPct >= 100.0) {
+          statusCode = "TP1_HARVEST";
+          action = "TP1_TAKE_PROFIT";
+          isCritical = false;
+          directive = `RULE 3: +100% TP1 achieved (+${retPct.toFixed(2)}%). Sell 50% to recoup 100% principal; trail stop on remaining.`;
+        } else {
+          statusCode = "HOLD";
+          action = "ACTIVE_HOLD";
+          isCritical = false;
+          directive = `RULE 4: Healthy active trend follow (${retPct >= 0 ? "+" : ""}${retPct.toFixed(2)}%). Trailing stop floor at $${hardStopP.toFixed(2)}.`;
+        }
+
+        diagnostics.push({
+          ticker: tClean,
+          status_code: statusCode,
+          action: action,
+          current_return_pct: retPct,
+          hard_stop_price: hardStopP,
+          is_critical: isCritical,
+          directive: directive,
+          entry_price: Math.round(entryP * 100) / 100,
+          current_price: Math.round(curP * 100) / 100,
+          shares: shares,
+          days_held: days,
+          invested_value: investedVal,
+          unrealized_pnl: unrealizedPnl,
+        });
+      }
+
+      const rawHealth = 100 - (30 * hardStopCount) - (15 * deadMoneyCount);
+      const healthScore = Math.max(0, Math.min(100, rawHealth));
+
+      const totalInvested = Math.round(diagnostics.reduce((acc, d) => acc + d.invested_value, 0) * 100) / 100;
+      const totalCost = Math.round(
+        positions.reduce((acc, p) => acc + (parseFloat(p.entry_price || 0) * (parseFloat(p.shares > 0 ? p.shares : 1.0))), 0) * 100
+      ) / 100;
+      const totalUnrealizedPnl = Math.round(diagnostics.reduce((acc, d) => acc + d.unrealized_pnl, 0) * 100) / 100;
+      const totalUnrealizedPnlPct = totalCost > 0 ? Math.round((totalUnrealizedPnl / totalCost) * 10000) / 100 : 0.0;
+
+      const capitalAtRisk = Math.round(
+        positions.reduce((acc, p) => {
+          const ep = parseFloat(p.entry_price || 0);
+          const sh = parseFloat(p.shares > 0 ? p.shares : 1.0);
+          const stp = Math.round(ep * 0.91 * 100) / 100;
+          return acc + Math.max(0.0, ep - stp) * sh;
+        }, 0) * 100
+      ) / 100;
+
+      const stressScenarios = [];
+      if (totalInvested <= 0) {
+        stressScenarios.push(
+          { name: "Semi Extreme Fear Shock (-15%)", projected_pnl_pct: 0.0, impact_usd: 0.0, verdict: "Neutral" },
+          { name: "Defensive Safe-Haven Rotation ($XLV +5%)", projected_pnl_pct: 0.0, impact_usd: 0.0, verdict: "Neutral" },
+          { name: "Right-Side Ignition Wave (+25%)", projected_pnl_pct: 0.0, impact_usd: 0.0, verdict: "Neutral" }
+        );
+      } else {
+        // 1. Semi Extreme Fear Shock (-15%)
+        let impactS1 = 0.0;
+        for (const d of diagnostics) {
+          const sRef = stocksByTicker[d.ticker];
+          const sec = SECTOR_REGIME_MAP[sRef ? sRef.sector : ""] || "Other";
+          if (sec === "AI & Semiconductors" || sec === "Cloud & Enterprise Software" || sec === "Internet & Digital Media") {
+            impactS1 += d.invested_value * -0.15;
+          } else if (sec === "Healthcare & Biotechnology" || sec === "Consumer & Retail") {
+            impactS1 += d.invested_value * 0.015;
+          } else {
+            impactS1 += d.invested_value * -0.05;
+          }
+        }
+        const pnlPctS1 = Math.round((impactS1 / totalInvested) * 10000) / 100;
+        const verdictS1 = pnlPctS1 <= -8.0 ? "Vulnerable" : pnlPctS1 <= -3.0 ? "Moderate Risk" : "Resilient";
+        stressScenarios.push({
+          name: "Semi Extreme Fear Shock (-15%)",
+          projected_pnl_pct: pnlPctS1,
+          impact_usd: Math.round(impactS1 * 100) / 100,
+          verdict: verdictS1,
+        });
+
+        // 2. Defensive Safe-Haven Rotation ($XLV +5%)
+        let impactS2 = 0.0;
+        for (const d of diagnostics) {
+          const sRef = stocksByTicker[d.ticker];
+          const sec = SECTOR_REGIME_MAP[sRef ? sRef.sector : ""] || "Other";
+          if (sec === "Healthcare & Biotechnology" || sec === "Consumer & Retail") {
+            impactS2 += d.invested_value * 0.05;
+          } else if (sec === "AI & Semiconductors" || sec === "Cloud & Enterprise Software" || sec === "Internet & Digital Media") {
+            impactS2 += d.invested_value * -0.02;
+          }
+        }
+        const pnlPctS2 = Math.round((impactS2 / totalInvested) * 10000) / 100;
+        const verdictS2 = pnlPctS2 >= 1.0 ? "Resilient" : pnlPctS2 >= -2.0 ? "Neutral" : "Vulnerable";
+        stressScenarios.push({
+          name: "Defensive Safe-Haven Rotation ($XLV +5%)",
+          projected_pnl_pct: pnlPctS2,
+          impact_usd: Math.round(impactS2 * 100) / 100,
+          verdict: verdictS2,
+        });
+
+        // 3. Right-Side Ignition Wave (+25%)
+        let impactS3 = 0.0;
+        for (const d of diagnostics) {
+          const sRef = stocksByTicker[d.ticker];
+          const zcode = sRef ? sRef.zone_code : "WASHOUT_WATCH";
+          if (zcode === "IGNITION_ZONE") {
+            impactS3 += d.invested_value * 0.25;
+          } else if (zcode === "WASHOUT_WATCH") {
+            impactS3 += d.invested_value * 0.10;
+          } else {
+            impactS3 += d.invested_value * 0.02;
+          }
+        }
+        const pnlPctS3 = Math.round((impactS3 / totalInvested) * 10000) / 100;
+        const verdictS3 = pnlPctS3 >= 12.0 ? "High Upside" : pnlPctS3 >= 5.0 ? "Moderate Upside" : "Low Momentum";
+        stressScenarios.push({
+          name: "Right-Side Ignition Wave (+25%)",
+          projected_pnl_pct: pnlPctS3,
+          impact_usd: Math.round(impactS3 * 100) / 100,
+          verdict: verdictS3,
+        });
+      }
+
+      // Automated Rebalancing Recommendations
+      const rebalanceRecommendations = [];
+      const stoppedPositions = diagnostics.filter((d) => d.status_code === "HARD_STOP" || d.status_code === "TIME_STOP");
+      let totalHarvested = 0.0;
+
+      for (const sp of stoppedPositions) {
+        const reason = sp.status_code === "HARD_STOP" ? "Hard stop exit capital recovery" : "Time stop dead money capital recovery";
+        rebalanceRecommendations.push({
+          action: "HARVEST",
+          ticker: sp.ticker,
+          target_ticker: null,
+          amount_usd: sp.invested_value,
+          allocation_pct: null,
+          reason: reason,
+          setup_type: sp.status_code,
+        });
+        totalHarvested += sp.invested_value;
+      }
+
+      totalHarvested = Math.round(totalHarvested * 100) / 100;
+      const currentTickers = new Set(diagnostics.map((d) => d.ticker));
+      const ignitionCandidates = all.filter(
+        (s) => s.zone_code === "IGNITION_ZONE" && !currentTickers.has(s.ticker) && !VALUE_TRAPS.has(s.ticker)
+      );
+      ignitionCandidates.sort((a, b) => (Number(b.score) || 0) - (Number(a.score) || 0));
+
+      if (totalHarvested > 0) {
+        if (ignitionCandidates.length > 0) {
+          const reallocCount = Math.min(3, ignitionCandidates.length);
+          const perTargetUsd = Math.round((totalHarvested / reallocCount) * 100) / 100;
+          const perTargetPct = Math.round((100.0 / reallocCount) * 10) / 10;
+          for (let i = 0; i < reallocCount; i++) {
+            const cand = ignitionCandidates[i];
+            rebalanceRecommendations.push({
+              action: "REALLOCATE",
+              ticker: null,
+              target_ticker: cand.ticker,
+              amount_usd: perTargetUsd,
+              allocation_pct: perTargetPct,
+              reason: "1.35% risk parity allocation into active Right-Side Ignition setup",
+              setup_type: `IGNITION_ZONE (Score ${cand.score})`,
+            });
+          }
+        } else {
+          rebalanceRecommendations.push({
+            action: "REALLOCATE",
+            ticker: null,
+            target_ticker: "CASH_RESERVE",
+            amount_usd: totalHarvested,
+            allocation_pct: 100.0,
+            reason: "Harvested capital held in cash safe-haven awaiting fresh Ignition triggers",
+            setup_type: "CASH_SAFE_HAVEN",
+          });
+        }
+      } else {
+        if (!stoppedPositions.length && diagnostics.length > 0) {
+          rebalanceRecommendations.push({
+            action: "MAINTAIN",
+            ticker: null,
+            target_ticker: null,
+            amount_usd: 0.0,
+            allocation_pct: 100.0,
+            reason: "Portfolio positions aligned with quant criteria; maintain active trailing stops.",
+            setup_type: "ACTIVE_PORTFOLIO",
+          });
+        }
+      }
+
+      return {
+        health_score: healthScore,
+        total_invested: totalInvested,
+        total_unrealized_pnl: totalUnrealizedPnl,
+        total_unrealized_pnl_pct: totalUnrealizedPnlPct,
+        capital_at_risk: capitalAtRisk,
+        items: diagnostics,
+        stress_scenarios: stressScenarios,
+        rebalance_recommendations: rebalanceRecommendations,
+      };
+    }
+  );
+}
 async function fetchReferralConfig() {
   return fetchJsonWithFallback(
     "/api/referral/config",
@@ -1734,7 +2188,7 @@ function renderPositionDoctorForm(state) {
   const defaultClose = celh ? Number(celh.close).toFixed(2) : "27.93";
   const defaultDate = celh && celh.date ? celh.date : "2026-10-13";
   const initialDoc = state.docLastResult
-    ? formatDoctorResult(state.docLastResult)
+    ? formatDoctorResult(state.docLastResult, state)
     : `<div style="color:var(--muted);">Enter US ticker, cost basis ($), and trading days held to evaluate asymmetric exit triggers against the latest closing price ($${defaultClose}).</div>`;
 
   return `
@@ -1786,7 +2240,200 @@ function renderPositionDoctorForm(state) {
     </div>
   `;
 }
-function formatDoctorResult(result) {
+
+const DOC_VAULT_KEY = "RSA_PRO_VAULT_2026_KEY";
+
+function decodeDocRow(row) {
+  if (!row || !row._v) return row;
+  try {
+    const bin =
+      typeof atob === "function"
+        ? atob(row._v)
+        : typeof Buffer !== "undefined"
+        ? Buffer.from(row._v, "base64").toString("binary")
+        : "";
+    if (!bin) return row;
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) {
+      bytes[i] = bin.charCodeAt(i) ^ DOC_VAULT_KEY.charCodeAt(i % DOC_VAULT_KEY.length);
+    }
+    const jsonStr =
+      typeof TextDecoder !== "undefined"
+        ? new TextDecoder("utf-8").decode(bytes)
+        : decodeURIComponent(escape(String.fromCharCode(...bytes)));
+    return { ...row, ...JSON.parse(jsonStr), is_pro_locked: false };
+  } catch (_) {
+    return row;
+  }
+}
+function renderDoctorVipUnlockPreview(state) {
+  if (!state) return "";
+  const isPro = Boolean(state.isProUnlocked);
+
+  const fallbackIgnitions = [
+    {
+      ticker: "CELH",
+      name: "Celsius Holdings",
+      sector: "Consumer Beverages",
+      score: 84,
+      vol_surge_10d: 2.46,
+      close: 33.19,
+      entry_trigger_price: 29.45,
+      stop_loss_price: 30.2,
+      hist_2x_rate: 45.8,
+      zone_code: "IGNITION_ZONE",
+    },
+    {
+      ticker: "FSLR",
+      name: "First Solar Inc",
+      sector: "Solar Modules",
+      score: 98,
+      vol_surge_10d: 3.41,
+      close: 191.61,
+      entry_trigger_price: 191.02,
+      stop_loss_price: 174.37,
+      hist_2x_rate: 38.2,
+      zone_code: "IGNITION_ZONE",
+    },
+    {
+      ticker: "SOFI",
+      name: "SoFi Technologies",
+      sector: "Digital Banking",
+      score: 98,
+      vol_surge_10d: 3.17,
+      close: 16.75,
+      entry_trigger_price: 16.68,
+      stop_loss_price: 15.24,
+      hist_2x_rate: 41.5,
+      zone_code: "IGNITION_ZONE",
+    },
+  ];
+
+  let rawList = Array.isArray(state.stocks) && state.stocks.length > 0 ? state.stocks : [];
+  let decodedList = rawList.map(decodeDocRow);
+  let candidates = decodedList.filter(
+    (s) => s && (s.zone_code === "IGNITION_ZONE" || Number(s.score ?? s.pw_score ?? 0) >= 75)
+  );
+  if (candidates.length < 3) {
+    const existingTickers = new Set(candidates.map((s) => s.ticker));
+    for (const fb of fallbackIgnitions) {
+      if (!existingTickers.has(fb.ticker)) {
+        candidates.push(fb);
+      }
+    }
+  }
+  const top3 = candidates.slice(0, 3);
+
+  const rowsHtml = top3
+    .map((s, idx) => {
+      const isPick1 = idx === 0;
+      const isPickUnmasked = isPro || isPick1;
+      const score = Number(s.score ?? s.pw_score ?? 85);
+      const volSurge = Number(s.vol_surge_10d ?? 2.5);
+      const sector = s.sector || "Growth Tech";
+      const ticker = s.ticker || `PICK#${idx + 1}`;
+      const entryPrice =
+        s.entry_trigger_price !== undefined && s.entry_trigger_price !== null
+          ? Number(s.entry_trigger_price)
+          : Number(s.close || 30.0) * 0.98;
+      const stopPrice =
+        s.stop_loss_price !== undefined && s.stop_loss_price !== null
+          ? Number(s.stop_loss_price)
+          : Number(s.close || 30.0) * 0.91;
+
+      const tickerHtml = isPickUnmasked
+        ? `<span class="mono" style="font-weight:800; color:#ffffff; font-size:0.86rem;">$${ticker}</span>`
+        : `<span class="doc-blur-lock blurred-cell mono" style="font-weight:800; font-size:0.86rem; color:#93c5fd; user-select:none;">$${ticker}</span>`;
+
+      const badgeHtml = isPro
+        ? `<span class="badge" style="background:rgba(16,185,129,0.2); color:#34d399; font-size:0.62rem; padding:1px 5px; font-weight:700;">PICK #${idx + 1}</span>`
+        : isPick1
+        ? `<span class="badge" style="background:rgba(59,130,246,0.2); color:#60a5fa; font-size:0.62rem; padding:1px 5px; font-weight:700;">PICK #1 · UNMASKED</span>`
+        : `<span class="badge" style="background:rgba(245,158,11,0.2); color:#fbbf24; font-size:0.62rem; padding:1px 5px; font-weight:700;">🔒 PICK #${idx + 1} · VIP LOCKED</span>`;
+
+      const triggerDisp = isPickUnmasked
+        ? `<span class="mono" style="color:#60a5fa; font-weight:700;">$${entryPrice.toFixed(2)}</span>`
+        : `<span class="doc-blur-lock blurred-cell mono" style="color:#60a5fa; font-weight:700; user-select:none;">$${entryPrice.toFixed(2)}</span>`;
+
+      const stopDisp = isPickUnmasked
+        ? `<span class="mono" style="color:var(--fin-down); font-weight:700;">$${stopPrice.toFixed(2)}</span>`
+        : `<span class="doc-blur-lock blurred-cell mono" style="color:var(--fin-down); font-weight:700; user-select:none;">$${stopPrice.toFixed(2)}</span>`;
+
+      return `
+        <div class="doc-vip-pick-row" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; padding:8px 10px; background:rgba(9,13,22,0.7); border:1px solid rgba(255,255,255,0.06); border-radius:4px; margin-bottom:6px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            ${badgeHtml}
+            ${tickerHtml}
+            <span style="font-size:0.72rem; color:var(--muted);">${sector}</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px; font-size:0.72rem;">
+            <span class="mono" style="color:#34d399; font-weight:700;">PW-RSI ${score}</span>
+            <span class="mono" style="color:#94a3b8;">${volSurge.toFixed(2)}x Vol</span>
+            <span class="mono" style="color:var(--muted);">TRG ${triggerDisp}</span>
+            <span class="mono" style="color:var(--muted);">STP ${stopDisp}</span>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+
+  const headerBadge = isPro
+    ? `<span class="badge" style="background:rgba(16,185,129,0.2); color:#34d399; font-size:0.65rem; font-weight:800; padding:2px 8px; border:1px solid rgba(16,185,129,0.4);">👑 PRO VIP ACTIVE</span>`
+    : `<span class="badge" style="background:rgba(245,158,11,0.2); color:#fbbf24; font-size:0.65rem; font-weight:800; padding:2px 8px; border:1px solid rgba(245,158,11,0.4);">PRO VIP EXCLUSIVE</span>`;
+
+  const checkoutButtonsHtml = !isPro
+    ? `
+      <div class="doc-vip-action-bar" style="margin-top:12px; display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/bad98d00-7175-41f6-9d58-eeb2471d0da4?embed=1"
+           class="btn btn-primary lemonsqueezy-button"
+           id="btnDocUnlockMonthly"
+           style="flex:1; min-width:180px; justify-content:center; padding:9px 12px; font-weight:800; font-size:0.78rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+          ⚡ Monthly VIP ($29/mo)
+        </a>
+        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/00c9f6e1-c8be-42a4-b5a5-e05af1a41ed9?embed=1"
+           class="btn lemonsqueezy-button"
+           id="btnDocUnlockLifetime"
+           style="flex:1; min-width:180px; justify-content:center; padding:9px 12px; font-weight:800; font-size:0.78rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color:#000; border:none;">
+          💎 Lifetime VIP ($199 · SAVE 43%)
+        </a>
+      </div>
+      <div class="doc-compliance-notice" style="margin-top:8px; font-size:0.66rem; color:var(--muted); text-align:center; font-family:var(--font-mono); line-height:1.4;">
+        🔒 Lemon Squeezy Store #296100 Live · PCI-DSS Encrypted · 즉시 영수증 및 라이선스키 발급
+      </div>
+    `
+    : `
+      <div class="doc-vip-active-banner" style="margin-top:10px; padding:8px 12px; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:4px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <span class="mono" style="font-size:0.72rem; color:#34d399; font-weight:700;">
+          👑 PRO VIP ACTIVE · All 72 Institutional Breakout Signals Unlocked
+        </span>
+        <a href="#pro-vault" class="btn btn-sm" style="padding:3px 8px; font-size:0.68rem; border-color:rgba(16,185,129,0.4); color:#34d399;">
+          Open Pro Vault →
+        </a>
+      </div>
+    `;
+
+  return `
+    <div id="docVipIgnitionPreviewCard" class="doc-vip-preview-card" style="margin-top:14px; padding:12px; background:#070b14; border:1px solid rgba(245,158,11,0.25); border-radius:4px; box-shadow:0 4px 16px rgba(0,0,0,0.4);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span style="font-size:0.85rem;">🔒</span>
+          <span class="mono" style="font-size:0.74rem; font-weight:800; color:#fbbf24; letter-spacing:0.03em;">
+            기관 매집 돌파 시그널 TOP 3 블러 프리뷰 (REALLOCATION TARGETS)
+          </span>
+        </div>
+        ${headerBadge}
+      </div>
+      <p style="font-size:0.72rem; color:var(--muted); margin-bottom:10px; line-height:1.4;">
+        Exit capital from dead-money or stopped-out positions and immediately rotate into high-conviction right-side ignition breakouts (PW-RSI &ge; 75, 10D Volume Surge &ge; 1.40x).
+      </p>
+      <div class="doc-vip-picks-list">
+        ${rowsHtml}
+      </div>
+      ${checkoutButtonsHtml}
+    </div>
+  `;
+}
+function formatDoctorResult(result, state = null) {
   let badgeColor = "var(--fin-up)";
   let borderLeftColor = "var(--fin-up)";
 
@@ -1825,7 +2472,7 @@ function formatDoctorResult(result) {
   const currStr = currVal > 0 ? `$${currVal.toFixed(2)}` : "$0.00";
   const entryStr = entryVal > 0 ? `$${entryVal.toFixed(2)}` : "$0.00";
 
-  return `
+  const baseHtml = `
     <div style="border-left: 3px solid ${borderLeftColor}; padding-left: 10px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
         <span class="mono" style="font-weight:800; font-size:0.84rem; color:${badgeColor};">
@@ -1850,7 +2497,346 @@ function formatDoctorResult(result) {
       </div>
     </div>
   `;
+
+  const previewHtml = state ? renderDoctorVipUnlockPreview(state) : "";
+  return baseHtml + previewHtml;
 }
+function renderPortfolioDoctorForm(state) {
+  const isPro = Boolean(state && state.isProUnlocked);
+  const defaultPositions = (state && state.portfolioPositions && state.portfolioPositions.length > 0)
+    ? state.portfolioPositions
+    : [
+        { ticker: "CELH", entry_price: 28.5, shares: 100, days_held: 35, current_price: 27.93 },
+        { ticker: "CCL", entry_price: 19.2, shares: 200, days_held: 25, current_price: 21.4 },
+        { ticker: "TSLA", entry_price: 215.0, shares: 50, days_held: 45, current_price: 228.0 },
+        { ticker: "UPST", entry_price: 38.0, shares: 150, days_held: 20, current_price: 44.5 },
+      ];
+
+  const totalCap = Number((state && state.proPortfolioUsd) || 50000);
+  const outputHtml = (state && state.portfolioDocResult)
+    ? formatPortfolioDoctorResult(state.portfolioDocResult, state)
+    : `<div style="color:var(--muted); font-size:0.78rem; padding:12px 14px; background:#05080f; border-radius:4px; border:1px solid var(--border); border-left:3px solid var(--fin-blue); line-height:1.5;">
+        Enter up to 10 equity positions and click <b>Run VIP Portfolio Diagnostic</b> to evaluate aggregate health score, Rule 1 -9% stop loss risks, 3 macro volatility stress scenarios, and 1.35% risk parity rebalancing directives.
+      </div>`;
+
+  return `
+    <div style="background:#090d16; border:1px solid var(--border); border-top:2px solid #6366f1; border-radius:4px; padding:18px; margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+        <div>
+          <div style="font-size:0.7rem; font-family:var(--font-mono); font-weight:700; color:#818cf8; letter-spacing:0.05em; text-transform:uppercase;">
+            👑 PRO VIP EXCLUSIVE · MULTI-POSITION PORTFOLIO DOCTOR 2.0
+          </div>
+          <h3 style="font-size:1.05rem; font-weight:800; margin:4px 0; color:#ffffff;">
+            Multi-Asset Health Score, 3-Scenario Stress Testing &amp; 1.35% Risk Parity Rebalancer
+          </h3>
+          <p style="font-size:0.78rem; color:var(--muted); margin:0; line-height:1.5;">
+            Audit up to 10 positions simultaneously against Rule 1 (-9% Stop), Rule 2 (55D Time Stop), and Rule 3 (+100% TP1). Volatility stress-test against Semiconductor Fear Shocks and simulate capital reallocation into today's Top 3 Ignition Setups.
+          </p>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <label class="mono" style="font-size:0.7rem; color:var(--muted);">TOTAL CAPITAL ($ USD):</label>
+          <input type="number" id="portTotalCapital" value="${totalCap}" step="5000" min="1000" style="width:110px; padding:5px 8px; background:#05080f; border:1px solid var(--border); color:#fff; border-radius:3px; font-family:var(--font-mono); font-weight:700;" />
+        </div>
+      </div>
+
+      <!-- 1-Click Preset Buttons Bar -->
+      <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center; margin-bottom:12px; background:rgba(13,20,36,0.6); border:1px solid rgba(255,255,255,0.06); padding:8px 10px; border-radius:4px;">
+        <span class="mono" style="font-size:0.68rem; color:var(--muted); font-weight:700;">1-CLICK PRESETS:</span>
+        <button type="button" class="btn btn-sm btn-quick-port-preset" id="btnLoadPresetIgnition" style="padding:3px 8px; font-size:0.72rem; border-color:rgba(16,185,129,0.4); color:#34d399;">
+          🚀 Load Current Ignition Leaders (CELH, CCL, TSLA, UPST)
+        </button>
+        <button type="button" class="btn btn-sm btn-quick-port-preset" id="btnLoadPresetTech" style="padding:3px 8px; font-size:0.72rem; border-color:rgba(99,102,241,0.4); color:#a5b4fc;">
+          💻 Load Sample Tech Basket (NVDA, AMD, PLTR, CRWD)
+        </button>
+        <button type="button" class="btn btn-sm" id="btnClearPortRows" style="padding:3px 8px; font-size:0.72rem; border-color:rgba(239,68,68,0.4); color:#fca5a5;">
+          🗑️ Clear All
+        </button>
+      </div>
+
+      <!-- Multi-Position Input Grid Table -->
+      <div class="table-responsive-scroll" style="margin-bottom:12px;">
+        <table class="stock-table" id="portDoctorInputTable" style="font-size:0.78rem; width:100%;">
+          <thead>
+            <tr>
+              <th style="min-width:90px;">US Ticker</th>
+              <th style="min-width:110px;">Cost Basis ($)</th>
+              <th style="min-width:90px;">Shares</th>
+              <th style="min-width:90px;">Days Held</th>
+              <th style="min-width:110px;">Current Price ($ Override)</th>
+              <th style="width:40px; text-align:center;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="portDoctorTableBody">
+            ${defaultPositions
+              .map(
+                (p, idx) => `
+              <tr class="port-input-row" data-row-idx="${idx}">
+                <td>
+                  <input type="text" class="port-row-ticker" value="${p.ticker || ""}" placeholder="e.g. CELH" style="width:100%; padding:5px 7px; background:#05080f; border:1px solid var(--border); color:#fff; border-radius:3px; font-family:var(--font-mono); font-weight:700; text-transform:uppercase;" />
+                </td>
+                <td>
+                  <input type="number" step="0.01" class="port-row-entry" value="${Number(p.entry_price || 0).toFixed(2)}" placeholder="0.00" style="width:100%; padding:5px 7px; background:#05080f; border:1px solid var(--border); color:#fff; border-radius:3px; font-family:var(--font-mono);" />
+                </td>
+                <td>
+                  <input type="number" step="1" min="1" class="port-row-shares" value="${Number(p.shares || 1)}" placeholder="1" style="width:100%; padding:5px 7px; background:#05080f; border:1px solid var(--border); color:#fff; border-radius:3px; font-family:var(--font-mono);" />
+                </td>
+                <td>
+                  <input type="number" step="1" min="0" class="port-row-days" value="${Number(p.days_held || 0)}" placeholder="0" style="width:100%; padding:5px 7px; background:#05080f; border:1px solid var(--border); color:#fff; border-radius:3px; font-family:var(--font-mono);" />
+                </td>
+                <td>
+                  <input type="number" step="0.01" class="port-row-cur" value="${p.current_price !== undefined && p.current_price !== null && Number(p.current_price) > 0 ? Number(p.current_price).toFixed(2) : ""}" placeholder="Auto (Latest Close)" style="width:100%; padding:5px 7px; background:#05080f; border:1px solid var(--border); color:#fff; border-radius:3px; font-family:var(--font-mono);" />
+                </td>
+                <td style="text-align:center;">
+                  <button type="button" class="btn btn-sm btn-remove-port-row" data-row-idx="${idx}" style="padding:3px 7px; color:#f87171; border-color:rgba(239,68,68,0.3);" title="Remove position">✕</button>
+                </td>
+              </tr>
+            `
+              )
+              .join("")}
+          </tbody>
+        </table>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
+        <button type="button" class="btn btn-sm" id="btnAddPortRow" style="padding:5px 12px; font-size:0.75rem; border-color:rgba(99,102,241,0.45); color:#a5b4fc;">
+          ➕ Add Position Row (Up to 10)
+        </button>
+        <span class="mono" style="font-size:0.7rem; color:var(--muted);" id="portRowCountLabel">
+          Active Positions: ${(defaultPositions || []).length} / 10
+        </span>
+      </div>
+
+      <div>
+        <button class="btn btn-primary" id="btnRunPortfolioDoctor" style="width:100%; justify-content:center; padding:10px; font-weight:800; background:linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%); border:none;">
+          🩺 Run VIP Portfolio Diagnostic &amp; Macro Stress Test
+        </button>
+      </div>
+
+      <div id="portfolioDocOutput" style="margin-top:14px;">
+        ${outputHtml}
+      </div>
+    </div>
+  `;
+}
+function formatPortfolioDoctorResult(result, state) {
+  if (!result) return "";
+
+  const score = Number(result.health_score ?? 100);
+  const scoreColor = score >= 80 ? "#10b981" : score >= 50 ? "#fbbf24" : "#ef4444";
+  const scoreLabel = score >= 80 ? "HEALTHY (LOW RISK)" : score >= 50 ? "MODERATE RISK (CAUTION)" : "CRITICAL RISK (IMMEDIATE ACTION)";
+  const scoreDesc = score >= 80
+    ? "All positions follow mechanical stop-loss rules. Minimal capital at risk."
+    : score >= 50
+    ? "Dead money holding or stop-loss proximity detected. Rebalancing advised."
+    : "Rule 1 -9% Hard Stop breached. Immediate liquidation required to preserve principal.";
+
+  const totalInvested = Number(result.total_invested || 0);
+  const totalPnl = Number(result.total_unrealized_pnl || 0);
+  const totalPnlPct = Number(result.total_unrealized_pnl_pct || 0);
+  const capitalAtRisk = Number(result.capital_at_risk || 0);
+
+  const pnlSign = totalPnl >= 0 ? "+" : "";
+  const pnlColor = totalPnl >= 0 ? "var(--fin-up)" : "var(--fin-down)";
+
+  const items = Array.isArray(result.items) ? result.items : [];
+  const scenarios = Array.isArray(result.stress_scenarios) ? result.stress_scenarios : [];
+  const rebalance = Array.isArray(result.rebalance_recommendations) ? result.rebalance_recommendations : [];
+
+  return `
+    <div style="background:#05080f; border:1px solid var(--border); border-radius:4px; padding:16px;">
+      <!-- Section 1: Health Score Dial & Aggregate Portfolio KPIs -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; margin-bottom:16px; border-bottom:1px solid var(--border); padding-bottom:14px;">
+        <!-- Gauge Card -->
+        <div style="background:#090d16; border:1px solid var(--border); border-left:4px solid ${scoreColor}; border-radius:4px; padding:12px; display:flex; align-items:center; gap:14px;">
+          <div style="width:64px; height:64px; border-radius:50%; border:4px solid ${scoreColor}; display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0;">
+            <span class="mono" style="font-size:1.25rem; font-weight:800; color:${scoreColor}; line-height:1;">${score}</span>
+            <span class="mono" style="font-size:0.55rem; color:var(--muted); text-transform:uppercase;">/ 100</span>
+          </div>
+          <div>
+            <div class="mono" style="font-size:0.68rem; color:${scoreColor}; font-weight:800; letter-spacing:0.04em;">${scoreLabel}</div>
+            <div style="font-size:0.86rem; font-weight:800; color:#ffffff; margin:2px 0;">Portfolio Health Score</div>
+            <div style="font-size:0.72rem; color:var(--muted); line-height:1.35;">${scoreDesc}</div>
+          </div>
+        </div>
+
+        <!-- Invested & Unrealized PnL -->
+        <div style="background:#090d16; border:1px solid var(--border); border-radius:4px; padding:12px; display:flex; flex-direction:column; justify-content:center;">
+          <div class="mono" style="font-size:0.68rem; color:var(--muted); text-transform:uppercase;">Total Invested Capital</div>
+          <div class="mono" style="font-size:1.15rem; font-weight:800; color:#ffffff; margin:3px 0;">
+            $${totalInvested.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          </div>
+          <div class="mono" style="font-size:0.76rem; color:${pnlColor}; font-weight:700;">
+            P&amp;L: ${pnlSign}$${totalPnl.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${pnlSign}${totalPnlPct.toFixed(2)}%)
+          </div>
+        </div>
+
+        <!-- Capital at Risk against Rule 1 Stop Loss -->
+        <div style="background:#090d16; border:1px solid var(--border); border-radius:4px; padding:12px; display:flex; flex-direction:column; justify-content:center;">
+          <div class="mono" style="font-size:0.68rem; color:var(--muted); text-transform:uppercase;">Rule 1 Capital at Risk (-9% Stop)</div>
+          <div class="mono" style="font-size:1.15rem; font-weight:800; color:#fbbf24; margin:3px 0;">
+            $${capitalAtRisk.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          </div>
+          <div style="font-size:0.72rem; color:var(--muted);">
+            Max account drawdown if all positions hit their hard stop floor.
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Asset Diagnostic Table -->
+      <div style="margin-bottom:16px;">
+        <div class="mono" style="font-size:0.7rem; color:var(--fin-up); font-weight:800; letter-spacing:0.04em; margin-bottom:6px; text-transform:uppercase;">
+          📋 INDIVIDUAL ASSET DIAGNOSTIC BREAKDOWN (${items.length} POSITIONS)
+        </div>
+        <div class="table-responsive-scroll">
+          <table class="stock-table" style="font-size:0.76rem; width:100%;">
+            <thead>
+              <tr>
+                <th>Ticker</th>
+                <th>Return %</th>
+                <th>Entry Price</th>
+                <th>Latest Close</th>
+                <th>-9% Hard Stop</th>
+                <th>Status Rule</th>
+                <th>Actionable Tactical Directive</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${items
+                .map((d) => {
+                  let badgeBg = "rgba(16,185,129,0.18)";
+                  let badgeColor = "#34d399";
+                  let badgeText = "🟢 HOLD (Rule 4)";
+                  if (d.status_code === "HARD_STOP") {
+                    badgeBg = "rgba(239,68,68,0.22)";
+                    badgeColor = "#fca5a5";
+                    badgeText = "🛑 HARD STOP (Rule 1)";
+                  } else if (d.status_code === "TIME_STOP") {
+                    badgeBg = "rgba(251,191,36,0.22)";
+                    badgeColor = "#fde047";
+                    badgeText = "⏳ 55D TIME STOP (Rule 2)";
+                  } else if (d.status_code === "TP1_HARVEST") {
+                    badgeBg = "rgba(16,185,129,0.25)";
+                    badgeColor = "#6ee7b7";
+                    badgeText = "🎯 2X TP1 HARVEST (Rule 3)";
+                  }
+
+                  const retVal = Number(d.current_return_pct ?? 0);
+                  const retSign = retVal >= 0 ? "+" : "";
+                  const retCol = retVal >= 0 ? "var(--fin-up)" : "var(--fin-down)";
+
+                  return `
+                    <tr>
+                      <td class="mono" style="font-weight:800; color:#ffffff;">$${d.ticker || ""}</td>
+                      <td class="mono" style="font-weight:700; color:${retCol};">${retSign}${retVal.toFixed(2)}%</td>
+                      <td class="mono">$${Number(d.entry_price || 0).toFixed(2)}</td>
+                      <td class="mono">$${Number(d.current_price || 0).toFixed(2)}</td>
+                      <td class="mono" style="color:var(--fin-down); font-weight:700;">$${Number(d.hard_stop_price || 0).toFixed(2)}</td>
+                      <td>
+                        <span class="badge" style="background:${badgeBg}; color:${badgeColor}; font-weight:700; font-size:0.68rem; padding:2px 6px;">
+                          ${badgeText}
+                        </span>
+                      </td>
+                      <td style="color:#cbd5e1; font-size:0.74rem;">${d.directive || ""}</td>
+                    </tr>
+                  `;
+                })
+                .join("")}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Section 3: Macro Volatility Regime Stress-Testing Cards -->
+      <div style="margin-bottom:16px;">
+        <div class="mono" style="font-size:0.7rem; color:#60a5fa; font-weight:800; letter-spacing:0.04em; margin-bottom:8px; text-transform:uppercase;">
+          ⚡ MACRO VOLATILITY REGIME STRESS-TESTING (3 MARKET SCENARIOS)
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:10px;">
+          ${scenarios
+            .map((s) => {
+              const pnlVal = Number(s.projected_pnl_pct || 0);
+              const pnlSignS = pnlVal >= 0 ? "+" : "";
+              const pnlCol = pnlVal >= 0 ? "var(--fin-up)" : "var(--fin-down)";
+              const impVal = Number(s.impact_usd || 0);
+              const impSign = impVal >= 0 ? "+$" : "-$";
+
+              let verdictBg = "rgba(16,185,129,0.18)";
+              let verdictCol = "#34d399";
+              if (s.verdict === "Vulnerable") {
+                verdictBg = "rgba(239,68,68,0.2)";
+                verdictCol = "#fca5a5";
+              } else if (s.verdict === "Moderate Risk" || s.verdict === "Neutral") {
+                verdictBg = "rgba(251,191,36,0.18)";
+                verdictCol = "#fde047";
+              }
+
+              return `
+                <div style="background:#090d16; border:1px solid var(--border); border-radius:4px; padding:12px; display:flex; flex-direction:column; justify-content:space-between;">
+                  <div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                      <span class="mono" style="font-size:0.74rem; font-weight:800; color:#ffffff;">${s.name}</span>
+                      <span class="badge" style="background:${verdictBg}; color:${verdictCol}; font-size:0.62rem; padding:2px 5px;">
+                        ${s.verdict}
+                      </span>
+                    </div>
+                  </div>
+                  <div style="margin-top:8px; padding-top:6px; border-top:1px solid rgba(255,255,255,0.06); display:flex; justify-content:space-between; align-items:center;">
+                    <span class="mono" style="font-size:0.72rem; color:var(--muted);">Projected P&amp;L:</span>
+                    <span class="mono" style="font-size:0.88rem; font-weight:800; color:${pnlCol};">
+                      ${pnlSignS}${pnlVal.toFixed(2)}% (${impSign}${Math.abs(impVal).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })})
+                    </span>
+                  </div>
+                </div>
+              `;
+            })
+            .join("")}
+        </div>
+      </div>
+
+      <!-- Section 4: Automated Rebalancing Allocation Breakdown -->
+      <div>
+        <div class="mono" style="font-size:0.7rem; color:#34d399; font-weight:800; letter-spacing:0.04em; margin-bottom:8px; text-transform:uppercase;">
+          🔄 AUTOMATED 1.35% RISK PARITY REBALANCING DIRECTIVES
+        </div>
+        <div style="background:#090d16; border:1px solid var(--border); border-radius:4px; padding:12px;">
+          ${
+            rebalance.length === 0
+              ? `<div style="color:var(--muted); font-size:0.75rem;">No rebalancing required at this time.</div>`
+              : rebalance
+                  .map((r) => {
+                    const isHarvest = r.action === "HARVEST";
+                    const isRealloc = r.action === "REALLOCATE";
+                    const actColor = isHarvest ? "#f87171" : isRealloc ? "#34d399" : "#60a5fa";
+                    const actBadge = isHarvest ? "🚨 HARVEST CAPITAL" : isRealloc ? "🚀 REALLOCATE" : "✅ MAINTAIN";
+
+                    return `
+                      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span class="badge" style="background:rgba(255,255,255,0.06); color:${actColor}; font-weight:800; font-size:0.65rem;">
+                            ${actBadge}
+                          </span>
+                          <span class="mono" style="font-weight:800; font-size:0.8rem; color:#ffffff;">
+                            ${isHarvest ? `$${r.ticker}` : isRealloc ? `→ $${r.target_ticker}` : "Portfolio"}
+                          </span>
+                          <span style="font-size:0.74rem; color:var(--muted);">
+                            ${r.reason || ""} ${r.setup_type ? `[${r.setup_type}]` : ""}
+                          </span>
+                        </div>
+                        <div class="mono" style="font-weight:800; font-size:0.82rem; color:${actColor};">
+                          $${Number(r.amount_usd || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          ${r.allocation_pct ? `<span style="font-size:0.7rem; color:var(--muted); font-weight:500;"> (${Number(r.allocation_pct).toFixed(1)}%)</span>` : ""}
+                        </div>
+                      </div>
+                    `;
+                  })
+                  .join("")
+          }
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 
 
 // --- src/components/Header.js ---
@@ -2561,54 +3547,96 @@ function renderProofCard(state) {
 
 // --- src/components/StockTable.js ---
 function renderScreenerControls(state) {
-  const t = state.t;
-  const f = state.zoneFilter;
+  const t = state.t || {};
+  const f = state.zoneFilter || "ALL";
+  const secFilter = state.sectorFilter || "ALL";
   const allStocks = (state.stocks || []).filter((s) => !String(s.ticker).includes("."));
   const cAll = allStocks.length;
   const cIgn = allStocks.filter((s) => s.zone_code === "IGNITION_ZONE").length;
   const cWatch = allStocks.filter((s) => s.zone_code === "WASHOUT_WATCH").length;
   const cKnife = allStocks.filter((s) => s.zone_code === "LEFT_SIDE_KNIFE").length;
   const cTrap = allStocks.filter((s) => s.zone_code === "VALUE_TRAP_FILTERED").length;
+  const vipList = state.vipWatchlist || [];
+  const cWatchlist = allStocks.filter((s) => vipList.includes(s.ticker)).length;
+
+  const sectorsList = [
+    "AI & Semiconductors",
+    "Cloud & Enterprise Software",
+    "Internet & Digital Media",
+    "Fintech & Digital Finance",
+    "Consumer & Retail",
+    "Mobility, EV & CleanTech",
+    "Healthcare & Biotechnology",
+    "Energy & Industrials",
+  ];
 
   return `
     <div class="screener-header-bar">
-      <div class="controls">
-        <div class="search-wrap">
-          <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input
-            type="text"
-            class="search-box"
-            id="searchInput"
-            placeholder="${t.searchPlaceholder}"
-            value="${state.searchQuery || ""}"
-          />
+      <div class="controls" style="display:flex; flex-direction:column; gap:8px; width:100%;">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; width:100%;">
+          <div class="search-wrap" style="flex:1; min-width:260px;">
+            <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input
+              type="text"
+              class="search-box"
+              id="searchInput"
+              placeholder="${t.searchPlaceholder || "Filter by US Ticker, Company, or Sector..."}"
+              value="${state.searchQuery || ""}"
+            />
+          </div>
+
+          <!-- Sector Regime Matrix Quick Filter & Watchlist CSV Export -->
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <div style="display:flex; align-items:center; gap:5px;">
+              <label for="sectorFilterSelect" class="mono" style="font-size:0.68rem; color:var(--muted); font-weight:700;">SECTOR:</label>
+              <select id="sectorFilterSelect" class="search-box" style="padding:5px 8px; font-size:0.72rem; background:#05080f; border:1px solid var(--border); color:#fff; border-radius:3px; font-family:var(--font-sans);">
+                <option value="ALL" ${secFilter === "ALL" ? "selected" : ""}>All 8 Sectors (${cAll})</option>
+                ${sectorsList
+                  .map((sec) => {
+                    const cnt = allStocks.filter((s) => (SECTOR_REGIME_MAP && SECTOR_REGIME_MAP[s.sector] ? SECTOR_REGIME_MAP[s.sector] : s.sector) === sec).length;
+                    return `<option value="${sec}" ${secFilter === sec ? "selected" : ""}>${sec} (${cnt})</option>`;
+                  })
+                  .join("")}
+              </select>
+            </div>
+
+            <button type="button" class="btn btn-sm" id="btnExportVipWatchlistCsv" style="background:rgba(251,191,36,0.12); border-color:rgba(251,191,36,0.4); color:#fbbf24; font-weight:700; padding:5px 9px; font-size:0.72rem;" title="Download CSV of starred VIP Watchlist tickers">
+              ⭐ Export Watchlist CSV (${cWatchlist})
+            </button>
+          </div>
         </div>
-        <div class="filter-tabs">
+
+        <div class="filter-tabs" style="flex-wrap:wrap;">
           <button class="filter-tab ${f === "ALL" ? "active" : ""}" data-zone="ALL">
-            <span>${t.filterAll}</span>
+            <span>${t.filterAll || "All US Equities"}</span>
             <span class="tab-count">${cAll}</span>
           </button>
           <button class="filter-tab ${f === "IGNITION_ZONE" ? "active" : ""}" data-zone="IGNITION_ZONE">
             <span style="width:6px; height:6px; border-radius:50%; background:var(--fin-up); display:inline-block;"></span>
-            <span>${t.filterIgnition}</span>
+            <span>${t.filterIgnition || "Right-Side Ignition"}</span>
             <span class="tab-count">${cIgn}</span>
           </button>
           <button class="filter-tab ${f === "WASHOUT_WATCH" ? "active" : ""}" data-zone="WASHOUT_WATCH">
             <span style="width:6px; height:6px; border-radius:50%; background:var(--fin-amber); display:inline-block;"></span>
-            <span>${t.filterWatch}</span>
+            <span>${t.filterWatch || "Washout Base Watch"}</span>
             <span class="tab-count">${cWatch}</span>
           </button>
           <button class="filter-tab ${f === "LEFT_SIDE_KNIFE" ? "active" : ""}" data-zone="LEFT_SIDE_KNIFE">
             <span style="width:6px; height:6px; border-radius:50%; background:var(--fin-down); display:inline-block;"></span>
-            <span>${t.filterKnife}</span>
+            <span>${t.filterKnife || "Downtrend / Avoid"}</span>
             <span class="tab-count">${cKnife}</span>
           </button>
           <button class="filter-tab ${f === "VALUE_TRAP_FILTERED" ? "active" : ""}" data-zone="VALUE_TRAP_FILTERED">
-            <span>${t.filterTrap}</span>
+            <span>${t.filterTrap || "Value Trap Excluded"}</span>
             <span class="tab-count">${cTrap}</span>
+          </button>
+          <button class="filter-tab ${f === "VIP_WATCHLIST" ? "active" : ""}" data-zone="VIP_WATCHLIST" style="border-color:rgba(251,191,36,0.35);">
+            <span style="color:#fbbf24; font-size:0.8rem;">⭐</span>
+            <span style="color:#fef08a;">VIP Watchlist</span>
+            <span class="tab-count" style="background:rgba(251,191,36,0.2); color:#fef08a;">${cWatchlist}</span>
           </button>
         </div>
       </div>
@@ -2775,8 +3803,20 @@ function renderStockRows(state) {
       const saUrl = `https://seekingalpha.com/symbol/${encodeURIComponent(s.ticker)}/earnings?source=${saSource}`;
       const brokerUrl = `${rawBrokerUrl}${brokerSep}symbol=${encodeURIComponent(s.ticker)}`;
 
+      const vipWatchlist = state.vipWatchlist || [];
+      const isStarred = vipWatchlist.includes(s.ticker);
+
       const tickerCellHtml = `<div>
-        <div style="display:flex; align-items:center; gap:7px;">
+        <div style="display:flex; align-items:center; gap:6px;">
+          <button
+            type="button"
+            class="btn-watchlist-star"
+            data-ticker="${s.ticker}"
+            title="${isStarred ? "Remove from VIP Watchlist" : "Add to VIP Watchlist"}"
+            style="background:none; border:none; cursor:pointer; font-size:0.92rem; padding:0; line-height:1; vertical-align:middle; color:${isStarred ? "#fbbf24" : "var(--muted)"}; display:inline-flex; align-items:center;"
+          >
+            ${isStarred ? "⭐" : "☆"}
+          </button>
           <span class="mono" style="font-weight:800; font-size:0.9rem; color:#ffffff;">${s.ticker}</span>
           <span style="font-size:0.62rem; font-family:var(--font-mono); padding:1px 4px; background:#141d2f; border:1px solid #24324d; color:#93c5fd; border-radius:2px;">US</span>
           ${
@@ -2885,7 +3925,7 @@ function renderStockRows(state) {
 
 // --- src/components/ProVault.js ---
 function renderProVault(state) {
-  const t = state.t;
+  const t = state.t || {};
   const isPro = state.isProUnlocked;
   const stocks = state.stocks || [];
   const topIgnitions = stocks
@@ -2895,6 +3935,33 @@ function renderProVault(state) {
   const perSlotUsd = Math.round(proCapUsd * 0.15); // 15% slot -> 9% stop = 1.35% total account risk
   const celh = stocks.find((s) => s.ticker === "CELH");
   const mbly = stocks.find((s) => s.ticker === "MBLY");
+
+  const allUsStocks = stocks.filter((s) => !String(s.ticker).includes("."));
+  const sectorGroups = {};
+  const standardSectors = [
+    "AI & Semiconductors",
+    "Cloud & Enterprise Software",
+    "Internet & Digital Media",
+    "Fintech & Digital Finance",
+    "Consumer & Retail",
+    "Mobility, EV & CleanTech",
+    "Healthcare & Biotechnology",
+    "Energy & Industrials",
+  ];
+  for (const s of allUsStocks) {
+    const secName = (SECTOR_REGIME_MAP && SECTOR_REGIME_MAP[s.sector]) || s.sector || "Other";
+    if (!sectorGroups[secName]) sectorGroups[secName] = [];
+    sectorGroups[secName].push(s);
+  }
+  const sectorMatrixItems = standardSectors.map((secName) => {
+    const sList = sectorGroups[secName] || [];
+    const count = sList.length;
+    const avgScore = count > 0 ? Math.round((sList.reduce((acc, x) => acc + Number(x.score || 0), 0) / count) * 10) / 10 : 0.0;
+    const ignCount = sList.filter((x) => x.zone_code === "IGNITION_ZONE").length;
+    const trend = avgScore >= 50.0 ? "BULLISH" : avgScore < 40.0 ? "BEARISH" : "NEUTRAL";
+    return { name: secName, count, avg_score: avgScore, momentum_trend: trend, ignition_count: ignCount, tickers: sList.map((x) => x.ticker) };
+  });
+  sectorMatrixItems.sort((a, b) => b.ignition_count - a.ignition_count || b.avg_score - a.avg_score);
 
   const celhClose = celh && celh.close ? Number(celh.close).toFixed(2) : "29.12";
   const celhMa20 = celh && celh.ma20_price ? Number(celh.ma20_price).toFixed(2) : "28.19";
@@ -3059,6 +4126,69 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
                 .join("")}
             </tbody>
           </table>
+        </div>
+      </div>
+
+      <!-- PRO VIP MODULE: MULTI-POSITION PORTFOLIO DOCTOR 2.0 -->
+      <div class="${isPro ? "" : "blur-locked"}">
+        ${renderPortfolioDoctorForm(state)}
+      </div>
+
+      <!-- PRO VIP MODULE: 72-STOCK SECTOR REGIME MATRIX & HEATMAP -->
+      <div class="${isPro ? "" : "blur-locked"}" style="background:#090d16; border:1px solid var(--border); border-top:2px solid #06b6d4; border-radius:4px; padding:16px 18px; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+          <div>
+            <div class="mono" style="font-size:0.7rem; color:#06b6d4; font-weight:800; letter-spacing:0.05em; text-transform:uppercase;">
+              👑 PRO VIP EXCLUSIVE · 72-STOCK SECTOR REGIME MATRIX &amp; ROTATION HEATMAP
+            </div>
+            <h3 style="font-size:1.02rem; font-weight:800; color:#ffffff; margin-top:3px;">
+              Sector Momentum Scores &amp; Ignition Concentration Across 8 Regimes
+            </h3>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-sm" id="btnVaultGoWatchlist" style="background:rgba(251,191,36,0.12); border-color:rgba(251,191,36,0.4); color:#fbbf24; font-weight:700;">
+              ⭐ Filter Screener to VIP Watchlist
+            </button>
+            <button type="button" class="btn btn-sm" id="btnVaultExportWatchlistCsv" style="background:rgba(251,191,36,0.12); border-color:rgba(251,191,36,0.4); color:#fbbf24; font-weight:700;">
+              📥 Export Watchlist CSV
+            </button>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:10px;">
+          ${sectorMatrixItems
+            .map((sec) => {
+              const trendCol = sec.momentum_trend === "BULLISH" ? "var(--fin-up)" : sec.momentum_trend === "BEARISH" ? "var(--fin-down)" : "var(--fin-amber)";
+              const ignBadge = sec.ignition_count > 0 ? `<span class="badge badge-ignition" style="font-size:0.64rem;">${sec.ignition_count} IGNITION</span>` : `<span class="badge" style="background:rgba(255,255,255,0.06); color:var(--muted); font-size:0.64rem;">0 IGNITION</span>`;
+              return `
+                <div style="background:#05080f; border:1px solid var(--border); border-radius:4px; padding:12px; display:flex; flex-direction:column; justify-content:space-between;">
+                  <div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                      <span class="mono" style="font-size:0.78rem; font-weight:800; color:#ffffff;">${sec.name}</span>
+                      ${ignBadge}
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px; margin:6px 0;">
+                      <div class="score-bar" style="flex:1;">
+                        <div class="score-fill" style="width:${sec.avg_score}%; background:${trendCol};"></div>
+                      </div>
+                      <span class="mono" style="font-size:0.8rem; font-weight:800; color:${trendCol};">${sec.avg_score.toFixed(1)}</span>
+                    </div>
+                    <div class="mono" style="font-size:0.7rem; color:var(--muted); margin-bottom:6px;">
+                      Trend: <b style="color:${trendCol};">${sec.momentum_trend}</b> · ${sec.count} US Equities
+                    </div>
+                  </div>
+                  <div style="padding-top:6px; border-top:1px solid rgba(255,255,255,0.05); display:flex; justify-content:space-between; align-items:center;">
+                    <span class="mono" style="font-size:0.66rem; color:var(--text-secondary); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:140px;">
+                      ${sec.tickers.slice(0, 4).join(", ")}${sec.tickers.length > 4 ? "..." : ""}
+                    </span>
+                    <button type="button" class="btn btn-sm btn-filter-sector-card" data-sector="${sec.name}" style="padding:2px 7px; font-size:0.68rem; border-color:rgba(56,189,248,0.4); color:#38bdf8;">
+                      Filter Table ↗
+                    </button>
+                  </div>
+                </div>
+              `;
+            })
+            .join("")}
         </div>
       </div>
 
@@ -4736,6 +5866,16 @@ const state = {
   zoneFilter: initialFilterParam === "ignition" || initialFilterParam === "ignition_zone" ? "IGNITION_ZONE" : initialFilterParam === "washout" ? "WASHOUT_WATCH" : "ALL",
   sortCol: "score",
   sortAsc: false,
+  sectorFilter: "ALL",
+  vipWatchlist: getVipWatchlist(),
+  portfolioPositions: [
+    { ticker: "CELH", entry_price: 28.5, shares: 100, days_held: 35, current_price: 27.93 },
+    { ticker: "CCL", entry_price: 19.2, shares: 200, days_held: 25, current_price: 21.4 },
+    { ticker: "TSLA", entry_price: 215.0, shares: 50, days_held: 45, current_price: 228.0 },
+    { ticker: "UPST", entry_price: 38.0, shares: 150, days_held: 20, current_price: 44.5 },
+  ],
+  portfolioDocResult: null,
+  sectorMatrix: null,
   // SemiFearGreed state
   semiOverview: null,
   semiHistory: null,
@@ -4794,12 +5934,22 @@ function showToast(msg) {
 
 function applyClientFilterAndSort() {
   const q = (state.searchQuery || "").trim().toLowerCase();
-  const z = state.zoneFilter;
+  const z = state.zoneFilter || "ALL";
+  const secFilter = state.sectorFilter || "ALL";
+  const vipList = state.vipWatchlist || [];
 
   let list = state.stocks.filter((s) => {
     // Strictly US-listed equities only
     if (!s.ticker || String(s.ticker).includes(".")) return false;
-    if (z !== "ALL" && s.zone_code !== z) return false;
+    if (z === "VIP_WATCHLIST") {
+      if (!vipList.includes(s.ticker)) return false;
+    } else if (z !== "ALL" && s.zone_code !== z) {
+      return false;
+    }
+    if (secFilter !== "ALL") {
+      const sRegime = (SECTOR_REGIME_MAP && SECTOR_REGIME_MAP[s.sector]) || s.sector || "Other";
+      if (sRegime !== secFilter) return false;
+    }
     if (q) {
       const isLockedRow = !state.isProUnlocked && s.zone_code === "IGNITION_ZONE" && s.ticker !== "CELH";
       const hay = isLockedRow
@@ -5263,26 +6413,16 @@ function bindEvents() {
     }
   });
 
-  document.querySelectorAll(".lemonsqueezy-button").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      const href = btn.getAttribute("href") || "";
-      const isDirectModalBtn = true; // Always open Lemon Squeezy live checkout directly without free trial modal interception
-      if (!isDirectModalBtn) {
-        e.preventDefault();
-        const isLtd = href.includes("00c9f6e1") || href.includes("667aa482") || (btn.id || "").toLowerCase().includes("ltd");
-        openLicenseModal(
-          false,
-          isLtd
-            ? "💎 Selected: Lifetime Pass ($199) — Proceed to Lemon Squeezy Checkout above, or enter your email for an instant 7-Day Pro Founding Pass!"
-            : "🍋 Selected: Pro Monthly ($29/mo) — Proceed to Lemon Squeezy Checkout above, or enter your email for an instant 7-Day Pro Founding Pass!"
-        );
-        return;
-      }
-      if (window.LemonSqueezy && window.LemonSqueezy.Url && typeof window.LemonSqueezy.Url.Open === "function") {
-        e.preventDefault();
-        window.LemonSqueezy.Url.Open(href);
-      }
-    });
+  // Delegated Lemon Squeezy Checkout Overlay Interceptor
+  // Handles both static and dynamically rendered checkout buttons (e.g. inside #docOutput)
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".lemonsqueezy-button");
+    if (!btn) return;
+    const href = btn.getAttribute("href") || "";
+    if (window.LemonSqueezy && window.LemonSqueezy.Url && typeof window.LemonSqueezy.Url.Open === "function") {
+      e.preventDefault();
+      window.LemonSqueezy.Url.Open(href);
+    }
   });
 
   // Admin Login & Config Modal Controls
@@ -5762,7 +6902,7 @@ function bindEvents() {
           days_held: daysHeld,
         });
         state.docLastResult = res;
-        if (outEl) outEl.innerHTML = formatDoctorResult(res);
+        if (outEl) outEl.innerHTML = formatDoctorResult(res, state);
       } catch (e) {
         // Ignore
       }
@@ -5792,11 +6932,236 @@ function bindEvents() {
         });
         state.docLastResult = res;
         if (outEl) {
-          outEl.innerHTML = formatDoctorResult(res);
+          outEl.innerHTML = formatDoctorResult(res, state);
         }
       } catch (err) {
         if (outEl) {
           outEl.innerHTML = `<div style="color:var(--fin-down);">Please enter a valid positive cost basis ($) and non-negative trading days.</div>`;
+        }
+      }
+    });
+  }
+
+  // Sector Regime Matrix Quick Filter Select
+  const sectorFilterSelect = document.getElementById("sectorFilterSelect");
+  if (sectorFilterSelect) {
+    sectorFilterSelect.addEventListener("change", (e) => {
+      state.sectorFilter = e.target.value;
+      applyClientFilterAndSort();
+      renderApp();
+    });
+  }
+
+  // 1-Click VIP Watchlist CSV Export
+  const exportWatchlistCsv = () => {
+    if (!state.isProUnlocked) {
+      openLicenseModal(false, "Save custom VIP watchlists and get breakout alerts with Pro VIP.");
+      return;
+    }
+    const starredList = state.vipWatchlist || [];
+    const starredStocks = (state.stocks || []).filter((s) => starredList.includes(s.ticker));
+    if (!starredStocks.length) {
+      showToast("Your VIP Watchlist is empty. Star tickers using ⭐ to export.");
+      return;
+    }
+    const perSlot = Math.round((state.proPortfolioUsd || 30000) * 0.15);
+    const header = "Rank,Ticker,Company,Sector,PW_RSI_Score,Zone,Close,Entry_Trigger,Stop_Loss_9Pct,Target_2X_TP1,Recommended_Shares_15Pct_Slot\n";
+    const rows = starredStocks.map((s, idx) => {
+      const c = Number(s.close || 0);
+      const trig = Number(s.entry_trigger_price ?? s.ma60_price ?? c).toFixed(2);
+      const stp = Number(s.stop_loss_price ?? c * 0.91).toFixed(2);
+      const tp1 = Number(s.tp1_2x_price ?? c * 2.0).toFixed(2);
+      const sh = c > 0 ? Math.max(1, Math.floor(perSlot / c)) : 0;
+      return `${idx + 1},${s.ticker},"${(s.name_en || s.ticker).replace(/"/g, '""')}",${s.sector || "US Equity"},${s.score},${s.zone_code},${c.toFixed(2)},${trig},${stp},${tp1},${sh}`;
+    });
+    const blob = new Blob([header + rows.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `RightSideAlpha_VIP_Watchlist_${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast(`📥 Exported ${starredStocks.length} Starred Watchlist Tickers (.CSV)`);
+  };
+
+  const btnExportVipWatchlistCsv = document.getElementById("btnExportVipWatchlistCsv");
+  if (btnExportVipWatchlistCsv) {
+    btnExportVipWatchlistCsv.addEventListener("click", exportWatchlistCsv);
+  }
+  const btnVaultExportWatchlistCsv = document.getElementById("btnVaultExportWatchlistCsv");
+  if (btnVaultExportWatchlistCsv) {
+    btnVaultExportWatchlistCsv.addEventListener("click", exportWatchlistCsv);
+  }
+
+  // Filter Table by Sector from ProVault Card
+  document.querySelectorAll(".btn-filter-sector-card").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const sec = btn.getAttribute("data-sector") || "ALL";
+      state.sectorFilter = sec;
+      state.zoneFilter = "ALL";
+      applyClientFilterAndSort();
+      renderApp();
+      const screenerSec = document.querySelector(".screener-panel") || document.getElementById("stockTable");
+      if (screenerSec && typeof screenerSec.scrollIntoView === "function") {
+        screenerSec.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      showToast(`Filtered Screener to: ${sec}`);
+    });
+  });
+
+  // Vault Go to VIP Watchlist Button
+  const btnVaultGoWatchlist = document.getElementById("btnVaultGoWatchlist");
+  if (btnVaultGoWatchlist) {
+    btnVaultGoWatchlist.addEventListener("click", () => {
+      state.zoneFilter = "VIP_WATCHLIST";
+      state.sectorFilter = "ALL";
+      applyClientFilterAndSort();
+      renderApp();
+      const screenerSec = document.querySelector(".screener-panel") || document.getElementById("stockTable");
+      if (screenerSec && typeof screenerSec.scrollIntoView === "function") {
+        screenerSec.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      showToast("Filtered Screener to ⭐ VIP Watchlist");
+    });
+  }
+
+  // Helper: Read Portfolio Doctor 2.0 Positions from DOM
+  const getPortfolioPositionsFromDOM = () => {
+    const rows = document.querySelectorAll(".port-input-row");
+    const positions = [];
+    rows.forEach((row) => {
+      const ticker = (row.querySelector(".port-row-ticker")?.value || "").trim().toUpperCase();
+      const entry_price = parseFloat(row.querySelector(".port-row-entry")?.value || "0");
+      const shares = parseFloat(row.querySelector(".port-row-shares")?.value || "1");
+      const days_held = parseInt(row.querySelector(".port-row-days")?.value || "0", 10);
+      const curVal = row.querySelector(".port-row-cur")?.value;
+      const current_price = curVal !== undefined && curVal !== null && curVal !== "" && Number(curVal) > 0 ? parseFloat(curVal) : null;
+      if (ticker && entry_price > 0) {
+        positions.push({ ticker, entry_price, shares, days_held, current_price });
+      }
+    });
+    return positions;
+  };
+
+  // Add Position Row
+  const btnAddPortRow = document.getElementById("btnAddPortRow");
+  if (btnAddPortRow) {
+    btnAddPortRow.addEventListener("click", () => {
+      const currentPositions = getPortfolioPositionsFromDOM();
+      if (currentPositions.length >= 10) {
+        showToast("Maximum 10 positions allowed in Portfolio Doctor 2.0");
+        return;
+      }
+      currentPositions.push({ ticker: "", entry_price: 25.0, shares: 100, days_held: 15, current_price: null });
+      state.portfolioPositions = currentPositions;
+      renderApp();
+      const newInputs = document.querySelectorAll(".port-row-ticker");
+      if (newInputs.length > 0) newInputs[newInputs.length - 1].focus();
+    });
+  }
+
+  // Remove Position Row
+  document.querySelectorAll(".btn-remove-port-row").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const idx = parseInt(btn.getAttribute("data-row-idx") || "0", 10);
+      const currentPositions = getPortfolioPositionsFromDOM();
+      currentPositions.splice(idx, 1);
+      state.portfolioPositions = currentPositions;
+      renderApp();
+    });
+  });
+
+  // Preset: Load Current Ignition Leaders
+  const btnLoadPresetIgnition = document.getElementById("btnLoadPresetIgnition");
+  if (btnLoadPresetIgnition) {
+    btnLoadPresetIgnition.addEventListener("click", () => {
+      const celh = state.stocks.find((s) => s.ticker === "CELH");
+      const ccl = state.stocks.find((s) => s.ticker === "CCL");
+      const tsla = state.stocks.find((s) => s.ticker === "TSLA");
+      const upst = state.stocks.find((s) => s.ticker === "UPST");
+      state.portfolioPositions = [
+        { ticker: "CELH", entry_price: celh ? Number(celh.close) : 28.5, shares: 100, days_held: 35, current_price: celh ? Number(celh.close) : 27.93 },
+        { ticker: "CCL", entry_price: ccl ? Number(ccl.close) : 19.2, shares: 200, days_held: 25, current_price: ccl ? Number(ccl.close) : 21.4 },
+        { ticker: "TSLA", entry_price: tsla ? Number(tsla.close) : 215.0, shares: 50, days_held: 45, current_price: tsla ? Number(tsla.close) : 228.0 },
+        { ticker: "UPST", entry_price: upst ? Number(upst.close) : 38.0, shares: 150, days_held: 20, current_price: upst ? Number(upst.close) : 44.5 },
+      ];
+      renderApp();
+      showToast("🚀 Loaded Current Ignition Leaders Preset");
+    });
+  }
+
+  // Preset: Load Sample Tech Basket
+  const btnLoadPresetTech = document.getElementById("btnLoadPresetTech");
+  if (btnLoadPresetTech) {
+    btnLoadPresetTech.addEventListener("click", () => {
+      const nvda = state.stocks.find((s) => s.ticker === "NVDA");
+      const amd = state.stocks.find((s) => s.ticker === "AMD");
+      const pltr = state.stocks.find((s) => s.ticker === "PLTR");
+      const crwd = state.stocks.find((s) => s.ticker === "CRWD");
+      state.portfolioPositions = [
+        { ticker: "NVDA", entry_price: nvda ? Number(nvda.close) : 135.0, shares: 75, days_held: 40, current_price: nvda ? Number(nvda.close) : 138.5 },
+        { ticker: "AMD", entry_price: amd ? Number(amd.close) : 155.0, shares: 60, days_held: 60, current_price: amd ? Number(amd.close) : 158.0 },
+        { ticker: "PLTR", entry_price: pltr ? Number(pltr.close) : 42.0, shares: 200, days_held: 30, current_price: pltr ? Number(pltr.close) : 44.2 },
+        { ticker: "CRWD", entry_price: crwd ? Number(crwd.close) : 310.0, shares: 30, days_held: 15, current_price: crwd ? Number(crwd.close) : 322.0 },
+      ];
+      renderApp();
+      showToast("💻 Loaded Sample Tech Basket Preset");
+    });
+  }
+
+  // Clear All Position Rows
+  const btnClearPortRows = document.getElementById("btnClearPortRows");
+  if (btnClearPortRows) {
+    btnClearPortRows.addEventListener("click", () => {
+      state.portfolioPositions = [
+        { ticker: "", entry_price: 0, shares: 100, days_held: 0, current_price: null },
+      ];
+      state.portfolioDocResult = null;
+      renderApp();
+      showToast("Cleared Portfolio Positions");
+    });
+  }
+
+  // Submit VIP Portfolio Diagnostic
+  const btnRunPortfolioDoctor = document.getElementById("btnRunPortfolioDoctor");
+  if (btnRunPortfolioDoctor) {
+    btnRunPortfolioDoctor.addEventListener("click", async () => {
+      if (!state.isProUnlocked) {
+        openLicenseModal(false, "Upgrade to Pro to unlock the Multi-Position Portfolio Doctor 2.0 & Volatility Stress Testing.");
+        return;
+      }
+      const positions = getPortfolioPositionsFromDOM();
+      if (!positions.length) {
+        showToast("Please enter at least 1 valid stock position with ticker and cost basis.");
+        return;
+      }
+      state.portfolioPositions = positions;
+      const totalCap = parseFloat(document.getElementById("portTotalCapital")?.value || "50000") || 50000;
+      state.proPortfolioUsd = totalCap;
+      try {
+        localStorage.setItem("rsa_pro_cap_usd", String(totalCap));
+      } catch (_) {}
+
+      const outEl = document.getElementById("portfolioDocOutput");
+      if (outEl) {
+        outEl.innerHTML = `<div class="mono" style="padding:14px; color:#93c5fd; font-size:0.8rem; background:#05080f; border-radius:4px;">⏳ Running quant health diagnostic & macro stress testing on ${positions.length} positions...</div>`;
+      }
+
+      try {
+        const res = await evaluatePortfolioDoctor({
+          positions: positions,
+          total_capital: totalCap,
+        });
+        state.portfolioDocResult = res;
+        if (outEl) {
+          outEl.innerHTML = formatPortfolioDoctorResult(res, state);
+        }
+        showToast(`🩺 Portfolio Health Score: ${res.health_score}/100`);
+      } catch (err) {
+        if (outEl) {
+          outEl.innerHTML = `<div style="color:var(--fin-down); padding:12px; font-size:0.8rem;">Diagnostic evaluation error. Please ensure all tickers and entry prices are positive.</div>`;
         }
       }
     });
@@ -6201,6 +7566,43 @@ function bindRowEvents() {
           inputEl.value = state.licenseKey || "";
         }
       }
+    });
+  });
+
+  // Watchlist Star Toggles on Screener Table Rows
+  document.querySelectorAll(".btn-watchlist-star").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (!state.isProUnlocked) {
+        const licenseModal = document.getElementById("licenseModal");
+        if (licenseModal) {
+          licenseModal.style.display = "flex";
+          const inputEl = document.getElementById("licenseInput");
+          const msgEl = document.getElementById("licenseMsg");
+          if (inputEl && !inputEl.value.trim()) {
+            inputEl.value = state.licenseKey || "";
+          }
+          if (msgEl) {
+            msgEl.style.color = "#93c5fd";
+            msgEl.textContent = "Save custom VIP watchlists and get breakout alerts with Pro VIP.";
+          }
+        }
+        return;
+      }
+      const ticker = (btn.getAttribute("data-ticker") || "").trim().toUpperCase();
+      if (!ticker) return;
+      const currentList = new Set(state.vipWatchlist || []);
+      if (currentList.has(ticker)) {
+        currentList.delete(ticker);
+        showToast(`Removed $${ticker} from VIP Watchlist`);
+      } else {
+        currentList.add(ticker);
+        showToast(`Added $${ticker} to ⭐ VIP Watchlist`);
+      }
+      state.vipWatchlist = Array.from(currentList);
+      saveVipWatchlist(state.vipWatchlist);
+      applyClientFilterAndSort();
+      renderApp();
     });
   });
 

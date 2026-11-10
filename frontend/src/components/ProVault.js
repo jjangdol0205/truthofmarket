@@ -1,8 +1,8 @@
-import { renderPositionDoctorForm } from "./PositionDoctor.js";
-import { getVipTelegramUrl } from "../services/api.js";
+import { renderPositionDoctorForm, renderPortfolioDoctorForm } from "./PositionDoctor.js";
+import { getVipTelegramUrl, SECTOR_REGIME_MAP } from "../services/api.js";
 
 export function renderProVault(state) {
-  const t = state.t;
+  const t = state.t || {};
   const isPro = state.isProUnlocked;
   const stocks = state.stocks || [];
   const topIgnitions = stocks
@@ -12,6 +12,33 @@ export function renderProVault(state) {
   const perSlotUsd = Math.round(proCapUsd * 0.15); // 15% slot -> 9% stop = 1.35% total account risk
   const celh = stocks.find((s) => s.ticker === "CELH");
   const mbly = stocks.find((s) => s.ticker === "MBLY");
+
+  const allUsStocks = stocks.filter((s) => !String(s.ticker).includes("."));
+  const sectorGroups = {};
+  const standardSectors = [
+    "AI & Semiconductors",
+    "Cloud & Enterprise Software",
+    "Internet & Digital Media",
+    "Fintech & Digital Finance",
+    "Consumer & Retail",
+    "Mobility, EV & CleanTech",
+    "Healthcare & Biotechnology",
+    "Energy & Industrials",
+  ];
+  for (const s of allUsStocks) {
+    const secName = (SECTOR_REGIME_MAP && SECTOR_REGIME_MAP[s.sector]) || s.sector || "Other";
+    if (!sectorGroups[secName]) sectorGroups[secName] = [];
+    sectorGroups[secName].push(s);
+  }
+  const sectorMatrixItems = standardSectors.map((secName) => {
+    const sList = sectorGroups[secName] || [];
+    const count = sList.length;
+    const avgScore = count > 0 ? Math.round((sList.reduce((acc, x) => acc + Number(x.score || 0), 0) / count) * 10) / 10 : 0.0;
+    const ignCount = sList.filter((x) => x.zone_code === "IGNITION_ZONE").length;
+    const trend = avgScore >= 50.0 ? "BULLISH" : avgScore < 40.0 ? "BEARISH" : "NEUTRAL";
+    return { name: secName, count, avg_score: avgScore, momentum_trend: trend, ignition_count: ignCount, tickers: sList.map((x) => x.ticker) };
+  });
+  sectorMatrixItems.sort((a, b) => b.ignition_count - a.ignition_count || b.avg_score - a.avg_score);
 
   const celhClose = celh && celh.close ? Number(celh.close).toFixed(2) : "29.12";
   const celhMa20 = celh && celh.ma20_price ? Number(celh.ma20_price).toFixed(2) : "28.19";
@@ -176,6 +203,69 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
                 .join("")}
             </tbody>
           </table>
+        </div>
+      </div>
+
+      <!-- PRO VIP MODULE: MULTI-POSITION PORTFOLIO DOCTOR 2.0 -->
+      <div class="${isPro ? "" : "blur-locked"}">
+        ${renderPortfolioDoctorForm(state)}
+      </div>
+
+      <!-- PRO VIP MODULE: 72-STOCK SECTOR REGIME MATRIX & HEATMAP -->
+      <div class="${isPro ? "" : "blur-locked"}" style="background:#090d16; border:1px solid var(--border); border-top:2px solid #06b6d4; border-radius:4px; padding:16px 18px; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+          <div>
+            <div class="mono" style="font-size:0.7rem; color:#06b6d4; font-weight:800; letter-spacing:0.05em; text-transform:uppercase;">
+              👑 PRO VIP EXCLUSIVE · 72-STOCK SECTOR REGIME MATRIX &amp; ROTATION HEATMAP
+            </div>
+            <h3 style="font-size:1.02rem; font-weight:800; color:#ffffff; margin-top:3px;">
+              Sector Momentum Scores &amp; Ignition Concentration Across 8 Regimes
+            </h3>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-sm" id="btnVaultGoWatchlist" style="background:rgba(251,191,36,0.12); border-color:rgba(251,191,36,0.4); color:#fbbf24; font-weight:700;">
+              ⭐ Filter Screener to VIP Watchlist
+            </button>
+            <button type="button" class="btn btn-sm" id="btnVaultExportWatchlistCsv" style="background:rgba(251,191,36,0.12); border-color:rgba(251,191,36,0.4); color:#fbbf24; font-weight:700;">
+              📥 Export Watchlist CSV
+            </button>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:10px;">
+          ${sectorMatrixItems
+            .map((sec) => {
+              const trendCol = sec.momentum_trend === "BULLISH" ? "var(--fin-up)" : sec.momentum_trend === "BEARISH" ? "var(--fin-down)" : "var(--fin-amber)";
+              const ignBadge = sec.ignition_count > 0 ? `<span class="badge badge-ignition" style="font-size:0.64rem;">${sec.ignition_count} IGNITION</span>` : `<span class="badge" style="background:rgba(255,255,255,0.06); color:var(--muted); font-size:0.64rem;">0 IGNITION</span>`;
+              return `
+                <div style="background:#05080f; border:1px solid var(--border); border-radius:4px; padding:12px; display:flex; flex-direction:column; justify-content:space-between;">
+                  <div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                      <span class="mono" style="font-size:0.78rem; font-weight:800; color:#ffffff;">${sec.name}</span>
+                      ${ignBadge}
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px; margin:6px 0;">
+                      <div class="score-bar" style="flex:1;">
+                        <div class="score-fill" style="width:${sec.avg_score}%; background:${trendCol};"></div>
+                      </div>
+                      <span class="mono" style="font-size:0.8rem; font-weight:800; color:${trendCol};">${sec.avg_score.toFixed(1)}</span>
+                    </div>
+                    <div class="mono" style="font-size:0.7rem; color:var(--muted); margin-bottom:6px;">
+                      Trend: <b style="color:${trendCol};">${sec.momentum_trend}</b> · ${sec.count} US Equities
+                    </div>
+                  </div>
+                  <div style="padding-top:6px; border-top:1px solid rgba(255,255,255,0.05); display:flex; justify-content:space-between; align-items:center;">
+                    <span class="mono" style="font-size:0.66rem; color:var(--text-secondary); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:140px;">
+                      ${sec.tickers.slice(0, 4).join(", ")}${sec.tickers.length > 4 ? "..." : ""}
+                    </span>
+                    <button type="button" class="btn btn-sm btn-filter-sector-card" data-sector="${sec.name}" style="padding:2px 7px; font-size:0.68rem; border-color:rgba(56,189,248,0.4); color:#38bdf8;">
+                      Filter Table ↗
+                    </button>
+                  </div>
+                </div>
+              `;
+            })
+            .join("")}
         </div>
       </div>
 

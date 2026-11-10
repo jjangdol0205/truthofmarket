@@ -3,7 +3,7 @@
 """
 daily_6am_shorts_sender.py — Daily 6:00 AM KST Telegram Video + YouTube/Instagram/X/Reddit Copy Kit Dispatcher
 ==============================================================================================================
-Sends 1 mastered US Viral Short MP4 per day (EP01 -> EP10) to Telegram along with
+Sends 1 mastered US Viral Short MP4 per day (EP01 -> EP22) to Telegram along with
 1-tap mobile copy blocks (`<pre>...</pre>`) for:
   1) YouTube Shorts Title (with live $SMH Fear & Greed score)
   2) YouTube Shorts Description
@@ -13,8 +13,8 @@ Sends 1 mastered US Viral Short MP4 per day (EP01 -> EP10) to Telegram along wit
   6) Reddit (r/swingtrading, r/ETFs, r/Semiconductors) & TradingView Idea Copy
 
 Usage:
-  python daily_6am_shorts_sender.py --next          # Sends next queued episode (1..10) and advances pointer
-  python daily_6am_shorts_sender.py --ep 1          # Sends specific episode (1..10)
+  python daily_6am_shorts_sender.py --next          # Sends next queued episode (1..22) and advances pointer
+  python daily_6am_shorts_sender.py --ep 9          # Sends specific episode (1..22)
 """
 import argparse
 import html
@@ -247,24 +247,24 @@ EPISODE_COPY_KIT: List[Dict[str, Any]] = [
     {
         "num": 9,
         "id": "EP09",
-        "topic_kr": "가짜 돌파(Bull Trap)에 속지 않는 단 하나의 지표 — 10일 거래량 1.8배 폭발(Vol Surge)",
+        "topic_kr": "[V3 도파민판] 가짜 돌파(Bull Trap)에 속지 않는 단 하나의 지표 — 10일 거래량 1.8배 폭발(Vol Surge)",
         "yt_title": "$NVDA, $TSLA & $SOFI Fake Breakout vs Real Institutional Buying: The 1.8x Volume Tell 🔍📊 #nvda #tsla #sofi",
         "yt_desc": (
-            "90% of retail breakout trades fail because traders only watch price candles and ignore institutional volume.\n"
-            "When price crosses the 60-day moving average on weak volume, it's a Bull Trap. True institutional accumulation surges 1.5x–2.0x above 10-day average volume.\n\n"
-            "🔍 Scan Live Institutional Volume Surges: https://truthofmarket.com\n"
+            "90% of retail breakout trades fail within 48 hours because traders only watch green price candles and ignore institutional volume.\n"
+            "When price crosses the 60-day moving average on weak volume, it's a Bull Trap. True institutional accumulation surges 1.8x–2.5x+ above 10-day average volume.\n\n"
+            "🔍 Scan Live Institutional Volume Surges (#1 Signal Unlocked Free): https://truthofmarket.com\n"
             "✈️ Free Telegram Breakout Channel: https://t.me/truthofmarketss\n\n"
             "#volumeanalysis #technicalanalysis #breakouttrading #usstocks #stockmarket #daytrading #swingtrading #quant"
         ),
         "yt_pin": (
-            "🔍 Filter out low-volume bull traps automatically with our live 72-stock institutional scanner via @rightsidealpha!"
+            "🔍 Today's #1 Institutional Volume Breakout is unlocked FREE (and #2-#3 Pro VIP tickers are live) via @rightsidealpha bio!"
         ),
         "ig_caption": (
-            'Comment "SMH" and I’ll DM you our Live Institutional Volume & Breakout Scanner 👇\n\n'
+            'Comment "SMH" or "ALPHA" and I’ll DM you our Live Institutional Volume & Breakout Scanner 👇\n\n'
             "Price can be manipulated on low volume—institutional volume surge cannot hide.\n"
             "Before entering any breakout, verify:\n"
             "1️⃣ Price reclaimed both MA20 and MA60\n"
-            "2️⃣ 10-Day Volume Surge is spiking 1.5x to 2.0x+ above normal\n\n"
+            "2️⃣ 10-Day Volume Surge is spiking 1.8x to 2.5x+ above normal\n\n"
             '💬 Comment "SMH" below to get the live scanner & Telegram bot in your DMs!\n\n'
             "#technicalanalysis #daytrading #swingtrading #usstocks #stockmarket #priceaction #quanttrading #wallstreet"
         ),
@@ -272,17 +272,17 @@ EPISODE_COPY_KIT: List[Dict[str, Any]] = [
     {
         "num": 10,
         "id": "EP10",
-        "topic_kr": "매일 밤 9시 30분 미국장 개장 전 3초 포지션 닥터(Position Doctor) 점검 루틴",
-        "yt_title": "Trading $NVDA, $TSLA or $SOXL Today? Run This 3-Second Check Before 9:30 AM Open 🔔📈 #nvda #tsla #soxl",
+        "topic_kr": "[V3 도파민판] 매일 밤 9시 30분 미국장 개장 전 3초 포지션 닥터(Position Doctor) 점검 루틴",
+        "yt_title": "Trading $NVDA, $TSLA or $SOXL Tonight? Run This 3-Second Check Before 9:30 AM Open 🔔📈 #nvda #tsla #soxl",
         "yt_desc": (
-            "Before the US market opens at 9:30 AM EST tomorrow, stop trading blind on social media hype.\n"
+            "Before the US market opens at 9:30 AM EST, stop trading blind on social media hype.\n"
             "In 3 seconds, check whether any US stock is in an institutional Right-Side Ignition or a dangerous Trap—and audit your open positions with Position Doctor.\n\n"
             "🖥️ Open Live US Quant Terminal: https://truthofmarket.com\n"
             "✈️ Free Morning Briefing Telegram Channel: https://t.me/truthofmarketss\n\n"
             "#premarket #usstocks #stockmarket #daytrading #swingtrading #nvda #tsla #pltr #quanttrading #wallstreet"
         ),
         "yt_pin": (
-            "🔔 Tap @rightsidealpha below and open our bio link for daily pre-market Ignition & Semi Fear & Greed briefings!"
+            "🔔 Tap @rightsidealpha below and open our bio link for daily pre-market Ignition & 3-Second Position Doctor!"
         ),
         "ig_caption": (
             'Comment "SMH" and I’ll DM you our Pre-Market Quant Terminal + Free Telegram Alert Bot 👇\n\n'
@@ -292,6 +292,284 @@ EPISODE_COPY_KIT: List[Dict[str, Any]] = [
             "✅ Run your open positions through Position Doctor for exact -9% Stop & 2x Target levels\n\n"
             '💬 Drop "SMH" in the comments right now and check your DMs!\n\n'
             "#premarket #usstocks #stockmarket #daytrading #swingtrading #nvda #tsla #quanttrading #wallstreet"
+        ),
+    },
+    {
+        "num": 11,
+        "id": "EP11",
+        "topic_kr": "$SMCI · $AMD 60일선 붕괴 상태에서의 저가 매수가 계좌를 녹이는 이유",
+        "yt_title": "Why $SMCI & $AMD Dip Buyers Got Trapped (The 60-Day Institutional Trend Filter) 📉🚨 #smci #amd #nvda",
+        "yt_desc": (
+            "Buying a crashing semiconductor stock while it is still trapped below its 60-day moving average is financial suicide.\n"
+            "Wall Street quants wait for one non-negotiable proof: price must reclaim the 60-day trendline with surging institutional volume.\n\n"
+            "🖥️ Live 72-Stock Breakout Scanner: https://truthofmarket.com\n"
+            "✈️ Free Telegram Quant Channel: https://t.me/truthofmarketss\n\n"
+            "#smci #amd #nvda #semiconductors #usstocks #stockmarket #swingtrading #quanttrading #wallstreet"
+        ),
+        "yt_pin": (
+            "🚨 Check which semiconductor stocks just reclaimed their 60-day line with volume via @rightsidealpha bio!"
+        ),
+        "ig_caption": (
+            'Comment "SMH" or "ALPHA" and I’ll DM you our Live 60-Day Trend & Breakout Scanner 👇\n\n'
+            "Every dead-cat bounce looks like a bottom until institutional sellers slam it down another 30%.\n"
+            "Never buy below the 60-day trendline—wait for confirmed Right-Side Ignition.\n\n"
+            '💬 Drop "SMH" in the comments for instant access!\n\n'
+            "#smci #amd #nvda #semiconductors #usstocks #stockmarket #swingtrading #quanttrading #wallstreet"
+        ),
+    },
+    {
+        "num": 12,
+        "id": "EP12",
+        "topic_kr": "실적 발표(Earnings) 도박 vs 실적 발표 후 기관 수급 확인 우측 돌파 전략",
+        "yt_title": "Stop Gambling on $NVDA & $TSLA Earnings — Trade the Post-Earnings Quant Ignition 🎲📈 #nvda #tsla #earnings",
+        "yt_desc": (
+            "Holding a stock into an earnings report is not investing—it is flipping a coin at a casino.\n"
+            "Instead of gambling before earnings, our quant engine waits for post-earnings washout to finish and flags the exact day institutional buyers step back in.\n\n"
+            "🖥️ Scan Post-Earnings Institutional Breakouts: https://truthofmarket.com\n"
+            "✈️ Free Telegram Quant Channel: https://t.me/truthofmarketss\n\n"
+            "#earnings #nvda #tsla #usstocks #stockmarket #daytrading #swingtrading #quanttrading #wallstreet"
+        ),
+        "yt_pin": (
+            "🎯 Scan all 72 US market leaders for post-earnings institutional breakouts via @rightsidealpha bio!"
+        ),
+        "ig_caption": (
+            'Comment "SMH" and I’ll DM you our Post-Earnings Institutional Breakout Scanner 👇\n\n'
+            "Even when a company beats estimates, Wall Street algorithms can gap the stock down 20% overnight.\n"
+            "Stop flipping coins before earnings—wait for confirmed institutional accumulation.\n\n"
+            '💬 Comment "SMH" below and check your DMs!\n\n'
+            "#earnings #nvda #tsla #usstocks #stockmarket #swingtrading #daytrading #quanttrading #wallstreet"
+        ),
+    },
+    {
+        "num": 13,
+        "id": "EP13",
+        "topic_kr": "반도체 공포·탐욕 지수 75 돌파(Extreme Greed) 시 월가 퀀트가 몰래 비중을 줄이는 법",
+        "yt_title": "Semiconductor Fear & Greed Above 75 (Extreme Greed): When Quants Secretly Trim ⚠️🧭 #smh #nvda #soxl",
+        "yt_desc": (
+            "When everyone on social media is bragging about semiconductor gains, smart money is quietly heading for the exit.\n"
+            "Whenever our 7-Factor Semiconductor Fear & Greed Index climbs above 75, our barbell engine trims offensive tech and locks profits into defensive healthcare ($XLV).\n\n"
+            "🧭 Live Semiconductor Fear & Greed Gauge: https://truthofmarket.com/semi-fear-greed.html\n"
+            "✈️ Free Telegram Channel: https://t.me/truthofmarketss\n\n"
+            "#smh #soxl #nvda #semiconductors #usstocks #stockmarket #etfinvesting #quanttrading #wallstreet"
+        ),
+        "yt_pin": (
+            "🧭 Track today's live Semiconductor Fear & Greed score and exact $SMH : $XLV barbell weights via @rightsidealpha!"
+        ),
+        "ig_caption": (
+            'Comment "SMH" to get our Live Semiconductor Fear & Greed Gauge in your DMs 👇\n\n'
+            "Chasing semiconductor breakouts when Fear & Greed is above 75 carries massive drawdown risk.\n"
+            "See our exact daily $SMH : $XLV barbell allocation in real time.\n\n"
+            '💬 Drop "SMH" in the comments below!\n\n'
+            "#smh #soxl #nvda #semiconductors #usstocks #stockmarket #quanttrading #wallstreet"
+        ),
+    },
+    {
+        "num": 14,
+        "id": "EP14",
+        "topic_kr": "하락장 물타기(Averaging Down) vs 상승장 불타기(Pyramiding Up)의 수학적 계좌 차이",
+        "yt_title": "Averaging Down vs Pyramiding Up: The Math That Separates Quants From Losers 📊🔥 #usstocks #nvda #tsla",
+        "yt_desc": (
+            "Averaging down into a losing stock is how one bad trade wipes out three years of gains.\n"
+            "Wall Street quants cut losers at -9.0% and only add capital after a stock proves itself above the 60-day trendline.\n\n"
+            "🩺 Run 3-Second Position Doctor: https://truthofmarket.com\n"
+            "✈️ Free Telegram Channel: https://t.me/truthofmarketss\n\n"
+            "#usstocks #stockmarket #riskmanagement #swingtrading #daytrading #nvda #tsla #quanttrading"
+        ),
+        "yt_pin": (
+            "🩺 Diagnose your current holdings in 3 seconds with Position Doctor via @rightsidealpha bio!"
+        ),
+        "ig_caption": (
+            'Comment "SMH" or "ALPHA" for instant access to our 3-Second Position Doctor 👇\n\n'
+            "Stop feeding good capital to a broken trend while institutional sellers keep unloading.\n"
+            "Cut at -9% and ride confirmed Right-Side leaders.\n\n"
+            '💬 Comment "SMH" below and check your DMs!\n\n'
+            "#usstocks #stockmarket #riskmanagement #swingtrading #quanttrading #wallstreet"
+        ),
+    },
+    {
+        "num": 15,
+        "id": "EP15",
+        "topic_kr": "52주 신저가 종목을 덜컥 사면 추가로 -60% 폭락하는 이유 (바닥 반등 +12% 확인 법칙)",
+        "yt_title": "The 52-Week Low Illusion: Why 'Cheap' Stocks Drop Another 60% 📉🛑 #stocks #swingtrading #nvda",
+        "yt_desc": (
+            "Buying a stock just because it hit the 52-week low list is the fastest way to catch a falling knife.\n"
+            "Our 26-year quant study proves the sweet spot only begins after a stock rebounds at least +12% off its low and reclaims the 60-day trendline.\n\n"
+            "🖥️ See Confirmed Turnaround Leaders Live: https://truthofmarket.com\n"
+            "✈️ Free Telegram Channel: https://t.me/truthofmarketss\n\n"
+            "#usstocks #stockmarket #valueinvesting #swingtrading #quanttrading #technicalanalysis #wallstreet"
+        ),
+        "yt_pin": (
+            "📈 See every US stock in the confirmed post-washout Ignition Zone right now via @rightsidealpha!"
+        ),
+        "ig_caption": (
+            'Comment "SMH" and I’ll DM you our Live 72-Stock Turnaround Scanner 👇\n\n'
+            "Stocks making new 52-week lows have endless institutional tax-loss selling.\n"
+            "Wait until washout completes and price reclaims the 60-day trendline.\n\n"
+            '💬 Drop "SMH" in the comments below!\n\n'
+            "#usstocks #stockmarket #swingtrading #daytrading #quanttrading #wallstreet"
+        ),
+    },
+    {
+        "num": 16,
+        "id": "EP16",
+        "topic_kr": "주가 폭등 전 헤지펀드 다크풀(Dark Pool) 매집을 포착하는 10일 상대거래량 지표",
+        "yt_title": "How to Spot Hedge Fund Accumulation Before a Stock Explodes 2x 🔍🐋 #usstocks #daytrading #nvda",
+        "yt_desc": (
+            "Hedge funds cannot buy 10 million shares in one day without spiking the price.\n"
+            "They leave behind one unmistakable clue: 10-day relative volume surging 1.5x to 2.0x+ above the 20-day average right at the 60-day trendline.\n\n"
+            "🔍 Track Institutional Volume Surges Live: https://truthofmarket.com\n"
+            "✈️ Free Telegram Channel: https://t.me/truthofmarketss\n\n"
+            "#darkpool #volumeanalysis #usstocks #stockmarket #swingtrading #daytrading #quanttrading #wallstreet"
+        ),
+        "yt_pin": (
+            "🐋 Track real-time institutional volume surges across 72 US market leaders via @rightsidealpha bio!"
+        ),
+        "ig_caption": (
+            'Comment "SMH" or "ALPHA" to unlock our Institutional Volume Scanner 👇\n\n'
+            "Big money cannot hide volume expansion.\n"
+            "See which US stocks are showing 1.8x–2.5x institutional volume surges today.\n\n"
+            '💬 Comment "SMH" below and check your DMs!\n\n'
+            "#volumeanalysis #usstocks #stockmarket #swingtrading #quanttrading #wallstreet"
+        ),
+    },
+    {
+        "num": 17,
+        "id": "EP17",
+        "topic_kr": "-25% 물린 계좌, 기도매매 대신 3초 포지션 닥터로 보유·교체 매매 판별하기",
+        "yt_title": "Down -25% on a US Stock? Run This 3-Second Quant Triage Right Now 🩺📉 #usstocks #nvda #tsla",
+        "yt_desc": (
+            "When you are down 25% on a stock, hope is the most expensive emotion in the market.\n"
+            "Enter your ticker and average buy price into our quantitative Position Doctor for your exact mathematical stop-loss, trend health, and 2x target.\n\n"
+            "🩺 Free 3-Second Position Doctor: https://truthofmarket.com\n"
+            "✈️ Free Telegram Channel: https://t.me/truthofmarketss\n\n"
+            "#usstocks #stockmarket #portfolio #riskmanagement #swingtrading #nvda #tsla #quanttrading"
+        ),
+        "yt_pin": (
+            "🩺 Enter your ticker & avg price into our free 3-Second Position Doctor via @rightsidealpha bio!"
+        ),
+        "ig_caption": (
+            'Comment "SMH" and I’ll DM you our free 3-Second Position Doctor link 👇\n\n'
+            "Should you hold for recovery, cut the loss, or rotate into an active institutional leader?\n"
+            "Let math decide in 3 seconds.\n\n"
+            '💬 Drop "SMH" in the comments below!\n\n'
+            "#usstocks #stockmarket #swingtrading #riskmanagement #quanttrading #wallstreet"
+        ),
+    },
+    {
+        "num": 18,
+        "id": "EP18",
+        "topic_kr": "금리 급등·매크로 쇼크 때 유행주 90%가 폭락해도 살아남는 4단계 수학적 필터",
+        "yt_title": "Why 90% of Hype Stocks Crash in Macro Panics — And the 4-Gate Quant Filter 🛡️📊 #usstocks #qqq #nvda",
+        "yt_desc": (
+            "Every time treasury yields spike or macro panic hits, 90% of social media hype stocks get wiped out.\n"
+            "Our quant engine survived 26 years of crashes because every trade must pass 4 strict gates: C1 Deep Washout, C2 Floor Recovery, C3 MA60 Reclamation, and C4 Volume Surge.\n\n"
+            "🛡️ Check Today's 4-Gate Passed Stocks: https://truthofmarket.com\n"
+            "✈️ Free Telegram Channel: https://t.me/truthofmarketss\n\n"
+            "#usstocks #stockmarket #quanttrading #algotrading #swingtrading #qqq #nvda #wallstreet"
+        ),
+        "yt_pin": (
+            "🛡️ Check which US market leaders pass all 4 institutional gates today via @rightsidealpha bio!"
+        ),
+        "ig_caption": (
+            'Comment "SMH" to see today’s US stocks passing all 4 institutional quant gates 👇\n\n'
+            "1️⃣ C1: Deep seller washout complete\n"
+            "2️⃣ C2: Confirmed floor recovery\n"
+            "3️⃣ C3: 60-day trend reclamation\n"
+            "4️⃣ C4: Institutional volume surge\n\n"
+            '💬 Comment "SMH" below for the live terminal link!\n\n'
+            "#usstocks #stockmarket #quanttrading #swingtrading #wallstreet"
+        ),
+    },
+    {
+        "num": 19,
+        "id": "EP19",
+        "topic_kr": "+10%에 일찍 팔지 않고 60일선 트레일링으로 +240% 대세 상승 끝까지 먹는 법",
+        "yt_title": "Stop Selling Winners at +10%: How Quants Trail the 60-Day Line for +240% Runs 🚀📈 #nvda #pltr #stocks",
+        "yt_desc": (
+            "Retail traders cut their winners at +10% and hold their losers down -50%.\n"
+            "After taking half off at +100% (TP1) for a risk-free ride, our engine trails the remaining shares along the 60-day moving average until the macro trend breaks.\n\n"
+            "📈 See Live Trailing Trend Signals: https://truthofmarket.com\n"
+            "✈️ Free Telegram Channel: https://t.me/truthofmarketss\n\n"
+            "#nvda #pltr #usstocks #stockmarket #swingtrading #trendfollowing #quanttrading #wallstreet"
+        ),
+        "yt_pin": (
+            "🚀 Flip the retail equation—see live trailing 60-day trend signals across 72 US leaders via @rightsidealpha!"
+        ),
+        "ig_caption": (
+            'Comment "SMH" or "ALPHA" for our Live 72-Stock Trailing Trend Terminal 👇\n\n'
+            "Cut losers mechanically at -9%, lock principal at +100%, and ride the 60-day trendline for massive multi-baggers.\n\n"
+            '💬 Drop "SMH" in the comments below!\n\n'
+            "#nvda #pltr #usstocks #stockmarket #swingtrading #quanttrading #wallstreet"
+        ),
+    },
+    {
+        "num": 20,
+        "id": "EP20",
+        "topic_kr": "일요일 밤 60초 만에 월요일 급등 임박 Top 5 워치리스트 뽑는 월가 루틴",
+        "yt_title": "Wall Street Prep: Build Your Top 5 Breakout Watchlist in 60 Seconds ⚡📋 #usstocks #nvda #tsla",
+        "yt_desc": (
+            "Amateur traders wake up at 9:25 AM and chase whatever stock is trending on social media.\n"
+            "Professional quants filter 72 liquid US leaders down to the exact stocks coiling just below their Right-Side Ignition trigger before the bell.\n\n"
+            "📋 Build Your Breakout Watchlist Now: https://truthofmarket.com\n"
+            "✈️ Free Telegram Channel: https://t.me/truthofmarketss\n\n"
+            "#watchlist #usstocks #stockmarket #swingtrading #daytrading #nvda #tsla #quanttrading #wallstreet"
+        ),
+        "yt_pin": (
+            "📋 Filter 72 liquid US leaders down to today's top Right-Side Ignition candidates via @rightsidealpha bio!"
+        ),
+        "ig_caption": (
+            'Comment "SMH" and I’ll DM you today’s Top Right-Side Breakout Watchlist 👇\n\n'
+            "Stop chasing social media hype at the open.\n"
+            "Track the exact dollar Entry Trigger (TRG) on 72 liquid US leaders in 60 seconds.\n\n"
+            '💬 Comment "SMH" below and check your DMs!\n\n'
+            "#watchlist #usstocks #stockmarket #swingtrading #daytrading #quanttrading #wallstreet"
+        ),
+    },
+    {
+        "num": 21,
+        "id": "EP21",
+        "topic_kr": "[V3 도파민 대결] $10,000 반도체 물타기 개미(-48%) vs 월가 우측 돌파 퀀트 엔진",
+        "yt_title": "$10,000 Retail Dip Buyer vs Wall Street Quant Engine ($SMH, $NVDA, $SOXL) ⚡📊 #nvda #smh #soxl",
+        "yt_desc": (
+            "Watch what happens to $10,000 buying semiconductor dips below the 60-day line (-48% wipeout) versus our Wall Street Right-Side Quant Engine on the exact same cycle.\n"
+            "Zero left-side guessing: wait for MA60 reclamation + 2.0x institutional volume + PW-RSI 90+ ignition.\n\n"
+            "🖥️ Live 72-Stock Terminal (#1 Signal Free): https://truthofmarket.com\n"
+            "🧭 Semiconductor Fear & Greed: https://truthofmarket.com/semi-fear-greed.html\n"
+            "✈️ Free Telegram Channel: https://t.me/truthofmarketss\n\n"
+            "#nvda #smh #soxl #semiconductors #usstocks #stockmarket #quanttrading #swingtrading #wallstreet"
+        ),
+        "yt_pin": (
+            "⚡ Stop averaging down below the 60-day line! Check today's #1 Free Ignition Stock & Semi Fear/Greed score via @rightsidealpha!"
+        ),
+        "ig_caption": (
+            'Comment "SMH" or "ALPHA" and I’ll DM you the live Wall Street Quant Terminal link 👇\n\n'
+            "📉 $10,000 Retail Dip Buyer: Buys below MA60, averages down at -25%, wiped out -48% on a dead-cat trap.\n"
+            "📈 Wall Street Quant Engine: Waits for MA60 breakout + 2.0x volume + PW-RSI 90 ignition with a strict -9% stop.\n\n"
+            '💬 Drop "SMH" in the comments to unlock today’s live signals!\n\n'
+            "#nvda #smh #soxl #semiconductors #usstocks #stockmarket #quanttrading #wallstreet"
+        ),
+    },
+    {
+        "num": 22,
+        "id": "EP22",
+        "topic_kr": "[V3 10초 초압축 도파민] 60일선 붕괴 반도체 절대 물타기 금지 — 2배 거래량 + PW-RSI 90 법칙",
+        "yt_title": "Never Buy Crashing Chip Stocks Below the 60-Day Line ($NVDA, $SMH, $AMD) 🚨⚡ #nvda #smh #amd",
+        "yt_desc": (
+            "90% of semiconductor bottom-guessers get wiped out by dead-cat traps.\n"
+            "Wait for 2.0x institutional volume and Price-Weighted RSI 90+ ignition, lock a -9% stop, and ride 2x targets.\n\n"
+            "🖥️ Check Live Ignition Stocks: https://truthofmarket.com\n"
+            "✈️ Free Telegram Channel: https://t.me/truthofmarketss\n\n"
+            "#nvda #smh #amd #soxl #semiconductors #usstocks #stockmarket #quanttrading #wallstreet"
+        ),
+        "yt_pin": (
+            "🚨 Check which semiconductor & US growth stocks hit 2.0x volume + PW-RSI 90 ignition today via @rightsidealpha!"
+        ),
+        "ig_caption": (
+            'Comment "SMH" and I’ll DM you our Live Semiconductor & 72-Stock Breakout Scanner 👇\n\n'
+            "Never catch a falling chip stock below its 60-day line.\n"
+            "Wait for 2.0x volume + PW-RSI 90 ignition at truthofmarket.com.\n\n"
+            '💬 Comment "SMH" below for instant DM access!\n\n'
+            "#nvda #smh #amd #semiconductors #usstocks #stockmarket #quanttrading #wallstreet"
         ),
     },
 ]
@@ -370,7 +648,8 @@ def _load_live_market_snapshot() -> Dict[str, Any]:
 
 
 def send_episode_package_to_telegram(ep_num: int, advance_state: bool = False) -> bool:
-    ep_idx = (ep_num - 1) % 10
+    total_eps = len(EPISODE_COPY_KIT)
+    ep_idx = (ep_num - 1) % total_eps
     kit = EPISODE_COPY_KIT[ep_idx]
     real_num = kit["num"]
     mp4_path = VIDEOS_DIR / f"EP{real_num:02d}_US_Viral_Shorts.mp4"
@@ -461,7 +740,7 @@ def send_episode_package_to_telegram(ep_num: int, advance_state: bool = False) -
 
         if yt_video_path.exists():
             yt_caption = (
-                f"🇺🇸 <b>[1사업부: truthofmarket.com · 1/2 영상: 유튜브 쇼츠 전용판 ({real_num}/10편)]</b>\n"
+                f"🇺🇸 <b>[1사업부: truthofmarket.com · 1/2 영상: 유튜브 쇼츠 전용판 ({real_num}/{total_eps}편)]</b>\n"
                 f"📌 주제: {kit['topic_kr']}\n"
                 "✅ 엔딩 자막: 유튜브 맞춤형 (@rightsidealpha 관련 동영상 &amp; 프로필 링크 유도)\n"
                 "📺 업로드 유튜브: https://www.youtube.com/@rightsidealpha"
@@ -487,7 +766,7 @@ def send_episode_package_to_telegram(ep_num: int, advance_state: bool = False) -
 
         if ig_video_path.exists():
             ig_caption_vid = (
-                f"📸 <b>[1사업부: truthofmarket.com · 2/2 영상: 인스타 릴스 전용판 ({real_num}/10편)]</b>\n"
+                f"📸 <b>[1사업부: truthofmarket.com · 2/2 영상: 인스타 릴스 전용판 ({real_num}/{total_eps}편)]</b>\n"
                 "✅ 엔딩 자막: 인스타 매니챗 맞춤형 (댓글에 'SMH' 또는 'ALPHA' 입력 시 1초 만에 DM 자동 발송 유도)\n"
                 "📸 업로드 인스타: https://www.instagram.com/rightsidealpha"
             )
@@ -499,8 +778,6 @@ def send_episode_package_to_telegram(ep_num: int, advance_state: bool = False) -
 
         extra_messages = [
             f"🟣 <b>[4/4] 1사업부 인스타그램 릴스 전체 본문 (@rightsidealpha · 매니챗 'SMH'/'ALPHA' 연동)</b> — 아래 박스 터치 시 바로 복사\n<pre>{ig_cap_esc}</pre>",
-
-
         ]
         for m_html in extra_messages:
             r_extra = client.post(
@@ -509,13 +786,13 @@ def send_episode_package_to_telegram(ep_num: int, advance_state: bool = False) -
             )
             ok = ok and (r_extra.status_code == 200 and r_extra.json().get("ok", False))
 
-        print(f"[DailyShorts] Sent Full 6-Part YT+IG+X+Reddit Package EP{real_num:02d}: ok={ok}")
+        print(f"[DailyShorts] Sent Full YT+IG Package EP{real_num:02d}/{total_eps:02d}: ok={ok}")
 
     if advance_state and ok:
         st = load_daily_state()
         today_str = datetime.now().strftime("%Y-%m-%d")
         st["last_sent_date"] = today_str
-        st["next_ep"] = (real_num % 10) + 1
+        st["next_ep"] = (real_num % total_eps) + 1
         st.setdefault("history", []).append(
             {"ep": real_num, "sent_at": datetime.now(timezone.utc).isoformat()}
         )
@@ -526,7 +803,7 @@ def send_episode_package_to_telegram(ep_num: int, advance_state: bool = False) -
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Daily 6:00 AM Shorts & Reels Telegram Sender")
-    parser.add_argument("--ep", type=int, default=0, help="Send specific episode (1..10)")
+    parser.add_argument("--ep", type=int, default=0, help="Send specific episode (1..22)")
     parser.add_argument("--next", action="store_true", help="Send next queued episode and advance state")
     args = parser.parse_args()
 

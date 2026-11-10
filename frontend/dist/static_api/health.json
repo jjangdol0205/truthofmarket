@@ -1,8 +1,8 @@
 {
   "status": "ok",
   "mode": "static",
-  "as_of_date": "2026-11-06",
-  "updated_at": "2026-11-09T02:32:09Z",
+  "as_of_date": "2026-11-09",
+  "updated_at": "2026-11-10T13:09:40Z",
   "services": [
     "RightSideAlpha",
     "SemiFearGreed"

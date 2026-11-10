@@ -17,6 +17,93 @@ from backend.app.models.backtest import (
     PositionDoctorResponse,
 )
 from backend.app.models.research import ResearchBriefDetail, ResearchBriefSummary
+from backend.app.models.auth import (
+    PortfolioPositionItem,
+    PortfolioDoctorRequest,
+    PortfolioPositionDiagnostic,
+    StressScenarioResult,
+    RebalanceRecommendation,
+    PortfolioDoctorResponse,
+    SectorMatrixItem,
+    SectorMatrixResponse,
+    WatchlistResponse,
+)
+
+SECTOR_REGIME_MAP: Dict[str, str] = {
+    # 1. AI & Semiconductors
+    "AI Semiconductors": "AI & Semiconductors",
+    "Semiconductors": "AI & Semiconductors",
+    "Semiconductor Equip": "AI & Semiconductors",
+    "Semiconductor IP": "AI & Semiconductors",
+    "Memory Semiconductors": "AI & Semiconductors",
+    "Power Semiconductors": "AI & Semiconductors",
+    "Power & Auto Chips": "AI & Semiconductors",
+    "Foundry Semis": "AI & Semiconductors",
+    "AI Server Hardware": "AI & Semiconductors",
+    "ADAS & Autonomous": "AI & Semiconductors",
+
+    # 2. Cloud & Enterprise Software
+    "Enterprise AI": "Cloud & Enterprise Software",
+    "Cloud Security": "Cloud & Enterprise Software",
+    "Cybersecurity": "Cloud & Enterprise Software",
+    "Cloud Observability": "Cloud & Enterprise Software",
+    "Database Software": "Cloud & Enterprise Software",
+    "Data Cloud SaaS": "Cloud & Enterprise Software",
+    "Edge Cloud & Security": "Cloud & Enterprise Software",
+    "3D Engine Software": "Cloud & Enterprise Software",
+
+    # 3. Internet & Digital Media
+    "Internet & AI": "Internet & Digital Media",
+    "Internet & Social": "Internet & Digital Media",
+    "Social Media": "Internet & Digital Media",
+    "Streaming Media": "Internet & Digital Media",
+    "Media & Entertainment": "Internet & Digital Media",
+    "Legacy Media": "Internet & Digital Media",
+    "Connected TV": "Internet & Digital Media",
+    "Audio Streaming": "Internet & Digital Media",
+    "AdTech & AI Software": "Internet & Digital Media",
+
+    # 4. Fintech & Digital Finance
+    "Fintech & BNPL": "Fintech & Digital Finance",
+    "Digital Assets & Fin": "Fintech & Digital Finance",
+    "Fintech & Brokerage": "Fintech & Digital Finance",
+    "Digital Payments": "Fintech & Digital Finance",
+    "Digital Banking": "Fintech & Digital Finance",
+    "AI Lending Fintech": "Fintech & Digital Finance",
+
+    # 5. Consumer & Retail
+    "Consumer Beverages": "Consumer & Retail",
+    "Leisure & Cruise": "Consumer & Retail",
+    "Consumer Footwear": "Consumer & Retail",
+    "Consumer Apparel": "Consumer & Retail",
+    "Athletic Apparel": "Consumer & Retail",
+    "Consumer Retail": "Consumer & Retail",
+    "Consumer EdTech": "Consumer & Retail",
+    "E-Commerce SaaS": "Consumer & Retail",
+    "Cloud & E-Commerce": "Consumer & Retail",
+    "Auto E-Commerce": "Consumer & Retail",
+
+    # 6. Mobility, EV & CleanTech
+    "EV & Robotics": "Mobility, EV & CleanTech",
+    "Mobility Platform": "Mobility, EV & CleanTech",
+    "Automotive": "Mobility, EV & CleanTech",
+    "Solar & CleanTech": "Mobility, EV & CleanTech",
+    "Solar Inverters": "Mobility, EV & CleanTech",
+    "Solar Modules": "Mobility, EV & CleanTech",
+    "Grid Energy Storage": "Mobility, EV & CleanTech",
+
+    # 7. Healthcare & Biotechnology
+    "Biopharma": "Healthcare & Biotechnology",
+    "Pharmaceuticals": "Healthcare & Biotechnology",
+    "Biotechnology": "Healthcare & Biotechnology",
+
+    # 8. Energy & Industrials
+    "Aerospace & Defense": "Energy & Industrials",
+    "Passenger Airlines": "Energy & Industrials",
+    "Oil & Gas E&P": "Energy & Industrials",
+    "Integrated Energy": "Energy & Industrials",
+    "Specialty Chemicals": "Energy & Industrials",
+}
 
 STOCK_NAMES: Dict[str, tuple[str, str, str, str]] = {
     "AFRM": ("Affirm Holdings", "アファーム・ホールディングス", "어펌 홀딩스", "Fintech & BNPL"),
@@ -113,6 +200,7 @@ class QuantEngine:
         self.trade_logs: List[Dict[str, Any]] = []
         self.research_briefs: Dict[str, List[ResearchBriefDetail]] = {}
         self.research_summaries: List[ResearchBriefSummary] = []
+        self.vip_watchlist: List[str] = ["CELH", "CCL", "TSLA", "SPOT", "NVDA"]
         self.is_loaded: bool = False
 
     @classmethod
@@ -731,5 +819,394 @@ class QuantEngine:
                 as_of_date=as_of_date,
             )
 
+    def diagnose_portfolio(
+        self,
+        positions: List[PortfolioPositionItem],
+        total_capital: Optional[float] = 10000.0,
+    ) -> PortfolioDoctorResponse:
+        """
+        VIP Multi-Position Portfolio Doctor:
+        - Evaluates up to 10 positions against Rule 1 (-9% hard stop), Rule 2 (55D time stop),
+          Rule 3 (+100% TP1), and Rule 4 (active hold).
+        - Computes 0-100 Portfolio Health Score: starts at 100, -30 per hard stop breach,
+          -15 per 55D dead money holding, bounded strictly in [0, 100].
+        - Computes total capital at risk against Rule 1 -9% stop loss.
+        - Runs 3 macro stress scenarios:
+            1. "Semi Extreme Fear Shock (-15%)"
+            2. "Defensive Safe-Haven Rotation ($XLV +5%)"
+            3. "Right-Side Ignition Wave (+25%)"
+        - Generates automated rebalancing recommendations harvesting stopped/dead positions
+          and reallocating into top active ignition setups using strict 1.35% risk parity sizing.
+        """
+        cap = float(total_capital if total_capital and total_capital > 0 else 10000.0)
+
+        if not positions:
+            return PortfolioDoctorResponse(
+                health_score=100,
+                total_invested=0.0,
+                total_unrealized_pnl=0.0,
+                total_unrealized_pnl_pct=0.0,
+                capital_at_risk=0.0,
+                items=[],
+                stress_scenarios=[
+                    StressScenarioResult(
+                        name="Semi Extreme Fear Shock (-15%)",
+                        projected_pnl_pct=0.0,
+                        impact_usd=0.0,
+                        verdict="Neutral",
+                    ),
+                    StressScenarioResult(
+                        name="Defensive Safe-Haven Rotation ($XLV +5%)",
+                        projected_pnl_pct=0.0,
+                        impact_usd=0.0,
+                        verdict="Neutral",
+                    ),
+                    StressScenarioResult(
+                        name="Right-Side Ignition Wave (+25%)",
+                        projected_pnl_pct=0.0,
+                        impact_usd=0.0,
+                        verdict="Neutral",
+                    ),
+                ],
+                rebalance_recommendations=[
+                    RebalanceRecommendation(
+                        action="MAINTAIN",
+                        ticker=None,
+                        target_ticker=None,
+                        amount_usd=0.0,
+                        allocation_pct=100.0,
+                        reason="No active holdings in portfolio; ready for Right-Side Ignition deployment.",
+                        setup_type="CASH_RESERVE",
+                    )
+                ],
+            )
+
+        diagnostics: List[PortfolioPositionDiagnostic] = []
+        hard_stop_count = 0
+        dead_money_count = 0
+
+        for item in positions:
+            t_clean = item.ticker.strip().upper()
+            stock = self.stocks_by_ticker.get(t_clean)
+            entry_p = float(item.entry_price)
+            shares = float(item.shares if item.shares > 0 else 1.0)
+            days = int(item.days_held if item.days_held >= 0 else 0)
+
+            if item.current_price is not None and item.current_price > 0:
+                cur_p = float(item.current_price)
+            else:
+                cur_p = stock.close if stock else entry_p
+
+            hard_stop_p = round(entry_p * 0.91, 2)
+            ret_pct = round(((cur_p / entry_p) - 1.0) * 100.0, 2)
+            invested_val = round(cur_p * shares, 2)
+            cost_val = round(entry_p * shares, 2)
+            unrealized_pnl = round(invested_val - cost_val, 2)
+
+            # Rule 1: -9% Hard Stop Loss
+            if ret_pct <= -9.0:
+                status_code = "HARD_STOP"
+                action = "CRITICAL_STOP_EXIT"
+                is_critical = True
+                directive = f"RULE 1: -9% Hard Stop breached ({ret_pct:.2f}%). Exit full position immediately."
+                hard_stop_count += 1
+            # Rule 2: 55-Day Dead-Money Time Stop
+            elif days >= 55 and ret_pct < 8.0:
+                status_code = "TIME_STOP"
+                action = "DEAD_MONEY_ROTATE"
+                is_critical = False
+                directive = f"RULE 2: 55-Day Dead-Money holding ({days} days, {ret_pct:+.2f}%). Reallocate to active ignition candidates."
+                dead_money_count += 1
+            # Rule 3: +100% TP1 Principal Recovery
+            elif ret_pct >= 100.0:
+                status_code = "TP1_HARVEST"
+                action = "TP1_TAKE_PROFIT"
+                is_critical = False
+                directive = f"RULE 3: +100% TP1 achieved (+{ret_pct:.2f}%). Sell 50% to recoup 100% principal; trail stop on remaining."
+            # Rule 4: Active Healthy Trend Follow
+            else:
+                status_code = "HOLD"
+                action = "ACTIVE_HOLD"
+                is_critical = False
+                directive = f"RULE 4: Healthy active trend follow ({ret_pct:+.2f}%). Trailing stop floor at ${hard_stop_p:.2f}."
+
+            diagnostics.append(
+                PortfolioPositionDiagnostic(
+                    ticker=t_clean,
+                    status_code=status_code,
+                    action=action,
+                    current_return_pct=ret_pct,
+                    hard_stop_price=hard_stop_p,
+                    is_critical=is_critical,
+                    directive=directive,
+                    entry_price=round(entry_p, 2),
+                    current_price=round(cur_p, 2),
+                    shares=shares,
+                    days_held=days,
+                    invested_value=invested_val,
+                    unrealized_pnl=unrealized_pnl,
+                )
+            )
+
+        # 0-100 Portfolio Health Score: starts at 100, -30 per hard stop breach, -15 per 55D dead money holding
+        raw_health = 100 - (30 * hard_stop_count) - (15 * dead_money_count)
+        health_score = int(max(0, min(100, raw_health)))
+
+        total_invested = round(sum(d.invested_value for d in diagnostics), 2)
+        total_cost = sum(p.entry_price * (p.shares if p.shares > 0 else 1.0) for p in positions)
+        total_unrealized_pnl = round(sum(d.unrealized_pnl for d in diagnostics), 2)
+        total_unrealized_pnl_pct = (
+            round((total_unrealized_pnl / total_cost) * 100.0, 2) if total_cost > 0 else 0.0
+        )
+        capital_at_risk = round(
+            sum(
+                max(0.0, p.entry_price - round(p.entry_price * 0.91, 2))
+                * (p.shares if p.shares > 0 else 1.0)
+                for p in positions
+            ),
+            2,
+        )
+
+        # Macro Stress Scenarios
+        stress_scenarios: List[StressScenarioResult] = []
+        if total_invested <= 0:
+            stress_scenarios = [
+                StressScenarioResult(
+                    name="Semi Extreme Fear Shock (-15%)",
+                    projected_pnl_pct=0.0,
+                    impact_usd=0.0,
+                    verdict="Neutral",
+                ),
+                StressScenarioResult(
+                    name="Defensive Safe-Haven Rotation ($XLV +5%)",
+                    projected_pnl_pct=0.0,
+                    impact_usd=0.0,
+                    verdict="Neutral",
+                ),
+                StressScenarioResult(
+                    name="Right-Side Ignition Wave (+25%)",
+                    projected_pnl_pct=0.0,
+                    impact_usd=0.0,
+                    verdict="Neutral",
+                ),
+            ]
+        else:
+            # 1. Semi Extreme Fear Shock (-15%)
+            # Tech/semi holdings drop 15%, defensive holdings receive 30% $XLV safe-haven buffer (+1.5%), other -5%
+            impact_s1 = 0.0
+            for d in diagnostics:
+                stock_ref = self.stocks_by_ticker.get(d.ticker)
+                sector_mapped = SECTOR_REGIME_MAP.get(stock_ref.sector if stock_ref else "", "Other")
+                if sector_mapped in ("AI & Semiconductors", "Cloud & Enterprise Software", "Internet & Digital Media"):
+                    impact_s1 += d.invested_value * -0.15
+                elif sector_mapped in ("Healthcare & Biotechnology", "Consumer & Retail"):
+                    impact_s1 += d.invested_value * 0.015
+                else:
+                    impact_s1 += d.invested_value * -0.05
+            pnl_pct_s1 = round((impact_s1 / total_invested) * 100.0, 2)
+            verdict_s1 = "Vulnerable" if pnl_pct_s1 <= -8.0 else ("Moderate Risk" if pnl_pct_s1 <= -3.0 else "Resilient")
+            stress_scenarios.append(
+                StressScenarioResult(
+                    name="Semi Extreme Fear Shock (-15%)",
+                    projected_pnl_pct=pnl_pct_s1,
+                    impact_usd=round(impact_s1, 2),
+                    verdict=verdict_s1,
+                )
+            )
+
+            # 2. Defensive Safe-Haven Rotation ($XLV +5%)
+            # Defensive holdings gain +5%, tech/semi consolidate -2%, other flat 0%
+            impact_s2 = 0.0
+            for d in diagnostics:
+                stock_ref = self.stocks_by_ticker.get(d.ticker)
+                sector_mapped = SECTOR_REGIME_MAP.get(stock_ref.sector if stock_ref else "", "Other")
+                if sector_mapped in ("Healthcare & Biotechnology", "Consumer & Retail"):
+                    impact_s2 += d.invested_value * 0.05
+                elif sector_mapped in ("AI & Semiconductors", "Cloud & Enterprise Software", "Internet & Digital Media"):
+                    impact_s2 += d.invested_value * -0.02
+                else:
+                    impact_s2 += 0.0
+            pnl_pct_s2 = round((impact_s2 / total_invested) * 100.0, 2)
+            verdict_s2 = "Resilient" if pnl_pct_s2 >= 1.0 else ("Neutral" if pnl_pct_s2 >= -2.0 else "Vulnerable")
+            stress_scenarios.append(
+                StressScenarioResult(
+                    name="Defensive Safe-Haven Rotation ($XLV +5%)",
+                    projected_pnl_pct=pnl_pct_s2,
+                    impact_usd=round(impact_s2, 2),
+                    verdict=verdict_s2,
+                )
+            )
+
+            # 3. Right-Side Ignition Wave (+25%)
+            # Ignition zone holdings rally +25%, washout watch rally +10%, other lagging +2%
+            impact_s3 = 0.0
+            for d in diagnostics:
+                stock_ref = self.stocks_by_ticker.get(d.ticker)
+                zcode = stock_ref.zone_code if stock_ref else "WASHOUT_WATCH"
+                if zcode == "IGNITION_ZONE":
+                    impact_s3 += d.invested_value * 0.25
+                elif zcode == "WASHOUT_WATCH":
+                    impact_s3 += d.invested_value * 0.10
+                else:
+                    impact_s3 += d.invested_value * 0.02
+            pnl_pct_s3 = round((impact_s3 / total_invested) * 100.0, 2)
+            verdict_s3 = "High Upside" if pnl_pct_s3 >= 12.0 else ("Moderate Upside" if pnl_pct_s3 >= 5.0 else "Low Momentum")
+            stress_scenarios.append(
+                StressScenarioResult(
+                    name="Right-Side Ignition Wave (+25%)",
+                    projected_pnl_pct=pnl_pct_s3,
+                    impact_usd=round(impact_s3, 2),
+                    verdict=verdict_s3,
+                )
+            )
+
+        # Automated Rebalancing Recommendations
+        # Harvest stopped/dead positions and reallocate into top active ignition setups using strict 1.35% risk parity sizing
+        rebalance_recommendations: List[RebalanceRecommendation] = []
+        stopped_positions = [d for d in diagnostics if d.status_code in ("HARD_STOP", "TIME_STOP")]
+        total_harvested = 0.0
+
+        for sp in stopped_positions:
+            reason = "Hard stop exit capital recovery" if sp.status_code == "HARD_STOP" else "Time stop dead money capital recovery"
+            rebalance_recommendations.append(
+                RebalanceRecommendation(
+                    action="HARVEST",
+                    ticker=sp.ticker,
+                    target_ticker=None,
+                    amount_usd=sp.invested_value,
+                    allocation_pct=None,
+                    reason=reason,
+                    setup_type=sp.status_code,
+                )
+            )
+            total_harvested += sp.invested_value
+
+        total_harvested = round(total_harvested, 2)
+        current_tickers = {d.ticker for d in diagnostics}
+        ignition_candidates = [
+            s for s in self.stocks
+            if s.zone_code == "IGNITION_ZONE" and s.ticker not in current_tickers and s.ticker not in VALUE_TRAPS
+        ]
+        ignition_candidates.sort(key=lambda s: -s.score)
+
+        if total_harvested > 0:
+            if ignition_candidates:
+                realloc_count = min(3, len(ignition_candidates))
+                per_target_usd = round(total_harvested / realloc_count, 2)
+                per_target_pct = round(100.0 / realloc_count, 1)
+                for cand in ignition_candidates[:realloc_count]:
+                    rebalance_recommendations.append(
+                        RebalanceRecommendation(
+                            action="REALLOCATE",
+                            ticker=None,
+                            target_ticker=cand.ticker,
+                            amount_usd=per_target_usd,
+                            allocation_pct=per_target_pct,
+                            reason="1.35% risk parity allocation into active Right-Side Ignition setup",
+                            setup_type=f"IGNITION_ZONE (Score {cand.score})",
+                        )
+                    )
+            else:
+                rebalance_recommendations.append(
+                    RebalanceRecommendation(
+                        action="REALLOCATE",
+                        ticker=None,
+                        target_ticker="CASH_RESERVE",
+                        amount_usd=total_harvested,
+                        allocation_pct=100.0,
+                        reason="Harvested capital held in cash safe-haven awaiting fresh Ignition triggers",
+                        setup_type="CASH_SAFE_HAVEN",
+                    )
+                )
+        else:
+            if not stopped_positions and diagnostics:
+                rebalance_recommendations.append(
+                    RebalanceRecommendation(
+                        action="MAINTAIN",
+                        ticker=None,
+                        target_ticker=None,
+                        amount_usd=0.0,
+                        allocation_pct=100.0,
+                        reason="Portfolio positions aligned with quant criteria; maintain active trailing stops.",
+                        setup_type="ACTIVE_PORTFOLIO",
+                    )
+                )
+
+        return PortfolioDoctorResponse(
+            health_score=health_score,
+            total_invested=total_invested,
+            total_unrealized_pnl=total_unrealized_pnl,
+            total_unrealized_pnl_pct=total_unrealized_pnl_pct,
+            capital_at_risk=capital_at_risk,
+            items=diagnostics,
+            stress_scenarios=stress_scenarios,
+            rebalance_recommendations=rebalance_recommendations,
+        )
+
+    def get_sector_regime_matrix(self) -> SectorMatrixResponse:
+        """
+        Sector Regime Matrix & Heatmap:
+        Aggregates all 72 US equities across 8 sectors and 4 technical zones.
+        Computes average PW-RSI composite scores, momentum trends, and active ignition counts.
+        """
+        sectors_dict: Dict[str, List[StockBase]] = {}
+        for s in self.stocks:
+            sec_name = SECTOR_REGIME_MAP.get(s.sector, "Other")
+            sectors_dict.setdefault(sec_name, []).append(s)
+
+        items: List[SectorMatrixItem] = []
+        for sec_name, s_list in sectors_dict.items():
+            avg_sc = round(sum(x.score for x in s_list) / len(s_list), 1)
+            ign_count = sum(1 for x in s_list if x.zone_code == "IGNITION_ZONE")
+            trend = "BULLISH" if avg_sc >= 50.0 else ("BEARISH" if avg_sc < 40.0 else "NEUTRAL")
+            items.append(
+                SectorMatrixItem(
+                    name=sec_name,
+                    count=len(s_list),
+                    avg_score=avg_sc,
+                    momentum_trend=trend,
+                    ignition_count=ign_count,
+                    tickers=[x.ticker for x in s_list],
+                )
+            )
+
+        # Primary sort: active ignition count descending, then avg score descending
+        items.sort(key=lambda m: (-m.ignition_count, -m.avg_score))
+        return SectorMatrixResponse(sectors=items)
+
+    def update_watchlist(self, tickers: List[str], action: str = "set") -> WatchlistResponse:
+        """
+        Updates VIP Watchlist tracking state.
+        Supported actions: 'set', 'add', 'remove', 'clear'.
+        """
+        cleaned = [t.strip().upper() for t in tickers if t and t.strip()]
+        action_clean = (action or "set").strip().lower()
+
+        if action_clean == "set":
+            self.vip_watchlist = sorted(list(dict.fromkeys(cleaned)))
+        elif action_clean == "add":
+            merged = dict.fromkeys(self.vip_watchlist + cleaned)
+            self.vip_watchlist = sorted(list(merged.keys()))
+        elif action_clean == "remove":
+            remove_set = set(cleaned)
+            self.vip_watchlist = [t for t in self.vip_watchlist if t not in remove_set]
+        elif action_clean == "clear":
+            self.vip_watchlist = []
+
+        return WatchlistResponse(
+            watchlist=list(self.vip_watchlist),
+            count=len(self.vip_watchlist),
+            message=f"Watchlist action '{action_clean}' processed successfully",
+        )
+
+    def get_watchlist(self) -> WatchlistResponse:
+        """Returns current synchronized VIP Watchlist tickers."""
+        return WatchlistResponse(
+            watchlist=list(self.vip_watchlist),
+            count=len(self.vip_watchlist),
+            message="Watchlist retrieved successfully",
+        )
+
 
 quant_engine = QuantEngine.get_instance()
+

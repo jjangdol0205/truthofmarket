@@ -285,3 +285,110 @@ def test_t2_referral_missing_ticker_defaults_safely(client):
     resp = client.get("/api/referral/build?provider=tradingview")
     assert resp.status_code == 200
     assert "url" in resp.json()
+
+
+# ==============================================================================
+# 7. VIP Portfolio Doctor 2.0 Boundary & Mathematical Tests
+# ==============================================================================
+
+def test_t2_portfolio_doctor_empty_and_max_positions(client):
+    """
+    Boundary verification:
+    1. Empty positions list: returns 100 health score, 0.0 invested and safe defaults.
+    2. Maximum standard positions (10 positions boundary): executes diagnostics without degradation.
+    """
+    headers = {"Authorization": "Bearer PRO-DEMO-2026"}
+
+    # Boundary 1: Empty list
+    resp_empty = client.post(
+        "/api/pro/portfolio-doctor",
+        headers=headers,
+        json={"positions": [], "total_capital": 10000.0},
+    )
+    assert resp_empty.status_code == 200
+    data_empty = resp_empty.json()
+    assert data_empty["health_score"] == 100
+    assert data_empty["total_invested"] == 0.0
+    assert data_empty["capital_at_risk"] == 0.0
+    assert data_empty["items"] == []
+    assert len(data_empty["stress_scenarios"]) == 3
+
+    # Boundary 2: 10 positions (boundary limit)
+    tickers = ["NVDA", "AVGO", "MRVL", "TSM", "AMD", "CELH", "SPOT", "INTC", "TSLA", "AAPL"]
+    positions_10 = [
+        {
+            "ticker": sym,
+            "entry_price": 100.0 + i * 10,
+            "shares": 5.0,
+            "days_held": 10 + i * 2,
+            "current_price": 105.0 + i * 10,
+        }
+        for i, sym in enumerate(tickers)
+    ]
+    resp_10 = client.post(
+        "/api/pro/portfolio-doctor",
+        headers=headers,
+        json={"positions": positions_10, "total_capital": 50000.0},
+    )
+    assert resp_10.status_code == 200
+    data_10 = resp_10.json()
+    assert len(data_10["items"]) == 10
+    assert data_10["total_invested"] > 0
+    assert len(data_10["stress_scenarios"]) == 3
+    assert 0 <= data_10["health_score"] <= 100
+
+
+def test_t2_portfolio_doctor_rule_violations_and_health_scoring(client):
+    """
+    Verifies that positions breaching Rule 1 (-9% hard stop) and Rule 2 (55D time stop):
+    - Are correctly identified with status_code HARD_STOP and TIME_STOP
+    - Incur proper health score deductions (100 - 30 - 15 = 55)
+    - Generate actionable harvest recommendations and reallocation into top ignition setups
+    """
+    headers = {"Authorization": "Bearer PRO-DEMO-2026"}
+    payload = {
+        "positions": [
+            {"ticker": "CELH", "entry_price": 35.0, "shares": 100, "days_held": 45, "current_price": 28.5},
+            {"ticker": "INTC", "entry_price": 30.0, "shares": 100, "days_held": 60, "current_price": 31.0},
+            {"ticker": "NVDA", "entry_price": 120.0, "shares": 50, "days_held": 20, "current_price": 130.0},
+        ],
+        "total_capital": 25000.0,
+    }
+    resp = client.post("/api/pro/portfolio-doctor", headers=headers, json=payload)
+    assert resp.status_code == 200
+    data = resp.json()
+
+    # Health score deducted: 100 - (30 for hard stop) - (15 for time stop) = 55
+    assert data["health_score"] == 55
+
+    # Position 1: CELH -18.57% -> Rule 1 Hard Stop
+    celh = next(it for it in data["items"] if it["ticker"] == "CELH")
+    assert celh["status_code"] == "HARD_STOP"
+    assert celh["action"] == "CRITICAL_STOP_EXIT"
+    assert celh["is_critical"] is True
+    assert celh["current_return_pct"] == -18.57
+
+    # Position 2: INTC +3.33% at 60 days -> Rule 2 55D Time Stop
+    intc = next(it for it in data["items"] if it["ticker"] == "INTC")
+    assert intc["status_code"] == "TIME_STOP"
+    assert intc["action"] == "DEAD_MONEY_ROTATE"
+    assert intc["is_critical"] is False
+
+    # Position 3: NVDA +8.33% at 20 days -> Rule 4 Ongoing Hold
+    nvda = next(it for it in data["items"] if it["ticker"] == "NVDA")
+    assert nvda["status_code"] == "HOLD"
+    assert nvda["action"] == "ACTIVE_HOLD"
+
+    # Harvest rebalancing recommendations
+    recs = data["rebalance_recommendations"]
+    harvest_recs = [r for r in recs if r["action"] == "HARVEST"]
+    assert len(harvest_recs) >= 1
+    harvest_tickers = [r["ticker"] for r in harvest_recs]
+    assert "CELH" in harvest_tickers
+
+    realloc_recs = [r for r in recs if r["action"] == "REALLOCATE"]
+    assert len(realloc_recs) > 0
+    for r in realloc_recs:
+        assert r["target_ticker"] is not None
+        assert r["amount_usd"] > 0
+

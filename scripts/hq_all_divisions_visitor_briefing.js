@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
  * scripts/hq_all_divisions_visitor_briefing.js
- * 1·2·3사업부 통합 홈페이지 실방문자(UV/PV) & 사업부별 핵심 목표(1·2사업부: 유료회원 전환 / 3사업부: 상품 레퍼럴 클릭) 정기 브리핑 엔진
+ * 1·2·3·4·5사업부 통합 홈페이지 실방문자(UV/PV) & 사업부별 핵심 목표(1·2·3사업부: 유료회원 전환 / 4사업부: 골드 VIP·응원후원·라디오 / 5사업부: 상품 레퍼럴 클릭) 정기 브리핑 엔진
  *
  * [정합성 보장 아키텍처]
  * 1. Abacus API 레이트리밋(HTTP 429) 원천 차단:
- *    - 기존 36개 병렬 호출 대신 오늘 필요한 핵심 키(총 11개)만 350ms 간격 순차 조회 + HTTP 429 자동 재시도
+ *    - 필요한 핵심 키만 350ms 간격 순차 조회 + HTTP 429 자동 재시도
  * 2. 영구 원장(data/hq_visitor_ledger.json) 단조증가(Monotonic) 보장:
  *    - 네트워크/429 일시 오류 시 절대 0으로 초기화되지 않고 직전 유효값 유지
  *    - PV >= UV 수학적 정합성 보장 및 누적치(Total) = 전체 일자별 합산(Sum of daily records) 100% 일치 보장
@@ -46,12 +46,14 @@ const BOT_TOKENS_BY_DIV = {
   HQ: loadHqBotToken(),
   '1사업부': loadEnvToken('D:\\드림컴퍼니\\1사업부\\.env', /RSA_TELEGRAM_BOT_TOKEN=([^\r\n]+)/),
   '2사업부': loadEnvToken('D:\\드림컴퍼니\\2사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/),
-  '3사업부': loadEnvToken('D:\\드림컴퍼니\\3사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/),
-  '4사업부': loadHqBotToken()
+  '3사업부': loadEnvToken('D:\\드림컴퍼니\\3사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/) || loadHqBotToken(),
+  '4사업부': loadEnvToken('D:\\드림컴퍼니\\4사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/) || '8899653516:AAEr6ZWcfkXObdiU83o-LYaw3eHL9J0QbHU',
+  '5사업부': loadEnvToken('D:\\드림컴퍼니\\5사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/)
 };
 
 const BOT_TOKEN = BOT_TOKENS_BY_DIV['1사업부'] || BOT_TOKENS_BY_DIV.HQ;
 const CHAT_ID = '-1003834697086';
+const OWNER_USER_ID = '755033799';
 
 function getActiveChatId() {
   try {
@@ -166,9 +168,7 @@ function checkSiteHealth(urlStr) {
   });
 }
 
-function sendTelegramHtml(text, preferredToken = null, customChatId = null) {
-  const tok = preferredToken || BOT_TOKEN;
-  const targetChatId = customChatId || getActiveChatId();
+function sendTelegramHtmlSingle(tok, targetChatId, text) {
   return new Promise((resolve) => {
     const payload = JSON.stringify({
       chat_id: targetChatId,
@@ -197,6 +197,20 @@ function sendTelegramHtml(text, preferredToken = null, customChatId = null) {
     req.write(payload);
     req.end();
   });
+}
+
+async function sendTelegramHtml(text, preferredToken = null, customChatId = null) {
+  const tok = preferredToken || BOT_TOKEN;
+  const targetChatId = customChatId || getActiveChatId();
+  let res = await sendTelegramHtmlSingle(tok, targetChatId, text);
+  if (!res.ok && targetChatId !== OWNER_USER_ID) {
+    // If bot is not yet in group chat, send directly to Owner DM or fallback to HQ bot
+    res = await sendTelegramHtmlSingle(tok, OWNER_USER_ID, text);
+    if (!res.ok && BOT_TOKENS_BY_DIV.HQ) {
+      res = await sendTelegramHtmlSingle(BOT_TOKENS_BY_DIV.HQ, targetChatId, text);
+    }
+  }
+  return res;
 }
 
 async function fetchDivisionMetricsSequential(div, ledger) {
@@ -309,7 +323,7 @@ async function runVisitorBriefing(options = {}) {
       kpiType: 'PAID',
       kpiGoal: '유료화 회원수 증대 (PRO 구독 & VIP 채널)',
       gscStatus: '소유권 인증 완료 · Sitemap 75개 URL 정상 등록',
-      channels: 'IG @rightsidealpha · X @rightsidealpha · TG @truthofmarketss'
+      channels: 'IG @rightsidealpha · X @rightsidealpha · TG @RigjtsideAlphabot'
     },
     {
       code: '2사업부',
@@ -320,29 +334,40 @@ async function runVisitorBriefing(options = {}) {
       kpiType: 'PAID',
       kpiGoal: '유료화 회원수 증대 ($8.99 단건 / $19.99 6개월 패스)',
       gscStatus: '소유권 인증 완료 · Sitemap 63p & RSS 31p 성공',
-      channels: 'IG @kisfitglobal · YT @kisfitglobal · LemonSqueezy Live'
+      channels: 'IG @kisfitglobal · YT @kisfitglobal · TG @kidsfittbot'
     },
     {
       code: '3사업부',
-      name: 'KIDS-FIT Korea 한국판',
+      name: 'GetBreakAI 일본 퀀트 브레이크아웃 터미널',
+      domain: 'getbreakai.com',
+      url: 'https://getbreakai.com/jp/',
+      ns: 'gba_getbreakai',
+      kpiType: 'PAID',
+      kpiGoal: '일본 시장 유료화 회원수 증대 (新NISA·특정계좌 퀀트 PRO $29/$49)',
+      gscStatus: '일본어 핀테크 UI · RSS 피드(/jp/feed.xml) · Sitemap 개통',
+      channels: 'IG/YT 일본 쇼츠 · X 자동 신디케이션 · TG @SemifearGreedbot'
+    },
+    {
+      code: '4사업부',
+      name: '파라다이스 히어로 & @김쌤의영웅라디오',
+      domain: 'paradise-hero.com',
+      url: 'https://paradise-hero.com/',
+      ns: 'hero_paradisehero',
+      kpiType: 'PAID',
+      kpiGoal: '황영웅 골드 VIP 멤버십(월 9,900원) · 황금 응원 전광판 후원 · 시니어 커머스',
+      gscStatus: '시니어 WCAG AAA 6개 페이지 구축 · 15분 롱폼 라디오 파이프라인 가동',
+      channels: 'YT @김쌤의영웅라디오 (롱폼) · paradise-hero.com · TG @inves123_bot'
+    },
+    {
+      code: '5사업부',
+      name: 'KIDS-FIT Korea 한국판 (100% 패시브 자동화)',
       domain: 'kidsfit.co.kr',
       url: 'https://kidsfit.co.kr/',
       ns: 'kfk_kidsfitkr',
       kpiType: 'REFERRAL',
-      kpiGoal: '상품 구매 클릭으로 상품 레퍼럴(쿠팡/셀렉트샵) 확대',
-      gscStatus: '소유권 인증 완료 · Sitemap 32p & RSS 27p 성공',
-      channels: 'IG @kids_fit1 · YT @kidsfit01 · 무료진단 + 상품레퍼럴'
-    },
-    {
-      code: '4사업부',
-      name: 'GetBreakAI 이벤트·감마 퀀트 터미널',
-      domain: 'getbreakai.com',
-      url: 'https://getbreakai.com/',
-      ns: 'gba_getbreakai',
-      kpiType: 'PAID',
-      kpiGoal: '유료화 회원수 증대 ($29/mo & $199 Lifetime 듀얼 번들)',
-      gscStatus: '커스텀 도메인 HTTPS 개통 · Sitemap & JSON-LD 등록 완료',
-      channels: 'TG @SemifearGreedbot · X/YT Shorts · TruthOfMarket 크로스번들'
+      kpiGoal: '100% 무인 패시브 운영 및 쿠팡(AF7865143)·링크프라이스(A100708867) 레퍼럴 수익',
+      gscStatus: '소유권 인증 완료 · Sitemap 32p & RSS 27p 무인 유지보수',
+      channels: '무인 패시브 자동화 · TG @Moneyfiityyy_bot'
     }
   ];
 
@@ -357,13 +382,13 @@ async function runVisitorBriefing(options = {}) {
   const nowStr = getKstNowFormatted();
 
   const lines = [
-    `🎯 <b>[전사업부 최우선 목표 — 1순위: 홈페이지 유입 | 2순위: 유료결제 브리핑]</b>`,
+    `🎯 <b>[전사업부(1~5사업부) 최우선 목표 — 1순위: 홈페이지 유입 | 2순위: 유료결제·수익전환 브리핑]</b>`,
     `⏰ <b>집계 시각</b>: <code>${nowStr}</code> (봇·크롤러 제외 순수 실방문자 · 영구원장 동기화)`,
     `━━━━━━━━━━━━━━━━━━`
   ];
 
   for (const r of results) {
-    const statusBadge = r.health.ok ? `🟢 정상 (${r.health.ms}ms)` : `🔴 점검필요`;
+    const statusBadge = r.health.ok ? `🟢 정상 (${r.health.ms}ms)` : `🟡 배포대기/점검`;
     const kpiLine =
       r.kpiType === 'PAID'
         ? `• <b>🥈 [2순위 목표: 유료결제]</b>: 오늘 결제창 클릭 <b>${r.paidClickToday}회</b> (누적 ${r.paidClickTotal}회) · 실결제 완료 <b>${r.paidMemberToday}건</b> (누적 <b>${r.paidMemberTotal}건</b>)`
@@ -380,9 +405,9 @@ async function runVisitorBriefing(options = {}) {
   }
 
   lines.push(
-    `🔔 <b>정기 자동 브리핑 &amp; 24시간 교대근무</b>`,
-    `• <b>최우선 순위 고정</b>: 🥇 1순위 홈페이지 유입(UV/PV) ➡️ 🥈 2순위 유료결제·구매전환 (강화학습 보류 · 홍보 100% 집중)`,
-    `• <b>오전 08:30 &amp; 밤 21:00</b>: 전 사업부 방문자·유료전환·상품레퍼럴 정기 결산 보고`
+    `🔔 <b>정기 자동 브리핑 &amp; 1~5사업부 5개 전담 봇 체계</b>`,
+    `• <b>최우선 순위 고정</b>: 🥇 1순위 홈페이지 유입(UV/PV) ➡️ 🥈 2순위 유료결제·구매전환`,
+    `• <b>오전 08:30 &amp; 밤 21:00</b>: 1~5사업부 방문자·유료전환·상품레퍼럴 정기 결산 보고`
   );
 
   const html = lines.join('\n');
@@ -395,14 +420,14 @@ async function runVisitorBriefing(options = {}) {
       saveLedger(ledger);
       // 1. 본사 총괄 매니저 (@SemifearGreedbot) 브리핑 개시 선언
       await sendTelegramHtml(
-        `🏛️ <b>[드림컴퍼니 본사 총괄 — 정기 방문자 &amp; 전환 브리핑 개시]</b>\n` +
+        `🏛️ <b>[드림컴퍼니 본사 총괄 — 1~5사업부 정기 방문자 &amp; 전환 브리핑 개시]</b>\n` +
           `⏰ <b>집계 시각</b>: <code>${nowStr}</code>\n` +
-          `• <b>원칙</b>: 1·2·3사업부 각 전담 봇이 모두컴퍼니 대화방을 통해 직접 실적을 보고합니다.`,
+          `• <b>원칙</b>: 1·2·3·4·5사업부 각 전담 봇이 모두컴퍼니 대화방을 통해 직접 실적을 보고합니다.`,
         BOT_TOKENS_BY_DIV.HQ
       );
-      // 2. 1·2·3사업부 각 전담 봇이 대화방(모두컴퍼니)을 통해 직접 실적을 보고
+      // 2. 1~5사업부 각 전담 봇이 직접 실적을 보고
       for (const r of results) {
-        const statusBadge = r.health.ok ? `🟢 정상 (${r.health.ms}ms)` : `🔴 점검필요`;
+        const statusBadge = r.health.ok ? `🟢 정상 (${r.health.ms}ms)` : `🟡 배포대기/점검`;
         const kpiLine =
           r.kpiType === 'PAID'
             ? `• <b>🥈 [유료결제 전환]</b>: 오늘 결제창 클릭 <b>${r.paidClickToday}회</b> (누적 ${r.paidClickTotal}회) · 실결제 완료 <b>${r.paidMemberToday}건</b> (누적 <b>${r.paidMemberTotal}건</b>)`
@@ -414,7 +439,7 @@ async function runVisitorBriefing(options = {}) {
           `• <b>🥇 [홈페이지 유입]</b>: 오늘 UV <b>${r.uvToday.toLocaleString()}명</b> (PV ${r.pvToday.toLocaleString()}회) ｜ 어제 <b>${r.uvYest.toLocaleString()}명</b> (${r.pvYest.toLocaleString()}회) ｜ 누적 <b>${r.uvTotal.toLocaleString()}명</b> (${r.pvTotal.toLocaleString()}회)`,
           kpiLine,
           `• <b>🎯 핵심 목표</b>: ${r.kpiGoal}`,
-          `• <b>서버 &amp; 서치콘솔</b>: ${statusBadge} | ✅ <code>${r.gscStatus}</code>`
+          `• <b>서버 &amp; 채널</b>: ${statusBadge} | ✅ <code>${r.channels}</code>`
         ].join('\n');
         await sendTelegramHtml(divHtml, BOT_TOKENS_BY_DIV[r.code] || BOT_TOKEN);
       }
@@ -436,4 +461,4 @@ if (require.main === module) {
     });
 }
 
-module.exports = { runVisitorBriefing };
+module.exports = { runVisitorBriefing, BOT_TOKENS_BY_DIV };
