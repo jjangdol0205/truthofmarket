@@ -1563,7 +1563,10 @@ async function main() {
   // CLI helper mode: `--notify "message" [--div TOM|KFG|GBA|HERO|KFK|HQ|ALL]`
   const notifyIdx = process.argv.indexOf("--notify");
   if (notifyIdx !== -1 && process.argv[notifyIdx + 1]) {
-    const msg = process.argv[notifyIdx + 1];
+    let msg = process.argv[notifyIdx + 1];
+    if (msg.includes(".99/.99")) {
+      msg = msg.replace(/\.99\/\.99/g, "$8.99/$19.99");
+    }
     const divIdx = process.argv.indexOf("--div");
     let divArg = divIdx !== -1 && process.argv[divIdx + 1] ? process.argv[divIdx + 1].toUpperCase() : "";
     if (!divArg) {
@@ -1585,9 +1588,11 @@ async function main() {
     const htmlOut = `📬 <b>[작업 완료 보고]</b>\n${msg}`;
 
     // Always send to 모두컴퍼니 본부 방, and if the last command was in a 1:1 chat, send there too!
-    await sendHqMessage(htmlOut, true, targetToken, groupChat);
+    const rGroup = await sendHqMessage(htmlOut, true, targetToken, groupChat);
+    console.log(`[HQ Bridge Notify] Dispatched via ${DIVISIONS[divArg]?.botHandle || targetToken} to groupChat (${groupChat}): ${rGroup && rGroup.ok ? "SUCCESS" : JSON.stringify(rGroup)}`);
     if (lastChat && lastChat !== groupChat) {
-      await sendHqMessage(htmlOut, true, targetToken, lastChat);
+      const rLast = await sendHqMessage(htmlOut, true, targetToken, lastChat);
+      console.log(`[HQ Bridge Notify] Dispatched via ${DIVISIONS[divArg]?.botHandle || targetToken} to lastChat (${lastChat}): ${rLast && rLast.ok ? "SUCCESS" : JSON.stringify(rLast)}`);
     }
     return;
   }

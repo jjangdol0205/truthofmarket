@@ -1615,4 +1615,7 @@ a {
     flex-direction: column;
   }
   .doc-vip-action-bar .btn {
-    width: 1
+    width: 100%;
+  }
+}
+
