@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: getbreakai-static
+    name: truthofmarket-static
     runtime: static
     buildCommand: ""
     staticPublishPath: ./dist
