@@ -16,6 +16,7 @@ const moduleOrder = [
   "src/locales/i18n.js",
   "src/services/api.js",
   "src/components/PositionDoctor.js",
+  "src/components/ChartBlindTest.js",
   "src/components/Header.js",
   "src/components/Hero.js",
   "src/components/ProofCard.js",
@@ -73,6 +74,37 @@ const indexHtml = `<!DOCTYPE html>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700;800&family=Noto+Sans+JP:wght@400;600;700&family=Noto+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://truthofmarket.com/#software",
+        "name": "RightSideAlpha × SemiFearGreed Institutional Quant Terminal",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Web",
+        "url": "https://truthofmarket.com/",
+        "offers": [
+          {
+            "@type": "Offer",
+            "name": "Pro Quantitative Terminal (Monthly)",
+            "price": "29.00",
+            "priceCurrency": "USD",
+            "url": "https://truthofmarket.lemonsqueezy.com/checkout/buy/bad98d00-7175-41f6-9d58-eeb2471d0da4"
+          },
+          {
+            "@type": "Offer",
+            "name": "Lifetime Research & Terminal License",
+            "price": "199.00",
+            "priceCurrency": "USD",
+            "url": "https://truthofmarket.lemonsqueezy.com/checkout/buy/00c9f6e1-c8be-42a4-b5a5-e05af1a41ed9"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
   <script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
   <script type="module" crossorigin src="./assets/${jsFileName}"></script>
   <link rel="stylesheet" crossorigin href="./assets/${cssFileName}" />

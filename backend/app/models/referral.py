@@ -26,15 +26,15 @@ class ReferralConfig(BaseModel):
     tradingview_aff_id: str = Field("1173809", description="TradingView partner affiliate ID")
     seekingalpha_source: str = Field("better_life333", description="Seeking Alpha tracking source tag")
     trendspider_aff_id: str = Field("rightside", description="TrendSpider partner tracking ID")
-    broker_name: str = Field("Bitget (7nja)", description="Broker/Exchange partner label")
+    broker_name: str = Field("TrendSpider (rightside)", description="US Equity Charting & Scanner Partner label")
     broker_referral_url: str = Field(
-        "https://www.bitget.com/referral/register?clacCode=7nja",
-        description="Broker/Exchange affiliate referral URL",
+        "https://trendspider.com/?_go=rightside",
+        description="US Equity Charting & Scanner affiliate referral URL",
     )
     telegram_channel_url: Optional[str] = Field("https://t.me/truthofmarketss")
     telegram_vip_channel_url: Optional[str] = Field("")
     telegram_chat_id: Optional[str] = Field("@truthofmarketss")
-    youtube_url: Optional[str] = Field("https://youtube.com/@rightsidealpha")
+    youtube_url: Optional[str] = Field("https://www.youtube.com/@RightSideAlpha")
     instagram_url: Optional[str] = Field("https://www.instagram.com/rightsidealpha")
 
 

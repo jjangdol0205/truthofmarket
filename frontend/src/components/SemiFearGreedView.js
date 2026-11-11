@@ -322,12 +322,12 @@ export function renderSemiFearGreedView(state) {
         <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
           <a
             class="btn"
-            href="${state.config?.youtube_url || "https://youtube.com/@rightsidealpha"}"
+            href="${state.config?.youtube_url || "https://www.youtube.com/@RightSideAlpha"}"
             target="_blank"
             rel="noopener noreferrer"
             style="background:#dc2626; color:#ffffff; border-color:#b91c1c;"
           >
-            📺 YouTube (@rightsidealpha) ↗
+            📺 YouTube (@RightSideAlpha) ↗
           </a>
           <a
             class="btn"
@@ -474,11 +474,10 @@ export function renderSemiFearGreedView(state) {
           const cfg = state.config || {};
           const tvAffId = encodeURIComponent(cfg.tradingview_aff_id || "1173809");
           const saSource = encodeURIComponent(cfg.seekingalpha_source || "better_life333");
-          const rawBrk = cfg.broker_referral_url || "https://www.bitget.com/referral/register?clacCode=7nja";
-          const brkSep = rawBrk.includes("?") ? "&" : "?";
+          const tsAffId = encodeURIComponent(cfg.trendspider_aff_id || "rightside");
           const tvUrl = `https://www.tradingview.com/symbols/${encodeURIComponent(etf.ticker)}/?aff_id=${tvAffId}`;
           const saUrl = `https://seekingalpha.com/symbol/${encodeURIComponent(etf.ticker)}/earnings?source=${saSource}`;
-          const brokerUrl = `${rawBrk}${brkSep}symbol=${encodeURIComponent(etf.ticker)}`;
+          const tsUrl = `https://trendspider.com/?_go=${tsAffId}&symbol=${encodeURIComponent(etf.ticker)}`;
           return `
           <div class="proof-card" style="margin-bottom:0; border-top:2px solid ${
             etf.ticker === "SMH" ? "var(--fin-blue)" : etf.ticker === "XLV" ? "var(--fin-up)" : "#64748b"
@@ -508,7 +507,7 @@ export function renderSemiFearGreedView(state) {
               <div style="display:flex; gap:6px;">
                 <a class="btn btn-sm" href="${tvUrl}" target="_blank" rel="noopener noreferrer">TV Chart ↗</a>
                 <a class="btn btn-sm" href="${saUrl}" target="_blank" rel="noopener noreferrer">Holdings ↗</a>
-                <a class="btn btn-sm" href="${brokerUrl}" target="_blank" rel="noopener noreferrer" style="border-color:rgba(16,185,129,0.4); color:#34d399;">Trade ↗</a>
+                <a class="btn btn-sm" href="${tsUrl}" target="_blank" rel="noopener noreferrer" style="border-color:rgba(16,185,129,0.4); color:#34d399;">TrendSpider ↗</a>
               </div>
             </div>
           </div>

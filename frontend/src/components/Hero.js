@@ -1,3 +1,5 @@
+import { renderChartBlindTest } from "./ChartBlindTest.js";
+
 export function renderHero(state) {
   const t = state.t;
   const kpis = state.backtestKpis || {};
@@ -12,6 +14,21 @@ export function renderHero(state) {
 
   return `
     <section class="hero">
+      <!-- YOUTUBE SHORTS (@RightSideAlpha) SLIM QUICK-JUMP BRIDGE BAR -->
+      <div id="youtubeShortsQuickJumpBar" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; background:linear-gradient(90deg, rgba(220,38,38,0.16) 0%, rgba(15,23,42,0.92) 55%, rgba(16,185,129,0.14) 100%); border:1px solid rgba(248,113,113,0.42); border-radius:6px; padding:8px 14px; margin-bottom:14px;">
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:0.79rem; font-weight:700; color:#f8fafc;">
+          <span>🎬 Came from <a href="https://www.youtube.com/@RightSideAlpha" target="_blank" rel="noopener noreferrer" style="color:#fca5a5; text-decoration:underline; font-weight:800;">@RightSideAlpha</a> YouTube?</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <button type="button" class="btn btn-sm" id="btnQuickJumpSemiFg" style="background:rgba(220,38,38,0.2); border-color:rgba(248,113,113,0.55); color:#fecaca; font-weight:800; padding:5px 11px; font-size:0.74rem; cursor:pointer;">
+            🌡️ Live Semi Fear &amp; Greed
+          </button>
+          <a href="#doctor" class="btn btn-sm" id="btnQuickJumpDoctor" style="background:rgba(16,185,129,0.2); border-color:rgba(16,185,129,0.55); color:#6ee7b7; font-weight:800; padding:5px 11px; font-size:0.74rem; text-decoration:none;">
+            🩺 3-Sec Position Doctor
+          </a>
+        </div>
+      </div>
+
       <div class="hero-top-row">
         <div>
           <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:8px;">
@@ -47,7 +64,10 @@ export function renderHero(state) {
           <span><b>3. Harvest:</b> Sell 50% at +100% (2x Target)</span>
         </div>
         <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-          <a href="#proVaultSection" class="btn btn-sm" id="btnHeroJumpPositionDoctor" style="background:rgba(16,185,129,0.14); border-color:rgba(16,185,129,0.45); color:#34d399; font-weight:800; padding:5px 10px; font-size:0.73rem; text-decoration:none;">
+          <a href="#chartBlindTestSection" class="btn btn-sm" id="btnHeroJumpBlindTest" style="background:rgba(245,158,11,0.16); border-color:rgba(245,158,11,0.5); color:#fbbf24; font-weight:800; padding:5px 10px; font-size:0.73rem; text-decoration:none;">
+            🎯 15s Chart Blind Test ↓
+          </a>
+          <a href="#doctor" class="btn btn-sm" id="btnHeroJumpPositionDoctor" style="background:rgba(16,185,129,0.14); border-color:rgba(16,185,129,0.45); color:#34d399; font-weight:800; padding:5px 10px; font-size:0.73rem; text-decoration:none;">
             🩺 Free 3-Second Position Doctor ↓
           </a>
           <a href="#stockTable" class="btn btn-sm" id="btnHeroJumpFreeSample" style="background:rgba(56,189,248,0.1); border-color:rgba(56,189,248,0.35); color:#38bdf8; font-weight:700; padding:5px 10px; font-size:0.73rem; text-decoration:none;">
@@ -84,6 +104,9 @@ export function renderHero(state) {
 
       <!-- BEGINNER-FRIENDLY 10-SECOND PROFIT PLAYBOOK & INTERACTIVE DOLLAR CALCULATOR -->
       ${renderEasyProfitSimulator(state, netCagr)}
+
+      <!-- VIRAL SHORTS -> WEB MAGNET: 15-SECOND WALL STREET CHART BLIND TEST -->
+      ${renderChartBlindTest(state)}
     </section>
   `;
 }

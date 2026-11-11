@@ -183,8 +183,7 @@ export function renderStockRows(state) {
   );
   const tvAffId = encodeURIComponent(cfg.tradingview_aff_id || "1173809");
   const saSource = encodeURIComponent(cfg.seekingalpha_source || "better_life333");
-  const rawBrokerUrl = cfg.broker_referral_url || "https://www.bitget.com/referral/register?clacCode=7nja";
-  const brokerSep = rawBrokerUrl.includes("?") ? "&" : "?";
+  const tsAffId = encodeURIComponent(cfg.trendspider_aff_id || "rightside");
 
   if (!stocks.length) {
     return `
@@ -257,7 +256,7 @@ export function renderStockRows(state) {
 
       const tvUrl = `https://www.tradingview.com/symbols/${encodeURIComponent(s.ticker)}/?aff_id=${tvAffId}`;
       const saUrl = `https://seekingalpha.com/symbol/${encodeURIComponent(s.ticker)}/earnings?source=${saSource}`;
-      const brokerUrl = `${rawBrokerUrl}${brokerSep}symbol=${encodeURIComponent(s.ticker)}`;
+      const tsUrl = `https://trendspider.com/?_go=${tsAffId}&symbol=${encodeURIComponent(s.ticker)}`;
 
       const vipWatchlist = state.vipWatchlist || [];
       const isStarred = vipWatchlist.includes(s.ticker);
@@ -365,8 +364,8 @@ export function renderStockRows(state) {
             <a class="btn btn-sm" href="${saUrl}" target="_blank" rel="noopener noreferrer" title="Open Seeking Alpha Fundamentals (Partner)">
               SA ↗
             </a>
-            <a class="btn btn-sm" href="${brokerUrl}" target="_blank" rel="noopener noreferrer" title="Execute Trade on Partner Broker / Exchange" style="border-color:rgba(16,185,129,0.4); color:#34d399;">
-              Trade ↗
+            <a class="btn btn-sm" href="${tsUrl}" target="_blank" rel="noopener noreferrer" title="Open TrendSpider AI Breakout Scanner (Partner)" style="border-color:rgba(16,185,129,0.4); color:#34d399;">
+              TS ↗
             </a>
             `
             }

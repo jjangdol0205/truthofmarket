@@ -272,26 +272,26 @@ EPISODE_COPY_KIT: List[Dict[str, Any]] = [
     {
         "num": 10,
         "id": "EP10",
-        "topic_kr": "[V3 도파민판] 매일 밤 9시 30분 미국장 개장 전 3초 포지션 닥터(Position Doctor) 점검 루틴",
-        "yt_title": "Trading $NVDA, $TSLA or $SOXL Tonight? Run This 3-Second Check Before 9:30 AM Open 🔔📈 #nvda #tsla #soxl",
+        "topic_kr": "[V4 실전 차트 HUD] 개미 92%가 물리는 좌측 물타기($NVDA·$SMCI) vs 26년 백테스트 +17.81% 우측 돌파($CELH 2.46x)",
+        "yt_title": "Why 92% of Dip Buyers Lose Money ($NVDA, $SMCI vs $CELH 2.46x Quant Breakout) 📊🎯 #nvda #smci #celh",
         "yt_desc": (
-            "Before the US market opens at 9:30 AM EST, stop trading blind on social media hype.\n"
-            "In 3 seconds, check whether any US stock is in an institutional Right-Side Ignition or a dangerous Trap—and audit your open positions with Position Doctor.\n\n"
-            "🖥️ Open Live US Quant Terminal: https://truthofmarket.com\n"
+            "Buying a 'cheap' stock while it is -18% to -23% below its 60-day moving average ($NVDA, $SMCI, $COIN) traps retail capital for months.\n"
+            "Across 2,938 validated US trades over 26 years, waiting for Right-Side MA60 reclamation + institutional volume surge ($CELH 2.46x, VIP #2 3.41x) compounded at +17.81% net CAGR with a 55.24% 2x hit rate.\n\n"
+            "🎯 Play the 15-Second Wall Street Chart Blind Test: https://truthofmarket.com/#blindtest\n"
+            "🩺 Free 3-Second Position Doctor & Live Scanner: https://truthofmarket.com\n"
             "✈️ Free Morning Briefing Telegram Channel: https://t.me/truthofmarketss\n\n"
-            "#premarket #usstocks #stockmarket #daytrading #swingtrading #nvda #tsla #pltr #quanttrading #wallstreet"
+            "#usstocks #stockmarket #daytrading #swingtrading #nvda #smci #celh #quanttrading #wallstreet"
         ),
         "yt_pin": (
-            "🔔 Tap @rightsidealpha below and open our bio link for daily pre-market Ignition & 3-Second Position Doctor!"
+            "🎯 Can you spot the Bull Trap vs the 3.41x Institutional Breakout? Tap @rightsidealpha below and take the 15-Second Chart Blind Test on truthofmarket.com!"
         ),
         "ig_caption": (
-            'Comment "SMH" and I’ll DM you our Pre-Market Quant Terminal + Free Telegram Alert Bot 👇\n\n'
-            "Your 30-second pre-market checklist before the 9:30 AM EST opening bell:\n"
-            "✅ Check /ignition on Telegram for today's top Right-Side breakouts\n"
-            "✅ Check /semi for Semiconductor Fear & Greed barbell weights\n"
-            "✅ Run your open positions through Position Doctor for exact -9% Stop & 2x Target levels\n\n"
-            '💬 Drop "SMH" in the comments right now and check your DMs!\n\n'
-            "#premarket #usstocks #stockmarket #daytrading #swingtrading #nvda #tsla #quanttrading #wallstreet"
+            'Comment "SMH" or "ALPHA" and I’ll DM you our 15-Second Wall Street Chart Blind Test + Live Quant Terminal 👇\n\n'
+            "Why do 92% of dip buyers get trapped while Right-Side quants compound at +17.81%/yr?\n"
+            "❌ Left-Side Trap: Buying below a falling 60-day moving average ($NVDA -18.3% vs MA60)\n"
+            "🟢 Right-Side Ignition: Reclaiming MA60 with 2.46x–3.41x institutional volume ($CELH #1 Free Showcase + VIP #2 Score 98)\n\n"
+            '💬 Drop "SMH" in the comments right now and test your Quant IQ in 15 seconds!\n\n'
+            "#usstocks #stockmarket #daytrading #swingtrading #nvda #celh #quanttrading #wallstreet"
         ),
     },
     {
@@ -570,6 +570,83 @@ EPISODE_COPY_KIT: List[Dict[str, Any]] = [
             "Wait for 2.0x volume + PW-RSI 90 ignition at truthofmarket.com.\n\n"
             '💬 Comment "SMH" below for instant DM access!\n\n'
             "#nvda #smh #amd #semiconductors #usstocks #stockmarket #quanttrading #wallstreet"
+        ),
+    },
+    {
+        "num": 23,
+        "id": "EP23",
+        "topic_kr": "[V4 실전 차트 블라인드 테스트] 익명 차트 A($NVDA -18.3% 함정) vs 익명 차트 B($CELH 2.46x 돌파) — 당신의 선택은?",
+        "yt_title": "Wall Street Chart Blind Test: BUY the Dip or AVOID the Trap? ($NVDA vs 3.41x Quant Ignition) 🎯📊 #nvda #stocks",
+        "yt_desc": (
+            "Can you beat 92% of retail dip-buyers on this 15-second Wall Street Chart Blind Test?\n"
+            "• Mystery Stock A: Down 26% off its 52-week high, trading -18.3% below MA60 on 0.92x volume → Revealed as $NVDA ($178.67 Left-Side Trap).\n"
+            "• Mystery Stock B: Washed out, reclaimed MA60 by +12.7%, and surged on 2.46x institutional volume → Revealed as $CELH ($33.19 #1 Free Showcase).\n\n"
+            "🎯 Play All 3 Rounds Interactively (Including the Score 98 / 3.41x Volume Anomaly): https://truthofmarket.com/#blindtest\n"
+            "✈️ Free Telegram Quant Channel: https://t.me/truthofmarketss\n\n"
+            "#chartquiz #technicalanalysis #nvda #celh #usstocks #stockmarket #swingtrading #quanttrading #wallstreet"
+        ),
+        "yt_pin": (
+            "🎯 Did you call Round 1 ($NVDA Trap) and Round 2 ($CELH Ignition) correctly? Play Round 3 (3.41x Volume Surge, Score 98) live via @rightsidealpha bio!"
+        ),
+        "ig_caption": (
+            'Comment "SMH" or "ALPHA" and I’ll DM you the interactive 15-Second Wall Street Chart Blind Test 👇\n\n'
+            "Can you tell a Left-Side Falling Knife from a Right-Side Institutional Ignition?\n"
+            "🔴 Round 1 Reveal: $NVDA ($178.67) sitting -18.3% below MA60 on 0.92x volume = Left-Side Trap\n"
+            "🟢 Round 2 Reveal: $CELH ($33.19) reclaiming MA60 (+12.7%) on 2.46x volume = Right-Side Ignition\n"
+            "🔥 Round 3 Challenge: Score 98/100 + 3.41x Institutional Volume Anomaly\n\n"
+            '💬 Comment "SMH" below to test your Quant IQ and unlock today’s top signals!\n\n'
+            "#chartanalysis #usstocks #stockmarket #nvda #celh #swingtrading #quanttrading #wallstreet"
+        ),
+    },
+    {
+        "num": 24,
+        "id": "EP24",
+        "topic_kr": "[V4 $10,000 실전 계좌 대결] 좌측 물타기 개미($5,200 반토막) vs 우측 PW-RSI 퀀트($22,697 복리)",
+        "yt_title": "$10,000 Account Race: Retail Dip-Buyer ($5,200) vs Right-Side Quant Engine ($22,697) 💰⚔️ #usstocks #nvda #smci",
+        "yt_desc": (
+            "What happens when you put $10,000 into 'Buy the Dip' below the 60-day moving average versus $10,000 into a mechanical Right-Side PW-RSI Quant Engine?\n"
+            "• Trader A (Dip Buyer): Bought $SMCI (-23% vs MA60) & $COIN (-21% vs MA60) with no stop-loss → $10,000 shrank to $5,200 (-48%).\n"
+            "• Trader B (RightSideAlpha): Risked only -$135 per trade (-9% stop on 15% slot) on 2.46x–3.41x volume breakouts → $10,000 compounded to $22,697.\n\n"
+            "💰 Simulate Your Own $10,000 Trade Ticket: https://truthofmarket.com\n"
+            "🎯 Take the 15-Second Chart Blind Test: https://truthofmarket.com/#blindtest\n\n"
+            "#portfoliomanagement #riskmanagement #usstocks #stockmarket #smci #coin #celh #quanttrading #wallstreet"
+        ),
+        "yt_pin": (
+            "💰 Enter your own capital ($5K–$100K) and copy exact dollar buy, -9% stop, and +100% target tickets via @rightsidealpha bio!"
+        ),
+        "ig_caption": (
+            'Comment "SMH" and I’ll DM you our Live $10,000 Trade Ticket Calculator + 3-Second Position Doctor 👇\n\n'
+            "The math that separates institutional compounders from trapped retail accounts:\n"
+            "📉 Without a -9% stop below MA60: $10,000 drops to $5,200 (-48% requires +92% just to break even!)\n"
+            "📈 With our 15% slot & -9% stop: Max risk is just -$135 (-1.35% of equity) while targeting +$750 to +$1,500 on 2.46x+ volume breakouts.\n\n"
+            '💬 Drop "SMH" below for instant access!\n\n'
+            "#riskmanagement #usstocks #stockmarket #swingtrading #quanttrading #wallstreet"
+        ),
+    },
+    {
+        "num": 25,
+        "id": "EP25",
+        "topic_kr": "[V4 기관 수급 레이더] 오늘 72종목 중 기관 거래량 2.46배~3.41배 폭발한 TOP 3 (#1 $CELH 무료 공개 & #2·#3 VIP)",
+        "yt_title": "3 US Stocks Triggered Extreme 2.46x–3.41x Institutional Volume Today (#1 $CELH Unlocked) 🚨🐋 #celh #usstocks",
+        "yt_desc": (
+            "Out of 72 liquid NYSE & NASDAQ leaders today, 67 were filtered out as noise or left-side traps—and only 5 entered our confirmed Ignition Zone.\n"
+            "• #1 Free Daily Showcase: $CELH ($33.19 | Score 84 | 2.46x Vol Surge | Stop $30.20 | Target $66.38)\n"
+            "• #2 & #3 VIP Anomalies: Scoring 98/100 with 3.41x and 3.17x institutional volume breakouts.\n\n"
+            "🔓 Check #1 $CELH Free & Unlock #2–#3 VIP Tickers: https://truthofmarket.com\n"
+            "🎯 15-Second Chart Blind Test: https://truthofmarket.com/#blindtest\n\n"
+            "#celh #volumeanalysis #breakoutstocks #usstocks #stockmarket #swingtrading #quanttrading #wallstreet"
+        ),
+        "yt_pin": (
+            "🐋 See #1 $CELH ($33.19, 2.46x Vol) unlocked FREE and reveal today's Score 98 / 3.41x VIP breakout via @rightsidealpha bio!"
+        ),
+        "ig_caption": (
+            'Comment "SMH" or "ALPHA" to see today’s #1 Free Showcase ($CELH 2.46x Vol) & unlock the 3.41x VIP Breakout 👇\n\n'
+            "Institutions cannot hide 3.41x volume expansion.\n"
+            "🔓 #1 Free Showcase: $CELH ($33.19 · Score 84 · Stop $30.20 · TP1 $66.38)\n"
+            "🔒 #2 Pro VIP: Score 98/100 · 3.41x Institutional Volume Surge\n"
+            "🔒 #3 Pro VIP: Score 98/100 · 3.17x Institutional Volume Surge\n\n"
+            '💬 Comment "SMH" below and check your DMs!\n\n'
+            "#celh #breakoutstocks #usstocks #stockmarket #swingtrading #quanttrading #wallstreet"
         ),
     },
 ]

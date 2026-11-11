@@ -1,6 +1,6 @@
 # 🎬 US Viral Promo Shorts 10-Episode Google Flow Prompts & Script Pack
 
-- **Target**: US & Global Retail Traders (YouTube Shorts `@rightsidealpha` / Instagram Reels `@semifeargreed` / Telegram `@SemifearGreedbot`)
+- **Target**: US & Global Retail Traders (YouTube Shorts `@RightSideAlpha` / Instagram Reels `@rightsidealpha` / Telegram `@truthofmarketss`)
 - **How to Use**:
   1. Open Google Flow (`https://labs.google/fx/tools/flow`) in **9:16 Portrait** mode.
   2. Copy either **Shot 1 (Fast 1-Clip Mode)** or **Shots 1~3 (Full 3-Clip Mode)** for any episode below.
@@ -33,7 +33,7 @@ Vertical 9:16 cinematic medium shot, 4k photorealistic. A calm, razor-sharp Wall
 
 ---
 ## 🎬 EP02: EP02_RSA_Falling_Knife_Trap (-50% 반토막 주식 줍다가 지하실 가는 이유 (떨어지는 칼날))
-- **Style**: Brutal Truth / Wall Street Wake-Up | **Target**: 🚀 RightSideAlpha (getbreakai.com)
+- **Style**: Brutal Truth / Wall Street Wake-Up | **Target**: 🚀 RightSideAlpha (truthofmarket.com)
 - **Save Filename**: `ep02.mp4` (1-Clip Mode) or `ep02_shot1.mp4`, `ep02_shot2.mp4`, `ep02_shot3.mp4` (3-Clip Mode)
 
 ### ⭐ Shot 1 Prompt (Main Hook / 1-Clip Fast Mode)
@@ -52,7 +52,7 @@ Vertical 9:16 cinematic shot, 4k photorealistic. A high-tech dark quantitative t
 1. **Shot 1**: "You bought a famous stock down fifty percent thinking it was cheap, and then it dropped another forty percent."
 2. **Shot 2**: "Buying the left side of a crash is called catching a falling knife, and it traps retail capital for years."
 3. **Shot 3**: "Institutional quants never guess the bottom. They wait for Right-Side Ignition, when price reclaims the sixty-day moving average on surging volume."
-4. **Shot 4 (Auto Live UI)**: "Scan all seventy-two US momentum leaders and test your portfolio free at getbreakai dot com."
+4. **Shot 4 (Auto Live UI)**: "Scan all seventy-two US momentum leaders and test your portfolio free at truthofmarket dot com."
 - **한국어 요약**: 고점 대비 50% 빠진 주식이 싸 보여서 샀다가 거기서 또 40% 물린 적 있으시죠? 좌측 하락장에서 떨어지는 칼날을 잡으면 수년간 자금이 묶입니다. 월가 퀀트는 반드시 60일선을 거래량과 함께 돌파하는 우측 시동(Right-Side Ignition)만 노립니다.
 
 ---
@@ -81,7 +81,7 @@ Vertical 9:16 cinematic shot, 4k photorealistic. A wealthy quantitative strategi
 
 ---
 ## 🎬 EP04: EP04_RSA_Position_Doctor_Bagholder_Audit (내 계좌 물린 종목 3초 심폐소생술 (포지션 닥터))
-- **Style**: Interactive Diagnostic / Pain Relief Hook | **Target**: 🚀 RightSideAlpha (getbreakai.com)
+- **Style**: Interactive Diagnostic / Pain Relief Hook | **Target**: 🚀 RightSideAlpha (truthofmarket.com)
 - **Save Filename**: `ep04.mp4` (1-Clip Mode) or `ep04_shot1.mp4`, `ep04_shot2.mp4`, `ep04_shot3.mp4` (3-Clip Mode)
 
 ### ⭐ Shot 1 Prompt (Main Hook / 1-Clip Fast Mode)
@@ -100,12 +100,12 @@ Vertical 9:16 cinematic medium shot, 4k photorealistic. A relieved trader noddin
 1. **Shot 1**: "Be honest. How many red stocks are sitting in your brokerage account right now because you hope they will bounce back?"
 2. **Shot 2**: "Hope is not a risk management strategy. Every institutional trade needs a hard nine-percent stop loss and a fifty-five day time stop."
 3. **Shot 3**: "Instead of guessing whether to hold or cut, run your ticker, entry price, and holding days through our algorithmic Position Doctor."
-4. **Shot 4 (Auto Live UI)**: "Get an instant mathematical verdict on your stock right now at getbreakai dot com or on our free Telegram bot."
+4. **Shot 4 (Auto Live UI)**: "Get an instant mathematical verdict on your stock right now at truthofmarket dot com or on our free Telegram bot."
 - **한국어 요약**: 솔직히 지금 언젠가 오르겠지 하며 방치 중인 파란불 종목이 몇 개입니까? 희망고문은 전략이 아닙니다. 모든 기관 매매에는 -9% 칼손절과 55일 시간손절 원칙이 있습니다. 티커·매수가·보유일을 포지션 닥터에 넣고 3초 만에 수학적 판정을 받으세요.
 
 ---
 ## 🎬 EP05: EP05_RSA_Institutional_Breakout_Footprints (기관들이 몰래 매집할 때 무조건 남기는 4가지 흔적)
-- **Style**: 'Feels Illegal to Know' Insider Quant Style | **Target**: 🚀 RightSideAlpha (getbreakai.com)
+- **Style**: 'Feels Illegal to Know' Insider Quant Style | **Target**: 🚀 RightSideAlpha (truthofmarket.com)
 - **Save Filename**: `ep05.mp4` (1-Clip Mode) or `ep05_shot1.mp4`, `ep05_shot2.mp4`, `ep05_shot3.mp4` (3-Clip Mode)
 
 ### ⭐ Shot 1 Prompt (Main Hook / 1-Clip Fast Mode)
@@ -124,7 +124,7 @@ Vertical 9:16 cinematic shot, 4k photorealistic. A focused young quant analyst i
 1. **Shot 1**: "Wall Street hedge funds cannot hide when they accumulate millions of shares in a turnaround stock."
 2. **Shot 2**: "Before a stock doubles, it leaves four mathematical footprints: seller washout, higher lows, reclaiming the sixty-day moving average, and a ten-day volume surge."
 3. **Shot 3**: "Our PW-RSI engine scans seventy-two US market leaders daily to catch that exact Right-Side Ignition before financial television even notices."
-4. **Shot 4 (Auto Live UI)**: "See today's top five US Ignition stocks unlocked right now at getbreakai dot com."
+4. **Shot 4 (Auto Live UI)**: "See today's top five US Ignition stocks unlocked right now at truthofmarket dot com."
 - **한국어 요약**: 월가 기관들이 턴어라운드 주식을 수백만 주 매집할 때 절대 숨기지 못하는 4가지 수학적 흔적이 있습니다: 매도 클라이맥스 통과, 저점 높아짐, 60일선 탈환, 그리고 10일 거래량 폭발입니다. PW-RSI 엔진이 미국 72개 핵심주에서 이 시동을 매일 포착합니다.
 
 ---
@@ -153,7 +153,7 @@ Vertical 9:16 cinematic shot, 4k photorealistic. A calm institutional trading de
 
 ---
 ## 🎬 EP07: EP07_RSA_55_Day_Dead_Money_Rule (계좌를 조용히 죽이는 55일 데드머니(기회비용)의 저주)
-- **Style**: Opportunity Cost / Time-Stop Secret | **Target**: 🚀 RightSideAlpha (getbreakai.com)
+- **Style**: Opportunity Cost / Time-Stop Secret | **Target**: 🚀 RightSideAlpha (truthofmarket.com)
 - **Save Filename**: `ep07.mp4` (1-Clip Mode) or `ep07_shot1.mp4`, `ep07_shot2.mp4`, `ep07_shot3.mp4` (3-Clip Mode)
 
 ### ⭐ Shot 1 Prompt (Main Hook / 1-Clip Fast Mode)
@@ -172,12 +172,12 @@ Vertical 9:16 cinematic shot, 4k photorealistic. A decisive trader pressing a cl
 1. **Shot 1**: "The biggest silent killer of your stock portfolio is not a sudden crash. It is dead money."
 2. **Shot 2**: "When you hold a stagnant stock for months waiting for a bounce, you miss every real institutional breakout happening across the market."
 3. **Shot 3**: "That is why our quantitative engine enforces Rule Two: if a position fails to gain eight percent within fifty-five trading days, you cut it and rotate into active Right-Side leaders."
-4. **Shot 4 (Auto Live UI)**: "Test if your stocks have triggered the fifty-five day time stop right now at getbreakai dot com."
+4. **Shot 4 (Auto Live UI)**: "Test if your stocks have triggered the fifty-five day time stop right now at truthofmarket dot com."
 - **한국어 요약**: 계좌를 망치는 가장 무서운 적은 폭락이 아니라 안 오르고 옆으로 기는 데드머니(Dead Money)입니다. 본전 생각에 수개월간 횡보주에 묶여 있으면 시장의 진짜 주도주 시동을 전부 놓칩니다. 55거래일 동안 +8% 못 가면 즉시 교체하는 것이 규칙 2번입니다.
 
 ---
 ## 🎬 EP08: EP08_RSA_100_Percent_TP1_Free_Runner (+100%(2배) 수익 찍고 다시 본전까지 반납하지 않는 법)
-- **Style**: Asymmetric Wealth / House Money Rule | **Target**: 🚀 RightSideAlpha (getbreakai.com)
+- **Style**: Asymmetric Wealth / House Money Rule | **Target**: 🚀 RightSideAlpha (truthofmarket.com)
 - **Save Filename**: `ep08.mp4` (1-Clip Mode) or `ep08_shot1.mp4`, `ep08_shot2.mp4`, `ep08_shot3.mp4` (3-Clip Mode)
 
 ### ⭐ Shot 1 Prompt (Main Hook / 1-Clip Fast Mode)
@@ -196,11 +196,11 @@ Vertical 9:16 cinematic medium shot, 4k photorealistic. A relaxed investor sippi
 1. **Shot 1**: "Have you ever watched a winning stock double in your account, only to hold too long and watch the entire profit vanish?"
 2. **Shot 2**: "Professional momentum traders never ride a full position back down. At plus one hundred percent gain, you sell exactly half."
 3. **Shot 3**: "That single move locks in one hundred percent of your original cash into your pocket, turning the remaining half into a stress-free runner trailed by the sixty-day moving average."
-4. **Shot 4 (Auto Live UI)**: "Get exact two-x target prices and trailing stop levels for seventy-two US stocks at getbreakai dot com."
+4. **Shot 4 (Auto Live UI)**: "Get exact two-x target prices and trailing stop levels for seventy-two US stocks at truthofmarket dot com."
 - **한국어 요약**: 수익이 2배 찍혔던 종목을 욕심부려 끝까지 들고 있다가 수익을 다 날려본 적 있으신가요? 프로 트레이더는 +100% 도달 즉시 절반(50%)을 팔아 원금 100%를 회수하고, 남은 50%만 60일선 트레일링 스탑으로 공짜 러너(Free Runner)로 굴립니다.
 
 ---
-## 🎬 EP09: EP09_Telegram_Quant_Bot_Instant_Alerts (CNBC 뉴스 보고 사면 이미 40% 늦는 이유 (텔레그램 봇))
+## 🎬 EP09: EP09_Telegram_Quant_Bot_Instant_Alerts (CNBC 뉴스 보고 사면 이미 40% 늦는 이유 (실시간 브리핑 채널))
 - **Style**: Speed & Automation / Telegram Bot Hook | **Target**: 🧭 SemiFearGreed (truthofmarket.com)
 - **Save Filename**: `ep09.mp4` (1-Clip Mode) or `ep09_shot1.mp4`, `ep09_shot2.mp4`, `ep09_shot3.mp4` (3-Clip Mode)
 
@@ -220,8 +220,8 @@ Vertical 9:16 cinematic shot, 4k photorealistic. A modern commuter on a sleek ev
 1. **Shot 1**: "By the time financial news anchors tell you semiconductor stocks are a buy, institutional money is already up forty percent."
 2. **Shot 2**: "You do not have time to stare at charts for six hours a day. You need real-time quantitative signals delivered straight to your phone."
 3. **Shot 3**: "Our free Telegram bot gives you the live Semiconductor Fear and Greed score, top five US Right-Side Ignition stocks, and instant price diagnostics with one tap."
-4. **Shot 4 (Auto Live UI)**: "Search SemifearGreedbot on Telegram or tap the link at truthofmarket dot com to connect in ten seconds."
-- **한국어 요약**: TV 뉴스 앵커가 반도체 주식을 사라고 말할 때쯤이면 기관들은 이미 40% 수익 구간입니다. 하루 6시간씩 차트를 볼 시간이 없다면 텔레그램에서 @SemifearGreedbot을 시작하세요. 버튼 하나로 공포탐욕 지수 18점과 우측시동 Top 5 타점이 1초 만에 도착합니다.
+4. **Shot 4 (Auto Live UI)**: "Join @truthofmarketss on Telegram or tap the link at truthofmarket dot com to connect in ten seconds."
+- **한국어 요약**: TV 뉴스 앵커가 반도체 주식을 사라고 말할 때쯤이면 기관들은 이미 40% 수익 구간입니다. 하루 6시간씩 차트를 볼 시간이 없다면 공식 채널 @truthofmarketss에 참여하세요. 공포탐욕 지수 18점과 우측시동 Top 5 타점이 매일 실시간 도착합니다.
 
 ---
 ## 🎬 EP10: EP10_Semi_3_Tranche_Crash_Deployment (폭락장 첫날 현금 100% 몰빵하면 절대 안 되는 이유 (3분할 공식))

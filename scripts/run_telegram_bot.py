@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Interactive Telegram Bot Runner & Auto-Configurator for @SemifearGreedbot.
+Interactive Telegram Bot Runner & Auto-Configurator for TruthOfMarket (@truthofmarketss).
 
 Features:
 1. Uses IPv4 HTTPTransport (local_address='0.0.0.0') to avoid Windows IPv6 timeout on api.telegram.org.
@@ -54,18 +54,18 @@ def setup_bot_profile(token: str) -> dict:
             {"command": "daily", "description": "반도체 + 미국 우측시동 통합 일일 리포트"},
             {"command": "price", "description": "종목/ETF 실시간 가격·손절·목표가 조회 (예: /price CELH)"},
             {"command": "doctor", "description": "보유 포지션 4대 청산원칙 진단 (예: /doctor CELH 27.20 42)"},
-            {"command": "channels", "description": "공식 유튜브(@rightsidealpha) · 인스타그램(@semifeargreed) 바로가기"},
+            {"command": "channels", "description": "공식 유튜브(@RightSideAlpha) · 텔레그램(@truthofmarketss) 바로가기"},
             {"command": "help", "description": "전체 명령어 도움말 보기"},
         ]
         client.post(f"{base}/setMyCommands", json={"commands": commands})
 
         desc = (
-            "📊 SemiFearGreed & RightSideAlpha 공식 퀀트 알림 봇 (@SemifearGreedbot)\n"
+            "📊 TruthOfMarket — RightSideAlpha 공식 퀀트 알림 봇 (@truthofmarketss)\n"
             "• 반도체 공포·탐욕 지수 (18.0/100 극단적 공포) & $SMH:$XLV 바벨 리밸런싱\n"
             "• 미국 72개 핵심 종목 PW-RSI 우측 시동(Ignition) 포착\n"
             "• 4대 비대칭 청산 원칙(-9% 손절 / 55일 시간손절 / +100% 반익절) 포지션 닥터\n\n"
-            "📺 공식 YouTube: https://youtube.com/@rightsidealpha\n"
-            "📸 공식 Instagram: https://www.instagram.com/semifeargreed\n"
+            "📺 공식 YouTube: https://www.youtube.com/@RightSideAlpha\n"
+            "✈️ 공식 Telegram: https://t.me/truthofmarketss\n"
             "🌐 실시간 웹 터미널: https://truthofmarket.com\n\n"
             "아래 [시작 / START] 버튼을 누르거나 하단 메뉴 버튼을 터치해 보세요!"
         )
@@ -73,7 +73,7 @@ def setup_bot_profile(token: str) -> dict:
 
         short_desc = (
             "반도체 공포탐욕($SMH/$XLV) & 미국주식 우측시동 퀀트봇 | "
-            "📺 youtube.com/@rightsidealpha | 📸 instagram.com/semifeargreed"
+            "📺 youtube.com/@RightSideAlpha | 🌐 truthofmarket.com"
         )
         client.post(f"{base}/setMyShortDescription", json={"short_description": short_desc})
     return me_data
@@ -123,7 +123,7 @@ def process_updates(token: str, offset: int = 0, timeout_sec: int = 2) -> tuple[
                 TelegramConfigRequest(
                     bot_token=token,
                     chat_id=chat_id,
-                    channel_url="https://t.me/SemifearGreedbot",
+                    channel_url="https://t.me/truthofmarketss",
                 )
             )
             out = telegram_service.handle_webhook_command(msg)
@@ -141,7 +141,7 @@ def process_updates(token: str, offset: int = 0, timeout_sec: int = 2) -> tuple[
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Configure & run @SemifearGreedbot")
+    parser = argparse.ArgumentParser(description="Configure & run TruthOfMarket Telegram Bot")
     parser.add_argument("--token", default=DEFAULT_TOKEN, help="Telegram Bot Token")
     parser.add_argument("--poll", action="store_true", help="Continuously poll and reply to Telegram commands")
     parser.add_argument("--duration", type=int, default=0, help="Max polling seconds (0 = infinite)")
@@ -151,7 +151,7 @@ def main() -> int:
         TelegramConfigRequest(
             bot_token=args.token,
             chat_id="755033799",
-            channel_url="https://t.me/SemifearGreedbot",
+            channel_url="https://t.me/truthofmarketss",
         )
     )
 
@@ -166,7 +166,7 @@ def main() -> int:
     if not args.poll:
         return 0
 
-    print("Starting live polling for @SemifearGreedbot...", flush=True)
+    print("Starting live polling for TruthOfMarket bot...", flush=True)
     start_ts = time.time()
     while True:
         try:

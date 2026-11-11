@@ -2,7 +2,7 @@ export function renderModals(state) {
   const t = state.t || {};
   const cfg = state.config || {};
   const tgChannelUrl = cfg.telegram_channel_url || "https://t.me/truthofmarketss";
-  const ytUrl = cfg.youtube_url || "https://youtube.com/@rightsidealpha";
+  const ytUrl = cfg.youtube_url || "https://www.youtube.com/@RightSideAlpha";
   const igUrl = cfg.instagram_url || "https://www.instagram.com/rightsidealpha";
   const tgChatId = state.telegramChatId || cfg.telegram_chat_id || "@truthofmarketss";
   const tgToken = state.telegramBotToken || "DEMO-BOT-TOKEN";
@@ -33,13 +33,16 @@ export function renderModals(state) {
         <p style="color:var(--muted); font-size:0.82rem; margin-top:6px; line-height:1.5;">
           Enter the license key issued upon Lemon Squeezy checkout to unlock all 72 US equity target levels, Daily VIP Ignition Order Book, Position Sizing Calculator, Position Doctor, and the 26-year Semiconductor CSV dataset.
         </p>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:12px 0 10px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:12px 0 8px;">
           <a class="btn btn-primary btn-sm lemonsqueezy-button" data-direct-ls="1" href="${cfg.ls_site1_monthly_url || "https://truthofmarket.lemonsqueezy.com/checkout/buy/bad98d00-7175-41f6-9d58-eeb2471d0da4"}?embed=1" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:8px 10px; font-weight:700;">
             🍋 Subscribe Pro ($29/mo) ↗
           </a>
           <a class="btn btn-emerald btn-sm lemonsqueezy-button" data-direct-ls="1" href="${cfg.ls_site1_ltd_url || "https://truthofmarket.lemonsqueezy.com/checkout/buy/00c9f6e1-c8be-42a4-b5a5-e05af1a41ed9"}?embed=1" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:8px 10px; font-weight:700;">
             🏆 Lifetime Pass ($199) ↗
           </a>
+        </div>
+        <div style="margin-bottom:10px; font-size:0.72rem; color:#94a3b8; text-align:center; line-height:1.45;">
+          Checkout issue in your region? Join <a href="https://t.me/truthofmarketss" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">@truthofmarketss</a> or request instant Pro activation via <a href="mailto:beable9489@gmail.com?subject=Instant%20Pro%20Activation%20Request%20(TruthOfMarket)" style="color:#93c5fd; font-weight:700; text-decoration:underline;">email</a>.
         </div>
         <div id="instantVipBridgeBox" style="display:none !important;">
           <div style="display:flex; justify-content:space-between; align-items:center; gap:6px; flex-wrap:wrap;">
@@ -236,8 +239,8 @@ export function renderModals(state) {
           <div style="display:flex; gap:6px; flex-wrap:wrap;">
             <a class="btn btn-sm" href="https://app.lemonsqueezy.com/products" target="_blank" rel="noopener noreferrer" style="font-size:0.7rem; padding:4px 8px;">🍋 Lemon Squeezy ↗</a>
             <a class="btn btn-sm" href="https://www.tradingview.com/partner-program/" target="_blank" rel="noopener noreferrer" style="font-size:0.7rem; padding:4px 8px;">📈 TradingView Aff ↗</a>
-            <a class="btn btn-sm" href="https://www.interactivebrokers.com/en/general/refer-a-friend.php" target="_blank" rel="noopener noreferrer" style="font-size:0.7rem; padding:4px 8px;">🏦 IBKR Referral ↗</a>
             <a class="btn btn-sm" href="https://affiliates.seekingalpha.com/" target="_blank" rel="noopener noreferrer" style="font-size:0.7rem; padding:4px 8px;">📊 Seeking Alpha Aff ↗</a>
+            <a class="btn btn-sm" href="https://trendspider.com/?_go=rightside" target="_blank" rel="noopener noreferrer" style="font-size:0.7rem; padding:4px 8px;">⚡ TrendSpider Aff ↗</a>
           </div>
         </div>
 
@@ -250,10 +253,10 @@ export function renderModals(state) {
         <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">LEMON SQUEEZY LIFETIME CHECKOUT URL ($199)</label>
         <input type="text" id="cfgLsLtd" value="${cfg.ls_site1_ltd_url || "https://truthofmarket.lemonsqueezy.com/checkout/buy/00c9f6e1-c8be-42a4-b5a5-e05af1a41ed9"}" />
 
-        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">TELEGRAM OFFICIAL CHANNEL / BOT URL</label>
+        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">TELEGRAM OFFICIAL CHANNEL / SUPPORT URL</label>
         <input type="text" id="cfgTgChannel" value="${tgChannelUrl}" />
 
-        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">OFFICIAL YOUTUBE CHANNEL URL (@rightsidealpha)</label>
+        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">OFFICIAL YOUTUBE CHANNEL URL (@RightSideAlpha)</label>
         <input type="text" id="cfgYoutubeUrl" value="${ytUrl}" />
 
         <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">OFFICIAL INSTAGRAM PROFILE URL (@rightsidealpha)</label>
@@ -265,11 +268,11 @@ export function renderModals(state) {
         <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">SEEKING ALPHA PARTNER SOURCE TAG</label>
         <input type="text" id="cfgAffSa" value="${cfg.seekingalpha_source || "better_life333"}" />
 
-        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">BROKER / EXCHANGE PARTNER LABEL (E.G. BITGET / IBKR)</label>
-        <input type="text" id="cfgBrokerName" value="${cfg.broker_name || "Bitget (7nja)"}" />
+        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">TRENDSPIDER / US EQUITY SCANNER PARTNER LABEL</label>
+        <input type="text" id="cfgBrokerName" value="${cfg.broker_name || "TrendSpider (rightside)"}" />
 
-        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">BROKER / EXCHANGE REFERRAL URL</label>
-        <input type="text" id="cfgBrokerUrl" value="${cfg.broker_referral_url || "https://www.bitget.com/referral/register?clacCode=7nja"}" />
+        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">TRENDSPIDER / US EQUITY SCANNER REFERRAL URL</label>
+        <input type="text" id="cfgBrokerUrl" value="${cfg.broker_referral_url || "https://trendspider.com/?_go=rightside"}" />
 
         <div id="configMsg" style="font-size:0.8rem; margin-bottom:12px; min-height:1.2em;"></div>
 

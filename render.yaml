@@ -8,6 +8,12 @@ services:
       - truthofmarket.com
       - www.truthofmarket.com
     headers:
+      - path: /static_api/*
+        name: Access-Control-Allow-Origin
+        value: "*"
+      - path: /static_api/*.json
+        name: Access-Control-Allow-Origin
+        value: "*"
       - path: /rss.xml
         name: Content-Type
         value: application/xml; charset=utf-8

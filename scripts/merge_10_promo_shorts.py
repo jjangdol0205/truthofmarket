@@ -7,7 +7,7 @@
 - Supports all 10 US Viral Promo Episodes (EP01 ~ EP10) for:
   * SemiFearGreed (https://truthofmarket.com)
   * RightSideAlpha (https://truthofmarket.com)
-  * Telegram Bot (@SemifearGreedbot)
+  * Official Channel (@truthofmarketss)
 - Automatically picks up downloaded Google Flow (.mp4) clips from:
   1) `D:/드림컴퍼니/1사업부/flow_shorts_studio/ai_shorts_output/flow_clips/epXX_shot1.mp4` (or `epXX.mp4`)
   2) User's Windows `Downloads` folder (most recent `.mp4` files downloaded from Google Flow)
@@ -29,7 +29,9 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
-STUDIO_DIR = next(ROOT_DIR.parent.glob("3_*"), ROOT_DIR.parent / "3_AI영상_홍보_스튜디오")
+STUDIO_DIR = ROOT_DIR / "flow_shorts_studio"
+if not STUDIO_DIR.exists():
+    STUDIO_DIR = next(ROOT_DIR.parent.glob("3_*"), ROOT_DIR.parent / "3_AI영상_홍보_스튜디오")
 if str(STUDIO_DIR) not in sys.path:
     sys.path.insert(0, str(STUDIO_DIR))
 
@@ -51,12 +53,9 @@ EPISODES = {
         "accent_color": (239, 68, 68, 255),  # Crimson Red
         "ending_mode": "punchline",
         "flow_prompts": [
-            # Shot 1 (Main Hook / Fast 1-Clip Mode)
-            "Vertical 9:16 cinematic close-up shot, 4k photorealistic. A stressed 32-year-old American male trader sitting on the edge of his bed at 2 AM in a dark bedroom. Intense crimson red light from his smartphone screen illuminates the sweat and exhaustion on his face as semiconductor stocks crash. Moody David Fincher style dark teal and red lighting, shallow depth of field, slow push-in.",
-            # Shot 2 (Visual Metaphor / Fear Gauge)
-            "Vertical 9:16 cinematic macro shot, 4k photorealistic. A sleek glass speedometer-style financial Fear and Greed dial on a dark institutional trading terminal slamming violently to the left into glowing red Extreme Fear at number 18. Crisp reflections on dark glass, dramatic cinematic lighting.",
-            # Shot 3 (Quant Awakening)
-            "Vertical 9:16 cinematic medium shot, 4k photorealistic. A calm, razor-sharp Wall Street quantitative portfolio manager in a dark glass Manhattan office at dawn, executing an automated rebalance order as emerald green buy blocks light up his ultrawide screen. Smooth tracking shot.",
+            "Vertical 9:16 dark institutional chart canvas. $SMH -22% washout red candlesticks with 7-factor Fear & Greed dial entering 18 Extreme Fear.",
+            "Vertical 9:16 dark institutional terminal gauge slamming into glowing crimson 18/100 Extreme Fear with Contrarian Barbell alert.",
+            "Vertical 9:16 dark institutional 26-year backtest equity curve shifting from 70:30 baseline to 80% $SMH : 20% $XLV on emerald volume.",
         ],
         "shot_scripts": [
             "Every single time semiconductor stocks drop twenty percent, retail traders panic and sell at the exact bottom.",
@@ -73,12 +72,9 @@ EPISODES = {
         "accent_color": (16, 185, 129, 255),  # Emerald Green
         "ending_mode": "punchline",
         "flow_prompts": [
-            # Shot 1
-            "Vertical 9:16 cinematic over-the-shoulder shot, 4k photorealistic. A frustrated retail investor at a dimly lit home desk staring at a glowing red stock chart plunging down a steep cliff on his monitor, holding his head in his hands. Dark moody atmosphere, realistic screen reflections, slow zoom in.",
-            # Shot 2
-            "Vertical 9:16 cinematic slow-motion macro shot, 4k photorealistic. A gleaming steel dagger falling vertically through dark smoky air, reflecting crimson stock ticker numbers on its blade. High-contrast dramatic studio lighting, ultra-detailed.",
-            # Shot 3
-            "Vertical 9:16 cinematic shot, 4k photorealistic. A high-tech dark quantitative trading monitor showing a stock chart rounding out a flat bottom base and erupting upward through a glowing golden 60-day moving average line with massive green volume bars.",
+            "Vertical 9:16 dark institutional OHLCV chart plunging -50% then another -40% in left-side falling knife washout.",
+            "Vertical 9:16 dark institutional risk chart marking -9.0% mechanical hard stop vs retail bagholder drawdown.",
+            "Vertical 9:16 dark institutional OHLCV chart rounding out a flat base and erupting through the golden 60-DAY MA on 2.1x emerald volume.",
         ],
         "shot_scripts": [
             "You bought a famous stock down fifty percent thinking it was cheap, and then it dropped another forty percent.",
@@ -95,12 +91,9 @@ EPISODES = {
         "accent_color": (245, 158, 11, 255),  # Gold Amber
         "ending_mode": "punchline",
         "flow_prompts": [
-            # Shot 1
-            "Vertical 9:16 cinematic shot, 4k photorealistic. Nighttime view from inside a sleek black Porsche driving through rain-slicked Manhattan streets, neon stock market tickers reflecting off the wet windshield. Dark luxury aesthetic, shallow depth of field.",
-            # Shot 2
-            "Vertical 9:16 cinematic close-up shot, 4k photorealistic. A balanced precision brass scale on a dark marble desk in a private wealth office, one side holding a glowing silicon semiconductor wafer and the other side holding a defensive medical shield emblem. Moody warm gold lighting.",
-            # Shot 3
-            "Vertical 9:16 cinematic shot, 4k photorealistic. A wealthy quantitative strategist in a tailored dark suit reviewing a glowing 26-year compounding equity curve climbing steadily on a sleek MacBook Pro in a dark penthouse study.",
+            "Vertical 9:16 dark institutional chart comparing 100% $SMH -35% drawdown shock vs hedged barbell trajectory.",
+            "Vertical 9:16 dark institutional allocation matrix showing 70% $SMH Semiconductors paired with 30% $XLV Healthcare.",
+            "Vertical 9:16 dark institutional 26-year compounding equity curve (23.1% CAGR) rotating to 80% $SMH : 20% $XLV below score 25.",
         ],
         "shot_scripts": [
             "Going one hundred percent into semiconductor ETFs feels genius in a bull run, until a thirty-five percent drawdown wipes out your nerve.",
@@ -117,12 +110,9 @@ EPISODES = {
         "accent_color": (56, 189, 248, 255),  # Cyan Blue
         "ending_mode": "punchline",
         "flow_prompts": [
-            # Shot 1
-            "Vertical 9:16 cinematic close-up shot, 4k photorealistic. A conflicted investor staring at a red minus-twenty-two percent portfolio screen on his phone at night, thumb hovering nervously between a red Sell button and a gray Hold button. Tense cinematic lighting.",
-            # Shot 2
-            "Vertical 9:16 cinematic shot, 4k photorealistic. A futuristic medical diagnostic scanner beam sweeping across a 3D holographic stock candlestick chart in a dark lab, highlighting a broken support line in bright warning red.",
-            # Shot 3
-            "Vertical 9:16 cinematic medium shot, 4k photorealistic. A relieved trader nodding with clarity as a clean quantitative risk dashboard displays an exact nine-percent stop-loss level and a two-x profit target on his dark monitor.",
+            "Vertical 9:16 dark institutional portfolio audit table showing -22% unrealized drawdown vs -9.0% hard stop rule.",
+            "Vertical 9:16 dark institutional 3D OHLCV candlestick chart highlighting broken MA60 support and 55-day time stop.",
+            "Vertical 9:16 dark institutional Position Doctor terminal displaying exact -9.0% stop loss and +100% 2X target price.",
         ],
         "shot_scripts": [
             "Be honest. How many red stocks are sitting in your brokerage account right now because you hope they will bounce back?",
@@ -139,12 +129,9 @@ EPISODES = {
         "accent_color": (16, 185, 129, 255),  # Emerald Green
         "ending_mode": "punchline",
         "flow_prompts": [
-            # Shot 1
-            "Vertical 9:16 cinematic shot, 4k photorealistic. A shadowy view of the New York Stock Exchange facade at dusk as institutional server racks pulse with high-frequency fiber-optic light behind glass windows. Thriller movie atmosphere, slow push-in.",
-            # Shot 2
-            "Vertical 9:16 cinematic macro shot, 4k photorealistic. An extreme close-up of a dark trading terminal where ten-day institutional volume bars suddenly spike one-point-five times higher in glowing neon green while price crosses an orange moving average.",
-            # Shot 3
-            "Vertical 9:16 cinematic shot, 4k photorealistic. A focused young quant analyst in a dark room smiling subtlely as five US stock tickers lock into an emerald Ignition Zone on his multi-screen setup.",
+            "Vertical 9:16 dark institutional order-flow footprint chart tracking multi-day accumulation bars.",
+            "Vertical 9:16 dark institutional OHLCV chart where 10-day volume spikes 1.8x-2.5x in neon emerald as price crosses 60-DAY MA.",
+            "Vertical 9:16 dark institutional 72-stock PW-RSI scanner locking top 5 US tickers into the emerald Ignition Zone.",
         ],
         "shot_scripts": [
             "Wall Street hedge funds cannot hide when they accumulate millions of shares in a turnaround stock.",
@@ -161,12 +148,9 @@ EPISODES = {
         "accent_color": (239, 68, 68, 255),  # Crimson Red
         "ending_mode": "punchline",
         "flow_prompts": [
-            # Shot 1
-            "Vertical 9:16 cinematic shot, 4k photorealistic. A dramatic rollercoaster track plunging straight down into dark storm clouds with glowing red stock market numbers flying past the camera. Intense visceral motion, 4k cinema quality.",
-            # Shot 2
-            "Vertical 9:16 cinematic close-up shot, 4k photorealistic. A silicon wafer inside a high-tech cleanroom glowing under ultraviolet lithography lasers, reflecting sharp geometric patterns on dark glass.",
-            # Shot 3
-            "Vertical 9:16 cinematic shot, 4k photorealistic. A calm institutional trading desk overlooking a city skyline at night, displaying a green portfolio curve outperforming a crashing red benchmark.",
+            "Vertical 9:16 dark institutional chart comparing $SOXL 3x leverage volatility decay vs unleveraged $SMH:$XLV barbell.",
+            "Vertical 9:16 dark institutional 2000-2026 semiconductor drawdown table across four major macro bear cycles.",
+            "Vertical 9:16 dark institutional equity curve compounding $10,000 into $2,210,000 via systematic $SMH:$XLV rebalancing.",
         ],
         "shot_scripts": [
             "Everyone loves semiconductor stocks when Nvidia and SMH are hitting all-time highs, but a twenty percent pullback destroys over-leveraged accounts.",
@@ -183,12 +167,9 @@ EPISODES = {
         "accent_color": (245, 158, 11, 255),  # Amber
         "ending_mode": "punchline",
         "flow_prompts": [
-            # Shot 1
-            "Vertical 9:16 cinematic macro shot, 4k photorealistic. An antique glass hourglass on a dark trading desk with golden sand running out, while a flat sideways stock chart glows faintly in the background. Moody cinematic lighting.",
-            # Shot 2
-            "Vertical 9:16 cinematic shot, 4k photorealistic. A split-focus shot in a dark room: in the foreground a stagnant gray stock ticker barely moving, while in the background emerald green breakout stocks rocket upward on a wall screen.",
-            # Shot 3
-            "Vertical 9:16 cinematic shot, 4k photorealistic. A decisive trader pressing a clean keyboard key to rotate capital out of a dead position into a surging right-side momentum leader.",
+            "Vertical 9:16 dark institutional OHLCV chart flatlining sideways for 55 trading days with opportunity cost counter.",
+            "Vertical 9:16 dark institutional split chart contrasting stagnant dead-money stock vs emerald Right-Side Ignition leader.",
+            "Vertical 9:16 dark institutional Rule 2 capital rotation dashboard cutting <+8% 55-day laggards into active leaders.",
         ],
         "shot_scripts": [
             "The biggest silent killer of your stock portfolio is not a sudden crash. It is dead money.",
@@ -205,12 +186,9 @@ EPISODES = {
         "accent_color": (16, 185, 129, 255),  # Emerald
         "ending_mode": "punchline",
         "flow_prompts": [
-            # Shot 1
-            "Vertical 9:16 cinematic close-up shot, 4k photorealistic. A retail trader celebrating a big paper gain on his phone, followed by a sudden flash of red as the stock reverses and wipes out his unbooked profits. Dramatic lighting shift.",
-            # Shot 2
-            "Vertical 9:16 cinematic shot, 4k photorealistic. A sleek digital vault door locking in glowing gold bars on the left while a green rocket trajectory continues climbing on a transparent HUD glass screen on the right.",
-            # Shot 3
-            "Vertical 9:16 cinematic medium shot, 4k photorealistic. A relaxed investor sipping espresso on a high-rise balcony at sunset while his tablet trails a winning stock along a smooth 60-day moving average line.",
+            "Vertical 9:16 dark institutional OHLCV chart showing an unbooked +100% rally round-tripping back to breakeven.",
+            "Vertical 9:16 dark institutional Rule 3 TP1 chart locking 50% principal harvest at +100% (2X) gain.",
+            "Vertical 9:16 dark institutional OHLCV chart trailing the remaining 50% house-money runner along the 60-DAY MA.",
         ],
         "shot_scripts": [
             "Have you ever watched a winning stock double in your account, only to hold too long and watch the entire profit vanish?",
@@ -227,18 +205,15 @@ EPISODES = {
         "accent_color": (56, 189, 248, 255),  # Telegram Sky Blue
         "ending_mode": "punchline",
         "flow_prompts": [
-            # Shot 1
-            "Vertical 9:16 cinematic shot, 4k photorealistic. A noisy wall of television screens broadcasting financial news anchors talking over late market headlines, slightly blurred in the background while a trader checks a sleek smartphone in the foreground.",
-            # Shot 2
-            "Vertical 9:16 cinematic macro shot, 4k photorealistic. A smartphone resting on a dark carbon-fiber desk lighting up with an instant glowing blue Telegram quantitative alert notification showing semiconductor Fear and Greed at 18 and top stock triggers.",
-            # Shot 3
-            "Vertical 9:16 cinematic shot, 4k photorealistic. A modern commuter on a sleek evening train tapping a single button on his phone to view institutional stop-loss and target levels in one second.",
+            "Vertical 9:16 dark institutional chart showing institutional accumulation +40% ahead of late retail headlines.",
+            "Vertical 9:16 dark institutional alert feed showing live Semiconductor Fear & Greed at 18 and top 5 Ignition triggers.",
+            "Vertical 9:16 dark institutional Position Doctor mobile card computing -9.0% hard stop and 2X target in 3 seconds.",
         ],
         "shot_scripts": [
             "By the time financial news anchors tell you semiconductor stocks are a buy, institutional money is already up forty percent.",
             "You do not have time to stare at charts for six hours a day. You need real-time quantitative signals delivered straight to your phone.",
             "Our free Telegram bot gives you the live Semiconductor Fear and Greed score, top five US Right-Side Ignition stocks, and instant price diagnostics with one tap.",
-            "Search SemifearGreedbot on Telegram or tap the link at truthofmarket dot com to connect in ten seconds.",
+            "Join @truthofmarketss on Telegram or tap the link at truthofmarket dot com to connect in ten seconds.",
         ],
     },
     10: {
@@ -249,12 +224,9 @@ EPISODES = {
         "accent_color": (16, 185, 129, 255),  # Emerald Green
         "ending_mode": "punchline",
         "flow_prompts": [
-            # Shot 1
-            "Vertical 9:16 cinematic shot, 4k photorealistic. A retail trader shoving all his chips into the center of a dark table as a market chart dips ten percent, only for the chart in the background to plunge much deeper into red.",
-            # Shot 2
-            "Vertical 9:16 cinematic close-up shot, 4k photorealistic. Three glowing emerald capital vaults unlocking sequentially one by one as a digital Fear and Greed counter drops from 35 to 25 to 18 on a dark glass screen.",
-            # Shot 3
-            "Vertical 9:16 cinematic shot, 4k photorealistic. A confident institutional investor reviewing a 3-tranche capital deployment schedule on a wide dark monitor as semiconductor stocks begin a massive recovery.",
+            "Vertical 9:16 dark institutional drawdown chart showing 100% lump-sum entry at -5% dip caught in deeper -28% washout.",
+            "Vertical 9:16 dark institutional 3-tranche deployment matrix (30% Fear / 40% Extreme Fear / 30% Right-Side Rebound).",
+            "Vertical 9:16 dark institutional Lump-Sum Tranche Calculator computing exact $SMH and $XLV share counts at score 18.",
         ],
         "shot_scripts": [
             "The worst mistake investors make in a tech sell-off is firing all their cash on the very first five percent dip.",
@@ -331,9 +303,18 @@ def find_clips_for_episode(ep_num: int, use_downloads: bool = False) -> list[str
 
 
 def build_episode(ep_num: int, use_downloads: bool = False) -> Path:
+    import json
     from flow_shorts_merger import render_clean_fullscreen_shorts_from_clips
+    from build_rsa_semi_promo_shorts import build_rightsidealpha_youtube_metadata, render_real_ohlcv_3stage_clips
 
     ep = EPISODES[ep_num]
+    code = ep["code"]
+    ticker_hint = "$SMH" if ep["platform"] == "semi" else "$CELH"
+    three_shots = [FLOW_CLIPS_DIR / f"{code}_shot{i}.mp4" for i in range(1, 4)]
+    if not all(p.exists() for p in three_shots) and not use_downloads:
+        ohlcv_shots = render_real_ohlcv_3stage_clips(prefix=code, ticker=ticker_hint.lstrip("$"))
+        for idx_c, src_c in enumerate(ohlcv_shots[:3], 1):
+            shutil.copy2(src_c, FLOW_CLIPS_DIR / f"{code}_shot{idx_c}.mp4")
     clips = find_clips_for_episode(ep_num, use_downloads=use_downloads)
     out_mp4 = LOCAL_OUT_DIR / f"{ep['title']}.mp4"
 
@@ -349,7 +330,13 @@ def build_episode(ep_num: int, use_downloads: bool = False) -> Path:
         shot_scripts=ep["shot_scripts"],
         ending_mode=ep["ending_mode"],
     )
-    # Also copy to 3_AI영상_홍보_스튜디오/ai_shorts_output
+    yt_meta = build_rightsidealpha_youtube_metadata(
+        ticker=ticker_hint.lstrip("$"),
+        hook_metric=ep["title"].split("_", 2)[-1].replace("_", " "),
+        video_path=out_mp4,
+    )
+    out_mp4.with_suffix(".youtube.json").write_text(json.dumps(yt_meta, ensure_ascii=False, indent=2), encoding="utf-8")
+    # Also copy to flow_shorts_studio/ai_shorts_output
     try:
         shutil.copy2(out_mp4, OUTPUT_DIR / out_mp4.name)
     except Exception:

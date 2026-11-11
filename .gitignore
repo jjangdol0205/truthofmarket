@@ -33,7 +33,9 @@ data/daily_shorts_state.json
 data/master_hq_bridge_state.json
 data/master_hq_bridge.pid
 viral_shorts_10_output/
-flow_shorts_studio/
+flow_shorts_studio/*
+!flow_shorts_studio/*.py
+!flow_shorts_studio/*.md
 
 # OS & Editor
 .DS_Store

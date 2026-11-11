@@ -9,7 +9,8 @@ export function renderPositionDoctorForm(state) {
     : `<div style="color:var(--muted);">Enter US ticker, cost basis ($), and trading days held to evaluate asymmetric exit triggers against the latest closing price ($${defaultClose}).</div>`;
 
   return `
-    <div style="background:#090d16; border:1px solid var(--border); border-top:2px solid var(--fin-up); border-radius:4px; padding:18px; display:flex; flex-direction:column; justify-content:space-between;">
+    <div id="doctor" style="background:#090d16; border:1px solid var(--border); border-top:2px solid var(--fin-up); border-radius:4px; padding:18px; display:flex; flex-direction:column; justify-content:space-between; scroll-margin-top:84px;">
+      <span id="positionDoctorCard" style="display:block; height:0; overflow:hidden;"></span>
       <div>
         <div style="font-size:0.7rem; font-family:var(--font-mono); font-weight:700; color:var(--fin-up); letter-spacing:0.05em; text-transform:uppercase;">
           ${t.tool1Title}
@@ -215,8 +216,11 @@ export function renderDoctorVipUnlockPreview(state) {
           💎 Lifetime VIP ($199 · SAVE 43%)
         </a>
       </div>
-      <div class="doc-compliance-notice" style="margin-top:8px; font-size:0.66rem; color:var(--muted); text-align:center; font-family:var(--font-mono); line-height:1.4;">
-        🔒 Lemon Squeezy Store #296100 Live · PCI-DSS Encrypted · 즉시 영수증 및 라이선스키 발급
+      <div class="doc-compliance-notice" style="margin-top:8px; font-size:0.66rem; color:var(--muted); text-align:center; font-family:var(--font-mono); line-height:1.45;">
+        🔒 Lemon Squeezy Store #296100 Live · PCI-DSS Encrypted · Instant Receipt &amp; License Key Delivery
+      </div>
+      <div style="margin-top:6px; font-size:0.7rem; color:#94a3b8; text-align:center; line-height:1.45;">
+        Checkout issue in your region? Join <a href="https://t.me/truthofmarketss" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">@truthofmarketss</a> or request instant Pro activation via <a href="mailto:beable9489@gmail.com?subject=Instant%20Pro%20Activation%20Request%20(TruthOfMarket)" style="color:#93c5fd; font-weight:700; text-decoration:underline;">email</a>.
       </div>
     `
     : `
@@ -236,7 +240,7 @@ export function renderDoctorVipUnlockPreview(state) {
         <div style="display:flex; align-items:center; gap:6px;">
           <span style="font-size:0.85rem;">🔒</span>
           <span class="mono" style="font-size:0.74rem; font-weight:800; color:#fbbf24; letter-spacing:0.03em;">
-            기관 매집 돌파 시그널 TOP 3 블러 프리뷰 (REALLOCATION TARGETS)
+            INSTITUTIONAL IGNITION SIGNALS TOP 3 PREVIEW (REALLOCATION TARGETS)
           </span>
         </div>
         ${headerBadge}

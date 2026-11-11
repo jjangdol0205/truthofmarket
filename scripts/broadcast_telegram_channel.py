@@ -17,8 +17,8 @@ TG_CONFIG_PATH = BASE_DIR / "data" / "telegram_config.json"
 SEMI_JSON_PATH = BASE_DIR / "frontend" / "public" / "static_api" / "semi_overview.json"
 STOCKS_PRO_PATH = BASE_DIR / "data" / "stocks_pro_master.json"
 
-LS_MONTHLY_URL = "https://truthofmarket.com/?checkout=monthly#pricingSection"
-LS_LTD_URL = "https://truthofmarket.com/?checkout=lifetime#pricingSection"
+LS_MONTHLY_URL = "https://truthofmarket.com/?checkout=monthly#pricing"
+LS_LTD_URL = "https://truthofmarket.com/?checkout=lifetime#pricing"
 
 
 def load_tg_credentials():
@@ -207,14 +207,14 @@ def build_inline_keyboard() -> dict:
                     "url": "https://www.tradingview.com/?aff_id=1173809",
                 },
                 {
-                    "text": "⚡ Trade on Bitget (24/7)",
-                    "url": "https://www.bitget.com/referral/register?clacCode=7nja",
+                    "text": "⚡ TrendSpider AI Scanner",
+                    "url": "https://trendspider.com/?_go=rightside",
                 },
             ],
             [
                 {
-                    "text": "▶️ YouTube (@rightsidealpha)",
-                    "url": "https://youtube.com/@rightsidealpha",
+                    "text": "▶️ YouTube (@RightSideAlpha)",
+                    "url": "https://www.youtube.com/@RightSideAlpha",
                 },
                 {
                     "text": "📸 Instagram (@rightsidealpha)",

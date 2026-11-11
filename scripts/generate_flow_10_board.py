@@ -52,8 +52,8 @@ KR_SUMMARIES = {
         "수익이 2배 찍혔던 종목을 욕심부려 끝까지 들고 있다가 수익을 다 날려본 적 있으신가요? 프로 트레이더는 +100% 도달 즉시 절반(50%)을 팔아 원금 100%를 회수하고, 남은 50%만 60일선 트레일링 스탑으로 공짜 러너(Free Runner)로 굴립니다.",
     ),
     9: (
-        "CNBC 뉴스 보고 사면 이미 40% 늦는 이유 (텔레그램 봇)",
-        "TV 뉴스 앵커가 반도체 주식을 사라고 말할 때쯤이면 기관들은 이미 40% 수익 구간입니다. 하루 6시간씩 차트를 볼 시간이 없다면 텔레그램에서 @SemifearGreedbot을 시작하세요. 버튼 하나로 공포탐욕 지수 18점과 우측시동 Top 5 타점이 1초 만에 도착합니다.",
+        "CNBC 뉴스 보고 사면 이미 40% 늦는 이유 (실시간 브리핑 채널)",
+        "TV 뉴스 앵커가 반도체 주식을 사라고 말할 때쯤이면 기관들은 이미 40% 수익 구간입니다. 하루 6시간씩 차트를 볼 시간이 없다면 공식 채널 @truthofmarketss에 참여하세요. 공포탐욕 지수 18점과 우측시동 Top 5 타점이 매일 실시간 도착합니다.",
     ),
     10: (
         "폭락장 첫날 현금 100% 몰빵하면 절대 안 되는 이유 (3분할 공식)",
@@ -67,7 +67,7 @@ def main() -> None:
     md_lines = [
         "# 🎬 US Viral Promo Shorts 10-Episode Google Flow Prompts & Script Pack",
         "",
-        "- **Target**: US & Global Retail Traders (YouTube Shorts `@rightsidealpha` / Instagram Reels `@semifeargreed` / Telegram `@SemifearGreedbot`)",
+        "- **Target**: US & Global Retail Traders (YouTube Shorts `@RightSideAlpha` / Instagram Reels `@rightsidealpha` / Telegram `@truthofmarketss`)",
         "- **How to Use**:",
         "  1. Open Google Flow (`https://labs.google/fx/tools/flow`) in **9:16 Portrait** mode.",
         "  2. Copy either **Shot 1 (Fast 1-Clip Mode)** or **Shots 1~3 (Full 3-Clip Mode)** for any episode below.",
@@ -81,7 +81,7 @@ def main() -> None:
         plat_badge = (
             "🧭 SemiFearGreed (truthofmarket.com)"
             if ep["platform"] == "semi"
-            else "🚀 RightSideAlpha (getbreakai.com)"
+            else "🚀 RightSideAlpha (truthofmarket.com)"
         )
         badge_bg = "rgba(239,68,68,0.18)" if ep["platform"] == "semi" else "rgba(16,185,129,0.18)"
         badge_col = "#fca5a5" if ep["platform"] == "semi" else "#6ee7b7"

@@ -96,7 +96,7 @@ class Settings:
     # Telegram Bot & Alert Configuration
     TELEGRAM_BOT_TOKEN: str = os.getenv("TELEGRAM_BOT_TOKEN", "")
     TELEGRAM_CHAT_ID: str = os.getenv("TELEGRAM_CHAT_ID", "")
-    TELEGRAM_CHANNEL_URL: str = os.getenv("TELEGRAM_CHANNEL_URL", "https://t.me/RightSideAlphaBot")
+    TELEGRAM_CHANNEL_URL: str = os.getenv("TELEGRAM_CHANNEL_URL", "https://t.me/truthofmarketss")
     TELEGRAM_CONFIG_PATH: Path = BASE_DIR / "data" / "telegram_config.json"
 
 

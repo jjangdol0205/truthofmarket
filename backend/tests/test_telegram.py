@@ -28,7 +28,7 @@ def test_telegram_status_default(client):
     assert data["configured"] is False
     assert data["bot_token_masked"] == ""
     assert data["chat_id"] == ""
-    assert data["channel_url"] == "https://t.me/RightSideAlphaBot"
+    assert data["channel_url"] == "https://t.me/truthofmarketss"
     assert data["auto_alert_ignition"] is True
     assert data["auto_alert_stop_loss"] is True
     assert data["auto_alert_semi_extreme"] is True

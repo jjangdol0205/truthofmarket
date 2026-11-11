@@ -238,8 +238,9 @@ def render_clean_beat_overlay(
     # Highlight color alternates between Neon Yellow and Emerald Mint for dopamine contrast
     hl_color = (255, 232, 0, 255) if (beat_idx % 2 == 0) else (16, 245, 196, 255)
 
-    draw_centered_stroked_text(draw, 1385, l1, f_sub, (255, 255, 255, 255), stroke_w=10)
-    draw_centered_stroked_text(draw, 1458, l2, f_sub, hl_color, stroke_w=10)
+    # Golden Safe Zone (Y=1055 / 1128) — avoids bottom 3-line YouTube Shorts title/bio UI
+    draw_centered_stroked_text(draw, 1055, l1, f_sub, (255, 255, 255, 255), stroke_w=10)
+    draw_centered_stroked_text(draw, 1128, l2, f_sub, hl_color, stroke_w=10)
 
     if is_cta:
         # Final 2.8s Domain Slate (truthofmarket.com)
@@ -292,19 +293,28 @@ def mix_point_sfx_and_bgm(
     total_samples = len(voice_mono)
     total_dur = total_samples / float(SAMPLE_RATE)
     t = np.linspace(0.0, total_dur, total_samples, endpoint=False)
-    rng = np.random.default_rng(2026)
+    dyn_seed = (sum((idx + 1) * ord(ch) for idx, ch in enumerate(out_wav.stem)) * 2654435761) % 2147483647 or 20261111
+    rng = np.random.default_rng(dyn_seed)
 
-    # Dark Quant Pulse BGM (128 BPM = 2.133 Hz for high-retention pacing)
-    notes = [110.0, 130.81, 98.0, 123.47]
+    # Rotating Dark Documentary BGM (low-pass filtered warm harmonics, zero pure-sine drone)
+    bgm_bank = [
+        [110.0, 130.81, 98.0, 123.47],
+        [82.41, 98.00, 73.42, 92.50],
+        [92.50, 110.0, 82.41, 103.83],
+        [73.42, 87.31, 65.41, 82.41],
+    ]
+    notes = bgm_bank[dyn_seed % len(bgm_bank)]
     left = np.zeros(total_samples, dtype=np.float64)
     right = np.zeros(total_samples, dtype=np.float64)
     sec_per_note = total_dur / len(notes)
     for idx, f0 in enumerate(notes):
         s_t, e_t = idx * sec_per_note, (idx + 1) * sec_per_note
         env = np.clip((t - s_t) / 0.4, 0, 1) * np.clip((e_t - t) / 0.4, 0, 1)
-        pad = 0.55 * np.sin(2 * np.pi * f0 * t) + 0.30 * np.sin(2 * np.pi * (f0 * 1.5) * t)
-        left += 0.18 * pad * env
-        right += 0.18 * pad * env
+        tri = (2.0 / np.pi) * np.arcsin(np.sin(2 * np.pi * f0 * t))
+        fifth = (2.0 / np.pi) * np.arcsin(np.sin(2 * np.pi * (f0 * 1.5) * t + 0.35))
+        pad = np.convolve(0.55 * tri + 0.30 * fifth, np.ones(12) / 12.0, mode="same")
+        left += 0.16 * pad * env
+        right += 0.16 * pad * env
 
     beat_phase = (t * 2.133) % 1.0
     kick = 0.18 * np.sin(2 * np.pi * (55.0 + 35.0 * np.exp(-beat_phase * 18.0)) * t) * np.exp(-beat_phase * 8.0)
@@ -529,10 +539,17 @@ async def main():
     slug = "EP21_V3_VS_Quant"
 
     lang_configs = [
-        ("EN", "en-US-AndrewMultilingualNeural", "+20%", winner_data["beats_en"]),
-        ("KR", "ko-KR-InJoonNeural", "+20%", winner_data["beats_kr"]),
-        ("JA", "ja-JP-KeitaNeural", "+18%", winner_data["beats_ja"]),
+        ("EN", "en-US-AndrewMultilingualNeural", "+4%", winner_data["beats_en"]),
+        ("KR", "ko-KR-InJoonNeural", "+4%", winner_data["beats_kr"]),
+        ("JA", "ja-JP-KeitaNeural", "+4%", winner_data["beats_ja"]),
     ]
+
+    from datetime import datetime, timedelta, timezone
+    kst = timezone(timedelta(hours=9))
+    now_kst = datetime.now(kst)
+    pub_2200 = now_kst.replace(hour=22, minute=0, second=0, microsecond=0)
+    if pub_2200 <= now_kst:
+        pub_2200 += timedelta(days=1)
 
     results = {}
     for lang, voice, rate, beats in lang_configs:
@@ -545,6 +562,14 @@ async def main():
                 "madeForKids": False,
                 "selfDeclaredMadeForKids": False,
                 "categoryId": "27",
+                "defaultLanguage": "en-US" if lang == "EN" else ("ja" if lang == "JA" else "ko"),
+                "defaultAudioLanguage": "en-US" if lang == "EN" else ("ja" if lang == "JA" else "ko"),
+                "publishAt": pub_2200.isoformat(),
+                "channelUrl": "https://www.youtube.com/@RightSideAlpha",
+                "channelBioLink": "https://truthofmarket.com/?view=semi",
+                "supportTelegram": "https://t.me/truthofmarketss",
+                "standardCta": "🖥️ Live 72-Stock Breakout Scanner & Free 3s Position Doctor 👉 Tap truthofmarket.com in @RightSideAlpha channel bio!",
+                "tags": ["us stocks", "swing trading", "breakout trading", "technical analysis", "NVDA", "SMH"],
                 "cleanFullscreen": True,
             },
         }

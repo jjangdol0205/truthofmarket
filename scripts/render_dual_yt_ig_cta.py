@@ -171,10 +171,10 @@ def ensure_dual_videos(src_video, division="KFG", force=False):
 
     div = division.upper()
     if div == "TOM":
-        yt_title = "▶ YOUTUBE SHORTS: TAP @rightsidealpha BELOW"
-        yt_sub = "Click Profile Link & Pinned Comment -> Free US Stock Terminal"
+        yt_title = "🖥️ Live 72-Stock Breakout Scanner & Position Doctor"
+        yt_sub = "👉 Tap truthofmarket.com in @RightSideAlpha channel bio!"
         ig_title = '▶ INSTAGRAM REELS: COMMENT "ALPHA" BELOW'
-        ig_sub = "We'll DM You the Direct Live Terminal Link in 1 Second!"
+        ig_sub = "We'll DM You the Direct truthofmarket.com Link in 1 Second!"
         png_yt = create_cta_overlay_png(w, h, yt_title, yt_sub, (110, 255, 210), (255, 232, 0), is_kr=False)
         png_ig = create_cta_overlay_png(w, h, ig_title, ig_sub, (255, 232, 0), (110, 255, 210), is_kr=False)
     elif div == "KFK":

@@ -125,7 +125,7 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
           </div>
           <a
             class="btn btn-sm ${isPro ? "" : "btn-gated-vip-tg"}"
-            href="${isPro ? vipTgUrl : "#pricingSection"}"
+            href="${isPro ? vipTgUrl : "#pricing"}"
             ${isPro ? 'target="_blank" rel="noopener noreferrer"' : ""}
             style="background:#0284c7; border-color:#38bdf8; color:#ffffff; font-weight:800; padding:8px 14px;"
           >

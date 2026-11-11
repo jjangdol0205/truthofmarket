@@ -4,7 +4,7 @@ Clean Level-Up Mastering for 1사업부 (TOM) & 2사업부 (KFG) Existing Viral 
 - Removes the old overlapping yellow box that covered the Y=1420 subtitle on _IG_Reels / _YT_Shorts
 - Keeps Cuts 1~3 100% clean (full-screen 4K/3D video + single active subtitle ONLY)
 - Places a sleek, non-overlapping domain CTA pill ONLY in the final 2.8 seconds!
-- Also fixes the old `[] getbreakai.com` header on 1사업부 Shot 4 to `truthofmarket.com`.
+- Ensures clean `truthofmarket.com` header on 1사업부 Shot 4.
 """
 import os
 import sys
@@ -52,7 +52,7 @@ def make_tom_ending_png(out_png: Path):
     canvas = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(canvas)
 
-    # Cleanly replace the old `[] getbreakai.com` pill at Y=82..252 on Shot 4 live UI
+    # Clean `truthofmarket.com` pill at Y=82..252 on Shot 4 live UI
     draw.rounded_rectangle([72, 82, 1008, 252], radius=28, fill=(11, 20, 34, 255), outline=(16, 185, 129, 240), width=3)
     f_top = ImageFont.truetype(str(FONT_BOLD), 42)
     f_sub = ImageFont.truetype(str(FONT_BOLD), 28)

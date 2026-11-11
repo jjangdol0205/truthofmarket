@@ -22,17 +22,17 @@ const PRICING_COPY = {
       "Full Access to both RightSideAlpha and SemiFearGreed Pro Features",
     ],
     t2Btn: "Acquire Lifetime License ($199)",
-    t3Badge: "EXECUTION & CHARTING PARTNERS",
-    t3Title: "Direct Charting, Consensus & Broker Execution",
-    t3Desc: "Verify MA20/MA60 volume breakouts, EPS revisions, and execute US stock/ETF orders with fee rebates:",
+    t3Badge: "ESSENTIAL US EQUITY PARTNER TOOLS",
+    t3Title: "Institutional Charting, Consensus & Automated Scanners",
+    t3Desc: "Verify MA20/MA60 volume breakouts, Wall Street EPS revisions, and automated multi-timeframe trendlines with our official US equity partner stack:",
     t3Items: [
-      "<b>TradingView Pro</b> — Multi-timeframe MA20/MA60 & Pine Script v5 execution",
-      "<b>Seeking Alpha Premium</b> — Quant Grades & 1-2Y consensus EPS revision tracking",
-      "<b>US Brokerage & Global Exchange</b> — Low-spread NYSE/NASDAQ & 24/7 Perp execution",
+      "<b>TradingView Pro (ID: 1173809)</b> — Multi-timeframe MA20/MA60 & Pine Script v5 execution",
+      "<b>Seeking Alpha Premium (better_life333)</b> — Quant Grades & 1-2Y consensus EPS revision tracking",
+      "<b>TrendSpider Automated Charting (rightside)</b> — Institutional AI trendline, breakout & unusual options scanner",
     ],
     tvBtn: "📈 Launch TradingView Terminal ↗",
     saBtn: "📊 Open Seeking Alpha EPS Consensus ↗",
-    brokerBtn: "🏦 Open US Broker / Exchange Partner Bonus ↗",
+    tsBtn: "⚡ Launch TrendSpider AI Scanner ↗",
     tgBtn: "🔒 Pro VIP Telegram ($SMH/$XLV & 72-Stock Live News)",
   },
   kr: {
@@ -56,17 +56,17 @@ const PRICING_COPY = {
       "RightSideAlpha(개별주) + SemiFearGreed(반도체 공포지수) 모든 Pro 기능 영구 잠금 해제",
     ],
     t2Btn: "평생 라이선스 소장하기 ($199)",
-    t3Badge: "차트 · 분석 · 증권/거래소 제휴 혜택",
-    t3Title: "실전 차트 검증 & 제휴 증권사/거래소 수수료 혜택",
-    t3Desc: "MA20/MA60 거래량 돌파 차트 확인부터 EPS 컨센서스 점검, 실전 매매 수수료 리베이트까지 원클릭으로 연결됩니다:",
+    t3Badge: "미국주식 필수 3대 차트·리서치 제휴",
+    t3Title: "월가 기관급 차트 검증 & EPS 컨센서스 필수 툴 3종",
+    t3Desc: "MA20/MA60 거래량 돌파 차트 확인부터 EPS 컨센서스 점검, AI 자동 추세선 스캐너까지 원클릭으로 연결됩니다:",
     t3Items: [
-      "<b>TradingView Pro</b> — MA20/MA60 돌파 및 Pine Script v5 지표 자동 작도 (제휴 할인)",
-      "<b>Seeking Alpha Premium</b> — 월가 애널리스트 1~2년 선행 EPS 상향 리비전 추적",
-      "<b>제휴 증권사 & 글로벌 거래소</b> — 미국주식(IBKR/Webull) 및 24시간 지수/선물 수수료 우대",
+      "<b>TradingView Pro (1173809)</b> — MA20/MA60 돌파 및 Pine Script v5 지표 자동 작도",
+      "<b>Seeking Alpha Premium (better_life333)</b> — 월가 애널리스트 1~2년 선행 EPS 상향 리비전 추적",
+      "<b>TrendSpider AI Charting (rightside)</b> — 미국주식 자동 추세선 · 돌파 스캐너 · 백테스트",
     ],
     tvBtn: "📈 TradingView 차트 터미널 열기 ↗",
     saBtn: "📊 Seeking Alpha 실적 컨센서스 열기 ↗",
-    brokerBtn: "🏦 제휴 증권사 / 거래소 수수료 혜택 받기 ↗",
+    tsBtn: "⚡ TrendSpider AI 자동 차트 스캐너 ↗",
     tgBtn: "🔒 Pro 전용 VIP 텔레그램 ($SMH/$XLV & 72종목 실시간 월가 뉴스)",
   },
   jp: {
@@ -90,17 +90,17 @@ const PRICING_COPY = {
       "RightSideAlpha＋SemiFearGreedの全Pro機能を永久アンロック",
     ],
     t2Btn: "永久ライセンスを取得 ($199)",
-    t3Badge: "EXECUTION & CHARTING PARTNERS",
-    t3Title: "チャート検証・EPSコンセンサス・提携証券/取引所",
-    t3Desc: "MA20/MA60出来高ブレイクの確認、EPSリビジョン検証、米国株・指数の執行パートナー特典：",
+    t3Badge: "ESSENTIAL US EQUITY PARTNER TOOLS",
+    t3Title: "米国株必須チャート検証・EPSコンセンサス・AIスキャナー",
+    t3Desc: "MA20/MA60出来高ブレイクの確認、EPSリビジョン検証、マルチタイムフレーム自動トレンドライン分析：",
     t3Items: [
-      "<b>TradingView Pro</b> — マルチタイムフレームMA20/MA60＆Pine Script v5実行",
-      "<b>Seeking Alpha Premium</b> — クオンツ評価＆1〜2年先EPSコンセンサス推移",
-      "<b>提携証券・取引所 (IBKR / Webull / Bybit)</b> — 米国株・24時間インデックス取引特典",
+      "<b>TradingView Pro (1173809)</b> — マルチタイムフレームMA20/MA60＆Pine Script v5実行",
+      "<b>Seeking Alpha Premium (better_life333)</b> — クオンツ評価＆1〜2年先EPSコンセンサス推移",
+      "<b>TrendSpider AI Charting (rightside)</b> — 自動トレンドライン＆機関投資家ブレイクスキャナー",
     ],
     tvBtn: "📈 TradingView チャートを開く ↗",
     saBtn: "📊 Seeking Alpha EPSコンセンサス ↗",
-    brokerBtn: "🏦 提携証券・取引所の手数料特典を見る ↗",
+    tsBtn: "⚡ TrendSpider AIスキャナーを開く ↗",
     tgBtn: "🔒 Pro専用 VIP Telegram ($SMH/$XLV & 72銘柄リアルタイムニュース)",
   },
 };
@@ -116,12 +116,18 @@ export function renderPricing(state) {
     cfg.ls_site1_ltd_url,
     "https://truthofmarket.lemonsqueezy.com/checkout/buy/00c9f6e1-c8be-42a4-b5a5-e05af1a41ed9"
   );
-  const brokerName = cfg.broker_name || "Bitget (7nja)";
   const tvAffId = encodeURIComponent(cfg.tradingview_aff_id || "1173809");
   const saSource = encodeURIComponent(cfg.seekingalpha_source || "better_life333");
-  const rawBrkUrl = cfg.broker_referral_url || "https://www.bitget.com/referral/register?clacCode=7nja";
+  const tsAffId = encodeURIComponent(cfg.trendspider_aff_id || "rightside");
   const directTvUrl = `https://www.tradingview.com/?aff_id=${tvAffId}`;
   const directSaUrl = `https://seekingalpha.com/symbol/SPY/earnings?source=${saSource}`;
+  const directTsUrl = `https://trendspider.com/?_go=${tsAffId}`;
+
+  const checkoutFallbackHtml = `
+    <div style="margin-top:8px; font-size:0.71rem; color:#94a3b8; text-align:center; line-height:1.45;">
+      Checkout issue in your region? Join <a href="https://t.me/truthofmarketss" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">@truthofmarketss</a> or request instant Pro activation via <a href="mailto:beable9489@gmail.com?subject=Instant%20Pro%20Activation%20Request%20(TruthOfMarket)" style="color:#93c5fd; font-weight:700; text-decoration:underline;">email</a>.
+    </div>
+  `;
 
   const checkSvg = `
     <span class="price-check">
@@ -132,7 +138,8 @@ export function renderPricing(state) {
   `;
 
   return `
-    <div id="pricingSection">
+    <div id="pricing" style="scroll-margin-top:80px;">
+      <span id="pricingSection" style="display:block; height:0; overflow:hidden;"></span>
       <div style="background:linear-gradient(135deg, rgba(139,92,246,0.16) 0%, rgba(16,185,129,0.12) 100%); border:1px solid rgba(139,92,246,0.5); border-left:4px solid #8b5cf6; border-radius:8px; padding:12px 16px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
         <div style="font-size:0.8rem; color:#e2e8f0; line-height:1.45;">
           <span class="mono" style="color:#fbbf24; font-weight:800; font-size:0.72rem;">🎁 2-IN-1 DUAL TERMINAL PRO BUNDLE INCLUDED:</span>
@@ -159,9 +166,12 @@ export function renderPricing(state) {
               ${c.t1Items.map((item) => `<li>${checkSvg}<span>${item}</span></li>`).join("")}
             </ul>
           </div>
-          <a class="btn btn-primary lemonsqueezy-button" id="cardMonthlyBtn" href="${lsMonthly}" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:10px;">
-            ${c.t1Btn}
-          </a>
+          <div>
+            <a class="btn btn-primary lemonsqueezy-button" id="cardMonthlyBtn" href="${lsMonthly}" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:10px; width:100%;">
+              ${c.t1Btn}
+            </a>
+            ${checkoutFallbackHtml}
+          </div>
         </div>
 
         <!-- Tier 2: Lifetime Pass -->
@@ -181,12 +191,15 @@ export function renderPricing(state) {
               ${c.t2Items.map((item) => `<li>${checkSvg}<span>${item}</span></li>`).join("")}
             </ul>
           </div>
-          <a class="btn btn-emerald lemonsqueezy-button" id="cardLtdBtn" href="${lsLtd}" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:10px;">
-            ${c.t2Btn}
-          </a>
+          <div>
+            <a class="btn btn-emerald lemonsqueezy-button" id="cardLtdBtn" href="${lsLtd}" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:10px; width:100%;">
+              ${c.t2Btn}
+            </a>
+            ${checkoutFallbackHtml}
+          </div>
         </div>
 
-        <!-- Tier 3: Institutional Charting, Consensus & Broker/Exchange Partners -->
+        <!-- Tier 3: Essential US Equity Partner Tools -->
         <div class="price-card">
           <div>
             <span class="badge" style="background:rgba(41,98,255,0.14); color:#93c5fd; border:1px solid rgba(41,98,255,0.3);">${c.t3Badge}</span>
@@ -207,15 +220,15 @@ export function renderPricing(state) {
             <a class="btn" id="affSaBtn" href="${directSaUrl}" target="_blank" rel="noopener noreferrer" style="justify-content:center;">
               ${c.saBtn}
             </a>
-            <a class="btn" id="affBrokerBtn" href="${rawBrkUrl}" target="_blank" rel="noopener noreferrer" style="justify-content:center; border-color:rgba(16,185,129,0.45); color:#34d399; font-weight:700;">
-              ${c.brokerBtn} (${brokerName})
+            <a class="btn" id="affBrokerBtn" href="${directTsUrl}" target="_blank" rel="noopener noreferrer" style="justify-content:center; border-color:rgba(16,185,129,0.45); color:#34d399; font-weight:700;">
+              ${c.tsBtn}
             </a>
             <a class="btn ${state.isProUnlocked ? "" : "btn-gated-vip-tg"}" id="pricingTelegramChannelBtn" href="${getVipTelegramUrl(state.isProUnlocked)}" ${state.isProUnlocked ? 'target="_blank" rel="noopener noreferrer"' : ""} style="justify-content:center; border-color:rgba(56,189,248,0.45); color:#38bdf8; font-weight:700;">
               ${state.isProUnlocked ? "👑 Enter Pro VIP Telegram Channel ↗" : c.tgBtn}
             </a>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-              <a class="btn" id="pricingYoutubeBtn" href="${cfg.youtube_url || "https://youtube.com/@rightsidealpha"}" target="_blank" rel="noopener noreferrer" style="justify-content:center; border-color:rgba(239,68,68,0.4); color:#fca5a5;">
-                📺 YouTube (@rightsidealpha) ↗
+              <a class="btn" id="pricingYoutubeBtn" href="${cfg.youtube_url || "https://www.youtube.com/@RightSideAlpha"}" target="_blank" rel="noopener noreferrer" style="justify-content:center; border-color:rgba(239,68,68,0.4); color:#fca5a5;">
+                📺 YouTube (@RightSideAlpha) ↗
               </a>
               <a class="btn" id="pricingInstagramBtn" href="${cfg.instagram_url || "https://www.instagram.com/rightsidealpha"}" target="_blank" rel="noopener noreferrer" style="justify-content:center; border-color:rgba(236,72,153,0.4); color:#f9a8d4;">
                 📸 Instagram (@rightsidealpha) ↗

@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 class TelegramConfigRequest(BaseModel):
     bot_token: Optional[str] = None
     chat_id: Optional[str] = None
-    channel_url: Optional[str] = "https://t.me/RightSideAlphaBot"
+    channel_url: Optional[str] = "https://t.me/truthofmarketss"
     auto_alert_ignition: bool = True
     auto_alert_stop_loss: bool = True
     auto_alert_semi_extreme: bool = True

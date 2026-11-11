@@ -524,3 +524,22 @@ def test_t1_sector_matrix_demo_key_unlocked(client):
     assert total_stocks == 72, f"Expected 72 stocks across all sectors, got {total_stocks}"
 
 
+def test_t1_chart_blind_test_and_v4_shorts_funnel_contract():
+    """Verifies the 15-Second Wall Street Chart Blind Test magnet & 25-episode V4 Shorts queue."""
+    from pathlib import Path
+    import daily_6am_shorts_sender as shorts_sender
+
+    root = Path(__file__).resolve().parent.parent
+    bt_src = (root / "frontend" / "src" / "components" / "ChartBlindTest.js").read_text(encoding="utf-8")
+    assert "chartBlindTestSection" in bt_src
+    assert "btn-blind-test-pick" in bt_src
+    assert "btnResetBlindTest" in bt_src
+    assert "btnBlindTestJumpDoctor" in bt_src
+
+    assert len(shorts_sender.EPISODE_COPY_KIT) >= 25
+    ids = [ep["id"] for ep in shorts_sender.EPISODE_COPY_KIT]
+    for target_ep in ("EP10", "EP23", "EP24", "EP25"):
+        assert target_ep in ids
+
+
+

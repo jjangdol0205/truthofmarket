@@ -1,0 +1,12 @@
+[[headers]]
+  for = "/static_api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, HEAD, OPTIONS"
+
+[[headers]]
+  for = "/static_api/*.json"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, HEAD, OPTIONS"
+    Content-Type = "application/json; charset=utf-8"

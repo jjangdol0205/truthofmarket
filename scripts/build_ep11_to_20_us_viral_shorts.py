@@ -255,7 +255,7 @@ def make_tom_ending_png(out_png: Path, platform: str):
     canvas = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(canvas)
 
-    # Replace old `getbreakai.com` header on Shot 4 live UI with `truthofmarket.com`
+    # Render clean `truthofmarket.com` header on Shot 4 live UI
     draw.rounded_rectangle([72, 82, 1008, 252], radius=28, fill=(11, 20, 34, 255), outline=(16, 185, 129, 255), width=3)
     f_top = ImageFont.truetype(str(FONT_BOLD), 42)
     f_sub = ImageFont.truetype(str(FONT_BOLD), 28)

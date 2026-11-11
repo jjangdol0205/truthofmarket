@@ -46,9 +46,9 @@ class TelegramService:
     def _default_state(self) -> Dict[str, Any]:
         return {
             "bot_token": settings.TELEGRAM_BOT_TOKEN or "",
-            "bot_username": "RightSideAlphaBot",
+            "bot_username": "RightSideAlpha",
             "chat_id": settings.TELEGRAM_CHAT_ID or "",
-            "channel_url": settings.TELEGRAM_CHANNEL_URL or "https://t.me/RightSideAlphaBot",
+            "channel_url": settings.TELEGRAM_CHANNEL_URL or "https://t.me/truthofmarketss",
             "auto_alert_ignition": True,
             "auto_alert_stop_loss": True,
             "auto_alert_semi_extreme": True,
@@ -73,7 +73,7 @@ class TelegramService:
         if not state.get("chat_id") and settings.TELEGRAM_CHAT_ID:
             state["chat_id"] = settings.TELEGRAM_CHAT_ID
         if not state.get("channel_url"):
-            state["channel_url"] = settings.TELEGRAM_CHANNEL_URL or "https://t.me/RightSideAlphaBot"
+            state["channel_url"] = settings.TELEGRAM_CHANNEL_URL or "https://t.me/truthofmarketss"
         return state
 
     def _save_state(self) -> None:
@@ -115,9 +115,9 @@ class TelegramService:
         return TelegramStatusResponse(
             configured=configured,
             bot_token_masked=mask_bot_token(token),
-            bot_username=self._state.get("bot_username") or "RightSideAlphaBot",
+            bot_username=self._state.get("bot_username") or "RightSideAlpha",
             chat_id=chat_id,
-            channel_url=self._state.get("channel_url") or "https://t.me/RightSideAlphaBot",
+            channel_url=self._state.get("channel_url") or "https://t.me/truthofmarketss",
             auto_alert_ignition=bool(self._state.get("auto_alert_ignition", True)),
             auto_alert_stop_loss=bool(self._state.get("auto_alert_stop_loss", True)),
             auto_alert_semi_extreme=bool(self._state.get("auto_alert_semi_extreme", True)),
@@ -425,12 +425,12 @@ class TelegramService:
             "inline_keyboard": [
                 [
                     {
-                        "text": "🖥️ Live US Quant Terminal (getbreakai.com)",
-                        "url": "https://getbreakai.com",
+                        "text": "🖥️ Live US Quant Terminal (truthofmarket.com)",
+                        "url": "https://truthofmarket.com",
                     },
                     {
-                        "text": "▶️ YouTube (@rightsidealpha)",
-                        "url": "https://www.youtube.com/@rightsidealpha",
+                        "text": "▶️ YouTube (@RightSideAlpha)",
+                        "url": "https://www.youtube.com/@RightSideAlpha",
                     },
                 ],
                 [
@@ -699,8 +699,8 @@ class TelegramService:
             else:
                 reply = (
                     "🤖 <b>RightSideAlpha × SemiFearGreed US Quant Bot</b>\n"
-                    "🌐 <b>Live Web Terminal</b>: <a href=\"https://getbreakai.com\">https://getbreakai.com</a>\n"
-                    "▶️ <b>YouTube Shorts</b>: <a href=\"https://www.youtube.com/@rightsidealpha\">youtube.com/@rightsidealpha</a>\n"
+                    "🌐 <b>Live Web Terminal</b>: <a href=\"https://truthofmarket.com\">https://truthofmarket.com</a>\n"
+                    "▶️ <b>YouTube Shorts</b>: <a href=\"https://www.youtube.com/@RightSideAlpha\">youtube.com/@RightSideAlpha</a>\n"
                     "━━━━━━━━━━━━━━━━━━━━\n"
                     "<b>Real-Time Institutional Quant Commands:</b>\n"
                     "• <code>/ignition</code> — Top 5 Right-Side Breakout Candidates (TRG / -9% Stop / 2x Target)\n"

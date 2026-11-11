@@ -1651,12 +1651,12 @@ export async function buildClientTelegramPreview({
 export const DEFAULT_TG_BOT_TOKEN = "DEMO-BOT-TOKEN";
 export const DEFAULT_TG_CHAT_ID = "@truthofmarketss";
 export const DEFAULT_TG_CHANNEL_URL = "https://t.me/truthofmarketss";
-export const DEFAULT_YOUTUBE_URL = "https://youtube.com/@rightsidealpha";
+export const DEFAULT_YOUTUBE_URL = "https://www.youtube.com/@RightSideAlpha";
 export const DEFAULT_INSTAGRAM_URL = "https://www.instagram.com/rightsidealpha";
 
 export async function syncTelegramBotBrowser(botToken, currentChatId = "") {
   const cid = String(currentChatId || DEFAULT_TG_CHAT_ID).trim();
-  return { chatId: cid, botUsername: "SemifearGreedbot", synced: true };
+  return { chatId: cid, botUsername: "truthofmarketss", synced: true };
 }
 
 export async function fetchTelegramStatus() {
@@ -1672,7 +1672,7 @@ export async function fetchTelegramStatus() {
         bot_token_masked: tok ? `${tok.slice(0, 6)}...${tok.slice(-4)}` : "",
         chat_id: cid,
         channel_url: ch,
-        bot_username: "SemifearGreedbot",
+        bot_username: "truthofmarketss",
         enabled_alerts: ["SEMI_BRIEFING", "RSA_IGNITION", "POSITION_DOCTOR", "FULL_DAILY"],
         lang: localStorage.getItem("rsa_lang") || "kr",
         commands_supported: ["/start", "/help", "/semi", "/ignition", "/price <TICKER>", "/doctor <TICKER> <ENTRY> <DAYS>"],
@@ -1695,9 +1695,9 @@ export async function saveTelegramConfig(data) {
     async () => ({
       configured: Boolean(data.bot_token && data.chat_id),
       bot_token_masked: data.bot_token ? `${String(data.bot_token).slice(0, 6)}...` : "",
-      chat_id: data.chat_id || "@SemifearGreedbot",
+      chat_id: data.chat_id || "@truthofmarketss",
       channel_url: data.channel_url || DEFAULT_TG_CHANNEL_URL,
-      bot_username: "SemifearGreedbot",
+      bot_username: "truthofmarketss",
       enabled_alerts: ["SEMI_BRIEFING", "RSA_IGNITION", "POSITION_DOCTOR", "FULL_DAILY"],
       lang: data.lang || "kr",
     })
@@ -1744,10 +1744,10 @@ export async function verifyTelegramBot(data) {
       valid: true,
       configured: Boolean(cid),
       mode: "DEMO_SIMULATION",
-      bot_username: "SemiFearGreedDemoBot",
-      bot_name: "SemiFearGreed & RightSideAlpha Demo Bot",
-      chat_id: cid || "@SemifearGreedbot",
-      message: "Demo Telegram Bot verified (Simulation Mode Ready).",
+      bot_username: "truthofmarketss",
+      bot_name: "TruthOfMarket & RightSideAlpha Dispatch",
+      chat_id: cid || "@truthofmarketss",
+      message: "Demo Telegram Dispatch verified (Simulation Mode Ready).",
     };
   }
 
@@ -1759,10 +1759,10 @@ export async function verifyTelegramBot(data) {
     valid: true,
     configured: Boolean(cid),
     mode: "SERVER_DISPATCH_READY",
-    bot_username: "SemifearGreedbot",
-    bot_name: "SemiFearGreed & RightSideAlpha Bot",
-    chat_id: cid || "@SemifearGreedbot",
-    message: "✅ Connected to @SemifearGreedbot.",
+    bot_username: "truthofmarketss",
+    bot_name: "TruthOfMarket Official Dispatch",
+    chat_id: cid || "@truthofmarketss",
+    message: "✅ Connected to @truthofmarketss.",
   };
 }
 
@@ -1810,15 +1810,15 @@ export async function sendTelegramAlert(data) {
       mode: "PREVIEW_SIMULATION",
       alert_type: preview.alert_type,
       lang: preview.lang,
-      chat_id: cid || "@SemifearGreedbot",
+      chat_id: cid || "@truthofmarketss",
       message_preview: preview.text,
       status_detail:
-        "Generated exact Telegram briefing preview. Click 'Send Briefing to Telegram' with @SemifearGreedbot active.",
+        "Generated exact Telegram briefing preview. Click 'Send Briefing to Telegram' with @truthofmarketss active.",
       as_of_date: preview.as_of_date,
     };
   }
 
-  if (!cid || cid.toLowerCase() === "@semifeargreedbot") {
+  if (!cid || cid === "@truthofmarketss") {
     return {
       ok: true,
       delivered: false,
@@ -1828,7 +1828,7 @@ export async function sendTelegramAlert(data) {
       chat_id: "@truthofmarketss",
       message_preview: preview.text,
       status_detail:
-        "✅ Connected to Official Channel @truthofmarketss (https://t.me/truthofmarketss) via Admin Bot @SemifearGreedbot.",
+        "✅ Connected to Official Channel @truthofmarketss (https://t.me/truthofmarketss).",
       as_of_date: preview.as_of_date,
     };
   }
@@ -1842,7 +1842,7 @@ export async function sendTelegramAlert(data) {
       lang: preview.lang,
       chat_id: cid || "@truthofmarketss",
       message_preview: preview.text,
-      status_detail: "✅ Briefing ready for @truthofmarketss (https://t.me/truthofmarketss) via Admin Bot @SemifearGreedbot.",
+      status_detail: "✅ Briefing ready for @truthofmarketss (https://t.me/truthofmarketss).",
       as_of_date: preview.as_of_date,
     }
   );

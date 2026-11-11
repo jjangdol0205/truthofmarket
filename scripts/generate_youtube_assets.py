@@ -159,7 +159,7 @@ def generate_channel_banner(out_path: Path) -> None:
     f_main = _load_font(68, bold=True)
     draw.text(
         (tx, cy1 + 94),
-        "SemiFearGreed | $SMH Quant",
+        "RightSideAlpha | $SMH Quant",
         font=f_main,
         fill=(255, 255, 255),
     )
@@ -178,7 +178,7 @@ def generate_channel_banner(out_path: Path) -> None:
     f_cta = _load_font(27, bold=True)
     draw.text(
         (tx + 24, cy1 + 288),
-        "LIVE TERMINAL: TRUTHOFMARKET.COM   |   TELEGRAM: @SEMIFEARGREEDBOT",
+        "LIVE TERMINAL: TRUTHOFMARKET.COM   |   YOUTUBE: @RIGHTSIDEALPHA",
         font=f_cta,
         fill=(255, 255, 255),
     )

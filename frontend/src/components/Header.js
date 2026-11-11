@@ -32,7 +32,7 @@ export function renderHeader(state) {
     state.config?.ls_site1_monthly_url,
     "https://truthofmarket.lemonsqueezy.com/checkout/buy/bad98d00-7175-41f6-9d58-eeb2471d0da4"
   );
-  const ytUrl = state.config?.youtube_url || "https://youtube.com/@rightsidealpha";
+  const ytUrl = state.config?.youtube_url || "https://www.youtube.com/@RightSideAlpha";
   const igUrl = state.config?.instagram_url || "https://www.instagram.com/rightsidealpha";
   const xUrl = state.config?.x_url || "https://x.com/rightsidealpha";
   const tgUrl = isPro ? (state.config?.telegram_vip_channel_url || state.config?.telegram_channel_url || "https://t.me/truthofmarketss") : "#pro-vip-telegram";
@@ -135,7 +135,7 @@ export function renderHeader(state) {
               href="${ytUrl}"
               target="_blank"
               rel="noopener noreferrer"
-              title="Official YouTube (@rightsidealpha)"
+              title="Official YouTube (@RightSideAlpha)"
               aria-label="Official YouTube"
             >
               <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">

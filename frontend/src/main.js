@@ -48,8 +48,13 @@ const initialSearch = new URLSearchParams(window.location.search);
 const viewParam = (initialSearch.get("view") || "").toLowerCase();
 const initialTickerParam = (initialSearch.get("ticker") || window.__INITIAL_TICKER__ || "").trim().toUpperCase();
 const initialFilterParam = (initialSearch.get("filter") || window.__INITIAL_FILTER__ || "").trim().toLowerCase();
+const initialToolParam = (initialSearch.get("tool") || "").trim().toLowerCase();
+const isInitialDoctorDeepLink =
+  initialToolParam === "doctor" || initialHash === "#doctor" || initialHash.includes("positiondoctor");
 const defaultView =
-  viewParam === "semi" || initialHash.includes("semi") || initialPath.includes("/semi")
+  isInitialDoctorDeepLink
+    ? "rightside"
+    : viewParam === "semi" || initialHash.includes("semi") || initialPath.includes("/semi")
     ? "semi"
     : viewParam === "rightside" || initialHash.includes("rightside") || initialPath.includes("/rightside") || initialTickerParam || initialFilterParam
     ? "rightside"
@@ -93,18 +98,25 @@ const defaultView =
     if (oldSa === "affiliate_rightside") {
       localStorage.setItem("rsa_cfg_aff_sa", "better_life333");
     }
-    const oldBrk = localStorage.getItem("rsa_cfg_broker_url") || "";
-    if (oldBrk.includes("ibkr.com/referral/rightsidealpha") || oldBrk.includes("partner.bitget.com")) {
-      localStorage.setItem("rsa_cfg_broker_url", "https://www.bitget.com/referral/register?clacCode=7nja");
-      localStorage.setItem("rsa_cfg_broker_name", "Bitget (7nja)");
+    if (!localStorage.getItem("rsa_aff_v6_us_tools")) {
+      localStorage.setItem("rsa_cfg_broker_url", "https://trendspider.com/?_go=rightside");
+      localStorage.setItem("rsa_cfg_broker_name", "TrendSpider (rightside)");
+      localStorage.setItem("rsa_cfg_youtube_url", "https://www.youtube.com/@RightSideAlpha");
+      localStorage.setItem("rsa_tg_channel_url", "https://t.me/truthofmarketss");
+      localStorage.setItem("rsa_tg_chat_id", "@truthofmarketss");
+      localStorage.setItem("rsa_aff_v6_us_tools", "1");
     }
     const oldTgCh = localStorage.getItem("rsa_tg_channel_url") || "";
-    if (!oldTgCh || oldTgCh.includes("SemifearGreedbot") || oldTgCh.includes("RightSideAlphaBot")) {
+    if (!oldTgCh || !oldTgCh.includes("truthofmarketss")) {
       localStorage.setItem("rsa_tg_channel_url", "https://t.me/truthofmarketss");
     }
     const oldTgCid = localStorage.getItem("rsa_tg_chat_id") || "";
-    if (!oldTgCid || oldTgCid.includes("SemifearGreedbot") || oldTgCid === "755033799") {
+    if (!oldTgCid || oldTgCid === "755033799" || !oldTgCid.includes("truthofmarketss")) {
       localStorage.setItem("rsa_tg_chat_id", "@truthofmarketss");
+    }
+    const oldYt = localStorage.getItem("rsa_cfg_youtube_url") || "";
+    if (!oldYt || oldYt.includes("youtube.com/@rightsidealpha")) {
+      localStorage.setItem("rsa_cfg_youtube_url", "https://www.youtube.com/@RightSideAlpha");
     }
     const oldIg = localStorage.getItem("rsa_cfg_instagram_url") || "";
     if (oldIg.includes("semifeargreed")) {
@@ -137,6 +149,7 @@ const state = {
   sortAsc: false,
   sectorFilter: "ALL",
   vipWatchlist: getVipWatchlist(),
+  blindTestAnswers: {},
   portfolioPositions: [
     { ticker: "CELH", entry_price: 28.5, shares: 100, days_held: 35, current_price: 27.93 },
     { ticker: "CCL", entry_price: 19.2, shares: 200, days_held: 25, current_price: 21.4 },
@@ -158,7 +171,7 @@ const state = {
   semiLumpCapUsd: 50000,
   semiLumpScore: null,
   semiLumpSumResult: null,
-  // Telegram state (@truthofmarketss channel + @SemifearGreedbot admin bot)
+  // Telegram state (@truthofmarketss official channel & dispatch)
   telegramConfigured: true,
   telegramBotToken: localStorage.getItem("rsa_tg_bot_token") || DEFAULT_TG_BOT_TOKEN,
   telegramChatId: localStorage.getItem("rsa_tg_chat_id") || "@truthofmarketss",
@@ -176,9 +189,10 @@ const state = {
       "https://truthofmarket.lemonsqueezy.com/checkout/buy/00c9f6e1-c8be-42a4-b5a5-e05af1a41ed9",
     tradingview_aff_id: localStorage.getItem("rsa_cfg_aff_tv") || "1173809",
     seekingalpha_source: localStorage.getItem("rsa_cfg_aff_sa") || "better_life333",
-    broker_name: localStorage.getItem("rsa_cfg_broker_name") || "Bitget (7nja)",
+    trendspider_aff_id: "rightside",
+    broker_name: localStorage.getItem("rsa_cfg_broker_name") || "TrendSpider (rightside)",
     broker_referral_url:
-      localStorage.getItem("rsa_cfg_broker_url") || "https://www.bitget.com/referral/register?clacCode=7nja",
+      localStorage.getItem("rsa_cfg_broker_url") || "https://trendspider.com/?_go=rightside",
     telegram_channel_url: localStorage.getItem("rsa_tg_channel_url") || "https://t.me/truthofmarketss",
     telegram_vip_channel_url: localStorage.getItem("rsa_tg_vip_channel_url") || "",
     telegram_chat_id: localStorage.getItem("rsa_tg_chat_id") || "@truthofmarketss",
@@ -289,7 +303,7 @@ function renderApp() {
         <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
           <span class="mono" style="font-size:0.72rem; color:var(--text); font-weight:700;">OFFICIAL CHANNELS:</span>
           <a href="${state.config.youtube_url || DEFAULT_YOUTUBE_URL}" target="_blank" rel="noopener noreferrer" style="color:#fca5a5; text-decoration:none; font-weight:600;">
-            📺 YouTube (@rightsidealpha) ↗
+            📺 YouTube (@RightSideAlpha) ↗
           </a>
           <span style="color:var(--border);">|</span>
           <a href="${state.config.instagram_url || DEFAULT_INSTAGRAM_URL}" target="_blank" rel="noopener noreferrer" style="color:#f9a8d4; text-decoration:none; font-weight:600;">
@@ -382,6 +396,36 @@ function bindEvents() {
   if (btnSwitchToRightSide) {
     btnSwitchToRightSide.addEventListener("click", () => switchView("rightside"));
   }
+  const btnQuickJumpSemiFg = document.getElementById("btnQuickJumpSemiFg");
+  if (btnQuickJumpSemiFg) {
+    btnQuickJumpSemiFg.addEventListener("click", () => switchView("semi"));
+  }
+  const focusPositionDoctor = (e) => {
+    if (e) e.preventDefault();
+    if (state.activeView !== "rightside") {
+      state.activeView = "rightside";
+      renderApp();
+    }
+    const docCard = document.getElementById("doctor") || document.getElementById("positionDoctorCard") || document.getElementById("proVaultSection");
+    if (docCard && docCard.scrollIntoView) {
+      docCard.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    setTimeout(() => {
+      const docTicker = document.getElementById("docTicker");
+      if (docTicker) {
+        docTicker.focus();
+        if (typeof docTicker.select === "function") docTicker.select();
+      }
+    }, 280);
+  };
+  const btnQuickJumpDoctor = document.getElementById("btnQuickJumpDoctor");
+  if (btnQuickJumpDoctor) {
+    btnQuickJumpDoctor.addEventListener("click", focusPositionDoctor);
+  }
+  const btnHeroJumpPositionDoctor = document.getElementById("btnHeroJumpPositionDoctor");
+  if (btnHeroJumpPositionDoctor) {
+    btnHeroJumpPositionDoctor.addEventListener("click", focusPositionDoctor);
+  }
 
   // Language Switcher
   document.querySelectorAll(".lang-btn").forEach((btn) => {
@@ -449,6 +493,31 @@ function bindEvents() {
       } catch (_) {}
       renderApp();
     });
+  }
+
+  // 15-Second Wall Street Chart Blind Test Controls
+  document.querySelectorAll(".btn-blind-test-pick").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const rId = btn.getAttribute("data-round");
+      const pick = btn.getAttribute("data-pick");
+      if (!rId || !pick) return;
+      state.blindTestAnswers = { ...(state.blindTestAnswers || {}), [rId]: pick };
+      renderApp();
+    });
+  });
+
+  const btnResetBlindTest = document.getElementById("btnResetBlindTest");
+  if (btnResetBlindTest) {
+    btnResetBlindTest.addEventListener("click", () => {
+      state.blindTestAnswers = {};
+      renderApp();
+      showToast("Chart Blind Test Reset — Try All 3 Setups Again");
+    });
+  }
+
+  const btnBlindTestJumpDoctor = document.getElementById("btnBlindTestJumpDoctor");
+  if (btnBlindTestJumpDoctor) {
+    btnBlindTestJumpDoctor.addEventListener("click", focusPositionDoctor);
   }
 
   // Sort Headers with Dynamic Directional Chevrons & Active State
@@ -805,10 +874,10 @@ function bindEvents() {
       const igUrl = document.getElementById("cfgInstagramUrl")?.value.trim() || state.config.instagram_url || DEFAULT_INSTAGRAM_URL;
       const tvId = document.getElementById("cfgAffTv")?.value.trim() || "1173809";
       const saSrc = document.getElementById("cfgAffSa")?.value.trim() || "better_life333";
-      const brkName = document.getElementById("cfgBrokerName")?.value.trim() || "Bitget (7nja)";
+      const brkName = document.getElementById("cfgBrokerName")?.value.trim() || "TrendSpider (rightside)";
       const brkUrl =
         document.getElementById("cfgBrokerUrl")?.value.trim() ||
-        "https://www.bitget.com/referral/register?clacCode=7nja";
+        "https://trendspider.com/?_go=rightside";
 
       state.config.site1_url = s1Url;
       state.config.ls_site1_monthly_url = lsM;
@@ -1626,7 +1695,29 @@ function bindEvents() {
             <span>STATUS / RRR: <b style="color:${isStopped ? "#fca5a5" : "#93c5fd"};">${data.rrr_ratio || "1 : 11.1"}</b></span>
           </div>
         `;
-        bodyEl.innerHTML = `${metaHeader}<div style="font-family:var(--font-sans); line-height:1.65;">${formatted}</div>`;
+        const tvAff = encodeURIComponent(state.config.tradingview_aff_id || "1173809");
+        const saSrc = encodeURIComponent(state.config.seekingalpha_source || "better_life333");
+        const tsAff = encodeURIComponent(state.config.trendspider_aff_id || "rightside");
+        const tSym = encodeURIComponent(data.ticker || ticker);
+        const affiliateFooter = `
+          <div style="margin-top:16px; padding:12px 14px; background:linear-gradient(135deg, rgba(15,23,42,0.95) 0%, rgba(9,13,22,0.98) 100%); border:1px solid rgba(59,130,246,0.35); border-radius:6px;">
+            <div class="mono" style="font-size:0.7rem; font-weight:800; color:#93c5fd; margin-bottom:8px; text-transform:uppercase;">
+              ⚡ VERIFY $${tSym} BREAKOUT, EPS REVISIONS &amp; AI TRENDLINES ON OFFICIAL US EQUITY PARTNER TOOLS
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:8px;">
+              <a class="btn btn-sm" href="https://www.tradingview.com/symbols/${tSym}/?aff_id=${tvAff}" target="_blank" rel="noopener noreferrer" style="justify-content:center; border-color:rgba(59,130,246,0.45); color:#60a5fa; font-weight:700;">
+                📈 TradingView Pro ($${tSym}) ↗
+              </a>
+              <a class="btn btn-sm" href="https://seekingalpha.com/symbol/${tSym}/earnings?source=${saSrc}" target="_blank" rel="noopener noreferrer" style="justify-content:center; border-color:rgba(245,158,11,0.45); color:#fbbf24; font-weight:700;">
+                📊 Seeking Alpha EPS ($${tSym}) ↗
+              </a>
+              <a class="btn btn-sm" href="https://trendspider.com/?_go=${tsAff}&symbol=${tSym}" target="_blank" rel="noopener noreferrer" style="justify-content:center; border-color:rgba(16,185,129,0.45); color:#34d399; font-weight:700;">
+                ⚡ TrendSpider AI ($${tSym}) ↗
+              </a>
+            </div>
+          </div>
+        `;
+        bodyEl.innerHTML = `${metaHeader}<div style="font-family:var(--font-sans); line-height:1.65;">${formatted}</div>${affiliateFooter}`;
       }
     } catch (e) {
       if (bodyEl) bodyEl.innerHTML = "Failed to load research brief.";
@@ -1897,11 +1988,7 @@ function bindRowEvents() {
         if (href.includes("tradingview")) {
           const aff = encodeURIComponent(state.config.tradingview_aff_id || "1173809");
           window.open(`https://www.tradingview.com/symbols/${ticker}/?aff_id=${aff}`, "_blank", "noopener");
-        } else if (href.includes("broker") || href.includes("exchange")) {
-          const rawBrk = state.config.broker_referral_url || "https://www.bitget.com/referral/register?clacCode=7nja";
-          const sep = rawBrk.includes("?") ? "&" : "?";
-          window.open(`${rawBrk}${sep}symbol=${encodeURIComponent(ticker)}`, "_blank", "noopener");
-        } else if (href.includes("trendspider")) {
+        } else if (href.includes("broker") || href.includes("exchange") || href.includes("trendspider")) {
           const ts = encodeURIComponent(state.config.trendspider_aff_id || "rightside");
           window.open(`https://trendspider.com/?_go=${ts}&symbol=${ticker}`, "_blank", "noopener");
         } else {
@@ -2126,8 +2213,43 @@ async function init() {
     }
   });
 
+  const handleSpecialAnchorScroll = () => {
+    const h = (window.location.hash || "").toLowerCase();
+    const sp = new URLSearchParams(window.location.search);
+    const toolP = (sp.get("tool") || "").toLowerCase();
+    if (toolP === "doctor" || h === "#doctor" || h.includes("positiondoctor")) {
+      if (state.activeView !== "rightside") {
+        state.activeView = "rightside";
+        renderApp();
+      }
+      setTimeout(() => {
+        const docEl = document.getElementById("doctor") || document.getElementById("positionDoctorCard");
+        if (docEl && docEl.scrollIntoView) {
+          docEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+        const docTicker = document.getElementById("docTicker");
+        if (docTicker) {
+          docTicker.focus();
+          if (typeof docTicker.select === "function") docTicker.select();
+        }
+      }, 180);
+      return true;
+    }
+    if (h === "#pricing" || h === "#pricing-section" || h === "#pricingsection") {
+      setTimeout(() => {
+        const prEl = document.getElementById("pricing") || document.getElementById("pricingSection");
+        if (prEl && prEl.scrollIntoView) {
+          prEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 150);
+      return true;
+    }
+    return false;
+  };
+
   window.addEventListener("hashchange", () => {
     const h = window.location.hash.toLowerCase();
+    if (handleSpecialAnchorScroll()) return;
     if (h.includes("rightside") && state.activeView !== "rightside") {
       state.activeView = "rightside";
       renderApp();
@@ -2139,6 +2261,7 @@ async function init() {
 
   await loadAllData();
   renderApp();
+  handleSpecialAnchorScroll();
 
   // Auto-unlock Pro Terminal when returning from Lemon Squeezy checkout with ?license_key= or ?key=
   const urlLicenseKey = (initialSearch.get("license_key") || initialSearch.get("key") || "").trim();
@@ -2172,6 +2295,18 @@ async function init() {
         }
       }
     }, 200);
+  }
+  if (
+    initialHash.includes("blindtest") ||
+    initialHash.includes("chartblindtest") ||
+    initialSearch.get("challenge") === "1"
+  ) {
+    setTimeout(() => {
+      const btEl = document.getElementById("chartBlindTestSection");
+      if (btEl && btEl.scrollIntoView) {
+        btEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 180);
   }
   if (initialTickerParam || initialFilterParam) {
     setTimeout(() => {

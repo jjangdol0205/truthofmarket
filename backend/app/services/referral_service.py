@@ -51,7 +51,7 @@ class ReferralService:
         elif prov == "trendspider":
             return f"https://trendspider.com/?_go={cfg.trendspider_aff_id}&symbol={tick}"
         elif prov in ("broker", "exchange"):
-            base_url = cfg.broker_referral_url or "https://www.bitget.com/referral/register?clacCode=7nja"
+            base_url = cfg.broker_referral_url or f"https://trendspider.com/?_go={cfg.trendspider_aff_id}"
             sep = "&" if "?" in base_url else "?"
             return f"{base_url}{sep}symbol={tick}"
         else:
