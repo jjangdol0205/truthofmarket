@@ -23,8 +23,8 @@
 
 ### ① 레몬스퀴지(Lemon Squeezy Store `#296100`) 실결제(Live Mode) UUID 보호
 - `frontend/src/components/Modals.js` 및 `frontend/src/main.js`에 설정된 **Live Mode 체크아웃 URL**을 절대 Test Mode UUID로 되돌리거나 훼손하지 말 것:
-  - **Pro Monthly (`$29/mo`, Product `#1491944`)**: `https://truthofmarket.lemonsqueezy.com/checkout/buy/bad98d00-7175-41f6-9d58-eeb2471d0da4`
-  - **Lifetime Pass (`$199`, Product `#1491942`)**: `https://truthofmarket.lemonsqueezy.com/checkout/buy/00c9f6e1-c8be-42a4-b5a5-e05af1a41ed9`
+  - **Pro Monthly (`$29/mo`, Product `#1491944`)**: `https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8`
+  - **Lifetime Pass (`$199`, Product `#1491942`)**: `https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b`
 - 라이선스 모달(`#licenseModal`)과 하단 푸터의 공식 사업자 표기(`Operated by Yoonju Lee · KIDS-FIT Global Studio (Lemon Squeezy Store #296100)`)를 절대 삭제하지 말 것.
 
 ### ② 3대 사업부 통합 마스터 텔레그램 브릿지 보호

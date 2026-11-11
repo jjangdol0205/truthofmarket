@@ -288,14 +288,14 @@ def test_t3_lemonsqueezy_store_296100_invariants_preserved():
     Interaction 9:
     Explicitly verifies that Lemon Squeezy Store #296100 Live Mode checkout links
     and overlay embed parameter are preserved intact across source and bundles:
-    - Monthly VIP ($29/mo): bad98d00-7175-41f6-9d58-eeb2471d0da4
-    - Lifetime VIP ($199): 00c9f6e1-c8be-42a4-b5a5-e05af1a41ed9
+    - Monthly VIP ($29/mo): d5e7e761-8b1b-4ca8-b1fe-771acd1450f8
+    - Lifetime VIP ($199): 667aa482-f17c-47d1-b7f3-a2427c36516b
     - In-page checkout overlay: embed=1
     """
     project_root = Path(__file__).resolve().parent.parent
 
-    monthly_uuid = "bad98d00-7175-41f6-9d58-eeb2471d0da4"
-    lifetime_uuid = "00c9f6e1-c8be-42a4-b5a5-e05af1a41ed9"
+    monthly_uuid = "d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
+    lifetime_uuid = "667aa482-f17c-47d1-b7f3-a2427c36516b"
 
     # 1. Source verification: frontend/src/components/Pricing.js
     pricing_js = (project_root / "frontend" / "src" / "components" / "Pricing.js").read_text(encoding="utf-8")

@@ -89,8 +89,8 @@ To serve retail enthusiasts, active swing traders, and sophisticated family offi
 | Plan Tier | Name & Positioning | Price (USD) | Lemon Squeezy Live UUID | Target Audience | Key Feature Deliverables |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Tier 1** | **7-Day VIP Research Pass** *(Trial)* | **$4.99** *(7-Day Full Access)* | Configured on checkout | Curious retail investors, test evaluators | • Full access to all 72 US Equity target prices & -9.0% stop-loss levels<br>• Unlimited Position Doctor diagnostic runs<br>• Real-time Semiconductor Fear & Greed gauge<br>• Converts automatically to Monthly Pro unless canceled |
-| **Tier 2** | **Pro Terminal Monthly** *(Core)* | **$29.00 / mo** *(Billed monthly)* | `bad98d00-7175-41f6-9d58-eeb2471d0da4` | Active swing traders, momentum investors | • Everything in Tier 1<br>• **Private VIP Telegram Alert Channel** (`@RigjtsideAlphabot`) with instant PW-RSI ignition & stop-loss notifications<br>• Daily SEC 10-K/10-Q Forensic Research Briefs<br>• $SMH:$XLV Barbell monthly rebalancing alerts<br>• Cancel anytime in 1 click |
-| **Tier 3** | **Institutional Annual Pass** *(VIP)* | **$199.00 / yr** *(Equivalent to $16.58/mo, 43% savings)* | `00c9f6e1-c8be-42a4-b5a5-e05af1a41ed9` | Serious wealth builders, quants, family offices | • Everything in Pro Terminal<br>• **Full 26.8-Year Empirical Backtest Raw CSV Dataset** (2000–2026 daily OHLCV & allocation matrix)<br>• **Proprietary TradingView Pine Script v5 Indicator Source Code**<br>• Quarterly Macro Institutional PDF Reports<br>• Priority email support from chief quantitative analyst |
+| **Tier 2** | **Pro Terminal Monthly** *(Core)* | **$29.00 / mo** *(Billed monthly)* | `d5e7e761-8b1b-4ca8-b1fe-771acd1450f8` | Active swing traders, momentum investors | • Everything in Tier 1<br>• **Private VIP Telegram Alert Channel** (`@RigjtsideAlphabot`) with instant PW-RSI ignition & stop-loss notifications<br>• Daily SEC 10-K/10-Q Forensic Research Briefs<br>• $SMH:$XLV Barbell monthly rebalancing alerts<br>• Cancel anytime in 1 click |
+| **Tier 3** | **Institutional Annual Pass** *(VIP)* | **$199.00 / yr** *(Equivalent to $16.58/mo, 43% savings)* | `667aa482-f17c-47d1-b7f3-a2427c36516b` | Serious wealth builders, quants, family offices | • Everything in Pro Terminal<br>• **Full 26.8-Year Empirical Backtest Raw CSV Dataset** (2000–2026 daily OHLCV & allocation matrix)<br>• **Proprietary TradingView Pine Script v5 Indicator Source Code**<br>• Quarterly Macro Institutional PDF Reports<br>• Priority email support from chief quantitative analyst |
 
 ---
 
@@ -98,8 +98,8 @@ To serve retail enthusiasts, active swing traders, and sophisticated family offi
 
 - **Merchant of Record**: Lemon Squeezy, LLC (Store #296100 · KIDS-FIT Global Studio & TruthOfMarket Analytics).
 - **Checkout URL Standard**:
-  - Monthly Pro: `https://truthofmarket.lemonsqueezy.com/checkout/buy/bad98d00-7175-41f6-9d58-eeb2471d0da4?embed=1`
-  - Institutional Annual: `https://truthofmarket.lemonsqueezy.com/checkout/buy/00c9f6e1-c8be-42a4-b5a5-e05af1a41ed9?embed=1`
+  - Monthly Pro: `https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1`
+  - Institutional Annual: `https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1`
 - **Customer Support Desk**: Unified official email `beable9489@gmail.com`.
 - **Standalone Compliance Pages**:
   - Terms of Service: `https://truthofmarket.com/terms.html`

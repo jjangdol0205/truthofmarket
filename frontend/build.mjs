@@ -91,14 +91,14 @@ const indexHtml = `<!DOCTYPE html>
             "name": "Pro Quantitative Terminal (Monthly)",
             "price": "29.00",
             "priceCurrency": "USD",
-            "url": "https://truthofmarket.lemonsqueezy.com/checkout/buy/bad98d00-7175-41f6-9d58-eeb2471d0da4"
+            "url": "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
           },
           {
             "@type": "Offer",
             "name": "Lifetime Research & Terminal License",
             "price": "199.00",
             "priceCurrency": "USD",
-            "url": "https://truthofmarket.lemonsqueezy.com/checkout/buy/00c9f6e1-c8be-42a4-b5a5-e05af1a41ed9"
+            "url": "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b"
           }
         ]
       }

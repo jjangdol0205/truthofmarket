@@ -9,7 +9,7 @@
 아래 기능들은 구현 및 라이브 배포가 완료된 상태입니다. 사용자가 명시적으로 수정을 지시하지 않는 한 **절대 건드리지 마세요.**
 
 - [x] **[잠금] 레몬스퀴지(Lemon Squeezy Store `#296100`) Live Mode 결제 연동 (`frontend/src/components/Modals.js`, `frontend/src/main.js`)**
-  - Pro Monthly (`$29/mo`, UUID `bad98d00-7175-41f6-9d58-eeb2471d0da4`) 및 Lifetime Pass (`$199`, UUID `00c9f6e1-c8be-42a4-b5a5-e05af1a41ed9`)
+  - Pro Monthly (`$29/mo`, UUID `d5e7e761-8b1b-4ca8-b1fe-771acd1450f8`) 및 Lifetime Pass (`$199`, UUID `667aa482-f17c-47d1-b7f3-a2427c36516b`)
   - 온보딩 심사 기준에 맞춘 공식 운영자 표기(`Operated by Yoonju Lee · KIDS-FIT Global Studio (Lemon Squeezy Store #296100)`)
 - [x] **[잠금] 레몬스퀴지 24시간 실시간 승인·첫결제 감시 워치독 (`scripts/master_hq_telegram_bridge.js`)**
   - 3분 주기 자동 감시(`checkLemonSqueezyLiveStatus`) 및 `/ls` 즉시 조회 버튼

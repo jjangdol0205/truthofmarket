@@ -58,7 +58,7 @@ def audit_and_heal_tom() -> dict:
             healed.append("🛠️ [자동수리] 1사업부 Modals.js 무료 프리패스 백도어 강제 비활성화")
             needs_rebuild = True
 
-        if "bad98d00-7175-41f6-9d58-eeb2471d0da4" in txt and "00c9f6e1-c8be-42a4-b5a5-e05af1a41ed9" in txt:
+        if "d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" in txt and "667aa482-f17c-47d1-b7f3-a2427c36516b" in txt:
             checks.append("✅ [결제검열] 레몬스퀴지 Live UUID ($29/mo · $199) 정상")
         else:
             healed.append("⚠️ [경고] 1사업부 Live UUID 변조 감지 — 즉시 복구 필요")

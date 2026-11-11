@@ -103,7 +103,7 @@ export function renderStockTable(state) {
   const isPro = state.isProUnlocked;
   const stocks = (state.filteredStocks || []).filter((s) => !String(s.ticker).includes("."));
   const cfg = state.config || {};
-  const monthlyUrl = cfg.ls_site1_monthly_url || "https://truthofmarket.lemonsqueezy.com/checkout/buy/bad98d00-7175-41f6-9d58-eeb2471d0da4";
+  const monthlyUrl = cfg.ls_site1_monthly_url || "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8";
 
   const renderSortTh = (col, label, isNum = false) => {
     const isAct = state.sortCol === col;
@@ -179,7 +179,7 @@ export function renderStockRows(state) {
   const cfg = state.config || {};
   const lsMonthlyUrl = formatCheckoutUrl(
     cfg.ls_site1_monthly_url,
-    "https://truthofmarket.lemonsqueezy.com/checkout/buy/bad98d00-7175-41f6-9d58-eeb2471d0da4"
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
   );
   const tvAffId = encodeURIComponent(cfg.tradingview_aff_id || "1173809");
   const saSource = encodeURIComponent(cfg.seekingalpha_source || "better_life333");

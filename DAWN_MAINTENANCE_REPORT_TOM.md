@@ -12,10 +12,10 @@
 ### 1.1 Lemon Squeezy Store #296100 실결제 Live UUID & 오버레이 보호
 - **스토어 식별자**: Lemon Squeezy Store `#296100` (`GetBreakAI & TruthOfMarket Analytics`)
 - **라이브 플랜 UUID 및 결제 파라미터**:
-  - **Monthly VIP ($29/mo)**: `bad98d00-7175-41f6-9d58-eeb2471d0da4`
-    - Live URL: `https://truthofmarket.lemonsqueezy.com/checkout/buy/bad98d00-7175-41f6-9d58-eeb2471d0da4?embed=1`
-  - **Lifetime VIP ($199)**: `00c9f6e1-c8be-42a4-b5a5-e05af1a41ed9`
-    - Live URL: `https://truthofmarket.lemonsqueezy.com/checkout/buy/00c9f6e1-c8be-42a4-b5a5-e05af1a41ed9?embed=1`
+  - **Monthly VIP ($29/mo)**: `d5e7e761-8b1b-4ca8-b1fe-771acd1450f8`
+    - Live URL: `https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1`
+  - **Lifetime VIP ($199)**: `667aa482-f17c-47d1-b7f3-a2427c36516b`
+    - Live URL: `https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1`
 - **PCI-DSS 컴플라이언스 및 신뢰 뱃지**:
   - 결제 버튼 하단에 `🔒 Lemon Squeezy Store #296100 Live · PCI-DSS Encrypted · 즉시 영수증 및 라이선스키 발급` 고지 유지 완료.
 - **동적 오버레이 이벤트 위임 (`frontend/src/main.js`)**:

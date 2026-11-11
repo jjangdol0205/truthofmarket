@@ -1,14 +1,14 @@
 # RightSideAlpha × SemiFearGreed (https://truthofmarket.com)
 
 > Institutional US Equity Post-Washout Right-Side Ignition (PW-RSI) Terminal & 7-Factor Semiconductor ($SMH × $XLV) Fear & Greed Index.
-> Live Daily Closing Snapshot as of 2026-11-09 | 26.8-Year Empirical Backtest (2000–2026): PW-RSI 24.48% CAGR (349.3x vs QQQ 14.3x).
+> Live Daily Closing Snapshot as of 2026-11-10 | 26.8-Year Empirical Backtest (2000–2026): PW-RSI 24.48% CAGR (349.3x vs QQQ 14.3x).
 
 ## 1. Live Macro & Semiconductor Fear & Greed Snapshot
-- **As of Date**: 2026-11-09
+- **As of Date**: 2026-11-10
 - **7-Factor Semiconductor Fear & Greed Score**: 18.0/100 (Extreme Fear)
-- **$SMH (VanEck Semiconductor ETF)**: $487.41 (-27.13% off 52-week high)
-- **$XLV (Health Care Select Sector SPDR ETF)**: $188.33
-- **$QQQ (Invesco QQQ Trust)**: $679.35
+- **$SMH (VanEck Semiconductor ETF)**: $483.63 (-27.7% off 52-week high)
+- **$XLV (Health Care Select Sector SPDR ETF)**: $188.88
+- **$QQQ (Invesco QQQ Trust)**: $674.76
 - **Active Barbell Allocation Directive**: 80% $SMH : 20% $XLV Contrarian Barbell
 - **Interactive Terminal**: https://truthofmarket.com/semi-fear-greed.html
 
@@ -21,28 +21,28 @@
 - Main Screener & Position Doctor: https://truthofmarket.com/
 - Semiconductor Fear & Greed Terminal: https://truthofmarket.com/semi-fear-greed.html
 - Live Telegram Quant Channel: https://t.me/truthofmarketss
-- **$CELH (Celsius Holdings)**: Close $33.19 | -9% Hard Stop $30.2 | +100% Target $66.38 -> https://truthofmarket.com/stocks/celh.html
-- **$ENPH (Enphase Energy)**: Close $29.08 | -9% Hard Stop $26.46 | +100% Target $58.16 -> https://truthofmarket.com/stocks/enph.html
-- **$TSLA (Tesla Inc)**: Close $378.05 | -9% Hard Stop $344.03 | +100% Target $756.1 -> https://truthofmarket.com/stocks/tsla.html
-- **$AVGO (Broadcom Inc)**: Close $319.48 | -9% Hard Stop $290.73 | +100% Target $638.96 -> https://truthofmarket.com/stocks/avgo.html
-- **$APP (AppLovin Corp)**: Close $410.0 | -9% Hard Stop $373.1 | +100% Target $820.0 -> https://truthofmarket.com/stocks/app.html
-- **$VRTX (Vertex Pharmaceuticals)**: Close $550.87 | -9% Hard Stop $501.29 | +100% Target $1101.74 -> https://truthofmarket.com/stocks/vrtx.html
-- **$DIS (Walt Disney Co)**: Close $119.12 | -9% Hard Stop $108.4 | +100% Target $238.24 -> https://truthofmarket.com/stocks/dis.html
-- **$GM (General Motors Co)**: Close $89.65 | -9% Hard Stop $81.58 | +100% Target $179.3 -> https://truthofmarket.com/stocks/gm.html
-- **$AMZN (Amazon.com Inc)**: Close $266.93 | -9% Hard Stop $242.91 | +100% Target $533.86 -> https://truthofmarket.com/stocks/amzn.html
-- **$SBUX (Starbucks Corp)**: Close $109.44 | -9% Hard Stop $99.59 | +100% Target $218.88 -> https://truthofmarket.com/stocks/sbux.html
-- **$GE (GE Aerospace)**: Close $335.54 | -9% Hard Stop $305.34 | +100% Target $671.08 -> https://truthofmarket.com/stocks/ge.html
-- **$HOOD (Robinhood Markets)**: Close $83.32 | -9% Hard Stop $75.82 | +100% Target $166.64 -> https://truthofmarket.com/stocks/hood.html
-- **$SNAP (Snap Inc)**: Close $5.05 | -9% Hard Stop $4.6 | +100% Target $10.1 -> https://truthofmarket.com/stocks/snap.html
-- **$MBLY (Mobileye Global)**: Close $5.86 | -9% Hard Stop $5.33 | +100% Target $11.72 -> https://truthofmarket.com/stocks/mbly.html
-- **$DUOL (Duolingo Inc)**: Close $154.25 | -9% Hard Stop $140.37 | +100% Target $308.5 -> https://truthofmarket.com/stocks/duol.html
-- **$UPST (Upstart Holdings)**: Close $22.25 | -9% Hard Stop $20.25 | +100% Target $44.5 -> https://truthofmarket.com/stocks/upst.html
-- **$PINS (Pinterest Inc)**: Close $19.06 | -9% Hard Stop $17.34 | +100% Target $38.12 -> https://truthofmarket.com/stocks/pins.html
-- **$NFLX (Netflix Inc)**: Close $63.95 | -9% Hard Stop $58.19 | +100% Target $127.9 -> https://truthofmarket.com/stocks/nflx.html
-- **$QCOM (Qualcomm Inc)**: Close $171.47 | -9% Hard Stop $156.04 | +100% Target $342.94 -> https://truthofmarket.com/stocks/qcom.html
-- **$KLAC (KLA Corp)**: Close $151.38 | -9% Hard Stop $137.76 | +100% Target $302.76 -> https://truthofmarket.com/stocks/klac.html
-- **$META (Meta Platforms Inc)**: Close $641.37 | -9% Hard Stop $583.65 | +100% Target $1282.74 -> https://truthofmarket.com/stocks/meta.html
-- **$FLNC (Fluence Energy)**: Close $5.4 | -9% Hard Stop $4.91 | +100% Target $10.8 -> https://truthofmarket.com/stocks/flnc.html
-- **$COIN (Coinbase Global)**: Close $136.1 | -9% Hard Stop $123.85 | +100% Target $272.2 -> https://truthofmarket.com/stocks/coin.html
-- **$SEDG (SolarEdge Tech)**: Close $27.66 | -9% Hard Stop $25.17 | +100% Target $55.32 -> https://truthofmarket.com/stocks/sedg.html
-- **$ON (ON Semiconductor)**: Close $69.11 | -9% Hard Stop $62.89 | +100% Target $138.22 -> https://truthofmarket.com/stocks/on.html
+- **$CELH (Celsius Holdings)**: Close $32.8 | -9% Hard Stop $29.85 | +100% Target $65.6 -> https://truthofmarket.com/stocks/celh.html
+- **$AVGO (Broadcom Inc)**: Close $331.98 | -9% Hard Stop $302.1 | +100% Target $663.96 -> https://truthofmarket.com/stocks/avgo.html
+- **$FSLR (First Solar Inc)**: Close $180.98 | -9% Hard Stop $164.69 | +100% Target $361.96 -> https://truthofmarket.com/stocks/fslr.html
+- **$APP (AppLovin Corp)**: Close $395.51 | -9% Hard Stop $359.91 | +100% Target $791.02 -> https://truthofmarket.com/stocks/app.html
+- **$VRTX (Vertex Pharmaceuticals)**: Close $547.89 | -9% Hard Stop $498.58 | +100% Target $1095.78 -> https://truthofmarket.com/stocks/vrtx.html
+- **$DIS (Walt Disney Co)**: Close $119.21 | -9% Hard Stop $108.48 | +100% Target $238.42 -> https://truthofmarket.com/stocks/dis.html
+- **$GM (General Motors Co)**: Close $88.69 | -9% Hard Stop $80.71 | +100% Target $177.38 -> https://truthofmarket.com/stocks/gm.html
+- **$AMZN (Amazon.com Inc)**: Close $270.87 | -9% Hard Stop $246.49 | +100% Target $541.74 -> https://truthofmarket.com/stocks/amzn.html
+- **$SBUX (Starbucks Corp)**: Close $109.95 | -9% Hard Stop $100.05 | +100% Target $219.9 -> https://truthofmarket.com/stocks/sbux.html
+- **$ENPH (Enphase Energy)**: Close $27.64 | -9% Hard Stop $25.15 | +100% Target $55.28 -> https://truthofmarket.com/stocks/enph.html
+- **$HOOD (Robinhood Markets)**: Close $81.33 | -9% Hard Stop $74.01 | +100% Target $162.66 -> https://truthofmarket.com/stocks/hood.html
+- **$SNAP (Snap Inc)**: Close $5.0 | -9% Hard Stop $4.55 | +100% Target $10.0 -> https://truthofmarket.com/stocks/snap.html
+- **$MBLY (Mobileye Global)**: Close $5.63 | -9% Hard Stop $5.12 | +100% Target $11.26 -> https://truthofmarket.com/stocks/mbly.html
+- **$GE (GE Aerospace)**: Close $337.91 | -9% Hard Stop $307.5 | +100% Target $675.82 -> https://truthofmarket.com/stocks/ge.html
+- **$UBER (Uber Technologies)**: Close $70.05 | -9% Hard Stop $63.75 | +100% Target $140.1 -> https://truthofmarket.com/stocks/uber.html
+- **$DUOL (Duolingo Inc)**: Close $156.67 | -9% Hard Stop $142.57 | +100% Target $313.34 -> https://truthofmarket.com/stocks/duol.html
+- **$MPWR (Monolithic Power Systems)**: Close $1357.6 | -9% Hard Stop $1235.42 | +100% Target $2715.2 -> https://truthofmarket.com/stocks/mpwr.html
+- **$PINS (Pinterest Inc)**: Close $18.95 | -9% Hard Stop $17.24 | +100% Target $37.9 -> https://truthofmarket.com/stocks/pins.html
+- **$NFLX (Netflix Inc)**: Close $63.26 | -9% Hard Stop $57.57 | +100% Target $126.52 -> https://truthofmarket.com/stocks/nflx.html
+- **$UPST (Upstart Holdings)**: Close $20.41 | -9% Hard Stop $18.57 | +100% Target $40.82 -> https://truthofmarket.com/stocks/upst.html
+- **$KLAC (KLA Corp)**: Close $152.99 | -9% Hard Stop $139.22 | +100% Target $305.98 -> https://truthofmarket.com/stocks/klac.html
+- **$META (Meta Platforms Inc)**: Close $641.39 | -9% Hard Stop $583.66 | +100% Target $1282.78 -> https://truthofmarket.com/stocks/meta.html
+- **$FLNC (Fluence Energy)**: Close $4.91 | -9% Hard Stop $4.47 | +100% Target $9.82 -> https://truthofmarket.com/stocks/flnc.html
+- **$COIN (Coinbase Global)**: Close $132.13 | -9% Hard Stop $120.24 | +100% Target $264.26 -> https://truthofmarket.com/stocks/coin.html
+- **$SEDG (SolarEdge Tech)**: Close $25.86 | -9% Hard Stop $23.53 | +100% Target $51.72 -> https://truthofmarket.com/stocks/sedg.html
