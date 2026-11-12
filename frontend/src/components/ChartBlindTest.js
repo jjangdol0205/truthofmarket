@@ -17,19 +17,19 @@ const BLIND_TEST_I18N = {
     answeredCountSuffix: "/ 3 SOLVED",
     resetBtn: "↻ Reset Challenge",
     jumpDocBtn: "🩺 Test My Own Stock Below",
-    buyBtn: "🟢 BUY NOW (Right-Side Ignition)",
-    trapBtn: "🔴 AVOID / BULL TRAP (Falling Knife)",
-    correctTag: "✅ QUANT SNIPER CORRECT!",
-    wrongTag: "❌ RETAIL TRAP! HERE IS WHY:",
+    buyBtn: "🟢 RIGHT-SIDE BREAKOUT (Ignition)",
+    trapBtn: "🔴 SUB-MA60 DOWNTREND (Trap)",
+    correctTag: "✅ QUANT REGIME MATCHED!",
+    wrongTag: "❌ LEFT-SIDE DRAWDOWN ZONE:",
     revealTickerLabel: "REVEALED LIVE TICKER",
-    battleTitle: "💰 $10,000 REAL ACCOUNT OUTCOME: RETAIL DIP-BUYER VS. RIGHT-SIDE QUANT ENGINE",
-    retailSideTitle: "❌ Amateur 'Buy the Dip' (-18% Below MA60)",
-    retailSideDesc: "Catches falling knives ($NVDA / $SMCI / $COIN below MA60) with no stop-loss. 1 deep drawdown wipes out 3 years of gains.",
-    quantSideTitle: "🟢 RightSideAlpha PW-RSI + Volume Ignition",
-    quantSideDesc: "Waits for MA60 reclaim + ≥1.4x institutional volume surge with a strict -9.0% stop-loss (-1.35% portfolio risk).",
-    vipUnlockBannerTitle: "🔥 YOU JUST SAW ROUND 3'S 3.41x VOLUME ANOMALY — UNLOCK TODAY'S #2 & #3 VIP IGNITION TICKERS",
+    battleTitle: "📊 $10,000 HISTORICAL BACKTEST COMPARISON: SUB-MA60 DIP-BUYING VS. PW-RSI MODEL",
+    retailSideTitle: "❌ Sub-MA60 Dip-Buying (-18% Below MA60)",
+    retailSideDesc: "Averages into sub-MA60 downtrends ($NVDA / $SMCI / $COIN) without risk caps. Unhedged tail drawdowns erode multi-year returns.",
+    quantSideTitle: "🟢 RightSideAlpha PW-RSI + Volume Model",
+    quantSideDesc: "Filters for MA60 reclaim + ≥1.4x institutional volume surge with a modeled -9.0% risk boundary (-1.35% portfolio allocation cap).",
+    vipUnlockBannerTitle: "🔥 ROUND 3 FEATURED A 3.41x VOLUME ANOMALY — UNLOCK ALL 72 QUANT FACTOR DATASETS & PINE SCRIPT",
     vipUnlockBannerSub:
-      "Free visitors see #1 Showcase ($CELH · 2.46x Vol). Pro VIP members unlock the full 72-stock Institutional Ignition table, including today's Score 98 / 3.41x & 3.17x volume breakouts.",
+      "Public preview displays #1 Showcase ($CELH · 2.46x Vol). Pro License holders unlock the complete 72-stock factor matrix, Pine Script v5 source code, and 26-year historical CSV datasets.",
     unlockMonthlyBtn: "👑 Unlock #2 & #3 VIP Tickers ($29/mo)",
     unlockLifetimeBtn: "💎 Lifetime VIP All-Access ($199)",
   },
@@ -189,7 +189,7 @@ function buildRoundsData(state) {
           ? `정답은 [지금 매수(우측 수급 돌파)]입니다! 오늘 무료 대표 쇼케이스 종목인 $${celh.ticker}($${Number(celh.close || 33.19).toFixed(2)})로, 좌측 투매 구간을 끝내고 60일선을 +12.7% 상향 돌파하며 10일 평균 대비 2.46배의 기관 거래량이 폭발했습니다. 손절선 -9.0%($${Number(celh.stop_loss_price || 30.2).toFixed(2)})와 1차 목표가 $${Number(celh.target_1_price || 66.38).toFixed(2)}(+100%)의 손익비 5.5:1 타점입니다.`
           : lang === "jp"
           ? `正解は【今すぐ買い(右側ブレイク)】です！本日の無料ショーケース銘柄 $${celh.ticker} ($${Number(celh.close || 33.19).toFixed(2)})。底固めを終えてMA60を+12.7%上抜け、機関投資家の出来高が2.46倍に急増しました。損切り-9.0% ($${Number(celh.stop_loss_price || 30.2).toFixed(2)})・目標株価 $${Number(celh.target_1_price || 66.38).toFixed(2)} の高リスクリワード局面です。`
-          : `Correct call is BUY (Right-Side Ignition)! This is today's #1 Free Showcase $${celh.ticker} ($${Number(celh.close || 33.19).toFixed(2)}). After washing out weak hands, it reclaimed MA60 (+12.7%) on 2.46x institutional volume. Strict -9.0% stop ($${Number(celh.stop_loss_price || 30.2).toFixed(2)}) targeting $${Number(celh.target_1_price || 66.38).toFixed(2)}.`,
+          : `Correct regime is RIGHT-SIDE BREAKOUT! This is today's #1 Public Showcase $${celh.ticker} ($${Number(celh.close || 33.19).toFixed(2)}). After base consolidation, it reclaimed MA60 (+12.7%) on 2.46x institutional volume (modeled -9.0% risk band $${Number(celh.stop_loss_price || 30.2).toFixed(2)}, 2x excursion band $${Number(celh.target_1_price || 66.38).toFixed(2)}).`,
     },
     {
       id: "r3",
@@ -209,18 +209,18 @@ function buildRoundsData(state) {
         { label: "Portfolio Risk", value: "-1.35% Max Risk", color: "#38bdf8" },
       ],
       revealedTicker: isPro
-        ? `$${fslr.ticker} ($${Number(fslr.close || 191.61).toFixed(2)}) — VIP UNLOCKED`
-        : "🔒 $████ (Score 98 · Vol 3.41x · VIP Ignition #2)",
+        ? `$${fslr.ticker} ($${Number(fslr.close || 191.61).toFixed(2)}) — PRO UNLOCKED`
+        : "🔒 $████ (Score 98 · Vol 3.41x · Pro Factor Rank #2)",
       revealedBadge: "🔥 SCORE 98/100 · EXTREME INSTITUTIONAL IGNITION",
       explanation: isPro
         ? lang === "kr"
-          ? `정답은 [지금 매수(우측 수급 돌파)]입니다! VIP 언락 종목인 $${fslr.ticker}($${Number(fslr.close || 191.61).toFixed(2)})로, 퀀트 점수 98점·기관 거래량 3.41배가 동시에 터진 최상위 시그널입니다.`
-          : `Correct call is BUY! As a Pro VIP member, you have full access to $${fslr.ticker} ($${Number(fslr.close || 191.61).toFixed(2)}) — Score 98/100 with a massive 3.41x institutional volume breakout.`
+          ? `정답은 [우측 수급 돌파(IGNITION)]입니다! Pro 언락 종목인 $${fslr.ticker}($${Number(fslr.close || 191.61).toFixed(2)})로, 퀀트 점수 98점·기관 거래량 3.41배가 동시에 기록된 최상위 팩터 셋업입니다.`
+          : `Correct regime is RIGHT-SIDE BREAKOUT! Pro Terminal displays $${fslr.ticker} ($${Number(fslr.close || 191.61).toFixed(2)}) — Factor Score 98/100 with a 3.41x institutional volume expansion.`
         : lang === "kr"
-        ? `정답은 [지금 매수(우측 수급 돌파)]입니다! 이 종목은 오늘 72종목 유니버스에서 퀀트 점수 98점·기관 거래량 3.41배 폭발을 기록한 VIP 전용 #2 시그널입니다. 아래 VIP 패스($29/월 또는 $199 평생권)로 티커와 정확한 진입·손절·목표가를 즉시 언락하세요!`
+        ? `정답은 [우측 수급 돌파(IGNITION)]입니다! 이 종목은 72종목 유니버스에서 퀀트 점수 98점·기관 거래량 3.41배를 기록한 Pro 팩터 셋업입니다. 아래 Pro 라이선스($29/월 또는 $199 평생권)로 전체 데이터셋과 Pine Script 지표를 언락하세요.`
         : lang === "jp"
-        ? `正解は【今すぐ買い(右側ブレイク)】です！この銘柄は本日72銘柄の中でスコア98・機関出来高3.41倍を記録したVIP限定#2シグナルです。下のVIPパス($29/月または$199永久パス)でティッカーと正確な売買プランを今すぐ解放しましょう！`
-        : `Correct call is BUY! This chart is today's #2 VIP Ignition Signal scoring 98/100 with a 3.41x institutional volume surge. Unlock its exact ticker, entry price, and -9% stop-loss below with Pro VIP!`,
+        ? `正解は【右側ブレイク(IGNITION)】です！この銘柄は72銘柄の中でスコア98・機関出来高3.41倍を記録したProファクター銘柄です。下のProパス($29/月または$199永久パス)で全データセットとPine Scriptを解放できます。`
+        : `Correct regime is RIGHT-SIDE BREAKOUT! This chart is today's #2 Pro Factor Setup scoring 98/100 with a 3.41x institutional volume expansion. Unlock the full 72-stock factor matrix, historical CSV, and Pine Script v5 license below.`,
     },
   ];
 }

@@ -324,11 +324,13 @@ function renderApp() {
           </a>
         </div>
         <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:10px; font-size:0.74rem;">
-          <a href="#legal-terms" class="btn-open-legal" data-legal-tab="terms" style="color:#93c5fd; text-decoration:none; font-weight:600;">Terms of Service</a>
+          <a href="/terms.html" class="btn-open-legal" data-legal-tab="terms" style="color:#93c5fd; text-decoration:none; font-weight:600;">Terms of Service</a>
           <span style="color:var(--border);">·</span>
-          <a href="#legal-privacy" class="btn-open-legal" data-legal-tab="privacy" style="color:#93c5fd; text-decoration:none; font-weight:600;">Privacy Policy</a>
+          <a href="/privacy.html" class="btn-open-legal" data-legal-tab="privacy" style="color:#93c5fd; text-decoration:none; font-weight:600;">Privacy Policy</a>
           <span style="color:var(--border);">·</span>
-          <a href="#legal-refund" class="btn-open-legal" data-legal-tab="refund" style="color:#93c5fd; text-decoration:none; font-weight:600;">Refund & Cancellation Policy</a>
+          <a href="/refund.html" class="btn-open-legal" data-legal-tab="refund" style="color:#93c5fd; text-decoration:none; font-weight:600;">Refund & Cancellation Policy</a>
+          <span style="color:var(--border);">·</span>
+          <a href="/contact.html" style="color:#93c5fd; text-decoration:none; font-weight:600;">Contact Desk</a>
           <span style="color:var(--border);">·</span>
           <a href="mailto:beable9489@gmail.com" style="color:#93c5fd; text-decoration:none; font-weight:600;">Support: beable9489@gmail.com</a>
           <span style="color:var(--border);">·</span>

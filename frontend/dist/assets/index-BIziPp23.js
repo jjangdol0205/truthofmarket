@@ -15,7 +15,7 @@ const translations = {
 
     // RightSideAlpha Hero & KPIs
     heroTag: "INSTITUTIONAL TURNAROUND RESEARCH · 394,371 US STOCK-DAYS VERIFIED (2000–2026 · 26.8-YR)",
-    heroTitle: "Institutional Quant Signals That Outperform Wall Street — Trade Post-Washout Turnarounds with Strict -9% Risk Boundaries.",
+    heroTitle: "Institutional Quantitative Factor Terminal — Analyze Post-Washout Turnarounds & Historical -9% Risk Boundaries.",
     heroDesc: "Blindly buying 52-week lows in US growth equities traps capital for a median of 81 trading days with a -30.3% post-entry drawdown. RightSideAlpha isolates post-washout (1.40x+ volume) breakouts reclaiming the 20-day and 60-day moving averages across 72 liquid NYSE & NASDAQ equities.",
     pwRsiExplainerBtn: "What is PW-RSI?",
     pwRsiModalTitle: "PW-RSI (Post-Washout Right-Side Ignition) Methodology",
@@ -43,7 +43,7 @@ const translations = {
     // Soft Paywall Call to Action
     softPaywallUnlockCta: "Unlock 67 Pro Setups ($29/mo)",
     softPaywallTitle: "🔒 67 Pro Ignition Setups Live Today",
-    softPaywallDesc: "Tickers 1–5 are unlocked as featured ignition leaders. Unlock live institutional target levels, -9% stops, and real-time execution signals for all remaining 67 stocks.",
+    softPaywallDesc: "Tickers 1–5 are unlocked as featured ignition leaders. Unlock full factor datasets, -9% historical risk bands, and Pine Script v5 indicator tools for all remaining 67 stocks.",
 
     // Empirical Benchmark Table
     proofHeading: "Empirical Performance Matrix · Left-Side Dip Buying vs. PW-RSI Right-Side Ignition",
@@ -2862,19 +2862,19 @@ const BLIND_TEST_I18N = {
     answeredCountSuffix: "/ 3 SOLVED",
     resetBtn: "↻ Reset Challenge",
     jumpDocBtn: "🩺 Test My Own Stock Below",
-    buyBtn: "🟢 BUY NOW (Right-Side Ignition)",
-    trapBtn: "🔴 AVOID / BULL TRAP (Falling Knife)",
-    correctTag: "✅ QUANT SNIPER CORRECT!",
-    wrongTag: "❌ RETAIL TRAP! HERE IS WHY:",
+    buyBtn: "🟢 RIGHT-SIDE BREAKOUT (Ignition)",
+    trapBtn: "🔴 SUB-MA60 DOWNTREND (Trap)",
+    correctTag: "✅ QUANT REGIME MATCHED!",
+    wrongTag: "❌ LEFT-SIDE DRAWDOWN ZONE:",
     revealTickerLabel: "REVEALED LIVE TICKER",
-    battleTitle: "💰 $10,000 REAL ACCOUNT OUTCOME: RETAIL DIP-BUYER VS. RIGHT-SIDE QUANT ENGINE",
-    retailSideTitle: "❌ Amateur 'Buy the Dip' (-18% Below MA60)",
-    retailSideDesc: "Catches falling knives ($NVDA / $SMCI / $COIN below MA60) with no stop-loss. 1 deep drawdown wipes out 3 years of gains.",
-    quantSideTitle: "🟢 RightSideAlpha PW-RSI + Volume Ignition",
-    quantSideDesc: "Waits for MA60 reclaim + ≥1.4x institutional volume surge with a strict -9.0% stop-loss (-1.35% portfolio risk).",
-    vipUnlockBannerTitle: "🔥 YOU JUST SAW ROUND 3'S 3.41x VOLUME ANOMALY — UNLOCK TODAY'S #2 & #3 VIP IGNITION TICKERS",
+    battleTitle: "📊 $10,000 HISTORICAL BACKTEST COMPARISON: SUB-MA60 DIP-BUYING VS. PW-RSI MODEL",
+    retailSideTitle: "❌ Sub-MA60 Dip-Buying (-18% Below MA60)",
+    retailSideDesc: "Averages into sub-MA60 downtrends ($NVDA / $SMCI / $COIN) without risk caps. Unhedged tail drawdowns erode multi-year returns.",
+    quantSideTitle: "🟢 RightSideAlpha PW-RSI + Volume Model",
+    quantSideDesc: "Filters for MA60 reclaim + ≥1.4x institutional volume surge with a modeled -9.0% risk boundary (-1.35% portfolio allocation cap).",
+    vipUnlockBannerTitle: "🔥 ROUND 3 FEATURED A 3.41x VOLUME ANOMALY — UNLOCK ALL 72 QUANT FACTOR DATASETS & PINE SCRIPT",
     vipUnlockBannerSub:
-      "Free visitors see #1 Showcase ($CELH · 2.46x Vol). Pro VIP members unlock the full 72-stock Institutional Ignition table, including today's Score 98 / 3.41x & 3.17x volume breakouts.",
+      "Public preview displays #1 Showcase ($CELH · 2.46x Vol). Pro License holders unlock the complete 72-stock factor matrix, Pine Script v5 source code, and 26-year historical CSV datasets.",
     unlockMonthlyBtn: "👑 Unlock #2 & #3 VIP Tickers ($29/mo)",
     unlockLifetimeBtn: "💎 Lifetime VIP All-Access ($199)",
   },
@@ -3034,7 +3034,7 @@ function buildRoundsData(state) {
           ? `정답은 [지금 매수(우측 수급 돌파)]입니다! 오늘 무료 대표 쇼케이스 종목인 $${celh.ticker}($${Number(celh.close || 33.19).toFixed(2)})로, 좌측 투매 구간을 끝내고 60일선을 +12.7% 상향 돌파하며 10일 평균 대비 2.46배의 기관 거래량이 폭발했습니다. 손절선 -9.0%($${Number(celh.stop_loss_price || 30.2).toFixed(2)})와 1차 목표가 $${Number(celh.target_1_price || 66.38).toFixed(2)}(+100%)의 손익비 5.5:1 타점입니다.`
           : lang === "jp"
           ? `正解は【今すぐ買い(右側ブレイク)】です！本日の無料ショーケース銘柄 $${celh.ticker} ($${Number(celh.close || 33.19).toFixed(2)})。底固めを終えてMA60を+12.7%上抜け、機関投資家の出来高が2.46倍に急増しました。損切り-9.0% ($${Number(celh.stop_loss_price || 30.2).toFixed(2)})・目標株価 $${Number(celh.target_1_price || 66.38).toFixed(2)} の高リスクリワード局面です。`
-          : `Correct call is BUY (Right-Side Ignition)! This is today's #1 Free Showcase $${celh.ticker} ($${Number(celh.close || 33.19).toFixed(2)}). After washing out weak hands, it reclaimed MA60 (+12.7%) on 2.46x institutional volume. Strict -9.0% stop ($${Number(celh.stop_loss_price || 30.2).toFixed(2)}) targeting $${Number(celh.target_1_price || 66.38).toFixed(2)}.`,
+          : `Correct regime is RIGHT-SIDE BREAKOUT! This is today's #1 Public Showcase $${celh.ticker} ($${Number(celh.close || 33.19).toFixed(2)}). After base consolidation, it reclaimed MA60 (+12.7%) on 2.46x institutional volume (modeled -9.0% risk band $${Number(celh.stop_loss_price || 30.2).toFixed(2)}, 2x excursion band $${Number(celh.target_1_price || 66.38).toFixed(2)}).`,
     },
     {
       id: "r3",
@@ -3054,18 +3054,18 @@ function buildRoundsData(state) {
         { label: "Portfolio Risk", value: "-1.35% Max Risk", color: "#38bdf8" },
       ],
       revealedTicker: isPro
-        ? `$${fslr.ticker} ($${Number(fslr.close || 191.61).toFixed(2)}) — VIP UNLOCKED`
-        : "🔒 $████ (Score 98 · Vol 3.41x · VIP Ignition #2)",
+        ? `$${fslr.ticker} ($${Number(fslr.close || 191.61).toFixed(2)}) — PRO UNLOCKED`
+        : "🔒 $████ (Score 98 · Vol 3.41x · Pro Factor Rank #2)",
       revealedBadge: "🔥 SCORE 98/100 · EXTREME INSTITUTIONAL IGNITION",
       explanation: isPro
         ? lang === "kr"
-          ? `정답은 [지금 매수(우측 수급 돌파)]입니다! VIP 언락 종목인 $${fslr.ticker}($${Number(fslr.close || 191.61).toFixed(2)})로, 퀀트 점수 98점·기관 거래량 3.41배가 동시에 터진 최상위 시그널입니다.`
-          : `Correct call is BUY! As a Pro VIP member, you have full access to $${fslr.ticker} ($${Number(fslr.close || 191.61).toFixed(2)}) — Score 98/100 with a massive 3.41x institutional volume breakout.`
+          ? `정답은 [우측 수급 돌파(IGNITION)]입니다! Pro 언락 종목인 $${fslr.ticker}($${Number(fslr.close || 191.61).toFixed(2)})로, 퀀트 점수 98점·기관 거래량 3.41배가 동시에 기록된 최상위 팩터 셋업입니다.`
+          : `Correct regime is RIGHT-SIDE BREAKOUT! Pro Terminal displays $${fslr.ticker} ($${Number(fslr.close || 191.61).toFixed(2)}) — Factor Score 98/100 with a 3.41x institutional volume expansion.`
         : lang === "kr"
-        ? `정답은 [지금 매수(우측 수급 돌파)]입니다! 이 종목은 오늘 72종목 유니버스에서 퀀트 점수 98점·기관 거래량 3.41배 폭발을 기록한 VIP 전용 #2 시그널입니다. 아래 VIP 패스($29/월 또는 $199 평생권)로 티커와 정확한 진입·손절·목표가를 즉시 언락하세요!`
+        ? `정답은 [우측 수급 돌파(IGNITION)]입니다! 이 종목은 72종목 유니버스에서 퀀트 점수 98점·기관 거래량 3.41배를 기록한 Pro 팩터 셋업입니다. 아래 Pro 라이선스($29/월 또는 $199 평생권)로 전체 데이터셋과 Pine Script 지표를 언락하세요.`
         : lang === "jp"
-        ? `正解は【今すぐ買い(右側ブレイク)】です！この銘柄は本日72銘柄の中でスコア98・機関出来高3.41倍を記録したVIP限定#2シグナルです。下のVIPパス($29/月または$199永久パス)でティッカーと正確な売買プランを今すぐ解放しましょう！`
-        : `Correct call is BUY! This chart is today's #2 VIP Ignition Signal scoring 98/100 with a 3.41x institutional volume surge. Unlock its exact ticker, entry price, and -9% stop-loss below with Pro VIP!`,
+        ? `正解は【右側ブレイク(IGNITION)】です！この銘柄は72銘柄の中でスコア98・機関出来高3.41倍を記録したProファクター銘柄です。下のProパス($29/月または$199永久パス)で全データセットとPine Scriptを解放できます。`
+        : `Correct regime is RIGHT-SIDE BREAKOUT! This chart is today's #2 Pro Factor Setup scoring 98/100 with a 3.41x institutional volume expansion. Unlock the full 72-stock factor matrix, historical CSV, and Pine Script v5 license below.`,
     },
   ];
 }
@@ -3756,26 +3756,26 @@ function renderEasyProfitSimulator(state, netCagrStr) {
   const plainSignal =
     zone === "IGNITION_ZONE"
       ? {
-          badge: "🟢 GREEN LIGHT · BUY ZONE (IGNITION)",
+          badge: "🟢 GREEN REGIME · RIGHT-SIDE IGNITION",
           color: "#34d399",
           bg: "rgba(16,185,129,0.12)",
           border: "rgba(16,185,129,0.4)",
-          summary: `Bottom is confirmed and institutions are buying (${Number(selectedStock.vol_surge_10d || 1.5).toFixed(2)}x volume). Enter now with a strict -9% stop-loss.`,
+          summary: `Base washout confirmed with institutional volume surge (${Number(selectedStock.vol_surge_10d || 1.5).toFixed(2)}x volume). Historical model applies a -9.0% risk threshold.`,
         }
       : zone === "WASHOUT_WATCH"
       ? {
-          badge: "🟡 YELLOW LIGHT · WAIT & WATCH",
+          badge: "🟡 YELLOW REGIME · BASE CONSOLIDATION",
           color: "#fbbf24",
           bg: "rgba(245,158,11,0.12)",
           border: "rgba(245,158,11,0.4)",
-          summary: `Stock is cheap (PW-RSI ${Number(selectedStock.score || 22).toFixed(1)}), but institutional buying volume hasn't triggered yet. Keep on watchlist.`,
+          summary: `Valuation washout detected (PW-RSI ${Number(selectedStock.score || 22).toFixed(1)}), awaiting institutional volume confirmation above moving averages.`,
         }
       : {
-          badge: "🔴 RED LIGHT · DO NOT BUY YET",
+          badge: "🔴 RED REGIME · BELOW MA60 DOWNTREND",
           color: "#f87171",
           bg: "rgba(239,68,68,0.12)",
           border: "rgba(239,68,68,0.4)",
-          summary: `Downtrend ("Falling Knife") is still active. Protect your cash until trend flips above 20-day & 60-day moving averages.`,
+          summary: `Left-side downtrend remains active below 20-day & 60-day moving averages. Historical factor filter excludes sub-MA60 trends.`,
         };
 
   return `
@@ -3783,18 +3783,18 @@ function renderEasyProfitSimulator(state, netCagrStr) {
       <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid rgba(148,163,184,0.16);">
         <div>
           <div style="display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:0.68rem; font-weight:800; color:#34d399; background:rgba(16,185,129,0.14); border:1px solid rgba(16,185,129,0.35); padding:3px 9px; border-radius:999px; margin-bottom:6px;">
-            <span>💰</span>
-            <span>PLAIN-ENGLISH PROFIT PLAYBOOK · ZERO JARGON GUIDE</span>
+            <span>📊</span>
+            <span>PLAIN-ENGLISH QUANT METHODOLOGY · ZERO JARGON GUIDE</span>
           </div>
           <h2 style="font-size:1.08rem; font-weight:800; color:#ffffff; margin:0 0 4px 0;">
-            How Everyday Investors Understand &amp; Make Money Here in 3 Simple Steps
+            How Our Quantitative Factor Model Evaluates Risk &amp; Asymmetric Setups in 3 Steps
           </h2>
           <p style="font-size:0.8rem; color:#cbd5e1; margin:0; line-height:1.5;">
-            You don&apos;t need a PhD in quant finance. Follow the <b>Traffic-Light Signal</b> below, enter your capital, and copy the exact buy price, stop-loss, and profit target.
+            You don&apos;t need a PhD in quant finance. Explore the <b>3-State Factor Regime</b> below and simulate historical position sizing, -9.0% risk bands, and R-multiple scenarios (for educational research only).
           </p>
         </div>
         <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-          <span class="mono" style="font-size:0.7rem; color:#94a3b8; font-weight:700;">MY CAPITAL:</span>
+          <span class="mono" style="font-size:0.7rem; color:#94a3b8; font-weight:700;">SIMULATED CAPITAL:</span>
           ${[5000, 10000, 30000, 100000]
             .map(
               (amt) => `
@@ -3813,37 +3813,37 @@ function renderEasyProfitSimulator(state, netCagrStr) {
       <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:10px; margin-bottom:14px;">
         <div style="background:rgba(15,23,42,0.75); border:1px solid rgba(16,185,129,0.28); border-left:3px solid #10b981; border-radius:6px; padding:10px 12px;">
           <div style="font-size:0.72rem; font-weight:800; color:#34d399; font-family:var(--font-mono); margin-bottom:3px;">
-            STEP 1 · WHEN TO BUY (GREEN LIGHT)
+            STEP 1 · REGIME FILTER (GREEN STATE)
           </div>
           <div style="font-size:0.8rem; font-weight:700; color:#ffffff; margin-bottom:3px;">
-            Buy Only &ldquo;IGNITION ZONE&rdquo; Stocks
+            Isolate &ldquo;IGNITION ZONE&rdquo; Factor Setups
           </div>
           <div style="font-size:0.74rem; color:#94a3b8; line-height:1.45;">
-            Means a great company dropped to a bargain price (<b>PW-RSI &le; 25</b>) AND big institutions just started buying heavily (<b>Volume &ge; 1.4x</b>).
+            Identifies post-washout equities (<b>PW-RSI &le; 25</b>) reclaiming moving averages alongside institutional volume expansion (<b>Volume &ge; 1.4x</b>).
           </div>
         </div>
 
         <div style="background:rgba(15,23,42,0.75); border:1px solid rgba(245,158,11,0.28); border-left:3px solid #f59e0b; border-radius:6px; padding:10px 12px;">
           <div style="font-size:0.72rem; font-weight:800; color:#fbbf24; font-family:var(--font-mono); margin-bottom:3px;">
-            STEP 2 · HOW NOT TO LOSE (-9% SHIELD)
+            STEP 2 · DOWNSIDE BOUNDARY (-9% MODEL)
           </div>
           <div style="font-size:0.8rem; font-weight:700; color:#ffffff; margin-bottom:3px;">
-            Set a -9.0% Auto Stop-Loss Immediately
+            Model a Mechanical -9.0% Risk Threshold
           </div>
           <div style="font-size:0.74rem; color:#94a3b8; line-height:1.45;">
-            Amateurs lose money by holding losers down -50%. Cutting any false breakout at <b>-9.0%</b> keeps your account 99% safe to catch the next big winner.
+            Unhedged drawdowns (-50%) erode compounding math. Modeling a strict <b>-9.0%</b> invalidation boundary caps simulated single-position portfolio risk at -1.35%.
           </div>
         </div>
 
         <div style="background:rgba(15,23,42,0.75); border:1px solid rgba(56,189,248,0.28); border-left:3px solid #38bdf8; border-radius:6px; padding:10px 12px;">
           <div style="font-size:0.72rem; font-weight:800; color:#38bdf8; font-family:var(--font-mono); margin-bottom:3px;">
-            STEP 3 · HOW TO LOCK IN BIG GAINS
+            STEP 3 · ASYMMETRIC R-MULTIPLE PROFILE
           </div>
           <div style="font-size:0.8rem; font-weight:700; color:#ffffff; margin-bottom:3px;">
-            Take Profit at +50% to +100% (5.5x Reward)
+            Historical +50% to +100% Excursion Bands
           </div>
           <div style="font-size:0.74rem; color:#94a3b8; line-height:1.45;">
-            Risking $1 to make $5–$10 means even a <b>55% win rate</b> compounds your wealth at <b>+${netCagrStr}%/yr</b> after tax. Sell half at +100% so your principal is free!
+            Across 2000–2026 empirical data, a <b>55% hit rate</b> with asymmetric payoff yielded <b>+${netCagrStr}%/yr</b> backtested net CAGR (past performance does not guarantee future results).
           </div>
         </div>
       </div>
@@ -3852,14 +3852,14 @@ function renderEasyProfitSimulator(state, netCagrStr) {
       <div style="background:#080c15; border:1px solid rgba(56,189,248,0.3); border-radius:6px; padding:12px 14px;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
           <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-            <span class="mono" style="font-size:0.72rem; font-weight:800; color:#38bdf8;">🎯 LIVE 1:1 TRADE TICKET SIMULATOR:</span>
+            <span class="mono" style="font-size:0.72rem; font-weight:800; color:#38bdf8;">🎯 INTERACTIVE POSITION SIZING &amp; RISK SIMULATOR:</span>
             <select id="easySimTickerSelect" style="background:#0f172a; color:#ffffff; border:1px solid #38bdf8; border-radius:4px; padding:4px 8px; font-family:var(--font-mono); font-size:0.76rem; font-weight:700; cursor:pointer;">
               ${selectableStocks
                 .map(
                   (s) =>
                     `<option value="${s.ticker}" ${s.ticker === selectedStock.ticker ? "selected" : ""}>$$${s.ticker} (${s.name_en || s.ticker}) — $${Number(
                       s.close || 0
-                    ).toFixed(2)} [${s.zone_code === "IGNITION_ZONE" ? "🟢 BUY ZONE" : s.zone_code}]</option>`
+                    ).toFixed(2)} [${s.zone_code === "IGNITION_ZONE" ? "🟢 IGNITION" : s.zone_code}]</option>`
                 )
                 .join("")}
             </select>
@@ -3870,7 +3870,7 @@ function renderEasyProfitSimulator(state, netCagrStr) {
               min="500"
               step="500"
               style="width:110px; background:#0f172a; color:#34d399; border:1px solid rgba(16,185,129,0.45); border-radius:4px; padding:4px 8px; font-family:var(--font-mono); font-size:0.76rem; font-weight:800;"
-              title="Enter your total portfolio capital in USD"
+              title="Enter simulated portfolio capital in USD"
             />
           </div>
           <span style="font-family:var(--font-mono); font-size:0.71rem; font-weight:800; color:${plainSignal.color}; background:${plainSignal.bg}; border:1px solid ${plainSignal.border}; padding:3px 9px; border-radius:4px;">
@@ -3879,42 +3879,42 @@ function renderEasyProfitSimulator(state, netCagrStr) {
         </div>
 
         <div style="font-size:0.77rem; color:#e2e8f0; margin-bottom:10px; padding:7px 10px; background:rgba(30,41,59,0.55); border-radius:4px;">
-          <b>Plain-English Verdict for $${selectedStock.ticker}:</b> ${plainSignal.summary}
+          <b>Quantitative Regime Summary for $${selectedStock.ticker}:</b> ${plainSignal.summary}
         </div>
 
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(195px, 1fr)); gap:10px;">
           <div style="background:#0d1424; border:1px solid var(--border); border-radius:5px; padding:9px 11px;">
-            <div class="mono" style="font-size:0.66rem; color:var(--muted);">① EXACT BUY AMOUNT (15% SLOT)</div>
+            <div class="mono" style="font-size:0.66rem; color:var(--muted);">① SIMULATED 15% ALLOCATION SLOT</div>
             <div class="mono" style="font-size:1.05rem; font-weight:800; color:#ffffff; margin-top:3px;">
               $${actualPositionUsd.toLocaleString()} <span style="font-size:0.76rem; color:#38bdf8;">(${shares} shares)</span>
             </div>
             <div style="font-size:0.7rem; color:#94a3b8; margin-top:2px;">
-              Buy at <b>$${entryPrice.toFixed(2)}</b> · Keep 85% in $SMH/$XLV &amp; other slots
+              Ref Close <b>$${entryPrice.toFixed(2)}</b> · 85% in $SMH/$XLV barbell model
             </div>
           </div>
 
           <div style="background:#0d1424; border:1px solid rgba(239,68,68,0.3); border-radius:5px; padding:9px 11px;">
-            <div class="mono" style="font-size:0.66rem; color:#f87171;">② IF WRONG: MAX LOSS (-9% STOP)</div>
+            <div class="mono" style="font-size:0.66rem; color:#f87171;">② SIMULATED DRAWDOWN CAP (-9% BAND)</div>
             <div class="mono" style="font-size:1.05rem; font-weight:800; color:#f87171; margin-top:3px;">
-              -$${maxLossUsd.toLocaleString()} <span style="font-size:0.74rem; color:#fca5a5;">(Stop @ $${stopPrice})</span>
+              -$${maxLossUsd.toLocaleString()} <span style="font-size:0.74rem; color:#fca5a5;">(Band @ $${stopPrice})</span>
             </div>
             <div style="font-size:0.7rem; color:#94a3b8; margin-top:2px;">
-              Only <b>-1.35%</b> of your total $${capUsd.toLocaleString()} portfolio!
+              Caps simulated impact to <b>-1.35%</b> of $${capUsd.toLocaleString()} model
             </div>
           </div>
 
           <div style="background:#0d1424; border:1px solid rgba(16,185,129,0.35); border-radius:5px; padding:9px 11px;">
-            <div class="mono" style="font-size:0.66rem; color:#34d399;">③ IF RIGHT: TARGET PROFIT (+50% / +100%)</div>
+            <div class="mono" style="font-size:0.66rem; color:#34d399;">③ HISTORICAL EXCURSION BAND (+50% / +100%)</div>
             <div class="mono" style="font-size:1.05rem; font-weight:800; color:#34d399; margin-top:3px;">
               +$${profit1Usd.toLocaleString()} ~ +$${profit2Usd.toLocaleString()}
             </div>
             <div style="font-size:0.7rem; color:#94a3b8; margin-top:2px;">
-              +50% (@ $${target1Price}) · 2x Double (@ $${target2Price})
+              +50% Band ($${target1Price}) · 2.0x Band ($${target2Price})
             </div>
           </div>
 
           <div style="background:#0d1424; border:1px solid rgba(56,189,248,0.35); border-radius:5px; padding:9px 11px;">
-            <div class="mono" style="font-size:0.66rem; color:#38bdf8;">④ 5-YR PORTFOLIO COMPOUNDING (+${netCagrStr}%/YR)</div>
+            <div class="mono" style="font-size:0.66rem; color:#38bdf8;">④ 5-YR BACKTESTED CAGR MODEL (+${netCagrStr}%/YR)</div>
             <div class="mono" style="font-size:1.05rem; font-weight:800; color:#38bdf8; margin-top:3px;">
               $${capUsd.toLocaleString()} &rarr; $${yr5Total.toLocaleString()}
             </div>
@@ -6636,11 +6636,13 @@ function renderApp() {
           </a>
         </div>
         <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:10px; font-size:0.74rem;">
-          <a href="#legal-terms" class="btn-open-legal" data-legal-tab="terms" style="color:#93c5fd; text-decoration:none; font-weight:600;">Terms of Service</a>
+          <a href="/terms.html" class="btn-open-legal" data-legal-tab="terms" style="color:#93c5fd; text-decoration:none; font-weight:600;">Terms of Service</a>
           <span style="color:var(--border);">·</span>
-          <a href="#legal-privacy" class="btn-open-legal" data-legal-tab="privacy" style="color:#93c5fd; text-decoration:none; font-weight:600;">Privacy Policy</a>
+          <a href="/privacy.html" class="btn-open-legal" data-legal-tab="privacy" style="color:#93c5fd; text-decoration:none; font-weight:600;">Privacy Policy</a>
           <span style="color:var(--border);">·</span>
-          <a href="#legal-refund" class="btn-open-legal" data-legal-tab="refund" style="color:#93c5fd; text-decoration:none; font-weight:600;">Refund & Cancellation Policy</a>
+          <a href="/refund.html" class="btn-open-legal" data-legal-tab="refund" style="color:#93c5fd; text-decoration:none; font-weight:600;">Refund & Cancellation Policy</a>
+          <span style="color:var(--border);">·</span>
+          <a href="/contact.html" style="color:#93c5fd; text-decoration:none; font-weight:600;">Contact Desk</a>
           <span style="color:var(--border);">·</span>
           <a href="mailto:beable9489@gmail.com" style="color:#93c5fd; text-decoration:none; font-weight:600;">Support: beable9489@gmail.com</a>
           <span style="color:var(--border);">·</span>

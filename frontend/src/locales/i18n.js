@@ -14,7 +14,7 @@ export const translations = {
 
     // RightSideAlpha Hero & KPIs
     heroTag: "INSTITUTIONAL TURNAROUND RESEARCH · 394,371 US STOCK-DAYS VERIFIED (2000–2026 · 26.8-YR)",
-    heroTitle: "Institutional Quant Signals That Outperform Wall Street — Trade Post-Washout Turnarounds with Strict -9% Risk Boundaries.",
+    heroTitle: "Institutional Quantitative Factor Terminal — Analyze Post-Washout Turnarounds & Historical -9% Risk Boundaries.",
     heroDesc: "Blindly buying 52-week lows in US growth equities traps capital for a median of 81 trading days with a -30.3% post-entry drawdown. RightSideAlpha isolates post-washout (1.40x+ volume) breakouts reclaiming the 20-day and 60-day moving averages across 72 liquid NYSE & NASDAQ equities.",
     pwRsiExplainerBtn: "What is PW-RSI?",
     pwRsiModalTitle: "PW-RSI (Post-Washout Right-Side Ignition) Methodology",
@@ -42,7 +42,7 @@ export const translations = {
     // Soft Paywall Call to Action
     softPaywallUnlockCta: "Unlock 67 Pro Setups ($29/mo)",
     softPaywallTitle: "🔒 67 Pro Ignition Setups Live Today",
-    softPaywallDesc: "Tickers 1–5 are unlocked as featured ignition leaders. Unlock live institutional target levels, -9% stops, and real-time execution signals for all remaining 67 stocks.",
+    softPaywallDesc: "Tickers 1–5 are unlocked as featured ignition leaders. Unlock full factor datasets, -9% historical risk bands, and Pine Script v5 indicator tools for all remaining 67 stocks.",
 
     // Empirical Benchmark Table
     proofHeading: "Empirical Performance Matrix · Left-Side Dip Buying vs. PW-RSI Right-Side Ignition",

@@ -153,26 +153,26 @@ function renderEasyProfitSimulator(state, netCagrStr) {
   const plainSignal =
     zone === "IGNITION_ZONE"
       ? {
-          badge: "🟢 GREEN LIGHT · BUY ZONE (IGNITION)",
+          badge: "🟢 GREEN REGIME · RIGHT-SIDE IGNITION",
           color: "#34d399",
           bg: "rgba(16,185,129,0.12)",
           border: "rgba(16,185,129,0.4)",
-          summary: `Bottom is confirmed and institutions are buying (${Number(selectedStock.vol_surge_10d || 1.5).toFixed(2)}x volume). Enter now with a strict -9% stop-loss.`,
+          summary: `Base washout confirmed with institutional volume surge (${Number(selectedStock.vol_surge_10d || 1.5).toFixed(2)}x volume). Historical model applies a -9.0% risk threshold.`,
         }
       : zone === "WASHOUT_WATCH"
       ? {
-          badge: "🟡 YELLOW LIGHT · WAIT & WATCH",
+          badge: "🟡 YELLOW REGIME · BASE CONSOLIDATION",
           color: "#fbbf24",
           bg: "rgba(245,158,11,0.12)",
           border: "rgba(245,158,11,0.4)",
-          summary: `Stock is cheap (PW-RSI ${Number(selectedStock.score || 22).toFixed(1)}), but institutional buying volume hasn't triggered yet. Keep on watchlist.`,
+          summary: `Valuation washout detected (PW-RSI ${Number(selectedStock.score || 22).toFixed(1)}), awaiting institutional volume confirmation above moving averages.`,
         }
       : {
-          badge: "🔴 RED LIGHT · DO NOT BUY YET",
+          badge: "🔴 RED REGIME · BELOW MA60 DOWNTREND",
           color: "#f87171",
           bg: "rgba(239,68,68,0.12)",
           border: "rgba(239,68,68,0.4)",
-          summary: `Downtrend ("Falling Knife") is still active. Protect your cash until trend flips above 20-day & 60-day moving averages.`,
+          summary: `Left-side downtrend remains active below 20-day & 60-day moving averages. Historical factor filter excludes sub-MA60 trends.`,
         };
 
   return `
@@ -180,18 +180,18 @@ function renderEasyProfitSimulator(state, netCagrStr) {
       <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid rgba(148,163,184,0.16);">
         <div>
           <div style="display:inline-flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:0.68rem; font-weight:800; color:#34d399; background:rgba(16,185,129,0.14); border:1px solid rgba(16,185,129,0.35); padding:3px 9px; border-radius:999px; margin-bottom:6px;">
-            <span>💰</span>
-            <span>PLAIN-ENGLISH PROFIT PLAYBOOK · ZERO JARGON GUIDE</span>
+            <span>📊</span>
+            <span>PLAIN-ENGLISH QUANT METHODOLOGY · ZERO JARGON GUIDE</span>
           </div>
           <h2 style="font-size:1.08rem; font-weight:800; color:#ffffff; margin:0 0 4px 0;">
-            How Everyday Investors Understand &amp; Make Money Here in 3 Simple Steps
+            How Our Quantitative Factor Model Evaluates Risk &amp; Asymmetric Setups in 3 Steps
           </h2>
           <p style="font-size:0.8rem; color:#cbd5e1; margin:0; line-height:1.5;">
-            You don&apos;t need a PhD in quant finance. Follow the <b>Traffic-Light Signal</b> below, enter your capital, and copy the exact buy price, stop-loss, and profit target.
+            You don&apos;t need a PhD in quant finance. Explore the <b>3-State Factor Regime</b> below and simulate historical position sizing, -9.0% risk bands, and R-multiple scenarios (for educational research only).
           </p>
         </div>
         <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-          <span class="mono" style="font-size:0.7rem; color:#94a3b8; font-weight:700;">MY CAPITAL:</span>
+          <span class="mono" style="font-size:0.7rem; color:#94a3b8; font-weight:700;">SIMULATED CAPITAL:</span>
           ${[5000, 10000, 30000, 100000]
             .map(
               (amt) => `
@@ -210,37 +210,37 @@ function renderEasyProfitSimulator(state, netCagrStr) {
       <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:10px; margin-bottom:14px;">
         <div style="background:rgba(15,23,42,0.75); border:1px solid rgba(16,185,129,0.28); border-left:3px solid #10b981; border-radius:6px; padding:10px 12px;">
           <div style="font-size:0.72rem; font-weight:800; color:#34d399; font-family:var(--font-mono); margin-bottom:3px;">
-            STEP 1 · WHEN TO BUY (GREEN LIGHT)
+            STEP 1 · REGIME FILTER (GREEN STATE)
           </div>
           <div style="font-size:0.8rem; font-weight:700; color:#ffffff; margin-bottom:3px;">
-            Buy Only &ldquo;IGNITION ZONE&rdquo; Stocks
+            Isolate &ldquo;IGNITION ZONE&rdquo; Factor Setups
           </div>
           <div style="font-size:0.74rem; color:#94a3b8; line-height:1.45;">
-            Means a great company dropped to a bargain price (<b>PW-RSI &le; 25</b>) AND big institutions just started buying heavily (<b>Volume &ge; 1.4x</b>).
+            Identifies post-washout equities (<b>PW-RSI &le; 25</b>) reclaiming moving averages alongside institutional volume expansion (<b>Volume &ge; 1.4x</b>).
           </div>
         </div>
 
         <div style="background:rgba(15,23,42,0.75); border:1px solid rgba(245,158,11,0.28); border-left:3px solid #f59e0b; border-radius:6px; padding:10px 12px;">
           <div style="font-size:0.72rem; font-weight:800; color:#fbbf24; font-family:var(--font-mono); margin-bottom:3px;">
-            STEP 2 · HOW NOT TO LOSE (-9% SHIELD)
+            STEP 2 · DOWNSIDE BOUNDARY (-9% MODEL)
           </div>
           <div style="font-size:0.8rem; font-weight:700; color:#ffffff; margin-bottom:3px;">
-            Set a -9.0% Auto Stop-Loss Immediately
+            Model a Mechanical -9.0% Risk Threshold
           </div>
           <div style="font-size:0.74rem; color:#94a3b8; line-height:1.45;">
-            Amateurs lose money by holding losers down -50%. Cutting any false breakout at <b>-9.0%</b> keeps your account 99% safe to catch the next big winner.
+            Unhedged drawdowns (-50%) erode compounding math. Modeling a strict <b>-9.0%</b> invalidation boundary caps simulated single-position portfolio risk at -1.35%.
           </div>
         </div>
 
         <div style="background:rgba(15,23,42,0.75); border:1px solid rgba(56,189,248,0.28); border-left:3px solid #38bdf8; border-radius:6px; padding:10px 12px;">
           <div style="font-size:0.72rem; font-weight:800; color:#38bdf8; font-family:var(--font-mono); margin-bottom:3px;">
-            STEP 3 · HOW TO LOCK IN BIG GAINS
+            STEP 3 · ASYMMETRIC R-MULTIPLE PROFILE
           </div>
           <div style="font-size:0.8rem; font-weight:700; color:#ffffff; margin-bottom:3px;">
-            Take Profit at +50% to +100% (5.5x Reward)
+            Historical +50% to +100% Excursion Bands
           </div>
           <div style="font-size:0.74rem; color:#94a3b8; line-height:1.45;">
-            Risking $1 to make $5–$10 means even a <b>55% win rate</b> compounds your wealth at <b>+${netCagrStr}%/yr</b> after tax. Sell half at +100% so your principal is free!
+            Across 2000–2026 empirical data, a <b>55% hit rate</b> with asymmetric payoff yielded <b>+${netCagrStr}%/yr</b> backtested net CAGR (past performance does not guarantee future results).
           </div>
         </div>
       </div>
@@ -249,14 +249,14 @@ function renderEasyProfitSimulator(state, netCagrStr) {
       <div style="background:#080c15; border:1px solid rgba(56,189,248,0.3); border-radius:6px; padding:12px 14px;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
           <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-            <span class="mono" style="font-size:0.72rem; font-weight:800; color:#38bdf8;">🎯 LIVE 1:1 TRADE TICKET SIMULATOR:</span>
+            <span class="mono" style="font-size:0.72rem; font-weight:800; color:#38bdf8;">🎯 INTERACTIVE POSITION SIZING &amp; RISK SIMULATOR:</span>
             <select id="easySimTickerSelect" style="background:#0f172a; color:#ffffff; border:1px solid #38bdf8; border-radius:4px; padding:4px 8px; font-family:var(--font-mono); font-size:0.76rem; font-weight:700; cursor:pointer;">
               ${selectableStocks
                 .map(
                   (s) =>
                     `<option value="${s.ticker}" ${s.ticker === selectedStock.ticker ? "selected" : ""}>$$${s.ticker} (${s.name_en || s.ticker}) — $${Number(
                       s.close || 0
-                    ).toFixed(2)} [${s.zone_code === "IGNITION_ZONE" ? "🟢 BUY ZONE" : s.zone_code}]</option>`
+                    ).toFixed(2)} [${s.zone_code === "IGNITION_ZONE" ? "🟢 IGNITION" : s.zone_code}]</option>`
                 )
                 .join("")}
             </select>
@@ -267,7 +267,7 @@ function renderEasyProfitSimulator(state, netCagrStr) {
               min="500"
               step="500"
               style="width:110px; background:#0f172a; color:#34d399; border:1px solid rgba(16,185,129,0.45); border-radius:4px; padding:4px 8px; font-family:var(--font-mono); font-size:0.76rem; font-weight:800;"
-              title="Enter your total portfolio capital in USD"
+              title="Enter simulated portfolio capital in USD"
             />
           </div>
           <span style="font-family:var(--font-mono); font-size:0.71rem; font-weight:800; color:${plainSignal.color}; background:${plainSignal.bg}; border:1px solid ${plainSignal.border}; padding:3px 9px; border-radius:4px;">
@@ -276,42 +276,42 @@ function renderEasyProfitSimulator(state, netCagrStr) {
         </div>
 
         <div style="font-size:0.77rem; color:#e2e8f0; margin-bottom:10px; padding:7px 10px; background:rgba(30,41,59,0.55); border-radius:4px;">
-          <b>Plain-English Verdict for $${selectedStock.ticker}:</b> ${plainSignal.summary}
+          <b>Quantitative Regime Summary for $${selectedStock.ticker}:</b> ${plainSignal.summary}
         </div>
 
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(195px, 1fr)); gap:10px;">
           <div style="background:#0d1424; border:1px solid var(--border); border-radius:5px; padding:9px 11px;">
-            <div class="mono" style="font-size:0.66rem; color:var(--muted);">① EXACT BUY AMOUNT (15% SLOT)</div>
+            <div class="mono" style="font-size:0.66rem; color:var(--muted);">① SIMULATED 15% ALLOCATION SLOT</div>
             <div class="mono" style="font-size:1.05rem; font-weight:800; color:#ffffff; margin-top:3px;">
               $${actualPositionUsd.toLocaleString()} <span style="font-size:0.76rem; color:#38bdf8;">(${shares} shares)</span>
             </div>
             <div style="font-size:0.7rem; color:#94a3b8; margin-top:2px;">
-              Buy at <b>$${entryPrice.toFixed(2)}</b> · Keep 85% in $SMH/$XLV &amp; other slots
+              Ref Close <b>$${entryPrice.toFixed(2)}</b> · 85% in $SMH/$XLV barbell model
             </div>
           </div>
 
           <div style="background:#0d1424; border:1px solid rgba(239,68,68,0.3); border-radius:5px; padding:9px 11px;">
-            <div class="mono" style="font-size:0.66rem; color:#f87171;">② IF WRONG: MAX LOSS (-9% STOP)</div>
+            <div class="mono" style="font-size:0.66rem; color:#f87171;">② SIMULATED DRAWDOWN CAP (-9% BAND)</div>
             <div class="mono" style="font-size:1.05rem; font-weight:800; color:#f87171; margin-top:3px;">
-              -$${maxLossUsd.toLocaleString()} <span style="font-size:0.74rem; color:#fca5a5;">(Stop @ $${stopPrice})</span>
+              -$${maxLossUsd.toLocaleString()} <span style="font-size:0.74rem; color:#fca5a5;">(Band @ $${stopPrice})</span>
             </div>
             <div style="font-size:0.7rem; color:#94a3b8; margin-top:2px;">
-              Only <b>-1.35%</b> of your total $${capUsd.toLocaleString()} portfolio!
+              Caps simulated impact to <b>-1.35%</b> of $${capUsd.toLocaleString()} model
             </div>
           </div>
 
           <div style="background:#0d1424; border:1px solid rgba(16,185,129,0.35); border-radius:5px; padding:9px 11px;">
-            <div class="mono" style="font-size:0.66rem; color:#34d399;">③ IF RIGHT: TARGET PROFIT (+50% / +100%)</div>
+            <div class="mono" style="font-size:0.66rem; color:#34d399;">③ HISTORICAL EXCURSION BAND (+50% / +100%)</div>
             <div class="mono" style="font-size:1.05rem; font-weight:800; color:#34d399; margin-top:3px;">
               +$${profit1Usd.toLocaleString()} ~ +$${profit2Usd.toLocaleString()}
             </div>
             <div style="font-size:0.7rem; color:#94a3b8; margin-top:2px;">
-              +50% (@ $${target1Price}) · 2x Double (@ $${target2Price})
+              +50% Band ($${target1Price}) · 2.0x Band ($${target2Price})
             </div>
           </div>
 
           <div style="background:#0d1424; border:1px solid rgba(56,189,248,0.35); border-radius:5px; padding:9px 11px;">
-            <div class="mono" style="font-size:0.66rem; color:#38bdf8;">④ 5-YR PORTFOLIO COMPOUNDING (+${netCagrStr}%/YR)</div>
+            <div class="mono" style="font-size:0.66rem; color:#38bdf8;">④ 5-YR BACKTESTED CAGR MODEL (+${netCagrStr}%/YR)</div>
             <div class="mono" style="font-size:1.05rem; font-weight:800; color:#38bdf8; margin-top:3px;">
               $${capUsd.toLocaleString()} &rarr; $${yr5Total.toLocaleString()}
             </div>
