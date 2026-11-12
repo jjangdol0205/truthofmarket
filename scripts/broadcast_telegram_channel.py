@@ -36,19 +36,45 @@ def load_tg_credentials():
     return token, chat_id
 
 
+AD_SPAM_KEYWORDS = (
+    "sponsored",
+    "partner content",
+    "advertisement",
+    "paid post",
+    "motley fool",
+    "zacks",
+    "globenewswire",
+    "pr newswire",
+    "accesswire",
+    "business wire",
+    "casino",
+    "presale",
+    "airdrop",
+    "1 stock better than",
+    "forget nvidia",
+)
+
+
 def fetch_ticker_news(client: httpx.Client, symbol: str, max_items: int = 2) -> List[Dict[str, str]]:
-    """Fetches real-time English Wall Street news headlines for a ticker via Yahoo Finance RSS."""
+    """Fetches real-time English Wall Street news headlines for a ticker via Yahoo Finance RSS (blocking ad/sponsored spam)."""
     url = f"https://feeds.finance.yahoo.com/rss/2.0/headline?s={symbol}&region=US&lang=en-US"
     results: List[Dict[str, str]] = []
     try:
         r = client.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=8.0)
         if r.status_code == 200 and r.text:
             root = ET.fromstring(r.text)
-            for item in root.findall("./channel/item")[:max_items]:
+            for item in root.findall("./channel/item"):
                 title = (item.findtext("title") or "").strip()
                 link = (item.findtext("link") or "").strip()
-                if title and link:
-                    results.append({"symbol": symbol, "title": title, "link": link})
+                desc = (item.findtext("description") or "").strip()
+                if not title or not link:
+                    continue
+                combined_low = f"{title} {link} {desc}".lower()
+                if any(bad in combined_low for bad in AD_SPAM_KEYWORDS):
+                    continue
+                results.append({"symbol": symbol, "title": title, "link": link})
+                if len(results) >= max_items:
+                    break
     except Exception:
         pass
     return results
@@ -199,16 +225,6 @@ def build_inline_keyboard() -> dict:
                 {
                     "text": "🧭 $SMH Fear & Greed Index",
                     "url": "https://truthofmarket.com/semi-fear-greed.html",
-                },
-            ],
-            [
-                {
-                    "text": "📈 TradingView Pro Chart",
-                    "url": "https://www.tradingview.com/?aff_id=1173809",
-                },
-                {
-                    "text": "⚡ TrendSpider AI Scanner",
-                    "url": "https://trendspider.com/?_go=rightside",
                 },
             ],
             [

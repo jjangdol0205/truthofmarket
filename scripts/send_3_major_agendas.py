@@ -15,7 +15,18 @@ import urllib.error
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 
-BOT_TOKEN = "9291573259:AAEZXNkQ4wuEPX6FYujxKT5mwLWdQpZOnes"
+def _load_hq_bot_token() -> str:
+    if os.getenv("TELEGRAM_BOT_TOKEN"):
+        return os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
+    env_p = Path(r"D:\드림컴퍼니\3사업부\.env")
+    if env_p.exists():
+        for line in env_p.read_text(encoding="utf-8", errors="ignore").splitlines():
+            if line.startswith("TELEGRAM_BOT_TOKEN="):
+                return line.split("=", 1)[1].strip().strip("'\"")
+    return ""
+
+
+BOT_TOKEN = _load_hq_bot_token()
 TARGET_CHAT_ID = "-1003834697086"
 API_URL = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
 KST = timezone(timedelta(hours=9))

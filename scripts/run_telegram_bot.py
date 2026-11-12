@@ -26,7 +26,16 @@ from backend.app.models.telegram import TelegramConfigRequest
 from backend.app.services.telegram_service import telegram_service
 
 
-DEFAULT_TOKEN = ":".join(("9291573259", "AAEZXNkQ4wuEPX6FYujxKT5mwLWdQpZOnes"))
+def _load_default_tom_token() -> str:
+    env_p = ROOT_DIR / ".env"
+    if env_p.exists():
+        for line in env_p.read_text(encoding="utf-8", errors="ignore").splitlines():
+            if line.startswith("RSA_TELEGRAM_BOT_TOKEN="):
+                return line.split("=", 1)[1].strip().strip("'\"")
+    return ""
+
+
+DEFAULT_TOKEN = _load_default_tom_token()
 
 
 def _ipv4_client(timeout: float = 12.0) -> httpx.Client:

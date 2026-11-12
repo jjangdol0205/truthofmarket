@@ -119,10 +119,10 @@
 ### 3.3 전담 텔레그램 봇 설정 검증 및 동기화 완료
 - **1사업부 전담 봇 표준**: **`@RigjtsideAlphabot`** (`[1사업부] TruthOfMarket (미국주식)`)
 - **비밀값 검증 (`1사업부/.env`)**:
-  - `RSA_TELEGRAM_BOT_TOKEN=9245553889:AAGCiCKCDeHZGNfY85iHxm6azY72bmad6gU` (정상 매핑 확인)
+  - `RSA_TELEGRAM_BOT_TOKEN=9245553889:[REDACTED_IN_ENV]` (정상 매핑 확인)
   - `HQ_TELEGRAM_CHAT_ID=-1003834697086`
 - **동기화 조치 (`1사업부/data/telegram_config.json`)**:
-  - 기존 구형 본사 봇(`SemifearGreedbot`) 토큰을 1사업부 전담 봇인 `@RigjtsideAlphabot` 토큰(`9245553889:AAGCiCKCDeHZGNfY85iHxm6azY72bmad6gU`)으로 즉시 수정·동기화 완료.
+  - 기존 구형 본사 봇(`SemifearGreedbot`) 토큰을 1사업부 전담 봇인 `@RigjtsideAlphabot` 토큰(`.env` 전용 비밀값 로드)으로 즉시 수정·동기화 완료.
 
 ---
 

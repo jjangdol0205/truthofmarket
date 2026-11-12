@@ -59,10 +59,10 @@ const CHAT_ID = process.env.HQ_TELEGRAM_CHAT_ID || tomEnv.HQ_TELEGRAM_CHAT_ID ||
 // - 2사업부 (KFG — kisfitglobal.com): @kidsfittbot
 // - 4사업부 (HERO — paradise-hero.com & @김쌤의영웅라디오): @inves123_bot
 // - 5사업부 (KFK — kidsfit.co.kr 패시브 자동화): @Moneyfiityyy_bot
-const RSA_BOT_TOKEN = tomEnv.RSA_TELEGRAM_BOT_TOKEN || "";
+const RSA_BOT_TOKEN = tomEnv.RSA_TELEGRAM_BOT_TOKEN || tomTgCfg.bot_token || "";
 const KFG_BOT_TOKEN = kfgEnv.TELEGRAM_BOT_TOKEN || "";
-const SEMI_BOT_TOKEN = gbaEnv.TELEGRAM_BOT_TOKEN || tomTgCfg.bot_token || "9291573259:AAEZXNkQ4wuEPX6FYujxKT5mwLWdQpZOnes";
-const HERO_BOT_TOKEN = heroEnv.TELEGRAM_BOT_TOKEN || "8899653516:AAEr6ZWcfkXObdiU83o-LYaw3eHL9J0QbHU";
+const SEMI_BOT_TOKEN = gbaEnv.TELEGRAM_BOT_TOKEN || process.env.HQ_TELEGRAM_BOT_TOKEN || "";
+const HERO_BOT_TOKEN = heroEnv.TELEGRAM_BOT_TOKEN || "";
 const KFK_BOT_TOKEN = kfkEnv.TELEGRAM_BOT_TOKEN || "";
 const PRIMARY_BOT_TOKEN = SEMI_BOT_TOKEN || RSA_BOT_TOKEN || KFG_BOT_TOKEN || HERO_BOT_TOKEN || KFK_BOT_TOKEN || "";
 
@@ -85,12 +85,13 @@ const LANGUAGE_SERVER_EXE = "C:\\Users\\jjang\\AppData\\Local\\Programs\\Antigra
 const AGENTAPI_BAT = "C:\\Users\\jjang\\.gemini\\antigravity\\bin\\agentapi.bat";
 
 // [채널 이원화] 텔레그램 원격 작업 전용 채널 vs 사장님 PC 직접 작업 전용 채널 분리
-const MASTER_CONVERSATION_ID = "1921e31e-ab59-4720-9419-93cac770374d";
+const MASTER_CONVERSATION_ID = "5dedd920-f82a-44e4-8034-116294946391";
 const PC_DIRECT_CONVERSATION_ID = "dbc61f0a-76cb-48e3-b617-a616c069564c";
+const RETIRED_REMOTE_CONVERSATION_IDS = new Set(["1921e31e-ab59-4720-9419-93cac770374d"]);
 
 function resolveSafeTelegramConversationId(candidateId) {
   const trimmed = String(candidateId || "").trim();
-  if (!trimmed || trimmed === PC_DIRECT_CONVERSATION_ID) {
+  if (!trimmed || trimmed === PC_DIRECT_CONVERSATION_ID || RETIRED_REMOTE_CONVERSATION_IDS.has(trimmed)) {
     return MASTER_CONVERSATION_ID;
   }
   return trimmed;
@@ -100,8 +101,8 @@ const DEFAULT_STANDING_DIRECTIVES = [
   {
     id: 1,
     title: "안티그래비티 채널 이원화 (텔레그램 원격 vs PC 직접 작업 분리)",
-    rule: "텔레그램 원격 지시사항은 전용 대화창(1921e31e-ab59-4720-9419-93cac770374d)에서만 전담 처리하며, 사장님이 컴퓨터로 직접 작업하시는 기존 채널(dbc61f0a-76cb-48e3-b617-a616c069564c)에는 절대 원격 프롬프트를 전송하거나 간섭하지 않는다.",
-    createdAt: "2026-11-08T22:12:00+09:00",
+    rule: "텔레그램 원격 지시사항은 전용 대화창(5dedd920-f82a-44e4-8034-116294946391)에서만 전담 처리하며, 사장님이 컴퓨터로 직접 작업하시는 기존 채널(dbc61f0a-76cb-48e3-b617-a616c069564c)에는 절대 원격 프롬프트를 전송하거나 간섭하지 않는다.",
+    createdAt: "2026-11-11T21:50:00+09:00",
   },
   {
     id: 2,
@@ -278,7 +279,7 @@ const DIVISIONS = {
     domain: "https://truthofmarket.com | https://kisfitglobal.com | https://getbreakai.com | https://paradise-hero.com | https://kidsfit.co.kr",
     cwd: HQ_ROOT_DIR,
     conversationId: MASTER_CONVERSATION_ID,
-    dedicatedConversationId: "1921e31e-ab59-4720-9419-93cac770374d",
+    dedicatedConversationId: "5dedd920-f82a-44e4-8034-116294946391",
     conversationTitle: "모두컴퍼니 본부",
     botToken: SEMI_BOT_TOKEN,
     botHandle: "@SemifearGreedbot",
@@ -349,7 +350,7 @@ const DIVISIONS = {
     domain: "https://paradise-hero.com",
     cwd: "D:\\드림컴퍼니\\4사업부",
     conversationId: resolveSafeTelegramConversationId(heroEnv.ANTIGRAVITY_CONVERSATION_ID),
-    dedicatedConversationId: "dbc61f0a-76cb-48e3-b617-a616c069564c",
+    dedicatedConversationId: "5dedd920-f82a-44e4-8034-116294946391",
     conversationTitle: "4사업부(paradise)",
     botToken: HERO_BOT_TOKEN,
     botHandle: "@inves123_bot",
@@ -429,13 +430,38 @@ const HQ_KEYBOARD = {
 
 function ensureSingleInstance() {
   try {
+    // Yield polling to 5-Bot Hub Watchdog if active (prevents HTTP 409 Conflict while keeping --notify intact)
+    const hubPidFile = path.join(HQ_ROOT_DIR, "telegram_5bot_hub", "bot_hub_watchdog.pid");
+    if (fs.existsSync(hubPidFile)) {
+      const hubPid = Number(fs.readFileSync(hubPidFile, "utf8").trim());
+      if (hubPid && hubPid !== process.pid) {
+        try {
+          process.kill(hubPid, 0);
+          console.log(`[Master HQ Bridge] 5-Bot Hub Watchdog (PID ${hubPid}) is active; yielding getUpdates polling to prevent HTTP 409.`);
+          process.exit(0);
+        } catch (_) {}
+      }
+    }
+
     fs.mkdirSync(DATA_DIR, { recursive: true });
     if (fs.existsSync(PID_FILE)) {
       const oldPid = Number(fs.readFileSync(PID_FILE, "utf8").trim());
       if (oldPid && oldPid !== process.pid) {
+        let isAlive = false;
         try {
-          process.kill(oldPid, "SIGTERM");
+          process.kill(oldPid, 0);
+          isAlive = true;
         } catch (_) {}
+        if (isAlive) {
+          if (process.argv.includes("--restart")) {
+            try {
+              process.kill(oldPid, "SIGTERM");
+            } catch (_) {}
+          } else {
+            console.log(`[Master HQ Bridge] Existing daemon (PID ${oldPid}) is already active and polling.`);
+            process.exit(0);
+          }
+        }
       }
     }
     fs.writeFileSync(PID_FILE, String(process.pid), "utf8");
@@ -1620,6 +1646,7 @@ if (require.main === module) {
 }
 
 module.exports = {
+  main,
   MASTER_CONVERSATION_ID,
   PC_DIRECT_CONVERSATION_ID,
   BOT_TOKENS,
@@ -1639,4 +1666,5 @@ module.exports = {
   formatCommonDirectivesBoard,
   buildAntigravityPromptText,
   handleCommand,
+  main,
 };

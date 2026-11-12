@@ -32,6 +32,8 @@ function loadEnvToken(filePath, keyPattern) {
 }
 
 function loadHqBotToken() {
+  const gbaToken = loadEnvToken('D:\\드림컴퍼니\\3사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/);
+  if (gbaToken) return gbaToken;
   try {
     const cfgPath = path.resolve(__dirname, '..', 'data', 'telegram_config.json');
     if (fs.existsSync(cfgPath)) {
@@ -39,7 +41,7 @@ function loadHqBotToken() {
       if (cfg.bot_token) return String(cfg.bot_token).trim();
     }
   } catch (_) {}
-  return '9291573259:AAEZXNkQ4wuEPX6FYujxKT5mwLWdQpZOnes';
+  return process.env.TELEGRAM_BOT_TOKEN || '';
 }
 
 const BOT_TOKENS_BY_DIV = {
@@ -47,7 +49,7 @@ const BOT_TOKENS_BY_DIV = {
   '1사업부': loadEnvToken('D:\\드림컴퍼니\\1사업부\\.env', /RSA_TELEGRAM_BOT_TOKEN=([^\r\n]+)/),
   '2사업부': loadEnvToken('D:\\드림컴퍼니\\2사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/),
   '3사업부': loadEnvToken('D:\\드림컴퍼니\\3사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/) || loadHqBotToken(),
-  '4사업부': loadEnvToken('D:\\드림컴퍼니\\4사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/) || '8899653516:AAEr6ZWcfkXObdiU83o-LYaw3eHL9J0QbHU',
+  '4사업부': loadEnvToken('D:\\드림컴퍼니\\4사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/),
   '5사업부': loadEnvToken('D:\\드림컴퍼니\\5사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/)
 };
 
