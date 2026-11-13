@@ -37,7 +37,7 @@ SEMI_PATH = ROOT_DIR / "static_api" / "semi_overview.json"
 STOCKS_PATH = ROOT_DIR / "static_api" / "stocks_free.json"
 TELEGRAPH_ACCT_PATH = ROOT_DIR / "data" / "tom_telegraph_account.json"
 BACKLINKS_LOG_PATH = ROOT_DIR / "data" / "tom_external_backlinks.json"
-INDEXNOW_KEY = "72f988bf86f141af91ab2d7cd011db47"
+INDEXNOW_KEY = "94e2c81f70a44d5eb63918ac4f02d715"
 
 
 def load_json(path: Path, default):
