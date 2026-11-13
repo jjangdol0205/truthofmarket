@@ -30,7 +30,7 @@ from indexnow_delta_gate import (  # noqa: E402
     publish_daily_unique_telegraph_summary,
     submit_delta_indexnow,
 )
-from live_web_deployer import deploy_division_live  # noqa: E402
+from live_web_deployer import deploy_division_live, sync_remote_before_build  # noqa: E402
 from official_api_syndicator import dispatch_zero_ban_text_bundle  # noqa: E402
 
 SEMI_PATH = ROOT_DIR / "static_api" / "semi_overview.json"
@@ -267,6 +267,7 @@ def run_daily_telegraph_and_syndication(semi: dict, stocks: list, dry_run: bool 
 
 def main():
     dry_run = "--dry-run" in sys.argv
+    sync_remote_before_build("TOM", dry_run=dry_run)
     for k_dir in [ROOT_DIR, ROOT_DIR / "dist", ROOT_DIR / "frontend" / "public"]:
         k_dir.mkdir(parents=True, exist_ok=True)
         (k_dir / f"{INDEXNOW_KEY}.txt").write_text(INDEXNOW_KEY, encoding="utf-8")
