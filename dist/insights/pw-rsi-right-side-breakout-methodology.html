@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Why Left-Side Dip Buyers Bleed Out: The 26.8-Year Math Behind Right-Side Ignition (PW-RSI) | RightSideAlpha Quant Insights</title>
+  <meta name="description" content="How filtering for completed 52-week washouts, MA20/MA60 reclaims, and 1.4x institutional volume surges eliminates value traps across 72 liquid US stocks." />
+  <link rel="canonical" href="https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html" />
+  <link rel="alternate" type="application/rss+xml" title="RightSideAlpha RSS Feed" href="https://truthofmarket.com/rss.xml" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Why Left-Side Dip Buyers Bleed Out: The 26.8-Year Math Behind Right-Side Ignition (PW-RSI)" />
+  <meta property="og:description" content="How filtering for completed 52-week washouts, MA20/MA60 reclaims, and 1.4x institutional volume surges eliminates value traps across 72 liquid US stocks." />
+  <meta property="og:url" content="https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html" />
+  <meta property="og:image" content="https://truthofmarket.com/og-preview.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Why Left-Side Dip Buyers Bleed Out: The 26.8-Year Math Behind Right-Side Ignition (PW-RSI)" />
+  <meta name="twitter:description" content="How filtering for completed 52-week washouts, MA20/MA60 reclaims, and 1.4x institutional volume surges eliminates value traps across 72 liquid US stocks." />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "Why Left-Side Dip Buyers Bleed Out: The 26.8-Year Math Behind Right-Side Ignition (PW-RSI)", "description": "How filtering for completed 52-week washouts, MA20/MA60 reclaims, and 1.4x institutional volume surges eliminates value traps across 72 liquid US stocks.", "datePublished": "2026-11-12", "dateModified": "2026-11-12", "mainEntityOfPage": "https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html", "author": {"@type": "Organization", "name": "RightSideAlpha Institutional Quant Desk", "url": "https://truthofmarket.com/"}, "publisher": {"@type": "Organization", "name": "RightSideAlpha x SemiFearGreed", "url": "https://truthofmarket.com/", "logo": {"@type": "ImageObject", "url": "https://truthofmarket.com/favicon.svg"}}}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is the difference between conventional RSI and PW-RSI?", "acceptedAnswer": {"@type": "Answer", "text": "Conventional 14-day RSI only measures short-term price velocity and frequently triggers premature buys in downtrends. PW-RSI combines 52-week washout depth, off-low rebound structure, MA20/MA60 right-side reclaim, and 10-day institutional volume expansion."}}, {"@type": "Question", "name": "Why wait for MA60 reclaim instead of buying the exact 52-week low?", "acceptedAnswer": {"@type": "Answer", "text": "Nobody catches the exact tick of a bottom consistently. Giving up the first 10-15% off the low in exchange for MA60 trend confirmation dramatically reduces time spent in dead-money sideways bases."}}]}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Terminal", "item": "https://truthofmarket.com/"}, {"@type": "ListItem", "position": 2, "name": "Quant Insights", "item": "https://truthofmarket.com/insights/index.html"}, {"@type": "ListItem", "position": 3, "name": "Why Left-Side Dip Buyers Bleed Out: The 26.8-Year Math Behind Right-Side Ignition (PW-RSI)", "item": "https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html"}]}]}</script>
+  <script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
+  <script>
+  (function(){
+    try {
+      if (typeof window === 'undefined' || typeof navigator === 'undefined') return;
+      if (window.__HQ_KPI_TOM__) return;
+      window.__HQ_KPI_TOM__ = true;
+      var ua = navigator.userAgent || '';
+      if (navigator.webdriver || /bot|crawl|spider|slurp|headless|lighthouse|python|curl|node/i.test(ua)) return;
+      var host = (location && location.hostname) || '';
+      if (!host || host === 'localhost' || host === '127.0.0.1') return;
+      var kst = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+      var ns = 'tom_truthofmarket';
+      fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/pv_' + kst, { mode: 'cors', keepalive: true }).catch(function(){});
+      fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/pv_total', { mode: 'cors', keepalive: true }).catch(function(){});
+    } catch (e) {}
+  })();
+  </script>
+  <style>
+    :root { --bg:#090d16; --panel:#111827; --border:#1f2937; --text:#e5e7eb; --muted:#9ca3af; --accent:#10b981; --amber:#f59e0b; --blue:#38bdf8; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; background:var(--bg); color:var(--text); line-height:1.72; }
+    a { color:var(--blue); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    .topbar { border-bottom:1px solid var(--border); background:#0b1120; padding:0.9rem 1.25rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; }
+    .brand { font-weight:800; color:#f8fafc; font-size:1.05rem; letter-spacing:-0.02em; }
+    .nav-links a { margin-left:1rem; font-size:0.9rem; color:#cbd5e1; font-weight:600; }
+    .wrap { max-width:860px; margin:0 auto; padding:2.2rem 1.25rem 4rem; }
+    .badge { display:inline-block; background:rgba(16,185,129,0.14); color:#34d399; border:1px solid rgba(16,185,129,0.35); border-radius:999px; padding:0.2rem 0.75rem; font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; }
+    h1 { font-size:clamp(1.75rem,3.6vw,2.45rem); line-height:1.22; color:#f8fafc; margin:0.8rem 0 0.6rem; letter-spacing:-0.025em; }
+    .meta { color:var(--muted); font-size:0.88rem; margin-bottom:1.8rem; border-bottom:1px solid var(--border); padding-bottom:1rem; }
+    article h2 { color:#f8fafc; font-size:1.38rem; margin-top:2.1rem; margin-bottom:0.65rem; }
+    article p { margin:0.9rem 0; color:#d1d5db; font-size:1.03rem; }
+    .callout { background:var(--panel); border-left:4px solid var(--accent); padding:1.1rem 1.25rem; border-radius:8px; margin:1.4rem 0; }
+    .data-table { width:100%; border-collapse:collapse; margin:1.25rem 0; font-size:0.92rem; background:var(--panel); border-radius:8px; overflow:hidden; }
+    .data-table th, .data-table td { padding:0.7rem 0.85rem; border-bottom:1px solid var(--border); text-align:left; }
+    .data-table th { background:#0f172a; color:#94a3b8; font-weight:700; text-transform:uppercase; font-size:0.76rem; }
+    .cta-box { background:linear-gradient(135deg,#0f172a 0%,#06281e 100%); border:1px solid rgba(16,185,129,0.45); border-radius:14px; padding:1.6rem; margin:2.4rem 0; }
+    .cta-box h3 { margin:0 0 0.5rem; color:#ecfdf5; font-size:1.25rem; }
+    .btn-row { display:flex; flex-wrap:wrap; gap:0.75rem; margin-top:1.1rem; }
+    .btn { display:inline-block; padding:0.75rem 1.25rem; border-radius:8px; font-weight:700; font-size:0.93rem; text-decoration:none !important; }
+    .btn-free { background:#1e293b; color:#f8fafc; border:1px solid #475569; }
+    .btn-vip { background:#10b981; color:#042f2e; }
+    .btn-life { background:#f59e0b; color:#1f1300; }
+    .faq-card { background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.25rem; margin-bottom:0.85rem; }
+    .faq-card h3 { margin:0 0 0.4rem; font-size:1.02rem; color:#f8fafc; }
+    .faq-card p { margin:0; color:#cbd5e1; font-size:0.95rem; }
+    footer { margin-top:3rem; padding-top:1.4rem; border-top:1px solid var(--border); color:var(--muted); font-size:0.82rem; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/">RightSideAlpha × SemiFearGreed</a>
+    <nav class="nav-links">
+      <a href="/">72-Stock Terminal</a>
+      <a href="/semi-fear-greed.html">$SMH Fear &amp; Greed</a>
+      <a href="/insights/index.html">Quant Insights</a>
+    </nav>
+  </header>
+  <main class="wrap">
+    <span class="badge">Quant Methodology</span>
+    <h1>Why Left-Side Dip Buyers Bleed Out: The 26.8-Year Math Behind Right-Side Ignition (PW-RSI)</h1>
+    <div class="meta">Published 2026-11-12 · 7 min read · RightSideAlpha Institutional Quant Desk</div>
+    <article>
+      
+      <div class="callout">
+        <strong>Core Premise:</strong> Cheap stocks get cheaper until institutional volume steps in to reclaim the 20-day and 60-day moving averages. Bottoms are not predicted; they are confirmed on the right side of the V.
+      </div>
+      <h2>1. The Left-Side Falling Knife Trap</h2>
+      <p>Every cycle, retail traders anchor to a stock's former all-time high. When a former darling drops -35%, it looks like a bargain. Yet without trend confirmation, buying below a falling 60-day moving average (MA60) exposes capital to multi-year structural value traps—think legacy turnarounds that bleed another -45% while the Nasdaq compounds without you.</p>
+      <h2>2. Four Mathematical Gates of Post-Washout Right-Side Ignition (PW-RSI)</h2>
+      <p>Across our 26.8-year backtest (2000–2026), the PW-RSI composite score requires four simultaneous conditions before flagging an institutional Ignition Zone setup:</p>
+      <p><strong>Gate 1 — Seller Exhaustion Washout:</strong> The stock has already digested a meaningful correction off its 52-week high, flushing out late momentum chasers and leveraged margin accounts.</p>
+      <p><strong>Gate 2 — Off-Bottom Elasticity (+10% to +45% off 52W Low):</strong> Price has stopped making lower lows and proved real demand off the floor without being over-extended.</p>
+      <p><strong>Gate 3 — Right-Side Moving Average Reclaim:</strong> Daily close reclaims both MA20 and MA60, proving medium-term institutional cost basis has flipped from overhead supply to support.</p>
+      <p><strong>Gate 4 — 10-Day Institutional Volume Surge:</strong> Relative volume expands above 1.3x–1.5x its prior baseline, confirming block accumulation rather than a low-volume retail bounce. See live examples on <a href="/stocks/celh.html">$CELH</a> and <a href="/stocks/nvda.html">$NVDA</a>.</p>
+
+    </article>
+
+    <section class="cta-box">
+      <h3>Audit Your Portfolio Cost Basis in 3 Seconds</h3>
+      <p style="margin:0;color:#cbd5e1;">Stop guessing where support sits. Run any of our 72 liquid US equities through the free Position Doctor to calculate your exact -9.0% hard stop floor and +100% TP1 principal-harvest target—or unlock real-time institutional Ignition Zone entries.</p>
+      <div class="btn-row">
+        <a class="btn btn-free" href="/">Run Free 3-Second Position Doctor →</a>
+        <a class="btn btn-vip lemonsqueezy-button" href="https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1">Unlock Monthly Pro VIP ($29/mo)</a>
+        <a class="btn btn-life lemonsqueezy-button" href="https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1">Lifetime Institutional Pass ($199)</a>
+      </div>
+    </section>
+
+    <section>
+      <h2>Frequently Asked Quantitative Questions</h2>
+      <div class="faq-card"><h3>What is the difference between conventional RSI and PW-RSI?</h3><p>Conventional 14-day RSI only measures short-term price velocity and frequently triggers premature buys in downtrends. PW-RSI combines 52-week washout depth, off-low rebound structure, MA20/MA60 right-side reclaim, and 10-day institutional volume expansion.</p></div>
+<div class="faq-card"><h3>Why wait for MA60 reclaim instead of buying the exact 52-week low?</h3><p>Nobody catches the exact tick of a bottom consistently. Giving up the first 10-15% off the low in exchange for MA60 trend confirmation dramatically reduces time spent in dead-money sideways bases.</p></div>
+    </section>
+
+    <footer>
+      <p><strong>Quantitative Research Disclosure:</strong> All empirical statistics, backtest metrics (2000–2026), and algorithmic trigger levels published by RightSideAlpha × SemiFearGreed (<a href="https://truthofmarket.com">truthofmarket.com</a>) are strictly for educational and quantitative research purposes and do not constitute personalized investment advice.</p>
+    </footer>
+  </main>
+</body>
+</html>

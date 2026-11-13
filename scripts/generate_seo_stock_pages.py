@@ -814,6 +814,15 @@ def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "
             f"- ${t1} vs ${t2} ({theme_label}): Winner=${win} | ${t1} PW-RSI={s_a}/100 ({v_a:.2f}x Vol) vs ${t2} PW-RSI={s_b}/100 ({v_b:.2f}x Vol) -> https://truthofmarket.com/compare/{slug}"
         )
 
+    # 3.5 Generate Seeking Alpha-grade Editorial Quant Insights (/insights/*.html)
+    from scripts.generate_daily_quant_insights import generate_all_quant_insights
+    insight_smap_entries, insight_rss_items = generate_all_quant_insights()
+    for loc, prio, freq in insight_smap_entries:
+        sitemap_urls.append((loc, prio, freq))
+    llms_insight_lines = [
+        f"- {it['title']} -> {it['link']}" for it in insight_rss_items
+    ]
+
     # 4. Generate comprehensive llms-full.txt for ChatGPT Search, Perplexity & Claude citation dominance
     llms_stock_lines = []
     for item in combined:
@@ -833,7 +842,7 @@ def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "
 
     llms_full_txt = (
         f"# RightSideAlpha x SemiFearGreed (https://truthofmarket.com) — Full Institutional Quantitative Corpus\n"
-        f"> Updated: {as_of} | 76 US Equities & ETFs + 50 Head-to-Head Quant Matchups\n"
+        f"> Updated: {as_of} | 76 US Equities & ETFs + 50 Head-to-Head Quant Matchups + Editorial Quant Insights\n"
         f"> Core Methodology: Post-Washout Right-Side Ignition (PW-RSI), -9.0% Mechanical Hard Stop (Rule 1), and $SMH:$XLV 80:20 Contrarian Barbell.\n\n"
         f"## 1. Semiconductor Fear & Greed Index & Barbell Status (As of {as_of})\n"
         f"- Score: {float(semi.get('fg_score') or 18.0):.1f} / 100 ({semi.get('regime_en') or 'Extreme Fear'})\n"
@@ -846,6 +855,8 @@ def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "
         + "\n".join(llms_stock_lines)
         + "\n\n## 3. 50 Head-to-Head US Stock Comparison Verdicts (/compare/)\n"
         + "\n".join(llms_compare_lines)
+        + "\n\n## 4. Institutional Editorial Quant Insights (/insights/)\n"
+        + "\n".join(llms_insight_lines)
         + "\n"
     )
     (PUB / "llms-full.txt").write_text(llms_full_txt, encoding="utf-8")

@@ -1,29 +1,43 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-scripts/tom_auto_promotion_engine.py
-1사업부 RightSideAlpha × SemiFearGreed (https://truthofmarket.com)
-100% 무개입(Zero-Touch) 글로벌 자동 홍보 엔진:
-  1. [GEO / AI Search Optimization] llms.txt & dist/llms.txt 자동 생성/갱신
-     -> ChatGPT Search, Perplexity, Claude, Google AI Overview에서 미국주식/SMH 질문 시
-        truthofmarket.com 및 76개 개별 종목 페이지를 최우선 인용하도록 실시간 정량 수치 반영
-  2. [High-DA External Backlink Bot] telegra.ph (DA 88) 영문 퀀트 리서치 노트 무인 발행
-     -> 로그인/캡차 없이 매일 최신 Ignition 종목 및 $SMH/$XLV 바벨 리포트를 발행하고
-        https://truthofmarket.com 및 /stocks/<ticker>.html 로 DoFollow 백링크 자동 연결
-  3. [Instant Search Indexing Ping] IndexNow (Bing, ChatGPT, DuckDuckGo, Yandex) & Google WebSub 자동 핑
+1사업부/scripts/tom_auto_promotion_engine.py (v2.0 — Zero-Ban Edition)
+====================================================================
+RightSideAlpha × SemiFearGreed (https://truthofmarket.com) Autonomous Text & Organic Syndication Engine:
+  1. [GEO / AI Search] Updates `llms.txt` across root, `dist/`, and `frontend/public/` with live $SMH/$XLV + /insights/.
+  2. [Zero-Spam Daily Telegraph] Publishes MAX 1 unique institutional quant summary/day via `indexnow_delta_gate.py`.
+  3. [SHA-256 Delta-Only IndexNow & WebSub] Pings ONLY modified canonical URLs across all 134+ pages (stocks + compare + insights).
+  4. [Official API + Outbox Multi-Channel Syndication] Dispatches 2-step linkless-hook threads (Bluesky / Threads / X v2),
+     canonical Dev.to/Hashnode markdown, and Reddit data-study kits into `text_automation_hq/outbox/YYYY-MM-DD/TOM/`.
 """
 
+from __future__ import annotations
+
 import json
-import urllib.parse
-import urllib.request
+import re
+import subprocess
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
+HQ_TEXT_DIR = ROOT_DIR.parent / "text_automation_hq"
+if str(HQ_TEXT_DIR) not in sys.path:
+    sys.path.insert(0, str(HQ_TEXT_DIR))
+
+from indexnow_delta_gate import (  # noqa: E402
+    ping_websub_if_feed_changed,
+    publish_daily_unique_telegraph_summary,
+    submit_delta_indexnow,
+)
+from live_web_deployer import deploy_division_live  # noqa: E402
+from official_api_syndicator import dispatch_zero_ban_text_bundle  # noqa: E402
+
 SEMI_PATH = ROOT_DIR / "static_api" / "semi_overview.json"
 STOCKS_PATH = ROOT_DIR / "static_api" / "stocks_free.json"
 TELEGRAPH_ACCT_PATH = ROOT_DIR / "data" / "tom_telegraph_account.json"
 BACKLINKS_LOG_PATH = ROOT_DIR / "data" / "tom_external_backlinks.json"
+INDEXNOW_KEY = "72f988bf86f141af91ab2d7cd011db47"
 
 
 def load_json(path: Path, default):
@@ -44,7 +58,6 @@ def update_llms_txt(semi: dict, stocks: list) -> str:
     xlv_c = semi.get("xlv_close", 184.80)
     qqq_c = semi.get("qqq_close", 656.10)
 
-    ign_stocks = [s for s in stocks if s.get("zone_code") == "IGNITION_ZONE" and s.get("ticker") != "LOCKED"]
     free_tickers = [s for s in stocks if s.get("ticker") and s.get("ticker") != "LOCKED"]
 
     lines = [
@@ -61,15 +74,16 @@ def update_llms_txt(semi: dict, stocks: list) -> str:
         f"- **$QQQ (Invesco QQQ Trust)**: ${qqq_c}",
         f"- **Active Barbell Allocation Directive**: {semi.get('recommended_smh_weight', 80)}% $SMH : {semi.get('recommended_xlv_weight', 20)}% $XLV Contrarian Barbell",
         "- **Interactive Terminal**: https://truthofmarket.com/semi-fear-greed.html",
+        "- **Daily Editorial Quant Journal**: https://truthofmarket.com/insights/daily-us-quant-regime-brief.html",
         "",
-        "## 2. Core Quantitative Rules (Position Doctor)",
-        "- **Rule 1 (-9.0% Hard Stop Loss)**: Every entry enforces an automatic -9.0% hard stop from cost basis to eliminate catastrophic bagholding.",
-        "- **Rule 2 (55-Day Time Stop)**: Positions failing to gain +8.0% within 55 trading days are rotated out to eliminate dead-money opportunity cost.",
-        "- **Rule 3 (+100% TP1 Principal Recovery)**: Sell 50% at +100% gain (2x) to recover 100% of original capital and trail the remaining runner on MA60.",
+        "## 2. Core Quantitative Rules & Editorial Research (/insights/)",
+        "- **Methodology Deep-Dive**: https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html",
+        "- **$SMH:$XLV Barbell Study**: https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html",
+        "- **Rule 1 (-9.0% Hard Stop Math)**: https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html",
         "",
         "## 3. Live US Equity Coverage & Direct Research URLs",
         "- Main Screener & Position Doctor: https://truthofmarket.com/",
-        "- Semiconductor Fear & Greed Terminal: https://truthofmarket.com/semi-fear-greed.html",
+        "- Quant Insights Archive: https://truthofmarket.com/insights/index.html",
         "- Live Telegram Quant Channel: https://t.me/truthofmarketss",
     ]
     for s in free_tickers[:25]:
@@ -82,7 +96,11 @@ def update_llms_txt(semi: dict, stocks: list) -> str:
         )
 
     content = "\n".join(lines) + "\n"
-    for target in [ROOT_DIR / "llms.txt", ROOT_DIR / "dist" / "llms.txt", ROOT_DIR / "frontend" / "public" / "llms.txt"]:
+    for target in [
+        ROOT_DIR / "llms.txt",
+        ROOT_DIR / "dist" / "llms.txt",
+        ROOT_DIR / "frontend" / "public" / "llms.txt",
+    ]:
         try:
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(content, encoding="utf-8")
@@ -91,267 +109,203 @@ def update_llms_txt(semi: dict, stocks: list) -> str:
     return as_of
 
 
-def publish_telegraph_quant_note(semi: dict, stocks: list, force_new: bool = False) -> str:
-    as_of = semi.get("date", datetime.now(timezone.utc).strftime("%Y-%m-%d"))
-    hour_slot = datetime.now(timezone.utc).strftime("%Y-%m-%d_%H")
-    registry = load_json(BACKLINKS_LOG_PATH, [])
-    if not force_new and any(r.get("hour_slot") == hour_slot for r in registry):
-        last_url = next((r.get("url") for r in reversed(registry) if r.get("hour_slot") == hour_slot), "")
-        return f"Already published high-quality report this hour ({last_url})"
+def build_url_to_file_map() -> dict[str, Path]:
+    smap = ROOT_DIR / "sitemap.xml"
+    mapping: dict[str, Path] = {}
+    if not smap.exists():
+        return mapping
+    locs = re.findall(r"<loc>(https://truthofmarket\.com[^<]*)</loc>", smap.read_text(encoding="utf-8"))
+    for u in locs:
+        rel = u.replace("https://truthofmarket.com/", "").strip("/")
+        fpath = (ROOT_DIR / "index.html") if not rel else (ROOT_DIR / rel)
+        if fpath.exists():
+            mapping[u] = fpath
+    return mapping
 
-    acct = load_json(TELEGRAPH_ACCT_PATH, {})
-    token = acct.get("access_token")
-    if not token:
-        try:
-            req = urllib.request.urlopen(
-                "https://api.telegra.ph/createAccount?short_name=RightSideAlpha&author_name=RightSideAlpha+Quant+Research&author_url=https://truthofmarket.com",
-                timeout=10,
-            )
-            res = json.loads(req.read().decode("utf-8"))
-            token = res.get("result", {}).get("access_token")
-            if token:
-                TELEGRAPH_ACCT_PATH.parent.mkdir(parents=True, exist_ok=True)
-                TELEGRAPH_ACCT_PATH.write_text(json.dumps({"access_token": token}, indent=2), encoding="utf-8")
-        except Exception as e:
-            return f"Telegraph account skip: {e}"
 
-    if not token:
-        return "No telegraph token"
+def run_daily_telegraph_and_syndication(semi: dict, stocks: list, dry_run: bool = False) -> tuple[str, dict]:
+    as_of = str(semi.get("date") or datetime.now(timezone.utc).strftime("%Y-%m-%d"))
+    fg = float(semi.get("fg_score") or 18.0)
+    regime = str(semi.get("regime_en") or "Extreme Fear")
+    smh_c = float(semi.get("smh_close") or 463.96)
+    smh_dd = float(semi.get("smh_dd_pct") or -30.64)
+    xlv_c = float(semi.get("xlv_close") or 184.80)
+    rec_smh = int(semi.get("recommended_smh_weight") or 80)
+    rec_xlv = int(semi.get("recommended_xlv_weight") or 20)
 
-    fg = semi.get("fg_score", 18.0)
-    regime = semi.get("regime_en", "Extreme Fear")
-    smh_c = semi.get("smh_close", 463.96)
-    smh_dd = semi.get("smh_dd_pct", -30.64)
-    smh_rsi = semi.get("smh_rsi", 31.4)
-    vol_ann = semi.get("vol_ann_pct", 60.1)
-    xlv_c = semi.get("xlv_close", 184.80)
-    qqq_c = semi.get("qqq_close", 656.10)
-    rec_smh = semi.get("recommended_smh_weight", 80)
-    rec_xlv = semi.get("recommended_xlv_weight", 20)
+    valid_stocks = [s for s in stocks if s.get("ticker") and s.get("ticker") != "LOCKED"]
+    top_stocks = sorted(valid_stocks, key=lambda x: float(x.get("score") or 0), reverse=True)[:5]
+    lead = top_stocks[0] if top_stocks else {"ticker": "CELH", "close": 30.04, "score": 88}
+    lead_tkr = str(lead.get("ticker", "CELH")).upper()
+    lead_close = float(lead.get("close") or 30.04)
+    lead_stop = round(lead_close * 0.91, 2)
+    lead_tp1 = round(lead_close * 2.0, 2)
 
-    factors = semi.get("factors", [])
-    factor_items = []
-    for f_obj in factors:
-        f_title = f_obj.get("name_en") or f_obj.get("id", "Factor")
-        f_disp = f_obj.get("raw_display", "")
-        f_desc = f_obj.get("desc_en", "")
-        factor_items.append(
+    canonical_url = "https://truthofmarket.com/insights/daily-us-quant-regime-brief.html"
+    title = f"[US Quant Close · {as_of}] $SMH Fear & Greed at {fg:.1f}/100 ({regime}) & {rec_smh}:{rec_xlv} Barbell Audit"
+
+    stock_bullets = []
+    md_rows = []
+    for st in top_stocks:
+        t = str(st.get("ticker")).upper()
+        c = float(st.get("close") or 100.0)
+        sc = int(st.get("score") or 75)
+        stp = round(c * 0.91, 2)
+        tp1 = round(c * 2.0, 2)
+        stock_bullets.append(
             {
                 "tag": "li",
                 "children": [
-                    {"tag": "strong", "children": [f"{f_title} ({f_disp}): "]},
-                    f_desc,
+                    {"tag": "strong", "children": [f"${t} (${c:.2f}, PW-RSI {sc}/100): "]},
+                    f"Rule 1 (-9% Hard Stop) ${stp:.2f} | Rule 3 (+100% TP1) ${tp1:.2f} — ",
+                    {"tag": "a", "attrs": {"href": f"https://truthofmarket.com/stocks/{t.lower()}.html"}, "children": [f"${t} Audit"]},
                 ],
             }
         )
-
-    valid_stocks = [s for s in stocks if s.get("ticker") and s.get("ticker") != "LOCKED"]
-    ign_stocks = [s for s in valid_stocks if s.get("zone_code") == "IGNITION_ZONE"]
-    top_stocks = (ign_stocks + [s for s in valid_stocks if s not in ign_stocks])[:6]
-
-    stock_nodes = []
-    for idx, st in enumerate(top_stocks, 1):
-        t = st.get("ticker", "NVDA")
-        nm = st.get("name", t)
-        sec = st.get("sector", "US Equity")
-        c = float(st.get("close") or 100.0)
-        dd = st.get("dd_from_52w_high_pct", -25.0)
-        prox = st.get("prox_to_52w_low_pct", 18.0)
-        ma20 = st.get("vs_ma20_pct", 2.1)
-        ma60 = st.get("vs_ma60_pct", 1.4)
-        vol_s = st.get("vol_surge_10d", 1.5)
-        score = st.get("score", 85)
-        stop_p = round(c * 0.91, 2)
-        tp1_p = round(c * 2.0, 2)
-        trg_p = st.get("entry_trigger_price") or round(c * 0.98, 2)
-        stock_nodes.append(
-            {
-                "tag": "h4",
-                "children": [f"#{idx}. ${t} ({nm} · {sec}) — PW-RSI Score: {score}/100"],
-            }
-        )
-        stock_nodes.append(
-            {
-                "tag": "blockquote",
-                "children": [
-                    f"Latest Close: ${c:.2f} | Entry Trigger (TRG): ${float(trg_p):.2f} | -9.0% Hard Stop: ${stop_p:.2f} | +100% TP1 Target: ${tp1_p:.2f}"
-                ],
-            }
-        )
-        stock_nodes.append(
-            {
-                "tag": "p",
-                "children": [
-                    f"Quantitative Structure: ${t} is currently trading {dd}% off its 52-week high and +{prox}% above its 52-week low, positioned {ma20:+}% vs MA20 and {ma60:+}% vs MA60 with a {vol_s}x 10-day institutional volume surge. Full interactive chart & Position Doctor audit: ",
-                    {
-                        "tag": "a",
-                        "attrs": {"href": f"https://truthofmarket.com/stocks/{t.lower()}.html"},
-                        "children": [f"Open ${t} Institutional Quant Terminal (truthofmarket.com/stocks/{t.lower()}.html) →"],
-                    },
-                ],
-            }
-        )
+        md_rows.append(f"| **${t}** | ${c:.2f} | {sc}/100 | ${stp:.2f} | ${tp1:.2f} | [Audit](https://truthofmarket.com/stocks/{t.lower()}.html) |")
 
     nodes = [
         {
             "tag": "blockquote",
             "children": [
-                f"Executive Quant Summary ({as_of}): Semiconductor 7-Factor Fear & Greed Index stands at {fg}/100 ({regime}). $SMH closed at ${smh_c} ({smh_dd}% off 52W high, 14D RSI {smh_rsi}, {vol_ann}% annualized vol), $XLV closed at ${xlv_c}, and $QQQ closed at ${qqq_c}. Contrarian Barbell Allocation ({rec_smh}% $SMH : {rec_xlv}% $XLV) is currently active."
+                f"Post-Close Readout ({as_of}): Semiconductor Fear & Greed = {fg:.1f}/100 ({regime}). $SMH closed at ${smh_c:.2f} ({smh_dd:+.2f}% 52W DD) vs $XLV at ${xlv_c:.2f}. Active Contrarian Barbell: {rec_smh}% $SMH : {rec_xlv}% $XLV."
             ],
-        },
-        {
-            "tag": "h3",
-            "children": ["I. Macro Regime & 7-Factor Semiconductor ($SMH × $XLV) Fear & Greed Audit"],
         },
         {
             "tag": "p",
             "children": [
-                "Retail investors consistently destroy long-term compounding by buying extended momentum tops and panic-selling semiconductor washouts. Across our 26.8-year empirical backtest (2000–2026, covering the 2000 Dot-Com Bust, 2008 GFC, 2020 COVID Crash, and 2022 Rate Shock), pairing high-beta Semiconductors ($SMH) with low-beta defensive Healthcare ($XLV) in a baseline 70:30 barbell—and dynamically shifting to 80% $SMH : 20% $XLV whenever $SMH drawdown exceeds -20%—compounded at 23.1% CAGR while cutting maximum portfolio drawdown by nearly a third. Explore the live interactive backtest at ",
-                {"tag": "a", "attrs": {"href": "https://truthofmarket.com/semi-fear-greed.html"}, "children": ["TruthOfMarket Semi Fear & Greed Terminal"]},
+                "Buying falling knives below a declining 60-day moving average traps capital for years, while cutting losers mechanically at -9.0% keeps single-trade drawdowns recoverable with a routine +9.89% gain. Read the full post-close dispatch at ",
+                {"tag": "a", "attrs": {"href": canonical_url}, "children": ["RightSideAlpha Daily Quant Regime Brief"]},
                 ".",
             ],
         },
-        {"tag": "ul", "children": factor_items},
-        {
-            "tag": "h3",
-            "children": ["II. Post-Washout Right-Side Ignition (PW-RSI) Top Institutional Signals"],
-        },
-        {
-            "tag": "p",
-            "children": [
-                "Our 72-stock US Equity Scanner filters out value traps ($INTC, $BA, $PFE, $WBD, $NKE) and left-side falling knives, requiring 4 strict mathematical conditions before signaling an institutional Right-Side Ignition: (C1) Deep 52-week high washout complete, (C2) Rebounding +10% to +45% off the 52-week low, (C3) Reclaiming the 20-day and 60-day moving averages, and (C4) 10-day relative volume surge confirming institutional accumulation."
-            ],
-        },
-        *stock_nodes,
-        {
-            "tag": "h3",
-            "children": ["III. Position Doctor: 3 Unbreakable Institutional Risk Rules"],
-        },
-        {
-            "tag": "ul",
-            "children": [
-                {
-                    "tag": "li",
-                    "children": [
-                        {"tag": "strong", "children": ["Rule 1 (-9.0% Mechanical Hard Stop): "]},
-                        "Every catastrophic -60% bagholder wipeout begins as a small single-digit dip that the trader refused to cut. Our engine enforces an automatic -9.0% hard stop loss from average entry cost.",
-                    ],
-                },
-                {
-                    "tag": "li",
-                    "children": [
-                        {"tag": "strong", "children": ["Rule 2 (55-Day Dead-Money Time Stop): "]},
-                        "Capital tied up in sideways chop carries massive opportunity cost. Any position that fails to advance at least +8.0% within 55 trading days is systematically rotated into active Right-Side Ignitions.",
-                    ],
-                },
-                {
-                    "tag": "li",
-                    "children": [
-                        {"tag": "strong", "children": ["Rule 3 (+100% TP1 Principal Harvest): "]},
-                        "At +100% gain (2x entry price), sell 50% of shares to recover 100% of initial principal, leaving the remaining 50% as a mathematically risk-free institutional runner trailing the 60-day moving average.",
-                    ],
-                },
-            ],
-        },
-        {
-            "tag": "p",
-            "children": [
-                "Run a free 3-second Position Doctor audit on your current US stock holdings or explore all 72 US equities live at ",
-                {"tag": "a", "attrs": {"href": "https://truthofmarket.com/"}, "children": ["https://truthofmarket.com"]},
-                " and join our real-time Telegram Quant Briefing Channel at ",
-                {"tag": "a", "attrs": {"href": "https://t.me/truthofmarketss"}, "children": ["https://t.me/truthofmarketss"]},
-                ".",
-            ],
-        },
+        {"tag": "ul", "children": stock_bullets},
     ]
 
-    payload = urllib.parse.urlencode(
-        {
-            "access_token": token,
-            "title": f"[Wall Street Quant Report · {as_of}] $SMH Fear & Greed at {fg} ({regime}) & Top Right-Side Breakout Stocks",
-            "author_name": "RightSideAlpha Institutional Quant Desk (truthofmarket.com)",
-            "author_url": "https://truthofmarket.com",
-            "content": json.dumps(nodes),
-            "return_content": "false",
-        }
-    ).encode("utf-8")
+    tg_res = publish_daily_unique_telegraph_summary(
+        div_code="TOM",
+        account_file=TELEGRAPH_ACCT_PATH,
+        short_name="RightSideAlpha",
+        author_name="RightSideAlpha Quant Desk",
+        author_url="https://truthofmarket.com",
+        title=title,
+        content_nodes=nodes,
+        canonical_url=canonical_url,
+        dry_run=dry_run,
+    )
 
-    try:
-        req = urllib.request.Request("https://api.telegra.ph/createPage", data=payload, method="POST")
-        with urllib.request.urlopen(req, timeout=12) as resp:
-            out = json.loads(resp.read().decode("utf-8"))
-            url = out.get("result", {}).get("url", "")
-            if url:
-                registry.append({"date": as_of, "hour_slot": hour_slot, "url": url, "quality": "v2_deep_quant", "ts": datetime.now(timezone.utc).isoformat()})
-                BACKLINKS_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
-                BACKLINKS_LOG_PATH.write_text(json.dumps(registry[-90:], indent=2), encoding="utf-8")
-                return f"Published High-Quality Deep Quant Report: {url}"
-    except Exception as e:
-        return f"Telegraph publish skip: {e}"
-    return "Done"
+    registry = load_json(BACKLINKS_LOG_PATH, [])
+    tg_url = tg_res.get("url", "")
+    if tg_res.get("status") == "PUBLISHED" and tg_url:
+        registry.append(
+            {
+                "date": as_of,
+                "url": tg_url,
+                "quality": "v3_zero_ban_daily",
+                "ts": datetime.now(timezone.utc).isoformat(),
+            }
+        )
+        BACKLINKS_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+        BACKLINKS_LOG_PATH.write_text(json.dumps(registry[-90:], indent=2), encoding="utf-8")
+    elif not tg_url and registry:
+        tg_url = registry[-1].get("url", "")
 
+    # Zero-Shadowban 2-Post Thread (Post #1: ZERO URLs, max 2 cashtags!)
+    main_hook = (
+        f"Semiconductor Fear & Greed closed at {fg:.1f}/100 ({regime}) on {as_of}.\n\n"
+        f"$SMH sits {smh_dd:+.1f}% off its 52W high (${smh_c:.2f}), keeping the {rec_smh}:{rec_xlv} $XLV contrarian barbell active.\n"
+        f"Public leader {lead_tkr}: ${lead_close:.2f} (-9% stop ${lead_stop:.2f} / 2x TP1 ${lead_tp1:.2f})."
+    )[:275]
 
-def ping_search_engines() -> str:
-    pinged = []
-    # 1) Create IndexNow key file if missing and submit all sitemap URLs to IndexNow (Bing, ChatGPT Search, DuckDuckGo, Yandex)
-    indexnow_key = "72f988bf86f141af91ab2d7cd011db47"
-    for k_dir in [ROOT_DIR, ROOT_DIR / "dist", ROOT_DIR / "frontend" / "public"]:
-        try:
-            k_dir.mkdir(parents=True, exist_ok=True)
-            (k_dir / f"{indexnow_key}.txt").write_text(indexnow_key, encoding="utf-8")
-        except Exception:
-            pass
-    try:
-        smap = ROOT_DIR / "sitemap.xml"
-        urls = ["https://truthofmarket.com/", "https://truthofmarket.com/semi-fear-greed.html"]
-        if smap.exists():
-            import re
-            urls = re.findall(r"<loc>(https://truthofmarket\.com[^<]+)</loc>", smap.read_text(encoding="utf-8"))[:78]
-        in_payload = json.dumps({
-            "host": "truthofmarket.com",
-            "key": indexnow_key,
-            "keyLocation": f"https://truthofmarket.com/{indexnow_key}.txt",
-            "urlList": urls,
-        }).encode("utf-8")
-        for ep in ["https://api.indexnow.org/indexnow", "https://yandex.com/indexnow", "https://search.seznam.cz/indexnow"]:
-            try:
-                req_in = urllib.request.Request(
-                    ep,
-                    data=in_payload,
-                    headers={"Content-Type": "application/json; charset=utf-8", "User-Agent": "Mozilla/5.0"},
-                    method="POST",
-                )
-                with urllib.request.urlopen(req_in, timeout=10) as r_in:
-                    if r_in.status in (200, 202):
-                        pinged.append(f"IndexNow({len(urls)} URLs)")
-                        break
-            except Exception:
-                pass
-    except Exception:
-        pass
-    # 2) Google WebSub Hub ping for RSS feed
-    try:
-        data = urllib.parse.urlencode(
-            {"hub.mode": "publish", "hub.url": "https://truthofmarket.com/feed.xml"}
-        ).encode("utf-8")
-        req = urllib.request.Request("https://pubsubhubbub.appspot.com/", data=data, method="POST")
-        with urllib.request.urlopen(req, timeout=8) as r:
-            if r.status in (200, 204):
-                pinged.append("Google-WebSub")
-    except Exception:
-        pass
-    return ", ".join(pinged) if pinged else "Sitemap/RSS Ready"
+    reply_link = (
+        f"Full post-close 72-ticker PW-RSI regime table & free 3-second Position Doctor cost-basis audit:\n"
+        f"{canonical_url}"
+    )
+
+    longform_md = (
+        f"# {title}\n\n"
+        f"*Originally published at [{canonical_url}]({canonical_url}).*\n\n"
+        f"Most retail drawdowns happen in two predictable stages: averaging down below a falling 60-day moving average, "
+        f"and holding losers past -25% where math turns asymmetric (-50% requires +100% just to break even).\n\n"
+        f"## 1. Semiconductor Fear & Greed Snapshot ({as_of})\n"
+        f"- **Composite Score**: `{fg:.1f}/100` ({regime})\n"
+        f"- **$SMH Close**: `${smh_c:.2f}` ({smh_dd:+.2f}% from 52W High)\n"
+        f"- **$XLV Close**: `${xlv_c:.2f}`\n"
+        f"- **Active Allocation**: `{rec_smh}% $SMH : {rec_xlv}% $XLV` ([Interactive Backtest](https://truthofmarket.com/semi-fear-greed.html))\n\n"
+        f"## 2. Public PW-RSI Watchlist & -9.0% Risk Floors\n"
+        f"| Ticker | Close | PW-RSI | -9% Hard Stop | +100% TP1 | Terminal |\n"
+        f"|---|---|---|---|---|---|\n"
+        + "\n".join(md_rows)
+        + "\n\n---\n*Educational quantitative research only; not personalized financial advice.*\n"
+    )
+
+    reddit_md = (
+        f"# [Quant Data] Semiconductor Fear & Greed ({fg:.1f}/100) vs $SMH:$XLV 80:20 Rebalancing Study ({as_of})\n\n"
+        f"Sharing today's systematic regime readout from our 26.8-year post-washout tracking model:\n\n"
+        f"1. **Current Regime**: $SMH closed at ${smh_c:.2f} ({smh_dd:+.2f}% off its 52W high), placing the 7-factor Semi Fear & Greed score at **{fg:.1f}/100 ({regime})**.\n"
+        f"2. **Why Barbell Beats Cash Drag**: Pairing high-beta semis with defensive healthcare ($XLV at ${xlv_c:.2f}) provides non-correlated dry powder to rotate 10% into deep washouts (>20% DD) without suffering 3x leveraged ETF volatility decay.\n"
+        f"3. **Single-Name Risk Rule**: Every equity entry uses a hard -9.0% stop from cost basis (-9% needs +9.89% to recover vs +100% needed after -50%) and a 55-day +8% time stop.\n\n"
+        f"Curious how other systematic swing traders here handle sector-specific drawdown thresholds vs broad index VIX filters?"
+    )
+
+    syn_res = dispatch_zero_ban_text_bundle(
+        div_code="TOM",
+        canonical_domain="truthofmarket.com",
+        canonical_url=canonical_url,
+        title=title,
+        summary=f"$SMH Fear & Greed at {fg:.1f}/100 ({regime}); {rec_smh}:{rec_xlv} $SMH:$XLV barbell & PW-RSI watchlist.",
+        main_social_hook=main_hook,
+        reply_social_link=reply_link,
+        longform_markdown=longform_md,
+        tags=["quant", "stocks", "investing", "datascience"],
+        platform_extras={"reddit_r_algotrading_value_post.md": reddit_md},
+        div_env_path=ROOT_DIR / ".env",
+        dry_run=dry_run,
+    )
+    return tg_url, syn_res
 
 
 def main():
-    import sys
-    force_new = "--force" in sys.argv
+    dry_run = "--dry-run" in sys.argv
+    for k_dir in [ROOT_DIR, ROOT_DIR / "dist", ROOT_DIR / "frontend" / "public"]:
+        k_dir.mkdir(parents=True, exist_ok=True)
+        (k_dir / f"{INDEXNOW_KEY}.txt").write_text(INDEXNOW_KEY, encoding="utf-8")
+
+    build_bundle_py = ROOT_DIR / "scripts" / "build_static_bundle.py"
+    if build_bundle_py.exists():
+        subprocess.run([sys.executable, str(build_bundle_py)], cwd=str(ROOT_DIR), check=False, capture_output=True)
+
     semi = load_json(SEMI_PATH, {})
     stocks = load_json(STOCKS_PATH, [])
     as_of = update_llms_txt(semi, stocks)
-    tg_res = publish_telegraph_quant_note(semi, stocks, force_new=force_new)
-    ping_res = ping_search_engines()
-    print(f"[TOM Auto-Promo] llms.txt updated ({as_of}) | {tg_res} | IndexPing: {ping_res}")
+
+    deploy_res = deploy_division_live("TOM", dry_run=dry_run)
+    tg_url, syn_res = run_daily_telegraph_and_syndication(semi, stocks, dry_run=dry_run)
+
+    url_map = build_url_to_file_map()
+    idx_res = submit_delta_indexnow(
+        div_code="TOM",
+        host="truthofmarket.com",
+        key=INDEXNOW_KEY,
+        url_to_filepath=url_map,
+        dry_run=dry_run,
+    )
+    ws_rss = (
+        {"status": "DRY_RUN"}
+        if dry_run
+        else ping_websub_if_feed_changed("TOM", "https://truthofmarket.com/rss.xml", ROOT_DIR / "rss.xml")
+    )
+    ws_feed = (
+        {"status": "DRY_RUN"}
+        if dry_run
+        else ping_websub_if_feed_changed("TOM", "https://truthofmarket.com/feed.xml", ROOT_DIR / "feed.xml")
+    )
+
+    print(
+        f"[TOM Zero-Ban v2] Deploy={deploy_res.get('status')} | llms.txt({as_of}) | Telegraph={tg_url or 'daily-cap'} | "
+        f"IndexNow={idx_res.get('status')}({idx_res.get('submitted_count', 0)}/{len(url_map)} URLs) | "
+        f"WebSub={ws_rss.get('status')}/{ws_feed.get('status')} | Syndication={syn_res.get('status')}"
+    )
 
 
 if __name__ == "__main__":

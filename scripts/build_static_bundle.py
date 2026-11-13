@@ -97,6 +97,36 @@ def refresh_health_and_rss() -> tuple[str, str]:
     }
     health_json = json.dumps(health_obj, indent=2) + "\n"
 
+    insight_items_xml = f"""
+    <item>
+      <title><![CDATA[US Market Regime Dispatch ({as_of_date}): $SMH Fear & Greed at {fg_score:.1f}/100 ({regime_code}) & PW-RSI Watchlist]]></title>
+      <link>https://truthofmarket.com/insights/daily-us-quant-regime-brief.html</link>
+      <guid isPermaLink="true">https://truthofmarket.com/insights/daily-us-quant-regime-brief.html</guid>
+      <pubDate>{rfc_now}</pubDate>
+      <description><![CDATA[Post-close institutional US market regime dispatch as of {as_of_date}: $SMH ${smh_close:.2f} ({smh_dd_pct:.2f}% off 52W high), contrarian $SMH:$XLV barbell status, and public PW-RSI leaders.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Why Left-Side Dip Buyers Bleed Out: The 26.8-Year Math Behind Right-Side Ignition (PW-RSI)]]></title>
+      <link>https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html</link>
+      <guid isPermaLink="true">https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html</guid>
+      <pubDate>{rfc_now}</pubDate>
+      <description><![CDATA[How filtering for completed 52-week washouts, MA20/MA60 reclaims, and institutional volume surges eliminates value traps across 72 liquid US stocks.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Surviving Chip Crashes: How the $SMH:$XLV Contrarian Barbell Cuts Max Drawdown Without Killing Alpha]]></title>
+      <link>https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html</link>
+      <guid isPermaLink="true">https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html</guid>
+      <pubDate>{rfc_now}</pubDate>
+      <description><![CDATA[Empirical breakdown of pairing high-beta Semiconductors ($SMH) with low-beta Healthcare ($XLV) and shifting from 70:30 to 80:20 during Extreme Fear washouts.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[The Asymmetry of Ruin: Why Cutting Every Loser at -9.0% Saves Years of Dead-Money Recovery]]></title>
+      <link>https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html</link>
+      <guid isPermaLink="true">https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html</guid>
+      <pubDate>{rfc_now}</pubDate>
+      <description><![CDATA[A -9% loss requires +9.89% to break even; a -50% bagholder drawdown demands +100%. Inside Rule 1 and the 55-day dead-money time stop.]]></description>
+    </item>"""
+
     rss_xml = f"""<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
@@ -106,7 +136,7 @@ def refresh_health_and_rss() -> tuple[str, str]:
     <atom:link href="https://pubsubhubbub.appspot.com/" rel="hub" />
     <description>Institutional US Equity Post-Washout Right-Side Ignition (PW-RSI) Quant Terminal covering 72 US equities, daily $SMH Semiconductor Fear &amp; Greed Index (0-100), and $SMH/$XLV contrarian barbell allocation.</description>
     <language>en-US</language>
-    <lastBuildDate>{rfc_now}</lastBuildDate>
+    <lastBuildDate>{rfc_now}</lastBuildDate>{insight_items_xml}
     <item>
       <title><![CDATA[RightSideAlpha x SemiFearGreed — 72 US Equity PW-RSI Turnaround Terminal & 26.8-Year Backtest (As of {as_of_date})]]></title>
       <link>https://truthofmarket.com/</link>
@@ -305,10 +335,15 @@ def main() -> None:
 """
 
     health_json, rss_xml = refresh_health_and_rss()
+    feed_xml = rss_xml.replace(
+        'href="https://truthofmarket.com/rss.xml" rel="self"',
+        'href="https://truthofmarket.com/feed.xml" rel="self"',
+    )
 
-    # Keep frontend/public/index.html, rss.xml, and health.json in sync
+    # Keep frontend/public/index.html, rss.xml, feed.xml, and health.json in sync
     (PUB / "index.html").write_text(index_html, encoding="utf-8")
     (PUB / "rss.xml").write_text(rss_xml, encoding="utf-8")
+    (PUB / "feed.xml").write_text(feed_xml, encoding="utf-8")
     (PUB / "static_api").mkdir(parents=True, exist_ok=True)
     (PUB / "static_api" / "health.json").write_text(health_json, encoding="utf-8")
     (ROOT / "static_api" / "health.json").write_text(health_json, encoding="utf-8")
@@ -332,9 +367,10 @@ def main() -> None:
                 shutil.copytree(item, dest, dirs_exist_ok=True)
             else:
                 shutil.copy2(item, dest)
-        # Write index.html, rss.xml, and static_api/health.json AFTER copying public files
+        # Write index.html, rss.xml, feed.xml, and static_api/health.json AFTER copying public files
         (target_dir / "index.html").write_text(index_html, encoding="utf-8")
         (target_dir / "rss.xml").write_text(rss_xml, encoding="utf-8")
+        (target_dir / "feed.xml").write_text(feed_xml, encoding="utf-8")
         (target_dir / "static_api").mkdir(parents=True, exist_ok=True)
         (target_dir / "static_api" / "health.json").write_text(health_json, encoding="utf-8")
         for stale_rel in ["instagram_us_setup.html", "static_api/stocks_pro.json", "static_api/smh_xlv_fear_greed_history.csv"]:

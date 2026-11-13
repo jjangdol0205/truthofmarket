@@ -22,8 +22,22 @@ LS_LTD_URL = "https://truthofmarket.com/?checkout=lifetime#pricing"
 
 
 def load_tg_credentials():
-    token = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
+    token = os.getenv("TELEGRAM_BOT_TOKEN", "").strip() or os.getenv("RSA_TELEGRAM_BOT_TOKEN", "").strip()
     chat_id = os.getenv("TELEGRAM_CHAT_ID", "").strip() or "-1004248811575"
+    env_file = BASE_DIR / ".env"
+    if env_file.exists():
+        try:
+            for line in env_file.read_text(encoding="utf-8", errors="ignore").splitlines():
+                if "=" in line and not line.strip().startswith("#"):
+                    k, v = line.split("=", 1)
+                    k = k.strip()
+                    v = v.strip().strip("'\"")
+                    if not token and k in ("RSA_TELEGRAM_BOT_TOKEN", "TELEGRAM_BOT_TOKEN") and v:
+                        token = v
+                    if not os.getenv("TELEGRAM_CHAT_ID") and k in ("TELEGRAM_CHANNEL_ID", "RSA_TELEGRAM_CHANNEL_ID") and v:
+                        chat_id = v
+        except Exception:
+            pass
     if TG_CONFIG_PATH.exists():
         try:
             cfg = json.loads(TG_CONFIG_PATH.read_text(encoding="utf-8"))
@@ -81,9 +95,10 @@ def fetch_ticker_news(client: httpx.Client, symbol: str, max_items: int = 2) -> 
 
 
 def setup_bot_and_channel_english(client: httpx.Client, base_url: str, chat_id: str) -> None:
+    # Preserve GEMINI.md standard bot name: [1사업부] TruthOfMarket (미국주식)
     client.post(
         f"{base_url}/setMyName",
-        json={"name": "TruthOfMarket | Pro VIP Quant & News Bot"},
+        json={"name": "[1사업부] TruthOfMarket (미국주식)"},
     )
     client.post(
         f"{base_url}/setMyShortDescription",
