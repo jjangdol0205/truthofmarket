@@ -224,6 +224,16 @@ def build_inline_keyboard() -> dict:
         "inline_keyboard": [
             [
                 {
+                    "text": "📖 Today's Quant Regime Brief (Free)",
+                    "url": "https://truthofmarket.com/insights/daily-us-quant-regime-brief.html?utm_source=telegram_channel",
+                },
+                {
+                    "text": "🩺 3-Sec Position Doctor (-9% Stop)",
+                    "url": "https://truthofmarket.com/?utm_source=telegram_channel#position-doctor",
+                },
+            ],
+            [
+                {
                     "text": "🔓 Unlock Pro VIP ($29/mo)",
                     "url": LS_MONTHLY_URL,
                 },

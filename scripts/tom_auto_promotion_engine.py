@@ -210,16 +210,16 @@ def run_daily_telegraph_and_syndication(semi: dict, stocks: list, dry_run: bool 
     elif not tg_url and registry:
         tg_url = registry[-1].get("url", "")
 
-    # Zero-Shadowban 2-Post Thread (Post #1: ZERO URLs, max 2 cashtags!)
+    # Zero-Shadowban 2-Post Thread (Post #1: <=15-word B2C 3-sec hook, ZERO URLs, max 2 cashtags!)
     main_hook = (
-        f"Semiconductor Fear & Greed closed at {fg:.1f}/100 ({regime}) on {as_of}.\n\n"
-        f"$SMH sits {smh_dd:+.1f}% off its 52W high (${smh_c:.2f}), keeping the {rec_smh}:{rec_xlv} $XLV contrarian barbell active.\n"
-        f"Public leader {lead_tkr}: ${lead_close:.2f} (-9% stop ${lead_stop:.2f} / 2x TP1 ${lead_tp1:.2f})."
+        f"Falling chip stocks trap dip-buyers for years—check your stock's -9% exit line free.\n\n"
+        f"Semi Fear & Greed sits at {fg:.1f}/100 ({regime}); $SMH is {smh_dd:+.1f}% off highs (${smh_c:.2f}) with {rec_smh}:{rec_xlv} $XLV barbell.\n"
+        f"Leader {lead_tkr}: ${lead_close:.2f} (stop ${lead_stop:.2f} / target ${lead_tp1:.2f})."
     )[:275]
 
     reply_link = (
-        f"Full post-close 72-ticker PW-RSI regime table & free 3-second Position Doctor cost-basis audit:\n"
-        f"{canonical_url}"
+        f"Check any US ticker's -9% stop line & 72-stock regime table free in 3 seconds:\n"
+        f"{canonical_url}?utm_source=social_thread&utm_medium=organic"
     )
 
     longform_md = (
