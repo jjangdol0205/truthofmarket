@@ -1,147 +1,147 @@
 # RightSideAlpha x SemiFearGreed (https://truthofmarket.com) — Full Institutional Quantitative Corpus
-> Updated: 2026-11-12 | 76 US Equities & ETFs + 50 Head-to-Head Quant Matchups + Editorial Quant Insights
+> Updated: 2026-11-13 | 76 US Equities & ETFs + 50 Head-to-Head Quant Matchups + Editorial Quant Insights
 > Core Methodology: Post-Washout Right-Side Ignition (PW-RSI), -9.0% Mechanical Hard Stop (Rule 1), and $SMH:$XLV 80:20 Contrarian Barbell.
 
-## 1. Semiconductor Fear & Greed Index & Barbell Status (As of 2026-11-12)
+## 1. Semiconductor Fear & Greed Index & Barbell Status (As of 2026-11-13)
 - Score: 18.0 / 100 (Extreme Fear)
-- $SMH Close: $501.92 (-24.96% 52W DD, RSI 43.1)
-- $XLV Close: $187.80 | $QQQ Close: $688.06
+- $SMH Close: $486.75 (-27.23% 52W DD, RSI 40.1)
+- $XLV Close: $188.85 | $QQQ Close: $679.89
 - Active Barbell Allocation: 80% $SMH : 20% $XLV (https://truthofmarket.com/semi-fear-greed.html)
 
 ## 2. 76 US Stock & ETF PW-RSI Quantitative Audit Table
 | Ticker | Company | Close | PW-RSI Score | 14D RSI | 10D Vol Surge | -9% Hard Stop | Regime | Audit URL |
 |---|---|---|---|---|---|---|---|---|
-| $CELH | Celsius Holdings | $31.89 | 98/100 | 60.8 | 2.46x | $29.02 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/celh.html |
-| $CVNA | Carvana Co | $70.83 | 90/100 | 55.0 | 1.89x | $64.46 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/cvna.html |
-| $TSLA | Tesla Inc | $397.55 | 90/100 | 56.6 | 1.99x | $361.77 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/tsla.html |
-| $AVGO | Broadcom Inc | $364.26 | 90/100 | 59.5 | 2.33x | $331.48 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/avgo.html |
-| $LULU | Lululemon Athletica | $104.46 | 82/100 | 48.8 | 1.21x | $95.06 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/lulu.html |
-| $APP | AppLovin Corp | $393.46 | 75/100 | 70.3 | 4.32x | $358.05 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/app.html |
-| $VRTX | Vertex Pharmaceuticals | $542.62 | 75/100 | 55.0 | 2.17x | $493.78 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/vrtx.html |
-| $DIS | Walt Disney Co | $118.22 | 75/100 | 65.5 | 1.62x | $107.58 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/dis.html |
-| $GM | General Motors Co | $86.26 | 75/100 | 52.2 | 1.41x | $78.50 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/gm.html |
-| $AMZN | Amazon.com Inc | $267.44 | 75/100 | 58.2 | 2.52x | $243.37 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/amzn.html |
-| $SBUX | Starbucks Corp | $107.26 | 75/100 | 59.5 | 1.45x | $97.61 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/sbux.html |
-| $UAL | United Airlines | $111.26 | 75/100 | 52.1 | 1.46x | $101.25 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/ual.html |
-| $CCL | Carnival Corp | $29.34 | 75/100 | 56.6 | 1.57x | $26.70 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/ccl.html |
-| $SOFI | SoFi Technologies | $15.62 | 72/100 | 45.8 | 1.34x | $14.21 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/sofi.html |
-| $F | Ford Motor Co | $11.90 | 72/100 | 43.6 | 1.27x | $10.83 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/f.html |
-| $ENPH | Enphase Energy | $26.79 | 70/100 | 40.0 | 2.16x | $24.38 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/enph.html |
-| $HOOD | Robinhood Markets | $81.35 | 70/100 | 36.2 | 1.63x | $74.03 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/hood.html |
-| $MBLY | Mobileye Global | $5.64 | 70/100 | 37.3 | 2.36x | $5.13 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mbly.html |
-| $SMCI | Super Micro Computer | $26.99 | 70/100 | 36.4 | 2.27x | $24.56 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/smci.html |
-| $SNAP | Snap Inc | $5.22 | 70/100 | 42.3 | 1.86x | $4.75 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/snap.html |
-| $GE | GE Aerospace | $330.81 | 67/100 | 57.1 | 1.20x | $301.04 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/ge.html |
-| $DECK | Deckers Outdoor | $84.52 | 65/100 | 48.8 | 1.41x | $76.91 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/deck.html |
-| $UBER | Uber Technologies | $69.10 | 65/100 | 50.5 | 2.07x | $62.88 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/uber.html |
-| $FSLR | First Solar Inc | $172.29 | 65/100 | 41.5 | 3.41x | $156.78 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/fslr.html |
-| $QCOM | Qualcomm Inc | $177.10 | 65/100 | 52.3 | 3.12x | $161.16 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/qcom.html |
-| $DUOL | Duolingo Inc | $157.44 | 65/100 | 56.6 | 6.90x | $143.27 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/duol.html |
-| $KLAC | KLA Corp | $157.29 | 65/100 | 47.6 | 2.49x | $143.13 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/klac.html |
-| $ON | ON Semiconductor | $73.72 | 65/100 | 51.5 | 2.34x | $67.09 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/on.html |
-| $AMAT | Applied Materials | $381.21 | 65/100 | 44.7 | 2.10x | $346.90 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/amat.html |
-| $LRCX | Lam Research Corp | $233.70 | 65/100 | 44.4 | 2.48x | $212.67 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/lrcx.html |
-| $META | Meta Platforms Inc | $623.51 | 62/100 | 42.1 | 1.33x | $567.39 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/meta.html |
-| $PINS | Pinterest Inc | $19.11 | 60/100 | 41.1 | 2.40x | $17.39 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/pins.html |
-| $NVDA | NVIDIA Corp | $166.18 | 60/100 | 26.0 | 3.64x | $151.22 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/nvda.html |
-| $NFLX | Netflix Inc | $62.67 | 57/100 | 39.7 | 1.17x | $57.03 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/nflx.html |
-| $UPST | Upstart Holdings | $19.16 | 55/100 | 33.0 | 3.02x | $17.44 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/upst.html |
-| $FLNC | Fluence Energy | $4.74 | 55/100 | 34.4 | 2.77x | $4.31 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/flnc.html |
-| $COIN | Coinbase Global | $130.68 | 55/100 | 33.8 | 2.55x | $118.92 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/coin.html |
-| $SEDG | SolarEdge Tech | $24.26 | 55/100 | 34.0 | 2.92x | $22.08 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/sedg.html |
-| $ARM | Arm Holdings plc | $199.86 | 55/100 | 43.4 | 2.68x | $181.87 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/arm.html |
-| $MPWR | Monolithic Power Systems | $1446.92 | 50/100 | 60.3 | 2.54x | $1316.70 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mpwr.html |
-| $AMD | Advanced Micro Devices | $585.58 | 50/100 | 57.5 | 2.74x | $532.88 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/amd.html |
-| $SPOT | Spotify Tech | $598.18 | 50/100 | 58.9 | 1.77x | $544.34 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/spot.html |
-| $REGN | Regeneron Pharma | $951.18 | 50/100 | 67.8 | 3.85x | $865.57 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/regn.html |
-| $LLY | Eli Lilly & Co | $1429.80 | 50/100 | 68.5 | 2.07x | $1301.12 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/lly.html |
+| $CELH | Celsius Holdings | $32.42 | 98/100 | 63.0 | 2.46x | $29.50 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/celh.html |
+| $CVNA | Carvana Co | $72.37 | 90/100 | 57.2 | 1.89x | $65.86 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/cvna.html |
+| $TSLA | Tesla Inc | $390.22 | 90/100 | 53.5 | 1.99x | $355.10 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/tsla.html |
+| $UAL | United Airlines | $109.31 | 90/100 | 49.8 | 1.46x | $99.47 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/ual.html |
+| $DECK | Deckers Outdoor | $86.82 | 90/100 | 53.5 | 1.41x | $79.01 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/deck.html |
+| $AVGO | Broadcom Inc | $347.01 | 84/100 | 53.2 | 2.33x | $315.78 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/avgo.html |
+| $LULU | Lululemon Athletica | $105.65 | 84/100 | 50.8 | 1.21x | $96.14 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/lulu.html |
+| $QCOM | Qualcomm Inc | $172.47 | 84/100 | 48.8 | 3.12x | $156.95 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/qcom.html |
+| $APP | AppLovin Corp | $409.10 | 75/100 | 72.6 | 4.32x | $372.28 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/app.html |
+| $VRTX | Vertex Pharmaceuticals | $538.60 | 75/100 | 52.8 | 2.12x | $490.13 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/vrtx.html |
+| $DIS | Walt Disney Co | $118.97 | 75/100 | 67.1 | 1.62x | $108.26 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/dis.html |
+| $AMZN | Amazon.com Inc | $266.66 | 75/100 | 57.4 | 2.04x | $242.66 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/amzn.html |
+| $SBUX | Starbucks Corp | $106.44 | 75/100 | 57.2 | 1.45x | $96.86 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/sbux.html |
+| $CCL | Carnival Corp | $29.23 | 75/100 | 55.9 | 1.57x | $26.60 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/ccl.html |
+| $SOFI | SoFi Technologies | $15.42 | 72/100 | 44.3 | 1.34x | $14.03 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/sofi.html |
+| $F | Ford Motor Co | $11.91 | 72/100 | 43.8 | 1.27x | $10.84 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/f.html |
+| $HOOD | Robinhood Markets | $77.86 | 70/100 | 33.2 | 1.63x | $70.85 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/hood.html |
+| $MBLY | Mobileye Global | $5.56 | 70/100 | 36.3 | 2.36x | $5.06 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mbly.html |
+| $SMCI | Super Micro Computer | $26.86 | 70/100 | 36.2 | 2.40x | $24.44 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/smci.html |
+| $SNAP | Snap Inc | $5.26 | 70/100 | 43.3 | 1.86x | $4.79 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/snap.html |
+| $GM | General Motors Co | $86.00 | 67/100 | 51.7 | 1.28x | $78.26 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/gm.html |
+| $GE | GE Aerospace | $331.81 | 67/100 | 57.5 | 1.20x | $301.95 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/ge.html |
+| $UBER | Uber Technologies | $69.69 | 65/100 | 52.5 | 2.07x | $63.42 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/uber.html |
+| $FSLR | First Solar Inc | $171.39 | 65/100 | 40.9 | 3.41x | $155.96 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/fslr.html |
+| $DUOL | Duolingo Inc | $165.31 | 65/100 | 60.8 | 6.90x | $150.43 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/duol.html |
+| $KLAC | KLA Corp | $152.32 | 65/100 | 44.9 | 2.49x | $138.61 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/klac.html |
+| $META | Meta Platforms Inc | $641.69 | 57/100 | 47.8 | 1.33x | $583.94 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/meta.html |
+| $ENPH | Enphase Energy | $26.07 | 55/100 | 38.2 | 2.16x | $23.72 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/enph.html |
+| $ON | ON Semiconductor | $71.06 | 55/100 | 47.5 | 2.34x | $64.66 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/on.html |
+| $AMAT | Applied Materials | $370.50 | 55/100 | 42.6 | 2.10x | $337.16 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/amat.html |
+| $LRCX | Lam Research Corp | $225.92 | 55/100 | 41.9 | 2.48x | $205.59 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/lrcx.html |
+| $UPST | Upstart Holdings | $19.56 | 55/100 | 35.5 | 3.02x | $17.80 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/upst.html |
+| $FLNC | Fluence Energy | $4.68 | 55/100 | 33.9 | 2.77x | $4.26 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/flnc.html |
+| $COIN | Coinbase Global | $127.64 | 55/100 | 32.4 | 1.43x | $116.15 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/coin.html |
+| $SEDG | SolarEdge Tech | $23.85 | 55/100 | 33.3 | 2.92x | $21.70 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/sedg.html |
+| $PINS | Pinterest Inc | $19.15 | 52/100 | 41.4 | 1.27x | $17.43 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/pins.html |
+| $MPWR | Monolithic Power Systems | $1390.54 | 50/100 | 56.1 | 2.52x | $1265.39 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mpwr.html |
+| $SPOT | Spotify Tech | $612.63 | 50/100 | 62.6 | 1.47x | $557.49 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/spot.html |
+| $REGN | Regeneron Pharma | $955.47 | 50/100 | 68.4 | 2.09x | $869.48 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/regn.html |
+| $LLY | Eli Lilly & Co | $1443.50 | 50/100 | 69.7 | 1.73x | $1313.59 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/lly.html |
 | $ROKU | Roku Inc | $160.52 | 50/100 | 61.0 | 3.44x | $146.07 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/roku.html |
-| $CROX | Crocs Inc | $156.96 | 50/100 | 69.0 | 1.65x | $142.83 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/crox.html |
-| $DAL | Delta Air Lines | $86.51 | 50/100 | 54.5 | 1.57x | $78.72 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/dal.html |
-| $U | Unity Software Inc | $50.17 | 50/100 | 66.5 | 4.39x | $45.65 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/u.html |
-| $NET | Cloudflare Inc | $318.70 | 50/100 | 54.5 | 2.39x | $290.02 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/net.html |
-| $MU | Micron Technology | $798.23 | 45/100 | 44.1 | 2.66x | $726.39 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mu.html |
-| $MRVL | Marvell Technology | $164.48 | 45/100 | 37.2 | 2.42x | $149.68 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mrvl.html |
-| $DDOG | Datadog Inc | $184.44 | 45/100 | 31.6 | 3.41x | $167.84 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/ddog.html |
-| $ASML | ASML Holding N.V. | $1496.69 | 45/100 | 42.4 | 2.36x | $1361.99 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/asml.html |
-| $SNOW | Snowflake Inc | $298.85 | 45/100 | 44.6 | 1.89x | $271.95 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/snow.html |
-| $NKE | Nike Inc | $37.76 | 42/100 | 49.1 | 1.33x | $34.36 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/nke.html |
-| $PYPL | PayPal Holdings | $58.29 | 42/100 | 53.9 | 1.34x | $53.04 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/pypl.html |
-| $TSM | TSMC (ADR) | $405.48 | 40/100 | 47.3 | 3.08x | $368.99 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/tsm.html |
-| $MDB | MongoDB Inc | $339.89 | 37/100 | 46.1 | 1.24x | $309.30 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mdb.html |
-| $ALB | Albemarle Corp | $94.82 | 35/100 | 43.3 | 2.27x | $86.29 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/alb.html |
-| $PANW | Palo Alto Networks | $322.48 | 35/100 | 38.7 | 2.19x | $293.46 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/panw.html |
-| $AFRM | Affirm Holdings | $65.87 | 35/100 | 39.4 | 2.33x | $59.94 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/afrm.html |
-| $CRWD | CrowdStrike Holdings | $229.87 | 30/100 | 43.8 | 1.86x | $209.18 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/crwd.html |
-| $MRNA | Moderna Inc | $231.29 | 30/100 | 52.4 | 0.98x | $210.47 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mrna.html |
-| $XOM | Exxon Mobil Corp | $169.79 | 30/100 | 47.0 | 1.95x | $154.51 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/xom.html |
-| $OXY | Occidental Petroleum | $58.38 | 30/100 | 45.1 | 1.75x | $53.13 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/oxy.html |
-| $ZS | Zscaler Inc | $193.18 | 25/100 | 36.0 | 1.13x | $175.79 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/zs.html |
-| $PLTR | Palantir Technologies | $171.56 | 20/100 | 41.8 | 2.06x | $156.12 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/pltr.html |
-| $SHOP | Shopify Inc | $146.77 | 20/100 | 42.4 | 2.76x | $133.56 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/shop.html |
-| $PARA | Paramount Global | $0.10 | 15/100 | 42.6 | 17.65x | $0.09 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/para.html |
-| $PFE | Pfizer Inc | $28.83 | 15/100 | 47.1 | 1.66x | $26.24 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/pfe.html |
-| $BA | Boeing Co | $171.52 | 15/100 | 37.8 | 1.12x | $156.08 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/ba.html |
-| $INTC | Intel Corp | $61.22 | 15/100 | 33.4 | 3.91x | $55.71 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/intc.html |
-| $SMH | VanEck Semiconductor ETF | $501.92 | 88/100 | 43.1 | 1.68x | $456.75 | EXTREME FEAR ACCUMULATION (80% BARBELL) | https://truthofmarket.com/stocks/smh.html |
-| $XLV | Health Care Select Sector SPDR ETF | $187.80 | 82/100 | 54.5 | 1.12x | $170.90 | DEFENSIVE BARBELL VAULT (20%-30% WEIGHT) | https://truthofmarket.com/stocks/xlv.html |
+| $DAL | Delta Air Lines | $86.25 | 50/100 | 54.0 | 1.57x | $78.49 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/dal.html |
+| $U | Unity Software Inc | $52.81 | 50/100 | 71.0 | 4.39x | $48.06 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/u.html |
+| $NVDA | NVIDIA Corp | $162.85 | 45/100 | 24.9 | 3.80x | $148.19 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/nvda.html |
+| $NFLX | Netflix Inc | $62.15 | 45/100 | 38.4 | 1.08x | $56.56 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/nflx.html |
+| $ARM | Arm Holdings plc | $190.53 | 45/100 | 40.6 | 2.68x | $173.38 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/arm.html |
+| $MU | Micron Technology | $778.31 | 45/100 | 42.5 | 2.66x | $708.26 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mu.html |
+| $MRVL | Marvell Technology | $156.76 | 45/100 | 35.2 | 2.42x | $142.65 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mrvl.html |
+| $DDOG | Datadog Inc | $184.16 | 45/100 | 31.5 | 3.41x | $167.59 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/ddog.html |
+| $ASML | ASML Holding N.V. | $1495.16 | 45/100 | 42.3 | 2.36x | $1360.60 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/asml.html |
+| $CROX | Crocs Inc | $163.72 | 42/100 | 73.0 | 1.27x | $148.99 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/crox.html |
+| $NKE | Nike Inc | $37.99 | 42/100 | 50.3 | 1.33x | $34.57 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/nke.html |
+| $PYPL | PayPal Holdings | $59.28 | 42/100 | 57.7 | 1.26x | $53.94 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/pypl.html |
+| $AMD | Advanced Micro Devices | $534.06 | 40/100 | 50.4 | 2.74x | $485.99 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/amd.html |
+| $NET | Cloudflare Inc | $305.81 | 40/100 | 50.4 | 2.39x | $278.29 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/net.html |
+| $MDB | MongoDB Inc | $334.20 | 37/100 | 44.4 | 1.24x | $304.12 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mdb.html |
+| $SNOW | Snowflake Inc | $291.00 | 35/100 | 41.7 | 1.64x | $264.81 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/snow.html |
+| $ALB | Albemarle Corp | $93.53 | 35/100 | 41.2 | 2.27x | $85.11 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/alb.html |
+| $PANW | Palo Alto Networks | $322.24 | 35/100 | 38.6 | 2.19x | $293.24 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/panw.html |
+| $AFRM | Affirm Holdings | $65.11 | 35/100 | 38.3 | 2.33x | $59.25 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/afrm.html |
+| $CRWD | CrowdStrike Holdings | $226.61 | 35/100 | 42.1 | 1.86x | $206.22 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/crwd.html |
+| $PLTR | Palantir Technologies | $167.99 | 35/100 | 39.5 | 2.06x | $152.87 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/pltr.html |
+| $TSM | TSMC (ADR) | $398.73 | 30/100 | 45.3 | 3.08x | $362.84 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/tsm.html |
+| $XOM | Exxon Mobil Corp | $170.59 | 30/100 | 48.2 | 1.95x | $155.24 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/xom.html |
+| $OXY | Occidental Petroleum | $58.75 | 30/100 | 46.8 | 1.75x | $53.46 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/oxy.html |
+| $MRNA | Moderna Inc | $223.37 | 25/100 | 49.7 | 0.98x | $203.27 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mrna.html |
+| $ZS | Zscaler Inc | $192.47 | 25/100 | 35.6 | 1.13x | $175.15 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/zs.html |
+| $SHOP | Shopify Inc | $147.09 | 20/100 | 42.7 | 2.76x | $133.85 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/shop.html |
+| $PARA | Paramount Global | $0.10 | 15/100 | 42.7 | 17.65x | $0.09 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/para.html |
+| $PFE | Pfizer Inc | $28.89 | 15/100 | 47.8 | 1.66x | $26.29 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/pfe.html |
+| $BA | Boeing Co | $171.50 | 15/100 | 37.8 | 1.12x | $156.06 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/ba.html |
+| $INTC | Intel Corp | $59.66 | 15/100 | 32.4 | 1.94x | $54.29 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/intc.html |
+| $SMH | VanEck Semiconductor ETF | $486.75 | 88/100 | 40.1 | 1.68x | $442.94 | EXTREME FEAR ACCUMULATION (80% BARBELL) | https://truthofmarket.com/stocks/smh.html |
+| $XLV | Health Care Select Sector SPDR ETF | $188.85 | 82/100 | 54.5 | 1.12x | $171.85 | DEFENSIVE BARBELL VAULT (20%-30% WEIGHT) | https://truthofmarket.com/stocks/xlv.html |
 | $SOXL | Direxion Daily Semiconductor Bull 3X Shares | $28.40 | 85/100 | 36.4 | 1.94x | $25.84 | DEEP WASHOUT (WAIT FOR MA20/MA60 RIGHT-SIDE) | https://truthofmarket.com/stocks/soxl.html |
-| $QQQ | Invesco QQQ Trust (Nasdaq-100 ETF) | $688.06 | 80/100 | 51.8 | 1.18x | $626.13 | CORE BENCHMARK TREND | https://truthofmarket.com/stocks/qqq.html |
+| $QQQ | Invesco QQQ Trust (Nasdaq-100 ETF) | $679.89 | 80/100 | 51.8 | 1.18x | $618.70 | CORE BENCHMARK TREND | https://truthofmarket.com/stocks/qqq.html |
 
 ## 3. 50 Head-to-Head US Stock Comparison Verdicts (/compare/)
-- $NVDA vs $AMD (AI GPU Monopoly vs Challenger): Winner=$NVDA | $NVDA PW-RSI=60/100 (3.64x Vol) vs $AMD PW-RSI=50/100 (2.74x Vol) -> https://truthofmarket.com/compare/nvda-vs-amd.html
+- $NVDA vs $AMD (AI GPU Monopoly vs Challenger): Winner=$NVDA | $NVDA PW-RSI=45/100 (3.80x Vol) vs $AMD PW-RSI=40/100 (2.74x Vol) -> https://truthofmarket.com/compare/nvda-vs-amd.html
 - $SOXL vs $SMH (3x Leveraged Semi vs Spot Semiconductor ETF): Winner=$SMH | $SOXL PW-RSI=85/100 (1.94x Vol) vs $SMH PW-RSI=88/100 (1.68x Vol) -> https://truthofmarket.com/compare/soxl-vs-smh.html
-- $TSLA vs $NVDA (Retail Megacap Momentum vs AI Compute King): Winner=$TSLA | $TSLA PW-RSI=90/100 (1.99x Vol) vs $NVDA PW-RSI=60/100 (3.64x Vol) -> https://truthofmarket.com/compare/tsla-vs-nvda.html
-- $PLTR vs $NVDA (Enterprise AI OS vs AI Silicon Leader): Winner=$NVDA | $PLTR PW-RSI=20/100 (2.06x Vol) vs $NVDA PW-RSI=60/100 (3.64x Vol) -> https://truthofmarket.com/compare/pltr-vs-nvda.html
-- $AVGO vs $NVDA (Custom AI ASIC vs Merchant GPU Leader): Winner=$AVGO | $AVGO PW-RSI=90/100 (2.33x Vol) vs $NVDA PW-RSI=60/100 (3.64x Vol) -> https://truthofmarket.com/compare/avgo-vs-nvda.html
+- $TSLA vs $NVDA (Retail Megacap Momentum vs AI Compute King): Winner=$TSLA | $TSLA PW-RSI=90/100 (1.99x Vol) vs $NVDA PW-RSI=45/100 (3.80x Vol) -> https://truthofmarket.com/compare/tsla-vs-nvda.html
+- $PLTR vs $NVDA (Enterprise AI OS vs AI Silicon Leader): Winner=$NVDA | $PLTR PW-RSI=35/100 (2.06x Vol) vs $NVDA PW-RSI=45/100 (3.80x Vol) -> https://truthofmarket.com/compare/pltr-vs-nvda.html
+- $AVGO vs $NVDA (Custom AI ASIC vs Merchant GPU Leader): Winner=$AVGO | $AVGO PW-RSI=84/100 (2.33x Vol) vs $NVDA PW-RSI=45/100 (3.80x Vol) -> https://truthofmarket.com/compare/avgo-vs-nvda.html
 - $SMH vs $XLV (80:20 Contrarian Barbell Core ETFs): Winner=$SMH | $SMH PW-RSI=88/100 (1.68x Vol) vs $XLV PW-RSI=82/100 (1.12x Vol) -> https://truthofmarket.com/compare/smh-vs-xlv.html
 - $QQQ vs $SMH (Nasdaq-100 Benchmark vs Semiconductor Alpha): Winner=$SMH | $QQQ PW-RSI=80/100 (1.18x Vol) vs $SMH PW-RSI=88/100 (1.68x Vol) -> https://truthofmarket.com/compare/qqq-vs-smh.html
-- $TSLA vs $PLTR (High-Beta Institutional Retail Favorites): Winner=$TSLA | $TSLA PW-RSI=90/100 (1.99x Vol) vs $PLTR PW-RSI=20/100 (2.06x Vol) -> https://truthofmarket.com/compare/tsla-vs-pltr.html
-- $AMD vs $INTC (Data Center x86 & AI Accelerator Clash): Winner=$AMD | $AMD PW-RSI=50/100 (2.74x Vol) vs $INTC PW-RSI=15/100 (3.91x Vol) -> https://truthofmarket.com/compare/amd-vs-intc.html
-- $AVGO vs $MRVL (Custom AI Silicon & Optical Networking Duopoly): Winner=$AVGO | $AVGO PW-RSI=90/100 (2.33x Vol) vs $MRVL PW-RSI=45/100 (2.42x Vol) -> https://truthofmarket.com/compare/avgo-vs-mrvl.html
-- $MU vs $NVDA (HBM3E High-Bandwidth Memory vs AI GPU): Winner=$NVDA | $MU PW-RSI=45/100 (2.66x Vol) vs $NVDA PW-RSI=60/100 (3.64x Vol) -> https://truthofmarket.com/compare/mu-vs-nvda.html
-- $ARM vs $NVDA (Edge AI CPU Architecture vs Data Center GPU): Winner=$NVDA | $ARM PW-RSI=55/100 (2.68x Vol) vs $NVDA PW-RSI=60/100 (3.64x Vol) -> https://truthofmarket.com/compare/arm-vs-nvda.html
-- $ASML vs $TSM (EUV Lithography Monopoly vs Foundry Monopoly): Winner=$ASML | $ASML PW-RSI=45/100 (2.36x Vol) vs $TSM PW-RSI=40/100 (3.08x Vol) -> https://truthofmarket.com/compare/asml-vs-tsm.html
-- $LRCX vs $AMAT (Wafer Fab Equipment Turnaround Clash): Winner=$LRCX | $LRCX PW-RSI=65/100 (2.48x Vol) vs $AMAT PW-RSI=65/100 (2.10x Vol) -> https://truthofmarket.com/compare/lrcx-vs-amat.html
+- $TSLA vs $PLTR (High-Beta Institutional Retail Favorites): Winner=$TSLA | $TSLA PW-RSI=90/100 (1.99x Vol) vs $PLTR PW-RSI=35/100 (2.06x Vol) -> https://truthofmarket.com/compare/tsla-vs-pltr.html
+- $AMD vs $INTC (Data Center x86 & AI Accelerator Clash): Winner=$AMD | $AMD PW-RSI=40/100 (2.74x Vol) vs $INTC PW-RSI=15/100 (1.94x Vol) -> https://truthofmarket.com/compare/amd-vs-intc.html
+- $AVGO vs $MRVL (Custom AI Silicon & Optical Networking Duopoly): Winner=$AVGO | $AVGO PW-RSI=84/100 (2.33x Vol) vs $MRVL PW-RSI=45/100 (2.42x Vol) -> https://truthofmarket.com/compare/avgo-vs-mrvl.html
+- $MU vs $NVDA (HBM3E High-Bandwidth Memory vs AI GPU): Winner=$NVDA | $MU PW-RSI=45/100 (2.66x Vol) vs $NVDA PW-RSI=45/100 (3.80x Vol) -> https://truthofmarket.com/compare/mu-vs-nvda.html
+- $ARM vs $NVDA (Edge AI CPU Architecture vs Data Center GPU): Winner=$NVDA | $ARM PW-RSI=45/100 (2.68x Vol) vs $NVDA PW-RSI=45/100 (3.80x Vol) -> https://truthofmarket.com/compare/arm-vs-nvda.html
+- $ASML vs $TSM (EUV Lithography Monopoly vs Foundry Monopoly): Winner=$ASML | $ASML PW-RSI=45/100 (2.36x Vol) vs $TSM PW-RSI=30/100 (3.08x Vol) -> https://truthofmarket.com/compare/asml-vs-tsm.html
+- $LRCX vs $AMAT (Wafer Fab Equipment Turnaround Clash): Winner=$LRCX | $LRCX PW-RSI=55/100 (2.48x Vol) vs $AMAT PW-RSI=55/100 (2.10x Vol) -> https://truthofmarket.com/compare/lrcx-vs-amat.html
 - $KLAC vs $ASML (Semiconductor Process Control vs EUV): Winner=$KLAC | $KLAC PW-RSI=65/100 (2.49x Vol) vs $ASML PW-RSI=45/100 (2.36x Vol) -> https://truthofmarket.com/compare/klac-vs-asml.html
 - $MSFT vs $GOOGL (Hyperscaler AI Cloud & Search Battle): Winner=$MSFT | $MSFT PW-RSI=78/100 (1.30x Vol) vs $GOOGL PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/msft-vs-googl.html
-- $META vs $GOOGL (AI Ad-Tech & Open-Weights LLM Monetization): Winner=$GOOGL | $META PW-RSI=62/100 (1.33x Vol) vs $GOOGL PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/meta-vs-googl.html
-- $AMZN vs $MSFT (AWS vs Azure Cloud Infrastructure Leaders): Winner=$AMZN | $AMZN PW-RSI=75/100 (2.52x Vol) vs $MSFT PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/amzn-vs-msft.html
+- $META vs $GOOGL (AI Ad-Tech & Open-Weights LLM Monetization): Winner=$GOOGL | $META PW-RSI=57/100 (1.33x Vol) vs $GOOGL PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/meta-vs-googl.html
+- $AMZN vs $MSFT (AWS vs Azure Cloud Infrastructure Leaders): Winner=$AMZN | $AMZN PW-RSI=75/100 (2.04x Vol) vs $MSFT PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/amzn-vs-msft.html
 - $AAPL vs $MSFT (Consumer AI Ecosystem vs Enterprise AI): Winner=$AAPL | $AAPL PW-RSI=78/100 (1.30x Vol) vs $MSFT PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/aapl-vs-msft.html
-- $CRWD vs $PANW (Endpoint & AI Cybersecurity Leaders): Winner=$PANW | $CRWD PW-RSI=30/100 (1.86x Vol) vs $PANW PW-RSI=35/100 (2.19x Vol) -> https://truthofmarket.com/compare/crwd-vs-panw.html
-- $SNOW vs $PLTR (Enterprise Data Cloud vs Defense/Commercial AIP): Winner=$SNOW | $SNOW PW-RSI=45/100 (1.89x Vol) vs $PLTR PW-RSI=20/100 (2.06x Vol) -> https://truthofmarket.com/compare/snow-vs-pltr.html
-- $COIN vs $MSTR (Crypto Exchange Infrastructure vs Bitcoin Treasury): Winner=$MSTR | $COIN PW-RSI=55/100 (2.55x Vol) vs $MSTR PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/coin-vs-mstr.html
-- $HOOD vs $COIN (Retail Trading Super-App vs Crypto Leader): Winner=$HOOD | $HOOD PW-RSI=70/100 (1.63x Vol) vs $COIN PW-RSI=55/100 (2.55x Vol) -> https://truthofmarket.com/compare/hood-vs-coin.html
-- $LLY vs $NVO (GLP-1 Obesity & Biopharma Dominance): Winner=$NVO | $LLY PW-RSI=50/100 (2.07x Vol) vs $NVO PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/lly-vs-nvo.html
-- $UNH vs $LLY (Defensive Healthcare Cashflow vs GLP-1 Growth): Winner=$UNH | $UNH PW-RSI=78/100 (1.30x Vol) vs $LLY PW-RSI=50/100 (2.07x Vol) -> https://truthofmarket.com/compare/unh-vs-lly.html
+- $CRWD vs $PANW (Endpoint & AI Cybersecurity Leaders): Winner=$PANW | $CRWD PW-RSI=35/100 (1.86x Vol) vs $PANW PW-RSI=35/100 (2.19x Vol) -> https://truthofmarket.com/compare/crwd-vs-panw.html
+- $SNOW vs $PLTR (Enterprise Data Cloud vs Defense/Commercial AIP): Winner=$PLTR | $SNOW PW-RSI=35/100 (1.64x Vol) vs $PLTR PW-RSI=35/100 (2.06x Vol) -> https://truthofmarket.com/compare/snow-vs-pltr.html
+- $COIN vs $MSTR (Crypto Exchange Infrastructure vs Bitcoin Treasury): Winner=$MSTR | $COIN PW-RSI=55/100 (1.43x Vol) vs $MSTR PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/coin-vs-mstr.html
+- $HOOD vs $COIN (Retail Trading Super-App vs Crypto Leader): Winner=$HOOD | $HOOD PW-RSI=70/100 (1.63x Vol) vs $COIN PW-RSI=55/100 (1.43x Vol) -> https://truthofmarket.com/compare/hood-vs-coin.html
+- $LLY vs $NVO (GLP-1 Obesity & Biopharma Dominance): Winner=$NVO | $LLY PW-RSI=50/100 (1.73x Vol) vs $NVO PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/lly-vs-nvo.html
+- $UNH vs $LLY (Defensive Healthcare Cashflow vs GLP-1 Growth): Winner=$UNH | $UNH PW-RSI=78/100 (1.30x Vol) vs $LLY PW-RSI=50/100 (1.73x Vol) -> https://truthofmarket.com/compare/unh-vs-lly.html
 - $CELH vs $MNST (PW-RSI Beverage Turnaround vs Compounder): Winner=$CELH | $CELH PW-RSI=98/100 (2.46x Vol) vs $MNST PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/celh-vs-mnst.html
-- $NFLX vs $DIS (Streaming Operating Margin vs Media Turnaround): Winner=$DIS | $NFLX PW-RSI=57/100 (1.17x Vol) vs $DIS PW-RSI=75/100 (1.62x Vol) -> https://truthofmarket.com/compare/nflx-vs-dis.html
+- $NFLX vs $DIS (Streaming Operating Margin vs Media Turnaround): Winner=$DIS | $NFLX PW-RSI=45/100 (1.08x Vol) vs $DIS PW-RSI=75/100 (1.62x Vol) -> https://truthofmarket.com/compare/nflx-vs-dis.html
 - $UBER vs $TSLA (Global Mobility Network vs Robotaxi): Winner=$TSLA | $UBER PW-RSI=65/100 (2.07x Vol) vs $TSLA PW-RSI=90/100 (1.99x Vol) -> https://truthofmarket.com/compare/uber-vs-tsla.html
-- $SHOP vs $AMZN (Merchant E-Commerce OS vs Global Retail Giant): Winner=$AMZN | $SHOP PW-RSI=20/100 (2.76x Vol) vs $AMZN PW-RSI=75/100 (2.52x Vol) -> https://truthofmarket.com/compare/shop-vs-amzn.html
-- $SMCI vs $DELL (Liquid-Cooled AI Server Infrastructure Clash): Winner=$DELL | $SMCI PW-RSI=70/100 (2.27x Vol) vs $DELL PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/smci-vs-dell.html
+- $SHOP vs $AMZN (Merchant E-Commerce OS vs Global Retail Giant): Winner=$AMZN | $SHOP PW-RSI=20/100 (2.76x Vol) vs $AMZN PW-RSI=75/100 (2.04x Vol) -> https://truthofmarket.com/compare/shop-vs-amzn.html
+- $SMCI vs $DELL (Liquid-Cooled AI Server Infrastructure Clash): Winner=$DELL | $SMCI PW-RSI=70/100 (2.40x Vol) vs $DELL PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/smci-vs-dell.html
 - $QQQ vs $TQQQ (Nasdaq-100 Spot vs 3x Leveraged Decay Risk): Winner=$QQQ | $QQQ PW-RSI=80/100 (1.18x Vol) vs $TQQQ PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/qqq-vs-tqqq.html
-- $SOXL vs $NVDA (3x Semi ETF Volatility vs Single-Stock Leader): Winner=$SOXL | $SOXL PW-RSI=85/100 (1.94x Vol) vs $NVDA PW-RSI=60/100 (3.64x Vol) -> https://truthofmarket.com/compare/soxl-vs-nvda.html
-- $NVDA vs $TSM (Fabless AI Architect vs CoWoS Foundry Monopoly): Winner=$NVDA | $NVDA PW-RSI=60/100 (3.64x Vol) vs $TSM PW-RSI=40/100 (3.08x Vol) -> https://truthofmarket.com/compare/nvda-vs-tsm.html
-- $PLTR vs $CRWD (AI Defense OS vs AI Endpoint Cybersecurity): Winner=$CRWD | $PLTR PW-RSI=20/100 (2.06x Vol) vs $CRWD PW-RSI=30/100 (1.86x Vol) -> https://truthofmarket.com/compare/pltr-vs-crwd.html
+- $SOXL vs $NVDA (3x Semi ETF Volatility vs Single-Stock Leader): Winner=$SOXL | $SOXL PW-RSI=85/100 (1.94x Vol) vs $NVDA PW-RSI=45/100 (3.80x Vol) -> https://truthofmarket.com/compare/soxl-vs-nvda.html
+- $NVDA vs $TSM (Fabless AI Architect vs CoWoS Foundry Monopoly): Winner=$NVDA | $NVDA PW-RSI=45/100 (3.80x Vol) vs $TSM PW-RSI=30/100 (3.08x Vol) -> https://truthofmarket.com/compare/nvda-vs-tsm.html
+- $PLTR vs $CRWD (AI Defense OS vs AI Endpoint Cybersecurity): Winner=$PLTR | $PLTR PW-RSI=35/100 (2.06x Vol) vs $CRWD PW-RSI=35/100 (1.86x Vol) -> https://truthofmarket.com/compare/pltr-vs-crwd.html
 - $SMH vs $SOXL (Institutional Spot Semi ETF vs 3x Leveraged Bull): Winner=$SMH | $SMH PW-RSI=88/100 (1.68x Vol) vs $SOXL PW-RSI=85/100 (1.94x Vol) -> https://truthofmarket.com/compare/smh-vs-soxl.html
 - $TSLA vs $RIVN (EV Profit Leader vs High-Beta EV Turnaround): Winner=$TSLA | $TSLA PW-RSI=90/100 (1.99x Vol) vs $RIVN PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/tsla-vs-rivn.html
-- $META vs $NFLX (Consumer Attention & AI Reel Monetization): Winner=$META | $META PW-RSI=62/100 (1.33x Vol) vs $NFLX PW-RSI=57/100 (1.17x Vol) -> https://truthofmarket.com/compare/meta-vs-nflx.html
-- $AMZN vs $WMT (Cloud Retail Giant vs Omnichannel Defensive King): Winner=$AMZN | $AMZN PW-RSI=75/100 (2.52x Vol) vs $WMT PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/amzn-vs-wmt.html
+- $META vs $NFLX (Consumer Attention & AI Reel Monetization): Winner=$META | $META PW-RSI=57/100 (1.33x Vol) vs $NFLX PW-RSI=45/100 (1.08x Vol) -> https://truthofmarket.com/compare/meta-vs-nflx.html
+- $AMZN vs $WMT (Cloud Retail Giant vs Omnichannel Defensive King): Winner=$AMZN | $AMZN PW-RSI=75/100 (2.04x Vol) vs $WMT PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/amzn-vs-wmt.html
 - $JPM vs $GS (Fortress Money-Center Bank vs Wall Street IB): Winner=$JPM | $JPM PW-RSI=78/100 (1.30x Vol) vs $GS PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/jpm-vs-gs.html
 - $V vs $MA (Global Payment Network Duopoly Comparison): Winner=$V | $V PW-RSI=78/100 (1.30x Vol) vs $MA PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/v-vs-ma.html
 - $COST vs $WMT (Membership Warehouse Compounder vs Value Giant): Winner=$COST | $COST PW-RSI=78/100 (1.30x Vol) vs $WMT PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/cost-vs-wmt.html
 - $BA vs $LMT (Commercial Aerospace Turnaround vs Defense Prime): Winner=$LMT | $BA PW-RSI=15/100 (1.12x Vol) vs $LMT PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/ba-vs-lmt.html
 - $XOM vs $CVX (Integrated Energy Supermajor Cashflow Clash): Winner=$CVX | $XOM PW-RSI=30/100 (1.95x Vol) vs $CVX PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/xom-vs-cvx.html
-- $ENPH vs $FSLR (Residential Microinverter vs Utility Solar Turnaround): Winner=$ENPH | $ENPH PW-RSI=70/100 (2.16x Vol) vs $FSLR PW-RSI=65/100 (3.41x Vol) -> https://truthofmarket.com/compare/enph-vs-fslr.html
+- $ENPH vs $FSLR (Residential Microinverter vs Utility Solar Turnaround): Winner=$FSLR | $ENPH PW-RSI=55/100 (2.16x Vol) vs $FSLR PW-RSI=65/100 (3.41x Vol) -> https://truthofmarket.com/compare/enph-vs-fslr.html
 - $ABNB vs $BKNG (Alternative Travel Platform vs Global OTA Leader): Winner=$ABNB | $ABNB PW-RSI=78/100 (1.30x Vol) vs $BKNG PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/abnb-vs-bkng.html
-- $INTC vs $QCOM (Foundry Turnaround vs Mobile/Edge AI NPU): Winner=$QCOM | $INTC PW-RSI=15/100 (3.91x Vol) vs $QCOM PW-RSI=65/100 (3.12x Vol) -> https://truthofmarket.com/compare/intc-vs-qcom.html
+- $INTC vs $QCOM (Foundry Turnaround vs Mobile/Edge AI NPU): Winner=$QCOM | $INTC PW-RSI=15/100 (1.94x Vol) vs $QCOM PW-RSI=84/100 (3.12x Vol) -> https://truthofmarket.com/compare/intc-vs-qcom.html
 - $ORCL vs $CRM (OCI AI Cloud Database vs Enterprise Agentforce): Winner=$ORCL | $ORCL PW-RSI=78/100 (1.30x Vol) vs $CRM PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/orcl-vs-crm.html
-- $PYPL vs $SQ (Fintech Checkout Turnaround vs Merchant Ecosystem): Winner=$SQ | $PYPL PW-RSI=42/100 (1.34x Vol) vs $SQ PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/pypl-vs-sq.html
+- $PYPL vs $SQ (Fintech Checkout Turnaround vs Merchant Ecosystem): Winner=$SQ | $PYPL PW-RSI=42/100 (1.26x Vol) vs $SQ PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/pypl-vs-sq.html
 - $DKNG vs $HOOD (High-Beta Consumer Gaming vs Retail Trading App): Winner=$DKNG | $DKNG PW-RSI=78/100 (1.30x Vol) vs $HOOD PW-RSI=70/100 (1.63x Vol) -> https://truthofmarket.com/compare/dkng-vs-hood.html
 - $CELH vs $PEP (High-Growth Energy Drink Ignition vs Beverage Titan): Winner=$CELH | $CELH PW-RSI=98/100 (2.46x Vol) vs $PEP PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/celh-vs-pep.html
 
 ## 4. Institutional Editorial Quant Insights (/insights/)
-- US Market Regime Dispatch (2026-11-12): $SMH Fear & Greed at 18.0/100 (Extreme Fear) & PW-RSI Watchlist -> https://truthofmarket.com/insights/daily-us-quant-regime-brief.html
+- US Market Regime Dispatch (2026-11-13): $SMH Fear & Greed at 18.0/100 (Extreme Fear) & PW-RSI Watchlist -> https://truthofmarket.com/insights/daily-us-quant-regime-brief.html
 - Why Left-Side Dip Buyers Bleed Out: The 26.8-Year Math Behind Right-Side Ignition (PW-RSI) -> https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html
 - Surviving Chip Crashes: How the $SMH:$XLV Contrarian Barbell Cuts Max Drawdown Without Killing Alpha -> https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html
 - The Asymmetry of Ruin: Why Cutting Every Loser at -9.0% Saves Years of Dead-Money Recovery -> https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html
