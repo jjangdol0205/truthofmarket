@@ -5,11 +5,11 @@ export function renderModals(state) {
   const cfg = state.config || {};
   const lsMonthly = formatCheckoutUrl(
     cfg.ls_site1_monthly_url,
-    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en"
   );
   const lsLtd = formatCheckoutUrl(
     cfg.ls_site1_ltd_url,
-    "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b"
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en"
   );
   const tgChannelUrl = cfg.telegram_channel_url || "https://t.me/truthofmarketss";
   const ytUrl = cfg.youtube_url || "https://www.youtube.com/@RightSideAlpha";
@@ -35,23 +35,29 @@ export function renderModals(state) {
   return `
     <!-- LICENSE ACTIVATION MODAL -->
     <div class="modal-backdrop" id="licenseModal">
-      <div class="modal">
-        <div style="font-size:0.68rem; font-family:var(--font-mono); color:#93c5fd; text-transform:uppercase; letter-spacing:0.05em;">
-          AUTHENTICATION · LEMON SQUEEZY MERCHANT OF RECORD
+      <div class="modal" style="max-width:540px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+          <div style="font-size:0.68rem; font-family:var(--font-mono); color:#93c5fd; text-transform:uppercase; letter-spacing:0.05em;">
+            1-TAP INLINE CHECKOUT · INSTANT AUTO-UNLOCK
+          </div>
+          <button type="button" class="btn btn-sm" id="btnCancelLicense" style="padding:4px 10px;">✕ Close</button>
         </div>
-        <h3 style="font-size:1.12rem; font-weight:800; margin-top:4px; color:#ffffff;">Activate Pro Terminal License</h3>
-        <p style="color:var(--muted); font-size:0.82rem; margin-top:6px; line-height:1.5;">
-          Enter the license key issued upon Lemon Squeezy checkout to unlock all 72 US equity target levels, Daily VIP Ignition Order Book, Position Sizing Calculator, Position Doctor, and the 26-year Semiconductor CSV dataset.
+        <h3 style="font-size:1.18rem; font-weight:800; margin-top:4px; color:#ffffff;">Unlock All 72 VIP Stock Setups</h3>
+        <p style="color:#cbd5e1; font-size:0.86rem; margin-top:6px; line-height:1.5;">
+          Pick a plan below. Your screen unlocks <b>automatically</b> the second payment finishes — no need to copy or type any license key.
         </p>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:12px 0 8px;">
-          <a class="btn btn-primary btn-sm lemonsqueezy-button" data-direct-ls="1" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthly}" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:8px 10px; font-weight:700;">
-            🍋 Subscribe Pro ($29/mo) ↗
+        <div style="display:grid; grid-template-columns:1fr; gap:10px; margin:14px 0 10px;">
+          <a class="btn btn-primary lemonsqueezy-button" data-direct-ls="1" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthly}" style="justify-content:center; min-height:62px; padding:12px 16px; font-size:1.02rem; font-weight:800; border-radius:12px;">
+            Start Monthly VIP — $29/mo
           </a>
-          <a class="btn btn-emerald btn-sm lemonsqueezy-button" data-direct-ls="1" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" href="${lsLtd}" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:8px 10px; font-weight:700;">
-            🏆 Lifetime Pass ($199) ↗
+          <a class="btn btn-emerald lemonsqueezy-button" data-direct-ls="1" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" href="${lsLtd}" style="justify-content:center; min-height:62px; padding:12px 16px; font-size:1.02rem; font-weight:800; border-radius:12px;">
+            Get Lifetime VIP — $199 (Save 43%)
           </a>
         </div>
-        <div style="margin-bottom:10px; font-size:0.72rem; color:#94a3b8; text-align:center; line-height:1.45;">
+        <div style="margin-bottom:8px; font-size:0.78rem; color:#e2e8f0; font-weight:700; text-align:center; line-height:1.45;">
+          🍎 Apple Pay · Google Pay · Credit Card (1-Click Cancel Anytime)
+        </div>
+        <div style="margin-bottom:12px; font-size:0.72rem; color:#94a3b8; text-align:center; line-height:1.45;">
           Checkout issue in your region? Join <a href="https://t.me/truthofmarketss" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">@truthofmarketss</a> or request instant Pro activation via <a href="mailto:beable9489@gmail.com?subject=Instant%20Pro%20Activation%20Request%20(TruthOfMarket)" style="color:#93c5fd; font-weight:700; text-decoration:underline;">email</a>.
         </div>
         <div id="instantVipBridgeBox" style="display:none !important;">
@@ -71,21 +77,27 @@ export function renderModals(state) {
             </button>
           </div>
         </div>
-        <input type="text" id="licenseInput" value="${state.licenseKey || ""}" placeholder="Enter Lemon Squeezy License Key (XXXX-XXXX-XXXX-XXXX)" autocomplete="off" />
-        <div id="licenseMsg" style="font-size:0.8rem; margin-bottom:12px; min-height:1.2em;"></div>
-        <div style="display:flex; gap:8px; justify-content:space-between; align-items:center; flex-wrap:wrap;">
-          <div>
-            ${
-              state.isProUnlocked
-                ? `<button class="btn btn-sm" id="btnLockLicense" style="color:var(--fin-down); border-color:rgba(246,70,93,0.4);">Deactivate / Lock</button>`
-                : ""
-            }
+        <div id="licenseMsg" style="font-size:0.8rem; margin-bottom:8px; min-height:1.1em;"></div>
+        <details id="licenseRestoreDetails" ${state.isProUnlocked ? "open" : ""} style="background:#0b1120; border:1px solid rgba(148,163,184,0.25); border-radius:10px; padding:10px 12px;">
+          <summary style="cursor:pointer; font-size:0.8rem; font-weight:700; color:#93c5fd;">
+            🔑 Switching devices or already have a License Key? Restore here
+          </summary>
+          <div style="margin-top:10px;">
+            <input type="text" id="licenseInput" value="${state.licenseKey || ""}" placeholder="Enter Lemon Squeezy License Key (XXXX-XXXX-XXXX-XXXX)" autocomplete="off" />
+            <div style="display:flex; gap:8px; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-top:8px;">
+              <div>
+                ${
+                  state.isProUnlocked
+                    ? `<button class="btn btn-sm" id="btnLockLicense" style="color:var(--fin-down); border-color:rgba(246,70,93,0.4);">Deactivate / Lock</button>`
+                    : ""
+                }
+              </div>
+              <div style="display:flex; gap:8px;">
+                <button class="btn btn-primary" id="btnVerifyLicense">Restore &amp; Unlock VIP</button>
+              </div>
+            </div>
           </div>
-          <div style="display:flex; gap:8px;">
-            <button class="btn" id="btnCancelLicense">Cancel</button>
-            <button class="btn btn-primary" id="btnVerifyLicense">Verify & Unlock Terminal</button>
-          </div>
-        </div>
+        </details>
       </div>
     </div>
 

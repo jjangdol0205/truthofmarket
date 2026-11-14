@@ -102,7 +102,7 @@ export function renderStockTable(state) {
   const cfg = state.config || {};
   const monthlyUrl = formatCheckoutUrl(
     cfg.ls_site1_monthly_url,
-    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en"
   );
 
   const renderSortTh = (col, label, isNum = false) => {

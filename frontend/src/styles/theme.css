@@ -1087,9 +1087,10 @@ a {
 
 .pricing-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin: 20px 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 980px;
+  gap: 20px;
+  margin: 20px auto;
 }
 
 .price-card {

@@ -681,6 +681,10 @@ function bindEvents() {
   const openLicenseModal = (_prefill = false, customNotice = "") => {
     if (!licenseModal) return;
     licenseModal.style.display = "flex";
+    const detailsEl = document.getElementById("licenseRestoreDetails");
+    if (detailsEl && (_prefill || state.isProUnlocked)) {
+      detailsEl.open = true;
+    }
     const inputEl = document.getElementById("licenseInput");
     const msgEl = document.getElementById("licenseMsg");
     if (inputEl && !inputEl.value.trim()) {
@@ -875,7 +879,8 @@ function bindEvents() {
       const btn = e.target.closest(".lemonsqueezy-button");
       if (!btn) return;
       const rawHref = btn.getAttribute("href") || "";
-      const href = formatCheckoutUrl(rawHref, rawHref);
+      const href =
+        typeof formatCheckoutUrl === "function" ? formatCheckoutUrl(rawHref, rawHref) : rawHref;
       if (href && href !== rawHref) {
         btn.setAttribute("href", href);
       }

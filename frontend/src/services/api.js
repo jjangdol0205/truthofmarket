@@ -36,9 +36,9 @@ export function getVipTelegramUrl(isPro = false) {
 }
 
 export const CANONICAL_TOM_MONTHLY_URL =
-  "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1";
+  "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en";
 export const CANONICAL_TOM_LIFETIME_URL =
-  "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1";
+  "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en";
 
 export function formatCheckoutUrl(
   rawUrl,
@@ -57,10 +57,14 @@ export function formatCheckoutUrl(
   ) {
     return CANONICAL_TOM_LIFETIME_URL;
   }
-  if (/[?&]embed=1\b/i.test(base)) {
-    return base;
+  let out = base;
+  if (!/[?&]embed=1\b/i.test(out)) {
+    out = `${out}${out.includes("?") ? "&" : "?"}embed=1`;
   }
-  return `${base}${base.includes("?") ? "&" : "?"}embed=1`;
+  if (!/[?&]locale=/i.test(out)) {
+    out = `${out}&locale=en`;
+  }
+  return out;
 }
 
 function isStaticHost() {

@@ -2,29 +2,36 @@ import { formatCheckoutUrl, getVipTelegramUrl } from "../services/api.js";
 
 const PRICING_COPY = {
   en: {
-    t1Badge: "INSTITUTIONAL PRO",
-    t1Title: "Pro Quantitative Terminal & Daily SEC Brief",
+    heading: "Simple, Transparent VIP Access — Unlocks Instantly After Payment",
+    subheading: "Choose Monthly or Lifetime below. Your screen unlocks automatically the moment checkout finishes — no license key typing required.",
+    t1Badge: "MONTHLY VIP",
+    t1Title: "Monthly VIP Terminal & Daily Signals",
     t1Period: "/ month",
     t1Items: [
-      "Unmask all 72 US Equity PW-RSI Scores, MA60 Breakout Triggers & -9% Stop Levels",
-      "Daily 08:10 EST Primary-Filing (10-K/10-Q/8-K) Turnaround Research Digest",
-      "Position Risk & 55-Day Time-Stop Diagnostic Engine (Position Doctor)",
-      "Full TradingView Pine Script v5 Indicator Source Code + SemiFearGreed 26Y CSV",
+      "Unmask all 72 US Stock Entry Triggers, -9% Stop-Loss & +100% Profit Targets",
+      "Daily 08:10 EST SEC Filing (10-K/10-Q/8-K) Turnaround Briefs",
+      "Position Doctor: Instant -9% Stop & 55-Day Time-Stop Check",
+      "Full TradingView Pine Script v5 + 26-Year Semiconductor CSV",
     ],
-    t1Btn: "Subscribe via Lemon Squeezy ($29/mo)",
-    t2Badge: "FOUNDER ALLOCATION",
-    t2Title: "Lifetime Research & Terminal License",
+    t1Btn: "Start Monthly VIP — $29/mo",
+    t1PayNote: "🍎 Apple Pay · Google Pay · Credit Card (1-Click Cancel Anytime)",
+    t2Badge: "LIFETIME VIP",
+    t2Title: "Lifetime VIP All-Access Pass",
     t2Period: "/ one-time",
     t2Items: [
-      "Permanent License Key — Zero recurring monthly subscription charges",
-      "Complete 26.8-Year (2000–2026) US Equity & Semiconductor ETF Backtest Datasets",
-      "Multilingual Access (English, Japanese & Korean SEC Research Briefs)",
-      "Full Access to both RightSideAlpha and SemiFearGreed Pro Features",
+      "Pay Once, Own Forever — Zero recurring monthly charges",
+      "Complete 26.8-Year (2000–2026) US Equity & Semiconductor Datasets",
+      "English & Japanese Research Briefs + VIP Alert Channel",
+      "Permanent Access to Both RightSideAlpha & SemiFearGreed Pro",
     ],
-    t2Btn: "Acquire Lifetime License ($199)",
-    t3Badge: "ESSENTIAL US EQUITY PARTNER TOOLS",
-    t3Title: "Institutional Charting, Consensus & Automated Scanners",
-    t3Desc: "Verify MA20/MA60 volume breakouts, Wall Street EPS revisions, and automated multi-timeframe trendlines with our official US equity partner stack:",
+    t2Btn: "Get Lifetime VIP — $199",
+    t2PayNote: "🍎 Apple Pay · Google Pay · Credit Card (One-Time · Instant Auto-Unlock)",
+    autoUnlockNote: "✨ Instant Auto-Unlock: All 72 VIP stock setups open automatically on this screen right after payment.",
+    restoreSummary: "🔑 Switching devices or already paid? Restore your VIP License Key here",
+    restoreBtn: "Open License Key Restore Box",
+    t3Badge: "OPTIONAL EXTERNAL CHARTING & COMMUNITY LINKS",
+    t3Title: "External Charting Platforms & Free Public Channels",
+    t3Desc: "Optional third-party charting tools and official public channels (separate from your TruthOfMarket VIP pass):",
     t3Items: [
       "<b>TradingView Pro (ID: 1173809)</b> — Multi-timeframe MA20/MA60 & Pine Script v5 execution",
       "<b>Seeking Alpha Premium (better_life333)</b> — Quant Grades & 1-2Y consensus EPS revision tracking",
@@ -36,29 +43,36 @@ const PRICING_COPY = {
     tgBtn: "🔒 Pro VIP Telegram ($SMH/$XLV & 72-Stock Live News)",
   },
   jp: {
-    t1Badge: "INSTITUTIONAL PRO",
-    t1Title: "Pro クオンツターミナル＆日次SECリサーチ",
+    heading: "シンプルでわかりやすいVIPプラン — 決済完了と同時に自動アンロック",
+    subheading: "月額プランまたは永久パスをお選びください。決済完了と同時にこの画面で自動解放されます（36桁キーのコピー＆貼り付け不要）。",
+    t1Badge: "MONTHLY VIP",
+    t1Title: "月額VIPターミナル＆日次SECリサーチ",
     t1Period: "/ 月額",
     t1Items: [
-      "米国72銘柄すべてのMA60突破トリガー(TRG)・-9%損切(STP)・+100%目標値(TP1)を完全公開",
+      "米国72銘柄すべての突破トリガー(TRG)・-9%損切(STP)・+100%目標値(TP1)を完全公開",
       "毎朝08:10 EST更新・SEC一次開示(10-K/10-Q/8-K)ターンアラウンド分析ブリーフ",
-      "ポジションドクター：保有銘柄の-9%損切 / 55日タイムストップ / 元本回収を即時診断",
-      "TradingView Pine Script v5 インジケーター完全ソース＋半導体指数26年分CSVダウンロード",
+      "ポジションドクター：保有銘柄の-9%損切 / 55日タイムストップを即時診断",
+      "TradingView Pine Script v5 完全ソース＋半導体指数26年分CSVダウンロード",
     ],
-    t1Btn: "Lemon SqueezyでPro購読 ($29/月)",
-    t2Badge: "FOUNDER LIFETIME",
-    t2Title: "永久リサーチ＆ターミナルライセンス",
+    t1Btn: "Start Monthly VIP — $29/mo (月額VIPを始める)",
+    t1PayNote: "🍎 Apple Pay · Google Pay · Credit Card (1-Click Cancel Anytime / いつでも1クリック解約)",
+    t2Badge: "LIFETIME VIP",
+    t2Title: "永久VIPオールアクセスパス (買い切り)",
     t2Period: "/ 買い切り(永久)",
     t2Items: [
-      "永久ライセンスキー発行 — 毎月のサブスクリプション費用ゼロ",
-      "26.8年間(2000–2026)の米国株＆半導体ETF完全バックテストデータセット収録",
-      "英語・日本語対応のSECリサーチブリーフ＆Telegramアラート連携",
+      "1回のお支払いのみ — 毎月のサブスクリプション費用ゼロ",
+      "26.8年間(2000–2026)の米国株＆半導体ETF完全データセット収録",
+      "英語・日本語対応のSECリサーチブリーフ＆VIPアラート連携",
       "RightSideAlpha＋SemiFearGreedの全Pro機能を永久アンロック",
     ],
-    t2Btn: "永久ライセンスを取得 ($199)",
-    t3Badge: "ESSENTIAL US EQUITY PARTNER TOOLS",
-    t3Title: "米国株必須チャート検証・EPSコンセンサス・AIスキャナー",
-    t3Desc: "MA20/MA60出来高ブレイクの確認、EPSリビジョン検証、マルチタイムフレーム自動トレンドライン分析：",
+    t2Btn: "Get Lifetime VIP — $199 (永久VIPパスを取得)",
+    t2PayNote: "🍎 Apple Pay · Google Pay · Credit Card (買い切り・決済後すぐ自動アンロック)",
+    autoUnlockNote: "✨ 決済完了と同時にブラウザ上で全72銘柄のVIPデータが自動解放されます（キー入力不要）。",
+    restoreSummary: "🔑 機種変更・別ブラウザでのVIPライセンスキー復元はこちら",
+    restoreBtn: "ライセンスキー復元ウィンドウを開く",
+    t3Badge: "OPTIONAL EXTERNAL CHARTING & COMMUNITY LINKS",
+    t3Title: "外部チャート検証ツール＆公式SNSチャンネル（任意）",
+    t3Desc: "MA20/MA60出来高ブレイクの確認やEPSコンセンサス検証に便利な外部提携ツール＆公式チャンネル：",
     t3Items: [
       "<b>TradingView Pro (1173809)</b> — マルチタイムフレームMA20/MA60＆Pine Script v5実行",
       "<b>Seeking Alpha Premium (better_life333)</b> — クオンツ評価＆1〜2年先EPSコンセンサス推移",
@@ -107,6 +121,10 @@ export function renderPricing(state) {
   return `
     <div id="pricing" style="scroll-margin-top:80px;">
       <span id="pricingSection" style="display:block; height:0; overflow:hidden;"></span>
+      <div style="max-width:980px; margin:0 auto 14px; text-align:center;">
+        <h2 style="font-size:1.35rem; font-weight:900; color:#ffffff; margin:0 0 6px;">${c.heading}</h2>
+        <p style="font-size:0.9rem; color:#cbd5e1; margin:0; line-height:1.5;">${c.subheading}</p>
+      </div>
       <div class="pricing-grid">
         <!-- Tier 1: Pro Monthly -->
         <div class="price-card featured">
@@ -115,19 +133,22 @@ export function renderPricing(state) {
               <span class="badge badge-ignition">${c.t1Badge}</span>
               <span class="badge price-badge-popular">POPULAR</span>
             </div>
-            <h3 style="font-size:1.12rem; font-weight:800; margin-top:10px; color:#ffffff;">
+            <h3 style="font-size:1.18rem; font-weight:800; margin-top:10px; color:#ffffff;">
               ${c.t1Title}
             </h3>
-            <div class="price-num">$29 <span style="font-size:0.82rem; color:var(--muted); font-family:var(--font-sans); font-weight:500;">${c.t1Period}</span></div>
+            <div class="price-num">$29 <span style="font-size:0.86rem; color:var(--muted); font-family:var(--font-sans); font-weight:600;">${c.t1Period}</span></div>
             <div class="price-subtext">Billed monthly · Cancel anytime with 1 click</div>
             <ul class="price-list">
               ${c.t1Items.map((item) => `<li>${checkSvg}<span>${item}</span></li>`).join("")}
             </ul>
           </div>
           <div>
-            <a class="btn btn-primary lemonsqueezy-button" id="cardMonthlyBtn" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthly}" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:10px; width:100%;">
+            <a class="btn btn-primary lemonsqueezy-button" id="cardMonthlyBtn" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthly}" style="justify-content:center; min-height:64px; padding:14px 18px; width:100%; font-size:1.06rem; font-weight:800; border-radius:12px;">
               ${c.t1Btn}
             </a>
+            <div style="margin-top:9px; font-size:0.8rem; color:#e2e8f0; font-weight:700; text-align:center; line-height:1.4;">
+              ${c.t1PayNote}
+            </div>
             ${checkoutFallbackHtml}
           </div>
         </div>
@@ -139,39 +160,83 @@ export function renderPricing(state) {
               <span class="badge badge-watch">${c.t2Badge}</span>
               <span class="badge price-badge-lifetime">BEST VALUE · SAVE 43%</span>
             </div>
-            <h3 style="font-size:1.12rem; font-weight:800; margin-top:10px; color:#ffffff;">
+            <h3 style="font-size:1.18rem; font-weight:800; margin-top:10px; color:#ffffff;">
               ${c.t2Title}
             </h3>
-            <div class="price-num">$199 <span style="font-size:0.82rem; color:var(--muted); font-family:var(--font-sans); font-weight:500;">${c.t2Period}</span></div>
-            <div class="price-subtext">One-time payment · Instant permanent license delivery</div>
+            <div class="price-num">$199 <span style="font-size:0.86rem; color:var(--muted); font-family:var(--font-sans); font-weight:600;">${c.t2Period}</span></div>
+            <div class="price-subtext">One-time payment · Instant automatic unlock on screen</div>
             <div class="price-savings-pill">⚡ Breakeven in 6.8 Months vs $29/mo ($199 vs $348/yr) · 100% Free Thereafter</div>
             <ul class="price-list">
               ${c.t2Items.map((item) => `<li>${checkSvg}<span>${item}</span></li>`).join("")}
             </ul>
           </div>
           <div>
-            <a class="btn btn-emerald lemonsqueezy-button" id="cardLtdBtn" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" href="${lsLtd}" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:10px; width:100%;">
+            <a class="btn btn-emerald lemonsqueezy-button" id="cardLtdBtn" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" href="${lsLtd}" style="justify-content:center; min-height:64px; padding:14px 18px; width:100%; font-size:1.06rem; font-weight:800; border-radius:12px;">
               ${c.t2Btn}
             </a>
+            <div style="margin-top:9px; font-size:0.8rem; color:#a7f3d0; font-weight:700; text-align:center; line-height:1.4;">
+              ${c.t2PayNote}
+            </div>
             ${checkoutFallbackHtml}
           </div>
         </div>
+      </div>
 
-        <!-- Tier 3: Essential US Equity Partner Tools -->
-        <div class="price-card">
-          <div>
-            <span class="badge" style="background:rgba(41,98,255,0.14); color:#93c5fd; border:1px solid rgba(41,98,255,0.3);">${c.t3Badge}</span>
-            <h3 style="font-size:1.12rem; font-weight:800; margin-top:10px; color:#ffffff;">
-              ${c.t3Title}
-            </h3>
-            <p style="color:var(--muted); font-size:0.8rem; margin-top:8px; line-height:1.5;">
-              ${c.t3Desc}
-            </p>
-            <ul class="price-list">
-              ${c.t3Items.map((item) => `<li>${checkSvg}<span>${item}</span></li>`).join("")}
-            </ul>
+      <!-- Instant Auto-Unlock Note & Collapsible Device License Restore -->
+      <div style="max-width:980px; margin:10px auto 0; text-align:center;">
+        <div style="font-size:0.82rem; color:#34d399; font-weight:700; margin-bottom:10px;">
+          ${c.autoUnlockNote}
+        </div>
+        <details style="background:#0b1120; border:1px solid rgba(148,163,184,0.22); border-radius:10px; padding:10px 16px; text-align:left;">
+          <summary style="cursor:pointer; font-size:0.82rem; font-weight:700; color:#93c5fd; list-style:none;">
+            ${c.restoreSummary} ▾
+          </summary>
+          <div style="margin-top:10px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; font-size:0.8rem; color:#cbd5e1;">
+            <span>Already have a Lemon Squeezy receipt key on another computer or phone? Restore your VIP session with 1 click:</span>
+            <button type="button" class="btn btn-sm" onclick="var b=document.getElementById('btnOpenLicense');if(b){b.click();}else{var m=document.getElementById('licenseModal');if(m)m.style.display='flex';}" style="font-weight:700; border-color:rgba(147,197,253,0.45); color:#93c5fd;">
+              ${c.restoreBtn} →
+            </button>
           </div>
-          <div style="display:flex; flex-direction:column; gap:7px;">
+        </details>
+      </div>
+
+      <!-- Trust & Security Micro-Ribbon (Lemon Squeezy PCI-DSS & Instant Key Delivery) -->
+      <div class="pricing-trust-ribbon" style="max-width:980px; margin:16px auto 0;">
+        <div class="trust-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span>Merchant of Record: <b>Lemon Squeezy, LLC</b></span>
+        </div>
+        <div class="trust-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>256-Bit SSL Encrypted Inline Checkout</span>
+        </div>
+        <div class="trust-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>Instant On-Screen Auto-Unlock &amp; Receipt Key</span>
+        </div>
+      </div>
+
+      <!-- Separated Lower Footer Section: Tier 3 Partner Tools & Public Channels -->
+      <details style="max-width:980px; margin:18px auto 0; background:rgba(15,23,42,0.55); border:1px solid var(--border-card); border-radius:10px; padding:12px 18px;">
+        <summary style="cursor:pointer; font-size:0.8rem; font-weight:700; color:#94a3b8; display:flex; align-items:center; justify-content:space-between; gap:8px;">
+          <span>🔗 ${c.t3Title}</span>
+          <span style="font-size:0.72rem; color:#64748b;">Expand Partner Tools &amp; Community ▾</span>
+        </summary>
+        <div style="margin-top:14px; padding-top:12px; border-top:1px solid rgba(148,163,184,0.14);">
+          <p style="color:var(--muted); font-size:0.8rem; margin:0 0 10px; line-height:1.5;">
+            ${c.t3Desc}
+          </p>
+          <ul class="price-list" style="margin-bottom:12px;">
+            ${c.t3Items.map((item) => `<li>${checkSvg}<span>${item}</span></li>`).join("")}
+          </ul>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:8px;">
             <a class="btn" id="affTvBtn" href="${directTvUrl}" target="_blank" rel="noopener noreferrer" style="justify-content:center;">
               ${c.tvBtn}
             </a>
@@ -184,40 +249,15 @@ export function renderPricing(state) {
             <a class="btn ${state.isProUnlocked ? "" : "btn-gated-vip-tg"}" id="pricingTelegramChannelBtn" href="${getVipTelegramUrl(state.isProUnlocked)}" ${state.isProUnlocked ? 'target="_blank" rel="noopener noreferrer"' : ""} style="justify-content:center; border-color:rgba(56,189,248,0.45); color:#38bdf8; font-weight:700;">
               ${state.isProUnlocked ? "👑 Enter Pro VIP Telegram Channel ↗" : c.tgBtn}
             </a>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-              <a class="btn" id="pricingYoutubeBtn" href="${cfg.youtube_url || "https://www.youtube.com/@RightSideAlpha"}" target="_blank" rel="noopener noreferrer" style="justify-content:center; border-color:rgba(239,68,68,0.4); color:#fca5a5;">
-                📺 YouTube (@RightSideAlpha) ↗
-              </a>
-              <a class="btn" id="pricingInstagramBtn" href="${cfg.instagram_url || "https://www.instagram.com/rightsidealpha"}" target="_blank" rel="noopener noreferrer" style="justify-content:center; border-color:rgba(236,72,153,0.4); color:#f9a8d4;">
-                📸 Instagram (@rightsidealpha) ↗
-              </a>
-            </div>
+            <a class="btn" id="pricingYoutubeBtn" href="${cfg.youtube_url || "https://www.youtube.com/@RightSideAlpha"}" target="_blank" rel="noopener noreferrer" style="justify-content:center; border-color:rgba(239,68,68,0.4); color:#fca5a5;">
+              📺 YouTube (@RightSideAlpha) ↗
+            </a>
+            <a class="btn" id="pricingInstagramBtn" href="${cfg.instagram_url || "https://www.instagram.com/rightsidealpha"}" target="_blank" rel="noopener noreferrer" style="justify-content:center; border-color:rgba(236,72,153,0.4); color:#f9a8d4;">
+              📸 Instagram (@rightsidealpha) ↗
+            </a>
           </div>
         </div>
-      </div>
-
-      <!-- Trust & Security Micro-Ribbon (Lemon Squeezy PCI-DSS & Instant Key Delivery) -->
-      <div class="pricing-trust-ribbon">
-        <div class="trust-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-          </svg>
-          <span>Merchant of Record: <b>Lemon Squeezy, LLC</b></span>
-        </div>
-        <div class="trust-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-          </svg>
-          <span>256-Bit SSL Encrypted Checkout</span>
-        </div>
-        <div class="trust-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-          <span>Instant Key Delivery &amp; VAT Invoicing</span>
-        </div>
-      </div>
+      </details>
     </div>
   `;
 }
