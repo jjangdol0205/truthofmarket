@@ -23,13 +23,13 @@
 | $VRTX | Vertex Pharmaceuticals | $538.60 | 75/100 | 52.8 | 2.12x | $490.13 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/vrtx.html |
 | $DIS | Walt Disney Co | $118.97 | 75/100 | 67.1 | 1.62x | $108.26 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/dis.html |
 | $AMZN | Amazon.com Inc | $266.66 | 75/100 | 57.4 | 2.04x | $242.66 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/amzn.html |
-| $SBUX | Starbucks Corp | $106.44 | 75/100 | 57.2 | 1.45x | $96.86 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/sbux.html |
+| $SBUX | Starbucks Corp | $106.44 | 75/100 | 58.9 | 1.45x | $96.86 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/sbux.html |
 | $CCL | Carnival Corp | $29.23 | 75/100 | 55.9 | 1.57x | $26.60 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/ccl.html |
 | $SOFI | SoFi Technologies | $15.42 | 72/100 | 44.3 | 1.34x | $14.03 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/sofi.html |
 | $F | Ford Motor Co | $11.91 | 72/100 | 43.8 | 1.27x | $10.84 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/f.html |
 | $HOOD | Robinhood Markets | $77.86 | 70/100 | 33.2 | 1.63x | $70.85 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/hood.html |
 | $MBLY | Mobileye Global | $5.56 | 70/100 | 36.3 | 2.36x | $5.06 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mbly.html |
-| $SMCI | Super Micro Computer | $26.86 | 70/100 | 36.2 | 2.40x | $24.44 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/smci.html |
+| $SMCI | Super Micro Computer | $26.87 | 70/100 | 36.2 | 2.40x | $24.45 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/smci.html |
 | $SNAP | Snap Inc | $5.26 | 70/100 | 43.3 | 1.86x | $4.79 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/snap.html |
 | $GM | General Motors Co | $86.00 | 67/100 | 51.7 | 1.28x | $78.26 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/gm.html |
 | $GE | GE Aerospace | $331.81 | 67/100 | 57.5 | 1.20x | $301.95 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/ge.html |
@@ -44,13 +44,13 @@
 | $LRCX | Lam Research Corp | $225.92 | 55/100 | 41.9 | 2.48x | $205.59 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/lrcx.html |
 | $UPST | Upstart Holdings | $19.56 | 55/100 | 35.5 | 3.02x | $17.80 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/upst.html |
 | $FLNC | Fluence Energy | $4.68 | 55/100 | 33.9 | 2.77x | $4.26 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/flnc.html |
-| $COIN | Coinbase Global | $127.64 | 55/100 | 32.4 | 1.43x | $116.15 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/coin.html |
+| $COIN | Coinbase Global | $127.65 | 55/100 | 32.4 | 1.43x | $116.16 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/coin.html |
 | $SEDG | SolarEdge Tech | $23.85 | 55/100 | 33.3 | 2.92x | $21.70 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/sedg.html |
 | $PINS | Pinterest Inc | $19.15 | 52/100 | 41.4 | 1.27x | $17.43 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/pins.html |
 | $MPWR | Monolithic Power Systems | $1390.54 | 50/100 | 56.1 | 2.52x | $1265.39 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mpwr.html |
 | $SPOT | Spotify Tech | $612.63 | 50/100 | 62.6 | 1.47x | $557.49 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/spot.html |
 | $REGN | Regeneron Pharma | $955.47 | 50/100 | 68.4 | 2.09x | $869.48 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/regn.html |
-| $LLY | Eli Lilly & Co | $1443.50 | 50/100 | 69.7 | 1.73x | $1313.59 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/lly.html |
+| $LLY | Eli Lilly & Co | $1443.50 | 50/100 | 69.9 | 1.73x | $1313.59 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/lly.html |
 | $ROKU | Roku Inc | $160.52 | 50/100 | 61.0 | 3.44x | $146.07 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/roku.html |
 | $DAL | Delta Air Lines | $86.25 | 50/100 | 54.0 | 1.57x | $78.49 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/dal.html |
 | $U | Unity Software Inc | $52.81 | 50/100 | 71.0 | 4.39x | $48.06 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/u.html |
