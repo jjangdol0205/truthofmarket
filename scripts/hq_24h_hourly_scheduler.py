@@ -408,8 +408,44 @@ def _safe_run(name: str, fn, hour: int, force: bool, fallback: dict) -> dict:
         return fb
 
 
+def _try_claim_hourly_slot(date_str: str, hour: int) -> bool:
+    """Atomically claims YYYY-MM-DD HH:00 so daemon + Windows Scheduled Task never double-execute."""
+    claims_dir = DIV1_DIR / "data" / "hq_hourly_claims"
+    claims_dir.mkdir(parents=True, exist_ok=True)
+    claim_path = claims_dir / f"claim_{date_str}_{hour:02d}.lock"
+    if claim_path.exists():
+        if _is_hour_already_logged(date_str, hour):
+            return False
+        try:
+            if (time.time() - claim_path.stat().st_mtime) < 900:
+                return False
+            claim_path.unlink(missing_ok=True)
+        except OSError:
+            return False
+    try:
+        fd = os.open(str(claim_path), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+        try:
+            os.write(fd, f"{os.getpid()} {datetime.now(KST).isoformat()}\n".encode("utf-8"))
+        finally:
+            os.close(fd)
+        return True
+    except FileExistsError:
+        return False
+    except OSError:
+        return not _is_hour_already_logged(date_str, hour)
+
+
 def execute_hourly_cycle(hour: int, notify: bool = True, force_all: bool = False) -> dict:
     kst_now = datetime.now(KST)
+    if not force_all and not _try_claim_hourly_slot(kst_now.strftime("%Y-%m-%d"), hour):
+        skip_summary = f"[SKIP_DUPLICATE_CLAIM] {kst_now.strftime('%Y-%m-%d')} {hour:02d}:00 already claimed/completed."
+        print(skip_summary)
+        return {
+            "timestamp_kst": kst_now.strftime("%Y-%m-%d %H:%M:%S KST"),
+            "hour": f"{hour:02d}:00",
+            "skipped_duplicate": True,
+            "result_summary": skip_summary,
+        }
     print(f"[{kst_now.strftime('%Y-%m-%d %H:%M:%S KST')}] Executing Zero-Ban v2 cycle for hour {hour:02d}:00 (force={force_all})...")
     sys.stdout.flush()
 
@@ -446,13 +482,17 @@ def execute_hourly_cycle(hour: int, notify: bool = True, force_all: bool = False
     except Exception as e:
         print(f"[LemonSqueezy Warning] {e}", file=sys.stderr)
 
-    # Once-daily Market Close Freshness & Affiliate Expiration Self-Healing Watchdog (runs after 06:00 KST)
+    # Once-daily Market Close Freshness & Affiliate Expiration Self-Healing Watchdog
+    # At 06:00-08:00 KST, pass --no-deploy so healed updates fold into the single morning promo commit
     if hour >= 6:
         try:
             watchdog_py = HQ_DIR / "text_automation_hq" / "hq_daily_freshness_and_link_healer.py"
             if watchdog_py.exists():
+                wd_cmd = [sys.executable, str(watchdog_py), "--daily-gate"]
+                if hour <= 8:
+                    wd_cmd.append("--no-deploy")
                 subprocess.run(
-                    [sys.executable, str(watchdog_py), "--daily-gate"],
+                    wd_cmd,
                     cwd=str(HQ_DIR / "text_automation_hq"),
                     timeout=240,
                     capture_output=True,
@@ -620,12 +660,22 @@ def main():
             hour = int(sys.argv[idx + 1]) % 24
             explicit_hour = True
 
-    if not force_all and not explicit_hour and _is_hour_already_logged(kst_now.strftime("%Y-%m-%d"), hour):
-        skip_msg = f"[SKIP] {kst_now.strftime('%Y-%m-%d')} {hour:02d}:00 cycle already completed cleanly."
-        _append_exec_log(skip_msg)
-        if "--silent" not in sys.argv:
-            print(skip_msg)
-        return
+    if not force_all and not explicit_hour:
+        if SCHEDULER_PID_FILE.exists():
+            try:
+                d_pid = int(SCHEDULER_PID_FILE.read_text(encoding="utf-8").strip())
+                if d_pid != os.getpid():
+                    chk = subprocess.run(["tasklist", "/FI", f"PID eq {d_pid}", "/NH"], capture_output=True, text=True, errors="ignore")
+                    if str(d_pid) in (chk.stdout or "") and "python" in (chk.stdout or "").lower():
+                        return
+            except Exception:
+                pass
+        if _is_hour_already_logged(kst_now.strftime("%Y-%m-%d"), hour):
+            skip_msg = f"[SKIP] {kst_now.strftime('%Y-%m-%d')} {hour:02d}:00 cycle already completed cleanly."
+            _append_exec_log(skip_msg)
+            if "--silent" not in sys.argv:
+                print(skip_msg)
+            return
 
     entry = execute_hourly_cycle(hour, notify=notify, force_all=force_all)
     _append_exec_log(f"Scheduled run {hour:02d}:00 -> {entry.get('result_summary')}")
