@@ -30,10 +30,62 @@
   <script type="module" crossorigin src="/assets/index-BIziPp23.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/index-CaOpdap3.css" />
   <script>
-  /* === HQ Edge Real-Human Visitor & KPI Beacon (tom_truthofmarket) === */
+  /* === HQ Edge Real-Human Visitor, Free Email Signup & KPI Beacon (tom_truthofmarket) === */
   (function(){
     try {
       if (typeof window === 'undefined' || typeof navigator === 'undefined') return;
+      var kst = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+      var ns = 'tom_truthofmarket';
+      window.__tomSubmitLeadMagnet = function(ev, formEl, topicLabel) {
+        if (ev && ev.preventDefault) ev.preventDefault();
+        var input = formEl ? formEl.querySelector('input[type="email"]') : null;
+        var msgBox = formEl ? formEl.parentNode.querySelector('.tom-lead-status') : null;
+        var email = input ? String(input.value || '').trim() : '';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          if (msgBox) {
+            msgBox.style.display = 'block';
+            msgBox.style.color = '#fca5a5';
+            msgBox.textContent = 'Please enter a valid email address (e.g., investor@email.com).';
+          }
+          if (input) input.focus();
+          return false;
+        }
+        try {
+          localStorage.setItem('tom_free_member_email', email);
+          localStorage.setItem('tom_free_member_since', kst);
+          var wl = JSON.parse(localStorage.getItem('tom_free_watchlist') || '[]');
+          if (topicLabel && wl.indexOf(topicLabel) === -1) {
+            wl.push(topicLabel);
+            localStorage.setItem('tom_free_watchlist', JSON.stringify(wl.slice(-20)));
+          }
+          var dedupeKey = 'hq_signup_' + ns + '_' + kst + '_' + email.toLowerCase();
+          var ua = navigator.userAgent || '';
+          var host = (location && location.hostname) || '';
+          var isHumanLive = !navigator.webdriver && !/bot|crawl|spider|slurp|headless|lighthouse|python|curl|node|axios/i.test(ua) && host && host !== 'localhost' && host !== '127.0.0.1';
+          if (localStorage.getItem(dedupeKey) !== '1') {
+            localStorage.setItem(dedupeKey, '1');
+            if (isHumanLive) {
+              fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup_' + kst, { mode: 'cors', keepalive: true }).catch(function(){});
+              fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup_total', { mode: 'cors', keepalive: true }).catch(function(){});
+            }
+          }
+        } catch (_e) {}
+        document.querySelectorAll('.tom-lead-status').forEach(function(el) {
+          el.style.display = 'block';
+          el.style.color = '#86efac';
+          el.innerHTML = '✅ <strong>Welcome aboard!</strong> Free 8:30 AM ET Safety &amp; -9% Stop-Loss Alerts are now active for <strong>' + email.replace(/[<>&"]/g, '') + '</strong>' + (topicLabel ? ' (' + topicLabel.replace(/[<>&"]/g, '') + ')' : '') + '.';
+        });
+        document.querySelectorAll('.tom-lead-form input[type="email"]').forEach(function(inp) { inp.value = email; });
+        return false;
+      };
+      document.addEventListener('DOMContentLoaded', function() {
+        try {
+          var saved = localStorage.getItem('tom_free_member_email');
+          if (saved) {
+            document.querySelectorAll('.tom-lead-form input[type="email"]').forEach(function(inp) { inp.value = saved; });
+          }
+        } catch (_e2) {}
+      });
       if (window.__HQ_BEACON_SENT_tom_truthofmarket__ || window.__HQ_KPI_TOM__) return;
       window.__HQ_BEACON_SENT_tom_truthofmarket__ = true;
       window.__HQ_KPI_TOM__ = true;
@@ -41,8 +93,6 @@
       if (navigator.webdriver || /bot|crawl|spider|slurp|headless|lighthouse|gtmetrix|pingdom|uptimerobot|python|curl|node|axios/i.test(ua)) return;
       var host = (location && location.hostname) || '';
       if (!host || host === 'localhost' || host === '127.0.0.1') return;
-      var kst = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
-      var ns = 'tom_truthofmarket';
       fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/pv_' + kst, { mode: 'cors', keepalive: true }).catch(function(){});
       fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/pv_total', { mode: 'cors', keepalive: true }).catch(function(){});
       if (localStorage.getItem('hq_uv_' + ns + '_' + kst) !== '1') {
@@ -135,7 +185,71 @@
         </div>
       </div>
   </section>
+  <section id="tom-senior-lead-top" class="tom-senior-lead-magnet" aria-label="Free Daily Retirement Nest-Egg Safety Email Alert and 1-Tap VIP Checkout" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;margin:16px auto;padding:24px;background:linear-gradient(135deg,#0c192c 0%,#062c24 100%);border:2px solid #10b981;border-radius:16px;color:#f8fafc;box-shadow:0 10px 28px rgba(16,185,129,0.16);">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(16,185,129,0.18);border:1px solid rgba(52,211,153,0.5);color:#6ee7b7;padding:6px 14px;border-radius:999px;font-size:15px;font-weight:800;margin-bottom:10px;">
+      🛡️ EASY AT-A-GLANCE TRAFFIC LIGHT &bull; 🟡 Wait &amp; Watch ($GE 67/100)
+    </div>
+    <h2 style="font-size:clamp(22px,2.6vw,28px);line-height:1.3;font-weight:900;margin:0 0 8px;color:#ffffff;">
+      Protect Your Retirement Nest Egg — Free Daily $GE Safety &amp; -9% Stop Alert
+    </h2>
+    <p style="margin:0 0 16px;font-size:18px;line-height:1.6;color:#e2e8f0;">
+      Never get trapped in a steep drawdown on GE Aerospace ($GE). Receive our plain-English 8:30 AM ET traffic-light signal and mechanical -9% exit alert.
+    </p>
+    <form class="tom-lead-form" onsubmit="return window.__tomSubmitLeadMagnet(event, this, '$GE');" style="display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;">
+      <label for="tom-email-top" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Email address for free daily market safety alerts</label>
+      <input id="tom-email-top" type="email" name="email" required autocomplete="email" placeholder="1-Step Free Sign-Up: Enter your email address" style="flex:1 1 280px;min-height:60px;padding:12px 18px;font-size:18px;border-radius:12px;border:2px solid #94a3b8;background:#ffffff;color:#0f172a;font-weight:700;" />
+      <button type="submit" style="min-height:60px;padding:12px 26px;font-size:18px;font-weight:900;border-radius:12px;border:none;background:#10b981;color:#042f2e;cursor:pointer;white-space:nowrap;">
+        📩 Free 8:30 AM Safety Alert (1-Click) &rarr;
+      </button>
+    </form>
+    <div class="tom-lead-status" role="status" aria-live="polite" style="display:none;margin-top:12px;font-size:18px;font-weight:700;line-height:1.5;"></div>
+    <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(148,163,184,0.25);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
+      <div style="font-size:16px;color:#e2e8f0;font-weight:700;">
+        💳 <strong>Want All 72 Buy/Sell Prices Right Now?</strong> 1-Tap Card / Apple Pay Checkout (No Account Needed):
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;">
+        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1" class="lemonsqueezy-button" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#2563eb;color:#ffffff;font-size:17px;font-weight:800;text-decoration:none;">
+          🔓 1-Tap Monthly VIP ($29/mo)
+        </a>
+        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1" class="lemonsqueezy-button" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#f59e0b;color:#0f172a;font-size:17px;font-weight:900;text-decoration:none;">
+          💎 1-Tap Lifetime Pass ($199 Once)
+        </a>
+      </div>
+    </div>
+  </section>
   <div id="app"></div>
+  <section id="tom-senior-lead-bottom" class="tom-senior-lead-magnet" aria-label="Free Daily Retirement Nest-Egg Safety Email Alert and 1-Tap VIP Checkout" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;margin:16px auto;padding:24px;background:linear-gradient(135deg,#0c192c 0%,#062c24 100%);border:2px solid #10b981;border-radius:16px;color:#f8fafc;box-shadow:0 10px 28px rgba(16,185,129,0.16);">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(16,185,129,0.18);border:1px solid rgba(52,211,153,0.5);color:#6ee7b7;padding:6px 14px;border-radius:999px;font-size:15px;font-weight:800;margin-bottom:10px;">
+      🛡️ EASY AT-A-GLANCE TRAFFIC LIGHT &bull; 🟡 Wait &amp; Watch ($GE 67/100)
+    </div>
+    <h2 style="font-size:clamp(22px,2.6vw,28px);line-height:1.3;font-weight:900;margin:0 0 8px;color:#ffffff;">
+      Track $GE Risk-Free — Get Our Free 8:30 AM ET Retirement Safety Brief
+    </h2>
+    <p style="margin:0 0 16px;font-size:18px;line-height:1.6;color:#e2e8f0;">
+      Enter your email once to receive daily $GE trend changes, -9% capital-protection alerts, and defensive $SMH/$XLV barbell updates.
+    </p>
+    <form class="tom-lead-form" onsubmit="return window.__tomSubmitLeadMagnet(event, this, '$GE');" style="display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;">
+      <label for="tom-email-bottom" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Email address for free daily market safety alerts</label>
+      <input id="tom-email-bottom" type="email" name="email" required autocomplete="email" placeholder="1-Step Free Sign-Up: Enter your email address" style="flex:1 1 280px;min-height:60px;padding:12px 18px;font-size:18px;border-radius:12px;border:2px solid #94a3b8;background:#ffffff;color:#0f172a;font-weight:700;" />
+      <button type="submit" style="min-height:60px;padding:12px 26px;font-size:18px;font-weight:900;border-radius:12px;border:none;background:#10b981;color:#042f2e;cursor:pointer;white-space:nowrap;">
+        📩 Free 8:30 AM Safety Alert (1-Click) &rarr;
+      </button>
+    </form>
+    <div class="tom-lead-status" role="status" aria-live="polite" style="display:none;margin-top:12px;font-size:18px;font-weight:700;line-height:1.5;"></div>
+    <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(148,163,184,0.25);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
+      <div style="font-size:16px;color:#e2e8f0;font-weight:700;">
+        💳 <strong>Want All 72 Buy/Sell Prices Right Now?</strong> 1-Tap Card / Apple Pay Checkout (No Account Needed):
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;">
+        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1" class="lemonsqueezy-button" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#2563eb;color:#ffffff;font-size:17px;font-weight:800;text-decoration:none;">
+          🔓 1-Tap Monthly VIP ($29/mo)
+        </a>
+        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1" class="lemonsqueezy-button" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#f59e0b;color:#0f172a;font-size:17px;font-weight:900;text-decoration:none;">
+          💎 1-Tap Lifetime Pass ($199 Once)
+        </a>
+      </div>
+    </div>
+  </section>
   <section class="seo-directory-footer" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;overflow-x:hidden;margin:24px auto 32px;padding:18px 16px;background:#0b1220;border:1px solid #1e293b;border-radius:10px;color:#94a3b8;font-size:0.78rem;">
     <div style="font-weight:800;color:#e2e8f0;margin-bottom:8px;font-size:0.84rem;letter-spacing:0.02em;">
       📊 INSTITUTIONAL US EQUITY &amp; ETF COVERAGE DIRECTORY (72 STOCKS + $SMH/$XLV BARBELL)

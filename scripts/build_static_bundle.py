@@ -50,10 +50,6 @@ def strip_imports_and_exports(code: str) -> str:
 
 
 def refresh_health_and_rss() -> tuple[str, str]:
-    now_utc = datetime.now(timezone.utc)
-    iso_now = now_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
-    rfc_now = format_datetime(now_utc)
-
     semi_path = ROOT / "static_api" / "semi_overview.json"
     stocks_path = ROOT / "static_api" / "stocks_free.json"
     as_of_date = "2026-11-13"
@@ -75,6 +71,13 @@ def refresh_health_and_rss() -> tuple[str, str]:
             smh_dd_pct = float(ov.get("smh_dd_pct") or smh_dd_pct)
         except Exception:
             pass
+
+    try:
+        close_dt_utc = datetime.strptime(as_of_date[:10], "%Y-%m-%d").replace(hour=21, minute=0, second=0, tzinfo=timezone.utc)
+    except Exception:
+        close_dt_utc = datetime.now(timezone.utc).replace(hour=21, minute=0, second=0, microsecond=0)
+    iso_now = close_dt_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
+    rfc_now = format_datetime(close_dt_utc)
 
     if stocks_path.exists():
         try:

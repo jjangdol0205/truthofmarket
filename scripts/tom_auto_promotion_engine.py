@@ -294,7 +294,9 @@ def run_daily_telegraph_and_syndication(semi: dict, stocks: list, dry_run: bool 
 
 def main():
     dry_run = "--dry-run" in sys.argv
-    sync_remote_before_build("TOM", dry_run=dry_run)
+    no_deploy = "--no-deploy" in sys.argv
+    if not no_deploy:
+        sync_remote_before_build("TOM", dry_run=dry_run)
     for k_dir in [ROOT_DIR, ROOT_DIR / "dist", ROOT_DIR / "frontend" / "public"]:
         k_dir.mkdir(parents=True, exist_ok=True)
         (k_dir / f"{INDEXNOW_KEY}.txt").write_text(INDEXNOW_KEY, encoding="utf-8")
@@ -307,7 +309,7 @@ def main():
     stocks = load_json(STOCKS_PATH, [])
     as_of = update_llms_txt(semi, stocks)
 
-    deploy_res = deploy_division_live("TOM", dry_run=dry_run)
+    deploy_res = {"status": "SKIPPED_NO_DEPLOY"} if no_deploy else deploy_division_live("TOM", dry_run=dry_run)
     tg_url, syn_res = run_daily_telegraph_and_syndication(semi, stocks, dry_run=dry_run)
 
     url_map = build_url_to_file_map()

@@ -215,26 +215,93 @@ async function sendTelegramHtml(text, preferredToken = null, customChatId = null
   return res;
 }
 
+async function getAbacusMaxSafe(namespaces, keys) {
+  const nsList = Array.isArray(namespaces) ? namespaces : [namespaces];
+  const keyList = Array.isArray(keys) ? keys : [keys];
+  let best = null;
+  for (const ns of nsList) {
+    if (!ns) continue;
+    for (const k of keyList) {
+      if (!k) continue;
+      const v = await getAbacusCountSafe(ns, k);
+      if (v !== null) {
+        best = best === null ? v : Math.max(best, v);
+      }
+    }
+  }
+  return best;
+}
+
+async function backfillHistoricalDaysOnce(div, ledger, nsList) {
+  const divEntry = ledger.divisions[div.ns];
+  if (divEntry.backfilledCounterV2) return;
+  const daysMap = divEntry.days;
+  // Backfill past 10 days (-10 .. -2) once so hero_paradisekr and Nov 12/13/14 gaps are 100% captured
+  for (let offset = -10; offset <= -2; offset++) {
+    const d = getKstDateString(offset);
+    const cur = daysMap[d] || { uv: 0, pv: 0, signup: 0, paidClick: 0, paidMember: 0, refClick: 0 };
+    if (div.ns === 'hero_paradisekr' || !daysMap[d]) {
+      const uv = await getAbacusMaxSafe(nsList, [`uv_${d}`]);
+      const pv = await getAbacusMaxSafe(nsList, [`pv_${d}`]);
+      if (uv !== null) cur.uv = Math.max(cur.uv || 0, uv);
+      if (pv !== null) cur.pv = Math.max(cur.pv || 0, pv, cur.uv || 0);
+      if (div.kpiType === 'PAID') {
+        const sg = await getAbacusMaxSafe(nsList, [`signup_${d}`]);
+        const pc = await getAbacusMaxSafe(nsList, [`paid_click_${d}`]);
+        if (sg !== null) cur.signup = Math.max(cur.signup || 0, sg);
+        if (pc !== null) cur.paidClick = Math.max(cur.paidClick || 0, pc);
+      } else {
+        const rc = await getAbacusMaxSafe(nsList, [`ref_click_${d}`, `shop_click_${d}`]);
+        if (rc !== null) cur.refClick = Math.max(cur.refClick || 0, rc);
+        if (div.kpiType === 'HERO_SHOP') {
+          const vc = await getAbacusMaxSafe(nsList, [`paid_click_${d}`, `vip_supporter_click_${d}`]);
+          if (vc !== null) cur.paidClick = Math.max(cur.paidClick || 0, vc);
+        }
+      }
+      daysMap[d] = cur;
+    }
+  }
+  divEntry.backfilledCounterV2 = true;
+}
+
 async function fetchDivisionMetricsSequential(div, ledger) {
   const today = getKstDateString(0);
   const yesterday = getKstDateString(-1);
+  const nsList = div.altNs ? [div.ns, div.altNs] : [div.ns];
 
   if (!ledger.divisions) ledger.divisions = {};
   if (!ledger.divisions[div.ns]) ledger.divisions[div.ns] = { days: {} };
+  // Merge any legacy altNs days monotonically so zero historical data is lost
+  if (div.altNs && ledger.divisions[div.altNs] && ledger.divisions[div.altNs].days) {
+    const altDays = ledger.divisions[div.altNs].days;
+    for (const dKey of Object.keys(altDays)) {
+      const src = altDays[dKey] || {};
+      const dst = ledger.divisions[div.ns].days[dKey] || { uv: 0, pv: 0, signup: 0, paidClick: 0, paidMember: 0, refClick: 0 };
+      dst.uv = Math.max(dst.uv || 0, Number(src.uv) || 0);
+      dst.pv = Math.max(dst.pv || 0, Number(src.pv) || 0, dst.uv);
+      dst.signup = Math.max(dst.signup || 0, Number(src.signup) || 0);
+      dst.paidClick = Math.max(dst.paidClick || 0, Number(src.paidClick) || 0);
+      dst.paidMember = Math.max(dst.paidMember || 0, Number(src.paidMember) || 0);
+      dst.refClick = Math.max(dst.refClick || 0, Number(src.refClick) || 0);
+      ledger.divisions[div.ns].days[dKey] = dst;
+    }
+  }
+
+  await backfillHistoricalDaysOnce(div, ledger, nsList);
   const daysMap = ledger.divisions[div.ns].days;
 
   if (!daysMap[today]) {
-    daysMap[today] = { uv: 0, pv: 0, paidClick: 0, paidMember: 0, refClick: 0 };
+    daysMap[today] = { uv: 0, pv: 0, signup: 0, paidClick: 0, paidMember: 0, refClick: 0 };
   }
   if (!daysMap[yesterday]) {
-    daysMap[yesterday] = { uv: 0, pv: 0, paidClick: 0, paidMember: 0, refClick: 0 };
+    daysMap[yesterday] = { uv: 0, pv: 0, signup: 0, paidClick: 0, paidMember: 0, refClick: 0 };
   }
 
   // Query today's and yesterday's active counters sequentially (prevents Abacus HTTP 429 & captures late-night 21:00~24:00 KST traffic)
-  const uvTodayRaw = await getAbacusCountSafe(div.ns, `uv_${today}`);
-  const pvTodayRaw = await getAbacusCountSafe(div.ns, `pv_${today}`);
-  const uvYestRaw = await getAbacusCountSafe(div.ns, `uv_${yesterday}`);
-  const pvYestRaw = await getAbacusCountSafe(div.ns, `pv_${yesterday}`);
+  const uvTodayRaw = await getAbacusMaxSafe(nsList, [`uv_${today}`]);
+  const pvTodayRaw = await getAbacusMaxSafe(nsList, [`pv_${today}`]);
+  const uvYestRaw = await getAbacusMaxSafe(nsList, [`uv_${yesterday}`]);
+  const pvYestRaw = await getAbacusMaxSafe(nsList, [`pv_${yesterday}`]);
 
   if (uvTodayRaw !== null) {
     daysMap[today].uv = Math.max(daysMap[today].uv || 0, uvTodayRaw);
@@ -253,9 +320,17 @@ async function fetchDivisionMetricsSequential(div, ledger) {
   daysMap[yesterday].pv = Math.max(daysMap[yesterday].pv || 0, daysMap[yesterday].uv || 0);
 
   if (div.kpiType === 'PAID') {
-    const paidClickRaw = await getAbacusCountSafe(div.ns, `paid_click_${today}`);
-    const paidClickYestRaw = await getAbacusCountSafe(div.ns, `paid_click_${yesterday}`);
-    const paidMemberRaw = await getAbacusCountSafe(div.ns, `paid_member_${today}`);
+    const signupRaw = await getAbacusMaxSafe(nsList, [`signup_${today}`]);
+    const signupYestRaw = await getAbacusMaxSafe(nsList, [`signup_${yesterday}`]);
+    const paidClickRaw = await getAbacusMaxSafe(nsList, [`paid_click_${today}`]);
+    const paidClickYestRaw = await getAbacusMaxSafe(nsList, [`paid_click_${yesterday}`]);
+    const paidMemberRaw = await getAbacusMaxSafe(nsList, [`paid_member_${today}`]);
+    if (signupRaw !== null) {
+      daysMap[today].signup = Math.max(daysMap[today].signup || 0, signupRaw);
+    }
+    if (signupYestRaw !== null) {
+      daysMap[yesterday].signup = Math.max(daysMap[yesterday].signup || 0, signupYestRaw);
+    }
     if (paidClickRaw !== null) {
       daysMap[today].paidClick = Math.max(daysMap[today].paidClick || 0, paidClickRaw);
     }
@@ -266,13 +341,23 @@ async function fetchDivisionMetricsSequential(div, ledger) {
       daysMap[today].paidMember = Math.max(daysMap[today].paidMember || 0, paidMemberRaw);
     }
   } else {
-    const refClickRaw = await getAbacusCountSafe(div.ns, `ref_click_${today}`);
-    const refClickYestRaw = await getAbacusCountSafe(div.ns, `ref_click_${yesterday}`);
+    const refClickRaw = await getAbacusMaxSafe(nsList, [`ref_click_${today}`, `shop_click_${today}`]);
+    const refClickYestRaw = await getAbacusMaxSafe(nsList, [`ref_click_${yesterday}`, `shop_click_${yesterday}`]);
     if (refClickRaw !== null) {
       daysMap[today].refClick = Math.max(daysMap[today].refClick || 0, refClickRaw);
     }
     if (refClickYestRaw !== null) {
       daysMap[yesterday].refClick = Math.max(daysMap[yesterday].refClick || 0, refClickYestRaw);
+    }
+    if (div.kpiType === 'HERO_SHOP') {
+      const vipClickRaw = await getAbacusMaxSafe(nsList, [`paid_click_${today}`, `vip_supporter_click_${today}`]);
+      const vipClickYestRaw = await getAbacusMaxSafe(nsList, [`paid_click_${yesterday}`, `vip_supporter_click_${yesterday}`]);
+      if (vipClickRaw !== null) {
+        daysMap[today].paidClick = Math.max(daysMap[today].paidClick || 0, vipClickRaw);
+      }
+      if (vipClickYestRaw !== null) {
+        daysMap[yesterday].paidClick = Math.max(daysMap[yesterday].paidClick || 0, vipClickYestRaw);
+      }
     }
   }
 
@@ -281,6 +366,7 @@ async function fetchDivisionMetricsSequential(div, ledger) {
   // Calculate exact cumulative totals by summing all recorded days in ledger
   let uvTotal = 0;
   let pvTotal = 0;
+  let signupTotal = 0;
   let paidClickTotal = 0;
   let paidMemberTotal = 0;
   let refClickTotal = 0;
@@ -291,6 +377,7 @@ async function fetchDivisionMetricsSequential(div, ledger) {
     const dPv = Math.max(Number(row.pv) || 0, dUv);
     uvTotal += dUv;
     pvTotal += dPv;
+    signupTotal += Number(row.signup) || 0;
     paidClickTotal += Number(row.paidClick) || 0;
     paidMemberTotal += Number(row.paidMember) || 0;
     refClickTotal += Number(row.refClick) || 0;
@@ -304,14 +391,31 @@ async function fetchDivisionMetricsSequential(div, ledger) {
     pvYest: daysMap[yesterday].pv || 0,
     uvTotal,
     pvTotal,
+    signupToday: daysMap[today].signup || 0,
+    signupYest: daysMap[yesterday].signup || 0,
+    signupTotal,
     paidClickToday: daysMap[today].paidClick || 0,
     paidClickTotal,
     paidMemberToday: daysMap[today].paidMember || 0,
     paidMemberTotal,
     refClickToday: daysMap[today].refClick || 0,
+    refClickYest: daysMap[yesterday].refClick || 0,
     refClickTotal,
     health
   };
+}
+
+function formatKpiLineForBriefing(r, shortHeader = false) {
+  if (r.kpiType === 'PAID') {
+    const label = shortHeader ? '무료가입 &amp; 유료결제' : '2순위 목표: 무료가입 &amp; 유료결제';
+    return `• <b>🥈 [${label}]</b>: 오늘 무료가입 <b>${r.signupToday}명</b> (목표 20~30명 · 누적 <b>${r.signupTotal}명</b>) ｜ 결제창 클릭 <b>${r.paidClickToday}회</b> (누적 ${r.paidClickTotal}회) · 실결제 <b>${r.paidMemberToday}건</b> (누적 <b>${r.paidMemberTotal}건</b>)`;
+  }
+  if (r.kpiType === 'HERO_SHOP') {
+    const label = shortHeader ? '시니어 쇼핑클릭 &amp; VIP후원' : '2순위 목표: 시니어 쇼핑몰 &amp; VIP후원';
+    return `• <b>🥈 [${label}]</b>: 오늘 쇼핑몰 클릭 <b>${r.refClickToday}회</b> (목표 40~50명 · 누적 <b>${r.refClickTotal}회</b>) ｜ 골드VIP·응원클릭 <b>${r.paidClickToday}회</b> (누적 ${r.paidClickTotal}회)`;
+  }
+  const label = shortHeader ? '학부모 쇼핑몰 클릭' : '2순위 목표: 학부모 쇼핑몰 레퍼럴';
+  return `• <b>🥈 [${label}]</b>: 오늘 쇼핑몰 클릭 <b>${r.refClickToday}회</b> (목표 40~50명 · 누적 레퍼럴 클릭 <b>${r.refClickTotal}회</b>)`;
 }
 
 async function runVisitorBriefing(options = {}) {
@@ -323,8 +427,8 @@ async function runVisitorBriefing(options = {}) {
       url: 'https://truthofmarket.com/',
       ns: 'tom_truthofmarket',
       kpiType: 'PAID',
-      kpiGoal: '유료화 회원수 증대 (PRO 구독 & VIP 채널)',
-      gscStatus: '소유권 인증 완료 · Sitemap 75개 URL 정상 등록',
+      kpiGoal: '하루 무료회원 20~30명 확보 & 1-Tap PRO 유료전환 ($29/월 · $199 평생)',
+      gscStatus: '소유권 인증 완료 · Sitemap 134개 URL 정상 등록',
       channels: 'IG @rightsidealpha · X @rightsidealpha · TG @RigjtsideAlphabot'
     },
     {
@@ -334,7 +438,7 @@ async function runVisitorBriefing(options = {}) {
       url: 'https://kisfitglobal.com/',
       ns: 'kfg_kisfitglobal',
       kpiType: 'PAID',
-      kpiGoal: '유료화 회원수 증대 ($8.99 단건 / $19.99 6개월 패스)',
+      kpiGoal: '하루 무료 학부모 가입 20~30명 확보 & 1-Tap 유료전환 ($8.99 / $19.99)',
       gscStatus: '소유권 인증 완료 · Sitemap 63p & RSS 31p 성공',
       channels: 'IG @kisfitglobal · YT @kisfitglobal · TG @kidsfittbot'
     },
@@ -345,7 +449,7 @@ async function runVisitorBriefing(options = {}) {
       url: 'https://getbreakai.com/jp/',
       ns: 'gba_getbreakai',
       kpiType: 'PAID',
-      kpiGoal: '일본 시장 유료화 회원수 증대 (新NISA·특정계좌 퀀트 PRO $29/$49)',
+      kpiGoal: '하루 무료 메일회원 20~30명 확보 & 新NISA PRO 유료전환 ($29/월 · $199/년)',
       gscStatus: '일본어 핀테크 UI · RSS 피드(/jp/feed.xml) · Sitemap 개통',
       channels: 'IG/YT 일본 쇼츠 · X 자동 신디케이션 · TG @SemifearGreedbot'
     },
@@ -354,10 +458,11 @@ async function runVisitorBriefing(options = {}) {
       name: '파라다이스 히어로 & @김쌤의영웅라디오',
       domain: 'paradise-hero.com',
       url: 'https://paradise-hero.com/',
-      ns: 'hero_paradisehero',
-      kpiType: 'PAID',
-      kpiGoal: '황영웅 골드 VIP 멤버십(월 9,900원) · 황금 응원 전광판 후원 · 시니어 커머스',
-      gscStatus: '시니어 WCAG AAA 6개 페이지 구축 · 15분 롱폼 라디오 파이프라인 가동',
+      ns: 'hero_paradisekr',
+      altNs: 'hero_paradisehero',
+      kpiType: 'HERO_SHOP',
+      kpiGoal: '하루 시니어 쇼핑몰 방문 40~50명 달성 & 골드 VIP(월 9,900원)·응원후원',
+      gscStatus: '시니어 WCAG AAA 칼럼·뉴스 구축 · 15분 롱폼 라디오 파이프라인 가동',
       channels: 'YT @김쌤의영웅라디오 (롱폼) · paradise-hero.com · TG @inves123_bot'
     },
     {
@@ -367,8 +472,8 @@ async function runVisitorBriefing(options = {}) {
       url: 'https://kidsfit.co.kr/',
       ns: 'kfk_kidsfitkr',
       kpiType: 'REFERRAL',
-      kpiGoal: '100% 무인 패시브 운영 및 쿠팡(AF7865143)·링크프라이스(A100708867) 레퍼럴 수익',
-      gscStatus: '소유권 인증 완료 · Sitemap 32p & RSS 27p 무인 유지보수',
+      kpiGoal: '하루 학부모 쇼핑몰 방문 40~50명 달성 & 쿠팡(AF7865143)·예스24(A100708867) 수익',
+      gscStatus: '소유권 인증 완료 · Sitemap 79p & RSS 72p 무인 유지보수',
       channels: '무인 패시브 자동화 · TG @Moneyfiityyy_bot'
     }
   ];
@@ -384,17 +489,14 @@ async function runVisitorBriefing(options = {}) {
   const nowStr = getKstNowFormatted();
 
   const lines = [
-    `🎯 <b>[전사업부(1~5사업부) 최우선 목표 — 1순위: 홈페이지 유입 | 2순위: 유료결제·수익전환 브리핑]</b>`,
+    `🎯 <b>[전사업부(1~5사업부) 최우선 목표 — 1순위: 홈페이지 유입 | 2순위: 무료가입·유료결제·쇼핑클릭 브리핑]</b>`,
     `⏰ <b>집계 시각</b>: <code>${nowStr}</code> (봇·크롤러 제외 순수 실방문자 · 영구원장 동기화)`,
     `━━━━━━━━━━━━━━━━━━`
   ];
 
   for (const r of results) {
     const statusBadge = r.health.ok ? `🟢 정상 (${r.health.ms}ms)` : `🟡 배포대기/점검`;
-    const kpiLine =
-      r.kpiType === 'PAID'
-        ? `• <b>🥈 [2순위 목표: 유료결제]</b>: 오늘 결제창 클릭 <b>${r.paidClickToday}회</b> (누적 ${r.paidClickTotal}회) · 실결제 완료 <b>${r.paidMemberToday}건</b> (누적 <b>${r.paidMemberTotal}건</b>)`
-        : `• <b>🥈 [2순위 목표: 구매전환]</b>: 오늘 상품구매 클릭 <b>${r.refClickToday}회</b> (누적 레퍼럴 클릭 <b>${r.refClickTotal}회</b>)`;
+    const kpiLine = formatKpiLineForBriefing(r, false);
 
     lines.push(
       `🏢 <b>${r.code} | ${r.name}</b> (<code>${r.domain}</code>)`,
@@ -430,10 +532,7 @@ async function runVisitorBriefing(options = {}) {
       // 2. 1~5사업부 각 전담 봇이 직접 실적을 보고
       for (const r of results) {
         const statusBadge = r.health.ok ? `🟢 정상 (${r.health.ms}ms)` : `🟡 배포대기/점검`;
-        const kpiLine =
-          r.kpiType === 'PAID'
-            ? `• <b>🥈 [유료결제 전환]</b>: 오늘 결제창 클릭 <b>${r.paidClickToday}회</b> (누적 ${r.paidClickTotal}회) · 실결제 완료 <b>${r.paidMemberToday}건</b> (누적 <b>${r.paidMemberTotal}건</b>)`
-            : `• <b>🥈 [상품 구매클릭]</b>: 오늘 상품구매 클릭 <b>${r.refClickToday}회</b> (누적 레퍼럴 클릭 <b>${r.refClickTotal}회</b>)`;
+        const kpiLine = formatKpiLineForBriefing(r, true);
         const divHtml = [
           `🏢 <b>[${r.code} 전담 봇 보고 — ${r.name}]</b> (<code>${r.domain}</code>)`,
           `⏰ 집계 시각: <code>${nowStr}</code>`,

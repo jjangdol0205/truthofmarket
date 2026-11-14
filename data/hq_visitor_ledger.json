@@ -1,6 +1,6 @@
 {
-  "lastUpdatedKst": "2026-11-09 21:00:43 KST",
-  "lastTelegramSentMs": 1794225643196,
+  "lastUpdatedKst": "2026-11-15 08:34:01 KST",
+  "lastTelegramSentMs": 1794626680706,
   "divisions": {
     "tom_truthofmarket": {
       "days": {
@@ -45,8 +45,54 @@
           "paidClick": 0,
           "paidMember": 0,
           "refClick": 0
+        },
+        "2026-11-11": {
+          "uv": 0,
+          "pv": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-10": {
+          "uv": 3,
+          "pv": 3,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-14": {
+          "uv": 8,
+          "pv": 14,
+          "paidClick": 1,
+          "paidMember": 0,
+          "refClick": 0,
+          "signup": 0
+        },
+        "2026-11-13": {
+          "uv": 7,
+          "pv": 39,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-12": {
+          "uv": 44,
+          "pv": 55,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-15": {
+          "uv": 3,
+          "pv": 4,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
         }
-      }
+      },
+      "backfilledCounterV2": true
     },
     "kfg_kisfitglobal": {
       "days": {
@@ -105,8 +151,54 @@
           "paidClick": 0,
           "paidMember": 0,
           "refClick": 0
+        },
+        "2026-11-11": {
+          "uv": 0,
+          "pv": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-10": {
+          "uv": 4,
+          "pv": 4,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-14": {
+          "uv": 9,
+          "pv": 10,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0,
+          "signup": 0
+        },
+        "2026-11-13": {
+          "uv": 1,
+          "pv": 1,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-12": {
+          "uv": 3,
+          "pv": 3,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-15": {
+          "uv": 8,
+          "pv": 8,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
         }
-      }
+      },
+      "backfilledCounterV2": true
     },
     "kfk_kidsfitkr": {
       "days": {
@@ -158,8 +250,53 @@
           "paidClick": 0,
           "paidMember": 0,
           "refClick": 0
+        },
+        "2026-11-11": {
+          "uv": 0,
+          "pv": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-10": {
+          "uv": 0,
+          "pv": 2,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-14": {
+          "uv": 3,
+          "pv": 3,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 1
+        },
+        "2026-11-13": {
+          "uv": 0,
+          "pv": 1,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-12": {
+          "uv": 9,
+          "pv": 9,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-15": {
+          "uv": 7,
+          "pv": 7,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
         }
-      }
+      },
+      "backfilledCounterV2": true
     },
     "gba_getbreakai": {
       "days": {
@@ -176,8 +313,78 @@
           "paidClick": 0,
           "paidMember": 0,
           "refClick": 0
+        },
+        "2026-11-11": {
+          "uv": 1,
+          "pv": 1,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-10": {
+          "uv": 4,
+          "pv": 4,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-14": {
+          "uv": 3,
+          "pv": 4,
+          "paidClick": 1,
+          "paidMember": 0,
+          "refClick": 0,
+          "signup": 0
+        },
+        "2026-11-13": {
+          "uv": 2,
+          "pv": 2,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-05": {
+          "uv": 0,
+          "pv": 0,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-06": {
+          "uv": 0,
+          "pv": 0,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-07": {
+          "uv": 0,
+          "pv": 0,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-12": {
+          "uv": 3,
+          "pv": 3,
+          "signup": 0,
+          "paidClick": 1,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-15": {
+          "uv": 0,
+          "pv": 0,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
         }
-      }
+      },
+      "backfilledCounterV2": true
     },
     "hero_paradisehero": {
       "days": {
@@ -194,8 +401,129 @@
           "paidClick": 0,
           "paidMember": 0,
           "refClick": 0
+        },
+        "2026-11-11": {
+          "uv": 0,
+          "pv": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-10": {
+          "uv": 0,
+          "pv": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-14": {
+          "uv": 0,
+          "pv": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-13": {
+          "uv": 0,
+          "pv": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
         }
       }
+    },
+    "hero_paradisekr": {
+      "days": {
+        "2026-11-09": {
+          "uv": 0,
+          "pv": 0,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-08": {
+          "uv": 0,
+          "pv": 0,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-11": {
+          "uv": 0,
+          "pv": 0,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-10": {
+          "uv": 0,
+          "pv": 0,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-14": {
+          "uv": 8,
+          "pv": 10,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 1
+        },
+        "2026-11-13": {
+          "uv": 0,
+          "pv": 0,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-05": {
+          "uv": 0,
+          "pv": 0,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-06": {
+          "uv": 0,
+          "pv": 0,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-07": {
+          "uv": 0,
+          "pv": 0,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-12": {
+          "uv": 0,
+          "pv": 0,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-15": {
+          "uv": 5,
+          "pv": 5,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        }
+      },
+      "backfilledCounterV2": true
     }
   }
 }

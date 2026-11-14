@@ -97,60 +97,42 @@ def git_commit_and_push_market_data(as_of_date: str) -> str:
 def main():
     do_broadcast = "--broadcast" in sys.argv
     do_notify = "--notify" in sys.argv
-
-    print("[1/4] Syncing latest US market closing prices (72 stocks + SMH/XLV/QQQ)...")
-    c1, out1 = run_cmd([sys.executable, "scripts/sync_live_market_data.py"])
-    print(out1[-400:] if out1 else "sync_live_market_data done")
-
-    print("[2/4] Rebuilding production static bundle (dist/ & SEO pages)...")
-    c2, out2 = run_cmd([sys.executable, "scripts/build_static_bundle.py"])
-    print(out2[-400:] if out2 else "build_static_bundle done")
-
-    as_of_date = "latest"
-    try:
-        as_of_date = json.loads(SEMI_OVERVIEW_PATH.read_text(encoding="utf-8")).get("date", "latest")
-    except Exception:
-        pass
-
-    print("[3/4] Committing and pushing updated closing prices to live remotes...")
-    deploy_status = git_commit_and_push_market_data(as_of_date)
-    print(deploy_status)
-
-    # [3.5/4] Also synchronize 3사업부 (GetBreakAI — getbreakai.com/jp/) US+JP closing prices, ATR & USD/JPY + 5-Div Affiliate Link Watchdog
-    gba_status = ""
-    div3_dir = ROOT_DIR.parent / "3사업부"
     text_hq_dir = ROOT_DIR.parent / "text_automation_hq"
-    if (div3_dir / "scripts" / "sync_getbreakai_live_data.py").exists():
-        print("[3.5/4] Syncing 3사업부 (getbreakai.com) US/TSE closing prices, 14d ATR & USD/JPY...")
-        for cmd in [
-            [sys.executable, "scripts/sync_getbreakai_live_data.py"],
-            [sys.executable, "scripts/build_jp_seo_pages.py"],
-            [sys.executable, "scripts/generate_jp_daily_column_html.py"],
-            [sys.executable, "scripts/upgrade_jp_fintech_uiux.py"],
-            ["node", "scripts/build_dist.js"],
-        ]:
-            subprocess.run(cmd, cwd=str(div3_dir), capture_output=True, text=True, encoding="utf-8", errors="replace")
-        if (text_hq_dir / "live_web_deployer.py").exists():
-            subprocess.run(
-                [sys.executable, str(text_hq_dir / "live_web_deployer.py"), "--div", "GBA"],
-                cwd=str(text_hq_dir),
-                capture_output=True,
-                text=True,
-                encoding="utf-8",
-                errors="replace",
-            )
-        gba_status = "\n• 3사업부(GetBreakAI) 미·일 종가·ATR·환율 동기화 및 dist 배포 완료"
+    div3_dir = ROOT_DIR.parent / "3사업부"
 
+    # [0.5/4] Pre-run local freshness & affiliate healing (--no-deploy) so any healed files fold into 1 commit
     if (text_hq_dir / "hq_daily_freshness_and_link_healer.py").exists():
-        print("[3.8/4] Running 5-Division Affiliate Stock/Campaign Expiration Self-Healing Watchdog...")
+        print("[0.5/4] Running 5-Division local freshness & affiliate link pre-check (--no-deploy)...")
         subprocess.run(
-            [sys.executable, str(text_hq_dir / "hq_daily_freshness_and_link_healer.py"), "--daily-gate"],
+            [sys.executable, str(text_hq_dir / "hq_daily_freshness_and_link_healer.py"), "--daily-gate", "--no-deploy"],
             cwd=str(text_hq_dir),
             capture_output=True,
             text=True,
             encoding="utf-8",
             errors="replace",
         )
+
+    print("[1/4] Syncing latest US market closing prices (72 stocks + SMH/XLV/QQQ)...")
+    c1, out1 = run_cmd([sys.executable, "scripts/sync_live_market_data.py"])
+    print(out1[-400:] if out1 else "sync_live_market_data done")
+
+    print("[2/4] Rebuilding TOM bundle, llms.txt & deploying in 1 consolidated commit...")
+    c2, out2 = run_cmd([sys.executable, "scripts/tom_auto_promotion_engine.py"])
+    deploy_status = out2.splitlines()[-1] if out2 else "TOM 통합 배포 완료"
+    print(deploy_status)
+
+    # [3/4] Synchronize 3사업부 (GetBreakAI — getbreakai.com/jp/) US+JP closing prices, ATR, USD/JPY & SEO in 1 [skip render] commit
+    gba_status = ""
+    if (div3_dir / "scripts" / "sync_getbreakai_live_data.py").exists():
+        print("[3/4] Syncing 3사업부 (getbreakai.com) US/TSE closing prices, 14d ATR, USD/JPY & JP SEO in 1 [skip render] commit...")
+        for cmd in [
+            [sys.executable, "scripts/sync_getbreakai_live_data.py"],
+            [sys.executable, "scripts/build_jp_seo_pages.py"],
+            [sys.executable, "scripts/upgrade_jp_fintech_uiux.py"],
+            [sys.executable, "scripts/gba_jp_auto_promotion_engine.py"],
+        ]:
+            subprocess.run(cmd, cwd=str(div3_dir), capture_output=True, text=True, encoding="utf-8", errors="replace")
+        gba_status = "\n• 3사업부(GetBreakAI) 미·일 종가·ATR·환율 동기화 및 [skip render] 단일 배포 완료"
 
     bcast_status = ""
     if do_broadcast:

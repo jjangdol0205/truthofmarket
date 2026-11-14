@@ -42,7 +42,7 @@ jobs:
         run: |
           git config user.name "RightSideAlpha Quant Bot"
           git config user.email "bot@truthofmarket.com"
-          python scripts/tom_auto_promotion_engine.py
+          python scripts/tom_auto_promotion_engine.py --no-deploy
           git add frontend/public/ dist/ static_api/ stocks/ compare/ insights/ index.html semi-fear-greed.html rss.xml feed.xml llms.txt llms-full.txt sitemap.xml
           if ! git diff --cached --quiet; then
             git commit -m "Auto-sync daily US market close prices, 134+ SEO pages & quant insights"

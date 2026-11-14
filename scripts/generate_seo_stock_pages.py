@@ -77,10 +77,62 @@ COMPARE_PAIRS: List[tuple[str, str, str]] = [
 ]
 
 HEAD_BEACON_SCRIPT = """  <script>
-  /* === HQ Edge Real-Human Visitor & KPI Beacon (tom_truthofmarket) === */
+  /* === HQ Edge Real-Human Visitor, Free Email Signup & KPI Beacon (tom_truthofmarket) === */
   (function(){
     try {
       if (typeof window === 'undefined' || typeof navigator === 'undefined') return;
+      var kst = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+      var ns = 'tom_truthofmarket';
+      window.__tomSubmitLeadMagnet = function(ev, formEl, topicLabel) {
+        if (ev && ev.preventDefault) ev.preventDefault();
+        var input = formEl ? formEl.querySelector('input[type="email"]') : null;
+        var msgBox = formEl ? formEl.parentNode.querySelector('.tom-lead-status') : null;
+        var email = input ? String(input.value || '').trim() : '';
+        if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
+          if (msgBox) {
+            msgBox.style.display = 'block';
+            msgBox.style.color = '#fca5a5';
+            msgBox.textContent = 'Please enter a valid email address (e.g., investor@email.com).';
+          }
+          if (input) input.focus();
+          return false;
+        }
+        try {
+          localStorage.setItem('tom_free_member_email', email);
+          localStorage.setItem('tom_free_member_since', kst);
+          var wl = JSON.parse(localStorage.getItem('tom_free_watchlist') || '[]');
+          if (topicLabel && wl.indexOf(topicLabel) === -1) {
+            wl.push(topicLabel);
+            localStorage.setItem('tom_free_watchlist', JSON.stringify(wl.slice(-20)));
+          }
+          var dedupeKey = 'hq_signup_' + ns + '_' + kst + '_' + email.toLowerCase();
+          var ua = navigator.userAgent || '';
+          var host = (location && location.hostname) || '';
+          var isHumanLive = !navigator.webdriver && !/bot|crawl|spider|slurp|headless|lighthouse|python|curl|node|axios/i.test(ua) && host && host !== 'localhost' && host !== '127.0.0.1';
+          if (localStorage.getItem(dedupeKey) !== '1') {
+            localStorage.setItem(dedupeKey, '1');
+            if (isHumanLive) {
+              fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup_' + kst, { mode: 'cors', keepalive: true }).catch(function(){});
+              fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup_total', { mode: 'cors', keepalive: true }).catch(function(){});
+            }
+          }
+        } catch (_e) {}
+        document.querySelectorAll('.tom-lead-status').forEach(function(el) {
+          el.style.display = 'block';
+          el.style.color = '#86efac';
+          el.innerHTML = '✅ <strong>Welcome aboard!</strong> Free 8:30 AM ET Safety &amp; -9% Stop-Loss Alerts are now active for <strong>' + email.replace(/[<>&"]/g, '') + '</strong>' + (topicLabel ? ' (' + topicLabel.replace(/[<>&"]/g, '') + ')' : '') + '.';
+        });
+        document.querySelectorAll('.tom-lead-form input[type="email"]').forEach(function(inp) { inp.value = email; });
+        return false;
+      };
+      document.addEventListener('DOMContentLoaded', function() {
+        try {
+          var saved = localStorage.getItem('tom_free_member_email');
+          if (saved) {
+            document.querySelectorAll('.tom-lead-form input[type="email"]').forEach(function(inp) { inp.value = saved; });
+          }
+        } catch (_e2) {}
+      });
       if (window.__HQ_BEACON_SENT_tom_truthofmarket__ || window.__HQ_KPI_TOM__) return;
       window.__HQ_BEACON_SENT_tom_truthofmarket__ = true;
       window.__HQ_KPI_TOM__ = true;
@@ -88,8 +140,6 @@ HEAD_BEACON_SCRIPT = """  <script>
       if (navigator.webdriver || /bot|crawl|spider|slurp|headless|lighthouse|gtmetrix|pingdom|uptimerobot|python|curl|node|axios/i.test(ua)) return;
       var host = (location && location.hostname) || '';
       if (!host || host === 'localhost' || host === '127.0.0.1') return;
-      var kst = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
-      var ns = 'tom_truthofmarket';
       fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/pv_' + kst, { mode: 'cors', keepalive: true }).catch(function(){});
       fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/pv_total', { mode: 'cors', keepalive: true }).catch(function(){});
       if (localStorage.getItem('hq_uv_' + ns + '_' + kst) !== '1') {
@@ -121,6 +171,49 @@ HEAD_BEACON_SCRIPT = """  <script>
     } catch (e) {}
   })();
   </script>"""
+
+
+def build_senior_lead_magnet_html(
+    topic_label: str,
+    headline_short: str,
+    subcopy: str,
+    signal_badge: str = "🟢 Safe Uptrend · 🟡 Wait & Watch · 🔴 -9% Exit Line",
+    position: str = "top",
+) -> str:
+    safe_topic = html.escape(topic_label, quote=True)
+    box_id = f"tom-senior-lead-{position}"
+    return f"""  <section id="{box_id}" class="tom-senior-lead-magnet" aria-label="Free Daily Retirement Nest-Egg Safety Email Alert and 1-Tap VIP Checkout" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;margin:16px auto;padding:24px;background:linear-gradient(135deg,#0c192c 0%,#062c24 100%);border:2px solid #10b981;border-radius:16px;color:#f8fafc;box-shadow:0 10px 28px rgba(16,185,129,0.16);">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(16,185,129,0.18);border:1px solid rgba(52,211,153,0.5);color:#6ee7b7;padding:6px 14px;border-radius:999px;font-size:15px;font-weight:800;margin-bottom:10px;">
+      🛡️ EASY AT-A-GLANCE TRAFFIC LIGHT &bull; {html.escape(signal_badge)}
+    </div>
+    <h2 style="font-size:clamp(22px,2.6vw,28px);line-height:1.3;font-weight:900;margin:0 0 8px;color:#ffffff;">
+      {html.escape(headline_short)}
+    </h2>
+    <p style="margin:0 0 16px;font-size:18px;line-height:1.6;color:#e2e8f0;">
+      {html.escape(subcopy)}
+    </p>
+    <form class="tom-lead-form" onsubmit="return window.__tomSubmitLeadMagnet(event, this, '{safe_topic}');" style="display:flex;flex-wrap:wrap;gap:12px;align-items:stretch;">
+      <label for="tom-email-{position}" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Email address for free daily market safety alerts</label>
+      <input id="tom-email-{position}" type="email" name="email" required autocomplete="email" placeholder="1-Step Free Sign-Up: Enter your email address" style="flex:1 1 280px;min-height:60px;padding:12px 18px;font-size:18px;border-radius:12px;border:2px solid #94a3b8;background:#ffffff;color:#0f172a;font-weight:700;" />
+      <button type="submit" style="min-height:60px;padding:12px 26px;font-size:18px;font-weight:900;border-radius:12px;border:none;background:#10b981;color:#042f2e;cursor:pointer;white-space:nowrap;">
+        📩 Free 8:30 AM Safety Alert (1-Click) &rarr;
+      </button>
+    </form>
+    <div class="tom-lead-status" role="status" aria-live="polite" style="display:none;margin-top:12px;font-size:18px;font-weight:700;line-height:1.5;"></div>
+    <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(148,163,184,0.25);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
+      <div style="font-size:16px;color:#e2e8f0;font-weight:700;">
+        💳 <strong>Want All 72 Buy/Sell Prices Right Now?</strong> 1-Tap Card / Apple Pay Checkout (No Account Needed):
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;">
+        <a href="{LS_MONTHLY_URL}" class="lemonsqueezy-button" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#2563eb;color:#ffffff;font-size:17px;font-weight:800;text-decoration:none;">
+          🔓 1-Tap Monthly VIP ($29/mo)
+        </a>
+        <a href="{LS_LTD_URL}" class="lemonsqueezy-button" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#f59e0b;color:#0f172a;font-size:17px;font-weight:900;text-decoration:none;">
+          💎 1-Tap Lifetime Pass ($199 Once)
+        </a>
+      </div>
+    </div>
+  </section>"""
 
 
 def load_stocks_and_semi() -> tuple[List[Dict[str, Any]], Dict[str, Any]]:
@@ -224,6 +317,20 @@ def generate_semi_fear_greed_page(semi: Dict[str, Any], stocks: List[Dict[str, A
     }
 
     dir_html = build_ticker_directory_html(stocks, prefix="/")
+    lead_top = build_senior_lead_magnet_html(
+        "$SMH:$XLV Barbell",
+        "Protect Your Retirement Nest Egg — Free Daily 8:30 AM Market Safety Alert",
+        f"Plain-English traffic-light signals for $SMH (${smh_close:.2f}) and defensive $XLV (${xlv_close:.2f}) so you never hold through a -30% tech crash.",
+        signal_badge=f"🧭 Semiconductor Fear & Greed: {fg_score:.1f}/100 ({regime_en})",
+        position="top",
+    )
+    lead_bottom = build_senior_lead_magnet_html(
+        "$SMH:$XLV Barbell",
+        "Don't Guess Tomorrow's Open — Get Our Free 8:30 AM ET Safety & Stop-Loss Brief",
+        f"Join US retirement & IRA investors receiving daily plain-English 3-color market status and {smh_w}:{xlv_w} $SMH/$XLV barbell updates.",
+        signal_badge=f"🟢 Safe Uptrend · 🟡 Wait & Watch · 🔴 -9% Exit Line",
+        position="bottom",
+    )
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -255,6 +362,7 @@ def generate_semi_fear_greed_page(semi: Dict[str, Any], stocks: List[Dict[str, A
 {HEAD_BEACON_SCRIPT}
 </head>
 <body>
+{lead_top}
   <div id="app">
     <section class="seo-semi-hero" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;margin:14px auto 0;padding:16px;background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 100%);border:1px solid #334155;border-radius:10px;color:#f8fafc;">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
@@ -286,6 +394,7 @@ def generate_semi_fear_greed_page(semi: Dict[str, Any], stocks: List[Dict[str, A
       </div>
     </section>
   </div>
+{lead_bottom}
 {dir_html}
 </body>
 </html>
@@ -416,6 +525,25 @@ def generate_single_stock_page(
     }
 
     dir_html = build_ticker_directory_html(all_stocks, prefix="/")
+    traffic_badge = (
+        f"🟢 Safe Uptrend (${tkr} {score}/100)"
+        if score >= 80
+        else (f"🟡 Wait & Watch (${tkr} {score}/100)" if score >= 60 else f"🔴 Protect Cash (${tkr} {score}/100)")
+    )
+    lead_top = build_senior_lead_magnet_html(
+        f"${tkr}",
+        f"Protect Your Retirement Nest Egg — Free Daily ${tkr} Safety & -9% Stop Alert",
+        f"Never get trapped in a steep drawdown on {name_en} (${tkr}). Receive our plain-English 8:30 AM ET traffic-light signal and mechanical -9% exit alert.",
+        signal_badge=traffic_badge,
+        position="top",
+    )
+    lead_bottom = build_senior_lead_magnet_html(
+        f"${tkr}",
+        f"Track ${tkr} Risk-Free — Get Our Free 8:30 AM ET Retirement Safety Brief",
+        f"Enter your email once to receive daily ${tkr} trend changes, -9% capital-protection alerts, and defensive $SMH/$XLV barbell updates.",
+        signal_badge=traffic_badge,
+        position="bottom",
+    )
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -489,7 +617,9 @@ def generate_single_stock_page(
     </div>
 {exec_box_html}
   </section>
+{lead_top}
   <div id="app"></div>
+{lead_bottom}
 {dir_html}
 </body>
 </html>
@@ -573,6 +703,20 @@ def generate_comparison_page(
 
     dir_html = build_ticker_directory_html(all_stocks, prefix="/")
     init_tkr = winner if winner not in ("SMH", "XLV", "SOXL", "QQQ") else ta
+    cmp_lead_top = build_senior_lead_magnet_html(
+        f"${ta} vs ${tb}",
+        f"Protect Your Nest Egg — Free Daily ${ta} vs ${tb} Safety & -9% Stop Alert",
+        f"Currently ${winner} leads (${win_score}/100). Get our plain-English 8:30 AM ET traffic-light brief whenever leadership or -9% stop-loss lines shift.",
+        signal_badge=f"🏆 Current Leader: ${winner} ({win_score}/100 · {win_vol:.2f}x Vol)",
+        position="top",
+    )
+    cmp_lead_bottom = build_senior_lead_magnet_html(
+        f"${ta} vs ${tb}",
+        f"Monitor ${ta} & ${tb} Without Stress — Free 8:30 AM ET Safety Alerts",
+        f"Protect your IRA or brokerage account from sudden drawdowns with mechanical -9% exit alerts for ${ta} (${stop_a:.2f}) and ${tb} (${stop_b:.2f}).",
+        signal_badge=f"🟢 Safe Uptrend · 🟡 Wait & Watch · 🔴 -9% Exit Line",
+        position="bottom",
+    )
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -665,7 +809,9 @@ def generate_comparison_page(
       </div>
     </div>
   </section>
+{cmp_lead_top}
   <div id="app"></div>
+{cmp_lead_bottom}
 {dir_html}
 </body>
 </html>
@@ -890,7 +1036,22 @@ def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "
         + "\n</urlset>\n"
     )
     (PUB / "sitemap.xml").write_text(sitemap_xml, encoding="utf-8")
-    print(f"[SEO] Generated /semi-fear-greed.html + {len(combined)} /stocks/<ticker>.html pages + clean sitemap.xml ({len(sitemap_urls)} URLs)")
+
+    # Sync SEO detail directories & files into ./dist, ./frontend/dist, and root without clobbering index.html
+    import shutil
+    for target_dir in [ROOT / "dist", ROOT / "frontend" / "dist", ROOT]:
+        if not target_dir.exists():
+            continue
+        for sub_d in ("stocks", "compare", "insights"):
+            src_d = PUB / sub_d
+            if src_d.exists():
+                shutil.copytree(src_d, target_dir / sub_d, dirs_exist_ok=True)
+        for fname in ("semi-fear-greed.html", "sitemap.xml", "llms-full.txt"):
+            src_f = PUB / fname
+            if src_f.exists():
+                shutil.copy2(src_f, target_dir / fname)
+
+    print(f"[SEO] Generated /semi-fear-greed.html + {len(combined)} /stocks/<ticker>.html + {compare_count} /compare/ + /insights/ pages + clean sitemap.xml ({len(sitemap_urls)} URLs)")
     return build_ticker_directory_html(stocks, prefix="/")
 
 
