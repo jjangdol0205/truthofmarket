@@ -220,10 +220,15 @@ export function renderStockRows(state) {
       const rangePct = Math.min(100, Math.max(2, Math.round(((closeVal - low52) / rangeSpan) * 100)));
 
       // Soft paywall rule:
-      // Tickers 1–5 (idx < 5) are featured free sample leaders and fully readable/interactive.
-      // Tickers 6–72 (idx >= 5) are softly blurred when user is not Pro.
-      const isFeaturedLeader = idx < 5;
-      const isFreeSample = isFeaturedLeader; // Free sample rows (1-5 open) for non-Pro users
+      // Unmasked free sample leader(s) (e.g. #1 CELH) are fully readable/interactive;
+      // masked feed rows (ticker === "LOCKED") and rows 6–72 render cleanly as Pro-locked setups without $LOCKED/$0.00 placeholders.
+      const isMaskedPlaceholder =
+        !isPro &&
+        (Boolean(s.locked) ||
+          Boolean(s.is_pro_locked) ||
+          String(s.ticker || "").toUpperCase() === "LOCKED");
+      const isFeaturedLeader = idx < 5 && !isMaskedPlaceholder;
+      const isFreeSample = isFeaturedLeader;
       const isReadable = isPro || isFreeSample;
       const isSoftBlurred = !isReadable;
       const blurClass = isSoftBlurred ? "blurred-cell" : "";
@@ -261,7 +266,18 @@ export function renderStockRows(state) {
       const vipWatchlist = state.vipWatchlist || [];
       const isStarred = vipWatchlist.includes(s.ticker);
 
-      const tickerCellHtml = `<div>
+      const tickerCellHtml = isMaskedPlaceholder
+        ? `<div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span class="mono" style="font-weight:800; font-size:0.86rem; color:#93c5fd;">🔒 VIP #${idx + 1}</span>
+              <span style="font-size:0.62rem; font-family:var(--font-mono); padding:1px 4px; background:#141d2f; border:1px solid #24324d; color:#93c5fd; border-radius:2px;">US</span>
+              <span style="font-size:0.6rem; padding:1px 5px; background:rgba(41,98,255,0.14); border:1px solid rgba(41,98,255,0.35); color:#93c5fd; border-radius:2px; font-family:var(--font-mono); font-weight:700;">PRO IGNITION #${idx + 1}</span>
+            </div>
+            <div style="font-size:0.72rem; font-family:var(--font-sans); color:var(--muted); margin-top:2px;">
+              Pro Institutional Signal · <span style="color:var(--text-secondary);">${s.sector || "US Equity"}</span>
+            </div>
+          </div>`
+        : `<div>
         <div style="display:flex; align-items:center; gap:6px;">
           <button
             type="button"
@@ -288,8 +304,8 @@ export function renderStockRows(state) {
       </div>`;
 
       const closeCellHtml =
-        s.close === null || s.close === undefined
-          ? `<div class="mono" style="font-weight:700; color:var(--muted);">$0.00</div>`
+        isMaskedPlaceholder || s.close === null || s.close === undefined
+          ? `<div class="mono" style="font-weight:700; color:#93c5fd;">🔒 VIP</div>`
           : `<div class="mono" style="font-weight:700; color:#ffffff;" title="Latest Close Date: ${s.date || "2026-10-30"}">$${closeVal.toFixed(2)}</div>
              <div class="range-52w-wrap" title="52W Range: $${low52.toFixed(2)} – $${high52.toFixed(2)} | Current: $${closeVal.toFixed(2)}">
                <div class="range-52w-track">

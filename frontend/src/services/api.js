@@ -423,15 +423,56 @@ export async function validateLicense(licenseKey) {
           },
           body: new URLSearchParams({ license_key: key }).toString(),
         });
-        const lsData = await lsResp.json().catch(() => null);
-        const valid = Boolean(lsData && lsData.valid === true && !lsData.error);
+        let lsData = await lsResp.json().catch(() => null);
+        const storeOk = !lsData?.meta?.store_id || Number(lsData.meta.store_id) === 296100;
+        const licStatus = lsData?.license_key?.status || "";
+        const actUsage = Number(lsData?.license_key?.activations_usage ?? -1);
+
+        if (storeOk && (!lsData?.valid || licStatus === "inactive" || actUsage === 0)) {
+          const actResp = await fetch("https://api.lemonsqueezy.com/v1/licenses/activate", {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              license_key: key,
+              instance_name: "TruthOfMarket-Pro-Terminal",
+            }).toString(),
+          }).catch(() => null);
+          const actData = actResp ? await actResp.json().catch(() => null) : null;
+          const actStoreOk = !actData?.meta?.store_id || Number(actData.meta.store_id) === 296100;
+          if (
+            actStoreOk &&
+            actData &&
+            (actData.activated === true || actData?.license_key?.status === "active")
+          ) {
+            lsData = {
+              valid: true,
+              meta: actData.meta,
+              license_key: actData.license_key,
+            };
+          }
+        }
+
+        const finalStoreOk = !lsData?.meta?.store_id || Number(lsData.meta.store_id) === 296100;
+        const finalStatus = lsData?.license_key?.status || "";
+        const valid = Boolean(
+          finalStoreOk &&
+            lsData &&
+            lsData.valid === true &&
+            !lsData.error &&
+            finalStatus !== "disabled" &&
+            finalStatus !== "expired"
+        );
+        const isLifetime = Number(lsData?.meta?.product_id) === 1491891;
         return {
           valid,
           license_key: valid ? key : null,
-          tier: valid ? "pro" : "free",
+          tier: valid ? (isLifetime ? "pro_lifetime" : "pro") : "free",
           expires_at: valid ? lsData?.license_key?.expires_at || "2099-12-31T23:59:59Z" : null,
           message: valid
-            ? "Pro Terminal License Verified via Lemon Squeezy."
+            ? "Pro Terminal License Verified via Lemon Squeezy (Store #296100)."
             : (lsData && lsData.error) ||
               "Invalid or expired license key. Please verify your Lemon Squeezy receipt or subscribe below.",
         };

@@ -359,15 +359,81 @@ function switchView(targetView) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function bindEvents() {
-  // Initialize Lemon Squeezy checkout overlay if script is loaded
-  if (typeof window.createLemonSqueezy === "function") {
-    try {
-      window.createLemonSqueezy();
-    } catch (_) {
-      // Ignore overlay init errors in headless environments
+async function handleLemonSqueezyCheckoutSuccess(orderRef) {
+  const tokenVal = String(orderRef || "RSA-PRO-2026-LS-CHECKOUT").trim();
+  state.isProUnlocked = true;
+  state.licenseKey = tokenVal;
+  try {
+    localStorage.setItem("rsa_pro_unlocked", "true");
+    localStorage.setItem("rsa_token", tokenVal);
+    const kst = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+    if (localStorage.getItem("hq_paid_" + kst) !== "1") {
+      localStorage.setItem("hq_paid_" + kst, "1");
+      fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/paid_member_" + kst, {
+        mode: "cors",
+        keepalive: true,
+      }).catch(() => {});
+      fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/paid_member_total", {
+        mode: "cors",
+        keepalive: true,
+      }).catch(() => {});
     }
-  }
+  } catch (_) {}
+  await loadAllData();
+  const licModal = document.getElementById("licenseModal");
+  if (licModal) licModal.style.display = "none";
+  renderApp();
+  showToast(
+    "🎉 Lemon Squeezy Payment Confirmed! All 72 Pro Setups Unlocked (Check your email for your permanent License Key)."
+  );
+}
+
+function bindRsaLemonSqueezyEvents() {
+  if (typeof window === "undefined") return;
+  try {
+    if (typeof window.createLemonSqueezy === "function") {
+      window.createLemonSqueezy();
+    }
+    if (window.LemonSqueezy && typeof window.LemonSqueezy.Setup === "function") {
+      window.LemonSqueezy.Setup({
+        eventHandler: (event) => {
+          if (event && event.event === "Checkout.Success") {
+            const ordId =
+              event?.data?.order?.data?.attributes?.identifier ||
+              event?.data?.order?.data?.id ||
+              "RSA-PRO-2026-LS-CHECKOUT";
+            handleLemonSqueezyCheckoutSuccess(`RSA-PRO-2026-${ordId}`);
+          }
+        },
+      });
+    }
+    if (!window.__rsaLsPostMessageBound && typeof window.addEventListener === "function") {
+      window.__rsaLsPostMessageBound = true;
+      window.addEventListener("message", (ev) => {
+        try {
+          const origin = String(ev?.origin || "").toLowerCase();
+          if (!origin.includes("lemonsqueezy.com")) return;
+          const isSuccess =
+            ev.data === "Checkout.Success" ||
+            (ev.data && typeof ev.data === "object" && ev.data.event === "Checkout.Success") ||
+            (typeof ev.data === "string" && ev.data.includes("Checkout.Success"));
+          if (isSuccess) {
+            handleLemonSqueezyCheckoutSuccess("RSA-PRO-2026-LS-IFRAME");
+          }
+        } catch (_) {}
+      });
+    }
+  } catch (_) {}
+}
+
+if (typeof window !== "undefined") {
+  window.__bindRsaLemonSqueezyEvents = bindRsaLemonSqueezyEvents;
+  window.addEventListener("load", bindRsaLemonSqueezyEvents);
+}
+
+function bindEvents() {
+  // Initialize Lemon Squeezy checkout overlay & Checkout.Success auto-unlock handler
+  bindRsaLemonSqueezyEvents();
 
   // Brand Home Button
   const brandHomeBtn = document.getElementById("brandHomeBtn");
@@ -755,15 +821,21 @@ function bindEvents() {
 
   // Delegated Lemon Squeezy Checkout Overlay Interceptor
   // Handles both static and dynamically rendered checkout buttons (e.g. inside #docOutput)
-  document.addEventListener("click", (e) => {
-    const btn = e.target.closest(".lemonsqueezy-button");
-    if (!btn) return;
-    const href = btn.getAttribute("href") || "";
-    if (window.LemonSqueezy && window.LemonSqueezy.Url && typeof window.LemonSqueezy.Url.Open === "function") {
-      e.preventDefault();
-      window.LemonSqueezy.Url.Open(href);
-    }
-  });
+  if (!window.__rsaLsClickDelegated) {
+    window.__rsaLsClickDelegated = true;
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest(".lemonsqueezy-button");
+      if (!btn) return;
+      const href = btn.getAttribute("href") || "";
+      if (typeof window.__bindRsaLemonSqueezyEvents === "function") {
+        window.__bindRsaLemonSqueezyEvents();
+      }
+      if (window.LemonSqueezy && window.LemonSqueezy.Url && typeof window.LemonSqueezy.Url.Open === "function") {
+        e.preventDefault();
+        window.LemonSqueezy.Url.Open(href);
+      }
+    });
+  }
 
   // Admin Login & Config Modal Controls
   const adminLoginModal = document.getElementById("adminLoginModal");
@@ -2265,8 +2337,13 @@ async function init() {
   renderApp();
   handleSpecialAnchorScroll();
 
-  // Auto-unlock Pro Terminal when returning from Lemon Squeezy checkout with ?license_key= or ?key=
-  const urlLicenseKey = (initialSearch.get("license_key") || initialSearch.get("key") || "").trim();
+  // Auto-unlock Pro Terminal when returning from Lemon Squeezy checkout with ?license_key=, ?order_key=, or ?key=
+  const urlLicenseKey = (
+    initialSearch.get("license_key") ||
+    initialSearch.get("order_key") ||
+    initialSearch.get("key") ||
+    ""
+  ).trim();
   if (urlLicenseKey && !state.isProUnlocked) {
     try {
       const vRes = await validateLicense(urlLicenseKey);
@@ -2292,8 +2369,8 @@ async function init() {
         if (msgEl) {
           msgEl.style.color = "#34d399";
           msgEl.textContent = checkoutParam === "lifetime"
-            ? "💎 Lifetime Pass ($199): Enter your email below for an Instant 7-Day Pro Pass or proceed to Lemon Squeezy Checkout."
-            : "🍋 Pro Monthly ($29/mo): Enter your email below for an Instant 7-Day Pro Pass or proceed to Lemon Squeezy Checkout.";
+            ? "🏆 Lifetime Pass ($199): Click Lifetime Pass ($199) above for official Lemon Squeezy checkout, or paste your License Key below to unlock immediately."
+            : "🍋 Pro Monthly ($29/mo): Click Subscribe Pro ($29/mo) above for official Lemon Squeezy checkout, or paste your License Key below to unlock immediately.";
         }
       }
     }, 200);

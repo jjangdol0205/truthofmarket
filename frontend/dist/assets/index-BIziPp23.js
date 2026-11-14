@@ -373,8 +373,7 @@ function isProActive() {
     return false;
   }
   return true;
-}
-function getAuthHeader() {
+}function getAuthHeader() {
   if (!isProActive()) {
     return {};
   }
@@ -385,8 +384,7 @@ function getAuthHeader() {
     return { Authorization: `Bearer ${token}` };
   }
   return {};
-}
-function getVipTelegramUrl(isPro = false) {
+}function getVipTelegramUrl(isPro = false) {
   if (isPro && isProActive()) {
     try {
       return atob("aHR0cHM6Ly90Lm1lL3RydXRob2ZtYXJrZXRzcw==");
@@ -395,8 +393,7 @@ function getVipTelegramUrl(isPro = false) {
     }
   }
   return "#pro-vip-telegram";
-}
-function formatCheckoutUrl(
+}function formatCheckoutUrl(
   rawUrl,
   fallbackUrl = "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
 ) {
@@ -486,8 +483,7 @@ async function getStaticSemiOverview() {
     cachedSemiOverview = await r.json();
   }
   return cachedSemiOverview;
-}
-async function fetchStocks(params = {}) {
+}async function fetchStocks(params = {}) {
   const query = new URLSearchParams();
   if (params.search) query.append("search", params.search);
   if (params.zone && params.zone !== "ALL") query.append("zone", params.zone);
@@ -549,8 +545,7 @@ async function fetchStocks(params = {}) {
       return list.slice(off, off + lim);
     }
   );
-}
-async function fetchStockDetail(ticker) {
+}async function fetchStockDetail(ticker) {
   const clean = String(ticker || "CELH").trim().toUpperCase();
   return fetchJsonWithFallback(
     `/api/stocks/${encodeURIComponent(clean)}`,
@@ -565,8 +560,7 @@ async function fetchStockDetail(ticker) {
       return all.find((s) => s.ticker === clean) || all[0];
     }
   );
-}
-async function fetchBacktestSummary() {
+}async function fetchBacktestSummary() {
   return fetchJsonWithFallback(
     "/api/backtest",
     { headers: { Accept: "application/json" } },
@@ -575,8 +569,7 @@ async function fetchBacktestSummary() {
       return r.json();
     }
   );
-}
-async function fetchResearchList() {
+}async function fetchResearchList() {
   return fetchJsonWithFallback(
     "/api/research",
     {
@@ -590,8 +583,7 @@ async function fetchResearchList() {
       return r.json();
     }
   );
-}
-async function fetchResearchBrief(ticker) {
+}async function fetchResearchBrief(ticker) {
   const clean = String(ticker || "CELH").trim().toUpperCase();
   return fetchJsonWithFallback(
     `/api/research/${encodeURIComponent(clean)}`,
@@ -696,8 +688,7 @@ async function computeSha256Hex(inputStr) {
     // Fallback to pure JS SHA-256
   }
   return sha256PureJs(unescape(encodeURIComponent(inputStr)));
-}
-async function verifyAdminCredentials(username, password) {
+}async function verifyAdminCredentials(username, password) {
   const uname = String(username || "").trim();
   const pw = String(password || "");
   return fetchJsonWithFallback(
@@ -723,8 +714,7 @@ async function verifyAdminCredentials(username, password) {
       };
     }
   );
-}
-async function validateLicense(licenseKey) {
+}async function validateLicense(licenseKey) {
   return fetchJsonWithFallback(
     "/api/auth/license/validate",
     {
@@ -777,15 +767,56 @@ async function validateLicense(licenseKey) {
           },
           body: new URLSearchParams({ license_key: key }).toString(),
         });
-        const lsData = await lsResp.json().catch(() => null);
-        const valid = Boolean(lsData && lsData.valid === true && !lsData.error);
+        let lsData = await lsResp.json().catch(() => null);
+        const storeOk = !lsData?.meta?.store_id || Number(lsData.meta.store_id) === 296100;
+        const licStatus = lsData?.license_key?.status || "";
+        const actUsage = Number(lsData?.license_key?.activations_usage ?? -1);
+
+        if (storeOk && (!lsData?.valid || licStatus === "inactive" || actUsage === 0)) {
+          const actResp = await fetch("https://api.lemonsqueezy.com/v1/licenses/activate", {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              license_key: key,
+              instance_name: "TruthOfMarket-Pro-Terminal",
+            }).toString(),
+          }).catch(() => null);
+          const actData = actResp ? await actResp.json().catch(() => null) : null;
+          const actStoreOk = !actData?.meta?.store_id || Number(actData.meta.store_id) === 296100;
+          if (
+            actStoreOk &&
+            actData &&
+            (actData.activated === true || actData?.license_key?.status === "active")
+          ) {
+            lsData = {
+              valid: true,
+              meta: actData.meta,
+              license_key: actData.license_key,
+            };
+          }
+        }
+
+        const finalStoreOk = !lsData?.meta?.store_id || Number(lsData.meta.store_id) === 296100;
+        const finalStatus = lsData?.license_key?.status || "";
+        const valid = Boolean(
+          finalStoreOk &&
+            lsData &&
+            lsData.valid === true &&
+            !lsData.error &&
+            finalStatus !== "disabled" &&
+            finalStatus !== "expired"
+        );
+        const isLifetime = Number(lsData?.meta?.product_id) === 1491891;
         return {
           valid,
           license_key: valid ? key : null,
-          tier: valid ? "pro" : "free",
+          tier: valid ? (isLifetime ? "pro_lifetime" : "pro") : "free",
           expires_at: valid ? lsData?.license_key?.expires_at || "2099-12-31T23:59:59Z" : null,
           message: valid
-            ? "Pro Terminal License Verified via Lemon Squeezy."
+            ? "Pro Terminal License Verified via Lemon Squeezy (Store #296100)."
             : (lsData && lsData.error) ||
               "Invalid or expired license key. Please verify your Lemon Squeezy receipt or subscribe below.",
         };
@@ -801,8 +832,7 @@ async function validateLicense(licenseKey) {
       }
     }
   );
-}
-async function fetchProVault() {
+}async function fetchProVault() {
   return fetchJsonWithFallback(
     "/api/pro/vault",
     {
@@ -821,8 +851,7 @@ async function fetchProVault() {
       };
     }
   );
-}
-async function fetchPineScript() {
+}async function fetchPineScript() {
   return fetchJsonWithFallback(
     "/api/pro/pinescript",
     {
@@ -836,8 +865,7 @@ async function fetchPineScript() {
       return r.json();
     }
   );
-}
-async function evaluatePositionDoctor(data) {
+}async function evaluatePositionDoctor(data) {
   return fetchJsonWithFallback(
     "/api/pro/position-doctor",
     {
@@ -932,8 +960,7 @@ async function evaluatePositionDoctor(data) {
       }
     }
   );
-}
-const SECTOR_REGIME_MAP = {
+}const SECTOR_REGIME_MAP = {
   // 1. AI & Semiconductors
   "AI Semiconductors": "AI & Semiconductors",
   "Semiconductors": "AI & Semiconductors",
@@ -1007,9 +1034,7 @@ const SECTOR_REGIME_MAP = {
   "Oil & Gas E&P": "Energy & Industrials",
   "Integrated Energy": "Energy & Industrials",
   "Specialty Chemicals": "Energy & Industrials",
-};
-const VALUE_TRAPS = new Set(["INTC", "BA", "PFE", "PARA", "WBD", "NKE", "ALB"]);
-function getVipWatchlist() {
+};const VALUE_TRAPS = new Set(["INTC", "BA", "PFE", "PARA", "WBD", "NKE", "ALB"]);function getVipWatchlist() {
   if (typeof localStorage === "undefined") return ["CELH", "CCL", "TSLA", "SPOT", "NVDA"];
   try {
     const raw = localStorage.getItem("rsa_vip_watchlist");
@@ -1019,8 +1044,7 @@ function getVipWatchlist() {
     }
   } catch (_) {}
   return ["CELH", "CCL", "TSLA", "SPOT", "NVDA"];
-}
-async function saveVipWatchlist(tickers) {
+}async function saveVipWatchlist(tickers) {
   const cleaned = [...new Set((tickers || []).map((t) => String(t || "").trim().toUpperCase()).filter(Boolean))];
   if (typeof localStorage !== "undefined") {
     try {
@@ -1041,8 +1065,7 @@ async function saveVipWatchlist(tickers) {
     } catch (_) {}
   }
   return cleaned;
-}
-async function fetchSectorMatrix() {
+}async function fetchSectorMatrix() {
   return fetchJsonWithFallback(
     "/api/pro/sector-matrix",
     {
@@ -1079,8 +1102,7 @@ async function fetchSectorMatrix() {
       return { sectors: items };
     }
   );
-}
-async function evaluatePortfolioDoctor(payload) {
+}async function evaluatePortfolioDoctor(payload) {
   return fetchJsonWithFallback(
     "/api/pro/portfolio-doctor",
     {
@@ -1386,8 +1408,7 @@ async function evaluatePortfolioDoctor(payload) {
       };
     }
   );
-}
-async function fetchReferralConfig() {
+}async function fetchReferralConfig() {
   return fetchJsonWithFallback(
     "/api/referral/config",
     { headers: { Accept: "application/json" } },
@@ -1396,8 +1417,7 @@ async function fetchReferralConfig() {
       return r.json();
     }
   );
-}
-async function updateReferralConfig(data) {
+}async function updateReferralConfig(data) {
   return fetchJsonWithFallback(
     "/api/referral/config",
     {
@@ -1410,20 +1430,17 @@ async function updateReferralConfig(data) {
     },
     async () => ({ status: "updated", config: data })
   );
-}
-function getReferralRedirectUrl(provider, ticker) {
+}function getReferralRedirectUrl(provider, ticker) {
   return `/api/referral/redirect/${encodeURIComponent(
     provider.toLowerCase()
   )}?ticker=${encodeURIComponent(ticker)}`;
-}
-async function fetchSemiOverview() {
+}async function fetchSemiOverview() {
   return fetchJsonWithFallback(
     "/api/semi/overview",
     { headers: { Accept: "application/json" } },
     async () => getStaticSemiOverview()
   );
-}
-async function fetchSemiHistory(rangeCode = "1Y") {
+}async function fetchSemiHistory(rangeCode = "1Y") {
   const rc = String(rangeCode || "1Y").trim().toUpperCase();
   const validRanges = ["3M", "6M", "1Y", "3Y", "5Y", "10Y", "ALL"];
   const safeRange = validRanges.includes(rc) ? rc : "1Y";
@@ -1435,8 +1452,7 @@ async function fetchSemiHistory(rangeCode = "1Y") {
       return r.json();
     }
   );
-}
-async function calculateSemiRebalance(data) {
+}async function calculateSemiRebalance(data) {
   return fetchJsonWithFallback(
     "/api/semi/rebalance",
     {
@@ -1576,8 +1592,7 @@ async function calculateSemiRebalance(data) {
       };
     }
   );
-}
-async function calculateSemiLumpSum(data) {
+}async function calculateSemiLumpSum(data) {
   return fetchJsonWithFallback(
     "/api/semi/lump-sum",
     {
@@ -1795,8 +1810,7 @@ async function calculateSemiLumpSum(data) {
       }
     }
   );
-}
-async function buildClientTelegramPreview({
+}async function buildClientTelegramPreview({
   alert_type = "SEMI_BRIEFING",
   lang = "en",
   ticker = "CELH",
@@ -1983,17 +1997,10 @@ async function buildClientTelegramPreview({
     alert_type: "FULL_DAILY",
     lang: lg,
   };
-}
-const DEFAULT_TG_BOT_TOKEN = "DEMO-BOT-TOKEN";
-const DEFAULT_TG_CHAT_ID = "@truthofmarketss";
-const DEFAULT_TG_CHANNEL_URL = "https://t.me/truthofmarketss";
-const DEFAULT_YOUTUBE_URL = "https://www.youtube.com/@RightSideAlpha";
-const DEFAULT_INSTAGRAM_URL = "https://www.instagram.com/rightsidealpha";
-async function syncTelegramBotBrowser(botToken, currentChatId = "") {
+}const DEFAULT_TG_BOT_TOKEN = "DEMO-BOT-TOKEN";const DEFAULT_TG_CHAT_ID = "@truthofmarketss";const DEFAULT_TG_CHANNEL_URL = "https://t.me/truthofmarketss";const DEFAULT_YOUTUBE_URL = "https://www.youtube.com/@RightSideAlpha";const DEFAULT_INSTAGRAM_URL = "https://www.instagram.com/rightsidealpha";async function syncTelegramBotBrowser(botToken, currentChatId = "") {
   const cid = String(currentChatId || DEFAULT_TG_CHAT_ID).trim();
   return { chatId: cid, botUsername: "truthofmarketss", synced: true };
-}
-async function fetchTelegramStatus() {
+}async function fetchTelegramStatus() {
   return fetchJsonWithFallback(
     "/api/telegram/status",
     { headers: { Accept: "application/json" } },
@@ -2013,8 +2020,7 @@ async function fetchTelegramStatus() {
       };
     }
   );
-}
-async function saveTelegramConfig(data) {
+}async function saveTelegramConfig(data) {
   return fetchJsonWithFallback(
     "/api/telegram/config",
     {
@@ -2035,8 +2041,7 @@ async function saveTelegramConfig(data) {
       lang: data.lang || "kr",
     })
   );
-}
-async function verifyTelegramBot(data) {
+}async function verifyTelegramBot(data) {
   const tok = String(data.bot_token || localStorage.getItem("rsa_tg_bot_token") || DEFAULT_TG_BOT_TOKEN).trim();
   let cid = String(data.chat_id || localStorage.getItem("rsa_tg_chat_id") || "").trim();
 
@@ -2096,8 +2101,7 @@ async function verifyTelegramBot(data) {
     chat_id: cid || "@truthofmarketss",
     message: "✅ Connected to @truthofmarketss.",
   };
-}
-async function sendTelegramAlert(data) {
+}async function sendTelegramAlert(data) {
   const tok = String(data.bot_token || localStorage.getItem("rsa_tg_bot_token") || DEFAULT_TG_BOT_TOKEN).trim();
   let cid = String(data.chat_id || localStorage.getItem("rsa_tg_chat_id") || "").trim();
 
@@ -2266,8 +2270,7 @@ function decodeDocRow(row) {
   } catch (_) {
     return row;
   }
-}
-function renderDoctorVipUnlockPreview(state) {
+}function renderDoctorVipUnlockPreview(state) {
   if (!state) return "";
   const isPro = Boolean(state.isProUnlocked);
 
@@ -2436,8 +2439,7 @@ function renderDoctorVipUnlockPreview(state) {
       ${checkoutButtonsHtml}
     </div>
   `;
-}
-function formatDoctorResult(result, state = null) {
+}function formatDoctorResult(result, state = null) {
   let badgeColor = "var(--fin-up)";
   let borderLeftColor = "var(--fin-up)";
 
@@ -2504,8 +2506,7 @@ function formatDoctorResult(result, state = null) {
 
   const previewHtml = state ? renderDoctorVipUnlockPreview(state) : "";
   return baseHtml + previewHtml;
-}
-function renderPortfolioDoctorForm(state) {
+}function renderPortfolioDoctorForm(state) {
   const isPro = Boolean(state && state.isProUnlocked);
   const defaultPositions = (state && state.portfolioPositions && state.portfolioPositions.length > 0)
     ? state.portfolioPositions
@@ -2621,8 +2622,7 @@ function renderPortfolioDoctorForm(state) {
       </div>
     </div>
   `;
-}
-function formatPortfolioDoctorResult(result, state) {
+}function formatPortfolioDoctorResult(result, state) {
   if (!result) return "";
 
   const score = Number(result.health_score ?? 100);
@@ -3163,8 +3163,7 @@ function renderMiniChartSvg(chartType, isRevealed) {
       <text x="14" y="122" fill="#34d399" font-size="8.5" font-family="monospace" font-weight="800">${volLabel}</text>
     </svg>
   `;
-}
-function renderChartBlindTest(state) {
+}function renderChartBlindTest(state) {
   const lang = state.lang && BLIND_TEST_I18N[state.lang] ? state.lang : "en";
   const copy = BLIND_TEST_I18N[lang];
   const rounds = buildRoundsData(state);
@@ -3720,7 +3719,13 @@ function renderEasyProfitSimulator(state, netCagrStr) {
   const ignStocks = allStocks.filter((s) => s.zone_code === "IGNITION_ZONE");
   const selectableStocks = isPro
     ? (ignStocks.length > 0 ? ignStocks : allStocks.slice(0, 12))
-    : allStocks.filter((s, idx) => s.ticker === "CELH" || idx < 5);
+    : allStocks.filter(
+        (s, idx) =>
+          !s.locked &&
+          !s.is_pro_locked &&
+          String(s.ticker || "").toUpperCase() !== "LOCKED" &&
+          (s.ticker === "CELH" || idx < 5)
+      );
   const defaultTicker = state.easySimTicker || (selectableStocks[0] && selectableStocks[0].ticker) || "CELH";
   const selectedStock =
     allStocks.find((s) => s.ticker === defaultTicker) ||
@@ -4209,8 +4214,7 @@ function renderScreenerControls(state) {
       </div>
     </div>
   `;
-}
-function renderStockTable(state) {
+}function renderStockTable(state) {
   const t = state.t;
   const isPro = state.isProUnlocked;
   const stocks = (state.filteredStocks || []).filter((s) => !String(s.ticker).includes("."));
@@ -4281,8 +4285,7 @@ function renderStockTable(state) {
       ${softPaywallBanner}
     </div>
   `;
-}
-function renderStockRows(state) {
+}function renderStockRows(state) {
   const t = state.t || {};
   const stocks = (state.filteredStocks || []).filter((s) => !String(s.ticker).includes("."));
   const lang = state.lang;
@@ -4331,10 +4334,15 @@ function renderStockRows(state) {
       const rangePct = Math.min(100, Math.max(2, Math.round(((closeVal - low52) / rangeSpan) * 100)));
 
       // Soft paywall rule:
-      // Tickers 1–5 (idx < 5) are featured free sample leaders and fully readable/interactive.
-      // Tickers 6–72 (idx >= 5) are softly blurred when user is not Pro.
-      const isFeaturedLeader = idx < 5;
-      const isFreeSample = isFeaturedLeader; // Free sample rows (1-5 open) for non-Pro users
+      // Unmasked free sample leader(s) (e.g. #1 CELH) are fully readable/interactive;
+      // masked feed rows (ticker === "LOCKED") and rows 6–72 render cleanly as Pro-locked setups without $LOCKED/$0.00 placeholders.
+      const isMaskedPlaceholder =
+        !isPro &&
+        (Boolean(s.locked) ||
+          Boolean(s.is_pro_locked) ||
+          String(s.ticker || "").toUpperCase() === "LOCKED");
+      const isFeaturedLeader = idx < 5 && !isMaskedPlaceholder;
+      const isFreeSample = isFeaturedLeader;
       const isReadable = isPro || isFreeSample;
       const isSoftBlurred = !isReadable;
       const blurClass = isSoftBlurred ? "blurred-cell" : "";
@@ -4372,7 +4380,18 @@ function renderStockRows(state) {
       const vipWatchlist = state.vipWatchlist || [];
       const isStarred = vipWatchlist.includes(s.ticker);
 
-      const tickerCellHtml = `<div>
+      const tickerCellHtml = isMaskedPlaceholder
+        ? `<div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span class="mono" style="font-weight:800; font-size:0.86rem; color:#93c5fd;">🔒 VIP #${idx + 1}</span>
+              <span style="font-size:0.62rem; font-family:var(--font-mono); padding:1px 4px; background:#141d2f; border:1px solid #24324d; color:#93c5fd; border-radius:2px;">US</span>
+              <span style="font-size:0.6rem; padding:1px 5px; background:rgba(41,98,255,0.14); border:1px solid rgba(41,98,255,0.35); color:#93c5fd; border-radius:2px; font-family:var(--font-mono); font-weight:700;">PRO IGNITION #${idx + 1}</span>
+            </div>
+            <div style="font-size:0.72rem; font-family:var(--font-sans); color:var(--muted); margin-top:2px;">
+              Pro Institutional Signal · <span style="color:var(--text-secondary);">${s.sector || "US Equity"}</span>
+            </div>
+          </div>`
+        : `<div>
         <div style="display:flex; align-items:center; gap:6px;">
           <button
             type="button"
@@ -4399,8 +4418,8 @@ function renderStockRows(state) {
       </div>`;
 
       const closeCellHtml =
-        s.close === null || s.close === undefined
-          ? `<div class="mono" style="font-weight:700; color:var(--muted);">$0.00</div>`
+        isMaskedPlaceholder || s.close === null || s.close === undefined
+          ? `<div class="mono" style="font-weight:700; color:#93c5fd;">🔒 VIP</div>`
           : `<div class="mono" style="font-weight:700; color:#ffffff;" title="Latest Close Date: ${s.date || "2026-10-30"}">$${closeVal.toFixed(2)}</div>
              <div class="range-52w-wrap" title="52W Range: $${low52.toFixed(2)} – $${high52.toFixed(2)} | Current: $${closeVal.toFixed(2)}">
                <div class="range-52w-track">
@@ -4980,8 +4999,7 @@ const PRICING_COPY = {
     tsBtn: "⚡ TrendSpider AIスキャナーを開く ↗",
     tgBtn: "🔒 Pro専用 VIP Telegram ($SMH/$XLV & 72銘柄リアルタイムニュース)",
   },
-};
-function renderPricing(state) {
+};function renderPricing(state) {
   const cfg = state.config || {};
   const c = PRICING_COPY[state.lang] || PRICING_COPY.en;
   const lsMonthly = formatCheckoutUrl(
@@ -6344,16 +6362,6 @@ function renderSemiFearGreedView(state) {
 
 // --- src/main.js ---
 
-
-
-
-
-
-
-
-
-
-
 const initialPath = window.location.pathname.toLowerCase();
 const initialHash = window.location.hash.toLowerCase();
 const initialSearch = new URLSearchParams(window.location.search);
@@ -6671,15 +6679,81 @@ function switchView(targetView) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function bindEvents() {
-  // Initialize Lemon Squeezy checkout overlay if script is loaded
-  if (typeof window.createLemonSqueezy === "function") {
-    try {
-      window.createLemonSqueezy();
-    } catch (_) {
-      // Ignore overlay init errors in headless environments
+async function handleLemonSqueezyCheckoutSuccess(orderRef) {
+  const tokenVal = String(orderRef || "RSA-PRO-2026-LS-CHECKOUT").trim();
+  state.isProUnlocked = true;
+  state.licenseKey = tokenVal;
+  try {
+    localStorage.setItem("rsa_pro_unlocked", "true");
+    localStorage.setItem("rsa_token", tokenVal);
+    const kst = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+    if (localStorage.getItem("hq_paid_" + kst) !== "1") {
+      localStorage.setItem("hq_paid_" + kst, "1");
+      fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/paid_member_" + kst, {
+        mode: "cors",
+        keepalive: true,
+      }).catch(() => {});
+      fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/paid_member_total", {
+        mode: "cors",
+        keepalive: true,
+      }).catch(() => {});
     }
-  }
+  } catch (_) {}
+  await loadAllData();
+  const licModal = document.getElementById("licenseModal");
+  if (licModal) licModal.style.display = "none";
+  renderApp();
+  showToast(
+    "🎉 Lemon Squeezy Payment Confirmed! All 72 Pro Setups Unlocked (Check your email for your permanent License Key)."
+  );
+}
+
+function bindRsaLemonSqueezyEvents() {
+  if (typeof window === "undefined") return;
+  try {
+    if (typeof window.createLemonSqueezy === "function") {
+      window.createLemonSqueezy();
+    }
+    if (window.LemonSqueezy && typeof window.LemonSqueezy.Setup === "function") {
+      window.LemonSqueezy.Setup({
+        eventHandler: (event) => {
+          if (event && event.event === "Checkout.Success") {
+            const ordId =
+              event?.data?.order?.data?.attributes?.identifier ||
+              event?.data?.order?.data?.id ||
+              "RSA-PRO-2026-LS-CHECKOUT";
+            handleLemonSqueezyCheckoutSuccess(`RSA-PRO-2026-${ordId}`);
+          }
+        },
+      });
+    }
+    if (!window.__rsaLsPostMessageBound && typeof window.addEventListener === "function") {
+      window.__rsaLsPostMessageBound = true;
+      window.addEventListener("message", (ev) => {
+        try {
+          const origin = String(ev?.origin || "").toLowerCase();
+          if (!origin.includes("lemonsqueezy.com")) return;
+          const isSuccess =
+            ev.data === "Checkout.Success" ||
+            (ev.data && typeof ev.data === "object" && ev.data.event === "Checkout.Success") ||
+            (typeof ev.data === "string" && ev.data.includes("Checkout.Success"));
+          if (isSuccess) {
+            handleLemonSqueezyCheckoutSuccess("RSA-PRO-2026-LS-IFRAME");
+          }
+        } catch (_) {}
+      });
+    }
+  } catch (_) {}
+}
+
+if (typeof window !== "undefined") {
+  window.__bindRsaLemonSqueezyEvents = bindRsaLemonSqueezyEvents;
+  window.addEventListener("load", bindRsaLemonSqueezyEvents);
+}
+
+function bindEvents() {
+  // Initialize Lemon Squeezy checkout overlay & Checkout.Success auto-unlock handler
+  bindRsaLemonSqueezyEvents();
 
   // Brand Home Button
   const brandHomeBtn = document.getElementById("brandHomeBtn");
@@ -7067,15 +7141,21 @@ function bindEvents() {
 
   // Delegated Lemon Squeezy Checkout Overlay Interceptor
   // Handles both static and dynamically rendered checkout buttons (e.g. inside #docOutput)
-  document.addEventListener("click", (e) => {
-    const btn = e.target.closest(".lemonsqueezy-button");
-    if (!btn) return;
-    const href = btn.getAttribute("href") || "";
-    if (window.LemonSqueezy && window.LemonSqueezy.Url && typeof window.LemonSqueezy.Url.Open === "function") {
-      e.preventDefault();
-      window.LemonSqueezy.Url.Open(href);
-    }
-  });
+  if (!window.__rsaLsClickDelegated) {
+    window.__rsaLsClickDelegated = true;
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest(".lemonsqueezy-button");
+      if (!btn) return;
+      const href = btn.getAttribute("href") || "";
+      if (typeof window.__bindRsaLemonSqueezyEvents === "function") {
+        window.__bindRsaLemonSqueezyEvents();
+      }
+      if (window.LemonSqueezy && window.LemonSqueezy.Url && typeof window.LemonSqueezy.Url.Open === "function") {
+        e.preventDefault();
+        window.LemonSqueezy.Url.Open(href);
+      }
+    });
+  }
 
   // Admin Login & Config Modal Controls
   const adminLoginModal = document.getElementById("adminLoginModal");
@@ -8577,8 +8657,13 @@ async function init() {
   renderApp();
   handleSpecialAnchorScroll();
 
-  // Auto-unlock Pro Terminal when returning from Lemon Squeezy checkout with ?license_key= or ?key=
-  const urlLicenseKey = (initialSearch.get("license_key") || initialSearch.get("key") || "").trim();
+  // Auto-unlock Pro Terminal when returning from Lemon Squeezy checkout with ?license_key=, ?order_key=, or ?key=
+  const urlLicenseKey = (
+    initialSearch.get("license_key") ||
+    initialSearch.get("order_key") ||
+    initialSearch.get("key") ||
+    ""
+  ).trim();
   if (urlLicenseKey && !state.isProUnlocked) {
     try {
       const vRes = await validateLicense(urlLicenseKey);
@@ -8604,8 +8689,8 @@ async function init() {
         if (msgEl) {
           msgEl.style.color = "#34d399";
           msgEl.textContent = checkoutParam === "lifetime"
-            ? "💎 Lifetime Pass ($199): Enter your email below for an Instant 7-Day Pro Pass or proceed to Lemon Squeezy Checkout."
-            : "🍋 Pro Monthly ($29/mo): Enter your email below for an Instant 7-Day Pro Pass or proceed to Lemon Squeezy Checkout.";
+            ? "🏆 Lifetime Pass ($199): Click Lifetime Pass ($199) above for official Lemon Squeezy checkout, or paste your License Key below to unlock immediately."
+            : "🍋 Pro Monthly ($29/mo): Click Subscribe Pro ($29/mo) above for official Lemon Squeezy checkout, or paste your License Key below to unlock immediately.";
         }
       }
     }, 200);

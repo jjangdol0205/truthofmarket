@@ -117,7 +117,13 @@ function renderEasyProfitSimulator(state, netCagrStr) {
   const ignStocks = allStocks.filter((s) => s.zone_code === "IGNITION_ZONE");
   const selectableStocks = isPro
     ? (ignStocks.length > 0 ? ignStocks : allStocks.slice(0, 12))
-    : allStocks.filter((s, idx) => s.ticker === "CELH" || idx < 5);
+    : allStocks.filter(
+        (s, idx) =>
+          !s.locked &&
+          !s.is_pro_locked &&
+          String(s.ticker || "").toUpperCase() !== "LOCKED" &&
+          (s.ticker === "CELH" || idx < 5)
+      );
   const defaultTicker = state.easySimTicker || (selectableStocks[0] && selectableStocks[0].ticker) || "CELH";
   const selectedStock =
     allStocks.find((s) => s.ticker === defaultTicker) ||

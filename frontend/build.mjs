@@ -1,9 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const __dirname = fs.existsSync(path.join(process.cwd(), "src", "main.js"))
-  ? process.cwd()
-  : path.join(process.cwd(), "frontend");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
 const distDir = path.join(__dirname, "dist");
 const rootDistDir = path.join(rootDir, "dist");
@@ -115,22 +114,35 @@ const indexHtml = `<!DOCTYPE html>
 </html>
 `;
 
+function copyTreeSync(src, dest) {
+  const st = fs.statSync(src);
+  if (st.isDirectory()) {
+    fs.mkdirSync(dest, { recursive: true });
+    for (const entry of fs.readdirSync(src)) {
+      copyTreeSync(path.join(src, entry), path.join(dest, entry));
+    }
+  } else {
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    fs.copyFileSync(src, dest);
+  }
+}
+
 fs.writeFileSync(path.join(distDir, "index.html"), indexHtml, "utf8");
 
 if (fs.existsSync(publicDir)) {
-  fs.cpSync(publicDir, distDir, { recursive: true });
+  copyTreeSync(publicDir, distDir);
 }
 
 // Also synchronize to root ./dist and root ./ static targets so Render Static & GitHub Pages stay 100% in sync
 fs.mkdirSync(rootDistDir, { recursive: true });
-fs.cpSync(distDir, rootDistDir, { recursive: true });
+copyTreeSync(distDir, rootDistDir);
 
 fs.writeFileSync(path.join(rootDir, "index.html"), indexHtml, "utf8");
 fs.mkdirSync(path.join(rootDir, "assets"), { recursive: true });
-fs.cpSync(assetsDir, path.join(rootDir, "assets"), { recursive: true });
+copyTreeSync(assetsDir, path.join(rootDir, "assets"));
 if (fs.existsSync(publicDir)) {
   for (const entry of fs.readdirSync(publicDir)) {
-    fs.cpSync(path.join(publicDir, entry), path.join(rootDir, entry), { recursive: true });
+    copyTreeSync(path.join(publicDir, entry), path.join(rootDir, entry));
   }
 }
 
