@@ -1766,6 +1766,64 @@ a {
   border-color: rgba(245, 158, 11, 0.2);
 }
 
+.mobile-stock-card-summary {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-stock-card-summary {
+    display: flex !important;
+  }
+  .table-wrap {
+    overflow-x: hidden;
+  }
+  .stock-table,
+  .stock-table thead,
+  .stock-table tbody,
+  .stock-table tbody tr,
+  .stock-table tbody td:first-child {
+    display: block;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+  .stock-table tbody tr {
+    border-bottom: 1px solid var(--border);
+  }
+  .stock-table tbody td:first-child {
+    padding: 11px 12px !important;
+    position: static !important;
+  }
+  .stock-table tbody td:not(:first-child) {
+    display: none !important;
+  }
+  .stock-table thead tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px;
+    padding: 8px 10px;
+    background: #080d19;
+    border-bottom: 1px solid var(--border);
+  }
+  .stock-table thead th {
+    min-width: 0 !important;
+    min-height: 38px;
+    padding: 6px 8px !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.68rem !important;
+    position: static !important;
+    text-align: left !important;
+  }
+  .stock-table thead th:nth-child(n + 5) {
+    display: none !important;
+  }
+}
+
 @media (max-width: 640px) {
   .doc-vip-pick-row {
     flex-direction: column;

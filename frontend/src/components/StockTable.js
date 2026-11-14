@@ -214,12 +214,21 @@ export function renderStockRows(state) {
       <tr data-locked-row="1" class="soft-paywall-row">
         <td>
           <div>
-            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-              <span class="mono" style="font-weight:800; font-size:0.86rem; color:#fbbf24;">🔒 VIP IGNITION #${idx + 1}</span>
-              <span style="font-size:0.62rem; font-family:var(--font-mono); padding:1px 5px; background:rgba(41,98,255,0.16); border:1px solid rgba(41,98,255,0.38); color:#93c5fd; border-radius:3px; font-weight:700;">PRO PICK</span>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:6px; flex-wrap:wrap;">
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                <span class="mono" style="font-weight:800; font-size:0.86rem; color:#fbbf24;">🔒 VIP IGNITION #${idx + 1}</span>
+                <span style="font-size:0.62rem; font-family:var(--font-mono); padding:1px 5px; background:rgba(41,98,255,0.16); border:1px solid rgba(41,98,255,0.38); color:#93c5fd; border-radius:3px; font-weight:700;">PRO PICK</span>
+              </div>
+              <span class="mobile-stock-card-summary mono" style="font-size:0.78rem; font-weight:800; color:var(--fin-up);">Score ${Number(s.score ?? 85)}</span>
             </div>
             <div style="font-size:0.72rem; font-family:var(--font-sans); color:var(--muted); margin-top:2px;">
               Hidden Institutional Breakout · <span style="color:var(--text-secondary);">${s.sector || "US Equity"}</span>
+            </div>
+            <div class="mobile-stock-card-summary" style="margin-top:8px; padding-top:7px; border-top:1px solid rgba(51,65,85,0.55); align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap;">
+              <span class="badge ${badgeClass}">${cleanZoneLabel}</span>
+              <a class="btn btn-primary btn-sm lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:40px; white-space:nowrap; font-weight:700;">
+                🔒 Unlock Pro ($29/mo)
+              </a>
             </div>
           </div>
         </td>
@@ -307,26 +316,45 @@ export function renderStockRows(state) {
       <tr data-ticker="${s.ticker}" class="stock-row-clickable" style="cursor:pointer;">
         <td>
           <div>
-            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-              <button
-                type="button"
-                class="btn-watchlist-star"
-                data-ticker="${s.ticker}"
-                title="${isStarred ? "Remove from VIP Watchlist" : "Add to VIP Watchlist"}"
-                style="background:none; border:none; cursor:pointer; font-size:0.95rem; padding:2px 4px; line-height:1; color:${isStarred ? "#fbbf24" : "var(--muted)"}; display:inline-flex; align-items:center;"
-              >
-                ${isStarred ? "⭐" : "☆"}
-              </button>
-              <span class="mono" style="font-weight:800; font-size:0.9rem; color:#ffffff;">${s.ticker}</span>
-              <span style="font-size:0.62rem; font-family:var(--font-mono); padding:1px 4px; background:#141d2f; border:1px solid #24324d; color:#93c5fd; border-radius:2px;">US</span>
-              ${
-                !isPro && s.ticker === "CELH"
-                  ? `<span style="font-size:0.6rem; padding:1px 4px; background:rgba(14,203,129,0.18); color:var(--fin-up); border-radius:2px; font-weight:700;">FREE SHOWCASE</span>`
-                  : ""
-              }
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:6px; flex-wrap:wrap;">
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                <button
+                  type="button"
+                  class="btn-watchlist-star"
+                  data-ticker="${s.ticker}"
+                  title="${isStarred ? "Remove from VIP Watchlist" : "Add to VIP Watchlist"}"
+                  style="background:none; border:none; cursor:pointer; font-size:0.95rem; padding:2px 4px; line-height:1; color:${isStarred ? "#fbbf24" : "var(--muted)"}; display:inline-flex; align-items:center;"
+                >
+                  ${isStarred ? "⭐" : "☆"}
+                </button>
+                <span class="mono" style="font-weight:800; font-size:0.92rem; color:#ffffff;">${s.ticker}</span>
+                <span style="font-size:0.62rem; font-family:var(--font-mono); padding:1px 4px; background:#141d2f; border:1px solid #24324d; color:#93c5fd; border-radius:2px;">US</span>
+                ${
+                  !isPro && s.ticker === "CELH"
+                    ? `<span style="font-size:0.6rem; padding:1px 4px; background:rgba(14,203,129,0.18); color:var(--fin-up); border-radius:2px; font-weight:700;">FREE SHOWCASE</span>`
+                    : ""
+                }
+              </div>
+              <div class="mobile-stock-card-summary mono" style="align-items:center; gap:8px;">
+                <span style="font-weight:800; font-size:0.92rem; color:#ffffff;">$${closeVal.toFixed(2)}</span>
+                <span style="font-size:0.74rem; font-weight:800; padding:2px 6px; border-radius:4px; background:rgba(15,23,42,0.9); border:1px solid rgba(148,163,184,0.28); color:${s.score >= 80 ? "var(--fin-up)" : s.score >= 55 ? "var(--fin-amber)" : "var(--fin-down)"};">Score ${Number(s.score ?? 0)}</span>
+              </div>
             </div>
             <div style="font-size:0.73rem; font-family:var(--font-sans); color:var(--muted); margin-top:2px;">
               ${stockName} · <span style="color:var(--text-secondary);">${s.sector}</span>
+            </div>
+            <div class="mobile-stock-card-summary" style="margin-top:8px; padding-top:7px; border-top:1px solid rgba(51,65,85,0.55); align-items:center; justify-content:space-between; gap:6px; flex-wrap:wrap;">
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                <span class="badge ${badgeClass}">${cleanZoneLabel}</span>
+                ${
+                  showTargets
+                    ? `<span class="mono" style="font-size:0.72rem; color:#cbd5e1;">TRG <b style="color:#60a5fa;">${ma60Disp}</b> · STP <b style="color:var(--fin-down);">${stopDisp}</b></span>`
+                    : `<span class="mono" style="font-size:0.71rem; color:#93c5fd;">🔒 Pro Trigger &amp; -9% Stop</span>`
+                }
+              </div>
+              <button type="button" class="btn btn-sm btn-open-stock-detail" data-ticker="${s.ticker}" style="min-height:40px; padding:5px 10px; border-color:rgba(56,189,248,0.45); color:#38bdf8; font-weight:700;">
+                Details →
+              </button>
             </div>
           </div>
         </td>

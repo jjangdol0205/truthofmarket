@@ -49,6 +49,7 @@ export function renderHeader(state) {
     Boolean(state.isAdminAuthenticated);
 
   return `
+    <span id="pro-vip-telegram" style="display:none;" aria-hidden="true"></span>
     <!-- INSTITUTIONAL MARKET TAPE RIBBON -->
     <div class="market-ribbon">
       <div class="market-ribbon-inner">
