@@ -12,10 +12,10 @@ const enCopy = {
   btnUnlockPro: "Unlock Pro ($29/mo)",
 
   // RightSideAlpha Hero & KPIs (B2C 3-Second Hook)
-  heroTag: "AUDITED 26.8-YR US BACKTEST · 394,371 STOCK-DAYS",
-  heroTitle: "Stop Buying Falling Knives—Spot Verified Stock Breakouts With Clear -9% Risk Limits.",
+  heroTag: "RETIREMENT SAFETY & BREAKOUT SCANNER · 26.8-YR AUDITED DATA",
+  heroTitle: "Protect Your Retirement Nest Egg & Spot Safe Uptrends in 60 Seconds a Day.",
   heroDesc:
-    "We scan 72 liquid NYSE & NASDAQ stocks daily to catch high-volume turnarounds reclaiming their 20-day and 60-day trendlines—with exact entry triggers and -9% stop-loss floors.",
+    "Daily 3-color safety & breakout check across 72 liquid US stocks—enter only confirmed uptrends and protect every position with a clear -9% safety stop.",
   pwRsiExplainerBtn: "How It Works",
   pwRsiModalTitle: "PW-RSI (Post-Washout Right-Side Ignition) Methodology",
   kpi1_label: "1Y 2x (+100%) Hit Rate",
@@ -64,15 +64,15 @@ const enCopy = {
   filterKnife: "Downtrend",
   filterTrap: "Value Trap",
   colTicker: "Ticker / Sector",
-  colZone: "Signal & 4-Factor Check",
-  colScore: "Quant Score",
+  colZone: "3-Color Safety Signal",
+  colScore: "Safety Score",
   colClose: "Last Close & 52W Range",
   colProx: "vs 52W Low",
   colDD: "52W Drawdown",
-  colMA: "vs MA20 / MA60",
-  colVol: "10D Vol Surge",
+  colMA: "vs 20D / 60D Trend",
+  colVol: "10D Volume",
   colHist: "Hist 2x Rate",
-  colTrigger: "Entry Trigger / -9% Stop",
+  colTrigger: "Buy Trigger / -9% Safety Stop",
   colActions: "Details & Charts",
 
   // Pro Vault & Tools

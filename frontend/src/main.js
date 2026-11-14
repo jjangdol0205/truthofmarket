@@ -142,6 +142,9 @@ function detectInitialLang() {
 const state = {
   lang: detectInitialLang(),
   activeView: defaultView,
+  uiTheme: localStorage.getItem("tom_ui_theme") || "dark",
+  fontSizeMode: localStorage.getItem("tom_font_size") || "normal",
+  freeMemberEmail: localStorage.getItem("tom_free_member_email") || "",
   isAdminAuthenticated: sessionStorage.getItem("rsa_admin_auth") === "true",
   isProUnlocked: isProActive(),
   licenseKey: localStorage.getItem("rsa_token") || "",
@@ -448,11 +451,110 @@ function bindRsaLemonSqueezyEvents() {
 if (typeof window !== "undefined") {
   window.__bindRsaLemonSqueezyEvents = bindRsaLemonSqueezyEvents;
   window.addEventListener("load", bindRsaLemonSqueezyEvents);
+  try {
+    const initTheme = localStorage.getItem("tom_ui_theme") || "dark";
+    const initFont = localStorage.getItem("tom_font_size") || "normal";
+    document.documentElement.setAttribute("data-tom-theme", initTheme);
+    document.documentElement.setAttribute("data-tom-font", initFont);
+  } catch (_) {}
 }
 
 function bindEvents() {
   // Initialize Lemon Squeezy checkout overlay & Checkout.Success auto-unlock handler
   bindRsaLemonSqueezyEvents();
+
+  // Senior Font Size & Daylight Theme Toggles
+  const btnToggleTomFont = document.getElementById("btnToggleTomFont");
+  if (btnToggleTomFont) {
+    btnToggleTomFont.addEventListener("click", () => {
+      state.fontSizeMode = state.fontSizeMode === "large" ? "normal" : "large";
+      try {
+        localStorage.setItem("tom_font_size", state.fontSizeMode);
+        document.documentElement.setAttribute("data-tom-font", state.fontSizeMode);
+      } catch (_) {}
+      renderApp();
+    });
+  }
+
+  const btnToggleTomTheme = document.getElementById("btnToggleTomTheme");
+  if (btnToggleTomTheme) {
+    btnToggleTomTheme.addEventListener("click", () => {
+      state.uiTheme = state.uiTheme === "light" ? "dark" : "light";
+      try {
+        localStorage.setItem("tom_ui_theme", state.uiTheme);
+        document.documentElement.setAttribute("data-tom-theme", state.uiTheme);
+      } catch (_) {}
+      renderApp();
+    });
+  }
+
+  // 3-Color Traffic Light Strip Actions
+  document.querySelectorAll(".tom-traffic-card").forEach((card) => {
+    card.addEventListener("click", () => {
+      const z = card.getAttribute("data-traffic-zone");
+      if (z === "DOCTOR") {
+        const docEl = document.getElementById("position-doctor-card");
+        if (docEl && docEl.scrollIntoView) docEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+      if (z) {
+        state.zoneFilter = z;
+        applyClientFilterAndSort();
+        renderApp();
+        const tbl = document.getElementById("screenerSection");
+        if (tbl && tbl.scrollIntoView) tbl.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  });
+
+  // 1-Field Free Morning Signal Signup Form
+  const tomMorningForm = document.getElementById("tomMorningSignalForm");
+  if (tomMorningForm) {
+    tomMorningForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const inp = document.getElementById("tomMorningEmailInput");
+      const statusEl = document.getElementById("tomMorningSignalStatus");
+      const bonusEl = document.getElementById("tomFreeMemberBonusCard");
+      const email = String(inp ? inp.value : "").trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        if (statusEl) {
+          statusEl.style.display = "block";
+          statusEl.style.color = "#f87171";
+          statusEl.textContent = "⚠️ Please enter a valid email address (e.g., robert@email.com).";
+        }
+        if (inp) inp.focus();
+        return;
+      }
+      state.freeMemberEmail = email;
+      try {
+        const kst = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+        localStorage.setItem("tom_free_member_email", email);
+        localStorage.setItem("tom_free_member_since", kst);
+        if (typeof window.trackTomFreeSignup === "function") {
+          window.trackTomFreeSignup(email);
+        }
+      } catch (_) {}
+      if (statusEl) {
+        statusEl.style.display = "block";
+        statusEl.style.color = "#34d399";
+        statusEl.textContent = `🎉 Welcome aboard (${email})! Your 8:30 AM ET Safety Brief & 2 Bonus Watchlist Setups are now unlocked.`;
+      }
+      if (bonusEl) bonusEl.style.display = "block";
+      showToast("✅ Free Daily Morning Signals & -9% Alerts Activated!");
+    });
+  }
+
+  const btnDocJumpFreeAlert = document.getElementById("btnDocJumpFreeAlert");
+  if (btnDocJumpFreeAlert) {
+    btnDocJumpFreeAlert.addEventListener("click", () => {
+      const box = document.getElementById("tomMorningSignalBox");
+      const inp = document.getElementById("tomMorningEmailInput");
+      if (box && box.scrollIntoView) box.scrollIntoView({ behavior: "smooth", block: "center" });
+      setTimeout(() => {
+        if (inp) inp.focus();
+      }, 250);
+    });
+  }
 
   // Brand Home Button
   const brandHomeBtn = document.getElementById("brandHomeBtn");

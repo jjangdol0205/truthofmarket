@@ -1838,3 +1838,161 @@ a {
   }
 }
 
+/* ==========================================================================
+   50-70s US INVESTOR SENIOR READABILITY, DAYLIGHT MODE & 1-FIELD MORNING BRIEF
+   ========================================================================== */
+html {
+  font-size: 16.5px;
+}
+html[data-tom-font="large"] {
+  font-size: 18.8px;
+}
+
+html[data-tom-theme="light"] {
+  --bg: #f1f5f9;
+  --bg-terminal: #f4f7fb;
+  --surface-base: #f8fafc;
+  --surface-card: #ffffff;
+  --surface-elevated: #f8fafc;
+  --surface-hover: #eff6ff;
+  --card: #ffffff;
+  --card2: #f8fafc;
+  --border: #cbd5e1;
+  --border-subtle: #e2e8f0;
+  --border-card: #cbd5e1;
+  --border-card-hover: #94a3b8;
+  --text: #0b1f3a;
+  --text-secondary: #1e293b;
+  --muted: #475569;
+  --fin-up: #047857;
+  --fin-down: #be123c;
+  --fin-blue: #1d4ed8;
+  --fin-amber: #b45309;
+}
+
+html[data-tom-theme="light"] .topbar {
+  background: rgba(255, 255, 255, 0.96);
+  border-bottom: 1px solid #cbd5e1;
+}
+html[data-tom-theme="light"] .market-ribbon {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+html[data-tom-theme="light"] .hero,
+html[data-tom-theme="light"] #position-doctor-card,
+html[data-tom-theme="light"] .screener-panel,
+html[data-tom-theme="light"] .price-card,
+html[data-tom-theme="light"] #easyProfitPlaybookSection {
+  background: #ffffff !important;
+  color: #0b1f3a !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.07) !important;
+}
+html[data-tom-theme="light"] h1,
+html[data-tom-theme="light"] h2,
+html[data-tom-theme="light"] h3,
+html[data-tom-theme="light"] .stock-table td,
+html[data-tom-theme="light"] .stock-table th {
+  color: #0b1f3a !important;
+}
+html[data-tom-theme="light"] #docTicker,
+html[data-tom-theme="light"] #docEntry,
+html[data-tom-theme="light"] #docDays,
+html[data-tom-theme="light"] .search-box {
+  background: #f8fafc !important;
+  color: #0b1f3a !important;
+  border-color: #94a3b8 !important;
+}
+
+.tom-traffic-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 12px 0 14px;
+}
+.tom-traffic-card {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+html[data-tom-theme="light"] .tom-traffic-card {
+  background: #f8fafc;
+}
+.tom-traffic-card:hover {
+  transform: translateY(-2px);
+  border-color: #38bdf8;
+}
+.tom-traffic-card.t-green { border-top: 4px solid #10b981; }
+.tom-traffic-card.t-yellow { border-top: 4px solid #f59e0b; }
+.tom-traffic-card.t-red { border-top: 4px solid #ef4444; }
+
+.tom-morning-box {
+  background: linear-gradient(135deg, rgba(6, 95, 70, 0.22), rgba(30, 58, 138, 0.22));
+  border: 2px solid #10b981;
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin: 0 0 14px;
+  box-shadow: 0 10px 26px rgba(16, 185, 129, 0.14);
+}
+html[data-tom-theme="light"] .tom-morning-box {
+  background: linear-gradient(135deg, #ecfdf5, #eff6ff);
+  border-color: #059669;
+}
+.tom-morning-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.tom-morning-input {
+  flex: 1 1 260px;
+  min-height: 60px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 2px solid rgba(148, 163, 184, 0.45);
+  background: #05080f;
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+html[data-tom-theme="light"] .tom-morning-input {
+  background: #ffffff;
+  color: #0b1f3a;
+  border-color: #64748b;
+}
+.tom-morning-input:focus {
+  outline: 3px solid rgba(16, 185, 129, 0.4);
+  border-color: #10b981;
+}
+.tom-morning-btn {
+  flex: 0 0 auto;
+  min-height: 60px;
+  padding: 12px 24px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #059669, #047857);
+  color: #ffffff !important;
+  font-size: 1.04rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(5, 150, 105, 0.32);
+  white-space: nowrap;
+}
+@media (max-width: 768px) {
+  .tom-traffic-strip {
+    grid-template-columns: 1fr;
+  }
+  .tom-morning-btn {
+    width: 100%;
+    white-space: normal;
+  }
+}
+
+

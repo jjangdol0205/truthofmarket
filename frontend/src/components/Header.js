@@ -123,6 +123,26 @@ export function renderHeader(state) {
         </div>
 
         <div class="nav-actions">
+          <button
+            type="button"
+            class="btn btn-sm"
+            id="btnToggleTomFont"
+            title="Toggle Large Senior Text Size (18px-20px)"
+            style="min-height:38px; padding:4px 9px; font-weight:800; border-color:rgba(16,185,129,0.5); color:#34d399;"
+          >
+            🔍 ${state.fontSizeMode === "large" ? "Text: Large" : "Text: A+"}
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-sm"
+            id="btnToggleTomTheme"
+            title="Switch between Daylight Light Mode and Dark Terminal Mode"
+            style="min-height:38px; padding:4px 9px; font-weight:800; border-color:rgba(251,191,36,0.5); color:#fbbf24;"
+          >
+            ${state.uiTheme === "light" ? "🌙 Dark" : "☀️ Daylight"}
+          </button>
+
           <div class="lang-switch" aria-label="Language Selector">
             <button type="button" class="lang-btn ${lang !== "jp" ? "active" : ""}" data-lang="en">EN</button>
             <button type="button" class="lang-btn ${lang === "jp" ? "active" : ""}" data-lang="jp">JP</button>

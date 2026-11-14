@@ -52,6 +52,13 @@ export function renderPositionDoctorForm(state) {
       <div id="docOutput" style="display:${state.docLastResult ? "block" : "none"}; font-size:0.78rem; background:#05080f; padding:8px 10px; border-radius:4px; border:1px solid var(--border); border-left:3px solid var(--fin-blue);">
         ${initialDoc}
       </div>
+
+      <div id="tomDocAlertBar" style="margin-top:4px; padding-top:8px; border-top:1px dashed rgba(148,163,184,0.25); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:0.82rem;">
+        <span style="color:var(--text-secondary); font-weight:600;">🔔 Want a free email alert if your stock hits its <b>-9% Safety Stop</b>?</span>
+        <button type="button" class="btn btn-sm" id="btnDocJumpFreeAlert" style="min-height:40px; padding:6px 12px; background:rgba(16,185,129,0.16); border-color:#10b981; color:#34d399; font-weight:800;">
+          📧 Enable Free -9% Email Alert →
+        </button>
+      </div>
     </div>
   `;
 }

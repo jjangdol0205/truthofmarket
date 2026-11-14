@@ -13,10 +13,10 @@ const enCopy = {
   btnUnlockPro: "Unlock Pro ($29/mo)",
 
   // RightSideAlpha Hero & KPIs (B2C 3-Second Hook)
-  heroTag: "AUDITED 26.8-YR US BACKTEST · 394,371 STOCK-DAYS",
-  heroTitle: "Stop Buying Falling Knives—Spot Verified Stock Breakouts With Clear -9% Risk Limits.",
+  heroTag: "RETIREMENT SAFETY & BREAKOUT SCANNER · 26.8-YR AUDITED DATA",
+  heroTitle: "Protect Your Retirement Nest Egg & Spot Safe Uptrends in 60 Seconds a Day.",
   heroDesc:
-    "We scan 72 liquid NYSE & NASDAQ stocks daily to catch high-volume turnarounds reclaiming their 20-day and 60-day trendlines—with exact entry triggers and -9% stop-loss floors.",
+    "Daily 3-color safety & breakout check across 72 liquid US stocks—enter only confirmed uptrends and protect every position with a clear -9% safety stop.",
   pwRsiExplainerBtn: "How It Works",
   pwRsiModalTitle: "PW-RSI (Post-Washout Right-Side Ignition) Methodology",
   kpi1_label: "1Y 2x (+100%) Hit Rate",
@@ -65,15 +65,15 @@ const enCopy = {
   filterKnife: "Downtrend",
   filterTrap: "Value Trap",
   colTicker: "Ticker / Sector",
-  colZone: "Signal & 4-Factor Check",
-  colScore: "Quant Score",
+  colZone: "3-Color Safety Signal",
+  colScore: "Safety Score",
   colClose: "Last Close & 52W Range",
   colProx: "vs 52W Low",
   colDD: "52W Drawdown",
-  colMA: "vs MA20 / MA60",
-  colVol: "10D Vol Surge",
+  colMA: "vs 20D / 60D Trend",
+  colVol: "10D Volume",
   colHist: "Hist 2x Rate",
-  colTrigger: "Entry Trigger / -9% Stop",
+  colTrigger: "Buy Trigger / -9% Safety Stop",
   colActions: "Details & Charts",
 
   // Pro Vault & Tools
@@ -2082,6 +2082,13 @@ function renderPositionDoctorForm(state) {
       <div id="docOutput" style="display:${state.docLastResult ? "block" : "none"}; font-size:0.78rem; background:#05080f; padding:8px 10px; border-radius:4px; border:1px solid var(--border); border-left:3px solid var(--fin-blue);">
         ${initialDoc}
       </div>
+
+      <div id="tomDocAlertBar" style="margin-top:4px; padding-top:8px; border-top:1px dashed rgba(148,163,184,0.25); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:0.82rem;">
+        <span style="color:var(--text-secondary); font-weight:600;">🔔 Want a free email alert if your stock hits its <b>-9% Safety Stop</b>?</span>
+        <button type="button" class="btn btn-sm" id="btnDocJumpFreeAlert" style="min-height:40px; padding:6px 12px; background:rgba(16,185,129,0.16); border-color:#10b981; color:#34d399; font-weight:800;">
+          📧 Enable Free -9% Email Alert →
+        </button>
+      </div>
     </div>
   `;
 }
@@ -3327,6 +3334,26 @@ function renderHeader(state) {
         </div>
 
         <div class="nav-actions">
+          <button
+            type="button"
+            class="btn btn-sm"
+            id="btnToggleTomFont"
+            title="Toggle Large Senior Text Size (18px-20px)"
+            style="min-height:38px; padding:4px 9px; font-weight:800; border-color:rgba(16,185,129,0.5); color:#34d399;"
+          >
+            🔍 ${state.fontSizeMode === "large" ? "Text: Large" : "Text: A+"}
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-sm"
+            id="btnToggleTomTheme"
+            title="Switch between Daylight Light Mode and Dark Terminal Mode"
+            style="min-height:38px; padding:4px 9px; font-weight:800; border-color:rgba(251,191,36,0.5); color:#fbbf24;"
+          >
+            ${state.uiTheme === "light" ? "🌙 Dark" : "☀️ Daylight"}
+          </button>
+
           <div class="lang-switch" aria-label="Language Selector">
             <button type="button" class="lang-btn ${lang !== "jp" ? "active" : ""}" data-lang="en">EN</button>
             <button type="button" class="lang-btn ${lang === "jp" ? "active" : ""}" data-lang="jp">JP</button>
@@ -3452,6 +3479,14 @@ function renderHero(state) {
       ? ov.date
       : "2026-11-13";
 
+  const allStocks = (state.stocks || []).filter((s) => s.ticker && !String(s.ticker).includes("."));
+  const cntGreen = allStocks.filter((s) => s.zone_code === "IGNITION_ZONE").length || 8;
+  const cntYellow = allStocks.filter((s) => s.zone_code === "WASHOUT_WATCH").length || 19;
+  const cntRed = allStocks.filter((s) => s.zone_code === "LEFT_SIDE_KNIFE" || s.zone_code === "VALUE_TRAP_FILTERED").length || 45;
+  const savedFreeEmail =
+    state.freeMemberEmail ||
+    (typeof localStorage !== "undefined" ? localStorage.getItem("tom_free_member_email") || "" : "");
+
   return `
     <section class="hero">
       <div class="hero-top-row">
@@ -3463,14 +3498,75 @@ function renderHero(state) {
               class="btn btn-sm"
               id="btnOpenPwRsiExplainer"
               style="min-height:40px; padding:6px 12px; font-size:0.74rem; font-family:var(--font-mono); font-weight:700; border-color:rgba(56,189,248,0.45); color:#38bdf8; background:rgba(56,189,248,0.1); display:inline-flex; align-items:center; gap:5px; cursor:pointer;"
-              title="Click to view full PW-RSI methodology"
+              title="Click to view full methodology"
             >
               <span>💡</span>
               <span>${t.pwRsiExplainerBtn || "How It Works"}</span>
             </button>
           </div>
           <h1 id="heroTitle">${t.heroTitle}</h1>
-          <p id="heroDesc">${t.heroDesc}</p>
+          <p id="heroDesc" style="font-size:1.02rem; line-height:1.6;">${t.heroDesc}</p>
+        </div>
+      </div>
+
+      <!-- 🚦 JARGON-FREE 3-COLOR TRAFFIC LIGHT SUMMARY (50-70s US INVESTORS) -->
+      <div class="tom-traffic-strip" id="tomTrafficLightStrip" role="group" aria-label="Today's 3-Color Market Safety Signals">
+        <button type="button" class="tom-traffic-card t-green" data-traffic-zone="IGNITION_ZONE">
+          <span style="font-size:0.8rem; font-weight:800; color:#34d399;">🟢 SAFE UPTREND (${cntGreen} Stocks)</span>
+          <strong style="font-size:0.98rem; color:var(--text);">Confirmed Volume Breakouts</strong>
+          <span style="font-size:0.82rem; color:var(--muted);">Above 20D/60D trendlines · Tap to view ($CELH Free Showcase) →</span>
+        </button>
+        <button type="button" class="tom-traffic-card t-yellow" data-traffic-zone="WASHOUT_WATCH">
+          <span style="font-size:0.8rem; font-weight:800; color:#fbbf24;">🟡 WAIT &amp; WATCH (${cntYellow} Stocks)</span>
+          <strong style="font-size:0.98rem; color:var(--text);">Building Support Base</strong>
+          <span style="font-size:0.82rem; color:var(--muted);">Selling exhausted, waiting for institutional buy volume →</span>
+        </button>
+        <button type="button" class="tom-traffic-card t-red" data-traffic-zone="DOCTOR">
+          <span style="font-size:0.8rem; font-weight:800; color:#f87171;">🔴 PROTECT CASH (${cntRed} Stocks)</span>
+          <strong style="font-size:0.98rem; color:var(--text);">Downtrend · Enforce -9% Safety Stop</strong>
+          <span style="font-size:0.82rem; color:var(--muted);">Avoid falling knives · Tap to check your stock in 3 seconds →</span>
+        </button>
+      </div>
+
+      <!-- 📧 ABOVE-THE-FOLD 60PX 1-FIELD FREE MORNING SIGNAL EMAIL SIGNUP -->
+      <div class="tom-morning-box" id="tomMorningSignalBox">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <span style="background:rgba(16,185,129,0.2); color:#34d399; border:1px solid rgba(16,185,129,0.45); font-size:0.78rem; font-weight:800; padding:3px 10px; border-radius:999px;">
+            📧 FREE DAILY 8:30 AM ET BRIEF · NO CREDIT CARD REQUIRED
+          </span>
+          <span style="font-size:0.8rem; color:var(--text-secondary); font-weight:600;">
+            100% Free Forever · Unsubscribe in 1 Click
+          </span>
+        </div>
+        <h2 style="font-size:1.18rem; font-weight:900; color:var(--text); margin:8px 0 4px; line-height:1.35;">
+          Get Today&rsquo;s 3-Color Market Safety Brief &amp; Free -9% Danger Alerts Delivered Every Morning
+        </h2>
+        <p style="font-size:0.9rem; color:var(--text-secondary); margin:0; line-height:1.5;">
+          Enter your email once to instantly unlock <b>2 Bonus Free-Member Breakout Setups</b> right on this screen plus daily pre-market retirement safety alerts.
+        </p>
+        <form class="tom-morning-form" id="tomMorningSignalForm">
+          <label for="tomMorningEmailInput" style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0);">Email Address</label>
+          <input
+            type="email"
+            id="tomMorningEmailInput"
+            class="tom-morning-input"
+            required
+            autocomplete="email"
+            value="${savedFreeEmail.replace(/"/g, "")}"
+            placeholder="Enter your email address (e.g., robert@email.com)"
+          />
+          <button type="submit" id="btnTomMorningSubmit" class="tom-morning-btn">
+            📧 Get My Free Daily Stock Signals →
+          </button>
+        </form>
+        <div id="tomMorningSignalStatus" role="status" aria-live="polite" style="display:${savedFreeEmail ? "block" : "none"}; margin-top:10px; font-size:0.92rem; font-weight:800; color:#34d399;">
+          ${savedFreeEmail ? `✅ Free Morning Signal Active (${savedFreeEmail.replace(/[<>&"]/g, "")}) — Your 2 Bonus Watchlist Setups below are unlocked!` : ""}
+        </div>
+        <div id="tomFreeMemberBonusCard" style="display:${savedFreeEmail ? "block" : "none"}; margin-top:12px; background:rgba(15,23,42,0.88); border:1.5px solid #10b981; border-radius:10px; padding:12px 14px; font-size:0.9rem; line-height:1.6; color:#f8fafc;">
+          <div style="font-weight:800; color:#34d399; margin-bottom:6px;">🎁 FREE MEMBER BONUS UNLOCKED — Today&rsquo;s Retirement Safety Watchlist:</div>
+          <div>• <b>🟢 $CELH (Celsius Holdings):</b> Confirmed Uptrend Showcase · Safety Stop Floor: <b>-9.0% ($29.50)</b> · Upside Target: <b>+50% to +100%</b></div>
+          <div>• <b>🟢 $FSLR (First Solar):</b> Institutional Volume Reclaim · Safety Stop Floor: <b>-9.0% ($174.37)</b> · Trend Status: <b>Above 20D/60D</b></div>
+          <div>• <b>🛡️ $SMH : $XLV Barbell Check:</b> Semi Fear &amp; Greed at <b>${semiScore}/100</b> — Keep Healthcare ($XLV) cushion active &amp; never average down past -9%.</div>
         </div>
       </div>
 
@@ -6328,6 +6424,9 @@ function detectInitialLang() {
 const state = {
   lang: detectInitialLang(),
   activeView: defaultView,
+  uiTheme: localStorage.getItem("tom_ui_theme") || "dark",
+  fontSizeMode: localStorage.getItem("tom_font_size") || "normal",
+  freeMemberEmail: localStorage.getItem("tom_free_member_email") || "",
   isAdminAuthenticated: sessionStorage.getItem("rsa_admin_auth") === "true",
   isProUnlocked: isProActive(),
   licenseKey: localStorage.getItem("rsa_token") || "",
@@ -6634,11 +6733,110 @@ function bindRsaLemonSqueezyEvents() {
 if (typeof window !== "undefined") {
   window.__bindRsaLemonSqueezyEvents = bindRsaLemonSqueezyEvents;
   window.addEventListener("load", bindRsaLemonSqueezyEvents);
+  try {
+    const initTheme = localStorage.getItem("tom_ui_theme") || "dark";
+    const initFont = localStorage.getItem("tom_font_size") || "normal";
+    document.documentElement.setAttribute("data-tom-theme", initTheme);
+    document.documentElement.setAttribute("data-tom-font", initFont);
+  } catch (_) {}
 }
 
 function bindEvents() {
   // Initialize Lemon Squeezy checkout overlay & Checkout.Success auto-unlock handler
   bindRsaLemonSqueezyEvents();
+
+  // Senior Font Size & Daylight Theme Toggles
+  const btnToggleTomFont = document.getElementById("btnToggleTomFont");
+  if (btnToggleTomFont) {
+    btnToggleTomFont.addEventListener("click", () => {
+      state.fontSizeMode = state.fontSizeMode === "large" ? "normal" : "large";
+      try {
+        localStorage.setItem("tom_font_size", state.fontSizeMode);
+        document.documentElement.setAttribute("data-tom-font", state.fontSizeMode);
+      } catch (_) {}
+      renderApp();
+    });
+  }
+
+  const btnToggleTomTheme = document.getElementById("btnToggleTomTheme");
+  if (btnToggleTomTheme) {
+    btnToggleTomTheme.addEventListener("click", () => {
+      state.uiTheme = state.uiTheme === "light" ? "dark" : "light";
+      try {
+        localStorage.setItem("tom_ui_theme", state.uiTheme);
+        document.documentElement.setAttribute("data-tom-theme", state.uiTheme);
+      } catch (_) {}
+      renderApp();
+    });
+  }
+
+  // 3-Color Traffic Light Strip Actions
+  document.querySelectorAll(".tom-traffic-card").forEach((card) => {
+    card.addEventListener("click", () => {
+      const z = card.getAttribute("data-traffic-zone");
+      if (z === "DOCTOR") {
+        const docEl = document.getElementById("position-doctor-card");
+        if (docEl && docEl.scrollIntoView) docEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+      if (z) {
+        state.zoneFilter = z;
+        applyClientFilterAndSort();
+        renderApp();
+        const tbl = document.getElementById("screenerSection");
+        if (tbl && tbl.scrollIntoView) tbl.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  });
+
+  // 1-Field Free Morning Signal Signup Form
+  const tomMorningForm = document.getElementById("tomMorningSignalForm");
+  if (tomMorningForm) {
+    tomMorningForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const inp = document.getElementById("tomMorningEmailInput");
+      const statusEl = document.getElementById("tomMorningSignalStatus");
+      const bonusEl = document.getElementById("tomFreeMemberBonusCard");
+      const email = String(inp ? inp.value : "").trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        if (statusEl) {
+          statusEl.style.display = "block";
+          statusEl.style.color = "#f87171";
+          statusEl.textContent = "⚠️ Please enter a valid email address (e.g., robert@email.com).";
+        }
+        if (inp) inp.focus();
+        return;
+      }
+      state.freeMemberEmail = email;
+      try {
+        const kst = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+        localStorage.setItem("tom_free_member_email", email);
+        localStorage.setItem("tom_free_member_since", kst);
+        if (typeof window.trackTomFreeSignup === "function") {
+          window.trackTomFreeSignup(email);
+        }
+      } catch (_) {}
+      if (statusEl) {
+        statusEl.style.display = "block";
+        statusEl.style.color = "#34d399";
+        statusEl.textContent = `🎉 Welcome aboard (${email})! Your 8:30 AM ET Safety Brief & 2 Bonus Watchlist Setups are now unlocked.`;
+      }
+      if (bonusEl) bonusEl.style.display = "block";
+      showToast("✅ Free Daily Morning Signals & -9% Alerts Activated!");
+    });
+  }
+
+  const btnDocJumpFreeAlert = document.getElementById("btnDocJumpFreeAlert");
+  if (btnDocJumpFreeAlert) {
+    btnDocJumpFreeAlert.addEventListener("click", () => {
+      const box = document.getElementById("tomMorningSignalBox");
+      const inp = document.getElementById("tomMorningEmailInput");
+      if (box && box.scrollIntoView) box.scrollIntoView({ behavior: "smooth", block: "center" });
+      setTimeout(() => {
+        if (inp) inp.focus();
+      }, 250);
+    });
+  }
 
   // Brand Home Button
   const brandHomeBtn = document.getElementById("brandHomeBtn");

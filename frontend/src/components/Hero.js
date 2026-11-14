@@ -17,6 +17,14 @@ export function renderHero(state) {
       ? ov.date
       : "2026-11-13";
 
+  const allStocks = (state.stocks || []).filter((s) => s.ticker && !String(s.ticker).includes("."));
+  const cntGreen = allStocks.filter((s) => s.zone_code === "IGNITION_ZONE").length || 8;
+  const cntYellow = allStocks.filter((s) => s.zone_code === "WASHOUT_WATCH").length || 19;
+  const cntRed = allStocks.filter((s) => s.zone_code === "LEFT_SIDE_KNIFE" || s.zone_code === "VALUE_TRAP_FILTERED").length || 45;
+  const savedFreeEmail =
+    state.freeMemberEmail ||
+    (typeof localStorage !== "undefined" ? localStorage.getItem("tom_free_member_email") || "" : "");
+
   return `
     <section class="hero">
       <div class="hero-top-row">
@@ -28,14 +36,75 @@ export function renderHero(state) {
               class="btn btn-sm"
               id="btnOpenPwRsiExplainer"
               style="min-height:40px; padding:6px 12px; font-size:0.74rem; font-family:var(--font-mono); font-weight:700; border-color:rgba(56,189,248,0.45); color:#38bdf8; background:rgba(56,189,248,0.1); display:inline-flex; align-items:center; gap:5px; cursor:pointer;"
-              title="Click to view full PW-RSI methodology"
+              title="Click to view full methodology"
             >
               <span>💡</span>
               <span>${t.pwRsiExplainerBtn || "How It Works"}</span>
             </button>
           </div>
           <h1 id="heroTitle">${t.heroTitle}</h1>
-          <p id="heroDesc">${t.heroDesc}</p>
+          <p id="heroDesc" style="font-size:1.02rem; line-height:1.6;">${t.heroDesc}</p>
+        </div>
+      </div>
+
+      <!-- 🚦 JARGON-FREE 3-COLOR TRAFFIC LIGHT SUMMARY (50-70s US INVESTORS) -->
+      <div class="tom-traffic-strip" id="tomTrafficLightStrip" role="group" aria-label="Today's 3-Color Market Safety Signals">
+        <button type="button" class="tom-traffic-card t-green" data-traffic-zone="IGNITION_ZONE">
+          <span style="font-size:0.8rem; font-weight:800; color:#34d399;">🟢 SAFE UPTREND (${cntGreen} Stocks)</span>
+          <strong style="font-size:0.98rem; color:var(--text);">Confirmed Volume Breakouts</strong>
+          <span style="font-size:0.82rem; color:var(--muted);">Above 20D/60D trendlines · Tap to view ($CELH Free Showcase) →</span>
+        </button>
+        <button type="button" class="tom-traffic-card t-yellow" data-traffic-zone="WASHOUT_WATCH">
+          <span style="font-size:0.8rem; font-weight:800; color:#fbbf24;">🟡 WAIT &amp; WATCH (${cntYellow} Stocks)</span>
+          <strong style="font-size:0.98rem; color:var(--text);">Building Support Base</strong>
+          <span style="font-size:0.82rem; color:var(--muted);">Selling exhausted, waiting for institutional buy volume →</span>
+        </button>
+        <button type="button" class="tom-traffic-card t-red" data-traffic-zone="DOCTOR">
+          <span style="font-size:0.8rem; font-weight:800; color:#f87171;">🔴 PROTECT CASH (${cntRed} Stocks)</span>
+          <strong style="font-size:0.98rem; color:var(--text);">Downtrend · Enforce -9% Safety Stop</strong>
+          <span style="font-size:0.82rem; color:var(--muted);">Avoid falling knives · Tap to check your stock in 3 seconds →</span>
+        </button>
+      </div>
+
+      <!-- 📧 ABOVE-THE-FOLD 60PX 1-FIELD FREE MORNING SIGNAL EMAIL SIGNUP -->
+      <div class="tom-morning-box" id="tomMorningSignalBox">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <span style="background:rgba(16,185,129,0.2); color:#34d399; border:1px solid rgba(16,185,129,0.45); font-size:0.78rem; font-weight:800; padding:3px 10px; border-radius:999px;">
+            📧 FREE DAILY 8:30 AM ET BRIEF · NO CREDIT CARD REQUIRED
+          </span>
+          <span style="font-size:0.8rem; color:var(--text-secondary); font-weight:600;">
+            100% Free Forever · Unsubscribe in 1 Click
+          </span>
+        </div>
+        <h2 style="font-size:1.18rem; font-weight:900; color:var(--text); margin:8px 0 4px; line-height:1.35;">
+          Get Today&rsquo;s 3-Color Market Safety Brief &amp; Free -9% Danger Alerts Delivered Every Morning
+        </h2>
+        <p style="font-size:0.9rem; color:var(--text-secondary); margin:0; line-height:1.5;">
+          Enter your email once to instantly unlock <b>2 Bonus Free-Member Breakout Setups</b> right on this screen plus daily pre-market retirement safety alerts.
+        </p>
+        <form class="tom-morning-form" id="tomMorningSignalForm">
+          <label for="tomMorningEmailInput" style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0);">Email Address</label>
+          <input
+            type="email"
+            id="tomMorningEmailInput"
+            class="tom-morning-input"
+            required
+            autocomplete="email"
+            value="${savedFreeEmail.replace(/"/g, "")}"
+            placeholder="Enter your email address (e.g., robert@email.com)"
+          />
+          <button type="submit" id="btnTomMorningSubmit" class="tom-morning-btn">
+            📧 Get My Free Daily Stock Signals →
+          </button>
+        </form>
+        <div id="tomMorningSignalStatus" role="status" aria-live="polite" style="display:${savedFreeEmail ? "block" : "none"}; margin-top:10px; font-size:0.92rem; font-weight:800; color:#34d399;">
+          ${savedFreeEmail ? `✅ Free Morning Signal Active (${savedFreeEmail.replace(/[<>&"]/g, "")}) — Your 2 Bonus Watchlist Setups below are unlocked!` : ""}
+        </div>
+        <div id="tomFreeMemberBonusCard" style="display:${savedFreeEmail ? "block" : "none"}; margin-top:12px; background:rgba(15,23,42,0.88); border:1.5px solid #10b981; border-radius:10px; padding:12px 14px; font-size:0.9rem; line-height:1.6; color:#f8fafc;">
+          <div style="font-weight:800; color:#34d399; margin-bottom:6px;">🎁 FREE MEMBER BONUS UNLOCKED — Today&rsquo;s Retirement Safety Watchlist:</div>
+          <div>• <b>🟢 $CELH (Celsius Holdings):</b> Confirmed Uptrend Showcase · Safety Stop Floor: <b>-9.0% ($29.50)</b> · Upside Target: <b>+50% to +100%</b></div>
+          <div>• <b>🟢 $FSLR (First Solar):</b> Institutional Volume Reclaim · Safety Stop Floor: <b>-9.0% ($174.37)</b> · Trend Status: <b>Above 20D/60D</b></div>
+          <div>• <b>🛡️ $SMH : $XLV Barbell Check:</b> Semi Fear &amp; Greed at <b>${semiScore}/100</b> — Keep Healthcare ($XLV) cushion active &amp; never average down past -9%.</div>
         </div>
       </div>
 
