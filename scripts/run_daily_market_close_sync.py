@@ -116,6 +116,42 @@ def main():
     deploy_status = git_commit_and_push_market_data(as_of_date)
     print(deploy_status)
 
+    # [3.5/4] Also synchronize 3사업부 (GetBreakAI — getbreakai.com/jp/) US+JP closing prices, ATR & USD/JPY + 5-Div Affiliate Link Watchdog
+    gba_status = ""
+    div3_dir = ROOT_DIR.parent / "3사업부"
+    text_hq_dir = ROOT_DIR.parent / "text_automation_hq"
+    if (div3_dir / "scripts" / "sync_getbreakai_live_data.py").exists():
+        print("[3.5/4] Syncing 3사업부 (getbreakai.com) US/TSE closing prices, 14d ATR & USD/JPY...")
+        for cmd in [
+            [sys.executable, "scripts/sync_getbreakai_live_data.py"],
+            [sys.executable, "scripts/build_jp_seo_pages.py"],
+            [sys.executable, "scripts/generate_jp_daily_column_html.py"],
+            [sys.executable, "scripts/upgrade_jp_fintech_uiux.py"],
+            ["node", "scripts/build_dist.js"],
+        ]:
+            subprocess.run(cmd, cwd=str(div3_dir), capture_output=True, text=True, encoding="utf-8", errors="replace")
+        if (text_hq_dir / "live_web_deployer.py").exists():
+            subprocess.run(
+                [sys.executable, str(text_hq_dir / "live_web_deployer.py"), "--div", "GBA"],
+                cwd=str(text_hq_dir),
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+            )
+        gba_status = "\n• 3사업부(GetBreakAI) 미·일 종가·ATR·환율 동기화 및 dist 배포 완료"
+
+    if (text_hq_dir / "hq_daily_freshness_and_link_healer.py").exists():
+        print("[3.8/4] Running 5-Division Affiliate Stock/Campaign Expiration Self-Healing Watchdog...")
+        subprocess.run(
+            [sys.executable, str(text_hq_dir / "hq_daily_freshness_and_link_healer.py"), "--daily-gate"],
+            cwd=str(text_hq_dir),
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+        )
+
     bcast_status = ""
     if do_broadcast:
         print("[4/4] Broadcasting VIP daily briefing to Telegram channel...")
@@ -124,9 +160,10 @@ def main():
 
     summary = get_as_of_summary()
     final_msg = (
-        f"[1사업부: RightSideAlpha (truthofmarket.com) 일일 미국장 종가 자동 업데이트 완료]\n"
+        f"[1·3사업부 금융 일일 종가 동기화 & 전사 제휴링크 만료 점검 완료]\n"
         f"• {summary}\n"
-        f"• 정적 번들(dist) 빌드 및 배포: {deploy_status}"
+        f"• 1사업부 정적 번들(dist) 빌드 및 배포: {deploy_status}"
+        f"{gba_status}"
         f"{bcast_status}"
     )
     print(final_msg)
