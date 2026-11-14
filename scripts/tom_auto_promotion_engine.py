@@ -248,6 +248,29 @@ def run_daily_telegraph_and_syndication(semi: dict, stocks: list, dry_run: bool 
         f"Curious how other systematic swing traders here handle sector-specific drawdown thresholds vs broad index VIX filters?"
     )
 
+    substack_md = (
+        f"# {title}\n\n"
+        f"> **3-Second Portfolio Check:** Falling chip stocks trap dip-buyers for years—check your stock's mechanical -9% exit floor free at [truthofmarket.com](https://truthofmarket.com/).\n\n"
+        + longform_md
+        + "\n### Unlock Real-Time Right-Side Ignition Signals & Institutional API\n"
+        + "- **Free 3-Second Position Doctor & $SMH:$XLV Simulator**: https://truthofmarket.com/\n"
+        + "- **Pro VIP ($29/mo) & Lifetime Institutional Pass ($199)**: Unlocks all 11 locked Ignition tickers + TradingView Pine v5 scripts across both TruthOfMarket.com and GetBreakAI.com.\n"
+        + "- **Institutional JSON API & Research Sponsorship Desk**: `beable9489@gmail.com`\n"
+    )
+
+    tradingview_idea_md = (
+        f"TITLE: $SMH Fear & Greed at {fg:.1f}/100 ({regime}) — {rec_smh}:{rec_xlv} $XLV Barbell & -9% Stop Audit ({as_of})\n\n"
+        f"1. REGIME SUMMARY:\n"
+        f"$SMH closed at ${smh_c:.2f} ({smh_dd:+.2f}% off its 52-week high), placing our 7-factor Semiconductor Fear & Greed model at {fg:.1f}/100 ({regime}).\n"
+        f"Active systematic allocation: {rec_smh}% $SMH / {rec_xlv}% $XLV contrarian barbell.\n\n"
+        f"2. MECHANICAL RISK DISCIPLINE (26.8-YEAR BACKTEST):\n"
+        f"- Never average down below a declining 60-day moving average.\n"
+        f"- Rule 1: Hard -9.0% stop from cost basis (requires only +9.89% to recover vs +100% after a -50% drawdown).\n"
+        f"- Rule 3: Harvest 50% at +100% (2x) so remaining shares ride on house money.\n"
+        f"- Top public watchlist readout: ${lead_tkr} at ${lead_close:.2f} (Rule 1 floor ${lead_stop:.2f} / 2x target ${lead_tp1:.2f}).\n\n"
+        f"(Educational quantitative study only, not financial advice. Full 72-ticker table in profile terminal: truthofmarket.com)\n"
+    )
+
     syn_res = dispatch_zero_ban_text_bundle(
         div_code="TOM",
         canonical_domain="truthofmarket.com",
@@ -258,7 +281,11 @@ def run_daily_telegraph_and_syndication(semi: dict, stocks: list, dry_run: bool 
         reply_social_link=reply_link,
         longform_markdown=longform_md,
         tags=["quant", "stocks", "investing", "datascience"],
-        platform_extras={"reddit_r_algotrading_value_post.md": reddit_md},
+        platform_extras={
+            "reddit_r_algotrading_value_post.md": reddit_md,
+            "substack_linkedin_newsletter_edition.md": substack_md,
+            "tradingview_published_idea_script.md": tradingview_idea_md,
+        },
         div_env_path=ROOT_DIR / ".env",
         dry_run=dry_run,
     )

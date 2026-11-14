@@ -373,7 +373,8 @@ function isProActive() {
     return false;
   }
   return true;
-}function getAuthHeader() {
+}
+function getAuthHeader() {
   if (!isProActive()) {
     return {};
   }
@@ -384,7 +385,8 @@ function isProActive() {
     return { Authorization: `Bearer ${token}` };
   }
   return {};
-}function getVipTelegramUrl(isPro = false) {
+}
+function getVipTelegramUrl(isPro = false) {
   if (isPro && isProActive()) {
     try {
       return atob("aHR0cHM6Ly90Lm1lL3RydXRob2ZtYXJrZXRzcw==");
@@ -393,7 +395,8 @@ function isProActive() {
     }
   }
   return "#pro-vip-telegram";
-}function formatCheckoutUrl(
+}
+function formatCheckoutUrl(
   rawUrl,
   fallbackUrl = "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
 ) {
@@ -483,7 +486,8 @@ async function getStaticSemiOverview() {
     cachedSemiOverview = await r.json();
   }
   return cachedSemiOverview;
-}async function fetchStocks(params = {}) {
+}
+async function fetchStocks(params = {}) {
   const query = new URLSearchParams();
   if (params.search) query.append("search", params.search);
   if (params.zone && params.zone !== "ALL") query.append("zone", params.zone);
@@ -545,7 +549,8 @@ async function getStaticSemiOverview() {
       return list.slice(off, off + lim);
     }
   );
-}async function fetchStockDetail(ticker) {
+}
+async function fetchStockDetail(ticker) {
   const clean = String(ticker || "CELH").trim().toUpperCase();
   return fetchJsonWithFallback(
     `/api/stocks/${encodeURIComponent(clean)}`,
@@ -560,7 +565,8 @@ async function getStaticSemiOverview() {
       return all.find((s) => s.ticker === clean) || all[0];
     }
   );
-}async function fetchBacktestSummary() {
+}
+async function fetchBacktestSummary() {
   return fetchJsonWithFallback(
     "/api/backtest",
     { headers: { Accept: "application/json" } },
@@ -569,7 +575,8 @@ async function getStaticSemiOverview() {
       return r.json();
     }
   );
-}async function fetchResearchList() {
+}
+async function fetchResearchList() {
   return fetchJsonWithFallback(
     "/api/research",
     {
@@ -583,7 +590,8 @@ async function getStaticSemiOverview() {
       return r.json();
     }
   );
-}async function fetchResearchBrief(ticker) {
+}
+async function fetchResearchBrief(ticker) {
   const clean = String(ticker || "CELH").trim().toUpperCase();
   return fetchJsonWithFallback(
     `/api/research/${encodeURIComponent(clean)}`,
@@ -688,7 +696,8 @@ async function computeSha256Hex(inputStr) {
     // Fallback to pure JS SHA-256
   }
   return sha256PureJs(unescape(encodeURIComponent(inputStr)));
-}async function verifyAdminCredentials(username, password) {
+}
+async function verifyAdminCredentials(username, password) {
   const uname = String(username || "").trim();
   const pw = String(password || "");
   return fetchJsonWithFallback(
@@ -714,7 +723,8 @@ async function computeSha256Hex(inputStr) {
       };
     }
   );
-}async function validateLicense(licenseKey) {
+}
+async function validateLicense(licenseKey) {
   return fetchJsonWithFallback(
     "/api/auth/license/validate",
     {
@@ -832,7 +842,8 @@ async function computeSha256Hex(inputStr) {
       }
     }
   );
-}async function fetchProVault() {
+}
+async function fetchProVault() {
   return fetchJsonWithFallback(
     "/api/pro/vault",
     {
@@ -851,7 +862,8 @@ async function computeSha256Hex(inputStr) {
       };
     }
   );
-}async function fetchPineScript() {
+}
+async function fetchPineScript() {
   return fetchJsonWithFallback(
     "/api/pro/pinescript",
     {
@@ -865,7 +877,8 @@ async function computeSha256Hex(inputStr) {
       return r.json();
     }
   );
-}async function evaluatePositionDoctor(data) {
+}
+async function evaluatePositionDoctor(data) {
   return fetchJsonWithFallback(
     "/api/pro/position-doctor",
     {
@@ -960,7 +973,8 @@ async function computeSha256Hex(inputStr) {
       }
     }
   );
-}const SECTOR_REGIME_MAP = {
+}
+const SECTOR_REGIME_MAP = {
   // 1. AI & Semiconductors
   "AI Semiconductors": "AI & Semiconductors",
   "Semiconductors": "AI & Semiconductors",
@@ -1034,7 +1048,9 @@ async function computeSha256Hex(inputStr) {
   "Oil & Gas E&P": "Energy & Industrials",
   "Integrated Energy": "Energy & Industrials",
   "Specialty Chemicals": "Energy & Industrials",
-};const VALUE_TRAPS = new Set(["INTC", "BA", "PFE", "PARA", "WBD", "NKE", "ALB"]);function getVipWatchlist() {
+};
+const VALUE_TRAPS = new Set(["INTC", "BA", "PFE", "PARA", "WBD", "NKE", "ALB"]);
+function getVipWatchlist() {
   if (typeof localStorage === "undefined") return ["CELH", "CCL", "TSLA", "SPOT", "NVDA"];
   try {
     const raw = localStorage.getItem("rsa_vip_watchlist");
@@ -1044,7 +1060,8 @@ async function computeSha256Hex(inputStr) {
     }
   } catch (_) {}
   return ["CELH", "CCL", "TSLA", "SPOT", "NVDA"];
-}async function saveVipWatchlist(tickers) {
+}
+async function saveVipWatchlist(tickers) {
   const cleaned = [...new Set((tickers || []).map((t) => String(t || "").trim().toUpperCase()).filter(Boolean))];
   if (typeof localStorage !== "undefined") {
     try {
@@ -1065,7 +1082,8 @@ async function computeSha256Hex(inputStr) {
     } catch (_) {}
   }
   return cleaned;
-}async function fetchSectorMatrix() {
+}
+async function fetchSectorMatrix() {
   return fetchJsonWithFallback(
     "/api/pro/sector-matrix",
     {
@@ -1102,7 +1120,8 @@ async function computeSha256Hex(inputStr) {
       return { sectors: items };
     }
   );
-}async function evaluatePortfolioDoctor(payload) {
+}
+async function evaluatePortfolioDoctor(payload) {
   return fetchJsonWithFallback(
     "/api/pro/portfolio-doctor",
     {
@@ -1408,7 +1427,8 @@ async function computeSha256Hex(inputStr) {
       };
     }
   );
-}async function fetchReferralConfig() {
+}
+async function fetchReferralConfig() {
   return fetchJsonWithFallback(
     "/api/referral/config",
     { headers: { Accept: "application/json" } },
@@ -1417,7 +1437,8 @@ async function computeSha256Hex(inputStr) {
       return r.json();
     }
   );
-}async function updateReferralConfig(data) {
+}
+async function updateReferralConfig(data) {
   return fetchJsonWithFallback(
     "/api/referral/config",
     {
@@ -1430,17 +1451,20 @@ async function computeSha256Hex(inputStr) {
     },
     async () => ({ status: "updated", config: data })
   );
-}function getReferralRedirectUrl(provider, ticker) {
+}
+function getReferralRedirectUrl(provider, ticker) {
   return `/api/referral/redirect/${encodeURIComponent(
     provider.toLowerCase()
   )}?ticker=${encodeURIComponent(ticker)}`;
-}async function fetchSemiOverview() {
+}
+async function fetchSemiOverview() {
   return fetchJsonWithFallback(
     "/api/semi/overview",
     { headers: { Accept: "application/json" } },
     async () => getStaticSemiOverview()
   );
-}async function fetchSemiHistory(rangeCode = "1Y") {
+}
+async function fetchSemiHistory(rangeCode = "1Y") {
   const rc = String(rangeCode || "1Y").trim().toUpperCase();
   const validRanges = ["3M", "6M", "1Y", "3Y", "5Y", "10Y", "ALL"];
   const safeRange = validRanges.includes(rc) ? rc : "1Y";
@@ -1452,7 +1476,8 @@ async function computeSha256Hex(inputStr) {
       return r.json();
     }
   );
-}async function calculateSemiRebalance(data) {
+}
+async function calculateSemiRebalance(data) {
   return fetchJsonWithFallback(
     "/api/semi/rebalance",
     {
@@ -1592,7 +1617,8 @@ async function computeSha256Hex(inputStr) {
       };
     }
   );
-}async function calculateSemiLumpSum(data) {
+}
+async function calculateSemiLumpSum(data) {
   return fetchJsonWithFallback(
     "/api/semi/lump-sum",
     {
@@ -1810,7 +1836,8 @@ async function computeSha256Hex(inputStr) {
       }
     }
   );
-}async function buildClientTelegramPreview({
+}
+async function buildClientTelegramPreview({
   alert_type = "SEMI_BRIEFING",
   lang = "en",
   ticker = "CELH",
@@ -1997,10 +2024,17 @@ async function computeSha256Hex(inputStr) {
     alert_type: "FULL_DAILY",
     lang: lg,
   };
-}const DEFAULT_TG_BOT_TOKEN = "DEMO-BOT-TOKEN";const DEFAULT_TG_CHAT_ID = "@truthofmarketss";const DEFAULT_TG_CHANNEL_URL = "https://t.me/truthofmarketss";const DEFAULT_YOUTUBE_URL = "https://www.youtube.com/@RightSideAlpha";const DEFAULT_INSTAGRAM_URL = "https://www.instagram.com/rightsidealpha";async function syncTelegramBotBrowser(botToken, currentChatId = "") {
+}
+const DEFAULT_TG_BOT_TOKEN = "DEMO-BOT-TOKEN";
+const DEFAULT_TG_CHAT_ID = "@truthofmarketss";
+const DEFAULT_TG_CHANNEL_URL = "https://t.me/truthofmarketss";
+const DEFAULT_YOUTUBE_URL = "https://www.youtube.com/@RightSideAlpha";
+const DEFAULT_INSTAGRAM_URL = "https://www.instagram.com/rightsidealpha";
+async function syncTelegramBotBrowser(botToken, currentChatId = "") {
   const cid = String(currentChatId || DEFAULT_TG_CHAT_ID).trim();
   return { chatId: cid, botUsername: "truthofmarketss", synced: true };
-}async function fetchTelegramStatus() {
+}
+async function fetchTelegramStatus() {
   return fetchJsonWithFallback(
     "/api/telegram/status",
     { headers: { Accept: "application/json" } },
@@ -2020,7 +2054,8 @@ async function computeSha256Hex(inputStr) {
       };
     }
   );
-}async function saveTelegramConfig(data) {
+}
+async function saveTelegramConfig(data) {
   return fetchJsonWithFallback(
     "/api/telegram/config",
     {
@@ -2041,7 +2076,8 @@ async function computeSha256Hex(inputStr) {
       lang: data.lang || "kr",
     })
   );
-}async function verifyTelegramBot(data) {
+}
+async function verifyTelegramBot(data) {
   const tok = String(data.bot_token || localStorage.getItem("rsa_tg_bot_token") || DEFAULT_TG_BOT_TOKEN).trim();
   let cid = String(data.chat_id || localStorage.getItem("rsa_tg_chat_id") || "").trim();
 
@@ -2101,7 +2137,8 @@ async function computeSha256Hex(inputStr) {
     chat_id: cid || "@truthofmarketss",
     message: "✅ Connected to @truthofmarketss.",
   };
-}async function sendTelegramAlert(data) {
+}
+async function sendTelegramAlert(data) {
   const tok = String(data.bot_token || localStorage.getItem("rsa_tg_bot_token") || DEFAULT_TG_BOT_TOKEN).trim();
   let cid = String(data.chat_id || localStorage.getItem("rsa_tg_chat_id") || "").trim();
 
@@ -2270,7 +2307,8 @@ function decodeDocRow(row) {
   } catch (_) {
     return row;
   }
-}function renderDoctorVipUnlockPreview(state) {
+}
+function renderDoctorVipUnlockPreview(state) {
   if (!state) return "";
   const isPro = Boolean(state.isProUnlocked);
 
@@ -2439,7 +2477,8 @@ function decodeDocRow(row) {
       ${checkoutButtonsHtml}
     </div>
   `;
-}function formatDoctorResult(result, state = null) {
+}
+function formatDoctorResult(result, state = null) {
   let badgeColor = "var(--fin-up)";
   let borderLeftColor = "var(--fin-up)";
 
@@ -2506,7 +2545,8 @@ function decodeDocRow(row) {
 
   const previewHtml = state ? renderDoctorVipUnlockPreview(state) : "";
   return baseHtml + previewHtml;
-}function renderPortfolioDoctorForm(state) {
+}
+function renderPortfolioDoctorForm(state) {
   const isPro = Boolean(state && state.isProUnlocked);
   const defaultPositions = (state && state.portfolioPositions && state.portfolioPositions.length > 0)
     ? state.portfolioPositions
@@ -2622,7 +2662,8 @@ function decodeDocRow(row) {
       </div>
     </div>
   `;
-}function formatPortfolioDoctorResult(result, state) {
+}
+function formatPortfolioDoctorResult(result, state) {
   if (!result) return "";
 
   const score = Number(result.health_score ?? 100);
@@ -3163,7 +3204,8 @@ function renderMiniChartSvg(chartType, isRevealed) {
       <text x="14" y="122" fill="#34d399" font-size="8.5" font-family="monospace" font-weight="800">${volLabel}</text>
     </svg>
   `;
-}function renderChartBlindTest(state) {
+}
+function renderChartBlindTest(state) {
   const lang = state.lang && BLIND_TEST_I18N[state.lang] ? state.lang : "en";
   const copy = BLIND_TEST_I18N[lang];
   const rounds = buildRoundsData(state);
@@ -4214,7 +4256,8 @@ function renderScreenerControls(state) {
       </div>
     </div>
   `;
-}function renderStockTable(state) {
+}
+function renderStockTable(state) {
   const t = state.t;
   const isPro = state.isProUnlocked;
   const stocks = (state.filteredStocks || []).filter((s) => !String(s.ticker).includes("."));
@@ -4285,7 +4328,8 @@ function renderScreenerControls(state) {
       ${softPaywallBanner}
     </div>
   `;
-}function renderStockRows(state) {
+}
+function renderStockRows(state) {
   const t = state.t || {};
   const stocks = (state.filteredStocks || []).filter((s) => !String(s.ticker).includes("."));
   const lang = state.lang;
@@ -4999,7 +5043,8 @@ const PRICING_COPY = {
     tsBtn: "⚡ TrendSpider AIスキャナーを開く ↗",
     tgBtn: "🔒 Pro専用 VIP Telegram ($SMH/$XLV & 72銘柄リアルタイムニュース)",
   },
-};function renderPricing(state) {
+};
+function renderPricing(state) {
   const cfg = state.config || {};
   const c = PRICING_COPY[state.lang] || PRICING_COPY.en;
   const lsMonthly = formatCheckoutUrl(
@@ -6361,6 +6406,16 @@ function renderSemiFearGreedView(state) {
 
 
 // --- src/main.js ---
+
+
+
+
+
+
+
+
+
+
 
 const initialPath = window.location.pathname.toLowerCase();
 const initialHash = window.location.hash.toLowerCase();

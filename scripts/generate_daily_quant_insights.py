@@ -197,13 +197,16 @@ def _render_article_shell(
     </article>
 
     <section class="cta-box">
-      <h3>Audit Your Portfolio Cost Basis in 3 Seconds</h3>
-      <p style="margin:0;color:#cbd5e1;">Stop guessing where support sits. Run any of our 72 liquid US equities through the free Position Doctor to calculate your exact -9.0% hard stop floor and +100% TP1 principal-harvest target—or unlock real-time institutional Ignition Zone entries.</p>
+      <h3>Don't Hold a Falling Stock—Check Your -9% Exit Line in 3 Seconds</h3>
+      <p style="margin:0;color:#cbd5e1;">Stop guessing where support sits. Run any of our 72 liquid US equities through the free Position Doctor to calculate your exact -9.0% hard stop floor and +100% TP1 principal-harvest target—or unlock real-time institutional Ignition Zone entries (Store #296100 dual-unlock includes GetBreakAI.com).</p>
       <div class="btn-row">
         <a class="btn btn-free" href="/">Run Free 3-Second Position Doctor →</a>
         <a class="btn btn-vip lemonsqueezy-button" href="{LS_MONTHLY_URL}">Unlock Monthly Pro VIP ($29/mo)</a>
         <a class="btn btn-life lemonsqueezy-button" href="{LS_LIFETIME_URL}">Lifetime Institutional Pass ($199)</a>
       </div>
+      <p style="margin:0.95rem 0 0;font-size:0.84rem;color:#94a3b8;">
+        🏛️ <strong>Institutional JSON Data Feed, RIA White-Label &amp; Newsletter Sponsorship Desk:</strong> <a href="mailto:beable9489@gmail.com?subject=RightSideAlpha%20Institutional%20API%20%26%20Sponsorship%20Desk">beable9489@gmail.com</a>
+      </p>
     </section>
 
     <section>

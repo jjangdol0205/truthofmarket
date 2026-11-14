@@ -169,11 +169,15 @@ def build_ticker_directory_html(stocks: List[Dict[str, Any]], prefix: str = "/")
       {joined}
     </nav>
     <div style="font-weight:800;color:#e9d5ff;margin:10px 0 6px;font-size:0.8rem;letter-spacing:0.02em;">
-      ⚔️ HEAD-TO-HEAD US STOCK &amp; ETF QUANT COMPARISONS (30 HIGH-INTENT MATCHUPS)
+      ⚔️ HEAD-TO-HEAD US STOCK &amp; ETF QUANT COMPARISONS (50 HIGH-INTENT MATCHUPS)
     </div>
     <nav aria-label="Head-to-Head US Stock Quantitative Comparisons" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
       {compare_joined}
     </nav>
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-size:0.76rem;color:#cbd5e1;">
+      <span>🏛️ <strong>Institutional JSON Data API, TradingView White-Label &amp; Newsletter Sponsorship Desk:</strong> License live 72-stock PW-RSI &amp; Semiconductor Fear &amp; Greed feeds or sponsor our daily quant brief.</span>
+      <a href="mailto:beable9489@gmail.com?subject=RightSideAlpha%20Institutional%20API%20%26%20Sponsorship%20Inquiry" style="color:#38bdf8;font-weight:800;text-decoration:none;padding:5px 11px;border:1px solid rgba(56,189,248,0.35);border-radius:6px;background:rgba(56,189,248,0.08);">✉️ Institutional &amp; Sponsorship Desk (beable9489@gmail.com) &rarr;</a>
+    </div>
   </section>"""
 
 
@@ -270,6 +274,9 @@ def generate_semi_fear_greed_page(semi: Dict[str, Any], stocks: List[Dict[str, A
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
         <a href="{LS_MONTHLY_URL}" class="lemonsqueezy-button btn btn-primary" style="background:#2563eb;border-color:#3b82f6;color:#fff;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:700;font-size:0.8rem;">
           🔓 Unlock Pro VIP ($29/mo)
+        </a>
+        <a href="{LS_LTD_URL}" class="lemonsqueezy-button" style="background:#f59e0b;color:#0f172a;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:800;font-size:0.8rem;">
+          💎 Lifetime Pass ($199)
         </a>
         <a href="https://t.me/truthofmarketss" target="_blank" rel="noopener noreferrer" style="background:#0284c7;color:#fff;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:700;font-size:0.8rem;">
           ✈️ Free Telegram Briefing
@@ -371,7 +378,10 @@ def generate_single_stock_page(
             🩺 Free Position Doctor (${tkr} Cost-Basis Audit)
           </a>
           <a href="{LS_MONTHLY_URL}" class="lemonsqueezy-button" style="background:#2563eb;color:#ffffff;text-decoration:none;padding:7px 13px;border-radius:6px;font-weight:700;font-size:0.78rem;">
-            🔓 Unlock All 11 VIP Ignition Picks ($29/mo)
+            🔓 Unlock Pro VIP ($29/mo)
+          </a>
+          <a href="{LS_LTD_URL}" class="lemonsqueezy-button" style="background:#f59e0b;color:#0f172a;text-decoration:none;padding:7px 13px;border-radius:6px;font-weight:800;font-size:0.78rem;">
+            💎 Lifetime Pass ($199)
           </a>
           <a href="/semi-fear-greed.html" style="background:#1e293b;border:1px solid #475569;color:#f8fafc;text-decoration:none;padding:7px 13px;border-radius:6px;font-weight:700;font-size:0.78rem;">
             🧭 $SMH Fear &amp; Greed ({float(semi.get("fg_score") or 18.0):.1f})
