@@ -34,11 +34,17 @@ import {
   DEFAULT_INSTAGRAM_URL,
 } from "./services/api.js";
 import { renderHeader } from "./components/Header.js";
-import { renderHero } from "./components/Hero.js";
+import { renderHero, renderEasyProfitSimulator } from "./components/Hero.js";
+import { renderChartBlindTest } from "./components/ChartBlindTest.js";
 import { renderProofCard } from "./components/ProofCard.js";
 import { renderScreenerControls, renderStockTable, renderStockRows } from "./components/StockTable.js";
 import { renderProVault } from "./components/ProVault.js";
-import { formatDoctorResult, renderPortfolioDoctorForm, formatPortfolioDoctorResult } from "./components/PositionDoctor.js";
+import {
+  renderPositionDoctorForm,
+  formatDoctorResult,
+  renderPortfolioDoctorForm,
+  formatPortfolioDoctorResult,
+} from "./components/PositionDoctor.js";
 import { renderPricing } from "./components/Pricing.js";
 import { renderModals } from "./components/Modals.js";
 import { renderSemiFearGreedView } from "./components/SemiFearGreedView.js";
@@ -72,14 +78,14 @@ const defaultView =
       localStorage.setItem("rsa_lang_v5_pure_en", "1");
     }
     const oldSite1 = localStorage.getItem("rsa_cfg_site1_url") || "";
-    if (oldSite1.includes("getbreakai.com")) {
+    if (oldSite1 && !oldSite1.includes("truthofmarket.com")) {
       localStorage.setItem("rsa_cfg_site1_url", "https://truthofmarket.com");
     }
     const oldM = localStorage.getItem("rsa_cfg_ls_monthly") || "";
     if (
       oldM.includes("rightsidealpha.lemonsqueezy.com") ||
       oldM.includes("pro-monthly") ||
-      oldM.includes("d5e7e761")
+      oldM.includes("checkout/custom/")
     ) {
       localStorage.removeItem("rsa_cfg_ls_monthly");
     }
@@ -87,7 +93,7 @@ const defaultView =
     if (
       oldL.includes("rightsidealpha.lemonsqueezy.com") ||
       oldL.includes("lifetime-pass") ||
-      oldL.includes("667aa482")
+      oldL.includes("checkout/custom/")
     ) {
       localStorage.removeItem("rsa_cfg_ls_ltd");
     }
@@ -235,10 +241,15 @@ function applyClientFilterAndSort() {
       if (sRegime !== secFilter) return false;
     }
     if (q) {
-      const isLockedRow = !state.isProUnlocked && s.zone_code === "IGNITION_ZONE" && s.ticker !== "CELH";
+      const isLockedRow =
+        !state.isProUnlocked &&
+        (Boolean(s.locked) ||
+          String(s.ticker || "").toUpperCase() === "LOCKED" ||
+          s.close === null ||
+          s.close === undefined);
       const hay = isLockedRow
-        ? `vip ignition locked pro ${s.sector}`.toLowerCase()
-        : `${s.ticker} ${s.name_en} ${s.name_jp} ${s.name_kr} ${s.sector}`.toLowerCase();
+        ? `vip ignition locked pro ${s.sector || ""}`.toLowerCase()
+        : `${s.ticker} ${s.name_en || ""} ${s.name_jp || ""} ${s.sector || ""}`.toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;
@@ -262,11 +273,18 @@ function renderRightSideView() {
   const t = state.t;
   return `
     ${renderHero(state)}
-    ${renderProofCard(state)}
-    <section class="screener-panel">
+    <section style="margin-bottom:12px;">
+      ${renderPositionDoctorForm(state)}
+    </section>
+    <section class="screener-panel" id="screenerSection">
       ${renderScreenerControls(state)}
       ${renderStockTable(state)}
     </section>
+    ${renderEasyProfitSimulator(state)}
+    <div style="margin-bottom:20px;">
+      ${renderChartBlindTest(state)}
+    </div>
+    ${renderProofCard(state)}
     ${renderProVault(state)}
     ${renderPricing(state)}
 
@@ -283,7 +301,7 @@ function renderRightSideView() {
           ${t.crossDesc}
         </p>
       </div>
-      <button class="btn btn-primary" id="crossFunnelSwitchBtn" style="background:#dc2626; border-color:#ef4444;">
+      <button type="button" class="btn btn-primary" id="crossFunnelSwitchBtn" style="min-height:42px; background:#dc2626; border-color:#ef4444;">
         <span id="crossBtn">${t.crossBtn} →</span>
       </button>
     </section>
@@ -475,18 +493,47 @@ function bindEvents() {
       state.activeView = "rightside";
       renderApp();
     }
-    const docCard = document.getElementById("doctor") || document.getElementById("positionDoctorCard") || document.getElementById("proVaultSection");
+    const docCard =
+      document.getElementById("position-doctor-card") ||
+      document.getElementById("doctor") ||
+      document.getElementById("positionDoctorCard");
+    const docTickerNow = document.getElementById("docTicker");
+    if (docTickerNow) {
+      try {
+        docTickerNow.focus({ preventScroll: true });
+      } catch (_) {
+        docTickerNow.focus();
+      }
+      if (typeof docTickerNow.select === "function") docTickerNow.select();
+    }
     if (docCard && docCard.scrollIntoView) {
       docCard.scrollIntoView({ behavior: "smooth", block: "start" });
     }
     setTimeout(() => {
       const docTicker = document.getElementById("docTicker");
       if (docTicker) {
-        docTicker.focus();
+        try {
+          docTicker.focus({ preventScroll: true });
+        } catch (_) {
+          docTicker.focus();
+        }
         if (typeof docTicker.select === "function") docTicker.select();
       }
-    }, 280);
+    }, 240);
   };
+  const btnHeroActionSignals = document.getElementById("btnHeroActionSignals");
+  if (btnHeroActionSignals) {
+    btnHeroActionSignals.addEventListener("click", () => {
+      const tableEl = document.getElementById("stockTable") || document.getElementById("screenerSection");
+      if (tableEl && typeof tableEl.scrollIntoView === "function") {
+        tableEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  }
+  const btnHeroActionDoctor = document.getElementById("btnHeroActionDoctor");
+  if (btnHeroActionDoctor) {
+    btnHeroActionDoctor.addEventListener("click", focusPositionDoctor);
+  }
   const btnQuickJumpDoctor = document.getElementById("btnQuickJumpDoctor");
   if (btnQuickJumpDoctor) {
     btnQuickJumpDoctor.addEventListener("click", focusPositionDoctor);
@@ -1326,6 +1373,25 @@ function bindEvents() {
     });
   });
 
+  const docEntryEl = document.getElementById("docEntry");
+  const docTickerEl = document.getElementById("docTicker");
+  if (docEntryEl) {
+    docEntryEl.addEventListener("input", () => {
+      docEntryEl.dataset.userEdited = "1";
+    });
+  }
+  if (docTickerEl) {
+    docTickerEl.addEventListener("input", () => {
+      const typed = (docTickerEl.value || "").trim().toUpperCase();
+      if (docEntryEl && docEntryEl.dataset.userEdited !== "1") {
+        const found = state.stocks.find((s) => s.ticker === typed && s.close !== null && s.close !== undefined);
+        if (found && Number(found.close) > 0) {
+          docEntryEl.value = Number(found.close).toFixed(2);
+        }
+      }
+    });
+  }
+
   const btnRunPositionDoctor = document.getElementById("btnRunPositionDoctor");
   if (btnRunPositionDoctor) {
     btnRunPositionDoctor.addEventListener("click", async () => {
@@ -1336,6 +1402,7 @@ function bindEvents() {
 
       if (!Number.isFinite(entryPrice) || entryPrice <= 0 || !Number.isFinite(daysHeld) || daysHeld < 0) {
         if (outEl) {
+          outEl.style.display = "block";
           outEl.innerHTML = `<div style="color:var(--fin-down);">Please enter a valid positive cost basis ($) and non-negative trading days.</div>`;
         }
         return;
@@ -1349,10 +1416,12 @@ function bindEvents() {
         });
         state.docLastResult = res;
         if (outEl) {
+          outEl.style.display = "block";
           outEl.innerHTML = formatDoctorResult(res, state);
         }
       } catch (err) {
         if (outEl) {
+          outEl.style.display = "block";
           outEl.innerHTML = `<div style="color:var(--fin-down);">Please enter a valid positive cost basis ($) and non-negative trading days.</div>`;
         }
       }
@@ -1639,8 +1708,17 @@ function bindEvents() {
     });
   }
 
+  // Stock Detail Modal wiring
+  const stockDetailModal = document.getElementById("stockDetailModal");
+  const btnCloseStockDetail = document.getElementById("btnCloseStockDetail");
+  if (btnCloseStockDetail && stockDetailModal) {
+    btnCloseStockDetail.addEventListener("click", () => {
+      stockDetailModal.style.display = "none";
+    });
+  }
+
   // Backdrop click-to-close on all modals
-  [licenseModal, telegramModal, configModal, researchModal, legalModal, pwRsiModal].forEach((modalEl) => {
+  [licenseModal, telegramModal, configModal, researchModal, legalModal, pwRsiModal, stockDetailModal].forEach((modalEl) => {
     if (modalEl) {
       modalEl.addEventListener("click", (e) => {
         if (e.target === modalEl) {
@@ -1994,7 +2072,143 @@ function bindEvents() {
   bindRowEvents();
 }
 
+function openStockDetailModal(ticker) {
+  const modal = document.getElementById("stockDetailModal");
+  const titleEl = document.getElementById("stockDetailTitle");
+  const bodyEl = document.getElementById("stockDetailBody");
+  if (!modal || !bodyEl) return;
+
+  const s = (state.stocks || []).find((x) => x.ticker === ticker);
+  if (!s || s.close === null || s.close === undefined) return;
+
+  const isPro = Boolean(state.isProUnlocked);
+  const closeVal = Number(s.close || 0);
+  const showTargets =
+    isPro || !s.is_pro_locked || (s.entry_trigger_price !== null && s.entry_trigger_price !== undefined);
+  const trig = Number(s.entry_trigger_price ?? s.ma60_price ?? closeVal * 1.02).toFixed(2);
+  const stop = Number(s.stop_loss_price ?? closeVal * 0.91).toFixed(2);
+  const tp1 = Number(s.tp1_2x_price ?? closeVal * 2.0).toFixed(2);
+  const lsMonthly = formatCheckoutUrl(
+    state.config?.ls_site1_monthly_url,
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
+  );
+  const lsLtd = formatCheckoutUrl(
+    state.config?.ls_site1_ltd_url,
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b"
+  );
+  const tvAffId = encodeURIComponent(state.config?.tradingview_aff_id || "1173809");
+  const tvUrl = `https://www.tradingview.com/symbols/${encodeURIComponent(s.ticker)}/?aff_id=${tvAffId}`;
+
+  if (titleEl) {
+    titleEl.textContent = `$${s.ticker} · ${s.name_en || s.ticker} ($${closeVal.toFixed(2)})`;
+  }
+
+  const checkItem = (pass, label) => `
+    <div style="display:flex; align-items:center; gap:8px; padding:6px 8px; background:#090d16; border:1px solid ${
+      pass ? "rgba(16,185,129,0.35)" : "rgba(148,163,184,0.18)"
+    }; border-radius:4px;">
+      <span style="font-size:0.85rem;">${pass ? "✅" : "⚪"}</span>
+      <span style="font-size:0.76rem; color:${pass ? "#e2e8f0" : "var(--muted)"}; font-weight:${pass ? "700" : "500"};">${label}</span>
+    </div>
+  `;
+
+  bodyEl.innerHTML = `
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 130px), 1fr)); gap:8px; margin-bottom:12px;">
+      <div style="background:#05080f; border:1px solid var(--border); border-radius:4px; padding:8px 10px;">
+        <div class="mono" style="font-size:0.66rem; color:var(--muted);">PW-RSI SCORE</div>
+        <div class="mono" style="font-size:1.05rem; font-weight:800; color:#34d399;">${Number(s.score ?? 0)} / 100</div>
+      </div>
+      <div style="background:#05080f; border:1px solid var(--border); border-radius:4px; padding:8px 10px;">
+        <div class="mono" style="font-size:0.66rem; color:var(--muted);">52W RANGE</div>
+        <div class="mono" style="font-size:0.85rem; font-weight:700; color:#ffffff;">$${Number(s.low52 || 0).toFixed(2)} – $${Number(s.high52 || 0).toFixed(2)}</div>
+      </div>
+      <div style="background:#05080f; border:1px solid var(--border); border-radius:4px; padding:8px 10px;">
+        <div class="mono" style="font-size:0.66rem; color:var(--muted);">VS MA20 / MA60</div>
+        <div class="mono" style="font-size:0.85rem; font-weight:700; color:${s.vs_ma60_pct >= 0 ? "var(--fin-up)" : "var(--fin-down)"};">${Number(s.vs_ma20_pct ?? 0).toFixed(1)}% / ${Number(s.vs_ma60_pct ?? 0).toFixed(1)}%</div>
+      </div>
+      <div style="background:#05080f; border:1px solid var(--border); border-radius:4px; padding:8px 10px;">
+        <div class="mono" style="font-size:0.66rem; color:var(--muted);">10D VOL SURGE</div>
+        <div class="mono" style="font-size:0.95rem; font-weight:800; color:${s.vol_surge_10d >= 1.35 ? "var(--fin-up)" : "#cbd5e1"};">${Number(s.vol_surge_10d ?? 1).toFixed(2)}x</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:12px;">
+      <div class="mono" style="font-size:0.68rem; color:#93c5fd; font-weight:800; margin-bottom:6px;">4-FACTOR RIGHT-SIDE CHECKLIST (${s.zone_code})</div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap:6px;">
+        ${checkItem(Boolean(s.c1_deep_dd), `52W Drawdown Washout (${Number(s.dd_high52_pct ?? 0).toFixed(1)}%)`)}
+        ${checkItem(Boolean(s.c2_off_low ?? s.c2_sweet_spot), `Off 52W Low (+${Number(s.prox_low52_pct ?? 0).toFixed(1)}%)`)}
+        ${checkItem(Boolean(s.c3_above_mas ?? s.c3_ma_reclaim), "MA20 & MA60 Trend Reclaimed")}
+        ${checkItem(Boolean(s.c4_vol_or_mom ?? s.c4_vol_washout), `Institutional Volume (${Number(s.vol_surge_10d ?? 1).toFixed(2)}x)`)}
+      </div>
+    </div>
+
+    ${
+      showTargets
+        ? `<div style="background:#05080f; border:1px solid rgba(16,185,129,0.35); border-radius:6px; padding:10px 12px; margin-bottom:12px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;" class="mono">
+             <span>Entry Trigger: <b style="color:#60a5fa;">$${trig}</b></span>
+             <span>-9% Stop: <b style="color:var(--fin-down);">$${stop}</b></span>
+             <span>2x Target: <b style="color:var(--fin-up);">$${tp1}</b></span>
+           </div>`
+        : `<div style="background:rgba(37,99,235,0.1); border:1px solid rgba(59,130,246,0.38); border-radius:6px; padding:12px; margin-bottom:12px;">
+             <div style="font-weight:800; color:#ffffff; margin-bottom:6px;">🔒 Exact Entry Trigger, -9% Hard Stop &amp; 2x Target Levels</div>
+             <div style="display:flex; gap:8px; flex-wrap:wrap;">
+               <a class="btn btn-primary btn-sm lemonsqueezy-button" data-direct-ls="1" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthly}" target="_blank" rel="noopener noreferrer" style="min-height:40px; font-weight:800;">
+                 🔒 Unlock Pro ($29/mo)
+               </a>
+               <a class="btn btn-emerald btn-sm lemonsqueezy-button" data-direct-ls="1" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" href="${lsLtd}" target="_blank" rel="noopener noreferrer" style="min-height:40px; font-weight:800;">
+                 💎 Lifetime VIP ($199)
+               </a>
+             </div>
+           </div>`
+    }
+
+    <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:space-between;">
+      <button type="button" class="btn btn-emerald btn-sm" id="btnModalDiagnoseStock" data-ticker="${s.ticker}" style="min-height:40px; font-weight:800;">
+        🩺 Diagnose $${s.ticker} in Position Doctor
+      </button>
+      <a class="btn btn-sm" href="${tvUrl}" target="_blank" rel="noopener noreferrer" style="min-height:40px;">
+        📈 Open $${s.ticker} Chart on TradingView ↗
+      </a>
+    </div>
+  `;
+
+  modal.style.display = "flex";
+
+  const diagBtn = document.getElementById("btnModalDiagnoseStock");
+  if (diagBtn) {
+    diagBtn.addEventListener("click", () => {
+      modal.style.display = "none";
+      const tEl = document.getElementById("docTicker");
+      const eEl = document.getElementById("docEntry");
+      if (tEl) tEl.value = s.ticker;
+      if (eEl) eEl.value = closeVal.toFixed(2);
+      const runBtn = document.getElementById("btnRunPositionDoctor");
+      if (runBtn) runBtn.click();
+      const docCard = document.getElementById("position-doctor-card") || document.getElementById("doctor");
+      if (docCard && docCard.scrollIntoView) {
+        docCard.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  }
+}
+
 function bindRowEvents() {
+  document.querySelectorAll(".btn-open-stock-detail").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const ticker = btn.getAttribute("data-ticker");
+      if (ticker) openStockDetailModal(ticker);
+    });
+  });
+
+  document.querySelectorAll("tr.stock-row-clickable[data-ticker]").forEach((row) => {
+    row.addEventListener("click", (e) => {
+      if (e.target && e.target.closest && e.target.closest("a, button")) return;
+      const ticker = row.getAttribute("data-ticker");
+      if (ticker) openStockDetailModal(ticker);
+    });
+  });
+
   document.querySelectorAll(".btn-unlock-row").forEach((el) => {
     el.addEventListener("click", () => {
       const licenseModal = document.getElementById("licenseModal");
@@ -2234,8 +2448,8 @@ async function loadAllData() {
     const celhStock = state.stocks.find((s) => s.ticker === "CELH");
     const defaultCelhClose = celhStock ? Number(celhStock.close) : 27.93;
 
-    // Pre-compute initial Rebalance, Lump-Sum, Position Doctor, and Telegram Status/Preview for instant rendering
-    const [rebalRes, lumpRes, docRes, tgStat, tgPrev] = await Promise.all([
+    // Pre-compute initial Rebalance, Lump-Sum, and Telegram Status/Preview for instant rendering
+    const [rebalRes, lumpRes, tgStat, tgPrev] = await Promise.all([
       calculateSemiRebalance({
         total_capital_usd: state.semiCapUsd,
         strategy_mode: state.semiMode,
@@ -2246,11 +2460,6 @@ async function loadAllData() {
         capital_usd: state.semiLumpCapUsd,
         override_fg_score: state.semiLumpScore,
       }).catch(() => null),
-      evaluatePositionDoctor({
-        ticker: "CELH",
-        entry_price: defaultCelhClose,
-        days_held: 42,
-      }).catch(() => null),
       fetchTelegramStatus().catch(() => null),
       sendTelegramAlert({
         alert_type: "SEMI_BRIEFING",
@@ -2260,7 +2469,6 @@ async function loadAllData() {
     ]);
     if (rebalRes) state.semiRebalanceResult = rebalRes;
     if (lumpRes) state.semiLumpSumResult = lumpRes;
-    if (docRes) state.docLastResult = docRes;
     if (tgStat) {
       state.telegramConfigured = Boolean(tgStat.configured || (state.telegramBotToken && state.telegramChatId));
       if (tgStat.chat_id && !state.telegramChatId) state.telegramChatId = tgStat.chat_id;
@@ -2283,7 +2491,7 @@ async function loadAllData() {
 async function init() {
   window.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
-      ["licenseModal", "telegramModal", "configModal", "researchModal"].forEach((id) => {
+      ["licenseModal", "telegramModal", "configModal", "researchModal", "legalModal", "pwRsiModal", "stockDetailModal"].forEach((id) => {
         const el = document.getElementById(id);
         if (el && el.style.display === "flex") {
           el.style.display = "none";

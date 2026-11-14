@@ -2,32 +2,38 @@ import { formatCheckoutUrl } from "../services/api.js";
 
 export function renderHeader(state) {
   const t = state.t;
-  const lang = state.lang;
+  const lang = state.lang || "en";
   const isPro = state.isProUnlocked;
   const activeView = state.activeView || "rightside";
   const ov = state.semiOverview;
-  const semiScore = ov && ov.fg_score !== undefined ? Number(ov.fg_score).toFixed(1) : "18.0";
+  const semiScore =
+    ov && ov.fg_score !== undefined && ov.fg_score !== null
+      ? Number(ov.fg_score).toFixed(1)
+      : "18.3";
   const rawRegime = ov
     ? lang === "jp"
       ? ov.regime_jp
-      : lang === "kr"
-      ? ov.regime_kr
       : ov.regime_en
     : "EXTREME FEAR";
   const semiRegime = String(rawRegime || "EXTREME FEAR").toUpperCase();
-  const semiDate = ov && ov.date ? ov.date : "2026-10-26";
-  const smhPrice = ov && ov.smh_close !== undefined ? Number(ov.smh_close).toFixed(2) : "541.62";
-  const xlvPrice = ov && ov.xlv_close !== undefined ? Number(ov.xlv_close).toFixed(2) : "179.28";
-  const qqqPrice = ov && ov.qqq_close !== undefined ? Number(ov.qqq_close).toFixed(2) : "712.20";
+  const semiDate = ov && ov.date ? ov.date : "2026-11-13";
+  const smhPrice = ov && ov.smh_close !== undefined ? Number(ov.smh_close).toFixed(2) : "486.75";
+  const xlvPrice = ov && ov.xlv_close !== undefined ? Number(ov.xlv_close).toFixed(2) : "188.85";
+  const qqqPrice = ov && ov.qqq_close !== undefined ? Number(ov.qqq_close).toFixed(2) : "679.89";
 
-  const etfs = (ov && Array.isArray(ov.etfs)) ? ov.etfs : [];
+  const etfs = ov && Array.isArray(ov.etfs) ? ov.etfs : [];
   const qqqEtf = etfs.find((e) => e.ticker === "QQQ");
   const smhEtf = etfs.find((e) => e.ticker === "SMH");
   const xlvEtf = etfs.find((e) => e.ticker === "XLV");
 
-  const qqq1d = qqqEtf && qqqEtf.ret_1d_pct !== undefined ? Number(qqqEtf.ret_1d_pct) : 1.11;
-  const smhDd = smhEtf && smhEtf.dd_52w_pct !== undefined ? Number(smhEtf.dd_52w_pct) : (ov && ov.smh_dd_pct !== undefined ? Number(ov.smh_dd_pct) : -19.03);
-  const xlv1d = xlvEtf && xlvEtf.ret_1d_pct !== undefined ? Number(xlvEtf.ret_1d_pct) : 0.0;
+  const qqq1d = qqqEtf && qqqEtf.ret_1d_pct !== undefined ? Number(qqqEtf.ret_1d_pct) : 0.25;
+  const smhDd =
+    smhEtf && smhEtf.dd_52w_pct !== undefined
+      ? Number(smhEtf.dd_52w_pct)
+      : ov && ov.smh_dd_pct !== undefined
+      ? Number(ov.smh_dd_pct)
+      : -29.02;
+  const xlv1d = xlvEtf && xlvEtf.ret_1d_pct !== undefined ? Number(xlvEtf.ret_1d_pct) : 0.22;
   const lsMonthlyHref = formatCheckoutUrl(
     state.config?.ls_site1_monthly_url,
     "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
@@ -35,7 +41,9 @@ export function renderHeader(state) {
   const ytUrl = state.config?.youtube_url || "https://www.youtube.com/@RightSideAlpha";
   const igUrl = state.config?.instagram_url || "https://www.instagram.com/rightsidealpha";
   const xUrl = state.config?.x_url || "https://x.com/rightsidealpha";
-  const tgUrl = isPro ? (state.config?.telegram_vip_channel_url || state.config?.telegram_channel_url || "https://t.me/truthofmarketss") : "#pro-vip-telegram";
+  const tgUrl = isPro
+    ? state.config?.telegram_vip_channel_url || state.config?.telegram_channel_url || "https://t.me/truthofmarketss"
+    : "#pro-vip-telegram";
   const isAdminMode =
     (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("admin") === "1") ||
     Boolean(state.isAdminAuthenticated);
@@ -65,12 +73,12 @@ export function renderHeader(state) {
             <span class="${xlv1d >= 0 ? "tape-up" : "tape-down"}">${xlv1d >= 0 ? "+" : ""}${xlv1d.toFixed(2)}%</span>
           </span>
           <span class="tape-item" style="cursor:pointer;" id="ribbonSwitchSemi">
-            <span class="tape-sym">SEMI FEAR & GREED</span>
+            <span class="tape-sym">SEMI FEAR &amp; GREED</span>
             <span class="${Number(semiScore) >= 55 ? "tape-up" : "tape-down"}" style="font-weight:700;">${semiScore} / 100 (${semiRegime})</span>
           </span>
         </div>
-        <div class="mono" style="font-size:0.68rem; color:var(--muted);">
-          LATEST CLOSE BASIS (${semiDate}) · NYSE / NASDAQ FEED
+        <div class="mono ribbon-date-note" style="font-size:0.68rem; color:var(--muted);">
+          LATEST CLOSE (${semiDate}) · NYSE / NASDAQ
         </div>
       </div>
     </div>
@@ -93,6 +101,7 @@ export function renderHeader(state) {
           <!-- PLATFORM SWITCHER -->
           <div class="platform-switcher" role="tablist" aria-label="Platform Switcher">
             <button
+              type="button"
               class="platform-tab ${activeView === "rightside" ? "active-rsa" : ""}"
               id="navTabRightSide"
               data-view="rightside"
@@ -101,26 +110,28 @@ export function renderHeader(state) {
               <span class="platform-tab-tag">72 US</span>
             </button>
             <button
+              type="button"
               class="platform-tab ${activeView === "semi" ? "active-semi" : ""}"
               id="navTabSemiFg"
               data-view="semi"
             >
               <span>${t.navSemiFg}</span>
-              <span class="platform-tab-tag" style="color:#fca5a5; background:rgba(220,38,38,0.2);">${semiScore}</span>
+              <span class="platform-tab-tag" id="headerSemiScoreTag" style="color:#fca5a5; background:rgba(220,38,38,0.2);">${semiScore}</span>
             </button>
           </div>
         </div>
 
         <div class="nav-actions">
           <div class="lang-switch" aria-label="Language Selector">
-            <button class="lang-btn active" data-lang="en">US · EN</button>
+            <button type="button" class="lang-btn ${lang !== "jp" ? "active" : ""}" data-lang="en">EN</button>
+            <button type="button" class="lang-btn ${lang === "jp" ? "active" : ""}" data-lang="jp">JP</button>
           </div>
 
           <span class="badge ${isPro ? "badge-ignition" : "badge-watch"}" id="proStatusBadge">
             ${isPro ? t.statusPro : t.statusFree}
           </span>
 
-          <button class="btn" id="btnOpenLicense">
+          <button type="button" class="btn" id="btnOpenLicense">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
               <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
@@ -138,7 +149,7 @@ export function renderHeader(state) {
               title="Official YouTube (@RightSideAlpha)"
               aria-label="Official YouTube"
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/>
               </svg>
             </a>
@@ -152,7 +163,7 @@ export function renderHeader(state) {
               title="Official Instagram (@rightsidealpha)"
               aria-label="Official Instagram"
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                 <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                 <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
@@ -168,7 +179,7 @@ export function renderHeader(state) {
               title="Official X (@rightsidealpha)"
               aria-label="Official X"
             >
-              <span style="font-weight:700; font-size:0.8rem;">𝕏</span>
+              <span style="font-weight:700; font-size:0.85rem;">𝕏</span>
             </a>
           </div>
 
@@ -184,13 +195,12 @@ export function renderHeader(state) {
               <line x1="22" y1="2" x2="11" y2="13"></line>
               <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
             </svg>
-            <span>${isPro ? "👑 VIP Telegram" : "🔒 VIP Telegram"}</span>
-            <span style="width:6px; height:6px; border-radius:50%; background:${isPro ? "var(--fin-up)" : "#f59e0b"}; display:inline-block;"></span>
+            <span>${isPro ? "👑 VIP TG" : "🔒 VIP TG"}</span>
           </a>
 
           ${
             isAdminMode
-              ? `<button class="btn" id="btnOpenConfig">
+              ? `<button type="button" class="btn" id="btnOpenConfig">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="3"></circle>
               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
@@ -203,6 +213,7 @@ export function renderHeader(state) {
           <a
             class="btn btn-primary lemonsqueezy-button"
             id="topSubscribeBtn"
+            data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
             href="${lsMonthlyHref}"
             target="_blank"
             rel="noopener noreferrer"

@@ -35,40 +35,6 @@ const PRICING_COPY = {
     tsBtn: "⚡ Launch TrendSpider AI Scanner ↗",
     tgBtn: "🔒 Pro VIP Telegram ($SMH/$XLV & 72-Stock Live News)",
   },
-  kr: {
-    t1Badge: "PRO 퀀트 멤버십",
-    t1Title: "프로 퀀트 터미널 & 일간 SEC 공시 리서치",
-    t1Period: "/ 월 구독",
-    t1Items: [
-      "미국 상장 72개 전 종목 진입 트리거(TRG) · -9% 칼손절(STP) · +100% 목표가(TP1) 전면 공개",
-      "매일 아침 SEC 원문(10-K/10-Q/8-K) 기반 우측 시동 턴어라운드 핵심 요약 브리프",
-      "포지션 닥터(Position Doctor): 내 보유종목 -9% 손절 / 55일 시간손절 / 원금회수 실시간 판독",
-      "TradingView Pine Script v5 전용 지표 원본 코드 + 반도체 공포·탐욕 26년치 CSV 다운로드",
-    ],
-    t1Btn: "Lemon Squeezy로 Pro 구독하기 ($29/월)",
-    t2Badge: "파운더 평생 소장권",
-    t2Title: "평생 리서치 & 터미널 무제한 라이선스",
-    t2Period: "/ 1회 결제 (평생)",
-    t2Items: [
-      "영구 라이선스 키 즉시 발급 — 매월 나가는 정기 구독료 평생 0원",
-      "26.8년(2000–2026) 미국 개별주 & 반도체($SMH:$XLV) 전체 백테스트 원본 데이터셋 제공",
-      "한국어 · 영어 · 일본어 3개 국어 SEC 리서치 브리프 및 텔레그램 실시간 알림 연동",
-      "RightSideAlpha(개별주) + SemiFearGreed(반도체 공포지수) 모든 Pro 기능 영구 잠금 해제",
-    ],
-    t2Btn: "평생 라이선스 소장하기 ($199)",
-    t3Badge: "미국주식 필수 3대 차트·리서치 제휴",
-    t3Title: "월가 기관급 차트 검증 & EPS 컨센서스 필수 툴 3종",
-    t3Desc: "MA20/MA60 거래량 돌파 차트 확인부터 EPS 컨센서스 점검, AI 자동 추세선 스캐너까지 원클릭으로 연결됩니다:",
-    t3Items: [
-      "<b>TradingView Pro (1173809)</b> — MA20/MA60 돌파 및 Pine Script v5 지표 자동 작도",
-      "<b>Seeking Alpha Premium (better_life333)</b> — 월가 애널리스트 1~2년 선행 EPS 상향 리비전 추적",
-      "<b>TrendSpider AI Charting (rightside)</b> — 미국주식 자동 추세선 · 돌파 스캐너 · 백테스트",
-    ],
-    tvBtn: "📈 TradingView 차트 터미널 열기 ↗",
-    saBtn: "📊 Seeking Alpha 실적 컨센서스 열기 ↗",
-    tsBtn: "⚡ TrendSpider AI 자동 차트 스캐너 ↗",
-    tgBtn: "🔒 Pro 전용 VIP 텔레그램 ($SMH/$XLV & 72종목 실시간 월가 뉴스)",
-  },
   jp: {
     t1Badge: "INSTITUTIONAL PRO",
     t1Title: "Pro クオンツターミナル＆日次SECリサーチ",
@@ -86,7 +52,7 @@ const PRICING_COPY = {
     t2Items: [
       "永久ライセンスキー発行 — 毎月のサブスクリプション費用ゼロ",
       "26.8年間(2000–2026)の米国株＆半導体ETF完全バックテストデータセット収録",
-      "日本語・英語・韓国語対応のSECリサーチブリーフ＆Telegramアラート連携",
+      "英語・日本語対応のSECリサーチブリーフ＆Telegramアラート連携",
       "RightSideAlpha＋SemiFearGreedの全Pro機能を永久アンロック",
     ],
     t2Btn: "永久ライセンスを取得 ($199)",
@@ -104,6 +70,7 @@ const PRICING_COPY = {
     tgBtn: "🔒 Pro専用 VIP Telegram ($SMH/$XLV & 72銘柄リアルタイムニュース)",
   },
 };
+PRICING_COPY.kr = PRICING_COPY.en;
 
 export function renderPricing(state) {
   const cfg = state.config || {};
@@ -140,15 +107,6 @@ export function renderPricing(state) {
   return `
     <div id="pricing" style="scroll-margin-top:80px;">
       <span id="pricingSection" style="display:block; height:0; overflow:hidden;"></span>
-      <div style="background:linear-gradient(135deg, rgba(139,92,246,0.16) 0%, rgba(16,185,129,0.12) 100%); border:1px solid rgba(139,92,246,0.5); border-left:4px solid #8b5cf6; border-radius:8px; padding:12px 16px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-        <div style="font-size:0.8rem; color:#e2e8f0; line-height:1.45;">
-          <span class="mono" style="color:#fbbf24; font-weight:800; font-size:0.72rem;">🎁 2-IN-1 DUAL TERMINAL PRO BUNDLE INCLUDED:</span>
-          Every <b>$29/mo</b> or <b>$199 Lifetime</b> license key (Store #296100) unlocks <b>BOTH TruthOfMarket.com</b> (60-Day PW-RSI &amp; $SMH:$XLV Barbell) <b>AND <a href="https://getbreakai.com/?utm_source=truthofmarket&utm_medium=pricing_bundle" target="_blank" rel="noopener noreferrer" style="color:#c4b5fd; font-weight:800; text-decoration:underline;">GetBreakAI.com</a></b> (1–15 Day Earnings Catalyst, Form-4 Whale &amp; Gamma Squeeze Terminal)!
-        </div>
-        <a href="https://getbreakai.com/?utm_source=truthofmarket&utm_medium=pricing_bundle" target="_blank" rel="noopener noreferrer" class="btn btn-sm" style="background:rgba(139,92,246,0.2); border-color:rgba(139,92,246,0.55); color:#ddd6fe; font-weight:800; white-space:nowrap;">
-          ⚡ Explore GetBreakAI.com ↗
-        </a>
-      </div>
       <div class="pricing-grid">
         <!-- Tier 1: Pro Monthly -->
         <div class="price-card featured">

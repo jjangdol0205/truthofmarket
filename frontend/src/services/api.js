@@ -35,21 +35,27 @@ export function getVipTelegramUrl(isPro = false) {
   return "#pro-vip-telegram";
 }
 
-export const LOCALIZED_TOM_MONTHLY_EN_URL =
-  "https://truthofmarket.lemonsqueezy.com/checkout/custom/1fe480f8-8bb0-46a9-959f-a8d396a87a1b?signature=a2c6d29a4b32c2c5aaccd38f408adb552dd6883c4bf1e48f03ace8c1d075373c&embed=1";
-export const LOCALIZED_TOM_LIFETIME_EN_URL =
-  "https://truthofmarket.lemonsqueezy.com/checkout/custom/c9ad1a1c-21c5-4d95-88a2-b570a860a147?signature=56e574e49be09b1776a57380506dc0292ecc8579b43600e68b7e1b40b97cf650&embed=1";
+export const CANONICAL_TOM_MONTHLY_URL =
+  "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1";
+export const CANONICAL_TOM_LIFETIME_URL =
+  "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1";
 
 export function formatCheckoutUrl(
   rawUrl,
   fallbackUrl = "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
 ) {
   const base = String(rawUrl || fallbackUrl).trim() || fallbackUrl;
-  if (base.includes("d5e7e761-8b1b-4ca8-b1fe-771acd1450f8")) {
-    return LOCALIZED_TOM_MONTHLY_EN_URL;
+  if (
+    base.includes("d5e7e761-8b1b-4ca8-b1fe-771acd1450f8") ||
+    base.includes("1fe480f8-8bb0-46a9-959f-a8d396a87a1b")
+  ) {
+    return CANONICAL_TOM_MONTHLY_URL;
   }
-  if (base.includes("667aa482-f17c-47d1-b7f3-a2427c36516b")) {
-    return LOCALIZED_TOM_LIFETIME_EN_URL;
+  if (
+    base.includes("667aa482-f17c-47d1-b7f3-a2427c36516b") ||
+    base.includes("c9ad1a1c-21c5-4d95-88a2-b570a860a147")
+  ) {
+    return CANONICAL_TOM_LIFETIME_URL;
   }
   if (/[?&]embed=1\b/i.test(base)) {
     return base;
@@ -58,10 +64,12 @@ export function formatCheckoutUrl(
 }
 
 function isStaticHost() {
-  if (typeof window === "undefined") return false;
+  if (typeof window === "undefined") return true;
   if (window.__STATIC_MODE__ === true) return true;
+  if (window.__API_BACKEND__ === true) return false;
   const h = window.location.hostname || "";
-  if (!h || h === "localhost" || h === "127.0.0.1") return false;
+  const p = String(window.location.port || "");
+  if ((h === "localhost" || h === "127.0.0.1") && p === "8000") return false;
   return true;
 }
 
@@ -1181,31 +1189,31 @@ export async function calculateSemiRebalance(data) {
         xlvW = 0.3;
         ruleEn = "Fixed 70% $SMH : 30% $XLV Golden Barbell Baseline";
         ruleJp = "70% $SMH : 30% $XLV 基本黄金バーベル比率";
-        ruleKr = "평시 70% $SMH : 30% $XLV 기본 황금 바벨 비중";
+        ruleKr = ruleEn;
       } else if (mode === "CONTRARIAN_80_20") {
         smhW = 0.8;
         xlvW = 0.2;
         ruleEn = "Contrarian 80% $SMH : 20% $XLV Crash Accumulation Tilt";
         ruleJp = "80% $SMH : 20% $XLV 暴落時・逆張り買い増しモード";
-        ruleKr = "80% $SMH : 20% $XLV 폭락장 역발상 매집 비중";
+        ruleKr = ruleEn;
       } else if (mode === "AGGRESSIVE_90_10") {
         smhW = 0.9;
         xlvW = 0.1;
         ruleEn = "90% $SMH : 10% $XLV Right-Side Momentum Tilt";
         ruleJp = "90% $SMH : 10% $XLV 右側モメンタム集中モード";
-        ruleKr = "90% $SMH : 10% $XLV 우측 시동 공격형 비중";
+        ruleKr = ruleEn;
       } else if (isExtreme) {
         smhW = 0.8;
         xlvW = 0.2;
         ruleEn = `AUTO REGIME: Extreme Fear (${fgScore}/100, DD ${ddPct.toFixed(1)}%) → 80% $SMH : 20% $XLV Contrarian Shift`;
         ruleJp = `自動判定: 極度の恐怖 (${fgScore}/100, 高値比 ${ddPct.toFixed(1)}%) → 80% $SMH : 20% $XLV 逆張り転換`;
-        ruleKr = `자동 판독: 극단적 공포 (${fgScore}/100, 낙폭 ${ddPct.toFixed(1)}%) → 80% $SMH : 20% $XLV 역발상 비중 확대`;
+        ruleKr = ruleEn;
       } else {
         smhW = 0.7;
         xlvW = 0.3;
         ruleEn = `AUTO REGIME: Standard Regime (${fgScore}/100) → 70% $SMH : 30% $XLV Core Barbell`;
         ruleJp = `自動判定: 通常レジーム (${fgScore}/100) → 70% $SMH : 30% $XLV 基本比率`;
-        ruleKr = `자동 판독: 평시 구간 (${fgScore}/100) → 70% $SMH : 30% $XLV 기본 황금비중`;
+        ruleKr = ruleEn;
       }
 
       const capUsd = Math.max(100, Number(data.total_capital_usd || 100000));
@@ -1248,10 +1256,7 @@ export async function calculateSemiRebalance(data) {
         gainKrw <= dedLimit
           ? `評価益 (₩${gainKrw.toLocaleString()}) は年間非課税枠 (₩2,500,000) 以内です。年末までにリバランスを実行することで譲渡所得税 ₩0 (節税額 ₩${taxSavedKrw.toLocaleString()}) で利益確定と取得単価引き上げが可能です。`
           : `評価益 (₩${gainKrw.toLocaleString()}) が非課税枠を ₩${taxableKrw.toLocaleString()} 超過しています。今年の売却益を250万ウォンまでに抑えて最大 ₩550,000 を節税し、残りは新規積立資金で比率調整するのが最適です。`;
-      const taxKr =
-        gainKrw <= dedLimit
-          ? `예상 실현차익(₩${gainKrw.toLocaleString()})이 연간 해외주식 양도세 기본공제 한도(250만 원) 이내입니다. 연말 전 리밸런싱 매도를 통해 양도세 0원(절세 효과 약 ₩${taxSavedKrw.toLocaleString()})으로 취득단가를 높이세요.`
-          : `예상 차익(₩${gainKrw.toLocaleString()})이 250만 원 비과세 한도를 ₩${taxableKrw.toLocaleString()} 초과합니다. 올해는 실현차익 250만 원까지만 부분 매도하여 최대 55만 원 절세 혜택을 챙기고, 부족한 비중은 신규 적립금으로 채우세요.`;
+      const taxKr = taxEn;
 
       return {
         as_of_date: ov.date || "2026-10-26",
@@ -1328,13 +1333,13 @@ export async function calculateSemiLumpSum(data) {
           case_code: "CASE_1_FEAR_100PCT",
           case_title_en: "Case 1 (Score 0–40 · Fear Regime): 100% Immediate Lump-Sum Entry",
           case_title_jp: "ケース1 (スコア 0–40 · 恐怖圏): 100% 即時一括エントリー",
-          case_title_kr: "Case 1 (지수 0–40 · 공포 구간): 100% 즉시 일시금 진입",
+          case_title_kr: "Case 1 (Score 0–40 · Fear Regime): 100% Immediate Lump-Sum Entry",
           summary_en:
             "Semiconductors are already discounted. Do not hold excess cash—deploy 100% today and rebalance back to 70:30 when $SMH recovers within -10% of its 52-week high.",
           summary_jp:
             "半導体セクターは既に割安圏にあります。現金を遊ばせず本日100%投入し、$SMHが高値比-10%以内へ回復した時点で70:30へ戻します。",
           summary_kr:
-            "반도체 섹터가 이미 할인된 공포 구간입니다. 현금을 놀리지 말고 당일 100% 거치식으로 진입한 뒤, $SMH가 고점 대비 -10% 이내로 회복되면 70:30으로 복귀하세요.",
+            "Semiconductors are already discounted. Deploy 100% today and rebalance back to 70:30 when $SMH recovers within -10% of its 52-week high.",
           immediate_deploy_pct: 100.0,
           parked_cash_rp_pct: 0.0,
           tranches: [
@@ -1342,10 +1347,10 @@ export async function calculateSemiLumpSum(data) {
               step: 1,
               title_en: "Tranche 1 (Day 1 Immediate 100% Deployment)",
               title_jp: "第1トランシェ (初日 100% 一括エントリー)",
-              title_kr: "1차 집행 (당일 100% 즉시 거치식 진입)",
+              title_kr: "Tranche 1 (Day 1 Immediate 100% Deployment)",
               timing_en: "Execute Today (Market Open / Close)",
               timing_jp: "本日即時執行 (Fear ≤ 40 割安圏)",
-              timing_kr: "오늘 즉시 집행 (공포 지수 40 이하 저평가 구간)",
+              timing_kr: "Execute Today (Market Open / Close)",
               allocation_pct: 100.0,
               amount_usd: cap,
               smh_usd: smhUsd,
@@ -1359,9 +1364,9 @@ export async function calculateSemiLumpSum(data) {
               note_jp: `${Math.round(smhW * 100)}:${Math.round(
                 xlvW * 100
               )} ($SMH:$XLV) 比率で100%即時エントリー。スコア25以下でのエントリーは過去1年後の勝率が91%超。`,
-              note_kr: `${Math.round(smhW * 100)}:${Math.round(
+              note_kr: `Deploy 100% immediately at ${Math.round(smhW * 100)}:${Math.round(
                 xlvW * 100
-              )} ($SMH:$XLV) 비중으로 100% 즉시 진입합니다. 공포 지수 25 이하 진입 시 1년 후 플러스 수익 확률은 91% 이상입니다.`,
+              )} ($SMH:$XLV). Historical 1-year forward win rate when entering below score 25 exceeds 91%.`,
             },
           ],
         };
@@ -1379,13 +1384,13 @@ export async function calculateSemiLumpSum(data) {
           case_code: "CASE_2_NEUTRAL_65_35",
           case_title_en: "Case 2 (Score 40–68 · Neutral Regime): 65% Immediate + 35% Pullback Reserve",
           case_title_jp: "ケース2 (スコア 40–68 · 中立圏): 65% 初日投入 + 35% 押し目待機",
-          case_title_kr: "Case 2 (지수 40–68 · 중립 구간): 65% 선진입 + 35% 달러 RP 파킹 후 분할",
+          case_title_kr: "Case 2 (Score 40–68 · Neutral Regime): 65% Immediate + 35% Pullback Reserve",
           summary_en:
             "Balanced deployment: lock in your 30% $XLV anchor and half of $SMH today, while keeping 35% dry powder for volatility.",
           summary_jp:
             "バランス型エントリー：$XLV 30%と$SMH半分を初日に確保し、35%の余力で押し目に備えます。",
           summary_kr:
-            "중립장 표준 공식: 1일차에 $XLV 30% 전량과 $SMH 절반(35%)을 먼저 채우고, 나머지 35%는 조정 시 추매 실탄으로 활용합니다.",
+            "Balanced deployment: lock in your 30% $XLV anchor and half of $SMH today, while keeping 35% dry powder for volatility.",
           immediate_deploy_pct: 65.0,
           parked_cash_rp_pct: 35.0,
           tranches: [
@@ -1393,10 +1398,10 @@ export async function calculateSemiLumpSum(data) {
               step: 1,
               title_en: "Tranche 1 (Day 1 Core 65% Deployment)",
               title_jp: "第1トランシェ (初日 65% コア投入)",
-              title_kr: "1차 집행 (1일차 65% 코어 포지션 선진입)",
+              title_kr: "Tranche 1 (Day 1 Core 65% Deployment)",
               timing_en: "Execute Today (30% $XLV Full + 35% $SMH Half)",
               timing_jp: "本日執行 ($XLV 30%全額 + $SMH 35%半分)",
-              timing_kr: "오늘 즉시 집행 ($XLV 30% 전량 + $SMH 35% 절반)",
+              timing_kr: "Execute Today (30% $XLV Full + 35% $SMH Half)",
               allocation_pct: 65.0,
               amount_usd: d1Tot,
               smh_usd: d1Smh,
@@ -1409,16 +1414,16 @@ export async function calculateSemiLumpSum(data) {
               note_jp:
                 "ディフェンシブ枠の$XLV (30%) 全額と、成長枠$SMHの半分 (35%) を初日に構築します。",
               note_kr:
-                "방어주 $XLV(30%) 전량과 반도체 $SMH 목표치의 절반(35%)을 첫날 즉시 매수합니다.",
+                "Establish 100% of your defensive $XLV position (30%) and half of your $SMH position (35%) immediately.",
             },
             {
               step: 2,
               title_en: "Tranche 2 (Remaining 35% $SMH Reserve in USD RP)",
               title_jp: "第2トランシェ (残り35% $SMH待機資金・米ドルMMF)",
-              title_kr: "2차 집행 (잔여 35% 달러 RP 파킹 후 조건부 투입)",
+              title_kr: "Tranche 2 (Remaining 35% $SMH Reserve in USD RP)",
               timing_en: "Deploy when FG Score ≤ 40 OR split across D+30 / D+60 / D+90",
               timing_jp: "スコア40以下へ低下時、または30日・60日・90日で3分割投入",
-              timing_kr: "공포지수 40 이하 하락 시 즉시 투입 (미도달 시 30·60·90일 3분할)",
+              timing_kr: "Deploy when FG Score ≤ 40 OR split across D+30 / D+60 / D+90",
               allocation_pct: 35.0,
               amount_usd: t2Smh,
               smh_usd: t2Smh,
@@ -1431,7 +1436,7 @@ export async function calculateSemiLumpSum(data) {
               note_jp:
                 "米ドルMMFで金利を受け取りながらスコア40以下への押し目を待つか、90日間で機械的に分割投入します。",
               note_kr:
-                "달러 RP(연 4%대 금리)에 예치해 두었다가 지수가 40 이하로 내려오면 즉시 투입하고, 안 내려오면 3개월간 균등 분할 매수합니다.",
+                "Earn ~4.5% USD RP yield while waiting for a pullback below score 40, or auto-deploy over 90 days.",
             },
           ],
         };
@@ -1450,13 +1455,13 @@ export async function calculateSemiLumpSum(data) {
           case_title_jp:
             "ケース3 (スコア 68–100 · 強欲圏): 初日 $XLV 30%のみ + 70% 米ドルMMF待機",
           case_title_kr:
-            "Case 3 (지수 68–100 · 탐욕 과열 구간): 당일 $XLV 30%만 진입 + 70% 달러 RP 대기",
+            "Case 3 (Score 68–100 · Greed Regime): 30% $XLV Today + 70% $SMH Parked in USD RP",
           summary_en:
             "Protect principal against euphoria: buy only the 30% $XLV sleeve today and keep 70% in USD RP until Fear & Greed cools to 45 or below.",
           summary_jp:
             "高値掴み防止ルール：初日は$XLV 30%のみを購入し、70%は指数が45以下に冷めるまで米ドルMMFで待機します。",
           summary_kr:
-            "고점 추격매수 방지 공식: 당일에는 방어주 $XLV 30%만 매수하고, $SMH 70% 자금은 지수가 45 이하로 내려올 때까지 달러 RP에서 이자를 받으며 대기합니다.",
+            "Protect principal against euphoria: buy only the 30% $XLV sleeve today and keep 70% in USD RP until Fear & Greed cools to 45 or below.",
           immediate_deploy_pct: 30.0,
           parked_cash_rp_pct: 70.0,
           tranches: [
@@ -1464,10 +1469,10 @@ export async function calculateSemiLumpSum(data) {
               step: 1,
               title_en: "Tranche 1 (Day 1 Defensive $XLV 30% Only)",
               title_jp: "第1トランシェ (初日はディフェンシブ $XLV 30% のみ購入)",
-              title_kr: "1차 집행 (1일차 방어주 $XLV 30%만 우선 진입)",
+              title_kr: "Tranche 1 (Day 1 Defensive $XLV 30% Only)",
               timing_en: "Execute Today ($XLV Anchor Only — Zero $SMH Chasing)",
               timing_jp: "本日執行 ($XLV 30%のみ・過熱した$SMHの高値追い禁止)",
-              timing_kr: "오늘 즉시 집행 (과열된 $SMH 추격매수 금지, $XLV 30%만 매수)",
+              timing_kr: "Execute Today ($XLV Anchor Only — Zero $SMH Chasing)",
               allocation_pct: 30.0,
               amount_usd: d1Xlv,
               smh_usd: 0.0,
@@ -1480,16 +1485,16 @@ export async function calculateSemiLumpSum(data) {
               note_jp:
                 "スコア68超の過熱局面での半導体ジャンピングキャッチを回避し、ヘルスケア枠30%のみを先行構築します。",
               note_kr:
-                "탐욕 지수 68 초과 과열 구간에서는 반도체 고점 물림을 피하기 위해 방어주 $XLV 30%만 우선 매수합니다.",
+                "Do not chase overheated semiconductors above score 68. Deploy only the 30% Healthcare anchor on Day 1.",
             },
             {
               step: 2,
               title_en: "Tranche 2 (70% $SMH Capital Parked in Yielding USD RP)",
               title_jp: "第2トランシェ (70% $SMH資金は米ドルMMFで冷却待機)",
-              title_kr: "2차 집행 (70% $SMH 몫은 달러 RP 파킹 후 지수 ≤ 45 냉각 시 투입)",
+              title_kr: "Tranche 2 (70% $SMH Capital Parked in Yielding USD RP)",
               timing_en: "Deploy when FG Score cools ≤ 45 (or 4 monthly tranches)",
               timing_jp: "スコア45以下へ冷却時、または4ヶ月分割で順次エントリー",
-              timing_kr: "공포·탐욕 지수가 45 이하로 식을 때 투입 (또는 4개월 분할)",
+              timing_kr: "Deploy when FG Score cools ≤ 45 (or 4 monthly tranches)",
               allocation_pct: 70.0,
               amount_usd: pSmh,
               smh_usd: pSmh,
@@ -1502,7 +1507,7 @@ export async function calculateSemiLumpSum(data) {
               note_jp:
                 "米ドル金利を確保しながら、半導体の過熱感が冷めるのを待って安全にエントリーします。",
               note_kr:
-                "달러 RP 이자를 받으며 반도체 과열이 해소될 때까지 기다렸다가 안전하게 진입하여 고점 낙폭을 방어합니다.",
+                "Collect risk-free USD interest while waiting for semiconductor euphoria to mean-revert.",
             },
           ],
         };
@@ -1519,9 +1524,7 @@ export async function buildClientTelegramPreview({
   days_held = 42,
 } = {}) {
   const atype = String(alert_type || "SEMI_BRIEFING").trim().toUpperCase();
-  const lg = ["kr", "en", "jp"].includes(String(lang || "en").toLowerCase())
-    ? String(lang || "en").toLowerCase()
-    : "en";
+  const lg = String(lang || "en").toLowerCase() === "jp" ? "jp" : "en";
 
   const ov = await getStaticSemiOverview();
   const reb = await calculateSemiRebalance({
@@ -1545,23 +1548,6 @@ export async function buildClientTelegramPreview({
     const smhShSign = reb.delta_smh_shares >= 0 ? `+${reb.delta_smh_shares}` : `${reb.delta_smh_shares}`;
     const xlvShSign = reb.delta_xlv_shares >= 0 ? `+${reb.delta_xlv_shares}` : `${reb.delta_xlv_shares}`;
 
-    if (lg === "en") {
-      return [
-        `🧭 [SemiFearGreed] Daily Semiconductor & Barbell Briefing (${ov.date})`,
-        `• Fear & Greed Score: ${Number(ov.fg_score).toFixed(1)} / 100 (${String(ov.regime_en).toUpperCase()})`,
-        `• $SMH: $${Number(ov.smh_close).toFixed(2)} (${Number(ov.smh_dd_pct).toFixed(2)}% 52W DD)`,
-        `• $XLV: $${Number(ov.xlv_close).toFixed(2)} (${xlv1d >= 0 ? "+" : ""}${xlv1d.toFixed(2)}% 1D) | $QQQ: $${Number(ov.qqq_close).toFixed(2)} (${qqq1d >= 0 ? "+" : ""}${qqq1d.toFixed(2)}% 1D)`,
-        `• FX Rate: ₩${Number(ov.usdkrw).toLocaleString()} / USD`,
-        ``,
-        `⚡ Active Signal: Target ${ov.recommended_smh_weight}% $SMH : ${ov.recommended_xlv_weight}% $XLV`,
-        `• ${ov.action_headline_en}`,
-        ``,
-        `📊 $100,000 Standard Rebalance Orders:`,
-        `• $SMH (${reb.target_smh_weight_pct}%): $${Number(reb.target_smh_usd).toLocaleString()} (${reb.target_smh_shares} sh) → ${dSmhSign}$${Math.abs(Number(reb.delta_smh_usd)).toLocaleString()} (${smhShSign} sh)`,
-        `• $XLV (${reb.target_xlv_weight_pct}%): $${Number(reb.target_xlv_usd).toLocaleString()} (${reb.target_xlv_shares} sh) → ${dXlvSign}$${Math.abs(Number(reb.delta_xlv_usd)).toLocaleString()} (${xlvShSign} sh)`,
-        `🔗 Terminal: https://truthofmarket.com/#semi`,
-      ].join("\n");
-    }
     if (lg === "jp") {
       return [
         `🧭 [SemiFearGreed] 半導体恐怖＆強欲指数・日次ブリーフィング (${ov.date})`,
@@ -1576,23 +1562,23 @@ export async function buildClientTelegramPreview({
         `📊 $100,000 基準リバランス注文:`,
         `• $SMH (${reb.target_smh_weight_pct}%): $${Number(reb.target_smh_usd).toLocaleString()} (${reb.target_smh_shares}株) → ${dSmhSign}$${Math.abs(Number(reb.delta_smh_usd)).toLocaleString()} (${smhShSign}株)`,
         `• $XLV (${reb.target_xlv_weight_pct}%): $${Number(reb.target_xlv_usd).toLocaleString()} (${reb.target_xlv_shares}株) → ${dXlvSign}$${Math.abs(Number(reb.delta_xlv_usd)).toLocaleString()} (${xlvShSign}株)`,
-        `🔗 ターミナル: https://truthofmarket.com/#semi`,
+        `🔗 ターミナル: https://truthofmarket.com/semi-fear-greed.html`,
       ].join("\n");
     }
     return [
-      `🧭 [SemiFearGreed] 반도체 공포·탐욕 지수 & 바벨 리밸런싱 브리핑 (${ov.date})`,
-      `• 공포·탐욕 지수: ${Number(ov.fg_score).toFixed(1)} / 100 (${ov.regime_kr} · ${String(ov.regime_en).toUpperCase()})`,
-      `• $SMH(반도체): $${Number(ov.smh_close).toFixed(2)} (52주 고점 대비 ${Number(ov.smh_dd_pct).toFixed(2)}%)`,
-      `• $XLV(헬스케어): $${Number(ov.xlv_close).toFixed(2)} (${xlv1d >= 0 ? "+" : ""}${xlv1d.toFixed(2)}% 1D) | $QQQ: $${Number(ov.qqq_close).toFixed(2)} (${qqq1d >= 0 ? "+" : ""}${qqq1d.toFixed(2)}% 1D)`,
-      `• 적용 환율: ₩${Number(ov.usdkrw).toLocaleString()} / USD`,
+      `🧭 [SemiFearGreed] Daily Semiconductor & Barbell Briefing (${ov.date})`,
+      `• Fear & Greed Score: ${Number(ov.fg_score).toFixed(1)} / 100 (${String(ov.regime_en).toUpperCase()})`,
+      `• $SMH: $${Number(ov.smh_close).toFixed(2)} (${Number(ov.smh_dd_pct).toFixed(2)}% 52W DD)`,
+      `• $XLV: $${Number(ov.xlv_close).toFixed(2)} (${xlv1d >= 0 ? "+" : ""}${xlv1d.toFixed(2)}% 1D) | $QQQ: $${Number(ov.qqq_close).toFixed(2)} (${qqq1d >= 0 ? "+" : ""}${qqq1d.toFixed(2)}% 1D)`,
+      `• FX Rate: ₩${Number(ov.usdkrw).toLocaleString()} / USD`,
       ``,
-      `⚡ 현재 발동 시그널: 목표 비중 ${ov.recommended_smh_weight}% $SMH : ${ov.recommended_xlv_weight}% $XLV`,
-      `• ${ov.action_headline_kr}`,
+      `⚡ Active Signal: Target ${ov.recommended_smh_weight}% $SMH : ${ov.recommended_xlv_weight}% $XLV`,
+      `• ${ov.action_headline_en}`,
       ``,
-      `📊 $100,000 (약 ₩${Number(reb.total_capital_krw).toLocaleString()}) 기준 리밸런싱 주문:`,
-      `• $SMH (${reb.target_smh_weight_pct}%): $${Number(reb.target_smh_usd).toLocaleString()} (${reb.target_smh_shares}주) → ${dSmhSign}$${Math.abs(Number(reb.delta_smh_usd)).toLocaleString()} (${smhShSign}주)`,
-      `• $XLV (${reb.target_xlv_weight_pct}%): $${Number(reb.target_xlv_usd).toLocaleString()} (${reb.target_xlv_shares}주) → ${dXlvSign}$${Math.abs(Number(reb.delta_xlv_usd)).toLocaleString()} (${xlvShSign}주)`,
-      `🔗 실시간 터미널: https://truthofmarket.com/#semi`,
+      `📊 $100,000 Standard Rebalance Orders:`,
+      `• $SMH (${reb.target_smh_weight_pct}%): $${Number(reb.target_smh_usd).toLocaleString()} (${reb.target_smh_shares} sh) → ${dSmhSign}$${Math.abs(Number(reb.delta_smh_usd)).toLocaleString()} (${smhShSign} sh)`,
+      `• $XLV (${reb.target_xlv_weight_pct}%): $${Number(reb.target_xlv_usd).toLocaleString()} (${reb.target_xlv_shares} sh) → ${dXlvSign}$${Math.abs(Number(reb.delta_xlv_usd)).toLocaleString()} (${xlvShSign} sh)`,
+      `🔗 Terminal: https://truthofmarket.com/semi-fear-greed.html`,
     ].join("\n");
   };
 
@@ -1612,17 +1598,6 @@ export async function buildClientTelegramPreview({
       .join("\n");
 
     const ignCount = allStocks.filter((s) => s.zone_code === "IGNITION_ZONE").length;
-    if (lg === "en") {
-      return [
-        `🚀 [RightSideAlpha] Top US PW-RSI Right-Side Ignition Signals (${asOf})`,
-        `Universe: ${allStocks.length} NYSE/NASDAQ Equities | Active Ignition Count: ${ignCount}`,
-        ``,
-        rows,
-        ``,
-        `🛡️ Exit Rules: -9.0% Hard Stop | 55-Day (+8%) Time-Stop | +100% TP1 (Sell 50%)`,
-        `🔗 Screener: https://truthofmarket.com/#rightside`,
-      ].join("\n");
-    }
     if (lg === "jp") {
       return [
         `🚀 [RightSideAlpha] 米国株 PW-RSI 右側イグニッション上位銘柄 (${asOf})`,
@@ -1631,17 +1606,17 @@ export async function buildClientTelegramPreview({
         rows,
         ``,
         `🛡️ エグジット原則: -9.0% ハード損切 | 55日(+8%未満) タイムストップ | +100% TP1 半分利確`,
-        `🔗 スクリーナー: https://truthofmarket.com/#rightside`,
+        `🔗 スクリーナー: https://truthofmarket.com/`,
       ].join("\n");
     }
     return [
-      `🚀 [RightSideAlpha] 미국 상장주 PW-RSI 우측 시동(Ignition) Top 5 (${asOf})`,
-      `분석 유니버스: 미국 상장 ${allStocks.length}개 핵심 종목 | 우측 시동 포착: ${ignCount}종목`,
+      `🚀 [RightSideAlpha] Top US PW-RSI Right-Side Ignition Signals (${asOf})`,
+      `Universe: ${allStocks.length} NYSE/NASDAQ Equities | Active Ignition Count: ${ignCount}`,
       ``,
       rows,
       ``,
-      `🛡️ 4대 청산 원칙: -9.0% 칼손절 | 55일(+8% 미만) 시간손절 | +100% 도달 시 50% 원금회수`,
-      `🔗 미국주식 터미널: https://truthofmarket.com/#rightside`,
+      `🛡️ Exit Rules: -9.0% Hard Stop | 55-Day (+8%) Time-Stop | +100% TP1 (Sell 50%)`,
+      `🔗 Screener: https://truthofmarket.com/`,
     ].join("\n");
   };
 
@@ -1662,33 +1637,20 @@ export async function buildClientTelegramPreview({
       entry_price: entry_price || 27.93,
       days_held: days_held ?? 42,
     });
-    const text =
-      lg === "en"
-        ? [
-            `🩺 [Position Doctor] $${doc.ticker} Asymmetric Exit Audit (${doc.as_of_date})`,
-            `• Status: ${doc.status_label} (${doc.status_code})`,
-            `• Latest Close: $${Number(doc.current_price).toFixed(2)} | Cost Basis: $${Number(doc.entry_price).toFixed(2)} | Held: ${days_held ?? 42}d`,
-            `• Current Return: ${doc.return_pct >= 0 ? "+" : ""}${Number(doc.return_pct).toFixed(2)}%`,
-            `• -9% Hard Stop: $${Number(doc.stop_price).toFixed(2)} | +100% Target (TP1): $${Number(doc.tp1_price).toFixed(2)}`,
-            `• Action Plan: ${doc.action_plan}`,
-          ].join("\n")
-        : [
-            `🩺 [Position Doctor] $${doc.ticker} 포지션 리스크 진단 (${doc.as_of_date})`,
-            `• 판정 결과: ${doc.status_label}`,
-            `• 최근 종가: $${Number(doc.current_price).toFixed(2)} | 매수 단가: $${Number(doc.entry_price).toFixed(2)} | 보유일: ${days_held ?? 42}일`,
-            `• 현재 수익률: ${doc.return_pct >= 0 ? "+" : ""}${Number(doc.return_pct).toFixed(2)}%`,
-            `• -9% 손절가: $${Number(doc.stop_price).toFixed(2)} | +100% 목표가(TP1): $${Number(doc.tp1_price).toFixed(2)}`,
-            `• 실행 지침: ${doc.action_plan}`,
-          ].join("\n");
+    const text = [
+      `🩺 [Position Doctor] $${doc.ticker} Asymmetric Exit Audit (${doc.as_of_date})`,
+      `• Status: ${doc.status_label} (${doc.status_code})`,
+      `• Latest Close: $${Number(doc.current_price).toFixed(2)} | Cost Basis: $${Number(doc.entry_price).toFixed(2)} | Held: ${days_held ?? 42}d`,
+      `• Current Return: ${doc.return_pct >= 0 ? "+" : ""}${Number(doc.return_pct).toFixed(2)}%`,
+      `• -9% Hard Stop: $${Number(doc.stop_price).toFixed(2)} | +100% Target (TP1): $${Number(doc.tp1_price).toFixed(2)}`,
+      `• Action Plan: ${doc.action_plan}`,
+    ].join("\n");
     return { text, as_of_date: doc.as_of_date || "2026-10-30", alert_type: atype, lang: lg };
   }
   if (atype === "TEST_PING") {
     const topSym = ignStocks[0]?.ticker || "CELH";
     const topClose = Number(ignStocks[0]?.close ?? 27.93).toFixed(2);
-    const text =
-      lg === "en"
-        ? `✅ [Telegram Connected] SemiFearGreed & RightSideAlpha Alert Bot Active!\n• Semi Fear & Greed (${ov.date}): ${Number(ov.fg_score).toFixed(1)}/100 (${String(ov.regime_en).toUpperCase()})\n• $SMH: $${Number(ov.smh_close).toFixed(2)} | $XLV: $${Number(ov.xlv_close).toFixed(2)} | $QQQ: $${Number(ov.qqq_close).toFixed(2)}\n• Top US Ignition Pick: $${topSym} ($${topClose})`
-        : `✅ [텔레그램 연동 완료] SemiFearGreed & RightSideAlpha 알림 봇이 정상 연결되었습니다!\n• 반도체 공포·탐욕 지수 (${ov.date}): ${Number(ov.fg_score).toFixed(1)}/100 (${ov.regime_kr})\n• $SMH: $${Number(ov.smh_close).toFixed(2)} | $XLV: $${Number(ov.xlv_close).toFixed(2)} | $QQQ: $${Number(ov.qqq_close).toFixed(2)}\n• 미국 우측 시동 1위: $${topSym} ($${topClose})`;
+    const text = `✅ [Telegram Connected] SemiFearGreed & RightSideAlpha Alert Bot Active!\n• Semi Fear & Greed (${ov.date}): ${Number(ov.fg_score).toFixed(1)}/100 (${String(ov.regime_en).toUpperCase()})\n• $SMH: $${Number(ov.smh_close).toFixed(2)} | $XLV: $${Number(ov.xlv_close).toFixed(2)} | $QQQ: $${Number(ov.qqq_close).toFixed(2)}\n• Top US Ignition Pick: $${topSym} ($${topClose})`;
     return { text, as_of_date: ov.date || "2026-10-26", alert_type: atype, lang: lg };
   }
 

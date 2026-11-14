@@ -56,8 +56,8 @@ def refresh_health_and_rss() -> tuple[str, str]:
 
     semi_path = ROOT / "static_api" / "semi_overview.json"
     stocks_path = ROOT / "static_api" / "stocks_free.json"
-    as_of_date = "2026-11-05"
-    fg_score = 18.0
+    as_of_date = "2026-11-13"
+    fg_score = 18.3
     regime_code = "EXTREME_FEAR"
     smh_close = 504.48
     smh_dd_pct = -24.58
@@ -328,7 +328,12 @@ def main() -> None:
   </script>
 </head>
 <body>
-  <div id="app"></div>
+  <div id="app">
+    <section class="seo-home-fallback" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;margin:16px auto;padding:20px;background:#0f172a;border:1px solid #1e293b;border-radius:12px;color:#f8fafc;">
+      <h1 style="font-size:1.5rem;font-weight:800;margin:0 0 8px;color:#ffffff;">Stop Buying Falling Knives—Spot Verified Stock Breakouts With Clear -9% Risk Limits.</h1>
+      <p style="margin:0;color:#cbd5e1;font-size:0.95rem;">Track 72 liquid US stocks daily—enter only confirmed uptrends, protect every trade with an automatic -9% stop-loss, and lock in profits at +100%.</p>
+    </section>
+  </div>
 {seo_dir_html}
 </body>
 </html>
@@ -373,7 +378,7 @@ def main() -> None:
         (target_dir / "feed.xml").write_text(feed_xml, encoding="utf-8")
         (target_dir / "static_api").mkdir(parents=True, exist_ok=True)
         (target_dir / "static_api" / "health.json").write_text(health_json, encoding="utf-8")
-        for stale_rel in ["instagram_us_setup.html", "static_api/stocks_pro.json", "static_api/smh_xlv_fear_greed_history.csv"]:
+        for stale_rel in ["instagram_us_setup.html", "static_api/stocks_pro.json", "static_api/smh_xlv_fear_greed_history.csv", "assets/index-BPaRJGLB.css"]:
             tp = target_dir / stale_rel
             if tp.exists():
                 tp.unlink()

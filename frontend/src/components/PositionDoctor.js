@@ -4,58 +4,53 @@ export function renderPositionDoctorForm(state) {
   const t = state.t;
   const stocks = state.stocks || [];
   const celh = stocks.find((s) => s.ticker === "CELH");
-  const defaultClose = celh ? Number(celh.close).toFixed(2) : "27.93";
-  const defaultDate = celh && celh.date ? celh.date : "2026-10-13";
+  const defaultClose = celh && celh.close ? Number(celh.close).toFixed(2) : "32.42";
+  const defaultDate = celh && celh.date ? celh.date : "2026-11-13";
   const initialDoc = state.docLastResult
     ? formatDoctorResult(state.docLastResult, state)
-    : `<div style="color:var(--muted);">Enter US ticker, cost basis ($), and trading days held to evaluate asymmetric exit triggers against the latest closing price ($${defaultClose}).</div>`;
+    : `<div style="color:var(--muted); font-size:0.76rem; line-height:1.4;">Type any US ticker (e.g. <b>NVDA</b>, <b>CELH</b>, <b>TSLA</b>) and click <b>Diagnose Position</b> for instant -9% stop &amp; 55-day time-stop rules.</div>`;
 
   return `
-    <div id="doctor" style="background:#090d16; border:1px solid var(--border); border-top:2px solid var(--fin-up); border-radius:4px; padding:18px; display:flex; flex-direction:column; justify-content:space-between; scroll-margin-top:84px;">
+    <div id="position-doctor-card" style="background:#090d16; border:1px solid rgba(16,185,129,0.38); border-top:2px solid var(--fin-up); border-radius:6px; padding:10px 12px; display:flex; flex-direction:column; gap:6px; scroll-margin-top:84px;">
+      <span id="doctor" style="display:block; height:0; overflow:hidden;"></span>
       <span id="positionDoctorCard" style="display:block; height:0; overflow:hidden;"></span>
-      <div>
-        <div style="font-size:0.7rem; font-family:var(--font-mono); font-weight:700; color:var(--fin-up); letter-spacing:0.05em; text-transform:uppercase;">
-          ${t.tool1Title}
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+        <div style="min-width:0;">
+          <div style="font-size:0.66rem; font-family:var(--font-mono); font-weight:800; color:var(--fin-up); letter-spacing:0.04em; text-transform:uppercase;">
+            🩺 ${t.tool1Title} · ${defaultDate}
+          </div>
+          <h2 style="font-size:0.9rem; font-weight:800; margin:1px 0 0; color:#ffffff;">${t.tool1Sub}</h2>
         </div>
-        <h3 style="font-size:1rem; font-weight:800; margin:6px 0; color:#ffffff;">${t.tool1Sub}</h3>
-        <p style="font-size:0.78rem; color:var(--muted); margin-bottom:14px; line-height:1.5;">${t.tool1Desc}</p>
-
-        <div class="doctor-inputs-grid">
-          <div>
-            <label style="font-size:0.68rem; color:var(--muted); font-family:var(--font-mono); text-transform:uppercase;">US Ticker</label>
-            <input type="text" id="docTicker" value="CELH" placeholder="CELH" style="padding:7px 9px; background:#05080f; border:1px solid var(--border); color:#fff; border-radius:3px; font-family:var(--font-mono); font-weight:700; width:100%; margin-top:3px;" />
-          </div>
-          <div>
-            <label style="font-size:0.68rem; color:var(--muted); font-family:var(--font-mono); text-transform:uppercase;">Cost Basis ($)</label>
-            <input type="number" id="docEntry" step="0.01" value="${defaultClose}" placeholder="${defaultClose}" style="padding:7px 9px; background:#05080f; border:1px solid var(--border); color:#fff; border-radius:3px; font-family:var(--font-mono); width:100%; margin-top:3px;" />
-          </div>
-          <div>
-            <label style="font-size:0.68rem; color:var(--muted); font-family:var(--font-mono); text-transform:uppercase;">Trading Days</label>
-            <input type="number" id="docDays" value="42" placeholder="42" style="padding:7px 9px; background:#05080f; border:1px solid var(--border); color:#fff; border-radius:3px; font-family:var(--font-mono); width:100%; margin-top:3px;" />
-          </div>
-        </div>
-
-        <div style="display:flex; gap:5px; flex-wrap:wrap; align-items:center; margin-bottom:12px;">
-          <span style="font-size:0.68rem; color:var(--muted); font-family:var(--font-mono);">LATEST CLOSE PRESETS (${defaultDate}):</span>
-          ${["CELH", "MBLY", "APP", "UPST", "NVDA", "CCL"]
+        <div style="display:flex; gap:4px; flex-wrap:wrap; align-items:center;">
+          ${["NVDA", "CELH", "TSLA", "APP"]
             .map((tick) => {
-              const st = stocks.find((x) => x.ticker === tick);
-              const pr = st ? ` $${Number(st.close).toFixed(2)}` : "";
-              return `
-                <button class="btn btn-sm btn-quick-doc mono" data-ticker="${tick}" style="padding:2px 6px; font-size:0.68rem;">${tick}${pr}</button>
-              `;
+              return `<button type="button" class="btn btn-sm btn-quick-doc mono" data-ticker="${tick}" style="min-height:40px; padding:4px 8px; font-size:0.71rem; font-weight:700;">${tick}</button>`;
             })
             .join("")}
         </div>
       </div>
 
-      <div>
-        <button class="btn btn-primary" id="btnRunPositionDoctor" style="width:100%; justify-content:center; padding:9px;">
-          ${t.tool1Btn}
-        </button>
-        <div id="docOutput" style="margin-top:12px; font-size:0.8rem; background:#05080f; padding:12px; border-radius:4px; border:1px solid var(--border); border-left:3px solid var(--fin-blue);">
-          ${initialDoc}
+      <div class="doctor-inputs-grid" style="display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:6px; margin:0;">
+        <div style="min-width:0;">
+          <label for="docTicker" style="display:block; font-size:0.64rem; color:var(--muted); font-family:var(--font-mono); text-transform:uppercase;">US Ticker</label>
+          <input type="text" id="docTicker" value="CELH" placeholder="NVDA" style="min-height:40px; padding:5px 8px; background:#05080f; border:1px solid var(--border); color:#fff; border-radius:4px; font-family:var(--font-mono); font-weight:700; width:100%; margin-top:2px;" />
         </div>
+        <div style="min-width:0;">
+          <label for="docEntry" style="display:block; font-size:0.64rem; color:var(--muted); font-family:var(--font-mono); text-transform:uppercase;">Cost ($)</label>
+          <input type="number" id="docEntry" step="0.01" value="${defaultClose}" placeholder="${defaultClose}" style="min-height:40px; padding:5px 8px; background:#05080f; border:1px solid var(--border); color:#fff; border-radius:4px; font-family:var(--font-mono); width:100%; margin-top:2px;" />
+        </div>
+        <div style="min-width:0;">
+          <label for="docDays" style="display:block; font-size:0.64rem; color:var(--muted); font-family:var(--font-mono); text-transform:uppercase;">Days Held</label>
+          <input type="number" id="docDays" value="42" placeholder="42" style="min-height:40px; padding:5px 8px; background:#05080f; border:1px solid var(--border); color:#fff; border-radius:4px; font-family:var(--font-mono); width:100%; margin-top:2px;" />
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-primary" id="btnRunPositionDoctor" style="min-height:42px; width:100%; justify-content:center; padding:8px 12px; font-weight:800;">
+        🩺 ${t.tool1Btn}
+      </button>
+
+      <div id="docOutput" style="display:${state.docLastResult ? "block" : "none"}; font-size:0.78rem; background:#05080f; padding:8px 10px; border-radius:4px; border:1px solid var(--border); border-left:3px solid var(--fin-blue);">
+        ${initialDoc}
       </div>
     </div>
   `;
@@ -484,7 +479,7 @@ export function formatPortfolioDoctorResult(result, state) {
   return `
     <div style="background:#05080f; border:1px solid var(--border); border-radius:4px; padding:16px;">
       <!-- Section 1: Health Score Dial & Aggregate Portfolio KPIs -->
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; margin-bottom:16px; border-bottom:1px solid var(--border); padding-bottom:14px;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap:12px; margin-bottom:16px; border-bottom:1px solid var(--border); padding-bottom:14px;">
         <!-- Gauge Card -->
         <div style="background:#090d16; border:1px solid var(--border); border-left:4px solid ${scoreColor}; border-radius:4px; padding:12px; display:flex; align-items:center; gap:14px;">
           <div style="width:64px; height:64px; border-radius:50%; border:4px solid ${scoreColor}; display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0;">
@@ -590,7 +585,7 @@ export function formatPortfolioDoctorResult(result, state) {
         <div class="mono" style="font-size:0.7rem; color:#60a5fa; font-weight:800; letter-spacing:0.04em; margin-bottom:8px; text-transform:uppercase;">
           ⚡ MACRO VOLATILITY REGIME STRESS-TESTING (3 MARKET SCENARIOS)
         </div>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:10px;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap:10px;">
           ${scenarios
             .map((s) => {
               const pnlVal = Number(s.projected_pnl_pct || 0);

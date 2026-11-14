@@ -3,7 +3,7 @@
 > Core Methodology: Post-Washout Right-Side Ignition (PW-RSI), -9.0% Mechanical Hard Stop (Rule 1), and $SMH:$XLV 80:20 Contrarian Barbell.
 
 ## 1. Semiconductor Fear & Greed Index & Barbell Status (As of 2026-11-13)
-- Score: 18.0 / 100 (Extreme Fear)
+- Score: 18.3 / 100 (Extreme Fear)
 - $SMH Close: $486.75 (-27.23% 52W DD, RSI 40.1)
 - $XLV Close: $188.85 | $QQQ Close: $679.89
 - Active Barbell Allocation: 80% $SMH : 20% $XLV (https://truthofmarket.com/semi-fear-greed.html)
@@ -141,7 +141,7 @@
 - $CELH vs $PEP (High-Growth Energy Drink Ignition vs Beverage Titan): Winner=$CELH | $CELH PW-RSI=98/100 (2.46x Vol) vs $PEP PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/celh-vs-pep.html
 
 ## 4. Institutional Editorial Quant Insights (/insights/)
-- US Market Regime Dispatch (2026-11-13): $SMH Fear & Greed at 18.0/100 (Extreme Fear) & PW-RSI Watchlist -> https://truthofmarket.com/insights/daily-us-quant-regime-brief.html
+- US Market Regime Dispatch (2026-11-13): $SMH Fear & Greed at 18.3/100 (Extreme Fear) & PW-RSI Watchlist -> https://truthofmarket.com/insights/daily-us-quant-regime-brief.html
 - Why Left-Side Dip Buyers Bleed Out: The 26.8-Year Math Behind Right-Side Ignition (PW-RSI) -> https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html
 - Surviving Chip Crashes: How the $SMH:$XLV Contrarian Barbell Cuts Max Drawdown Without Killing Alpha -> https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html
 - The Asymmetry of Ruin: Why Cutting Every Loser at -9.0% Saves Years of Dead-Money Recovery -> https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html

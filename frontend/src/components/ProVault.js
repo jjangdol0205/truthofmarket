@@ -1,4 +1,4 @@
-import { renderPositionDoctorForm, renderPortfolioDoctorForm } from "./PositionDoctor.js";
+import { renderPortfolioDoctorForm } from "./PositionDoctor.js";
 import { getVipTelegramUrl, SECTOR_REGIME_MAP } from "../services/api.js";
 
 export function renderProVault(state) {
@@ -84,11 +84,6 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
         <button class="btn btn-primary" id="vaultUnlockBtn" style="${isPro ? "display:none;" : ""}">
           ${t.vaultUnlockBtn}
         </button>
-      </div>
-
-      <!-- FREE INTERACTIVE BAIT: 3-SECOND POSITION DOCTOR (UNBLURRED FOR ALL VISITORS) -->
-      <div style="margin-bottom:18px;">
-        ${renderPositionDoctorForm(state)}
       </div>
 
       <div style="position:relative;">
@@ -232,7 +227,7 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
           </div>
         </div>
 
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:10px;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap:10px;">
           ${sectorMatrixItems
             .map((sec) => {
               const trendCol = sec.momentum_trend === "BULLISH" ? "var(--fin-up)" : sec.momentum_trend === "BEARISH" ? "var(--fin-down)" : "var(--fin-amber)";
@@ -269,7 +264,7 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
         </div>
       </div>
 
-      <div id="vaultContentWrap" class="${isPro ? "" : "blur-locked"}" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(330px, 1fr)); gap:16px;"><!-- Position Doctor moved to free unblurred top section -->
+      <div id="vaultContentWrap" class="${isPro ? "" : "blur-locked"}" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap:16px;">
         <!-- Module 01: Position Doctor rendered in free unblurred section above -->
 
         <!-- Module 02: Institutional SEC Research Vault -->

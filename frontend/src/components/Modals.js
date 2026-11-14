@@ -428,8 +428,27 @@ export function renderModals(state) {
           </div>
 
           <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px; border-top:1px solid var(--border); padding-top:10px;">
-            <button class="btn btn-primary btn-sm" id="btnUnderstandPwRsi">Got it, Explore 72 Setups</button>
+            <button type="button" class="btn btn-primary btn-sm" id="btnUnderstandPwRsi" style="min-height:40px;">Got it, Explore 72 Setups</button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STOCK DETAIL DIAGNOSTIC MODAL -->
+    <div class="modal-backdrop" id="stockDetailModal">
+      <div class="modal" style="max-width:580px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:10px;">
+          <div>
+            <div style="font-size:0.68rem; font-family:var(--font-mono); color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; font-weight:800;">
+              PW-RSI QUANTITATIVE FACTOR SNAPSHOT
+            </div>
+            <h3 style="font-size:1.12rem; font-weight:800; color:#ffffff; margin:3px 0 0;" id="stockDetailTitle">
+              Stock Signal Details
+            </h3>
+          </div>
+          <button type="button" class="btn btn-sm" id="btnCloseStockDetail" style="min-height:40px; padding:6px 12px;">✕ Close</button>
+        </div>
+        <div id="stockDetailBody" style="max-height:70vh; overflow-y:auto; font-size:0.82rem; line-height:1.55; color:#cbd5e1;">
         </div>
       </div>
     </div>

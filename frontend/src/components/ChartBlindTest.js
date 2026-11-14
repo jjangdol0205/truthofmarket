@@ -33,33 +33,6 @@ const BLIND_TEST_I18N = {
     unlockMonthlyBtn: "👑 Unlock #2 & #3 VIP Tickers ($29/mo)",
     unlockLifetimeBtn: "💎 Lifetime VIP All-Access ($199)",
   },
-  kr: {
-    badge: "🎯 쇼츠·릴스 실전 챌린지 · 15초 월스트리트 차트 블라인드 테스트",
-    title: "개미 92%가 속는 '떨어지는 칼날' vs '기관 수급 폭발 우측 돌파' — 당신은 구분할 수 있습니까?",
-    subtitle:
-      "대부분의 개인 투자자는 60일 이평선(MA60) 아래에서 '싸 보인다'는 이유로 물타기하다 계좌가 녹아내립니다. 지금 실전 72종목 중 익명 처리된 3개 차트에서 BUY(우측 돌파)와 TRAP(좌측 함정)을 직접 판별해 보세요.",
-    roundLabel: "라운드",
-    allRoundsView: "3단계 실전 차트 블라인드 테스트",
-    scoreBadgePrefix: "나의 퀀트 IQ:",
-    answeredCountSuffix: "/ 3 완료",
-    resetBtn: "↻ 다시 테스트하기",
-    jumpDocBtn: "🩺 내 보유종목 3초 무료 진단",
-    buyBtn: "🟢 지금 매수 (우측 수급 돌파 · IGNITION)",
-    trapBtn: "🔴 매수 금지 / 함정 (떨어지는 칼날 · TRAP)",
-    correctTag: "✅ 월스트리트 퀀트 정답!",
-    wrongTag: "❌ 개미 함정 주의! 이유를 확인하세요:",
-    revealTickerLabel: "실제 종목 공개",
-    battleTitle: "💰 $10,000(약 1,400만 원) 실전 계좌 비교: 좌측 물타기 개미 vs 우측 퀀트 엔진",
-    retailSideTitle: "❌ 일반 개인 투자자 '고점 대비 낙폭과대 물타기'",
-    retailSideDesc: "MA60 아래 역배열 종목($NVDA·$SMCI·$COIN 등)을 손절 없이 매수 → 단 한 번의 -48% 하락으로 3년 수익 반납",
-    quantSideTitle: "🟢 RightSideAlpha PW-RSI + 기관 거래량 돌파",
-    quantSideDesc: "MA60 탈환 + 기관 거래량 1.4배~3.4배 폭발 확인 후 진입 & -9.0% 기계적 손절(계좌 대비 -1.35% 리스크 고정)",
-    vipUnlockBannerTitle: "🔥 방금 3라운드에서 보신 '거래량 3.41배 폭발(Score 98)' 주인공을 지금 즉시 언락하세요",
-    vipUnlockBannerSub:
-      "무료 회원은 #1 대표 쇼케이스($CELH · 거래량 2.46배)만 공개됩니다. 지금 VIP를 구독하시면 오늘 기관 수급이 3.41배·3.17배 폭발한 #2·#3 히든 돌파 종목과 72종목 전체 매수·손절·목표가를 즉시 확인하실 수 있습니다.",
-    unlockMonthlyBtn: "👑 #2·#3 히든 급등주 즉시 언락 ($29/월)",
-    unlockLifetimeBtn: "💎 평생 VIP 무제한 패스 ($199)",
-  },
   jp: {
     badge: "🎯 ショート動画連動 · 15秒ウォール街チャート・ブラインドテスト",
     title: "個人投資家の92%が騙される「落ちるナイフ」vs「機関投資家の右側ブレイク」を見抜けますか？",
@@ -88,6 +61,7 @@ const BLIND_TEST_I18N = {
     unlockLifetimeBtn: "💎 永久VIPフルアクセス ($199)",
   },
 };
+BLIND_TEST_I18N.kr = BLIND_TEST_I18N.en;
 
 function buildRoundsData(state) {
   const stocks = Array.isArray(state.stocks) ? state.stocks : [];
@@ -143,9 +117,7 @@ function buildRoundsData(state) {
       id: "r1",
       roundNum: 1,
       mysteryTitle:
-        lang === "kr"
-          ? "익명 종목 A · AI 반도체 대형주 (고점 대비 -26.0% 하락)"
-          : lang === "jp"
+        lang === "jp"
           ? "匿名銘柄 A · AI半導体大型株 (高値比 -26.0% 下落)"
           : "MYSTERY STOCK A · AI Mega-Cap (-26.0% Off 52W High)",
       chartType: "LEFT_TRAP",
@@ -159,9 +131,7 @@ function buildRoundsData(state) {
       revealedTicker: `$${nvda.ticker} ($${Number(nvda.close || 178.67).toFixed(2)})`,
       revealedBadge: "🔴 LEFT_SIDE_KNIFE · FALLING KNIFE TRAP",
       explanation:
-        lang === "kr"
-          ? `정답은 [매수 금지 / 함정]입니다! 실제 종목은 $${nvda.ticker}($${Number(nvda.close || 178.67).toFixed(2)})입니다. 명성이 높은 AI 대장주라도 주가가 60일 이평선(MA60)보다 -18.3% 아래에 있고 기관 거래량(0.92x)이 실리지 않은 상태는 전형적인 '좌측 떨어지는 칼날'입니다. 우측에서 MA60을 탈환할 때까지 현금을 지켜야 합니다.`
-          : lang === "jp"
+        lang === "jp"
           ? `正解は【見送り・罠(TRAP)】です！実際の銘柄は $${nvda.ticker} ($${Number(nvda.close || 178.67).toFixed(2)})。どんな有名AI株でも、株価がMA60より-18.3%下にあり機関出来高(0.92x)が伴っていない状態は「落ちるナイフ」です。右側でMA60を奪還するまで待機が鉄則です。`
           : `Correct call is AVOID / TRAP! This is $${nvda.ticker} at $${Number(nvda.close || 178.67).toFixed(2)}. Even a world-class AI leader is a Left-Side Falling Knife when trading -18.3% below a declining 60-day moving average with 0.92x volume. Wait for the Right-Side MA60 reclaim.`,
     },
@@ -169,9 +139,7 @@ function buildRoundsData(state) {
       id: "r2",
       roundNum: 2,
       mysteryTitle:
-        lang === "kr"
-          ? "익명 종목 B · 바닥 다지기 후 MA60 +12.7% 돌파 & 거래량 2.46배"
-          : lang === "jp"
+        lang === "jp"
           ? "匿名銘柄 B · 底固め後にMA60を+12.7%突破＆出来高2.46倍"
           : "MYSTERY STOCK B · Base Washout + MA60 Reclaim (+12.7%) & 2.46x Vol",
       chartType: "RIGHT_IGNITION_1",
@@ -185,9 +153,7 @@ function buildRoundsData(state) {
       revealedTicker: `$${celh.ticker} ($${Number(celh.close || 33.19).toFixed(2)}) — #1 FREE SHOWCASE`,
       revealedBadge: "🟢 IGNITION_ZONE · INSTITUTIONAL ACCUMULATION",
       explanation:
-        lang === "kr"
-          ? `정답은 [지금 매수(우측 수급 돌파)]입니다! 오늘 무료 대표 쇼케이스 종목인 $${celh.ticker}($${Number(celh.close || 33.19).toFixed(2)})로, 좌측 투매 구간을 끝내고 60일선을 +12.7% 상향 돌파하며 10일 평균 대비 2.46배의 기관 거래량이 폭발했습니다. 손절선 -9.0%($${Number(celh.stop_loss_price || 30.2).toFixed(2)})와 1차 목표가 $${Number(celh.target_1_price || 66.38).toFixed(2)}(+100%)의 손익비 5.5:1 타점입니다.`
-          : lang === "jp"
+        lang === "jp"
           ? `正解は【今すぐ買い(右側ブレイク)】です！本日の無料ショーケース銘柄 $${celh.ticker} ($${Number(celh.close || 33.19).toFixed(2)})。底固めを終えてMA60を+12.7%上抜け、機関投資家の出来高が2.46倍に急増しました。損切り-9.0% ($${Number(celh.stop_loss_price || 30.2).toFixed(2)})・目標株価 $${Number(celh.target_1_price || 66.38).toFixed(2)} の高リスクリワード局面です。`
           : `Correct regime is RIGHT-SIDE BREAKOUT! This is today's #1 Public Showcase $${celh.ticker} ($${Number(celh.close || 33.19).toFixed(2)}). After base consolidation, it reclaimed MA60 (+12.7%) on 2.46x institutional volume (modeled -9.0% risk band $${Number(celh.stop_loss_price || 30.2).toFixed(2)}, 2x excursion band $${Number(celh.target_1_price || 66.38).toFixed(2)}).`,
     },
@@ -195,9 +161,7 @@ function buildRoundsData(state) {
       id: "r3",
       roundNum: 3,
       mysteryTitle:
-        lang === "kr"
-          ? "익명 종목 C · 오늘 72종목 중 기관 거래량 1위 (3.41배 폭발 · Score 98)"
-          : lang === "jp"
+        lang === "jp"
           ? "匿名銘柄 C · 本日72銘柄中トップの機関出来高3.41倍爆発 (スコア98)"
           : "MYSTERY STOCK C · #1 Volume Anomaly in Universe (3.41x Surge · Score 98)",
       chartType: "RIGHT_IGNITION_2",
@@ -213,11 +177,7 @@ function buildRoundsData(state) {
         : "🔒 $████ (Score 98 · Vol 3.41x · Pro Factor Rank #2)",
       revealedBadge: "🔥 SCORE 98/100 · EXTREME INSTITUTIONAL IGNITION",
       explanation: isPro
-        ? lang === "kr"
-          ? `정답은 [우측 수급 돌파(IGNITION)]입니다! Pro 언락 종목인 $${fslr.ticker}($${Number(fslr.close || 191.61).toFixed(2)})로, 퀀트 점수 98점·기관 거래량 3.41배가 동시에 기록된 최상위 팩터 셋업입니다.`
-          : `Correct regime is RIGHT-SIDE BREAKOUT! Pro Terminal displays $${fslr.ticker} ($${Number(fslr.close || 191.61).toFixed(2)}) — Factor Score 98/100 with a 3.41x institutional volume expansion.`
-        : lang === "kr"
-        ? `정답은 [우측 수급 돌파(IGNITION)]입니다! 이 종목은 72종목 유니버스에서 퀀트 점수 98점·기관 거래량 3.41배를 기록한 Pro 팩터 셋업입니다. 아래 Pro 라이선스($29/월 또는 $199 평생권)로 전체 데이터셋과 Pine Script 지표를 언락하세요.`
+        ? `Correct regime is RIGHT-SIDE BREAKOUT! Pro Terminal displays $${fslr.ticker} ($${Number(fslr.close || 191.61).toFixed(2)}) — Factor Score 98/100 with a 3.41x institutional volume expansion.`
         : lang === "jp"
         ? `正解は【右側ブレイク(IGNITION)】です！この銘柄は72銘柄の中でスコア98・機関出来高3.41倍を記録したProファクター銘柄です。下のProパス($29/月または$199永久パス)で全データセットとPine Scriptを解放できます。`
         : `Correct regime is RIGHT-SIDE BREAKOUT! This chart is today's #2 Pro Factor Setup scoring 98/100 with a 3.41x institutional volume expansion. Unlock the full 72-stock factor matrix, historical CSV, and Pine Script v5 license below.`,
@@ -370,17 +330,17 @@ export function renderChartBlindTest(state) {
           <div id="blindTestIqBadge" class="mono" style="background:rgba(16,185,129,0.14); border:1px solid rgba(16,185,129,0.4); color:#34d399; padding:6px 11px; border-radius:6px; font-size:0.74rem; font-weight:800;">
             ${copy.scoreBadgePrefix} <span style="color:#ffffff;">${iqScore}</span> (${solvedCount} ${copy.answeredCountSuffix})
           </div>
-          <button type="button" id="btnResetBlindTest" class="btn btn-sm" style="background:rgba(30,41,59,0.85); border:1px solid var(--border); color:#cbd5e1; font-size:0.72rem; padding:6px 10px; cursor:pointer;">
+          <button type="button" id="btnResetBlindTest" class="btn btn-sm" style="min-height:40px; background:rgba(30,41,59,0.85); border:1px solid var(--border); color:#cbd5e1; font-size:0.74rem; padding:6px 12px; cursor:pointer;">
             ${copy.resetBtn}
           </button>
-          <button type="button" id="btnBlindTestJumpDoctor" class="btn btn-sm" style="background:rgba(56,189,248,0.16); border:1px solid rgba(56,189,248,0.45); color:#38bdf8; font-size:0.72rem; font-weight:800; padding:6px 10px; cursor:pointer;">
+          <button type="button" id="btnBlindTestJumpDoctor" class="btn btn-sm" style="min-height:40px; background:rgba(56,189,248,0.16); border:1px solid rgba(56,189,248,0.45); color:#38bdf8; font-size:0.74rem; font-weight:800; padding:6px 12px; cursor:pointer;">
             ${copy.jumpDocBtn}
           </button>
         </div>
       </div>
 
       <!-- 3-Card Interactive Blind Chart Grid -->
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(290px, 1fr)); gap:14px; margin-bottom:16px;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap:14px; margin-bottom:16px;">
         ${rounds
           .map((r) => {
             const userPick = answers[r.id] || null;
@@ -435,7 +395,7 @@ export function renderChartBlindTest(state) {
                       class="btn btn-blind-test-pick"
                       data-round="${r.id}"
                       data-pick="BUY"
-                      style="padding:8px 6px; font-size:0.73rem; font-family:var(--font-mono); font-weight:800; border-radius:6px; cursor:pointer; background:${
+                      style="min-height:40px; padding:8px 6px; font-size:0.73rem; font-family:var(--font-mono); font-weight:800; border-radius:6px; cursor:pointer; background:${
                         userPick === "BUY" ? "rgba(16,185,129,0.28)" : "rgba(16,185,129,0.12)"
                       }; border:1px solid ${userPick === "BUY" ? "#10b981" : "rgba(16,185,129,0.35)"}; color:#34d399;"
                     >
@@ -446,7 +406,7 @@ export function renderChartBlindTest(state) {
                       class="btn btn-blind-test-pick"
                       data-round="${r.id}"
                       data-pick="TRAP"
-                      style="padding:8px 6px; font-size:0.73rem; font-family:var(--font-mono); font-weight:800; border-radius:6px; cursor:pointer; background:${
+                      style="min-height:40px; padding:8px 6px; font-size:0.73rem; font-family:var(--font-mono); font-weight:800; border-radius:6px; cursor:pointer; background:${
                         userPick === "TRAP" ? "rgba(239,68,68,0.28)" : "rgba(239,68,68,0.12)"
                       }; border:1px solid ${userPick === "TRAP" ? "#ef4444" : "rgba(239,68,68,0.35)"}; color:#fca5a5;"
                     >
@@ -481,7 +441,7 @@ export function renderChartBlindTest(state) {
       </div>
 
       <!-- $10,000 Real Account Comparison Strip + VIP Conversion Bridge -->
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:12px; align-items:stretch;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap:12px; align-items:stretch;">
         <div style="background:#080d19; border:1px solid rgba(148,163,184,0.2); border-radius:8px; padding:12px 14px;">
           <div class="mono" style="font-size:0.7rem; font-weight:800; color:#fbbf24; margin-bottom:8px;">
             ${copy.battleTitle}

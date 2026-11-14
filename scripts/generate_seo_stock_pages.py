@@ -20,8 +20,8 @@ PUB = ROOT / "frontend" / "public"
 STOCKS_MASTER_PATH = ROOT / "data" / "stocks_pro_master.json"
 SEMI_OVERVIEW_PATH = ROOT / "static_api" / "semi_overview.json"
 
-LS_MONTHLY_URL = "https://truthofmarket.lemonsqueezy.com/checkout/custom/1fe480f8-8bb0-46a9-959f-a8d396a87a1b?signature=a2c6d29a4b32c2c5aaccd38f408adb552dd6883c4bf1e48f03ace8c1d075373c&embed=1"
-LS_LTD_URL = "https://truthofmarket.lemonsqueezy.com/checkout/custom/c9ad1a1c-21c5-4d95-88a2-b570a860a147?signature=56e574e49be09b1776a57380506dc0292ecc8579b43600e68b7e1b40b97cf650&embed=1"
+LS_MONTHLY_URL = "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1"
+LS_LTD_URL = "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1"
 
 COMPARE_PAIRS: List[tuple[str, str, str]] = [
     ("NVDA", "AMD", "AI GPU Monopoly vs Challenger"),
@@ -158,7 +158,7 @@ def build_ticker_directory_html(stocks: List[Dict[str, Any]], prefix: str = "/")
             f'<a href="{prefix}compare/{slug}" title="${t1} vs ${t2} ({html.escape(label)}) PW-RSI Quant Comparison" style="color:#c084fc;text-decoration:none;padding:2px 7px;border:1px solid rgba(192,132,252,0.22);border-radius:4px;font-family:JetBrains Mono,monospace;font-size:0.71rem;background:rgba(168,85,247,0.06);">⚔️ ${t1} vs ${t2}</a>'
         )
     compare_joined = "\n      ".join(compare_links)
-    return f"""  <section class="seo-directory-footer" style="max-width:1280px;margin:24px auto 32px;padding:18px 20px;background:#0b1220;border:1px solid #1e293b;border-radius:10px;color:#94a3b8;font-size:0.78rem;">
+    return f"""  <section class="seo-directory-footer" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;overflow-x:hidden;margin:24px auto 32px;padding:18px 16px;background:#0b1220;border:1px solid #1e293b;border-radius:10px;color:#94a3b8;font-size:0.78rem;">
     <div style="font-weight:800;color:#e2e8f0;margin-bottom:8px;font-size:0.84rem;letter-spacing:0.02em;">
       📊 INSTITUTIONAL US EQUITY &amp; ETF COVERAGE DIRECTORY (72 STOCKS + $SMH/$XLV BARBELL)
     </div>
@@ -176,14 +176,14 @@ def build_ticker_directory_html(stocks: List[Dict[str, Any]], prefix: str = "/")
     </nav>
     <div style="margin-top:14px;padding-top:12px;border-top:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-size:0.76rem;color:#cbd5e1;">
       <span>🏛️ <strong>Institutional JSON Data API, TradingView White-Label &amp; Newsletter Sponsorship Desk:</strong> License live 72-stock PW-RSI &amp; Semiconductor Fear &amp; Greed feeds or sponsor our daily quant brief.</span>
-      <a href="mailto:beable9489@gmail.com?subject=RightSideAlpha%20Institutional%20API%20%26%20Sponsorship%20Inquiry" style="color:#38bdf8;font-weight:800;text-decoration:none;padding:5px 11px;border:1px solid rgba(56,189,248,0.35);border-radius:6px;background:rgba(56,189,248,0.08);">✉️ Institutional &amp; Sponsorship Desk (beable9489@gmail.com) &rarr;</a>
+      <a href="mailto:beable9489@gmail.com?subject=RightSideAlpha%20Institutional%20API%20%26%20Sponsorship%20Inquiry" style="color:#38bdf8;font-weight:800;text-decoration:none;padding:8px 12px;min-height:40px;display:inline-flex;align-items:center;max-width:100%;word-break:break-word;border:1px solid rgba(56,189,248,0.35);border-radius:6px;background:rgba(56,189,248,0.08);">✉️ Institutional &amp; Sponsorship Desk (beable9489@gmail.com) &rarr;</a>
     </div>
   </section>"""
 
 
 def generate_semi_fear_greed_page(semi: Dict[str, Any], stocks: List[Dict[str, Any]], js_name: str, css_name: str) -> str:
-    as_of = str(semi.get("date") or "2026-11-05")
-    fg_score = float(semi.get("fg_score") or 18.0)
+    as_of = str(semi.get("date") or "2026-11-13")
+    fg_score = float(semi.get("fg_score") or 18.3)
     regime_en = str(semi.get("regime_en") or "Extreme Fear")
     smh_close = float(semi.get("smh_close") or 504.48)
     smh_dd = float(semi.get("smh_dd_pct") or -24.58)
@@ -247,7 +247,7 @@ def generate_semi_fear_greed_page(semi: Dict[str, Any], stocks: List[Dict[str, A
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700;800&family=Noto+Sans+JP:wght@400;600;700&family=Noto+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700;800&family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet" />
   <script type="application/ld+json">{json.dumps(faq_ld, ensure_ascii=False)}</script>
   <script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
   <script type="module" crossorigin src="/assets/{js_name}"></script>
@@ -255,36 +255,37 @@ def generate_semi_fear_greed_page(semi: Dict[str, Any], stocks: List[Dict[str, A
 {HEAD_BEACON_SCRIPT}
 </head>
 <body>
-  <section class="seo-semi-hero" style="max-width:1280px;margin:14px auto 0;padding:16px 20px;background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 100%);border:1px solid #334155;border-radius:10px;color:#f8fafc;">
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
-      <div>
-        <div style="font-family:JetBrains Mono,monospace;font-size:0.72rem;color:#f87171;font-weight:700;text-transform:uppercase;">
-          🧭 LIVE SEMICONDUCTOR FEAR &amp; GREED TERMINAL • AS OF {html.escape(as_of)}
+  <div id="app">
+    <section class="seo-semi-hero" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;margin:14px auto 0;padding:16px;background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 100%);border:1px solid #334155;border-radius:10px;color:#f8fafc;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+        <div>
+          <div style="font-family:JetBrains Mono,monospace;font-size:0.72rem;color:#f87171;font-weight:700;text-transform:uppercase;">
+            🧭 LIVE SEMICONDUCTOR FEAR &amp; GREED TERMINAL • AS OF {html.escape(as_of)}
+          </div>
+          <h1 style="font-size:1.25rem;font-weight:800;margin:4px 0;color:#ffffff;">
+            Live Semiconductor Fear &amp; Greed Index: {fg_score:.1f} / 100 ({html.escape(regime_en)})
+          </h1>
+          <p style="margin:0;font-size:0.82rem;color:#cbd5e1;">
+            <strong>$SMH Close:</strong> ${smh_close:.2f} ({smh_dd:.2f}% 52W DD · RSI {smh_rsi:.1f}) &nbsp;|&nbsp;
+            <strong>$XLV Close:</strong> ${xlv_close:.2f} &nbsp;|&nbsp;
+            <strong>$QQQ Close:</strong> ${qqq_close:.2f} &nbsp;|&nbsp;
+            <strong>Target Barbell:</strong> <span style="color:#38bdf8;font-weight:700;">{smh_w}% $SMH : {xlv_w}% $XLV</span>
+          </p>
         </div>
-        <h1 style="font-size:1.25rem;font-weight:800;margin:4px 0;color:#ffffff;">
-          CNN-Edition Semiconductor Fear &amp; Greed Index: <span style="color:#f87171;">{fg_score:.1f} / 100 ({html.escape(regime_en.upper())})</span>
-        </h1>
-        <p style="margin:0;font-size:0.82rem;color:#cbd5e1;">
-          <strong>$SMH Close:</strong> ${smh_close:.2f} ({smh_dd:.2f}% 52W DD · RSI {smh_rsi:.1f}) &nbsp;|&nbsp;
-          <strong>$XLV Close:</strong> ${xlv_close:.2f} &nbsp;|&nbsp;
-          <strong>$QQQ Close:</strong> ${qqq_close:.2f} &nbsp;|&nbsp;
-          <strong>Target Barbell:</strong> <span style="color:#38bdf8;font-weight:700;">{smh_w}% $SMH : {xlv_w}% $XLV</span>
-        </p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <a href="{LS_MONTHLY_URL}" class="lemonsqueezy-button btn btn-primary" style="background:#2563eb;border-color:#3b82f6;color:#fff;text-decoration:none;padding:8px 14px;min-height:40px;display:inline-flex;align-items:center;border-radius:6px;font-weight:700;font-size:0.8rem;">
+            🔓 Unlock Pro VIP ($29/mo)
+          </a>
+          <a href="{LS_LTD_URL}" class="lemonsqueezy-button" style="background:#f59e0b;color:#0f172a;text-decoration:none;padding:8px 14px;min-height:40px;display:inline-flex;align-items:center;border-radius:6px;font-weight:800;font-size:0.8rem;">
+            💎 Lifetime Pass ($199)
+          </a>
+          <a href="https://t.me/truthofmarketss" target="_blank" rel="noopener noreferrer" style="background:#0284c7;color:#fff;text-decoration:none;padding:8px 14px;min-height:40px;display:inline-flex;align-items:center;border-radius:6px;font-weight:700;font-size:0.8rem;">
+            ✈️ Free Telegram Briefing
+          </a>
+        </div>
       </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <a href="{LS_MONTHLY_URL}" class="lemonsqueezy-button btn btn-primary" style="background:#2563eb;border-color:#3b82f6;color:#fff;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:700;font-size:0.8rem;">
-          🔓 Unlock Pro VIP ($29/mo)
-        </a>
-        <a href="{LS_LTD_URL}" class="lemonsqueezy-button" style="background:#f59e0b;color:#0f172a;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:800;font-size:0.8rem;">
-          💎 Lifetime Pass ($199)
-        </a>
-        <a href="https://t.me/truthofmarketss" target="_blank" rel="noopener noreferrer" style="background:#0284c7;color:#fff;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:700;font-size:0.8rem;">
-          ✈️ Free Telegram Briefing
-        </a>
-      </div>
-    </div>
-  </section>
-  <div id="app"></div>
+    </section>
+  </div>
 {dir_html}
 </body>
 </html>
@@ -692,7 +693,7 @@ def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "
         {
             "ticker": "SMH",
             "name_en": "VanEck Semiconductor ETF",
-            "name_kr": "VanEck 반도체 ETF",
+            "name_kr": "VanEck Semiconductor ETF",
             "name_jp": "VanEck 半導体 ETF",
             "sector": "Semiconductor ETF",
             "date": as_of,
@@ -715,7 +716,7 @@ def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "
         {
             "ticker": "XLV",
             "name_en": "Health Care Select Sector SPDR ETF",
-            "name_kr": "SPDR 헬스케어 섹터 ETF",
+            "name_kr": "Health Care Select Sector SPDR ETF",
             "name_jp": "SPDR ヘルスケア ETF",
             "sector": "Healthcare Defensive ETF",
             "date": as_of,
@@ -738,7 +739,7 @@ def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "
         {
             "ticker": "SOXL",
             "name_en": "Direxion Daily Semiconductor Bull 3X Shares",
-            "name_kr": "Direxion 반도체 3배 레버리지 ETF",
+            "name_kr": "Direxion Daily Semiconductor Bull 3X Shares",
             "name_jp": "Direxion 半導体株ブル3倍 ETF",
             "sector": "3x Leveraged Semiconductor ETF",
             "date": as_of,
@@ -761,7 +762,7 @@ def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "
         {
             "ticker": "QQQ",
             "name_en": "Invesco QQQ Trust (Nasdaq-100 ETF)",
-            "name_kr": "Invesco 나스닥 100 ETF",
+            "name_kr": "Invesco QQQ Trust (Nasdaq-100 ETF)",
             "name_jp": "Invesco QQQ ナスダック100 ETF",
             "sector": "Nasdaq-100 Benchmark ETF",
             "date": as_of,

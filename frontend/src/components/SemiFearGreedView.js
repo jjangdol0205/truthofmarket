@@ -149,12 +149,12 @@ export function renderTimelineSvg(historyData, activeRange) {
         <div style="font-size:0.8rem; font-weight:700; color:var(--text);">
           Historical Semiconductor Fear &amp; Greed Index (${firstDate} → ${lastDate})
         </div>
-        <div style="display:flex; gap:4px;">
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
           ${["3M", "1Y", "3Y", "5Y", "10Y", "ALL"]
             .map(
               (r) => `
-            <button class="btn-semi-range" data-range="${r}"
-                    style="padding:3px 9px; border-radius:4px; font-size:0.72rem; font-weight:700; cursor:pointer; border:1px solid ${
+            <button type="button" class="btn-semi-range" data-range="${r}"
+                    style="min-height:40px; padding:6px 10px; border-radius:4px; font-size:0.74rem; font-weight:700; cursor:pointer; border:1px solid ${
                       activeRange === r ? "var(--fin-blue)" : "var(--border)"
                     }; background:${activeRange === r ? "#141c2e" : "#060911"}; color:${
                 activeRange === r ? "#ffffff" : "var(--muted)"
@@ -301,9 +301,9 @@ export function renderSemiFearGreedView(state) {
     `;
   }
 
-  const regimeLabel = lang === "jp" ? ov.regime_jp : lang === "kr" ? ov.regime_kr : ov.regime_en;
-  const actionHeadline = lang === "jp" ? ov.action_headline_jp : lang === "kr" ? ov.action_headline_kr : ov.action_headline_en;
-  const actionDetail = lang === "jp" ? ov.action_detail_jp : lang === "kr" ? ov.action_detail_kr : ov.action_detail_en;
+  const regimeLabel = lang === "jp" ? ov.regime_jp : ov.regime_en;
+  const actionHeadline = lang === "jp" ? ov.action_headline_jp : ov.action_headline_en;
+  const actionDetail = lang === "jp" ? ov.action_detail_jp : ov.action_detail_en;
   const gaugeTab = state.semiGaugeTab || "overview";
   const activeRange = state.semiRange || "1Y";
   const rebal = state.semiRebalanceResult;
@@ -385,8 +385,8 @@ export function renderSemiFearGreedView(state) {
             <div class="cnn-history-list">
               ${ov.comparisons
                 .map((c) => {
-                  const lbl = lang === "jp" ? c.label_jp : lang === "kr" ? c.label_kr : c.label_en;
-                  const reg = lang === "jp" ? c.regime_jp : lang === "kr" ? c.regime_kr : c.regime_en;
+                  const lbl = lang === "jp" ? c.label_jp : c.label_en;
+                  const reg = lang === "jp" ? c.regime_jp : c.regime_en;
                   const sVal = Math.round(c.score);
                   const ringColor = sVal <= 24 ? "#ef4444" : sVal <= 44 ? "#f59e0b" : sVal <= 55 ? "#64748b" : sVal <= 74 ? "#10b981" : "#059669";
                   const ringBg = sVal <= 24 ? "rgba(239,68,68,0.15)" : sVal <= 44 ? "rgba(245,158,11,0.15)" : sVal <= 55 ? "rgba(100,116,139,0.15)" : sVal <= 74 ? "rgba(16,185,129,0.15)" : "rgba(5,150,105,0.15)";
@@ -429,10 +429,10 @@ export function renderSemiFearGreedView(state) {
         <div class="cnn-indicators-list">
           ${ov.factors
             .map((f) => {
-              const title = lang === "jp" ? f.title_jp : lang === "kr" ? f.title_kr : f.title_en;
-              const sub = lang === "jp" ? f.subtitle_jp : lang === "kr" ? f.subtitle_kr : f.subtitle_en;
-              const desc = lang === "jp" ? f.desc_jp : lang === "kr" ? f.desc_kr : f.desc_en;
-              const reg = lang === "jp" ? f.regime_jp : lang === "kr" ? f.regime_kr : f.regime_en;
+              const title = lang === "jp" ? f.title_jp : f.title_en;
+              const sub = lang === "jp" ? f.subtitle_jp : f.subtitle_en;
+              const desc = lang === "jp" ? f.desc_jp : f.desc_en;
+              const reg = lang === "jp" ? f.regime_jp : f.regime_en;
 
               return `
               <div class="cnn-indicator-item">
@@ -469,8 +469,8 @@ export function renderSemiFearGreedView(state) {
     <section class="core-etf-grid">
       ${ov.etfs
         .map((etf) => {
-          const name = lang === "jp" ? etf.name_jp : lang === "kr" ? etf.name_kr : etf.name_en;
-          const role = lang === "jp" ? etf.role_jp : lang === "kr" ? etf.role_kr : etf.role_en;
+          const name = lang === "jp" ? etf.name_jp : etf.name_en;
+          const role = lang === "jp" ? etf.role_jp : etf.role_en;
           const cfg = state.config || {};
           const tvAffId = encodeURIComponent(cfg.tradingview_aff_id || "1173809");
           const saSource = encodeURIComponent(cfg.seekingalpha_source || "better_life333");
@@ -550,18 +550,9 @@ export function renderSemiFearGreedView(state) {
               <option value="WEEKLY" ${state.semiFreq === "WEEKLY" ? "selected" : ""}>Weekly Rebalance (High Tax Drag)</option>
             </select>
           </div>
-          ${
-            lang === "kr"
-              ? `<div>
-            <label style="font-size:0.68rem; font-family:var(--font-mono); color:var(--muted);">UNREALIZED GAIN (₩ KRW · TAX HARVESTER)</label>
-            <input type="number" id="semiGainKrwInput" value="${state.semiGainKrw ?? 3800000}" step="100000"
-                   style="width:100%; padding:8px 10px; background:#060911; border:1px solid var(--border); color:#fff; border-radius:4px; font-family:var(--font-mono); margin-top:3px;" />
-          </div>`
-              : ""
-          }
         </div>
 
-        <button class="btn btn-emerald" id="btnRunSemiRebalance" style="width:100%; justify-content:center; padding:9px;">
+        <button type="button" class="btn btn-emerald" id="btnRunSemiRebalance" style="min-height:42px; width:100%; justify-content:center; padding:9px;">
           Calculate Exact $SMH / $XLV Rebalancing Orders
         </button>
 
@@ -570,14 +561,10 @@ export function renderSemiFearGreedView(state) {
             ? `
           <div id="semiRebalOutput" style="margin-top:14px; background:#060911; border:1px solid var(--border); border-left:3px solid var(--fin-up); border-radius:4px; padding:14px; font-size:0.8rem;">
             <div style="font-weight:800; color:var(--fin-up); margin-bottom:4px;">
-              ${lang === "jp" ? rebal.active_rule_jp : lang === "kr" ? rebal.active_rule_kr : rebal.active_rule_en}
+              ${lang === "jp" ? rebal.active_rule_jp : rebal.active_rule_en}
             </div>
             <div class="mono" style="font-size:0.71rem; color:#93c5fd; margin-bottom:8px;">
-              Latest Close Basis (${rebal.as_of_date || ov.date}): $SMH @ $${Number(rebal.smh_close ?? ov.smh_close).toFixed(2)} · $XLV @ $${Number(rebal.xlv_close ?? ov.xlv_close).toFixed(2)}${
-                lang === "kr"
-                  ? ` · FX ₩${Number(rebal.usdkrw ?? ov.usdkrw).toLocaleString()}/$ · Total ₩${Number(rebal.total_capital_krw ?? 0).toLocaleString()}`
-                  : ` · Total Capital $${Number(rebal.total_capital_usd ?? state.semiCapUsd ?? 100000).toLocaleString()}`
-              }
+              Latest Close Basis (${rebal.as_of_date || ov.date}): $SMH @ $${Number(rebal.smh_close ?? ov.smh_close).toFixed(2)} · $XLV @ $${Number(rebal.xlv_close ?? ov.xlv_close).toFixed(2)} · Total Capital $${Number(rebal.total_capital_usd ?? state.semiCapUsd ?? 100000).toLocaleString()}
             </div>
             <div class="semi-form-grid-2" style="margin-bottom:10px;">
               <div style="background:#0c1220; padding:10px; border-radius:4px; border:1px solid var(--border);">
@@ -600,13 +587,8 @@ export function renderSemiFearGreedView(state) {
               </div>
             </div>
             <div style="font-size:0.75rem; color:var(--text-secondary); line-height:1.45; border-top:1px solid var(--border); padding-top:8px;">
-              ${
-                lang === "kr"
-                  ? `<div style="margin-bottom:4px;"><b>KRW 2.5M Tax-Free Harvester:</b> ${rebal.kr_tax_guidance_kr}</div>`
-                  : ""
-              }
               <div class="mono" style="color:var(--muted);">
-                Residual Cash: $${Number(rebal.residual_cash_usd ?? 0).toFixed(2)} · Est. Annual Tax & Turnover Drag (${rebal.rebalance_frequency}): -${rebal.estimated_tax_drag_pct}%/yr · Expected Net 15Y Rate: +${rebal.expected_net_cagr_pct}%/yr
+                Residual Cash: $${Number(rebal.residual_cash_usd ?? 0).toFixed(2)} · Est. Annual Tax &amp; Turnover Drag (${rebal.rebalance_frequency}): -${rebal.estimated_tax_drag_pct}%/yr · Expected Net 15Y Rate: +${rebal.expected_net_cagr_pct}%/yr
               </div>
             </div>
           </div>
@@ -641,12 +623,12 @@ export function renderSemiFearGreedView(state) {
         </div>
 
         <div style="display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap;">
-          <button class="btn btn-sm btn-sim-fg" data-fg="18.0">Live Extreme Fear (18.0)</button>
-          <button class="btn btn-sm btn-sim-fg" data-fg="50.0">Simulate Neutral (50.0)</button>
-          <button class="btn btn-sm btn-sim-fg" data-fg="78.0">Simulate Extreme Greed (78.0)</button>
+          <button type="button" class="btn btn-sm btn-sim-fg" data-fg="${Number(ov.fg_score ?? 18.3).toFixed(1)}">Live Extreme Fear (${Number(ov.fg_score ?? 18.3).toFixed(1)})</button>
+          <button type="button" class="btn btn-sm btn-sim-fg" data-fg="50.0">Simulate Neutral (50.0)</button>
+          <button type="button" class="btn btn-sm btn-sim-fg" data-fg="78.0">Simulate Extreme Greed (78.0)</button>
         </div>
 
-        <button class="btn btn-primary" id="btnRunSemiLumpSum" style="width:100%; justify-content:center; padding:9px;">
+        <button type="button" class="btn btn-primary" id="btnRunSemiLumpSum" style="min-height:42px; width:100%; justify-content:center; padding:9px;">
           Generate 3-Stage Lump-Sum Tranche Schedule
         </button>
 
@@ -655,20 +637,20 @@ export function renderSemiFearGreedView(state) {
             ? `
           <div id="semiLumpOutput" style="margin-top:14px; background:#060911; border:1px solid var(--border); border-left:3px solid var(--fin-blue); border-radius:4px; padding:14px; font-size:0.8rem;">
             <div style="font-weight:800; color:#93c5fd; margin-bottom:3px;">
-              ${lang === "jp" ? lump.case_title_jp : lang === "kr" ? lump.case_title_kr : lump.case_title_en}
+              ${lang === "jp" ? lump.case_title_jp : lump.case_title_en}
             </div>
             <div class="mono" style="font-size:0.71rem; color:var(--muted); margin-bottom:6px;">
               Latest Close Basis (${lump.as_of_date || ov.date}): $SMH @ $${Number(lump.smh_close ?? ov.smh_close).toFixed(2)} · $XLV @ $${Number(lump.xlv_close ?? ov.xlv_close).toFixed(2)}
             </div>
             <p style="font-size:0.76rem; color:var(--text-secondary); margin-bottom:10px;">
-              ${lang === "jp" ? lump.summary_jp : lang === "kr" ? lump.summary_kr : lump.summary_en}
+              ${lang === "jp" ? lump.summary_jp : lump.summary_en}
             </p>
             <div style="display:flex; flex-direction:column; gap:8px;">
               ${lump.tranches
                 .map((tr) => {
-                  const tTitle = lang === "jp" ? tr.title_jp : lang === "kr" ? tr.title_kr : tr.title_en;
-                  const tTime = lang === "jp" ? tr.timing_jp : lang === "kr" ? tr.timing_kr : tr.timing_en;
-                  const tNote = lang === "jp" ? tr.note_jp : lang === "kr" ? tr.note_kr : tr.note_en;
+                  const tTitle = lang === "jp" ? tr.title_jp : tr.title_en;
+                  const tTime = lang === "jp" ? tr.timing_jp : tr.timing_en;
+                  const tNote = lang === "jp" ? tr.note_jp : tr.note_en;
                   return `
                   <div style="background:#0c1220; padding:10px; border-radius:4px; border:1px solid var(--border);">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -725,7 +707,7 @@ export function renderSemiFearGreedView(state) {
           <tbody>
             ${eras
               .map((e) => {
-                const hLabel = lang === "jp" ? e.horizon_jp : lang === "kr" ? e.horizon_kr : e.horizon_en;
+                const hLabel = lang === "jp" ? e.horizon_jp : e.horizon_en;
                 return `
                 <tr class="proof-highlight">
                   <td style="font-family:var(--font-sans);">${hLabel}</td>
