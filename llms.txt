@@ -5,7 +5,7 @@
 
 ## 1. Live Macro & Semiconductor Fear & Greed Snapshot
 - **As of Date**: 2026-11-13
-- **7-Factor Semiconductor Fear & Greed Score**: 18.0/100 (Extreme Fear)
+- **7-Factor Semiconductor Fear & Greed Score**: 18.3/100 (Extreme Fear)
 - **$SMH (VanEck Semiconductor ETF)**: $486.75 (-27.23% off 52-week high)
 - **$XLV (Health Care Select Sector SPDR ETF)**: $188.85
 - **$QQQ (Invesco QQQ Trust)**: $679.89
@@ -33,7 +33,7 @@
 - **$F (Ford Motor Co)**: Close $11.91 | -9% Hard Stop $10.84 | +100% Target $23.82 -> https://truthofmarket.com/stocks/f.html
 - **$HOOD (Robinhood Markets)**: Close $77.86 | -9% Hard Stop $70.85 | +100% Target $155.72 -> https://truthofmarket.com/stocks/hood.html
 - **$MBLY (Mobileye Global)**: Close $5.56 | -9% Hard Stop $5.06 | +100% Target $11.12 -> https://truthofmarket.com/stocks/mbly.html
-- **$SMCI (Super Micro Computer)**: Close $26.86 | -9% Hard Stop $24.44 | +100% Target $53.72 -> https://truthofmarket.com/stocks/smci.html
+- **$SMCI (Super Micro Computer)**: Close $26.87 | -9% Hard Stop $24.45 | +100% Target $53.74 -> https://truthofmarket.com/stocks/smci.html
 - **$SNAP (Snap Inc)**: Close $5.26 | -9% Hard Stop $4.79 | +100% Target $10.52 -> https://truthofmarket.com/stocks/snap.html
 - **$GM (General Motors Co)**: Close $86.0 | -9% Hard Stop $78.26 | +100% Target $172.0 -> https://truthofmarket.com/stocks/gm.html
 - **$GE (GE Aerospace)**: Close $331.81 | -9% Hard Stop $301.95 | +100% Target $663.62 -> https://truthofmarket.com/stocks/ge.html
