@@ -1,3 +1,5 @@
+import { formatCheckoutUrl } from "../services/api.js";
+
 export function renderPositionDoctorForm(state) {
   const t = state.t;
   const stocks = state.stocks || [];
@@ -200,16 +202,28 @@ export function renderDoctorVipUnlockPreview(state) {
     ? `<span class="badge" style="background:rgba(16,185,129,0.2); color:#34d399; font-size:0.65rem; font-weight:800; padding:2px 8px; border:1px solid rgba(16,185,129,0.4);">👑 PRO VIP ACTIVE</span>`
     : `<span class="badge" style="background:rgba(245,158,11,0.2); color:#fbbf24; font-size:0.65rem; font-weight:800; padding:2px 8px; border:1px solid rgba(245,158,11,0.4);">PRO VIP EXCLUSIVE</span>`;
 
+  const cfg = (state && state.config) || {};
+  const docMonthlyUrl = formatCheckoutUrl(
+    cfg.ls_site1_monthly_url,
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
+  );
+  const docLifetimeUrl = formatCheckoutUrl(
+    cfg.ls_site1_ltd_url,
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b"
+  );
+
   const checkoutButtonsHtml = !isPro
     ? `
       <div class="doc-vip-action-bar" style="margin-top:12px; display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
-        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1"
+        <a href="${docMonthlyUrl}"
+           data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
            class="btn btn-primary lemonsqueezy-button"
            id="btnDocUnlockMonthly"
            style="flex:1; min-width:180px; justify-content:center; padding:9px 12px; font-weight:800; font-size:0.78rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
           ⚡ Monthly VIP ($29/mo)
         </a>
-        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1"
+        <a href="${docLifetimeUrl}"
+           data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b"
            class="btn lemonsqueezy-button"
            id="btnDocUnlockLifetime"
            style="flex:1; min-width:180px; justify-content:center; padding:9px 12px; font-weight:800; font-size:0.78rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color:#000; border:none;">

@@ -1,6 +1,7 @@
 import "./styles/theme.css";
 import { translations } from "./locales/i18n.js";
 import {
+  formatCheckoutUrl,
   isProActive,
   getVipTelegramUrl,
   getAuthHeader,
@@ -826,7 +827,11 @@ function bindEvents() {
     document.addEventListener("click", (e) => {
       const btn = e.target.closest(".lemonsqueezy-button");
       if (!btn) return;
-      const href = btn.getAttribute("href") || "";
+      const rawHref = btn.getAttribute("href") || "";
+      const href = formatCheckoutUrl(rawHref, rawHref);
+      if (href && href !== rawHref) {
+        btn.setAttribute("href", href);
+      }
       if (typeof window.__bindRsaLemonSqueezyEvents === "function") {
         window.__bindRsaLemonSqueezyEvents();
       }
@@ -2428,7 +2433,7 @@ init();
   } catch (e) {}
 })();
 
-/* === HQ KPI Conversion Tracker (1사업부: 유료회원 전환 클릭 & 결제 추적) === */
+/* === HQ KPI Conversion Tracker (Division 1: Paid Member Click & Checkout Tracking) === */
 (function(){
   try {
     if (typeof window === 'undefined' || window.__HQ_KPI_TOM__) return;
@@ -2450,7 +2455,7 @@ init();
       var href = (el.getAttribute('href') || '').toLowerCase();
       var txt = (el.innerText || el.textContent || '').toLowerCase();
       var cls = (el.className || '').toLowerCase();
-      if (href.indexOf('lemonsqueezy.com') !== -1 || cls.indexOf('pro') !== -1 || cls.indexOf('paywall') !== -1 || /upgrade|unlock pro|vip|subscribe|프리미엄|유료|구독/.test(txt)) {
+      if (href.indexOf('lemonsqueezy.com') !== -1 || cls.indexOf('pro') !== -1 || cls.indexOf('paywall') !== -1 || /upgrade|unlock pro|vip|subscribe/.test(txt)) {
         fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_' + kst, { mode: 'cors', keepalive: true }).catch(function(){});
         fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_total', { mode: 'cors', keepalive: true }).catch(function(){});
       }

@@ -103,7 +103,10 @@ export function renderStockTable(state) {
   const isPro = state.isProUnlocked;
   const stocks = (state.filteredStocks || []).filter((s) => !String(s.ticker).includes("."));
   const cfg = state.config || {};
-  const monthlyUrl = cfg.ls_site1_monthly_url || "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8";
+  const monthlyUrl = formatCheckoutUrl(
+    cfg.ls_site1_monthly_url,
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
+  );
 
   const renderSortTh = (col, label, isNum = false) => {
     const isAct = state.sortCol === col;
@@ -123,7 +126,7 @@ export function renderStockTable(state) {
       <p style="color:#cbd5e1; font-size:0.84rem; margin:0 0 14px; line-height:1.5;">
         ${t.softPaywallDesc || "Tickers 1–5 are unlocked as featured ignition leaders. Unlock live institutional target levels, -9% stops, and real-time execution signals for all remaining 67 stocks."}
       </p>
-      <a class="soft-paywall-btn lemonsqueezy-button btn-unlock-row" data-direct-ls="1" href="${monthlyUrl}?embed=1" target="_blank" rel="noopener noreferrer">
+      <a class="soft-paywall-btn lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${monthlyUrl}" target="_blank" rel="noopener noreferrer">
         🍋 ${t.softPaywallUnlockCta || "Unlock 67 Pro Setups ($29/mo)"} →
       </a>
     </div>

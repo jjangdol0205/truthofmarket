@@ -167,7 +167,7 @@ export function renderPricing(state) {
             </ul>
           </div>
           <div>
-            <a class="btn btn-primary lemonsqueezy-button" id="cardMonthlyBtn" href="${lsMonthly}" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:10px; width:100%;">
+            <a class="btn btn-primary lemonsqueezy-button" id="cardMonthlyBtn" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthly}" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:10px; width:100%;">
               ${c.t1Btn}
             </a>
             ${checkoutFallbackHtml}
@@ -192,7 +192,7 @@ export function renderPricing(state) {
             </ul>
           </div>
           <div>
-            <a class="btn btn-emerald lemonsqueezy-button" id="cardLtdBtn" href="${lsLtd}" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:10px; width:100%;">
+            <a class="btn btn-emerald lemonsqueezy-button" id="cardLtdBtn" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" href="${lsLtd}" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:10px; width:100%;">
               ${c.t2Btn}
             </a>
             ${checkoutFallbackHtml}

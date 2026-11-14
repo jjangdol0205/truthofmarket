@@ -122,7 +122,7 @@
         var href = (el.getAttribute('href') || '').toLowerCase();
         var txt = (el.innerText || el.textContent || '').toLowerCase();
         var cls = (el.className || '').toLowerCase();
-        if (href.indexOf('lemonsqueezy.com') !== -1 || href.indexOf('truthofmarketss') !== -1 || cls.indexOf('pro') !== -1 || cls.indexOf('paywall') !== -1 || /pro|vip|unlock|subscribe|upgrade|checkout|\$19|\$29|\$49|\$199|프리미엄|유료|구독/.test(txt)) {
+        if (href.indexOf('lemonsqueezy.com') !== -1 || href.indexOf('truthofmarketss') !== -1 || cls.indexOf('pro') !== -1 || cls.indexOf('paywall') !== -1 || /pro|vip|unlock|subscribe|upgrade|checkout|\$19|\$29|\$49|\$199/.test(txt)) {
           fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_' + kst, { mode: 'cors', keepalive: true }).catch(function(){});
           fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_total', { mode: 'cors', keepalive: true }).catch(function(){});
         }

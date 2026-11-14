@@ -516,6 +516,7 @@ export function renderChartBlindTest(state) {
                 : `
                   <a
                     href="${monthlyUrl}"
+                    data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
                     class="lemonsqueezy-button btn btn-sm"
                     style="background:#10b981; border:1px solid #059669; color:#052e16; font-weight:800; font-size:0.74rem; padding:7px 12px; border-radius:6px; text-decoration:none;"
                   >
@@ -523,6 +524,7 @@ export function renderChartBlindTest(state) {
                   </a>
                   <a
                     href="${lifetimeUrl}"
+                    data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b"
                     class="lemonsqueezy-button btn btn-sm"
                     style="background:rgba(245,158,11,0.2); border:1px solid #f59e0b; color:#fbbf24; font-weight:800; font-size:0.74rem; padding:7px 12px; border-radius:6px; text-decoration:none;"
                   >

@@ -396,11 +396,21 @@ function getVipTelegramUrl(isPro = false) {
   }
   return "#pro-vip-telegram";
 }
+const LOCALIZED_TOM_MONTHLY_EN_URL =
+  "https://truthofmarket.lemonsqueezy.com/checkout/custom/1fe480f8-8bb0-46a9-959f-a8d396a87a1b?signature=a2c6d29a4b32c2c5aaccd38f408adb552dd6883c4bf1e48f03ace8c1d075373c&embed=1";
+const LOCALIZED_TOM_LIFETIME_EN_URL =
+  "https://truthofmarket.lemonsqueezy.com/checkout/custom/c9ad1a1c-21c5-4d95-88a2-b570a860a147?signature=56e574e49be09b1776a57380506dc0292ecc8579b43600e68b7e1b40b97cf650&embed=1";
 function formatCheckoutUrl(
   rawUrl,
   fallbackUrl = "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
 ) {
   const base = String(rawUrl || fallbackUrl).trim() || fallbackUrl;
+  if (base.includes("d5e7e761-8b1b-4ca8-b1fe-771acd1450f8")) {
+    return LOCALIZED_TOM_MONTHLY_EN_URL;
+  }
+  if (base.includes("667aa482-f17c-47d1-b7f3-a2427c36516b")) {
+    return LOCALIZED_TOM_LIFETIME_EN_URL;
+  }
   if (/[?&]embed=1\b/i.test(base)) {
     return base;
   }
@@ -2423,16 +2433,28 @@ function renderDoctorVipUnlockPreview(state) {
     ? `<span class="badge" style="background:rgba(16,185,129,0.2); color:#34d399; font-size:0.65rem; font-weight:800; padding:2px 8px; border:1px solid rgba(16,185,129,0.4);">👑 PRO VIP ACTIVE</span>`
     : `<span class="badge" style="background:rgba(245,158,11,0.2); color:#fbbf24; font-size:0.65rem; font-weight:800; padding:2px 8px; border:1px solid rgba(245,158,11,0.4);">PRO VIP EXCLUSIVE</span>`;
 
+  const cfg = (state && state.config) || {};
+  const docMonthlyUrl = formatCheckoutUrl(
+    cfg.ls_site1_monthly_url,
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
+  );
+  const docLifetimeUrl = formatCheckoutUrl(
+    cfg.ls_site1_ltd_url,
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b"
+  );
+
   const checkoutButtonsHtml = !isPro
     ? `
       <div class="doc-vip-action-bar" style="margin-top:12px; display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
-        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1"
+        <a href="${docMonthlyUrl}"
+           data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
            class="btn btn-primary lemonsqueezy-button"
            id="btnDocUnlockMonthly"
            style="flex:1; min-width:180px; justify-content:center; padding:9px 12px; font-weight:800; font-size:0.78rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
           ⚡ Monthly VIP ($29/mo)
         </a>
-        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1"
+        <a href="${docLifetimeUrl}"
+           data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b"
            class="btn lemonsqueezy-button"
            id="btnDocUnlockLifetime"
            style="flex:1; min-width:180px; justify-content:center; padding:9px 12px; font-weight:800; font-size:0.78rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color:#000; border:none;">
@@ -3401,6 +3423,7 @@ function renderChartBlindTest(state) {
                 : `
                   <a
                     href="${monthlyUrl}"
+                    data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
                     class="lemonsqueezy-button btn btn-sm"
                     style="background:#10b981; border:1px solid #059669; color:#052e16; font-weight:800; font-size:0.74rem; padding:7px 12px; border-radius:6px; text-decoration:none;"
                   >
@@ -3408,6 +3431,7 @@ function renderChartBlindTest(state) {
                   </a>
                   <a
                     href="${lifetimeUrl}"
+                    data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b"
                     class="lemonsqueezy-button btn btn-sm"
                     style="background:rgba(245,158,11,0.2); border:1px solid #f59e0b; color:#fbbf24; font-weight:800; font-size:0.74rem; padding:7px 12px; border-radius:6px; text-decoration:none;"
                   >
@@ -4262,7 +4286,10 @@ function renderStockTable(state) {
   const isPro = state.isProUnlocked;
   const stocks = (state.filteredStocks || []).filter((s) => !String(s.ticker).includes("."));
   const cfg = state.config || {};
-  const monthlyUrl = cfg.ls_site1_monthly_url || "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8";
+  const monthlyUrl = formatCheckoutUrl(
+    cfg.ls_site1_monthly_url,
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
+  );
 
   const renderSortTh = (col, label, isNum = false) => {
     const isAct = state.sortCol === col;
@@ -4282,7 +4309,7 @@ function renderStockTable(state) {
       <p style="color:#cbd5e1; font-size:0.84rem; margin:0 0 14px; line-height:1.5;">
         ${t.softPaywallDesc || "Tickers 1–5 are unlocked as featured ignition leaders. Unlock live institutional target levels, -9% stops, and real-time execution signals for all remaining 67 stocks."}
       </p>
-      <a class="soft-paywall-btn lemonsqueezy-button btn-unlock-row" data-direct-ls="1" href="${monthlyUrl}?embed=1" target="_blank" rel="noopener noreferrer">
+      <a class="soft-paywall-btn lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${monthlyUrl}" target="_blank" rel="noopener noreferrer">
         🍋 ${t.softPaywallUnlockCta || "Unlock 67 Pro Setups ($29/mo)"} →
       </a>
     </div>
@@ -5106,7 +5133,7 @@ function renderPricing(state) {
             </ul>
           </div>
           <div>
-            <a class="btn btn-primary lemonsqueezy-button" id="cardMonthlyBtn" href="${lsMonthly}" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:10px; width:100%;">
+            <a class="btn btn-primary lemonsqueezy-button" id="cardMonthlyBtn" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthly}" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:10px; width:100%;">
               ${c.t1Btn}
             </a>
             ${checkoutFallbackHtml}
@@ -5131,7 +5158,7 @@ function renderPricing(state) {
             </ul>
           </div>
           <div>
-            <a class="btn btn-emerald lemonsqueezy-button" id="cardLtdBtn" href="${lsLtd}" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:10px; width:100%;">
+            <a class="btn btn-emerald lemonsqueezy-button" id="cardLtdBtn" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" href="${lsLtd}" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:10px; width:100%;">
               ${c.t2Btn}
             </a>
             ${checkoutFallbackHtml}
@@ -5208,6 +5235,14 @@ function renderPricing(state) {
 function renderModals(state) {
   const t = state.t || {};
   const cfg = state.config || {};
+  const lsMonthly = formatCheckoutUrl(
+    cfg.ls_site1_monthly_url,
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
+  );
+  const lsLtd = formatCheckoutUrl(
+    cfg.ls_site1_ltd_url,
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b"
+  );
   const tgChannelUrl = cfg.telegram_channel_url || "https://t.me/truthofmarketss";
   const ytUrl = cfg.youtube_url || "https://www.youtube.com/@RightSideAlpha";
   const igUrl = cfg.instagram_url || "https://www.instagram.com/rightsidealpha";
@@ -5241,10 +5276,10 @@ function renderModals(state) {
           Enter the license key issued upon Lemon Squeezy checkout to unlock all 72 US equity target levels, Daily VIP Ignition Order Book, Position Sizing Calculator, Position Doctor, and the 26-year Semiconductor CSV dataset.
         </p>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:12px 0 8px;">
-          <a class="btn btn-primary btn-sm lemonsqueezy-button" data-direct-ls="1" href="${cfg.ls_site1_monthly_url || "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"}?embed=1" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:8px 10px; font-weight:700;">
+          <a class="btn btn-primary btn-sm lemonsqueezy-button" data-direct-ls="1" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthly}" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:8px 10px; font-weight:700;">
             🍋 Subscribe Pro ($29/mo) ↗
           </a>
-          <a class="btn btn-emerald btn-sm lemonsqueezy-button" data-direct-ls="1" href="${cfg.ls_site1_ltd_url || "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b"}?embed=1" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:8px 10px; font-weight:700;">
+          <a class="btn btn-emerald btn-sm lemonsqueezy-button" data-direct-ls="1" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" href="${lsLtd}" target="_blank" rel="noopener noreferrer" style="justify-content:center; padding:8px 10px; font-weight:700;">
             🏆 Lifetime Pass ($199) ↗
           </a>
         </div>
@@ -7201,7 +7236,11 @@ function bindEvents() {
     document.addEventListener("click", (e) => {
       const btn = e.target.closest(".lemonsqueezy-button");
       if (!btn) return;
-      const href = btn.getAttribute("href") || "";
+      const rawHref = btn.getAttribute("href") || "";
+      const href = formatCheckoutUrl(rawHref, rawHref);
+      if (href && href !== rawHref) {
+        btn.setAttribute("href", href);
+      }
       if (typeof window.__bindRsaLemonSqueezyEvents === "function") {
         window.__bindRsaLemonSqueezyEvents();
       }
@@ -8803,7 +8842,7 @@ init();
   } catch (e) {}
 })();
 
-/* === HQ KPI Conversion Tracker (1사업부: 유료회원 전환 클릭 & 결제 추적) === */
+/* === HQ KPI Conversion Tracker (Division 1: Paid Member Click & Checkout Tracking) === */
 (function(){
   try {
     if (typeof window === 'undefined' || window.__HQ_KPI_TOM__) return;
@@ -8825,7 +8864,7 @@ init();
       var href = (el.getAttribute('href') || '').toLowerCase();
       var txt = (el.innerText || el.textContent || '').toLowerCase();
       var cls = (el.className || '').toLowerCase();
-      if (href.indexOf('lemonsqueezy.com') !== -1 || cls.indexOf('pro') !== -1 || cls.indexOf('paywall') !== -1 || /upgrade|unlock pro|vip|subscribe|프리미엄|유료|구독/.test(txt)) {
+      if (href.indexOf('lemonsqueezy.com') !== -1 || cls.indexOf('pro') !== -1 || cls.indexOf('paywall') !== -1 || /upgrade|unlock pro|vip|subscribe/.test(txt)) {
         fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_' + kst, { mode: 'cors', keepalive: true }).catch(function(){});
         fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_total', { mode: 'cors', keepalive: true }).catch(function(){});
       }

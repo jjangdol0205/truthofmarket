@@ -35,11 +35,22 @@ export function getVipTelegramUrl(isPro = false) {
   return "#pro-vip-telegram";
 }
 
+export const LOCALIZED_TOM_MONTHLY_EN_URL =
+  "https://truthofmarket.lemonsqueezy.com/checkout/custom/1fe480f8-8bb0-46a9-959f-a8d396a87a1b?signature=a2c6d29a4b32c2c5aaccd38f408adb552dd6883c4bf1e48f03ace8c1d075373c&embed=1";
+export const LOCALIZED_TOM_LIFETIME_EN_URL =
+  "https://truthofmarket.lemonsqueezy.com/checkout/custom/c9ad1a1c-21c5-4d95-88a2-b570a860a147?signature=56e574e49be09b1776a57380506dc0292ecc8579b43600e68b7e1b40b97cf650&embed=1";
+
 export function formatCheckoutUrl(
   rawUrl,
   fallbackUrl = "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
 ) {
   const base = String(rawUrl || fallbackUrl).trim() || fallbackUrl;
+  if (base.includes("d5e7e761-8b1b-4ca8-b1fe-771acd1450f8")) {
+    return LOCALIZED_TOM_MONTHLY_EN_URL;
+  }
+  if (base.includes("667aa482-f17c-47d1-b7f3-a2427c36516b")) {
+    return LOCALIZED_TOM_LIFETIME_EN_URL;
+  }
   if (/[?&]embed=1\b/i.test(base)) {
     return base;
   }

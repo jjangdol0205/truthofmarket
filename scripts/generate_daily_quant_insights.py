@@ -32,8 +32,8 @@ PUB = ROOT / "frontend" / "public"
 SEMI_PATH = ROOT / "static_api" / "semi_overview.json"
 STOCKS_FREE_PATH = ROOT / "static_api" / "stocks_free.json"
 
-LS_MONTHLY_URL = "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1"
-LS_LIFETIME_URL = "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1"
+LS_MONTHLY_URL = "https://truthofmarket.lemonsqueezy.com/checkout/custom/1fe480f8-8bb0-46a9-959f-a8d396a87a1b?signature=a2c6d29a4b32c2c5aaccd38f408adb552dd6883c4bf1e48f03ace8c1d075373c&embed=1"
+LS_LIFETIME_URL = "https://truthofmarket.lemonsqueezy.com/checkout/custom/c9ad1a1c-21c5-4d95-88a2-b570a860a147?signature=56e574e49be09b1776a57380506dc0292ecc8579b43600e68b7e1b40b97cf650&embed=1"
 
 
 def _load_json(path: pathlib.Path, default: Any) -> Any:
