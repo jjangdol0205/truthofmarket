@@ -32,6 +32,8 @@ function loadEnvToken(filePath, keyPattern) {
 }
 
 function loadHqBotToken() {
+  const hqToken = loadEnvToken('D:\\드림컴퍼니\\.env', /HQ_TELEGRAM_BOT_TOKEN=([^\r\n]+)/);
+  if (hqToken) return hqToken;
   const gbaToken = loadEnvToken('D:\\드림컴퍼니\\3사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/);
   if (gbaToken) return gbaToken;
   try {
@@ -41,14 +43,16 @@ function loadHqBotToken() {
       if (cfg.bot_token) return String(cfg.bot_token).trim();
     }
   } catch (_) {}
-  return process.env.TELEGRAM_BOT_TOKEN || '';
+  return process.env.HQ_TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || '';
 }
+
+const GBA_FALLBACK_TOKEN = loadEnvToken('D:\\드림컴퍼니\\3사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/);
 
 const BOT_TOKENS_BY_DIV = {
   HQ: loadHqBotToken(),
   '1사업부': loadEnvToken('D:\\드림컴퍼니\\1사업부\\.env', /RSA_TELEGRAM_BOT_TOKEN=([^\r\n]+)/),
   '2사업부': loadEnvToken('D:\\드림컴퍼니\\2사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/),
-  '3사업부': loadEnvToken('D:\\드림컴퍼니\\3사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/) || loadHqBotToken(),
+  '3사업부': GBA_FALLBACK_TOKEN || loadHqBotToken(),
   '4사업부': loadEnvToken('D:\\드림컴퍼니\\4사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/),
   '5사업부': loadEnvToken('D:\\드림컴퍼니\\5사업부\\.env', /TELEGRAM_BOT_TOKEN=([^\r\n]+)/)
 };
@@ -208,8 +212,8 @@ async function sendTelegramHtml(text, preferredToken = null, customChatId = null
   if (!res.ok && targetChatId !== OWNER_USER_ID) {
     // If bot is not yet in group chat, send directly to Owner DM or fallback to HQ bot
     res = await sendTelegramHtmlSingle(tok, OWNER_USER_ID, text);
-    if (!res.ok && BOT_TOKENS_BY_DIV.HQ) {
-      res = await sendTelegramHtmlSingle(BOT_TOKENS_BY_DIV.HQ, targetChatId, text);
+    if (!res.ok && (GBA_FALLBACK_TOKEN || BOT_TOKENS_BY_DIV.HQ)) {
+      res = await sendTelegramHtmlSingle(GBA_FALLBACK_TOKEN || BOT_TOKENS_BY_DIV.HQ, targetChatId, text);
     }
   }
   return res;
@@ -522,11 +526,11 @@ async function runVisitorBriefing(options = {}) {
     } else {
       ledger.lastTelegramSentMs = nowMs;
       saveLedger(ledger);
-      // 1. 본사 총괄 매니저 (@SemifearGreedbot) 브리핑 개시 선언
+      // 1. 그룹 비서실장 (@Allcompany1_bot) 브리핑 개시 선언
       await sendTelegramHtml(
-        `🏛️ <b>[드림컴퍼니 본사 총괄 — 1~5사업부 정기 방문자 &amp; 전환 브리핑 개시]</b>\n` +
+        `🏛️ <b>[드림컴퍼니 그룹 비서실(@Allcompany1_bot) — 1~5사업부 정기 방문자 &amp; 전환 브리핑 개시]</b>\n` +
           `⏰ <b>집계 시각</b>: <code>${nowStr}</code>\n` +
-          `• <b>원칙</b>: 1·2·3·4·5사업부 각 전담 봇이 모두컴퍼니 대화방을 통해 직접 실적을 보고합니다.`,
+          `• <b>원칙</b>: 1·2·3·4·5사업부 각 전담 CEO 봇이 모두컴퍼니 대화방을 통해 직접 실적을 보고합니다.`,
         BOT_TOKENS_BY_DIV.HQ
       );
       // 2. 1~5사업부 각 전담 봇이 직접 실적을 보고

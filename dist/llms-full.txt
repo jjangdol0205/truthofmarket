@@ -141,7 +141,7 @@
 - $CELH vs $PEP (High-Growth Energy Drink Ignition vs Beverage Titan): Winner=$CELH | $CELH PW-RSI=98/100 (2.46x Vol) vs $PEP PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/celh-vs-pep.html
 
 ## 4. Institutional Editorial Quant Insights (/insights/)
-- US Market Regime Dispatch (2026-11-13): $SMH Fear & Greed at 18.3/100 (Extreme Fear) & PW-RSI Watchlist -> https://truthofmarket.com/insights/daily-us-quant-regime-brief.html
+- Wall Street Morning Bell Letter (2026-11-13): $SMH Fear & Greed at 18.3/100 (Extreme Fear) & Calm -9% Safety Watchlist -> https://truthofmarket.com/insights/daily-us-quant-regime-brief.html
 - Why Left-Side Dip Buyers Bleed Out: The 26.8-Year Math Behind Right-Side Ignition (PW-RSI) -> https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html
 - Surviving Chip Crashes: How the $SMH:$XLV Contrarian Barbell Cuts Max Drawdown Without Killing Alpha -> https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html
 - The Asymmetry of Ruin: Why Cutting Every Loser at -9.0% Saves Years of Dead-Money Recovery -> https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html
