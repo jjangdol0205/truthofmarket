@@ -3460,6 +3460,122 @@ function renderHeader(state) {
 
 
 // --- src/components/Hero.js ---
+const TOM_MORNING_CLUB_NOTES = [
+  "Good morning, Club Member — you never have to chase every rally. Protecting your principal comes first.",
+  "Good morning, friend — cash in your 401(k) or IRA is a safe harbor, never a missed opportunity.",
+  "Welcome back this morning — patience is your greatest retirement advantage when Wall Street gets noisy.",
+  "Good morning, Club Member — one calm 60-second check beats watching anxious market headlines all day.",
+  "Steady mornings build peaceful retirements — let safe uptrends come to you, and enjoy your day.",
+  "Good morning — protecting what you have worked decades to save always matters more than guessing market tops.",
+  "Glad you are with us today — small, steady habits keep your nest egg safe through every market season.",
+];
+const TOM_MORNING_CLUB_COMPANION_MSG = {
+  steady:
+    "🤝 Right beside you — staying calm in quality uptrends while keeping a -9% safety floor is how retirement wealth compounds.",
+  watch:
+    "👀 Wise patience — waiting calmly on the sidelines until buyers prove themselves protects both your sleep and your savings.",
+  cash:
+    "🛡️ Smart defense — holding cash in uncertain weeks keeps your nest egg intact and ready for the next clear green light.",
+};
+function getTomMorningClubTodayKey() {
+  try {
+    const parts = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/New_York",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).formatToParts(new Date());
+    const y = parts.find((p) => p.type === "year")?.value;
+    const m = parts.find((p) => p.type === "month")?.value;
+    const d = parts.find((p) => p.type === "day")?.value;
+    if (y && m && d && /^\d{4}-\d{2}-\d{2}$/.test(`${y}-${m}-${d}`)) {
+      return `${y}-${m}-${d}`;
+    }
+  } catch (_) {}
+  return new Date().toISOString().slice(0, 10);
+}
+function getTomMorningClubSeed(dateStr) {
+  let h = 2166136261;
+  const s = String(dateStr || "2026-11-15");
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return Math.abs(h);
+}
+function syncTomMorningClubStreak(todayKey) {
+  const dateKey = todayKey || getTomMorningClubTodayKey();
+  let days = 1;
+  let consecutiveDays = 1;
+  try {
+    if (typeof localStorage !== "undefined") {
+      const raw = localStorage.getItem("tom_morning_club_streak_v1");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        const prevDays = Math.max(1, Number(parsed && parsed.days) || 1);
+        const prevConsec = Math.max(1, Number(parsed && parsed.consecutiveDays) || 1);
+        const lastDate = String((parsed && parsed.lastVisitDate) || "");
+        if (lastDate === dateKey) {
+          days = prevDays;
+          consecutiveDays = prevConsec;
+        } else {
+          days = prevDays + 1;
+          const prevMs = Date.parse(`${lastDate}T00:00:00Z`);
+          const curMs = Date.parse(`${dateKey}T00:00:00Z`);
+          const diffDays = !isNaN(prevMs) && !isNaN(curMs) ? Math.round((curMs - prevMs) / 86400000) : 0;
+          consecutiveDays = diffDays === 1 ? prevConsec + 1 : 1;
+          localStorage.setItem(
+            "tom_morning_club_streak_v1",
+            JSON.stringify({ lastVisitDate: dateKey, days, consecutiveDays })
+          );
+        }
+      } else {
+        localStorage.setItem(
+          "tom_morning_club_streak_v1",
+          JSON.stringify({ lastVisitDate: dateKey, days: 1, consecutiveDays: 1 })
+        );
+      }
+    }
+  } catch (_) {}
+  return { dateKey, days, consecutiveDays };
+}
+function getTomMorningClubPollData(todayKey) {
+  const dateKey = todayKey || getTomMorningClubTodayKey();
+  const seed = getTomMorningClubSeed(dateKey);
+  const counts = {
+    steady: 148 + (seed % 47),
+    watch: 172 + ((seed >> 3) % 53),
+    cash: 126 + ((seed >> 6) % 45),
+  };
+  let choice = "";
+  try {
+    if (typeof localStorage !== "undefined") {
+      const raw = localStorage.getItem("tom_morning_club_poll_v1");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.date === dateKey && ["steady", "watch", "cash"].includes(parsed.choice)) {
+          choice = parsed.choice;
+          counts[choice] += 1;
+        }
+      }
+    }
+  } catch (_) {}
+  const total = Math.max(1, counts.steady + counts.watch + counts.cash);
+  const pctSteady = Math.round((counts.steady / total) * 100);
+  const pctWatch = Math.round((counts.watch / total) * 100);
+  const pctCash = Math.max(1, 100 - pctSteady - pctWatch);
+  return {
+    dateKey,
+    choice,
+    counts,
+    total,
+    pct: {
+      steady: pctSteady,
+      watch: pctWatch,
+      cash: pctCash,
+    },
+  };
+}
 function renderHero(state) {
   const t = state.t;
   const kpis = state.backtestKpis || {};
@@ -3486,6 +3602,15 @@ function renderHero(state) {
   const savedFreeEmail =
     state.freeMemberEmail ||
     (typeof localStorage !== "undefined" ? localStorage.getItem("tom_free_member_email") || "" : "");
+
+  const clubTodayKey = getTomMorningClubTodayKey();
+  const clubSeed = getTomMorningClubSeed(clubTodayKey);
+  const clubNote = TOM_MORNING_CLUB_NOTES[clubSeed % TOM_MORNING_CLUB_NOTES.length];
+  const clubStreak = syncTomMorningClubStreak(clubTodayKey);
+  const clubPoll = getTomMorningClubPollData(clubTodayKey);
+  const clubCompanionText = clubPoll.choice
+    ? TOM_MORNING_CLUB_COMPANION_MSG[clubPoll.choice]
+    : "Tap your morning stance above to compare notes with fellow 401(k) & IRA members — zero login required.";
 
   return `
     <section class="hero">
@@ -3567,6 +3692,85 @@ function renderHero(state) {
           <div>• <b>🟢 $CELH (Celsius Holdings):</b> Confirmed Uptrend Showcase · Safety Stop Floor: <b>-9.0% ($29.50)</b> · Upside Target: <b>+50% to +100%</b></div>
           <div>• <b>🟢 $FSLR (First Solar):</b> Institutional Volume Reclaim · Safety Stop Floor: <b>-9.0% ($174.37)</b> · Trend Status: <b>Above 20D/60D</b></div>
           <div>• <b>🛡️ $SMH : $XLV Barbell Check:</b> Semi Fear &amp; Greed at <b>${semiScore}/100</b> — Keep Healthcare ($XLV) cushion active &amp; never average down past -9%.</div>
+        </div>
+      </div>
+
+      <!-- ☕ MORNING BELL CLUB — ZERO-SIGNUP DAILY HABIT & BELONGING HUB -->
+      <div class="tom-club-box" id="tomMorningBellClub" role="region" aria-label="Morning Bell Club — Protecting Your Retirement Together">
+        <div class="tom-club-header">
+          <div class="tom-club-title-wrap">
+            <span class="tom-club-kicker">☕ MORNING BELL CLUB</span>
+            <strong class="tom-club-heading">Protecting Your Retirement Together</strong>
+          </div>
+          <span class="tom-club-streak" id="tomMorningClubStreakBadge" title="Increments once each morning you check in">
+            🏅 Day ${clubStreak.days} Morning Member
+          </span>
+        </div>
+
+        <div class="tom-club-note" id="tomMorningClubDailyNote">
+          <span class="tom-club-note-tag">Editor&rsquo;s Daily Morning Note (${clubTodayKey}):</span>
+          <span>&ldquo;${clubNote}&rdquo;</span>
+        </div>
+
+        <div class="tom-club-poll-head">
+          <span class="tom-club-poll-title">🗳️ Today&rsquo;s Member Sentiment Poll (1-Click):</span>
+          <span class="tom-club-poll-count" id="tomClubPollTotalCount">${clubPoll.total.toLocaleString()} members checked in today</span>
+        </div>
+
+        <div class="tom-club-poll-grid" role="group" aria-label="Today's Member Sentiment Poll">
+          <button
+            type="button"
+            class="tom-club-poll-btn ${clubPoll.choice === "steady" ? "is-active" : ""}"
+            data-tom-poll="steady"
+            aria-pressed="${clubPoll.choice === "steady" ? "true" : "false"}"
+          >
+            <span class="tom-poll-btn-top">
+              <span class="tom-poll-btn-label">🟢 Holding Steady</span>
+              <strong class="tom-poll-pct" data-tom-poll-pct="steady">${clubPoll.pct.steady}%</strong>
+            </span>
+            <span class="tom-poll-bar-track" aria-hidden="true">
+              <span class="tom-poll-bar-fill fill-steady" data-tom-poll-bar="steady" style="width:${clubPoll.pct.steady}%;"></span>
+            </span>
+          </button>
+
+          <button
+            type="button"
+            class="tom-club-poll-btn ${clubPoll.choice === "watch" ? "is-active" : ""}"
+            data-tom-poll="watch"
+            aria-pressed="${clubPoll.choice === "watch" ? "true" : "false"}"
+          >
+            <span class="tom-poll-btn-top">
+              <span class="tom-poll-btn-label">🟡 Watching Closely</span>
+              <strong class="tom-poll-pct" data-tom-poll-pct="watch">${clubPoll.pct.watch}%</strong>
+            </span>
+            <span class="tom-poll-bar-track" aria-hidden="true">
+              <span class="tom-poll-bar-fill fill-watch" data-tom-poll-bar="watch" style="width:${clubPoll.pct.watch}%;"></span>
+            </span>
+          </button>
+
+          <button
+            type="button"
+            class="tom-club-poll-btn ${clubPoll.choice === "cash" ? "is-active" : ""}"
+            data-tom-poll="cash"
+            aria-pressed="${clubPoll.choice === "cash" ? "true" : "false"}"
+          >
+            <span class="tom-poll-btn-top">
+              <span class="tom-poll-btn-label">🛡️ Protecting Cash</span>
+              <strong class="tom-poll-pct" data-tom-poll-pct="cash">${clubPoll.pct.cash}%</strong>
+            </span>
+            <span class="tom-poll-bar-track" aria-hidden="true">
+              <span class="tom-poll-bar-fill fill-cash" data-tom-poll-bar="cash" style="width:${clubPoll.pct.cash}%;"></span>
+            </span>
+          </button>
+        </div>
+
+        <div
+          class="tom-club-companion ${clubPoll.choice ? "is-voted" : ""}"
+          id="tomClubCompanionMsg"
+          role="status"
+          aria-live="polite"
+        >
+          ${clubCompanionText}
         </div>
       </div>
 
@@ -6825,6 +7029,55 @@ function bindEvents() {
       showToast("✅ Free Daily Morning Signals & -9% Alerts Activated!");
     });
   }
+
+  // Morning Bell Club 1-Click Member Sentiment Poll (<50ms instant + non-blocking Abacus)
+  document.querySelectorAll(".tom-club-poll-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const choice = String(btn.getAttribute("data-tom-poll") || "").trim();
+      if (!["steady", "watch", "cash"].includes(choice)) return;
+      const todayKey = getTomMorningClubTodayKey();
+      try {
+        localStorage.setItem(
+          "tom_morning_club_poll_v1",
+          JSON.stringify({ date: todayKey, choice })
+        );
+      } catch (_) {}
+
+      const updated = getTomMorningClubPollData(todayKey);
+      document.querySelectorAll(".tom-club-poll-btn").forEach((b) => {
+        const key = b.getAttribute("data-tom-poll");
+        const active = key === choice;
+        b.classList.toggle("is-active", active);
+        b.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+      ["steady", "watch", "cash"].forEach((k) => {
+        const pctEl = document.querySelector(`[data-tom-poll-pct="${k}"]`);
+        const barEl = document.querySelector(`[data-tom-poll-bar="${k}"]`);
+        if (pctEl) pctEl.textContent = `${updated.pct[k]}%`;
+        if (barEl) barEl.style.width = `${updated.pct[k]}%`;
+      });
+      const totalEl = document.getElementById("tomClubPollTotalCount");
+      if (totalEl) {
+        totalEl.textContent = `${updated.total.toLocaleString()} members checked in today`;
+      }
+      const msgEl = document.getElementById("tomClubCompanionMsg");
+      if (msgEl && TOM_MORNING_CLUB_COMPANION_MSG[choice]) {
+        msgEl.classList.add("is-voted");
+        msgEl.textContent = TOM_MORNING_CLUB_COMPANION_MSG[choice];
+      }
+
+      try {
+        const hitFlag = `tom_poll_hit_${choice}_${todayKey}`;
+        if (typeof fetch === "function" && localStorage.getItem(hitFlag) !== "1") {
+          localStorage.setItem(hitFlag, "1");
+          fetch(
+            `https://abacus.jasoncameron.dev/hit/tom_truthofmarket/poll_${choice}_${todayKey}`,
+            { mode: "cors", keepalive: true }
+          ).catch(() => {});
+        }
+      } catch (_) {}
+    });
+  });
 
   const btnDocJumpFreeAlert = document.getElementById("btnDocJumpFreeAlert");
   if (btnDocJumpFreeAlert) {

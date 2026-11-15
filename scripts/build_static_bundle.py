@@ -282,8 +282,8 @@ def main() -> None:
   }}
   </script>
   <script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
-  <script type="module" crossorigin src="./assets/{js_name}"></script>
-  <link rel="stylesheet" crossorigin href="./assets/{css_name}" />
+  <script type="module" crossorigin src="./assets/{js_name}?v=20261115club"></script>
+  <link rel="stylesheet" crossorigin href="./assets/{css_name}?v=20261115club" />
   <script>
   /* === HQ Edge Real-Human Visitor & KPI Beacon (tom_truthofmarket) === */
   (function(){{
@@ -349,6 +349,7 @@ def main() -> None:
     <section class="seo-home-fallback" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;margin:16px auto;padding:20px;background:#0f172a;border:1px solid #1e293b;border-radius:12px;color:#f8fafc;">
       <h1 style="font-size:1.5rem;font-weight:800;margin:0 0 8px;color:#ffffff;">Protect Your Retirement Nest Egg &amp; Spot Safe Uptrends in 60 Seconds a Day.</h1>
       <p style="margin:0;color:#cbd5e1;font-size:0.95rem;">Daily 3-color safety &amp; breakout check across 72 liquid US stocks—enter only confirmed uptrends and protect every position with a clear -9% safety stop.</p>
+      <p style="margin:10px 0 0;padding-top:10px;border-top:1px solid #1e293b;color:#fbbf24;font-size:0.88rem;font-weight:700;">☕ Morning Bell Club — Protecting Your Retirement Together · Daily 1-Click 401(k) &amp; IRA Member Sentiment Poll</p>
     </section>
   </div>
 {seo_dir_html}

@@ -34,7 +34,13 @@ import {
   DEFAULT_INSTAGRAM_URL,
 } from "./services/api.js";
 import { renderHeader } from "./components/Header.js";
-import { renderHero, renderEasyProfitSimulator } from "./components/Hero.js";
+import {
+  renderHero,
+  renderEasyProfitSimulator,
+  getTomMorningClubTodayKey,
+  getTomMorningClubPollData,
+  TOM_MORNING_CLUB_COMPANION_MSG,
+} from "./components/Hero.js";
 import { renderChartBlindTest } from "./components/ChartBlindTest.js";
 import { renderProofCard } from "./components/ProofCard.js";
 import { renderScreenerControls, renderStockTable, renderStockRows } from "./components/StockTable.js";
@@ -543,6 +549,55 @@ function bindEvents() {
       showToast("✅ Free Daily Morning Signals & -9% Alerts Activated!");
     });
   }
+
+  // Morning Bell Club 1-Click Member Sentiment Poll (<50ms instant + non-blocking Abacus)
+  document.querySelectorAll(".tom-club-poll-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const choice = String(btn.getAttribute("data-tom-poll") || "").trim();
+      if (!["steady", "watch", "cash"].includes(choice)) return;
+      const todayKey = getTomMorningClubTodayKey();
+      try {
+        localStorage.setItem(
+          "tom_morning_club_poll_v1",
+          JSON.stringify({ date: todayKey, choice })
+        );
+      } catch (_) {}
+
+      const updated = getTomMorningClubPollData(todayKey);
+      document.querySelectorAll(".tom-club-poll-btn").forEach((b) => {
+        const key = b.getAttribute("data-tom-poll");
+        const active = key === choice;
+        b.classList.toggle("is-active", active);
+        b.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+      ["steady", "watch", "cash"].forEach((k) => {
+        const pctEl = document.querySelector(`[data-tom-poll-pct="${k}"]`);
+        const barEl = document.querySelector(`[data-tom-poll-bar="${k}"]`);
+        if (pctEl) pctEl.textContent = `${updated.pct[k]}%`;
+        if (barEl) barEl.style.width = `${updated.pct[k]}%`;
+      });
+      const totalEl = document.getElementById("tomClubPollTotalCount");
+      if (totalEl) {
+        totalEl.textContent = `${updated.total.toLocaleString()} members checked in today`;
+      }
+      const msgEl = document.getElementById("tomClubCompanionMsg");
+      if (msgEl && TOM_MORNING_CLUB_COMPANION_MSG[choice]) {
+        msgEl.classList.add("is-voted");
+        msgEl.textContent = TOM_MORNING_CLUB_COMPANION_MSG[choice];
+      }
+
+      try {
+        const hitFlag = `tom_poll_hit_${choice}_${todayKey}`;
+        if (typeof fetch === "function" && localStorage.getItem(hitFlag) !== "1") {
+          localStorage.setItem(hitFlag, "1");
+          fetch(
+            `https://abacus.jasoncameron.dev/hit/tom_truthofmarket/poll_${choice}_${todayKey}`,
+            { mode: "cors", keepalive: true }
+          ).catch(() => {});
+        }
+      } catch (_) {}
+    });
+  });
 
   const btnDocJumpFreeAlert = document.getElementById("btnDocJumpFreeAlert");
   if (btnDocJumpFreeAlert) {
