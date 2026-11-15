@@ -384,13 +384,12 @@ def check_lemonsqueezy_store_approval() -> dict:
             )
             if approved and not prev_approved:
                 alert_msg = (
-                    "🎉🎊 <b>[긴급 속보: Lemon Squeezy 스토어 #296100 최종 승인 완료!!]</b>\n"
-                    f"• <b>스토어 상태</b>: <code>plan: {plan}</code> (Live 실결제 활성화 완료!)\n"
-                    "• <b>적용 도메인</b>: https://truthofmarket.com &amp; https://kisfitglobal.com &amp; https://getbreakai.com\n"
-                    "• 이제 모든 VIP 실결제 체크아웃이 정상 가동됩니다!"
+                    "🎉🎊 <b>[총 회장님 직접 확인 건 — Lemon Squeezy 스토어 #296100 최종 승인 완료!]</b>\n"
+                    f"• <b>스토어 상태</b>: <code>plan: {plan}</code> (Live 실결제 활성화 완료)\n"
+                    "• <b>적용 도메인</b>: truthofmarket.com · kisfitglobal.com · getbreakai.com\n"
+                    "• 이제 모든 VIP 실결제 체크아웃이 Live 모드로 정상 가동됩니다!"
                 )
-                notify_division_bot("TOM", alert_msg)
-                notify_division_bot("KFG", alert_msg)
+                notify_division_bot("HQ", alert_msg)
             return {"checked": True, "approved": approved, "plan": plan}
     except Exception as e:
         return {"checked": False, "approved": False, "error": str(e)}
@@ -482,6 +481,38 @@ def execute_hourly_cycle(hour: int, notify: bool = True, force_all: bool = False
     except Exception as e:
         print(f"[LemonSqueezy Warning] {e}", file=sys.stderr)
 
+    # Daytime Silent 5-Corp Member Mailing & KFG Paid VIP Monthly Concierge Slot (07:00~18:00 KST, Zero Telegram Spam)
+    daytime_mailing_ok = False
+    if (7 <= hour <= 18) or force_all:
+        try:
+            composer_py = HQ_DIR / "text_automation_hq" / "daily_5div_mailing_composer.py"
+            if composer_py.exists():
+                mr = subprocess.run(
+                    [sys.executable, "-X", "utf8", str(composer_py), "--run-due", "--silent"],
+                    cwd=str(HQ_DIR / "text_automation_hq"),
+                    timeout=180,
+                    capture_output=True,
+                )
+                daytime_mailing_ok = (mr.returncode == 0)
+        except Exception as e:
+            print(f"[DaytimeMailingCRM Warning] {e}", file=sys.stderr)
+
+    # Daytime Smart SEO Hub Slot (14:00 KST): Zero-Browser, Zero-Noise 5-Corp Charter SEO Hub & Rubric Refresh
+    daytime_hub_ok = False
+    if hour == 14 or force_all:
+        try:
+            orch_py = HQ_DIR / "text_automation_hq" / "hq_daily_text_orchestrator.py"
+            if orch_py.exists():
+                hr = subprocess.run(
+                    [sys.executable, "-X", "utf8", str(orch_py), "--hub-only"],
+                    cwd=str(HQ_DIR / "text_automation_hq"),
+                    timeout=180,
+                    capture_output=True,
+                )
+                daytime_hub_ok = (hr.returncode == 0)
+        except Exception as e:
+            print(f"[DaytimeSEOHub Warning] {e}", file=sys.stderr)
+
     # Once-daily Market Close Freshness & Affiliate Expiration Self-Healing Watchdog
     # At 06:00-08:00 KST, pass --no-deploy so healed updates fold into the single morning promo commit
     if hour >= 6:
@@ -522,6 +553,8 @@ def execute_hourly_cycle(hour: int, notify: bool = True, force_all: bool = False
         },
         "result_summary": summary,
         "cross_audit_healed": audit_rep.get("total_healed", 0),
+        "daytime_mailing_crm_ok": daytime_mailing_ok,
+        "daytime_seo_hub_ok": daytime_hub_ok,
     }
     LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
     with open(LOG_FILE, "a", encoding="utf-8") as f:

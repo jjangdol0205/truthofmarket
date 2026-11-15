@@ -25,6 +25,7 @@
   <script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
   <script type="module" crossorigin src="/assets/index-BIziPp23.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/index-CaOpdap3.css" />
+  <script src="/hq_member_crm_client.js" defer></script>
   <script>
   /* === HQ Edge Real-Human Visitor, Free Email Signup & KPI Beacon (tom_truthofmarket) === */
   (function(){
@@ -49,6 +50,17 @@
         try {
           localStorage.setItem('tom_free_member_email', email);
           localStorage.setItem('tom_free_member_since', kst);
+          if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.registerMember === 'function') {
+            window.DreamCompanyCRM.registerMember({
+              div: 'TOM',
+              email: email,
+              nickname: '',
+              segment: 'retirement_401k_ira',
+              message: topicLabel || '',
+              lang: 'en-US',
+              website_hp: ''
+            });
+          }
           var wl = JSON.parse(localStorage.getItem('tom_free_watchlist') || '[]');
           if (topicLabel && wl.indexOf(topicLabel) === -1) {
             wl.push(topicLabel);
