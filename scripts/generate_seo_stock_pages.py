@@ -76,7 +76,8 @@ COMPARE_PAIRS: List[tuple[str, str, str]] = [
     ("CELH", "PEP", "High-Growth Energy Drink Ignition vs Beverage Titan"),
 ]
 
-HEAD_BEACON_SCRIPT = """  <script>
+HEAD_BEACON_SCRIPT = """  <script src="/hq_member_crm_client.js" defer></script>
+  <script>
   /* === HQ Edge Real-Human Visitor, Free Email Signup & KPI Beacon (tom_truthofmarket) === */
   (function(){
     try {
@@ -100,6 +101,17 @@ HEAD_BEACON_SCRIPT = """  <script>
         try {
           localStorage.setItem('tom_free_member_email', email);
           localStorage.setItem('tom_free_member_since', kst);
+          if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.registerMember === 'function') {
+            window.DreamCompanyCRM.registerMember({
+              div: 'TOM',
+              email: email,
+              nickname: '',
+              segment: 'retirement_401k_ira',
+              message: topicLabel || '',
+              lang: 'en-US',
+              website_hp: ''
+            });
+          }
           var wl = JSON.parse(localStorage.getItem('tom_free_watchlist') || '[]');
           if (topicLabel && wl.indexOf(topicLabel) === -1) {
             wl.push(topicLabel);

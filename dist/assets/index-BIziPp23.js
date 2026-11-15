@@ -3576,6 +3576,265 @@ function getTomMorningClubPollData(todayKey) {
     },
   };
 }
+const TOM_CRM_SEGMENTS = [
+  { id: "retirement_401k_ira", label: "401(k) / IRA Principal Defense" },
+  { id: "us_macro_sp500", label: "Daily US Macro & S&P 500" },
+  { id: "ai_semis_momentum", label: "Semiconductors & AI Leaders" },
+];
+function escapeTomCrmHtml(raw) {
+  return String(raw || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+function getTomCrmSegmentLabel(segId) {
+  const key = String(segId || "").trim();
+  const found = TOM_CRM_SEGMENTS.find((s) => s.id === key);
+  return found ? found.label : TOM_CRM_SEGMENTS[0].label;
+}
+function getStoredTomClubMember() {
+  try {
+    if (
+      typeof window !== "undefined" &&
+      window.DreamCompanyCRM &&
+      typeof window.DreamCompanyCRM.getLocalMember === "function"
+    ) {
+      const rec = window.DreamCompanyCRM.getLocalMember("TOM");
+      if (rec && rec.email) return rec;
+    }
+    if (typeof localStorage !== "undefined") {
+      const raw = localStorage.getItem("dc_member_TOM");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.email) return parsed;
+      }
+    }
+  } catch (_) {}
+  return null;
+}
+function registerTomClubMemberSafe(opts) {
+  const cleanEmail = String((opts && opts.email) || "").trim().toLowerCase();
+  const cleanNick = String((opts && opts.nickname) || "").trim();
+  const cleanSeg = String((opts && opts.segment) || "retirement_401k_ira").trim() || "retirement_401k_ira";
+  const cleanHp = String((opts && opts.website_hp) || "").trim();
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(cleanEmail)) {
+    return Promise.resolve({ ok: false, error: "INVALID_EMAIL" });
+  }
+
+  if (
+    typeof window !== "undefined" &&
+    window.DreamCompanyCRM &&
+    typeof window.DreamCompanyCRM.registerMember === "function"
+  ) {
+    return window.DreamCompanyCRM.registerMember({
+      div: "TOM",
+      email: cleanEmail,
+      nickname: cleanNick,
+      segment: cleanSeg,
+      lang: "en-US",
+      website_hp: cleanHp,
+    });
+  }
+
+  const nowIso = new Date().toISOString();
+  try {
+    if (typeof localStorage !== "undefined") {
+      localStorage.setItem(
+        "dc_member_TOM",
+        JSON.stringify({
+          div: "TOM",
+          email: cleanEmail,
+          nickname: cleanNick,
+          segment: cleanSeg,
+          joined_at: nowIso,
+        })
+      );
+      const qRaw = localStorage.getItem("dc_crm_sync_queue_v1");
+      const parsedQ = qRaw ? JSON.parse(qRaw) : [];
+      const queue = Array.isArray(parsedQ) ? parsedQ : [];
+      queue.push({
+        action: "register_member",
+        div: "TOM",
+        email: cleanEmail,
+        nickname: cleanNick,
+        segment: cleanSeg,
+        message: "",
+        notes: "",
+        lang: "en-US",
+        website_hp: cleanHp,
+        source_url: typeof window !== "undefined" && window.location ? window.location.href : "",
+        client_ts: nowIso,
+      });
+      localStorage.setItem("dc_crm_sync_queue_v1", JSON.stringify(queue.slice(-25)));
+    }
+  } catch (_) {}
+  return Promise.resolve({
+    ok: true,
+    queued_for_sync: true,
+    div: "TOM",
+    email: cleanEmail,
+    segment: cleanSeg,
+  });
+}
+function bindTomPasswordlessClubEvents(state, showToastFn) {
+  const panel = document.getElementById("tom-passwordless-club-signup");
+  if (!panel) return;
+
+  const form = document.getElementById("tom-club-signup-form");
+  const segHidden = document.getElementById("tom-club-segment-value");
+  const nickInput = document.getElementById("tom-club-nickname-input");
+  const emailInput = document.getElementById("tom-club-email-input");
+  const hpInput = document.getElementById("tom-club-hp-input");
+  const submitBtn = document.getElementById("tom-club-signup-btn");
+  const activeBar = document.getElementById("tom-club-active-member-bar");
+  const activeText = document.getElementById("tom-club-active-member-text");
+  const toggleBtn = document.getElementById("tom-club-update-toggle-btn");
+  const feedbackEl = document.getElementById("tom-club-signup-feedback");
+
+  const applyActiveMemberUi = (memberObj) => {
+    if (!memberObj || !memberObj.email) return;
+    const segId = memberObj.segment || "retirement_401k_ira";
+    const segLabel = getTomCrmSegmentLabel(segId);
+    if (activeText) {
+      activeText.textContent = `Morning Bell Member Active: ${memberObj.email} · Focus: ${segLabel}`;
+    }
+    if (activeBar) {
+      activeBar.style.display = "flex";
+    }
+    if (segHidden) segHidden.value = segId;
+    if (emailInput && !emailInput.value) emailInput.value = memberObj.email;
+    if (nickInput && memberObj.nickname && !nickInput.value) nickInput.value = memberObj.nickname;
+    panel.querySelectorAll(".tom-crm-seg-pill").forEach((pill) => {
+      const active = pill.getAttribute("data-tom-crm-seg") === segId;
+      pill.classList.toggle("is-active", active);
+      pill.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+  };
+
+  // Mount check for existing passwordless member
+  const existing = getStoredTomClubMember();
+  if (existing && existing.email) {
+    applyActiveMemberUi(existing);
+    if (form) form.style.display = "none";
+  }
+
+  panel.querySelectorAll(".tom-crm-seg-pill").forEach((pill) => {
+    pill.addEventListener("click", () => {
+      const chosen = String(pill.getAttribute("data-tom-crm-seg") || "retirement_401k_ira").trim();
+      if (segHidden) segHidden.value = chosen;
+      panel.querySelectorAll(".tom-crm-seg-pill").forEach((btn) => {
+        const isCurrent = btn.getAttribute("data-tom-crm-seg") === chosen;
+        btn.classList.toggle("is-active", isCurrent);
+        btn.setAttribute("aria-pressed", isCurrent ? "true" : "false");
+      });
+    });
+  });
+
+  if (toggleBtn && form) {
+    toggleBtn.addEventListener("click", () => {
+      const isHidden = form.style.display === "none";
+      form.style.display = isHidden ? "block" : "none";
+      toggleBtn.textContent = isHidden ? "Hide Editor" : "Update Email / Focus";
+      if (isHidden && emailInput) {
+        setTimeout(() => emailInput.focus(), 40);
+      }
+    });
+  }
+
+  panel.addEventListener("click", (ev) => {
+    const jumpLink = ev.target && ev.target.closest ? ev.target.closest("#tom-club-jump-manual-btn, .tom-crm-manual-jump-btn") : null;
+    if (!jumpLink) return;
+    ev.preventDefault();
+    const manualEl = document.getElementById("tomFreeStarterManual");
+    if (manualEl && manualEl.scrollIntoView) {
+      manualEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+
+  if (form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = String((emailInput && emailInput.value) || "").trim().toLowerCase();
+      const nickname = String((nickInput && nickInput.value) || "").trim();
+      const segment = String((segHidden && segHidden.value) || "retirement_401k_ira").trim() || "retirement_401k_ira";
+      const website_hp = String((hpInput && hpInput.value) || "").trim();
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+        if (feedbackEl) {
+          feedbackEl.className = "tom-crm-feedback is-error";
+          feedbackEl.style.display = "block";
+          feedbackEl.textContent = "Please enter a valid email address (for example, robert@email.com).";
+        }
+        if (emailInput) emailInput.focus();
+        return;
+      }
+
+      const defaultBtnLabel = "Join Free Morning Bell Club (3-Sec Access) ->";
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Activating 3-Sec Club Access...";
+      }
+
+      try {
+        await registerTomClubMemberSafe({ email, nickname, segment, website_hp });
+      } catch (_) {}
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = defaultBtnLabel;
+      }
+
+      if (state) state.freeMemberEmail = email;
+      try {
+        const kst = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+        if (typeof localStorage !== "undefined") {
+          localStorage.setItem("tom_free_member_email", email);
+          localStorage.setItem("tom_free_member_since", kst);
+        }
+        if (typeof window !== "undefined" && typeof window.trackTomFreeSignup === "function") {
+          window.trackTomFreeSignup(email);
+        }
+      } catch (_) {}
+
+      const topEmailInp = document.getElementById("tomMorningEmailInput");
+      if (topEmailInp) topEmailInp.value = email;
+      const topStatusEl = document.getElementById("tomMorningSignalStatus");
+      if (topStatusEl) {
+        topStatusEl.style.display = "block";
+        topStatusEl.style.color = "#34d399";
+        topStatusEl.textContent = `✅ Free Morning Signal Active (${email}) — Your 2 Bonus Watchlist Setups below are unlocked!`;
+      }
+      const bonusCardEl = document.getElementById("tomFreeMemberBonusCard");
+      if (bonusCardEl) bonusCardEl.style.display = "block";
+
+      const segLabel = getTomCrmSegmentLabel(segment);
+      applyActiveMemberUi({ email, nickname, segment });
+      form.style.display = "none";
+      if (toggleBtn) toggleBtn.textContent = "Update Email / Focus";
+
+      if (feedbackEl) {
+        feedbackEl.className = "tom-crm-feedback is-success";
+        feedbackEl.style.display = "block";
+        feedbackEl.innerHTML = `
+          <div class="tom-crm-feedback-copy">
+            <strong>✅ Passwordless Morning Bell Macro Club membership is active for ${escapeTomCrmHtml(email)}!</strong>
+            <span>${nickname ? `Welcome, ${escapeTomCrmHtml(nickname)} — ` : ""}Focus: <b>${escapeTomCrmHtml(segLabel)}</b> · Daily US Rates, Liquidity, S&amp;P/Semis &amp; 3-Color Regime Signals will arrive in your inbox before the opening bell.</span>
+          </div>
+          <a href="#tomFreeStarterManual" class="tom-crm-manual-jump-btn" id="tom-club-jump-manual-btn">
+            📘 Open Your Free $0 Safe Order Manual ->
+          </a>
+        `;
+      }
+
+      if (typeof showToastFn === "function") {
+        showToastFn("✅ Morning Bell Macro Club Membership Active!");
+      }
+    });
+  }
+}
 function renderHero(state) {
   const t = state.t;
   const kpis = state.backtestKpis || {};
@@ -3611,6 +3870,15 @@ function renderHero(state) {
   const clubCompanionText = clubPoll.choice
     ? TOM_MORNING_CLUB_COMPANION_MSG[clubPoll.choice]
     : "Tap your morning stance above to compare notes with fellow 401(k) & IRA members — zero login required.";
+  const existingClubMember = getStoredTomClubMember();
+  const hasActiveClubMember = Boolean(existingClubMember && existingClubMember.email);
+  const initialClubSeg =
+    (existingClubMember && existingClubMember.segment) || "retirement_401k_ira";
+  const initialClubSegLabel = getTomCrmSegmentLabel(initialClubSeg);
+  const initialClubEmail =
+    (existingClubMember && existingClubMember.email) || savedFreeEmail || "";
+  const initialClubNick =
+    (existingClubMember && existingClubMember.nickname) || "";
 
   return `
     <section class="hero">
@@ -3771,6 +4039,111 @@ function renderHero(state) {
           aria-live="polite"
         >
           ${clubCompanionText}
+        </div>
+
+        <div
+          class="tom-crm-signup-panel"
+          id="tom-passwordless-club-signup"
+          role="region"
+          aria-label="Passwordless 3-Second Morning Bell Macro Club Membership"
+        >
+          <div class="tom-crm-top-row">
+            <span class="tom-crm-badge">FREE MEMBER BRIEFING · NO PASSWORD NEEDED</span>
+            <span class="tom-crm-trust-note">100% Free · 1-Click Unsubscribe Anytime</span>
+          </div>
+
+          <h3 class="tom-crm-heading">
+            Get Daily Morning US Macro &amp; 3-Color Safety Signals in Your Inbox.
+          </h3>
+          <p class="tom-crm-subcopy">
+            3-second passwordless club access. Choose your #1 focus and protect your retirement principal before the 9:30 AM opening bell.
+          </p>
+
+          <div
+            class="tom-crm-active-bar"
+            id="tom-club-active-member-bar"
+            style="display:${hasActiveClubMember ? "flex" : "none"};"
+          >
+            <span class="tom-crm-active-text" id="tom-club-active-member-text">
+              ${
+                hasActiveClubMember
+                  ? `Morning Bell Member Active: ${escapeTomCrmHtml(existingClubMember.email)} · Focus: ${escapeTomCrmHtml(initialClubSegLabel)}`
+                  : ""
+              }
+            </span>
+            <button type="button" class="tom-crm-update-toggle-btn" id="tom-club-update-toggle-btn">
+              Update Email / Focus
+            </button>
+          </div>
+
+          <form
+            class="tom-crm-form"
+            id="tom-club-signup-form"
+            novalidate
+            style="display:${hasActiveClubMember ? "none" : "block"};"
+          >
+            <input type="hidden" id="tom-club-segment-value" name="segment" value="${escapeTomCrmHtml(initialClubSeg)}" />
+            <input
+              type="text"
+              name="website_hp"
+              id="tom-club-hp-input"
+              tabindex="-1"
+              autocomplete="off"
+              aria-hidden="true"
+              style="display:none;"
+            />
+
+            <div class="tom-crm-seg-label">Tap Your #1 Morning Focus (1-Click):</div>
+            <div class="tom-crm-seg-grid" role="group" aria-label="Choose your #1 Morning Bell focus">
+              ${TOM_CRM_SEGMENTS.map(
+                (seg) => `
+                <button
+                  type="button"
+                  class="tom-crm-seg-pill ${initialClubSeg === seg.id ? "is-active" : ""}"
+                  data-tom-crm-seg="${seg.id}"
+                  aria-pressed="${initialClubSeg === seg.id ? "true" : "false"}"
+                >
+                  ${escapeTomCrmHtml(seg.label)}
+                </button>
+              `
+              ).join("")}
+            </div>
+
+            <div class="tom-crm-inputs-row">
+              <input
+                type="text"
+                id="tom-club-nickname-input"
+                class="tom-crm-input tom-crm-input-nick"
+                name="nickname"
+                autocomplete="given-name"
+                value="${escapeTomCrmHtml(initialClubNick)}"
+                placeholder="First name (optional)"
+                aria-label="First name (optional)"
+              />
+              <input
+                type="email"
+                id="tom-club-email-input"
+                class="tom-crm-input tom-crm-input-email"
+                name="email"
+                required
+                autocomplete="email"
+                value="${escapeTomCrmHtml(initialClubEmail)}"
+                placeholder="Enter your best email for Morning Bell alerts"
+                aria-label="Email address"
+              />
+              <button type="submit" id="tom-club-signup-btn" class="tom-crm-submit-btn">
+                Join Free Morning Bell Club (3-Sec Access) ->
+              </button>
+            </div>
+          </form>
+
+          <div
+            class="tom-crm-feedback"
+            id="tom-club-signup-feedback"
+            role="status"
+            aria-live="polite"
+            style="display:none;"
+          ></div>
         </div>
       </div>
 
@@ -7221,6 +7594,12 @@ function bindEvents() {
         if (typeof window.trackTomFreeSignup === "function") {
           window.trackTomFreeSignup(email);
         }
+        registerTomClubMemberSafe({
+          email,
+          nickname: "",
+          segment: "retirement_401k_ira",
+          website_hp: "",
+        }).catch(() => {});
       } catch (_) {}
       if (statusEl) {
         statusEl.style.display = "block";
@@ -7280,6 +7659,9 @@ function bindEvents() {
       } catch (_) {}
     });
   });
+
+  // Passwordless 3-Second Morning Bell Macro Club Membership (#tom-passwordless-club-signup)
+  bindTomPasswordlessClubEvents(state, showToast);
 
   const jumpToTomMorningBox = () => {
     const box = document.getElementById("tomMorningSignalBox");

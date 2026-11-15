@@ -105,6 +105,7 @@ const indexHtml = `<!DOCTYPE html>
   }
   </script>
   <script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
+  <script src="/hq_member_crm_client.js" defer></script>
   <script type="module" crossorigin src="./assets/${jsFileName}"></script>
   <link rel="stylesheet" crossorigin href="./assets/${cssFileName}" />
 </head>

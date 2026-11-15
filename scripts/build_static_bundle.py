@@ -282,8 +282,9 @@ def main() -> None:
   }}
   </script>
   <script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
-  <script type="module" crossorigin src="./assets/{js_name}?v=20261115manual"></script>
-  <link rel="stylesheet" crossorigin href="./assets/{css_name}?v=20261115manual" />
+  <script src="/hq_member_crm_client.js" defer></script>
+  <script type="module" crossorigin src="./assets/{js_name}?v=20261115crm"></script>
+  <link rel="stylesheet" crossorigin href="./assets/{css_name}?v=20261115crm" />
   <script>
   /* === HQ Edge Real-Human Visitor & KPI Beacon (tom_truthofmarket) === */
   (function(){{
@@ -378,6 +379,26 @@ def main() -> None:
         if sp.exists():
             sp.unlink()
 
+    # Explicitly sync passwordless CRM client & mailing endpoint config across public, frontend/dist, dist, and root
+    for crm_name in ("hq_member_crm_client.js", "hq-mailing-endpoint.json"):
+        root_crm = ROOT / crm_name
+        pub_crm = PUB / crm_name
+        src_crm = pub_crm if pub_crm.exists() else root_crm
+        if crm_name == "hq-mailing-endpoint.json" and root_crm.exists() and pub_crm.exists():
+            try:
+                r_cfg = json.loads(root_crm.read_text(encoding="utf-8"))
+                p_cfg = json.loads(pub_crm.read_text(encoding="utf-8"))
+                if r_cfg.get("webapp_exec_url") and not p_cfg.get("webapp_exec_url"):
+                    src_crm = root_crm
+                elif root_crm.stat().st_mtime > pub_crm.stat().st_mtime and r_cfg.get("webapp_exec_url") == p_cfg.get("webapp_exec_url"):
+                    src_crm = root_crm
+            except Exception:
+                pass
+        elif root_crm.exists() and pub_crm.exists() and root_crm.stat().st_mtime > pub_crm.stat().st_mtime:
+            src_crm = root_crm
+        if src_crm.exists() and src_crm.resolve() != pub_crm.resolve():
+            shutil.copy2(src_crm, pub_crm)
+
     for target_dir in [DIST, ROOT_DIST, ROOT]:
         assets_d = target_dir / "assets"
         assets_d.mkdir(parents=True, exist_ok=True)
@@ -391,6 +412,11 @@ def main() -> None:
                 shutil.copytree(item, dest, dirs_exist_ok=True)
             else:
                 shutil.copy2(item, dest)
+        for crm_name in ("hq_member_crm_client.js", "hq-mailing-endpoint.json"):
+            pub_crm = PUB / crm_name
+            dest_crm = target_dir / crm_name
+            if pub_crm.exists() and pub_crm.resolve() != dest_crm.resolve():
+                shutil.copy2(pub_crm, dest_crm)
         # Write index.html, rss.xml, feed.xml, and static_api/health.json AFTER copying public files
         (target_dir / "index.html").write_text(index_html, encoding="utf-8")
         (target_dir / "rss.xml").write_text(rss_xml, encoding="utf-8")

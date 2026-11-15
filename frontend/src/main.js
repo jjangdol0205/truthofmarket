@@ -41,6 +41,8 @@ import {
   getTomMorningClubTodayKey,
   getTomMorningClubPollData,
   TOM_MORNING_CLUB_COMPANION_MSG,
+  bindTomPasswordlessClubEvents,
+  registerTomClubMemberSafe,
 } from "./components/Hero.js";
 import { renderChartBlindTest } from "./components/ChartBlindTest.js";
 import { renderProofCard } from "./components/ProofCard.js";
@@ -541,6 +543,12 @@ function bindEvents() {
         if (typeof window.trackTomFreeSignup === "function") {
           window.trackTomFreeSignup(email);
         }
+        registerTomClubMemberSafe({
+          email,
+          nickname: "",
+          segment: "retirement_401k_ira",
+          website_hp: "",
+        }).catch(() => {});
       } catch (_) {}
       if (statusEl) {
         statusEl.style.display = "block";
@@ -600,6 +608,9 @@ function bindEvents() {
       } catch (_) {}
     });
   });
+
+  // Passwordless 3-Second Morning Bell Macro Club Membership (#tom-passwordless-club-signup)
+  bindTomPasswordlessClubEvents(state, showToast);
 
   const jumpToTomMorningBox = () => {
     const box = document.getElementById("tomMorningSignalBox");
