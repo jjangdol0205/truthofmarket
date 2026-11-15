@@ -160,14 +160,15 @@ def build_vip_briefing_with_news(client: httpx.Client) -> str:
     qqq_close = float(semi.get("qqq_close", 690.49))
 
     lines = [
-        f"👑 <b>[TRUTHOFMARKET QUANT DESK] DAILY ORDER BOOK &amp; BREAKING NEWS ({as_of})</b>",
+        f"🟢🟡🔴 <b>[TRUTHOFMARKET 8:30 AM SAFETY BRIEF] US STOCK TRAFFIC LIGHT ({as_of})</b>",
+        "<i>Calm Capital Protection for Self-Directed, IRA &amp; 401(k) Investors</i>",
         "━━━━━━━━━━━━━━━━━━━━",
-        "🧭 <b>1. Semiconductor ($SMH) &amp; Healthcare ($XLV) Barbell Desk</b>",
-        f"• <b>Fear &amp; Greed Score</b>: <b>{fg_score:.1f} / 100 ({regime_en})</b>",
-        f"• <b>Target Barbell Allocation</b>: <b>{smh_w}% $SMH : {xlv_w}% $XLV</b>",
-        f"• <b>$SMH</b>: <b>${smh_close:.2f}</b> ({smh_dd:.2f}% 52W DD | RSI {smh_rsi:.1f}) | <b>$XLV</b>: <b>${xlv_close:.2f}</b> | <b>$QQQ</b>: <b>${qqq_close:.2f}</b>",
+        "🧭 <b>1. Semiconductor ($SMH) &amp; Healthcare ($XLV) Cushion Check</b>",
+        f"• <b>Chip Fear &amp; Greed</b>: <b>{fg_score:.1f} / 100 ({regime_en})</b>",
+        f"• <b>Retirement Cushion Balance</b>: <b>{smh_w}% $SMH (Growth) : {xlv_w}% $XLV (Defense)</b>",
+        f"• <b>$SMH</b>: <b>${smh_close:.2f}</b> ({smh_dd:.2f}% off 52W High | RSI {smh_rsi:.1f}) | <b>$XLV</b>: <b>${xlv_close:.2f}</b> | <b>$QQQ</b>: <b>${qqq_close:.2f}</b>",
         "",
-        f"🎯 <b>2. Right-Side PW-RSI Ignition Order Book ({len(ignition)} Active Signals — #1 Free Showcase + #{min(2, len(ignition))}~#{min(5, len(ignition))} Pro VIP Locked)</b>",
+        f"🎯 <b>2. Today's Green-Light Uptrend Leaders ({len(ignition)} Active — #1 Free Showcase + #{min(2, len(ignition))}~#{min(5, len(ignition))} Pro VIP)</b>",
     ]
 
     for idx, s in enumerate(ignition[:5], start=1):
@@ -179,18 +180,18 @@ def build_vip_briefing_with_news(client: httpx.Client) -> str:
         sector = html.escape(str(s.get("sector") or "US Growth"))
         if idx == 1:
             lines.append(
-                f"🔥 <b>#{idx} [FREE SHOWCASE] ${s['ticker']}</b> ({html.escape(s.get('name_en', s['ticker']))}) — <b>${close_p:.2f}</b> | Score <b>{int(s['score'])}/100</b>\n"
-                f"   └ 🎯 Entry: <code>${trg_p:.2f}</code> | 🛑 Stop(-9%): <code>${stp_p:.2f}</code> | 💰 TP1(+100%): <code>${tp1_p:.2f}</code> | 📊 Vol: <code>{vol_surge:.2f}x</code>"
+                f"🟢 <b>#{idx} [FREE SHOWCASE] ${s['ticker']}</b> ({html.escape(s.get('name_en', s['ticker']))}) — <b>${close_p:.2f}</b> | Safety Score <b>{int(s['score'])}/100</b>\n"
+                f"   └ 🎯 Green Entry: <code>${trg_p:.2f}</code> | 🔴 -9% Safety Exit: <code>${stp_p:.2f}</code> | 💰 +100% Half-Lock: <code>${tp1_p:.2f}</code>"
             )
         else:
             lines.append(
-                f"🔒 <b>#{idx} $████ [PRO VIP ONLY — {sector}]</b> — Score <b>{int(s['score'])}/100</b> | 10D Vol Surge <b>{vol_surge:.2f}x</b>\n"
-                f"   └ 🎯 Entry: <code>$███.██</code> | 🛑 Stop(-9%): <code>$███.██</code> | 💰 TP1(+100%): <code>$███.██</code> 👉 <a href=\"{LS_MONTHLY_URL}\">Unlock Pro VIP</a>"
+                f"🔒 <b>#{idx} $████ [PRO VIP LEADER — {sector}]</b> — Safety Score <b>{int(s['score'])}/100</b> | Buying Surge <b>{vol_surge:.2f}x</b>\n"
+                f"   └ 🎯 Green Entry: <code>$███.██</code> | 🔴 -9% Safety Exit: <code>$███.██</code> | 💰 +100% Half-Lock: <code>$███.██</code> 👉 <a href=\"{LS_MONTHLY_URL}\">Unlock Pro VIP</a>"
             )
 
     lines.extend([
         "",
-        "📰 <b>3. Live Wall Street News Radar ($SMH · $XLV · 72-Equity Universe)</b>",
+        "📰 <b>3. Live Market Headlines ($SMH · $XLV · Core Holdings)</b>",
     ])
 
     etf_news = fetch_ticker_news(client, "SMH", max_items=1) + fetch_ticker_news(client, "XLV", max_items=1)

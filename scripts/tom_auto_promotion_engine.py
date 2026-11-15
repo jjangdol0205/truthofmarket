@@ -39,6 +39,34 @@ TELEGRAPH_ACCT_PATH = ROOT_DIR / "data" / "tom_telegraph_account.json"
 BACKLINKS_LOG_PATH = ROOT_DIR / "data" / "tom_external_backlinks.json"
 INDEXNOW_KEY = "94e2c81f70a44d5eb63918ac4f02d715"
 
+TOM_RETAIL_INVESTOR_THEMES = [
+    {
+        "slug": "daily-us-quant-regime-brief.html",
+        "lead_hook": "Falling chip stocks trap dip-buyers for years—check your stock's -9% exit line free.",
+        "angle_title": "Morning 3-Color Stock Safety Check & -9% Protection Floor",
+    },
+    {
+        "slug": "smh-xlv-80-20-barbell-drawdown-study.html",
+        "lead_hook": "One tech crash after 50 can erase years of hard-earned retirement gains.",
+        "angle_title": "Protecting IRA & 401(k) Tech Gains With an 80:20 Semiconductor-Healthcare Cushion",
+    },
+    {
+        "slug": "rule-1-minus-9-percent-stop-loss-math.html",
+        "lead_hook": "A -50% stock loss demands a +100% rally just to get even.",
+        "angle_title": "Why Retail Investors Use a Calm -9% Safety Line Instead of Hoping & Bag-Holding",
+    },
+    {
+        "slug": "pw-rsi-right-side-breakout-methodology.html",
+        "lead_hook": "Buying 'cheap' stocks in a downtrend locks up your cash for years.",
+        "angle_title": "Green-Light Uptrends Only: Waiting for Real Institutional Buying Before Entering",
+    },
+    {
+        "slug": "daily-us-quant-regime-brief.html",
+        "lead_hook": "Check your top stock's Green-Yellow-Red safety signal in 10 seconds before the bell.",
+        "angle_title": "8:30 AM US Market Safety Traffic Light for Individual & Retirement Investors",
+    },
+]
+
 
 def load_json(path: Path, default):
     try:
@@ -141,8 +169,13 @@ def run_daily_telegraph_and_syndication(semi: dict, stocks: list, dry_run: bool 
     lead_stop = round(lead_close * 0.91, 2)
     lead_tp1 = round(lead_close * 2.0, 2)
 
-    canonical_url = "https://truthofmarket.com/insights/daily-us-quant-regime-brief.html"
-    title = f"[US Quant Close · {as_of}] $SMH Fear & Greed at {fg:.1f}/100 ({regime}) & {rec_smh}:{rec_xlv} Barbell Audit"
+    day_ord = datetime.now(timezone.utc).date().toordinal()
+    theme = TOM_RETAIL_INVESTOR_THEMES[day_ord % len(TOM_RETAIL_INVESTOR_THEMES)]
+    target_slug = theme["slug"]
+    if not (ROOT_DIR / "frontend" / "public" / "insights" / target_slug).exists():
+        target_slug = "daily-us-quant-regime-brief.html"
+    canonical_url = f"https://truthofmarket.com/insights/{target_slug}"
+    title = f"[US Stock Safety Brief · {as_of}] {theme['angle_title']} ($SMH {fg:.1f}/100 · {regime})"
 
     stock_bullets = []
     md_rows = []
@@ -152,30 +185,31 @@ def run_daily_telegraph_and_syndication(semi: dict, stocks: list, dry_run: bool 
         sc = int(st.get("score") or 75)
         stp = round(c * 0.91, 2)
         tp1 = round(c * 2.0, 2)
+        sig_badge = "🟢 Green Uptrend" if sc >= 70 else ("🟡 Yellow Watch" if sc >= 50 else "🔴 Red Caution")
         stock_bullets.append(
             {
                 "tag": "li",
                 "children": [
-                    {"tag": "strong", "children": [f"${t} (${c:.2f}, PW-RSI {sc}/100): "]},
-                    f"Rule 1 (-9% Hard Stop) ${stp:.2f} | Rule 3 (+100% TP1) ${tp1:.2f} — ",
-                    {"tag": "a", "attrs": {"href": f"https://truthofmarket.com/stocks/{t.lower()}.html"}, "children": [f"${t} Audit"]},
+                    {"tag": "strong", "children": [f"${t} (${c:.2f} · {sig_badge}, Score {sc}/100): "]},
+                    f"🔴 -9% Safety Exit Line ${stp:.2f} | 🎯 +100% Half-Profit Target ${tp1:.2f} — ",
+                    {"tag": "a", "attrs": {"href": f"https://truthofmarket.com/stocks/{t.lower()}.html"}, "children": [f"Check ${t} Safety Card"]},
                 ],
             }
         )
-        md_rows.append(f"| **${t}** | ${c:.2f} | {sc}/100 | ${stp:.2f} | ${tp1:.2f} | [Audit](https://truthofmarket.com/stocks/{t.lower()}.html) |")
+        md_rows.append(f"| **${t}** | ${c:.2f} | {sig_badge} ({sc}/100) | ${stp:.2f} | ${tp1:.2f} | [Safety Card](https://truthofmarket.com/stocks/{t.lower()}.html) |")
 
     nodes = [
         {
             "tag": "blockquote",
             "children": [
-                f"Post-Close Readout ({as_of}): Semiconductor Fear & Greed = {fg:.1f}/100 ({regime}). $SMH closed at ${smh_c:.2f} ({smh_dd:+.2f}% 52W DD) vs $XLV at ${xlv_c:.2f}. Active Contrarian Barbell: {rec_smh}% $SMH : {rec_xlv}% $XLV."
+                f"8:30 AM Investor Safety Readout ({as_of}): Semiconductor Fear & Greed = {fg:.1f}/100 ({regime}). $SMH closed at ${smh_c:.2f} ({smh_dd:+.2f}% off 52-week high) vs defensive healthcare $XLV at ${xlv_c:.2f}. Recommended Retirement & Swing Cushion: {rec_smh}% $SMH : {rec_xlv}% $XLV."
             ],
         },
         {
             "tag": "p",
             "children": [
-                "Buying falling knives below a declining 60-day moving average traps capital for years, while cutting losers mechanically at -9.0% keeps single-trade drawdowns recoverable with a routine +9.89% gain. Read the full post-close dispatch at ",
-                {"tag": "a", "attrs": {"href": canonical_url}, "children": ["RightSideAlpha Daily Quant Regime Brief"]},
+                "Individual and IRA/401(k) investors rarely lose money from missing one rally—most deep losses come from averaging down into falling stocks and letting a routine -9% dip turn into a -45% multi-year trap. Check your stock's 3-Color Traffic Light (🟢 Green Uptrend / 🟡 Yellow Watch / 🔴 -9% Exit Floor) and sign up with 1 email for our free 8:30 AM Stock Safety Brief at ",
+                {"tag": "a", "attrs": {"href": canonical_url}, "children": ["TruthOfMarket Daily US Stock Safety Brief"]},
                 ".",
             ],
         },
@@ -186,7 +220,7 @@ def run_daily_telegraph_and_syndication(semi: dict, stocks: list, dry_run: bool 
         div_code="TOM",
         account_file=TELEGRAPH_ACCT_PATH,
         short_name="RightSideAlpha",
-        author_name="RightSideAlpha Quant Desk",
+        author_name="TruthOfMarket US Stock Safety Desk",
         author_url="https://truthofmarket.com",
         title=title,
         content_nodes=nodes,
@@ -210,65 +244,72 @@ def run_daily_telegraph_and_syndication(semi: dict, stocks: list, dry_run: bool 
     elif not tg_url and registry:
         tg_url = registry[-1].get("url", "")
 
-    # Zero-Shadowban 2-Post Thread (Post #1: <=15-word B2C 3-sec hook, ZERO URLs, max 2 cashtags!)
+    # Zero-Shadowban 2-Post Thread (Post #1: <=15-word B2C 3-sec hook, ZERO URLs, max 2 cashtags: $SMH and $XLV!)
     main_hook = (
-        f"Falling chip stocks trap dip-buyers for years—check your stock's -9% exit line free.\n\n"
-        f"Semi Fear & Greed sits at {fg:.1f}/100 ({regime}); $SMH is {smh_dd:+.1f}% off highs (${smh_c:.2f}) with {rec_smh}:{rec_xlv} $XLV barbell.\n"
-        f"Leader {lead_tkr}: ${lead_close:.2f} (stop ${lead_stop:.2f} / target ${lead_tp1:.2f})."
+        f"{theme['lead_hook']}\n\n"
+        f"Chip Fear & Greed sits at {fg:.1f}/100 ({regime}); $SMH is {smh_dd:+.1f}% off highs (${smh_c:.2f}) with an {rec_smh}:{rec_xlv} $XLV cushion.\n"
+        f"Top stock {lead_tkr}: ${lead_close:.2f} (safety stop ${lead_stop:.2f})."
     )[:275]
 
     reply_link = (
-        f"Check any US ticker's -9% stop line & 72-stock regime table free in 3 seconds:\n"
+        f"🟢🟡🔴 Check any US stock's 3-Color Safety Signal & get free 8:30 AM email alerts (1-click signup):\n"
         f"{canonical_url}?utm_source=social_thread&utm_medium=organic"
     )
 
     longform_md = (
         f"# {title}\n\n"
         f"*Originally published at [{canonical_url}]({canonical_url}).*\n\n"
-        f"Most retail drawdowns happen in two predictable stages: averaging down below a falling 60-day moving average, "
-        f"and holding losers past -25% where math turns asymmetric (-50% requires +100% just to break even).\n\n"
-        f"## 1. Semiconductor Fear & Greed Snapshot ({as_of})\n"
-        f"- **Composite Score**: `{fg:.1f}/100` ({regime})\n"
-        f"- **$SMH Close**: `${smh_c:.2f}` ({smh_dd:+.2f}% from 52W High)\n"
-        f"- **$XLV Close**: `${xlv_c:.2f}`\n"
-        f"- **Active Allocation**: `{rec_smh}% $SMH : {rec_xlv}% $XLV` ([Interactive Backtest](https://truthofmarket.com/semi-fear-greed.html))\n\n"
-        f"## 2. Public PW-RSI Watchlist & -9.0% Risk Floors\n"
-        f"| Ticker | Close | PW-RSI | -9% Hard Stop | +100% TP1 | Terminal |\n"
+        f"If you manage your own brokerage account, IRA, or 401(k), protecting principal matters far more than chasing Wall Street hype. "
+        f"Most painful retail losses happen in two steps: buying 'cheap' stocks while they are still sliding below their 60-day trend, "
+        f"and holding past -25% until a -50% hole demands a +100% rally just to get back to even.\n\n"
+        f"## 1. Today's 3-Color Market Traffic Light ({as_of})\n"
+        f"- **Semiconductor Fear & Greed Score**: `{fg:.1f}/100` (**{regime}**)\n"
+        f"- **$SMH (Semiconductors)**: `${smh_c:.2f}` ({smh_dd:+.2f}% from 52-week high)\n"
+        f"- **$XLV (Healthcare Cushion)**: `${xlv_c:.2f}`\n"
+        f"- **Calm Barbell Balance**: `{rec_smh}% $SMH : {rec_xlv}% $XLV` ([Test Your Allocation Free](https://truthofmarket.com/semi-fear-greed.html))\n\n"
+        f"## 2. How to Read Today's 3-Color Stock Signals\n"
+        f"- **🟢 Green (Safe Uptrend)**: Institutional buying + trend support confirmed.\n"
+        f"- **🟡 Yellow (Wait & Watch)**: Choppy or extended—avoid FOMO chasing.\n"
+        f"- **🔴 Red (-9.0% Safety Floor)**: Mechanical exit line from your entry price so one bad pick never damages retirement savings.\n\n"
+        f"| Ticker | Last Close | 3-Color Signal | 🔴 -9% Safety Line | 🎯 +100% Profit Lock | Free Check |\n"
         f"|---|---|---|---|---|---|\n"
         + "\n".join(md_rows)
-        + "\n\n---\n*Educational quantitative research only; not personalized financial advice.*\n"
+        + "\n\n## 3. Free 8:30 AM Stock Safety Email & Position Doctor\n"
+        + "- **1-Field Free Morning Alert**: Enter your email on [truthofmarket.com](https://truthofmarket.com/) to get our calm 8:30 AM EST Green-Yellow-Red summary before the opening bell.\n"
+        + "- **3-Second Position Doctor**: Type your ticker and cost basis to see your exact -9% safety floor instantly.\n"
+        + "\n---\n*Educational market research for self-directed investors; not personalized financial or tax advice.*\n"
     )
 
     reddit_md = (
-        f"# [Quant Data] Semiconductor Fear & Greed ({fg:.1f}/100) vs $SMH:$XLV 80:20 Rebalancing Study ({as_of})\n\n"
-        f"Sharing today's systematic regime readout from our 26.8-year post-washout tracking model:\n\n"
-        f"1. **Current Regime**: $SMH closed at ${smh_c:.2f} ({smh_dd:+.2f}% off its 52W high), placing the 7-factor Semi Fear & Greed score at **{fg:.1f}/100 ({regime})**.\n"
-        f"2. **Why Barbell Beats Cash Drag**: Pairing high-beta semis with defensive healthcare ($XLV at ${xlv_c:.2f}) provides non-correlated dry powder to rotate 10% into deep washouts (>20% DD) without suffering 3x leveraged ETF volatility decay.\n"
-        f"3. **Single-Name Risk Rule**: Every equity entry uses a hard -9.0% stop from cost basis (-9% needs +9.89% to recover vs +100% needed after -50%) and a 55-day +8% time stop.\n\n"
-        f"Curious how other systematic swing traders here handle sector-specific drawdown thresholds vs broad index VIX filters?"
+        f"# [Portfolio Risk Study] Protecting Tech/IRA Gains With a -9% Safety Floor & {rec_smh}:{rec_xlv} $SMH/$XLV Cushion ({as_of})\n\n"
+        f"For fellow self-directed & retirement-account investors holding semiconductors (`$NVDA`, `$AVGO`, `$AMD`, `$SMH`), here is today's post-close risk snapshot from our 26.8-year rules-based study:\n\n"
+        f"1. **Where Chip Sentiment Stands Today**: `$SMH` closed at `${smh_c:.2f}` (`{smh_dd:+.2f}%` off its 52-week high), putting our 7-factor Semiconductor Fear & Greed gauge at **{fg:.1f}/100 ({regime})**.\n"
+        f"2. **Why an 80:20 Healthcare Cushion Helps You Sleep at Night**: Pairing growth chips (`$SMH`) with steady healthcare (`$XLV` at `${xlv_c:.2f}`) keeps reserve buying power ready during >20% tech pullbacks without leveraged-ETF decay.\n"
+        f"3. **The -9% vs -50% Recovery Math**: A `-9.0%` exit only takes a routine `+9.89%` gain to recover, whereas holding a falling stock down `-50%` requires `+100%` just to break even.\n\n"
+        f"How are other 40s–60s investors here balancing tech exposure vs capital protection heading into next week?"
     )
 
     substack_md = (
         f"# {title}\n\n"
-        f"> **3-Second Portfolio Check:** Falling chip stocks trap dip-buyers for years—check your stock's mechanical -9% exit floor free at [truthofmarket.com](https://truthofmarket.com/).\n\n"
+        f"> **10-Second Morning Check:** Falling chip stocks trap dip-buyers for years—check any US stock's 🟢 Green / 🟡 Yellow / 🔴 -9% safety line free at [truthofmarket.com](https://truthofmarket.com/).\n\n"
         + longform_md
-        + "\n### Unlock Real-Time Right-Side Ignition Signals & Institutional API\n"
-        + "- **Free 3-Second Position Doctor & $SMH:$XLV Simulator**: https://truthofmarket.com/\n"
-        + "- **Pro VIP ($29/mo) & Lifetime Institutional Pass ($199)**: Unlocks all 11 locked Ignition tickers + TradingView Pine v5 scripts across both TruthOfMarket.com and GetBreakAI.com.\n"
-        + "- **Institutional JSON API & Research Sponsorship Desk**: `beable9489@gmail.com`\n"
+        + "\n### Upgrade When Ready: Full 72-Stock Signals & Pro VIP\n"
+        + "- **Free 8:30 AM Safety Email & 3-Second Position Doctor**: https://truthofmarket.com/\n"
+        + "- **Pro VIP ($29/mo) & Lifetime Pass ($199 — One-Time)**: Unlocks all 11 unmasked Top Uptrend Leaders, exact entry/exit alerts, and TradingView Pine v5 indicators.\n"
+        + "- **Research & Partnership Desk**: `beable9489@gmail.com`\n"
     )
 
     tradingview_idea_md = (
-        f"TITLE: $SMH Fear & Greed at {fg:.1f}/100 ({regime}) — {rec_smh}:{rec_xlv} $XLV Barbell & -9% Stop Audit ({as_of})\n\n"
-        f"1. REGIME SUMMARY:\n"
-        f"$SMH closed at ${smh_c:.2f} ({smh_dd:+.2f}% off its 52-week high), placing our 7-factor Semiconductor Fear & Greed model at {fg:.1f}/100 ({regime}).\n"
-        f"Active systematic allocation: {rec_smh}% $SMH / {rec_xlv}% $XLV contrarian barbell.\n\n"
-        f"2. MECHANICAL RISK DISCIPLINE (26.8-YEAR BACKTEST):\n"
-        f"- Never average down below a declining 60-day moving average.\n"
-        f"- Rule 1: Hard -9.0% stop from cost basis (requires only +9.89% to recover vs +100% after a -50% drawdown).\n"
-        f"- Rule 3: Harvest 50% at +100% (2x) so remaining shares ride on house money.\n"
-        f"- Top public watchlist readout: ${lead_tkr} at ${lead_close:.2f} (Rule 1 floor ${lead_stop:.2f} / 2x target ${lead_tp1:.2f}).\n\n"
-        f"(Educational quantitative study only, not financial advice. Full 72-ticker table in profile terminal: truthofmarket.com)\n"
+        f"TITLE: $SMH Fear & Greed at {fg:.1f}/100 ({regime}) — {rec_smh}:{rec_xlv} $XLV Cushion & -9% Safety Floor ({as_of})\n\n"
+        f"1. PLAIN-ENGLISH MARKET READOUT:\n"
+        f"$SMH closed at ${smh_c:.2f} ({smh_dd:+.2f}% off its 52-week high), placing our 7-factor Semiconductor Fear & Greed gauge at {fg:.1f}/100 ({regime}).\n"
+        f"Current capital-protection balance: {rec_smh}% $SMH / {rec_xlv}% $XLV healthcare cushion.\n\n"
+        f"2. 3 CALM RULES FOR INDIVIDUAL & RETIREMENT ACCOUNTS (26.8-YEAR STUDY):\n"
+        f"- Wait for a Green Uptrend: Avoid averaging down below a falling 60-day trend line.\n"
+        f"- Rule 1 (-9.0% Safety Exit): A -9% stop needs only +9.89% to recover, versus +100% needed after a -50% slide.\n"
+        f"- Rule 3 (+100% Half-Lock): Sell half at 2x so remaining shares ride stress-free.\n"
+        f"- Top public showcase stock: ${lead_tkr} at ${lead_close:.2f} (-9% safety floor ${lead_stop:.2f} / 2x target ${lead_tp1:.2f}).\n\n"
+        f"(Educational study only, not financial advice. Free 3-Color Stock Checker & 8:30 AM Alert: truthofmarket.com)\n"
     )
 
     syn_res = dispatch_zero_ban_text_bundle(
@@ -276,11 +317,11 @@ def run_daily_telegraph_and_syndication(semi: dict, stocks: list, dry_run: bool 
         canonical_domain="truthofmarket.com",
         canonical_url=canonical_url,
         title=title,
-        summary=f"$SMH Fear & Greed at {fg:.1f}/100 ({regime}); {rec_smh}:{rec_xlv} $SMH:$XLV barbell & PW-RSI watchlist.",
+        summary=f"8:30 AM 3-Color US Stock Safety Brief: $SMH {fg:.1f}/100 ({regime}), {rec_smh}:{rec_xlv} $SMH:$XLV cushion & -9% exit floors.",
         main_social_hook=main_hook,
         reply_social_link=reply_link,
         longform_markdown=longform_md,
-        tags=["quant", "stocks", "investing", "datascience"],
+        tags=["stocks", "investing", "retirement", "semiconductors"],
         platform_extras={
             "reddit_r_algotrading_value_post.md": reddit_md,
             "substack_linkedin_newsletter_edition.md": substack_md,
