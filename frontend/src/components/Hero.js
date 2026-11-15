@@ -357,6 +357,86 @@ export function renderHero(state) {
   `;
 }
 
+export function renderFreeStarterManual(state) {
+  const cfg = (state && state.config) || {};
+  const lsMonthly =
+    cfg.ls_site1_monthly_url ||
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en";
+  const lsLtd =
+    cfg.ls_site1_ltd_url ||
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en";
+
+  return `
+    <section class="tom-starter-manual-section" id="tomFreeStarterManual" aria-label="$0 Free Public Product: US Brokerage App & Safe Order Starter Manual">
+      <div class="tom-manual-top-row">
+        <span class="tom-manual-free-pill">📘 $0 FREE PUBLIC PRODUCT · OPEN TO ALL INVESTORS</span>
+        <span class="tom-manual-broker-pill">🏦 Fidelity · Charles Schwab · Vanguard Ready</span>
+      </div>
+
+      <h2 class="tom-manual-heading">
+        US Brokerage App &amp; Safe Order Starter Manual ($0 Free Edition)
+      </h2>
+      <p class="tom-manual-lead">
+        Whether you are placing your very first self-directed trade or managing a lifelong <b>401(k) / IRA</b> nest egg, learn the 3 calm brokerage habits that stop 9:30 AM price traps, shield your principal automatically, and pay steady monthly interest while waiting in cash.
+      </p>
+
+      <div class="tom-manual-steps-grid">
+        <button type="button" class="tom-manual-step-card btn-open-tom-manual-step" data-manual-step="tomManualStep1">
+          <span class="tom-manual-step-badge step-b1">STEP 1 · SAFE BUYING</span>
+          <strong class="tom-manual-step-title">Limit Order vs. Market Order</strong>
+          <span class="tom-manual-step-desc">
+            Why tapping &ldquo;Market Order&rdquo; at 9:30 AM ET risks overpaying &mdash; and how to place a safe <b>Limit Order</b> in 3 taps on Fidelity, Schwab, or Vanguard.
+          </span>
+          <span class="tom-manual-step-cta">Read Step 1 Guide →</span>
+        </button>
+
+        <button type="button" class="tom-manual-step-card btn-open-tom-manual-step" data-manual-step="tomManualStep2">
+          <span class="tom-manual-step-badge step-b2">STEP 2 · PRINCIPAL SHIELD</span>
+          <strong class="tom-manual-step-title">Automatic -8% to -9% Stop-Loss</strong>
+          <span class="tom-manual-step-desc">
+            How to set an automatic <b>Stop Order</b> safety net right after buying so a sudden market drop can never cut your retirement account in half.
+          </span>
+          <span class="tom-manual-step-cta">Read Step 2 Guide →</span>
+        </button>
+
+        <button type="button" class="tom-manual-step-card btn-open-tom-manual-step" data-manual-step="tomManualStep3">
+          <span class="tom-manual-step-badge step-b3">STEP 3 · RED-LIGHT CASH YIELD</span>
+          <strong class="tom-manual-step-title">401(k) / IRA Cash MMF Cushion</strong>
+          <span class="tom-manual-step-desc">
+            When the signal is 🔴 Red (Protect Cash), park idle cash in <b>SPAXX</b>, <b>SWVXX</b>, or <b>VMFXX</b> to collect monthly interest until the next 🟢 Green light.
+          </span>
+          <span class="tom-manual-step-cta">Read Step 3 Guide →</span>
+        </button>
+      </div>
+
+      <div class="tom-manual-cta-bar">
+        <button type="button" class="tom-manual-open-btn" id="btnOpenTomStarterManual">
+          📖 Open Complete $0 Starter Manual (Print / Save PDF) →
+        </button>
+        <button type="button" class="tom-manual-sec-btn btn-jump-tom-morning">
+          📧 Get Free Daily 3-Color Signals ($0)
+        </button>
+        <a
+          href="${lsMonthly}"
+          class="tom-manual-vip-link lemonsqueezy-button"
+          data-direct-ls="1"
+          data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
+        >
+          ⚡ Monthly VIP ($29/mo)
+        </a>
+        <a
+          href="${lsLtd}"
+          class="tom-manual-vip-link is-ltd lemonsqueezy-button"
+          data-direct-ls="1"
+          data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b"
+        >
+          👑 Lifetime VIP ($199)
+        </a>
+      </div>
+    </section>
+  `;
+}
+
 export function renderEasyProfitSimulator(state) {
   const kpis = state.backtestKpis || {};
   const netCagrStr = Number(kpis.cagr_after_tax_pct ?? kpis.us_only_net_cagr_pct ?? 17.81).toFixed(2);

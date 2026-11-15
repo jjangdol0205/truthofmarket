@@ -3812,6 +3812,85 @@ function renderHero(state) {
     </section>
   `;
 }
+function renderFreeStarterManual(state) {
+  const cfg = (state && state.config) || {};
+  const lsMonthly =
+    cfg.ls_site1_monthly_url ||
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en";
+  const lsLtd =
+    cfg.ls_site1_ltd_url ||
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en";
+
+  return `
+    <section class="tom-starter-manual-section" id="tomFreeStarterManual" aria-label="$0 Free Public Product: US Brokerage App & Safe Order Starter Manual">
+      <div class="tom-manual-top-row">
+        <span class="tom-manual-free-pill">📘 $0 FREE PUBLIC PRODUCT · OPEN TO ALL INVESTORS</span>
+        <span class="tom-manual-broker-pill">🏦 Fidelity · Charles Schwab · Vanguard Ready</span>
+      </div>
+
+      <h2 class="tom-manual-heading">
+        US Brokerage App &amp; Safe Order Starter Manual ($0 Free Edition)
+      </h2>
+      <p class="tom-manual-lead">
+        Whether you are placing your very first self-directed trade or managing a lifelong <b>401(k) / IRA</b> nest egg, learn the 3 calm brokerage habits that stop 9:30 AM price traps, shield your principal automatically, and pay steady monthly interest while waiting in cash.
+      </p>
+
+      <div class="tom-manual-steps-grid">
+        <button type="button" class="tom-manual-step-card btn-open-tom-manual-step" data-manual-step="tomManualStep1">
+          <span class="tom-manual-step-badge step-b1">STEP 1 · SAFE BUYING</span>
+          <strong class="tom-manual-step-title">Limit Order vs. Market Order</strong>
+          <span class="tom-manual-step-desc">
+            Why tapping &ldquo;Market Order&rdquo; at 9:30 AM ET risks overpaying &mdash; and how to place a safe <b>Limit Order</b> in 3 taps on Fidelity, Schwab, or Vanguard.
+          </span>
+          <span class="tom-manual-step-cta">Read Step 1 Guide →</span>
+        </button>
+
+        <button type="button" class="tom-manual-step-card btn-open-tom-manual-step" data-manual-step="tomManualStep2">
+          <span class="tom-manual-step-badge step-b2">STEP 2 · PRINCIPAL SHIELD</span>
+          <strong class="tom-manual-step-title">Automatic -8% to -9% Stop-Loss</strong>
+          <span class="tom-manual-step-desc">
+            How to set an automatic <b>Stop Order</b> safety net right after buying so a sudden market drop can never cut your retirement account in half.
+          </span>
+          <span class="tom-manual-step-cta">Read Step 2 Guide →</span>
+        </button>
+
+        <button type="button" class="tom-manual-step-card btn-open-tom-manual-step" data-manual-step="tomManualStep3">
+          <span class="tom-manual-step-badge step-b3">STEP 3 · RED-LIGHT CASH YIELD</span>
+          <strong class="tom-manual-step-title">401(k) / IRA Cash MMF Cushion</strong>
+          <span class="tom-manual-step-desc">
+            When the signal is 🔴 Red (Protect Cash), park idle cash in <b>SPAXX</b>, <b>SWVXX</b>, or <b>VMFXX</b> to collect monthly interest until the next 🟢 Green light.
+          </span>
+          <span class="tom-manual-step-cta">Read Step 3 Guide →</span>
+        </button>
+      </div>
+
+      <div class="tom-manual-cta-bar">
+        <button type="button" class="tom-manual-open-btn" id="btnOpenTomStarterManual">
+          📖 Open Complete $0 Starter Manual (Print / Save PDF) →
+        </button>
+        <button type="button" class="tom-manual-sec-btn btn-jump-tom-morning">
+          📧 Get Free Daily 3-Color Signals ($0)
+        </button>
+        <a
+          href="${lsMonthly}"
+          class="tom-manual-vip-link lemonsqueezy-button"
+          data-direct-ls="1"
+          data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
+        >
+          ⚡ Monthly VIP ($29/mo)
+        </a>
+        <a
+          href="${lsLtd}"
+          class="tom-manual-vip-link is-ltd lemonsqueezy-button"
+          data-direct-ls="1"
+          data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b"
+        >
+          👑 Lifetime VIP ($199)
+        </a>
+      </div>
+    </section>
+  `;
+}
 function renderEasyProfitSimulator(state) {
   const kpis = state.backtestKpis || {};
   const netCagrStr = Number(kpis.cagr_after_tax_pct ?? kpis.us_only_net_cagr_pct ?? 17.81).toFixed(2);
@@ -5766,6 +5845,128 @@ function renderModals(state) {
       </div>
     </div>
 
+    <!-- $0 FREE PUBLIC PRODUCT: US BROKERAGE APP & SAFE ORDER STARTER MANUAL MODAL -->
+    <div class="modal-backdrop" id="tomStarterManualModal" role="dialog" aria-modal="true" aria-labelledby="tomStarterManualModalTitle">
+      <div class="modal tom-manual-modal-dialog">
+        <div class="tom-manual-modal-header">
+          <div style="min-width:0;">
+            <div class="tom-manual-modal-kicker">📘 $0 FREE PUBLIC PRODUCT · FIDELITY · CHARLES SCHWAB · VANGUARD</div>
+            <h3 id="tomStarterManualModalTitle" class="tom-manual-modal-title">
+              US Brokerage App &amp; Safe Order Starter Manual
+            </h3>
+          </div>
+          <div class="tom-manual-modal-actions">
+            <button type="button" class="tom-manual-print-btn" id="btnPrintTomStarterManual">
+              🖨️ Print / Save PDF
+            </button>
+            <button type="button" class="tom-manual-close-btn" id="btnCloseTomStarterManual">
+              ✕ Close
+            </button>
+          </div>
+        </div>
+
+        <div class="tom-manual-jump-nav" role="navigation" aria-label="Manual Chapters">
+          <button type="button" class="tom-manual-jump-pill" data-manual-target="tomManualStep1">Step 1: Safe Limit Order</button>
+          <button type="button" class="tom-manual-jump-pill" data-manual-target="tomManualStep2">Step 2: -9% Safety Stop</button>
+          <button type="button" class="tom-manual-jump-pill" data-manual-target="tomManualStep3">Step 3: 401(k)/IRA Cash MMF</button>
+        </div>
+
+        <div class="tom-manual-modal-body" id="tomStarterManualPrintArea">
+          <article class="tom-manual-chapter" id="tomManualStep1">
+            <div class="tom-manual-chapter-tag tag-green">STEP 1 OF 3 · SAFE BUYING HABIT</div>
+            <h4>Fidelity · Charles Schwab · Vanguard Safe Buying: Limit Order vs. Market Order</h4>
+            <p>
+              <b>Why 9:30 AM ET Market Orders Are Risky:</b> During the first 15 to 30 minutes after the 9:30 AM Eastern opening bell, buyer and seller quotes often swing wide apart. Tapping <b>Market Order</b> tells your brokerage app, <i>&ldquo;Buy immediately at whatever price sellers ask right now&rdquo;</i> — which can cause you to overpay by 2% to 5% in seconds. A <b>Limit Order</b> sets the exact maximum dollar price you are willing to pay per share, and never a penny higher.
+            </p>
+            <div class="tom-manual-broker-list">
+              <div class="tom-manual-broker-item">
+                <strong>🟢 Fidelity App / Fidelity.com (3 Taps):</strong>
+                <span>1) Tap <b>Transact → Trade</b> and enter the stock symbol &amp; share count. 2) Change <b>Order Type</b> from <i>Market</i> to <b>Limit</b> and type your maximum buy price. 3) Keep Time-in-Force on <b>Day</b>, tap <b>Preview</b>, and confirm.</span>
+              </div>
+              <div class="tom-manual-broker-item">
+                <strong>🔵 Charles Schwab Mobile / Web (3 Taps):</strong>
+                <span>1) Tap <b>Trade</b>, enter the ticker, and choose <b>Buy</b>. 2) Under <b>Order Type</b>, switch to <b>Limit</b> and enter your target Limit Price. 3) Select <b>Timing: Day</b>, review total dollar cost, and tap <b>Place Order</b>.</span>
+              </div>
+              <div class="tom-manual-broker-item">
+                <strong>🔴 Vanguard App / Vanguard.com (3 Taps):</strong>
+                <span>1) Open <b>Transact → Buy &amp; sell stocks and ETFs</b>. 2) Enter ticker &amp; shares, then select <b>Order Type: Limit</b> (never Market at the open). 3) Enter your maximum share price, select <b>Duration: Day</b>, and submit.</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="tom-manual-chapter" id="tomManualStep2">
+            <div class="tom-manual-chapter-tag tag-amber">STEP 2 OF 3 · AUTOMATIC PRINCIPAL PROTECTION</div>
+            <h4>Setting Your Automatic -8% to -9% Stop-Loss Safety Net</h4>
+            <p>
+              <b>How You Prevent Steep Account Losses Forever:</b> A small <b>-8% to -9% exit</b> only needs about <b>+9% to +10%</b> on your next trade to recover in full. By contrast, holding a falling stock down <b>-50%</b> requires a <b>+100% double</b> just to break even. Placing an automatic <b>Stop Order</b> right after your buy fills protects your principal even while you are away from your phone.
+            </p>
+            <div class="tom-manual-broker-list">
+              <div class="tom-manual-broker-item">
+                <strong>🧮 Simple 5-Second Floor Math:</strong>
+                <span>Multiply your buy price by <b>0.91</b> (for a -9% safety stop) or <b>0.92</b> (for an -8% safety stop). <i>Example: Bought at <b>$50.00</b> × 0.91 = <b>$45.50</b> Stop Price.</i></span>
+              </div>
+              <div class="tom-manual-broker-item">
+                <strong>🛡️ Entering the Stop Order (Fidelity · Schwab · Vanguard):</strong>
+                <span>Open your owned position and tap <b>Sell</b> → Change <b>Order Type</b> to <b>Stop</b> (or <b>Stop Limit</b> with a limit $0.25 below your stop) → Enter <b>$45.50</b> as your Stop Price → Choose <b>GTC (Good &rsquo;Til Canceled)</b> so your safety net stays active automatically every trading day.</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="tom-manual-chapter" id="tomManualStep3">
+            <div class="tom-manual-chapter-tag tag-sky">STEP 3 OF 3 · RED-LIGHT CASH YIELD GUIDE</div>
+            <h4>401(k) / IRA Red-Light Cash Cushion: Earning Steady MMF Interest</h4>
+            <p>
+              <b>Patience Pays Monthly Interest:</b> When our daily traffic light shows 🔴 <b>Red (Protect Cash)</b>, staying on the sidelines does <i>not</i> mean earning 0%. Parking uninvested retirement cash in your broker&rsquo;s government <b>Money Market Fund (MMF)</b> keeps a steady $1.00 target share value while paying monthly yield until the next confirmed 🟢 <b>Green (Safe Uptrend)</b> appears:
+            </p>
+            <div class="tom-manual-broker-list">
+              <div class="tom-manual-broker-item">
+                <strong>🏦 Fidelity — SPAXX (Fidelity Government Money Market Fund):</strong>
+                <span>Default core cash sweep for most Fidelity IRAs and brokerage accounts. Uninvested cash earns monthly government money-market interest automatically and stays 100% ready when you place a buy order.</span>
+              </div>
+              <div class="tom-manual-broker-item">
+                <strong>🏦 Charles Schwab — SWVXX (Schwab Value Advantage Money Fund):</strong>
+                <span>In Schwab IRAs or brokerage accounts, tap <b>Trade → Mutual Funds</b> and buy <b>SWVXX</b> ($0 transaction fee) to earn full money-market yield on sidelined cash; selling settles the very next business day.</span>
+              </div>
+              <div class="tom-manual-broker-item">
+                <strong>🏦 Vanguard — VMFXX (Vanguard Federal Money Market Fund):</strong>
+                <span>Default Vanguard settlement fund — every dollar of sidelined cash automatically earns federal money-market yield while you wait calmly for safe green-light setups.</span>
+              </div>
+            </div>
+          </article>
+
+          <div class="tom-manual-funnel-box no-print-tom">
+            <div class="tom-manual-funnel-title">
+              🚦 Ready to Put These 3 Safe Habits to Work Every Morning?
+            </div>
+            <p class="tom-manual-funnel-sub">
+              Use our free daily <b>🟢 Green / 🟡 Yellow / 🔴 Red</b> morning safety brief — or unlock all 72 US stock setups, exact buy triggers, and -9% safety stops with VIP access:
+            </p>
+            <div class="tom-manual-funnel-btns">
+              <button type="button" class="tom-manual-funnel-free" id="btnModalJumpTomFreeSignal">
+                📧 Step 1: Join Free 8:30 AM ET 3-Color Brief ($0)
+              </button>
+              <a
+                href="${lsMonthly}"
+                class="tom-manual-funnel-paid lemonsqueezy-button"
+                data-direct-ls="1"
+                data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
+              >
+                ⚡ Start Monthly VIP — $29/mo
+              </a>
+              <a
+                href="${lsLtd}"
+                class="tom-manual-funnel-paid is-ltd lemonsqueezy-button"
+                data-direct-ls="1"
+                data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b"
+              >
+                👑 Get Lifetime VIP — $199 (Save 43%)
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- TOAST NOTIFICATION -->
     <div class="toast" id="toastBox">Action completed</div>
   `;
@@ -6762,6 +6963,7 @@ function renderRightSideView() {
   const t = state.t;
   return `
     ${renderHero(state)}
+    ${renderFreeStarterManual(state)}
     <section style="margin-bottom:12px;">
       ${renderPositionDoctorForm(state)}
     </section>
@@ -7079,15 +7281,95 @@ function bindEvents() {
     });
   });
 
+  const jumpToTomMorningBox = () => {
+    const box = document.getElementById("tomMorningSignalBox");
+    const inp = document.getElementById("tomMorningEmailInput");
+    if (box && box.scrollIntoView) box.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => {
+      if (inp) inp.focus();
+    }, 250);
+  };
+
   const btnDocJumpFreeAlert = document.getElementById("btnDocJumpFreeAlert");
   if (btnDocJumpFreeAlert) {
-    btnDocJumpFreeAlert.addEventListener("click", () => {
-      const box = document.getElementById("tomMorningSignalBox");
-      const inp = document.getElementById("tomMorningEmailInput");
-      if (box && box.scrollIntoView) box.scrollIntoView({ behavior: "smooth", block: "center" });
+    btnDocJumpFreeAlert.addEventListener("click", jumpToTomMorningBox);
+  }
+
+  document.querySelectorAll(".btn-jump-tom-morning").forEach((btn) => {
+    btn.addEventListener("click", jumpToTomMorningBox);
+  });
+
+  // $0 Free US Brokerage App & Safe Order Starter Manual Modal
+  const tomStarterManualModal = document.getElementById("tomStarterManualModal");
+  const openTomStarterManual = (stepId) => {
+    if (!tomStarterManualModal) return;
+    tomStarterManualModal.style.display = "flex";
+    if (stepId) {
       setTimeout(() => {
-        if (inp) inp.focus();
-      }, 250);
+        const targetEl = document.getElementById(stepId);
+        if (targetEl && targetEl.scrollIntoView) {
+          targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 60);
+    }
+  };
+
+  const btnOpenTomStarterManual = document.getElementById("btnOpenTomStarterManual");
+  if (btnOpenTomStarterManual) {
+    btnOpenTomStarterManual.addEventListener("click", () => openTomStarterManual(""));
+  }
+
+  document.querySelectorAll(".btn-open-tom-manual-step").forEach((card) => {
+    card.addEventListener("click", () => {
+      openTomStarterManual(card.getAttribute("data-manual-step") || "");
+    });
+  });
+
+  document.querySelectorAll(".tom-manual-jump-pill").forEach((pill) => {
+    pill.addEventListener("click", () => {
+      const tid = pill.getAttribute("data-manual-target");
+      const targetEl = tid ? document.getElementById(tid) : null;
+      if (targetEl && targetEl.scrollIntoView) {
+        targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  });
+
+  const btnCloseTomStarterManual = document.getElementById("btnCloseTomStarterManual");
+  if (btnCloseTomStarterManual && tomStarterManualModal) {
+    btnCloseTomStarterManual.addEventListener("click", () => {
+      tomStarterManualModal.style.display = "none";
+    });
+  }
+
+  if (tomStarterManualModal) {
+    tomStarterManualModal.addEventListener("click", (e) => {
+      if (e.target === tomStarterManualModal) {
+        tomStarterManualModal.style.display = "none";
+      }
+    });
+  }
+
+  const btnPrintTomStarterManual = document.getElementById("btnPrintTomStarterManual");
+  if (btnPrintTomStarterManual) {
+    btnPrintTomStarterManual.addEventListener("click", () => {
+      try {
+        document.body.classList.add("printing-tom-manual");
+        window.print();
+        setTimeout(() => {
+          document.body.classList.remove("printing-tom-manual");
+        }, 600);
+      } catch (_) {
+        document.body.classList.remove("printing-tom-manual");
+      }
+    });
+  }
+
+  const btnModalJumpTomFreeSignal = document.getElementById("btnModalJumpTomFreeSignal");
+  if (btnModalJumpTomFreeSignal) {
+    btnModalJumpTomFreeSignal.addEventListener("click", () => {
+      if (tomStarterManualModal) tomStarterManualModal.style.display = "none";
+      jumpToTomMorningBox();
     });
   }
 
@@ -9133,7 +9415,7 @@ async function loadAllData() {
 async function init() {
   window.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
-      ["licenseModal", "telegramModal", "configModal", "researchModal", "legalModal", "pwRsiModal", "stockDetailModal"].forEach((id) => {
+      ["licenseModal", "telegramModal", "configModal", "researchModal", "legalModal", "pwRsiModal", "stockDetailModal", "tomStarterManualModal"].forEach((id) => {
         const el = document.getElementById(id);
         if (el && el.style.display === "flex") {
           el.style.display = "none";

@@ -36,6 +36,7 @@ import {
 import { renderHeader } from "./components/Header.js";
 import {
   renderHero,
+  renderFreeStarterManual,
   renderEasyProfitSimulator,
   getTomMorningClubTodayKey,
   getTomMorningClubPollData,
@@ -282,6 +283,7 @@ function renderRightSideView() {
   const t = state.t;
   return `
     ${renderHero(state)}
+    ${renderFreeStarterManual(state)}
     <section style="margin-bottom:12px;">
       ${renderPositionDoctorForm(state)}
     </section>
@@ -599,15 +601,95 @@ function bindEvents() {
     });
   });
 
+  const jumpToTomMorningBox = () => {
+    const box = document.getElementById("tomMorningSignalBox");
+    const inp = document.getElementById("tomMorningEmailInput");
+    if (box && box.scrollIntoView) box.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => {
+      if (inp) inp.focus();
+    }, 250);
+  };
+
   const btnDocJumpFreeAlert = document.getElementById("btnDocJumpFreeAlert");
   if (btnDocJumpFreeAlert) {
-    btnDocJumpFreeAlert.addEventListener("click", () => {
-      const box = document.getElementById("tomMorningSignalBox");
-      const inp = document.getElementById("tomMorningEmailInput");
-      if (box && box.scrollIntoView) box.scrollIntoView({ behavior: "smooth", block: "center" });
+    btnDocJumpFreeAlert.addEventListener("click", jumpToTomMorningBox);
+  }
+
+  document.querySelectorAll(".btn-jump-tom-morning").forEach((btn) => {
+    btn.addEventListener("click", jumpToTomMorningBox);
+  });
+
+  // $0 Free US Brokerage App & Safe Order Starter Manual Modal
+  const tomStarterManualModal = document.getElementById("tomStarterManualModal");
+  const openTomStarterManual = (stepId) => {
+    if (!tomStarterManualModal) return;
+    tomStarterManualModal.style.display = "flex";
+    if (stepId) {
       setTimeout(() => {
-        if (inp) inp.focus();
-      }, 250);
+        const targetEl = document.getElementById(stepId);
+        if (targetEl && targetEl.scrollIntoView) {
+          targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 60);
+    }
+  };
+
+  const btnOpenTomStarterManual = document.getElementById("btnOpenTomStarterManual");
+  if (btnOpenTomStarterManual) {
+    btnOpenTomStarterManual.addEventListener("click", () => openTomStarterManual(""));
+  }
+
+  document.querySelectorAll(".btn-open-tom-manual-step").forEach((card) => {
+    card.addEventListener("click", () => {
+      openTomStarterManual(card.getAttribute("data-manual-step") || "");
+    });
+  });
+
+  document.querySelectorAll(".tom-manual-jump-pill").forEach((pill) => {
+    pill.addEventListener("click", () => {
+      const tid = pill.getAttribute("data-manual-target");
+      const targetEl = tid ? document.getElementById(tid) : null;
+      if (targetEl && targetEl.scrollIntoView) {
+        targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  });
+
+  const btnCloseTomStarterManual = document.getElementById("btnCloseTomStarterManual");
+  if (btnCloseTomStarterManual && tomStarterManualModal) {
+    btnCloseTomStarterManual.addEventListener("click", () => {
+      tomStarterManualModal.style.display = "none";
+    });
+  }
+
+  if (tomStarterManualModal) {
+    tomStarterManualModal.addEventListener("click", (e) => {
+      if (e.target === tomStarterManualModal) {
+        tomStarterManualModal.style.display = "none";
+      }
+    });
+  }
+
+  const btnPrintTomStarterManual = document.getElementById("btnPrintTomStarterManual");
+  if (btnPrintTomStarterManual) {
+    btnPrintTomStarterManual.addEventListener("click", () => {
+      try {
+        document.body.classList.add("printing-tom-manual");
+        window.print();
+        setTimeout(() => {
+          document.body.classList.remove("printing-tom-manual");
+        }, 600);
+      } catch (_) {
+        document.body.classList.remove("printing-tom-manual");
+      }
+    });
+  }
+
+  const btnModalJumpTomFreeSignal = document.getElementById("btnModalJumpTomFreeSignal");
+  if (btnModalJumpTomFreeSignal) {
+    btnModalJumpTomFreeSignal.addEventListener("click", () => {
+      if (tomStarterManualModal) tomStarterManualModal.style.display = "none";
+      jumpToTomMorningBox();
     });
   }
 
@@ -2653,7 +2735,7 @@ async function loadAllData() {
 async function init() {
   window.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
-      ["licenseModal", "telegramModal", "configModal", "researchModal", "legalModal", "pwRsiModal", "stockDetailModal"].forEach((id) => {
+      ["licenseModal", "telegramModal", "configModal", "researchModal", "legalModal", "pwRsiModal", "stockDetailModal", "tomStarterManualModal"].forEach((id) => {
         const el = document.getElementById(id);
         if (el && el.style.display === "flex") {
           el.style.display = "none";
