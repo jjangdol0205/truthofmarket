@@ -1,6 +1,6 @@
 const enCopy = {
   // Global Navigation & Header
-  brandSubtitle: "72 US STOCK BREAKOUT TERMINAL",
+  brandSubtitle: "RETIREMENT CASHFLOW & 72 US SIGNALS",
   navRightSide: "72 US Signals",
   navSemiFg: "Semi Fear & Greed",
   marketUniverseTag: "NYSE & NASDAQ · 72 US EQUITIES",
@@ -12,10 +12,10 @@ const enCopy = {
   btnUnlockPro: "Unlock Pro ($29/mo)",
 
   // RightSideAlpha Hero & KPIs (B2C 3-Second Hook)
-  heroTag: "RETIREMENT SAFETY & BREAKOUT SCANNER · 26.8-YR AUDITED DATA",
-  heroTitle: "Protect Your Retirement Nest Egg & Spot Safe Uptrends in 60 Seconds a Day.",
+  heroTag: "COMFORTABLE RETIREMENT & MONTHLY CASHFLOW ARCHITECT · 26.8-YR AUDITED DATA",
+  heroTitle: "Turn Your 401(k) & Savings Into Calm, Reliable Monthly Retirement Income.",
   heroDesc:
-    "Daily 3-color safety & breakout check across 72 liquid US stocks—enter only confirmed uptrends and protect every position with a clear -9% safety stop.",
+    "Design your monthly retirement paycheck in 30 seconds, protect your nest egg from -35% sequence-of-returns crashes, and rebalance SGOV, SCHD, JEPI & VOO calmly 2–4 times a year with our 3-Color Traffic Light.",
   pwRsiExplainerBtn: "How It Works",
   pwRsiModalTitle: "PW-RSI (Post-Washout Right-Side Ignition) Methodology",
   kpi1_label: "1Y 2x (+100%) Hit Rate",
@@ -85,9 +85,9 @@ const enCopy = {
   tool1Desc:
     "Enter any ticker, your buy price ($), and days held to get an instant Hold, Trim, or Exit diagnosis.",
   tool1Btn: "🩺 Diagnose Position Now",
-  tool2Title: "MODULE 02 · SEC FILING TURNAROUND RESEARCH",
-  tool2Sub: "10-K / 10-Q / 8-K Primary Source Equity Briefs",
-  tool2Desc: "Updated daily at 08:10 EST from primary SEC filings and EPS revisions:",
+  tool2Title: "MODULE 02 · RETIREMENT DIVIDEND & BALANCE-SHEET RESEARCH",
+  tool2Sub: "10-K / 10-Q Cashflow & Dividend Safety Briefs",
+  tool2Desc: "Updated daily at 08:10 EST from audited balance sheets, dividend coverage, and EPS stability:",
   tool2ViewBtn: "Open Institutional Research Archive",
   tool3Title: "MODULE 03 · TRADINGVIEW PINE SCRIPT v5 OVERLAY",
   tool3Sub: "Automated MA20/MA60 Ignition & Washout Plotter",

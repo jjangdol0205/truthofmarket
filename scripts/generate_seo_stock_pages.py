@@ -239,49 +239,65 @@ def load_stocks_and_semi() -> tuple[List[Dict[str, Any]], Dict[str, Any]]:
     return stocks, semi
 
 
-def build_ticker_directory_html(stocks: List[Dict[str, Any]], prefix: str = "/") -> str:
+SENIOR_EXCLUDED_SPECULATIVE = {"SOXL", "TQQQ", "COIN", "MSTR", "SQQQ", "SOXS", "MARA", "RIOT"}
+
+
+def build_ticker_directory_html(
+    stocks: List[Dict[str, Any]], prefix: str = "/", senior_home_only: bool = False
+) -> str:
     links = [
-        f'<a href="{prefix}semi-fear-greed.html" style="color:#f87171;text-decoration:none;font-weight:700;padding:3px 8px;border:1px solid rgba(248,113,113,0.3);border-radius:4px;background:rgba(239,68,68,0.08);">🧭 $SMH Semiconductor Fear &amp; Greed Index</a>'
+        f'<a href="{prefix}semi-fear-greed.html" style="color:#f87171;text-decoration:none;font-weight:800;padding:6px 12px;border:1px solid rgba(248,113,113,0.35);border-radius:6px;background:rgba(239,68,68,0.1);font-size:0.94rem;">🧭 $SMH &amp; $XLV Barbell Market Weather</a>'
     ]
-    for etf in ("SMH", "XLV", "SOXL", "QQQ"):
+    etf_list = ("SMH", "XLV", "QQQ") if senior_home_only else ("SMH", "XLV", "SOXL", "QQQ")
+    for etf in etf_list:
         links.append(
-            f'<a href="{prefix}stocks/{etf.lower()}.html" style="color:#38bdf8;text-decoration:none;font-weight:700;padding:3px 7px;border:1px solid rgba(56,189,248,0.25);border-radius:4px;">${etf} ETF</a>'
+            f'<a href="{prefix}stocks/{etf.lower()}.html" style="color:#38bdf8;text-decoration:none;font-weight:800;padding:6px 11px;border:1px solid rgba(56,189,248,0.3);border-radius:6px;font-size:0.94rem;">${etf} ETF</a>'
         )
     for s in stocks:
         tkr = str(s.get("ticker") or "").strip().upper()
         if not tkr or "." in tkr:
             continue
+        if senior_home_only and tkr in SENIOR_EXCLUDED_SPECULATIVE:
+            continue
         name_en = html.escape(str(s.get("name_en") or s.get("name") or tkr))
         links.append(
-            f'<a href="{prefix}stocks/{tkr.lower()}.html" title="{name_en} (${tkr}) PW-RSI Quant Analysis" style="color:#94a3b8;text-decoration:none;padding:2px 6px;border:1px solid rgba(148,163,184,0.16);border-radius:4px;font-family:JetBrains Mono,monospace;font-size:0.72rem;">${tkr}</a>'
+            f'<a href="{prefix}stocks/{tkr.lower()}.html" title="{name_en} (${tkr}) Retirement &amp; Trend Analysis" style="color:#cbd5e1;text-decoration:none;padding:5px 10px;border:1px solid rgba(148,163,184,0.22);border-radius:6px;font-family:JetBrains Mono,monospace;font-size:0.92rem;">${tkr}</a>'
         )
     joined = "\n      ".join(links)
     compare_links = []
     for t1, t2, label in COMPARE_PAIRS:
+        if senior_home_only and (t1 in SENIOR_EXCLUDED_SPECULATIVE or t2 in SENIOR_EXCLUDED_SPECULATIVE):
+            continue
         slug = f"{t1.lower()}-vs-{t2.lower()}.html"
         compare_links.append(
-            f'<a href="{prefix}compare/{slug}" title="${t1} vs ${t2} ({html.escape(label)}) PW-RSI Quant Comparison" style="color:#c084fc;text-decoration:none;padding:2px 7px;border:1px solid rgba(192,132,252,0.22);border-radius:4px;font-family:JetBrains Mono,monospace;font-size:0.71rem;background:rgba(168,85,247,0.06);">⚔️ ${t1} vs ${t2}</a>'
+            f'<a href="{prefix}compare/{slug}" title="${t1} vs ${t2} ({html.escape(label)}) Comparison" style="color:#d8b4fe;text-decoration:none;padding:5px 10px;border:1px solid rgba(192,132,252,0.28);border-radius:6px;font-family:JetBrains Mono,monospace;font-size:0.92rem;background:rgba(168,85,247,0.08);">⚖️ ${t1} vs ${t2}</a>'
         )
     compare_joined = "\n      ".join(compare_links)
-    return f"""  <section class="seo-directory-footer" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;overflow-x:hidden;margin:24px auto 32px;padding:18px 16px;background:#0b1220;border:1px solid #1e293b;border-radius:10px;color:#94a3b8;font-size:0.78rem;">
-    <div style="font-weight:800;color:#e2e8f0;margin-bottom:8px;font-size:0.84rem;letter-spacing:0.02em;">
-      📊 INSTITUTIONAL US EQUITY &amp; ETF COVERAGE DIRECTORY (72 STOCKS + $SMH/$XLV BARBELL)
+    core_banner = ""
+    if senior_home_only:
+        core_banner = """    <div style="margin-bottom:14px;padding:12px 14px;border-radius:10px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.35);color:#ecfdf5;font-size:1rem;line-height:1.65;">
+      <strong>🛡️ US 50–70s Retirement 4-Core Allocation Standard:</strong>
+      <b>$SGOV</b> (US T-Bill Cash Cushion) &middot; <b>$SCHD</b> (Dividend Growth) &middot; <b>$JEPI</b> (Monthly Dividend Paycheck) &middot; <b>$VOO</b> (S&amp;P 500 Core Compounding) — Rebalanced calmly 2–4 times per year via our 3-Color Traffic Light.
+    </div>\n"""
+    return f"""  <section class="seo-directory-footer" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;overflow-x:hidden;margin:24px auto 32px;padding:20px 18px;background:#0b1220;border:1px solid #1e293b;border-radius:12px;color:#cbd5e1;font-size:0.96rem;">
+{core_banner}    <div style="font-weight:800;color:#f8fafc;margin-bottom:8px;font-size:1.05rem;letter-spacing:0.01em;">
+      📊 US QUALITY EQUITY &amp; RETIREMENT ETF RESEARCH DIRECTORY
     </div>
-    <p style="margin:0 0 10px;color:#64748b;font-size:0.75rem;line-height:1.5;">
-      Direct institutional Post-Washout Right-Side Ignition (PW-RSI) audits, 52-week support/resistance levels, MA20/MA60 trendline triggers, and -9.0% mechanical stop-loss floors:
+    <p style="margin:0 0 12px;color:#cbd5e1;font-size:0.96rem;line-height:1.65;">
+      Plain-English trend health, dividend stability, 52-week support/resistance levels, and calm 2–4x/year rebalancing guides across liquid US leaders:
     </p>
-    <nav aria-label="US Stock and ETF Quantitative Research Directory" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:14px;">
+    <nav aria-label="US Stock and ETF Quantitative Research Directory" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px;">
       {joined}
     </nav>
-    <div style="font-weight:800;color:#e9d5ff;margin:10px 0 6px;font-size:0.8rem;letter-spacing:0.02em;">
-      ⚔️ HEAD-TO-HEAD US STOCK &amp; ETF QUANT COMPARISONS (50 HIGH-INTENT MATCHUPS)
+    <div style="font-weight:800;color:#e9d5ff;margin:12px 0 8px;font-size:1rem;letter-spacing:0.01em;">
+      ⚖️ SIDE-BY-SIDE US BLUE-CHIP &amp; ETF COMPARISONS
     </div>
-    <nav aria-label="Head-to-Head US Stock Quantitative Comparisons" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+    <nav aria-label="Head-to-Head US Stock Quantitative Comparisons" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
       {compare_joined}
     </nav>
-    <div style="margin-top:14px;padding-top:12px;border-top:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;font-size:0.76rem;color:#cbd5e1;">
-      <span>🏛️ <strong>Institutional JSON Data API, TradingView White-Label &amp; Newsletter Sponsorship Desk:</strong> License live 72-stock PW-RSI &amp; Semiconductor Fear &amp; Greed feeds or sponsor our daily quant brief.</span>
-      <a href="mailto:beable9489@gmail.com?subject=RightSideAlpha%20Institutional%20API%20%26%20Sponsorship%20Inquiry" style="color:#38bdf8;font-weight:800;text-decoration:none;padding:8px 12px;min-height:40px;display:inline-flex;align-items:center;max-width:100%;word-break:break-word;border:1px solid rgba(56,189,248,0.35);border-radius:6px;background:rgba(56,189,248,0.08);">✉️ Institutional &amp; Sponsorship Desk (beable9489@gmail.com) &rarr;</a>
+    <div style="margin-top:16px;padding-top:14px;border-top:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:0.95rem;color:#e2e8f0;">
+      <span>🏛️ <strong>Institutional Data API &amp; Retirement Advisory Desk:</strong> Questions about portfolio feeds or sponsorship? Reach our desk directly.</span>
+      <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Retirement%20%26%20Institutional%20Inquiry" style="color:#38bdf8;font-weight:800;text-decoration:none;padding:10px 16px;min-height:48px;display:inline-flex;align-items:center;max-width:100%;word-break:break-word;border:1px solid rgba(56,189,248,0.4);border-radius:8px;background:rgba(56,189,248,0.1);font-size:0.95rem;">✉️ Advisory &amp; Sponsorship Desk (beable9489@gmail.com) &rarr;</a>
     </div>
   </section>"""
 
@@ -1064,7 +1080,7 @@ def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "
                 shutil.copy2(src_f, target_dir / fname)
 
     print(f"[SEO] Generated /semi-fear-greed.html + {len(combined)} /stocks/<ticker>.html + {compare_count} /compare/ + /insights/ pages + clean sitemap.xml ({len(sitemap_urls)} URLs)")
-    return build_ticker_directory_html(stocks, prefix="/")
+    return build_ticker_directory_html(stocks, prefix="/", senior_home_only=True)
 
 
 if __name__ == "__main__":

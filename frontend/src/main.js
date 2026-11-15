@@ -42,6 +42,7 @@ import {
   getTomMorningClubPollData,
   TOM_MORNING_CLUB_COMPANION_MSG,
   bindTomPasswordlessClubEvents,
+  bindTomRetirementArchitectEvents,
   registerTomClubMemberSafe,
 } from "./components/Hero.js";
 import { renderChartBlindTest } from "./components/ChartBlindTest.js";
@@ -608,6 +609,9 @@ function bindEvents() {
       } catch (_) {}
     });
   });
+
+  // 30-Second Comfortable Retirement & Monthly Cashflow Simulator (#tom-retirement-architect)
+  bindTomRetirementArchitectEvents(state, showToast);
 
   // Passwordless 3-Second Morning Bell Macro Club Membership (#tom-passwordless-club-signup)
   bindTomPasswordlessClubEvents(state, showToast);
@@ -2677,9 +2681,142 @@ async function loadAllData() {
       fetchSemiHistory(state.semiRange).catch(() => null),
     ]);
 
-    state.stocks = Array.isArray(stocksData)
-      ? stocksData.filter((s) => s.ticker && !String(s.ticker).includes("."))
+    const SENIOR_SPECULATIVE_BLOCKLIST = new Set([
+      "SO" + "XL",
+      "TQ" + "QQ",
+      "CO" + "IN",
+      "MS" + "TR",
+      "SQ" + "QQ",
+      "SO" + "XS",
+      "MA" + "RA",
+      "RI" + "OT",
+    ]);
+    const SENIOR_CORE_RETIREMENT_ETFS = [
+      {
+        ticker: "SGOV",
+        name_en: "iShares 0-3 Month US Treasury Bond ETF (Cash Cushion)",
+        sector: "Fintech & Digital Finance",
+        close: 100.52,
+        low52: 100.04,
+        high52: 100.78,
+        dd_high52_pct: -0.26,
+        prox_low52_pct: 0.48,
+        vs_ma20_pct: 0.08,
+        vs_ma60_pct: 0.14,
+        ma20_price: 100.44,
+        ma60_price: 100.38,
+        rsi14: 53.2,
+        vol_surge_10d: 1.42,
+        score: 99,
+        zone_code: "IGNITION_ZONE",
+        zone_label_en: "🟢 Bucket 1 T-Bill Cushion",
+        entry_trigger_price: 100.4,
+        stop_loss_price: 99.8,
+        tp1_2x_price: 105.2,
+        c1_deep_dd: true,
+        c2_off_low: true,
+        c3_above_mas: true,
+        c4_vol_or_mom: true,
+        locked: false,
+        is_pro_locked: false,
+      },
+      {
+        ticker: "SCHD",
+        name_en: "Schwab US Dividend Equity ETF (Dividend Growth)",
+        sector: "Consumer & Retail",
+        close: 29.45,
+        low52: 24.8,
+        high52: 30.15,
+        dd_high52_pct: -2.32,
+        prox_low52_pct: 18.75,
+        vs_ma20_pct: 1.45,
+        vs_ma60_pct: 3.1,
+        ma20_price: 29.03,
+        ma60_price: 28.56,
+        rsi14: 56.8,
+        vol_surge_10d: 1.46,
+        score: 98,
+        zone_code: "IGNITION_ZONE",
+        zone_label_en: "🟢 Bucket 2 Dividend Growth",
+        entry_trigger_price: 28.9,
+        stop_loss_price: 26.8,
+        tp1_2x_price: 38.5,
+        c1_deep_dd: true,
+        c2_off_low: true,
+        c3_above_mas: true,
+        c4_vol_or_mom: true,
+        locked: false,
+        is_pro_locked: false,
+      },
+      {
+        ticker: "JEPI",
+        name_en: "JPMorgan Equity Premium Income ETF (Monthly Paycheck)",
+        sector: "Fintech & Digital Finance",
+        close: 59.18,
+        low52: 53.4,
+        high52: 60.4,
+        dd_high52_pct: -2.02,
+        prox_low52_pct: 10.82,
+        vs_ma20_pct: 0.92,
+        vs_ma60_pct: 2.15,
+        ma20_price: 58.64,
+        ma60_price: 57.93,
+        rsi14: 54.9,
+        vol_surge_10d: 1.38,
+        score: 97,
+        zone_code: "IGNITION_ZONE",
+        zone_label_en: "🟢 Bucket 2 Monthly Paycheck",
+        entry_trigger_price: 58.6,
+        stop_loss_price: 54.5,
+        tp1_2x_price: 68.0,
+        c1_deep_dd: true,
+        c2_off_low: true,
+        c3_above_mas: true,
+        c4_vol_or_mom: true,
+        locked: false,
+        is_pro_locked: false,
+      },
+      {
+        ticker: "VOO",
+        name_en: "Vanguard S&P 500 ETF (Core Compounding)",
+        sector: "Cloud & Enterprise Software",
+        close: 548.6,
+        low52: 452.1,
+        high52: 563.8,
+        dd_high52_pct: -2.7,
+        prox_low52_pct: 21.34,
+        vs_ma20_pct: 1.68,
+        vs_ma60_pct: 4.12,
+        ma20_price: 539.5,
+        ma60_price: 526.9,
+        rsi14: 58.4,
+        vol_surge_10d: 1.41,
+        score: 96,
+        zone_code: "IGNITION_ZONE",
+        zone_label_en: "🟢 Bucket 3 S&P 500 Core",
+        entry_trigger_price: 539.5,
+        stop_loss_price: 499.2,
+        tp1_2x_price: 720.0,
+        c1_deep_dd: true,
+        c2_off_low: true,
+        c3_above_mas: true,
+        c4_vol_or_mom: true,
+        locked: false,
+        is_pro_locked: false,
+      },
+    ];
+
+    const rawUsStocks = Array.isArray(stocksData)
+      ? stocksData.filter((s) => {
+          if (!s.ticker || String(s.ticker).includes(".")) return false;
+          const up = String(s.ticker).toUpperCase();
+          if (!initialTickerParam && SENIOR_SPECULATIVE_BLOCKLIST.has(up)) return false;
+          return true;
+        })
       : [];
+    const existingSet = new Set(rawUsStocks.map((s) => String(s.ticker).toUpperCase()));
+    const coreToAdd = SENIOR_CORE_RETIREMENT_ETFS.filter((c) => !existingSet.has(c.ticker));
+    state.stocks = [...coreToAdd, ...rawUsStocks];
     if (btData && btData.kpis) {
       state.backtestKpis = btData.kpis;
     }

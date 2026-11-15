@@ -173,7 +173,7 @@ def refresh_health_and_rss() -> tuple[str, str]:
       <link>https://truthofmarket.com/stocks/nvda.html</link>
       <guid isPermaLink="true">https://truthofmarket.com/stocks/nvda.html</guid>
       <pubDate>{rfc_now}</pubDate>
-      <description><![CDATA[Daily quantitative screening ({as_of_date}) of NVIDIA ($NVDA), $SMH, $SOXL, $AMD, and $AVGO across 52-week support/resistance levels, 20-day/60-day moving average reclaim triggers, and -9.0% hard-stop risk floors.]]></description>
+      <description><![CDATA[Daily retirement safety & market weather screening ({as_of_date}) across $SGOV (US T-Bill Cushion), $SCHD (Dividend Growth), $JEPI (Monthly Paycheck), $VOO (S&P 500 Core), $SMH, and $XLV with calm 2-4x/year 3-color rebalancing guidance.]]></description>
     </item>
   </channel>
 </rss>
@@ -203,19 +203,19 @@ def main() -> None:
   <meta name="google-site-verification" content="nAGlJMEUUPifbzSd8X4PCaBIyr3DtTwaa1a-q9zkbBc" />
   <meta name="google-site-verification" content="G99bl17UU6iKgNm5ndGcSWp0dHFpJ0MjJqBBp0Exfx0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RightSideAlpha × SemiFearGreed | 72 US Equity PW-RSI Turnaround Terminal & Semiconductor Fear & Greed Index</title>
-  <meta name="description" content="Real-time CNN-Edition Semiconductor Fear & Greed Index (0-100), $SMH/$XLV 70:30 & 80:20 Contrarian Barbell Rebalancing Engine, and 72 US Equity Post-Washout Right-Side Ignition (PW-RSI) Terminal." />
+  <title>Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income | TruthOfMarket</title>
+  <meta name="description" content="30-Second Comfortable Retirement &amp; Monthly Cashflow Simulator for 50-70s US investors. Build calm monthly income with SGOV (T-Bill Cushion), SCHD (Dividend Growth), JEPI (Monthly Paycheck) &amp; VOO (S&amp;P 500 Core) via 2-4x/year 3-color rebalancing." />
   <link rel="canonical" href="https://truthofmarket.com/" />
-  <link rel="alternate" type="application/rss+xml" title="RightSideAlpha × SemiFearGreed RSS Feed" href="https://truthofmarket.com/rss.xml" />
+  <link rel="alternate" type="application/rss+xml" title="TruthOfMarket Retirement &amp; Market Weather RSS Feed" href="https://truthofmarket.com/rss.xml" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="RightSideAlpha × SemiFearGreed" />
-  <meta property="og:title" content="RightSideAlpha × SemiFearGreed | 72 US Equity PW-RSI & Semiconductor Fear & Greed Index" />
-  <meta property="og:description" content="Real-time CNN-Edition Semiconductor Fear & Greed Index (0-100), $SMH/$XLV 70:30 & 80:20 Contrarian Barbell Rebalancing Engine, and 72 US Equity Post-Washout Right-Side Ignition (PW-RSI) Terminal." />
+  <meta property="og:site_name" content="TruthOfMarket — Retirement Cashflow Architect" />
+  <meta property="og:title" content="Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income | TruthOfMarket" />
+  <meta property="og:description" content="Design your monthly retirement paycheck in 30 seconds and protect your nest egg from -35% sequence-of-returns crashes with SGOV, SCHD, JEPI &amp; VOO calm 2-4x/year rebalancing." />
   <meta property="og:url" content="https://truthofmarket.com/" />
   <meta property="og:image" content="https://truthofmarket.com/og-preview.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="RightSideAlpha × SemiFearGreed | 72 US Equity PW-RSI & Semiconductor Fear & Greed Index" />
-  <meta name="twitter:description" content="Real-time CNN-Edition Semiconductor Fear & Greed Index (0-100), $SMH/$XLV 70:30 & 80:20 Contrarian Barbell Rebalancing Engine, and 72 US Equity Post-Washout Right-Side Ignition (PW-RSI) Terminal." />
+  <meta name="twitter:title" content="Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income | TruthOfMarket" />
+  <meta name="twitter:description" content="30-Second Retirement Cashflow Simulator &amp; 3-Bucket Blueprint (SGOV · SCHD · JEPI · VOO) for calm monthly retirement income." />
   <meta name="twitter:image" content="https://truthofmarket.com/og-preview.png" />
   <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -283,8 +283,8 @@ def main() -> None:
   </script>
   <script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
   <script src="/hq_member_crm_client.js" defer></script>
-  <script type="module" crossorigin src="./assets/{js_name}?v=20261115crm"></script>
-  <link rel="stylesheet" crossorigin href="./assets/{css_name}?v=20261115crm" />
+  <script type="module" crossorigin src="./assets/{js_name}?v=20261116senior"></script>
+  <link rel="stylesheet" crossorigin href="./assets/{css_name}?v=20261116senior" />
   <script>
   /* === HQ Edge Real-Human Visitor & KPI Beacon (tom_truthofmarket) === */
   (function(){{
@@ -347,11 +347,15 @@ def main() -> None:
 </head>
 <body>
   <div id="app">
-    <section class="seo-home-fallback" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;margin:16px auto;padding:20px;background:#0f172a;border:1px solid #1e293b;border-radius:12px;color:#f8fafc;">
-      <h1 style="font-size:1.5rem;font-weight:800;margin:0 0 8px;color:#ffffff;">Protect Your Retirement Nest Egg &amp; Spot Safe Uptrends in 60 Seconds a Day.</h1>
-      <p style="margin:0;color:#cbd5e1;font-size:0.95rem;">Daily 3-color safety &amp; breakout check across 72 liquid US stocks—enter only confirmed uptrends and protect every position with a clear -9% safety stop.</p>
-      <p style="margin:10px 0 0;padding-top:10px;border-top:1px solid #1e293b;color:#fbbf24;font-size:0.88rem;font-weight:700;">☕ Morning Bell Club — Protecting Your Retirement Together · Daily 1-Click 401(k) &amp; IRA Member Sentiment Poll</p>
-      <p style="margin:6px 0 0;color:#38bdf8;font-size:0.88rem;font-weight:700;">📘 $0 Free Public Product: US Brokerage App &amp; Safe Order Starter Manual (Fidelity · Charles Schwab · Vanguard — Limit Order, -9% Stop-Loss &amp; SPAXX/SWVXX/VMFXX Cash MMF Guide)</p>
+    <section class="seo-home-fallback" id="tom-retirement-architect" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;margin:16px auto;padding:24px;background:#0f172a;border:1px solid #10b981;border-radius:14px;color:#f8fafc;">
+      <h1 style="font-size:1.75rem;font-weight:900;margin:0 0 10px;color:#ffffff;line-height:1.3;">Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income.</h1>
+      <p style="margin:0;color:#e2e8f0;font-size:1.125rem;line-height:1.72;">30-Second Comfortable Retirement &amp; Monthly Cashflow Simulator — Design your guarded monthly retirement paycheck ($150k / $400k / $800k / $1.5M presets), shield your nest egg from -35% sequence-of-returns crashes, and rebalance calmly 2–4 times a year across <b>SGOV</b> (US T-Bill Cash Cushion), <b>SCHD</b> (Dividend Growth), <b>JEPI</b> (Monthly Dividend Paycheck), and <b>VOO</b> (S&amp;P 500 Core Compounding) using our 3-Color Traffic Light.</p>
+      <p id="tomMorningBellClub" style="margin:12px 0 0;padding-top:12px;border-top:1px solid #1e293b;color:#fbbf24;font-size:1.06rem;font-weight:700;line-height:1.65;"><span id="tom-passwordless-club-signup">☕ Morning Bell Retirement &amp; Macro Club — Protecting Your Nest Egg &amp; Monthly Income Together · Free 3-Second Passwordless Membership</span></p>
+      <p id="tomFreeStarterManual" style="margin:8px 0 0;color:#38bdf8;font-size:1.06rem;font-weight:700;line-height:1.65;">📘 $0 Free Public Product: US Brokerage App &amp; Safe Retirement Rebalancing Manual (Fidelity · Charles Schwab · Vanguard — SGOV/SPAXX Cash Cushion, Limit Orders &amp; Calm 2–4x/Year Rebalancing Guide)</p>
+      <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&amp;locale=en" class="lemonsqueezy-button" style="color:#6ee7b7;font-weight:800;font-size:1rem;">⚡ Monthly VIP ($29/mo)</a>
+        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&amp;locale=en" class="lemonsqueezy-button" style="color:#fde68a;font-weight:800;font-size:1rem;">👑 Lifetime VIP ($199 Once)</a>
+      </div>
     </section>
   </div>
 {seo_dir_html}

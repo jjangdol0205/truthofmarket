@@ -121,7 +121,7 @@ export function getTomMorningClubPollData(todayKey) {
 }
 
 export const TOM_CRM_SEGMENTS = [
-  { id: "retirement_401k_ira", label: "401(k) / IRA Principal Defense" },
+  { id: "retirement_401k_ira", label: "401(k) / IRA Retirement Cashflow & Defense" },
   { id: "us_macro_sp500", label: "Daily US Macro & S&P 500" },
   { id: "ai_semis_momentum", label: "Semiconductors & AI Leaders" },
 ];
@@ -385,6 +385,483 @@ export function bindTomPasswordlessClubEvents(state, showToastFn) {
   }
 }
 
+export const TOM_RETIRE_NEST_PRESETS = [
+  { val: 150000, label: "$150k" },
+  { val: 400000, label: "$400k" },
+  { val: 800000, label: "$800k" },
+  { val: 1500000, label: "$1.5M" },
+];
+
+export const TOM_RETIRE_YEAR_PRESETS = [
+  { val: 0, label: "Retiring Now" },
+  { val: 5, label: "5 Yrs" },
+  { val: 10, label: "10 Yrs" },
+  { val: 15, label: "15 Yrs" },
+];
+
+export const TOM_RETIRE_ADD_PRESETS = [
+  { val: 0, label: "$0/mo" },
+  { val: 500, label: "$500/mo" },
+  { val: 1000, label: "$1,000/mo" },
+  { val: 2000, label: "$2,000/mo" },
+];
+
+export const TOM_RETIRE_WEATHER_MAP = {
+  green: {
+    pill: "🟢 Calm Uptrend Weather",
+    desc: "Confirmed institutional uptrends active — lean into quality growth while keeping a 2-year T-Bill sleep cushion.",
+    weights: [20, 35, 45],
+  },
+  yellow: {
+    pill: "🟡 Cautious Base Weather",
+    desc: "Mixed market breadth — prioritize monthly dividend paychecks & T-Bill cushion while waiting for volume breakouts.",
+    weights: [30, 40, 30],
+  },
+  red: {
+    pill: "🔴 Crash Defense Weather",
+    desc: "Elevated volatility / downtrend alert — hold 40% in ~4.5% T-Bill cash cushion so you never sell stocks in a crash.",
+    weights: [40, 40, 20],
+  },
+};
+
+export function detectTomLiveWeatherMode(semiScoreNum, cntGreen, cntRed) {
+  const fg = Number(semiScoreNum);
+  if ((!isNaN(fg) && fg <= 32) || Number(cntRed) >= 40) return "red";
+  if (!isNaN(fg) && fg >= 58 && Number(cntGreen) >= 15) return "green";
+  return "yellow";
+}
+
+export function computeTomRetirementPlan({ nestEgg, years, monthlyAdd, weatherMode }) {
+  const egg = Math.max(10000, Number(nestEgg) || 400000);
+  const yrs = Math.max(0, Number(years) || 0);
+  const add = Math.max(0, Number(monthlyAdd) || 0);
+  const months = Math.round(yrs * 12);
+  const monthlyRate = 0.062 / 12;
+
+  const projectedNestEgg =
+    months > 0
+      ? Math.round(
+          egg * Math.pow(1 + monthlyRate, months) +
+            add * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate)
+        )
+      : Math.round(egg);
+
+  // Guarded 3-Bucket + -9% Stop Path (4.5% blended safe withdrawal + dividend yield)
+  const guardedAnnual = Math.round(projectedNestEgg * 0.045);
+  const guardedMonthly = Math.round(guardedAnnual / 12);
+
+  // Unprotected Sequence-of-Returns Crash Path (-35% early bear drawdown, 3.8% forced cut)
+  const crashNestEgg = Math.round(projectedNestEgg * 0.65);
+  const crashAnnual = Math.round(crashNestEgg * 0.038);
+  const crashMonthly = Math.round(crashAnnual / 12);
+
+  const comfortGapMonthly = Math.max(0, guardedMonthly - crashMonthly);
+  const comfortGapAnnual = comfortGapMonthly * 12;
+
+  const modeKey = TOM_RETIRE_WEATHER_MAP[weatherMode] ? weatherMode : "red";
+  const wSpec = TOM_RETIRE_WEATHER_MAP[modeKey];
+  const [w1, w2, w3] = wSpec.weights;
+  const b1Dollars = Math.round((projectedNestEgg * w1) / 100);
+  const b2Dollars = Math.round((projectedNestEgg * w2) / 100);
+  const b3Dollars = Math.max(0, projectedNestEgg - b1Dollars - b2Dollars);
+
+  return {
+    egg,
+    yrs,
+    add,
+    projectedNestEgg,
+    guardedAnnual,
+    guardedMonthly,
+    crashNestEgg,
+    crashMonthly,
+    comfortGapMonthly,
+    comfortGapAnnual,
+    longevityGainYears: "13.5",
+    modeKey,
+    weatherPill: wSpec.pill,
+    weatherDesc: wSpec.desc,
+    buckets: [
+      { pct: w1, dollars: b1Dollars },
+      { pct: w2, dollars: b2Dollars },
+      { pct: w3, dollars: b3Dollars },
+    ],
+  };
+}
+
+function fmtUsdInt(n) {
+  return "$" + Math.round(Number(n) || 0).toLocaleString("en-US");
+}
+
+export function renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRed }) {
+  const cfg = (state && state.config) || {};
+  const lsMonthly =
+    cfg.ls_site1_monthly_url ||
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en";
+  const lsLtd =
+    cfg.ls_site1_ltd_url ||
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en";
+
+  const liveMode = detectTomLiveWeatherMode(semiScore, cntGreen, cntRed);
+  const defaultEgg = 400000;
+  const defaultYrs = 5;
+  const defaultAdd = 1000;
+  const plan = computeTomRetirementPlan({
+    nestEgg: defaultEgg,
+    years: defaultYrs,
+    monthlyAdd: defaultAdd,
+    weatherMode: liveMode,
+  });
+
+  return `
+    <section
+      class="tom-retire-architect"
+      id="tom-retirement-architect"
+      data-live-weather="${liveMode}"
+      role="region"
+      aria-label="30-Second Comfortable Retirement & Monthly Cashflow Simulator"
+    >
+      <div class="tom-retire-top-bar">
+        <span class="tom-retire-badge">🧭 FREE 30-SECOND RETIREMENT ARCHITECT · ZERO LOGIN</span>
+        <span class="tom-retire-live-tag" id="tomRetireLiveSignalBadge">
+          Live Market Weather: ${plan.weatherPill} (Semi F&amp;G ${semiScore}/100)
+        </span>
+      </div>
+
+      <h2 class="tom-retire-title">
+        30-Second Comfortable Retirement &amp; Monthly Cashflow Simulator
+      </h2>
+      <p class="tom-retire-lead">
+        Tap 3 buttons below to see your <b>calm monthly retirement paycheck</b> (on top of Social Security), how much monthly income you protect by avoiding a <b>-35% retirement-eve crash</b>, and how to rebalance <b>$SGOV &middot; $SCHD &middot; $JEPI &middot; $VOO</b> calmly just <b>2–4 times a year</b>.
+      </p>
+
+      <div class="tom-retire-presets-wrap">
+        <div class="tom-retire-preset-group">
+          <div class="tom-retire-preset-label">1. Current 401(k) / IRA / Savings Nest Egg</div>
+          <div class="tom-retire-preset-row" role="group" aria-label="Current Nest Egg">
+            ${TOM_RETIRE_NEST_PRESETS.map(
+              (p) => `
+              <button
+                type="button"
+                class="tom-retire-pill ${p.val === defaultEgg ? "is-active" : ""}"
+                data-tom-retire-group="egg"
+                data-tom-retire-val="${p.val}"
+                aria-pressed="${p.val === defaultEgg ? "true" : "false"}"
+              >
+                ${p.label}
+              </button>`
+            ).join("")}
+          </div>
+        </div>
+
+        <div class="tom-retire-preset-group">
+          <div class="tom-retire-preset-label">2. Years Until Retirement</div>
+          <div class="tom-retire-preset-row" role="group" aria-label="Years Until Retirement">
+            ${TOM_RETIRE_YEAR_PRESETS.map(
+              (p) => `
+              <button
+                type="button"
+                class="tom-retire-pill ${p.val === defaultYrs ? "is-active" : ""}"
+                data-tom-retire-group="years"
+                data-tom-retire-val="${p.val}"
+                aria-pressed="${p.val === defaultYrs ? "true" : "false"}"
+              >
+                ${p.label}
+              </button>`
+            ).join("")}
+          </div>
+        </div>
+
+        <div class="tom-retire-preset-group">
+          <div class="tom-retire-preset-label">3. Monthly Contribution</div>
+          <div class="tom-retire-preset-row" role="group" aria-label="Monthly Contribution">
+            ${TOM_RETIRE_ADD_PRESETS.map(
+              (p) => `
+              <button
+                type="button"
+                class="tom-retire-pill ${p.val === defaultAdd ? "is-active" : ""}"
+                data-tom-retire-group="add"
+                data-tom-retire-val="${p.val}"
+                aria-pressed="${p.val === defaultAdd ? "true" : "false"}"
+              >
+                ${p.label}
+              </button>`
+            ).join("")}
+          </div>
+        </div>
+      </div>
+
+      <div class="tom-retire-results-grid" aria-live="polite">
+        <!-- RESULT 1: Guarded Monthly Paycheck vs. Unprotected -35% Crash Path -->
+        <div class="tom-retire-card card-paycheck" id="tomRetireResultPaycheck">
+          <div class="tom-retire-card-kicker">RESULT ① · MONTHLY RETIREMENT PAYCHECK &amp; CRASH SHIELD</div>
+          <div class="tom-retire-proj-line">
+            Projected Nest Egg at Retirement: <strong id="tomRetireProjectedEgg">${fmtUsdInt(plan.projectedNestEgg)}</strong>
+          </div>
+
+          <div class="tom-retire-compare-boxes">
+            <div class="tom-retire-pay-box is-guarded">
+              <span class="tom-retire-pay-tag">🛡️ Calm 2–4x/Yr Rebalance Path (SGOV · SCHD · JEPI · VOO)</span>
+              <div class="tom-retire-pay-amount" id="tomRetireGuardedMo">${fmtUsdInt(plan.guardedMonthly)}<span>/mo</span></div>
+              <div class="tom-retire-pay-sub" id="tomRetireGuardedSub">
+                ${fmtUsdInt(plan.guardedAnnual)}/yr calm cashflow (4.5% safe withdrawal + dividend yield) · <b>32+ Yr Horizon</b>
+              </div>
+            </div>
+
+            <div class="tom-retire-pay-box is-crash">
+              <span class="tom-retire-pay-tag">⚠️ Unprotected -35% Crash Path</span>
+              <div class="tom-retire-pay-amount is-muted" id="tomRetireCrashMo">${fmtUsdInt(plan.crashMonthly)}<span>/mo</span></div>
+              <div class="tom-retire-pay-sub" id="tomRetireCrashSub">
+                Sequence-of-returns shock shrinks nest egg to ${fmtUsdInt(plan.crashNestEgg)} · <b>~18.5 Yr Depletion Risk</b>
+              </div>
+            </div>
+          </div>
+
+          <div class="tom-retire-gap-banner" id="tomRetireComfortGapBanner">
+            ✅ <strong>+${fmtUsdInt(plan.comfortGapMonthly)}/mo Comfort Gap Protected</strong> (${fmtUsdInt(plan.comfortGapAnnual)}/yr extra income) &amp; <strong>+${plan.longevityGainYears} Years</strong> of Nest-Egg Longevity!
+          </div>
+        </div>
+
+        <!-- RESULT 2: 3-Color Market Weather Linked 3-Bucket Retirement Blueprint -->
+        <div class="tom-retire-card card-buckets" id="tomRetireResultBuckets">
+          <div class="tom-retire-card-kicker">RESULT ② · 3-BUCKET RETIREMENT BLUEPRINT (LINKED TO MARKET WEATHER)</div>
+
+          <div class="tom-retire-weather-tabs" role="group" aria-label="Preview Market Weather Allocation">
+            <button
+              type="button"
+              class="tom-retire-wtab ${liveMode === "green" ? "is-active" : ""}"
+              data-tom-weather="green"
+              aria-pressed="${liveMode === "green" ? "true" : "false"}"
+            >
+              🟢 Calm${liveMode === "green" ? " (Today)" : ""}
+            </button>
+            <button
+              type="button"
+              class="tom-retire-wtab ${liveMode === "yellow" ? "is-active" : ""}"
+              data-tom-weather="yellow"
+              aria-pressed="${liveMode === "yellow" ? "true" : "false"}"
+            >
+              🟡 Cautious${liveMode === "yellow" ? " (Today)" : ""}
+            </button>
+            <button
+              type="button"
+              class="tom-retire-wtab ${liveMode === "red" ? "is-active" : ""}"
+              data-tom-weather="red"
+              aria-pressed="${liveMode === "red" ? "true" : "false"}"
+            >
+              🔴 Defense${liveMode === "red" ? " (Today)" : ""}
+            </button>
+          </div>
+
+          <div class="tom-retire-weather-desc" id="tomRetireWeatherDesc">${plan.weatherDesc}</div>
+
+          <div class="tom-retire-bucket-list">
+            <div class="tom-retire-bucket-item b-cash">
+              <div class="tom-retire-bucket-head">
+                <strong>Bucket 1 · US T-Bill Cash Cushion ($SGOV)</strong>
+                <span id="tomBucket1Stat">${plan.buckets[0].pct}% · ${fmtUsdInt(plan.buckets[0].dollars)}</span>
+              </div>
+              <div class="tom-retire-bucket-bar"><span id="tomBucket1Bar" style="width:${plan.buckets[0].pct}%;"></span></div>
+              <div class="tom-retire-bucket-note">$SGOV (0–3 Mo US Treasury ETF) &amp; SPAXX / SWVXX (~4.7% yield) — covers 2–3 yrs of bills so you never sell stocks in a downturn.</div>
+            </div>
+
+            <div class="tom-retire-bucket-item b-div">
+              <div class="tom-retire-bucket-head">
+                <strong>Bucket 2 · Monthly &amp; Rising Dividend Paycheck ($JEPI + $SCHD)</strong>
+                <span id="tomBucket2Stat">${plan.buckets[1].pct}% · ${fmtUsdInt(plan.buckets[1].dollars)}</span>
+              </div>
+              <div class="tom-retire-bucket-bar"><span id="tomBucket2Bar" style="width:${plan.buckets[1].pct}%;"></span></div>
+              <div class="tom-retire-bucket-note">$JEPI monthly income + $SCHD dividend growth + $XLV healthcare cushion for steady retirement cashflow.</div>
+            </div>
+
+            <div class="tom-retire-bucket-item b-growth">
+              <div class="tom-retire-bucket-head">
+                <strong>Bucket 3 · S&amp;P 500 Core Compounding ($VOO)</strong>
+                <span id="tomBucket3Stat">${plan.buckets[2].pct}% · ${fmtUsdInt(plan.buckets[2].dollars)}</span>
+              </div>
+              <div class="tom-retire-bucket-bar"><span id="tomBucket3Bar" style="width:${plan.buckets[2].pct}%;"></span></div>
+              <div class="tom-retire-bucket-note">$VOO (Vanguard S&amp;P 500) &amp; quality US leaders — rebalanced calmly 2–4 times a year when our 3-color weather shifts.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- US 50-70s RETIREMENT 4-CORE STANDARD STRIP (ZERO LEVERAGED / ZERO CRYPTO) -->
+      <div class="tom-senior-core-strip" id="tomSeniorCoreStrip" aria-label="US 50-70s 4-Core Retirement Standard">
+        <div class="tom-senior-core-title">
+          🏛️ <strong>US 50–70s Retirement 4-Core Standard</strong> — No leveraged ETFs, no day-trading stress. Just calm <b>2–4x/year rebalancing</b> across 4 liquid, low-fee pillars:
+        </div>
+        <div class="tom-senior-core-grid">
+          <div class="tom-senior-core-card">
+            <span class="tom-core-tkr c-cash">$SGOV · US T-Bill Cushion</span>
+            <strong>~4.7% Monthly Treasury Yield</strong>
+            <span>State-tax-advantaged 0–3 month US Treasury shield for 2–3 years of living expenses.</span>
+          </div>
+          <div class="tom-senior-core-card">
+            <span class="tom-core-tkr c-div">$SCHD · Dividend Growth</span>
+            <strong>100 Cash-Rich US Dividend Payers</strong>
+            <span>10+ year dividend track record to keep your retirement income rising ahead of inflation.</span>
+          </div>
+          <div class="tom-senior-core-card">
+            <span class="tom-core-tkr c-pay">$JEPI · Monthly Paycheck</span>
+            <strong>Steady Monthly Cash Distributions</strong>
+            <span>Low-volatility S&amp;P 500 blue-chips engineered to deliver calm monthly retirement income.</span>
+          </div>
+          <div class="tom-senior-core-card">
+            <span class="tom-core-tkr c-grow">$VOO · S&amp;P 500 Core</span>
+            <strong>0.03% Ultra-Low Fee Compounding</strong>
+            <span>America&rsquo;s top 500 profitable enterprises for 15–30 year nest-egg longevity.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3-STEP RETIREMENT VALUE LADDER BAR -->
+      <div class="tom-retire-ladder-bar">
+        <button type="button" class="tom-retire-cta-btn step-manual" id="btnTomRetireStepManual">
+          📘 Step 1 ($0 Free): Safe Brokerage &amp; Calm Rebalance Manual
+        </button>
+        <button type="button" class="tom-retire-cta-btn step-club" id="btnTomRetireStepClub">
+          ☕ Step 2 (Free 3-Sec Club): Daily Retirement Cashflow Brief
+        </button>
+        <a
+          href="${lsMonthly}"
+          class="tom-retire-cta-btn step-vip lemonsqueezy-button"
+          data-ls-modal="true"
+        >
+          ⚡ Step 3: Monthly VIP ($29/mo)
+        </a>
+        <a
+          href="${lsLtd}"
+          class="tom-retire-cta-btn step-ltd lemonsqueezy-button"
+          data-ls-modal="true"
+        >
+          👑 Lifetime VIP ($199 Once)
+        </a>
+      </div>
+    </section>
+  `;
+}
+
+export function bindTomRetirementArchitectEvents(state, showToastFn) {
+  const root = document.getElementById("tom-retirement-architect");
+  if (!root) return;
+
+  let curEgg = 400000;
+  let curYears = 5;
+  let curAdd = 1000;
+  let curWeather = root.getAttribute("data-live-weather") || "red";
+
+  const updateDom = () => {
+    const plan = computeTomRetirementPlan({
+      nestEgg: curEgg,
+      years: curYears,
+      monthlyAdd: curAdd,
+      weatherMode: curWeather,
+    });
+
+    const setTxt = (id, txt) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = txt;
+    };
+    const setHtml = (id, html) => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = html;
+    };
+
+    setTxt("tomRetireProjectedEgg", fmtUsdInt(plan.projectedNestEgg));
+    setHtml("tomRetireGuardedMo", `${fmtUsdInt(plan.guardedMonthly)}<span>/mo</span>`);
+    setHtml(
+      "tomRetireGuardedSub",
+      `${fmtUsdInt(plan.guardedAnnual)}/yr calm cashflow (4.5% safe withdrawal + dividend yield) · <b>32+ Yr Horizon</b>`
+    );
+    setHtml("tomRetireCrashMo", `${fmtUsdInt(plan.crashMonthly)}<span>/mo</span>`);
+    setHtml(
+      "tomRetireCrashSub",
+      `Sequence-of-returns shock shrinks nest egg to ${fmtUsdInt(plan.crashNestEgg)} · <b>~18.5 Yr Depletion Risk</b>`
+    );
+    setHtml(
+      "tomRetireComfortGapBanner",
+      `✅ <strong>+${fmtUsdInt(plan.comfortGapMonthly)}/mo Comfort Gap Protected</strong> (${fmtUsdInt(plan.comfortGapAnnual)}/yr extra income) &amp; <strong>+${plan.longevityGainYears} Years</strong> of Nest-Egg Longevity!`
+    );
+    setTxt("tomRetireWeatherDesc", plan.weatherDesc);
+
+    [0, 1, 2].forEach((idx) => {
+      const b = plan.buckets[idx];
+      setTxt(`tomBucket${idx + 1}Stat`, `${b.pct}% · ${fmtUsdInt(b.dollars)}`);
+      const bar = document.getElementById(`tomBucket${idx + 1}Bar`);
+      if (bar) bar.style.width = `${b.pct}%`;
+    });
+  };
+
+  root.querySelectorAll(".tom-retire-pill").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const grp = btn.getAttribute("data-tom-retire-group");
+      const val = Number(btn.getAttribute("data-tom-retire-val"));
+      if (grp === "egg") curEgg = val;
+      else if (grp === "years") curYears = val;
+      else if (grp === "add") curAdd = val;
+
+      root.querySelectorAll(`.tom-retire-pill[data-tom-retire-group="${grp}"]`).forEach((b) => {
+        const active = b === btn;
+        b.classList.toggle("is-active", active);
+        b.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+      updateDom();
+    });
+  });
+
+  root.querySelectorAll(".tom-retire-wtab").forEach((wbtn) => {
+    wbtn.addEventListener("click", () => {
+      const w = wbtn.getAttribute("data-tom-weather") || "red";
+      curWeather = w;
+      root.querySelectorAll(".tom-retire-wtab").forEach((b) => {
+        const active = b === wbtn;
+        b.classList.toggle("is-active", active);
+        b.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+      updateDom();
+    });
+  });
+
+  const btnStepManual = document.getElementById("btnTomRetireStepManual");
+  if (btnStepManual) {
+    btnStepManual.addEventListener("click", () => {
+      const manualSec = document.getElementById("tomFreeStarterManual");
+      if (manualSec && manualSec.scrollIntoView) {
+        manualSec.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  }
+
+  const btnStepClub = document.getElementById("btnTomRetireStepClub");
+  if (btnStepClub) {
+    btnStepClub.addEventListener("click", () => {
+      const clubPanel = document.getElementById("tom-passwordless-club-signup");
+      const form = document.getElementById("tom-club-signup-form");
+      const segInput = document.getElementById("tom-club-segment-value");
+      const emailInput = document.getElementById("tom-club-email-input");
+
+      if (form) form.style.display = "block";
+      if (segInput) segInput.value = "retirement_401k_ira";
+      if (clubPanel) {
+        clubPanel.querySelectorAll(".tom-crm-seg-pill").forEach((pill) => {
+          const isRetire = pill.getAttribute("data-tom-crm-seg") === "retirement_401k_ira";
+          pill.classList.toggle("is-active", isRetire);
+          pill.setAttribute("aria-pressed", isRetire ? "true" : "false");
+        });
+        if (clubPanel.scrollIntoView) {
+          clubPanel.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }
+      setTimeout(() => {
+        if (emailInput && emailInput.focus) emailInput.focus();
+      }, 280);
+      if (typeof showToastFn === "function") {
+        showToastFn("☕ Enter your email below for daily 401(k)/IRA Retirement Cashflow & 3-Color Signals!");
+      }
+    });
+  }
+}
+
 export function renderHero(state) {
   const t = state.t;
   const kpis = state.backtestKpis || {};
@@ -434,13 +911,13 @@ export function renderHero(state) {
     <section class="hero">
       <div class="hero-top-row">
         <div style="min-width:0; flex:1 1 320px;">
-          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
-            <div class="hero-tag" id="heroTag" style="margin-bottom:0;">${t.heroTag} · ${latestStockDate}</div>
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
+            <div class="hero-tag" id="heroTag" style="margin-bottom:0; font-size:0.95rem;">${t.heroTag} · ${latestStockDate}</div>
             <button
               type="button"
               class="btn btn-sm"
               id="btnOpenPwRsiExplainer"
-              style="min-height:40px; padding:6px 12px; font-size:0.74rem; font-family:var(--font-mono); font-weight:700; border-color:rgba(56,189,248,0.45); color:#38bdf8; background:rgba(56,189,248,0.1); display:inline-flex; align-items:center; gap:5px; cursor:pointer;"
+              style="min-height:48px; padding:8px 16px; font-size:0.95rem; font-family:var(--font-mono); font-weight:800; border-color:rgba(56,189,248,0.5); color:#38bdf8; background:rgba(56,189,248,0.12); display:inline-flex; align-items:center; gap:6px; cursor:pointer;"
               title="Click to view full methodology"
             >
               <span>💡</span>
@@ -448,44 +925,47 @@ export function renderHero(state) {
             </button>
           </div>
           <h1 id="heroTitle">${t.heroTitle}</h1>
-          <p id="heroDesc" style="font-size:1.02rem; line-height:1.6;">${t.heroDesc}</p>
+          <p id="heroDesc" style="font-size:1.125rem; line-height:1.72;">${t.heroDesc}</p>
         </div>
       </div>
 
-      <!-- 🚦 JARGON-FREE 3-COLOR TRAFFIC LIGHT SUMMARY (50-70s US INVESTORS) -->
-      <div class="tom-traffic-strip" id="tomTrafficLightStrip" role="group" aria-label="Today's 3-Color Market Safety Signals">
+      <!-- 🚦 JARGON-FREE 3-COLOR TRAFFIC LIGHT SUMMARY (50-70s US INVESTORS · CALM 2-4X/YR REBALANCING) -->
+      <div class="tom-traffic-strip" id="tomTrafficLightStrip" role="group" aria-label="Today's 3-Color Retirement Rebalancing Signals">
         <button type="button" class="tom-traffic-card t-green" data-traffic-zone="IGNITION_ZONE">
-          <span style="font-size:0.8rem; font-weight:800; color:#34d399;">🟢 SAFE UPTREND (${cntGreen} Stocks)</span>
-          <strong style="font-size:0.98rem; color:var(--text);">Confirmed Volume Breakouts</strong>
-          <span style="font-size:0.82rem; color:var(--muted);">Above 20D/60D trendlines · Tap to view ($CELH Free Showcase) →</span>
+          <span style="font-size:0.96rem; font-weight:800; color:#34d399;">🟢 CALM UPTREND (${cntGreen} Leaders)</span>
+          <strong style="font-size:1.1rem; color:var(--text);">Hold $VOO &amp; $SCHD Core Compounders</strong>
+          <span style="font-size:1rem; line-height:1.55; color:var(--text-secondary);">Healthy uptrend · Let dividends &amp; S&amp;P core compound calmly →</span>
         </button>
         <button type="button" class="tom-traffic-card t-yellow" data-traffic-zone="WASHOUT_WATCH">
-          <span style="font-size:0.8rem; font-weight:800; color:#fbbf24;">🟡 WAIT &amp; WATCH (${cntYellow} Stocks)</span>
-          <strong style="font-size:0.98rem; color:var(--text);">Building Support Base</strong>
-          <span style="font-size:0.82rem; color:var(--muted);">Selling exhausted, waiting for institutional buy volume →</span>
+          <span style="font-size:0.96rem; font-weight:800; color:#fbbf24;">🟡 WAIT &amp; COLLECT INCOME (${cntYellow} Leaders)</span>
+          <strong style="font-size:1.1rem; color:var(--text);">Enjoy $JEPI &amp; $SCHD Monthly Paychecks</strong>
+          <span style="font-size:1rem; line-height:1.55; color:var(--text-secondary);">Pause aggressive buying · Collect steady dividends while bases form →</span>
         </button>
         <button type="button" class="tom-traffic-card t-red" data-traffic-zone="DOCTOR">
-          <span style="font-size:0.8rem; font-weight:800; color:#f87171;">🔴 PROTECT CASH (${cntRed} Stocks)</span>
-          <strong style="font-size:0.98rem; color:var(--text);">Downtrend · Enforce -9% Safety Stop</strong>
-          <span style="font-size:0.82rem; color:var(--muted);">Avoid falling knives · Tap to check your stock in 3 seconds →</span>
+          <span style="font-size:0.96rem; font-weight:800; color:#f87171;">🔴 SHIFT TO T-BILL CUSHION (${cntRed} Weak)</span>
+          <strong style="font-size:1.1rem; color:var(--text);">Rebalance Gently Into $SGOV (~4.7% Yield)</strong>
+          <span style="font-size:1rem; line-height:1.55; color:var(--text-secondary);">Calm 2–4x/yr trim · Check any holding in 3 seconds below →</span>
         </button>
       </div>
+
+      <!-- 🧭 30-SECOND COMFORTABLE RETIREMENT & MONTHLY CASHFLOW SIMULATOR (#tom-retirement-architect) -->
+      ${renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRed })}
 
       <!-- 📧 ABOVE-THE-FOLD 60PX 1-FIELD FREE MORNING SIGNAL EMAIL SIGNUP -->
       <div class="tom-morning-box" id="tomMorningSignalBox">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-          <span style="background:rgba(16,185,129,0.2); color:#34d399; border:1px solid rgba(16,185,129,0.45); font-size:0.78rem; font-weight:800; padding:3px 10px; border-radius:999px;">
-            📧 FREE DAILY 8:30 AM ET BRIEF · NO CREDIT CARD REQUIRED
+          <span style="background:rgba(16,185,129,0.2); color:#34d399; border:1px solid rgba(16,185,129,0.45); font-size:0.94rem; font-weight:800; padding:5px 12px; border-radius:999px;">
+            📧 FREE DAILY 8:30 AM ET RETIREMENT BRIEF · NO CREDIT CARD REQUIRED
           </span>
-          <span style="font-size:0.8rem; color:var(--text-secondary); font-weight:600;">
+          <span style="font-size:0.95rem; color:var(--text-secondary); font-weight:700;">
             100% Free Forever · Unsubscribe in 1 Click
           </span>
         </div>
-        <h2 style="font-size:1.18rem; font-weight:900; color:var(--text); margin:8px 0 4px; line-height:1.35;">
-          Get Today&rsquo;s 3-Color Market Safety Brief &amp; Free -9% Danger Alerts Delivered Every Morning
+        <h2 style="font-size:1.3rem; font-weight:900; color:var(--text); margin:10px 0 6px; line-height:1.38;">
+          Get Today&rsquo;s 3-Color Retirement Weather &amp; Calm Rebalancing Guide Every Morning
         </h2>
-        <p style="font-size:0.9rem; color:var(--text-secondary); margin:0; line-height:1.5;">
-          Enter your email once to instantly unlock <b>2 Bonus Free-Member Breakout Setups</b> right on this screen plus daily pre-market retirement safety alerts.
+        <p style="font-size:1.08rem; color:var(--text-secondary); margin:0; line-height:1.68;">
+          Enter your email once to instantly unlock <b>Today&rsquo;s 4-Core Retirement Model Weights ($SGOV &middot; $SCHD &middot; $JEPI &middot; $VOO)</b> right on this screen plus calm morning guidance.
         </p>
         <form class="tom-morning-form" id="tomMorningSignalForm">
           <label for="tomMorningEmailInput" style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0);">Email Address</label>
@@ -499,26 +979,26 @@ export function renderHero(state) {
             placeholder="Enter your email address (e.g., robert@email.com)"
           />
           <button type="submit" id="btnTomMorningSubmit" class="tom-morning-btn">
-            📧 Get My Free Daily Stock Signals →
+            📧 Get My Free Daily Retirement Brief →
           </button>
         </form>
-        <div id="tomMorningSignalStatus" role="status" aria-live="polite" style="display:${savedFreeEmail ? "block" : "none"}; margin-top:10px; font-size:0.92rem; font-weight:800; color:#34d399;">
-          ${savedFreeEmail ? `✅ Free Morning Signal Active (${savedFreeEmail.replace(/[<>&"]/g, "")}) — Your 2 Bonus Watchlist Setups below are unlocked!` : ""}
+        <div id="tomMorningSignalStatus" role="status" aria-live="polite" style="display:${savedFreeEmail ? "block" : "none"}; margin-top:10px; font-size:1.05rem; font-weight:800; color:#34d399;">
+          ${savedFreeEmail ? `✅ Free Morning Retirement Brief Active (${savedFreeEmail.replace(/[<>&"]/g, "")}) — Your 4-Core Allocation Guide below is unlocked!` : ""}
         </div>
-        <div id="tomFreeMemberBonusCard" style="display:${savedFreeEmail ? "block" : "none"}; margin-top:12px; background:rgba(15,23,42,0.88); border:1.5px solid #10b981; border-radius:10px; padding:12px 14px; font-size:0.9rem; line-height:1.6; color:#f8fafc;">
-          <div style="font-weight:800; color:#34d399; margin-bottom:6px;">🎁 FREE MEMBER BONUS UNLOCKED — Today&rsquo;s Retirement Safety Watchlist:</div>
-          <div>• <b>🟢 $CELH (Celsius Holdings):</b> Confirmed Uptrend Showcase · Safety Stop Floor: <b>-9.0% ($29.50)</b> · Upside Target: <b>+50% to +100%</b></div>
-          <div>• <b>🟢 $FSLR (First Solar):</b> Institutional Volume Reclaim · Safety Stop Floor: <b>-9.0% ($174.37)</b> · Trend Status: <b>Above 20D/60D</b></div>
-          <div>• <b>🛡️ $SMH : $XLV Barbell Check:</b> Semi Fear &amp; Greed at <b>${semiScore}/100</b> — Keep Healthcare ($XLV) cushion active &amp; never average down past -9%.</div>
+        <div id="tomFreeMemberBonusCard" style="display:${savedFreeEmail ? "block" : "none"}; margin-top:12px; background:rgba(15,23,42,0.9); border:1.5px solid #10b981; border-radius:12px; padding:14px 16px; font-size:1.06rem; line-height:1.72; color:#f8fafc;">
+          <div style="font-weight:800; color:#34d399; margin-bottom:6px;">🎁 FREE MEMBER BONUS UNLOCKED — Today&rsquo;s 4-Core Retirement Posture (2–4x/Yr Calm Rebalance):</div>
+          <div>• <b>🛡️ Bucket 1 ($SGOV US T-Bill Cushion):</b> Hold <b>30–40%</b> in short-term Treasury cash (~4.7% yield) so monthly bills are 100% insulated.</div>
+          <div>• <b>💵 Bucket 2 ($JEPI + $SCHD Dividend Income):</b> Hold <b>35–40%</b> across monthly income &amp; rising dividend aristocrats.</div>
+          <div>• <b>🌱 Bucket 3 ($VOO S&amp;P 500 + $XLV Healthcare):</b> Semi Fear &amp; Greed at <b>${semiScore}/100</b> — Rebalance calmly 2–4 times a year, never panic-sell.</div>
         </div>
       </div>
 
       <!-- ☕ MORNING BELL CLUB — ZERO-SIGNUP DAILY HABIT & BELONGING HUB -->
-      <div class="tom-club-box" id="tomMorningBellClub" role="region" aria-label="Morning Bell Club — Protecting Your Retirement Together">
+      <div class="tom-club-box" id="tomMorningBellClub" role="region" aria-label="Morning Bell Retirement & Macro Club — Protecting Your Nest Egg Together">
         <div class="tom-club-header">
           <div class="tom-club-title-wrap">
-            <span class="tom-club-kicker">☕ MORNING BELL CLUB</span>
-            <strong class="tom-club-heading">Protecting Your Retirement Together</strong>
+            <span class="tom-club-kicker">☕ MORNING BELL RETIREMENT &amp; MACRO CLUB</span>
+            <strong class="tom-club-heading">Protecting Your Nest Egg &amp; Monthly Income Together</strong>
           </div>
           <span class="tom-club-streak" id="tomMorningClubStreakBadge" title="Increments once each morning you check in">
             🏅 Day ${clubStreak.days} Morning Member
@@ -603,10 +1083,10 @@ export function renderHero(state) {
           </div>
 
           <h3 class="tom-crm-heading">
-            Get Daily Morning US Macro &amp; 3-Color Safety Signals in Your Inbox.
+            Get Daily Retirement Cashflow &amp; 3-Color US Macro Briefings in Your Inbox.
           </h3>
           <p class="tom-crm-subcopy">
-            3-second passwordless club access. Choose your #1 focus and protect your retirement principal before the 9:30 AM opening bell.
+            3-second passwordless club access. Choose your #1 focus to protect your 401(k)/IRA principal and calm monthly income before the 9:30 AM opening bell.
           </p>
 
           <div
