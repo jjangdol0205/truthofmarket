@@ -24,10 +24,17 @@ from __future__ import annotations
 import html
 import json
 import pathlib
+import sys
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Tuple
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
+HQ_TEXT_DIR = ROOT.parent / "text_automation_hq"
+if str(HQ_TEXT_DIR) not in sys.path:
+    sys.path.insert(0, str(HQ_TEXT_DIR))
+
+from fandom_editor_letter_builder import build_html_morning_letter_and_stamp_card  # noqa: E402
+
 PUB = ROOT / "frontend" / "public"
 SEMI_PATH = ROOT / "static_api" / "semi_overview.json"
 STOCKS_FREE_PATH = ROOT / "static_api" / "stocks_free.json"
@@ -344,26 +351,35 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
             f"<td>${stop:.2f}</td><td>${tp1:.2f}</td></tr>\n"
         )
 
+    morning_letter_html = build_html_morning_letter_and_stamp_card(
+        div_code="TOM",
+        date_str=as_of,
+        empathy_line_1="Good morning, friend—if loud tech headlines have you wondering whether your 401(k) or IRA nest egg is safe today, take a quiet sip of coffee first.",
+        empathy_line_2="You worked decades to build your principal, and our Morning Bell Club desk sits right on your side every morning so a routine dip never turns into a multi-year bagholder trap.",
+        mission_text="Pick your largest single-stock holding today and write down its exact -9.0% safety exit line next to your screen before the 9:30 AM opening bell.",
+    )
+
     articles_spec: List[Dict[str, Any]] = [
         {
             "slug": "daily-us-quant-regime-brief.html",
-            "title": f"US Market Regime Dispatch ({as_of}): $SMH Fear & Greed at {fg:.1f}/100 ({regime}) & PW-RSI Watchlist",
-            "desc": f"Post-close institutional audit as of {as_of}: $SMH ${smh_c:.2f} ({smh_dd:+.2f}% 52W DD), {rec_smh}:{rec_xlv} $SMH:$XLV barbell allocation, and public PW-RSI leaders.",
-            "cat": "Daily Regime Dispatch",
+            "title": f"Wall Street Morning Bell Letter ({as_of}): $SMH Fear & Greed at {fg:.1f}/100 ({regime}) & Calm -9% Safety Watchlist",
+            "desc": f"Morning Bell Club companion note as of {as_of}: $SMH ${smh_c:.2f} ({smh_dd:+.2f}% 52W DD), {rec_smh}:{rec_xlv} $SMH:$XLV cushion, and plain-English -9% safety lines.",
+            "cat": "Wall Street Morning Bell Letter",
             "date": as_of,
             "mins": 5,
             "body": f"""
+      {morning_letter_html}
       <div class="callout">
-        <strong>Post-Close Executive Readout ({as_of}):</strong> Semiconductor Fear &amp; Greed stands at <strong>{fg:.1f}/100 ({html.escape(regime)})</strong>.
+        <strong>8:30 AM Morning Bell Snapshot ({as_of}):</strong> Semiconductor Fear &amp; Greed sits at <strong>{fg:.1f}/100 ({html.escape(regime)})</strong>.
         <a href="/stocks/smh.html">$SMH</a> closed at <strong>${smh_c:.2f}</strong> ({smh_dd:+.2f}% vs. 52-week high, 14D RSI {smh_rsi:.1f}),
         <a href="/stocks/xlv.html">$XLV</a> closed at <strong>${xlv_c:.2f}</strong>, and <a href="/stocks/qqq.html">$QQQ</a> closed at <strong>${qqq_c:.2f}</strong>.
-        Active Barbell Weight: <strong>{rec_smh}% $SMH : {rec_xlv}% $XLV</strong>.
+        Calm Barbell Cushion: <strong>{rec_smh}% $SMH : {rec_xlv}% $XLV</strong>.
       </div>
-      <h2>1. Why Retail Traders Misread Semiconductor Washouts</h2>
-      <p>Most individual portfolios suffer permanent capital impairment during semiconductor drawdowns for two opposite reasons: buying the very first -10% dip on 3x leveraged ETFs (<a href="/stocks/soxl.html">$SOXL</a>) with zero stop-loss discipline, and then capitulating near the bottom when 14-day RSI drops into the low 30s.</p>
-      <p>Our 7-factor <a href="/semi-fear-greed.html">Semiconductor Fear &amp; Greed engine</a> removes emotion from sector rotation. Rather than holding unhedged high-beta chip exposure through macro tightening, pairing $SMH against defensive Health Care (<a href="/compare/smh-vs-xlv.html">$SMH vs $XLV</a>) provides dry powder to rebalance into deep fear regimes.</p>
-      <h2>2. Public PW-RSI Watchlist &amp; Mechanical Risk Floors ({as_of})</h2>
-      <p>Below are the top publicly unlocked US equities from our 72-ticker universe ranked by composite Post-Washout Right-Side Ignition (PW-RSI) score, alongside their non-negotiable Rule 1 (-9.0% hard stop) and Rule 3 (+100% TP1 principal recovery) levels:</p>
+      <h2>1. Insight #1 — Why Retirement &amp; Self-Directed Accounts Get Trapped in Chip Pullbacks</h2>
+      <p>Individual portfolios rarely suffer permanent damage from missing a one-day rally. Deep scars almost always start in two steps: averaging down into 3x leveraged ETFs (<a href="/stocks/soxl.html">$SOXL</a>) without a stop-loss floor, and losing sleep when 14-day RSI slides into the low 30s.</p>
+      <p>Our 7-factor <a href="/semi-fear-greed.html">Semiconductor Fear &amp; Greed gauge</a> keeps emotion out of the driver's seat. Pairing semiconductor growth ($SMH) with steady Health Care (<a href="/compare/smh-vs-xlv.html">$SMH vs $XLV</a>) gives you calm reserve power during deep pullbacks.</p>
+      <h2>2. Insight #2 — Today's Plain-English Stock Watchlist &amp; -9.0% Safety Floors ({as_of})</h2>
+      <p>Below are the top publicly unlocked US stocks from our 72-ticker study ranked by right-side trend strength (PW-RSI), paired with their Rule 1 (-9.0% safety exit floor) and Rule 3 (+100% half-profit principal lock):</p>
       <table class="data-table">
         <thead>
           <tr><th>Ticker</th><th>Close</th><th>PW-RSI</th><th>52W DD</th><th>10D Vol</th><th>-9% Stop</th><th>+100% TP1</th></tr>
@@ -372,8 +388,8 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
           {rows_html}
         </tbody>
       </table>
-      <h2>3. Key Head-to-Head Relative Strength Matchups</h2>
-      <p>Before deploying capital into a single semiconductor or software name, compare institutional accumulation velocity side-by-side: review <a href="/compare/nvda-vs-amd.html">$NVDA vs $AMD</a>, <a href="/compare/avgo-vs-mrvl.html">$AVGO vs $MRVL</a>, and <a href="/compare/pltr-vs-crwd.html">$PLTR vs $CRWD</a>.</p>
+      <h2>3. Insight #3 — Compare Before You Buy &amp; Use Free Tools at Your Own Pace</h2>
+      <p>Before adding new cash to any chip or software stock, check side-by-side trend strength first—no rush, no FOMO: review <a href="/compare/nvda-vs-amd.html">$NVDA vs $AMD</a>, <a href="/compare/avgo-vs-mrvl.html">$AVGO vs $MRVL</a>, and <a href="/compare/pltr-vs-crwd.html">$PLTR vs $CRWD</a>, or test your own ticker free in the 3-Second Position Doctor below.</p>
 """,
             "faqs": [
                 (

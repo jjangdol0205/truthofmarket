@@ -25,6 +25,10 @@ HQ_TEXT_DIR = ROOT_DIR.parent / "text_automation_hq"
 if str(HQ_TEXT_DIR) not in sys.path:
     sys.path.insert(0, str(HQ_TEXT_DIR))
 
+from fandom_editor_letter_builder import (  # noqa: E402
+    compose_fandom_editor_letter_md,
+    validate_fandom_editor_letter,
+)
 from indexnow_delta_gate import (  # noqa: E402
     ping_websub_if_feed_changed,
     publish_daily_unique_telegraph_summary,
@@ -202,14 +206,14 @@ def run_daily_telegraph_and_syndication(semi: dict, stocks: list, dry_run: bool 
         {
             "tag": "blockquote",
             "children": [
-                f"8:30 AM Investor Safety Readout ({as_of}): Semiconductor Fear & Greed = {fg:.1f}/100 ({regime}). $SMH closed at ${smh_c:.2f} ({smh_dd:+.2f}% off 52-week high) vs defensive healthcare $XLV at ${xlv_c:.2f}. Recommended Retirement & Swing Cushion: {rec_smh}% $SMH : {rec_xlv}% $XLV."
+                f"☕ Wall Street Morning Bell Club ({as_of}): Good morning, friend—if loud chip headlines have you worrying about your 401(k) or IRA principal, take a slow sip of coffee first. We stand on your side every morning so a routine pullback never mutates into a multi-year bagholder loss."
             ],
         },
         {
             "tag": "p",
             "children": [
-                "Individual and IRA/401(k) investors rarely lose money from missing one rally—most deep losses come from averaging down into falling stocks and letting a routine -9% dip turn into a -45% multi-year trap. Check your stock's 3-Color Traffic Light (🟢 Green Uptrend / 🟡 Yellow Watch / 🔴 -9% Exit Floor) and sign up with 1 email for our free 8:30 AM Stock Safety Brief at ",
-                {"tag": "a", "attrs": {"href": canonical_url}, "children": ["TruthOfMarket Daily US Stock Safety Brief"]},
+                f"Today's 3-Color Market Readout: Semiconductor Fear & Greed = {fg:.1f}/100 ({regime}). $SMH closed at ${smh_c:.2f} ({smh_dd:+.2f}% off 52-week high) paired with steady healthcare $XLV at ${xlv_c:.2f} ({rec_smh}% $SMH : {rec_xlv}% $XLV cushion). Today's 1-Minute Mission: write down your top stock's -9.0% safety exit line before the bell, or check it free at ",
+                {"tag": "a", "attrs": {"href": canonical_url}, "children": ["Wall Street Morning Bell Daily Letter"]},
                 ".",
             ],
         },
@@ -220,7 +224,7 @@ def run_daily_telegraph_and_syndication(semi: dict, stocks: list, dry_run: bool 
         div_code="TOM",
         account_file=TELEGRAPH_ACCT_PATH,
         short_name="RightSideAlpha",
-        author_name="TruthOfMarket US Stock Safety Desk",
+        author_name="Wall Street Morning Bell Club — TruthOfMarket",
         author_url="https://truthofmarket.com",
         title=title,
         content_nodes=nodes,
@@ -252,33 +256,44 @@ def run_daily_telegraph_and_syndication(semi: dict, stocks: list, dry_run: bool 
     )[:275]
 
     reply_link = (
-        f"🟢🟡🔴 Check any US stock's 3-Color Safety Signal & get free 8:30 AM email alerts (1-click signup):\n"
+        f"☕ Read today's Wall Street Morning Bell Letter & check any US stock's -9% safety line free:\n"
         f"{canonical_url}?utm_source=social_thread&utm_medium=organic"
     )
 
-    longform_md = (
-        f"# {title}\n\n"
-        f"*Originally published at [{canonical_url}]({canonical_url}).*\n\n"
-        f"If you manage your own brokerage account, IRA, or 401(k), protecting principal matters far more than chasing Wall Street hype. "
-        f"Most painful retail losses happen in two steps: buying 'cheap' stocks while they are still sliding below their 60-day trend, "
-        f"and holding past -25% until a -50% hole demands a +100% rally just to get back to even.\n\n"
-        f"## 1. Today's 3-Color Market Traffic Light ({as_of})\n"
-        f"- **Semiconductor Fear & Greed Score**: `{fg:.1f}/100` (**{regime}**)\n"
-        f"- **$SMH (Semiconductors)**: `${smh_c:.2f}` ({smh_dd:+.2f}% from 52-week high)\n"
-        f"- **$XLV (Healthcare Cushion)**: `${xlv_c:.2f}`\n"
-        f"- **Calm Barbell Balance**: `{rec_smh}% $SMH : {rec_xlv}% $XLV` ([Test Your Allocation Free](https://truthofmarket.com/semi-fear-greed.html))\n\n"
-        f"## 2. How to Read Today's 3-Color Stock Signals\n"
-        f"- **🟢 Green (Safe Uptrend)**: Institutional buying + trend support confirmed.\n"
-        f"- **🟡 Yellow (Wait & Watch)**: Choppy or extended—avoid FOMO chasing.\n"
-        f"- **🔴 Red (-9.0% Safety Floor)**: Mechanical exit line from your entry price so one bad pick never damages retirement savings.\n\n"
-        f"| Ticker | Last Close | 3-Color Signal | 🔴 -9% Safety Line | 🎯 +100% Profit Lock | Free Check |\n"
-        f"|---|---|---|---|---|---|\n"
+    watchlist_table_md = (
+        "| Ticker | Last Close | 3-Color Signal | 🔴 -9% Safety Line | 🎯 +100% Profit Lock | Free Check |\n"
+        "|---|---|---|---|---|---|\n"
         + "\n".join(md_rows)
-        + "\n\n## 3. Free 8:30 AM Stock Safety Email & Position Doctor\n"
-        + "- **1-Field Free Morning Alert**: Enter your email on [truthofmarket.com](https://truthofmarket.com/) to get our calm 8:30 AM EST Green-Yellow-Red summary before the opening bell.\n"
-        + "- **3-Second Position Doctor**: Type your ticker and cost basis to see your exact -9% safety floor instantly.\n"
-        + "\n---\n*Educational market research for self-directed investors; not personalized financial or tax advice.*\n"
     )
+
+    longform_md = compose_fandom_editor_letter_md(
+        div_code="TOM",
+        title=title,
+        canonical_url=canonical_url,
+        empathy_two_lines=[
+            "Good morning, friend—if noisy Wall Street headlines had you worrying about your 401(k) or IRA nest egg last night, take a calm breath over your morning coffee first.",
+            "You spent decades building your principal, and our Morning Bell Club desk sits right on your side every morning so a routine -9.0% stop-loss never turns into a painful -50% drawdown.",
+        ],
+        three_insights=[
+            f"**Today's Market Weather ({as_of})**: Semiconductor Fear & Greed sits at `{fg:.1f}/100` (**{regime}**), with `$SMH` at `${smh_c:.2f}` (`{smh_dd:+.2f}%` off its 52-week high) balanced against healthcare `$XLV` at `${xlv_c:.2f}` (`{rec_smh}% $SMH : {rec_xlv}% $XLV` cushion).",
+            "**Wait for Right-Side Confirmation (PW-RSI & MA60)**: Instead of catching falling knives in a panic, we wait until institutional volume steps back above the 20-day and 60-day trend lines (MA20 / MA60).",
+            "**The Calm Math of Rule 1 (-9.0% Exit Floor)**: Exiting a failed trade at `-9.0%` takes only a routine `+9.89%` gain to recover, whereas bagholding down `-50%` demands `+100%` just to break even.",
+        ],
+        daily_mission=(
+            f"Before the 9:30 AM opening bell, pick your #1 stock holding (or benchmark `${lead_tkr}` at `${lead_close:.2f}`, safety stop `${lead_stop:.2f}`) "
+            "and jot its -9.0% safety floor on a sticky note—knowing your exit in advance lets you sleep peacefully tonight."
+        ),
+        gentle_bridge_lines=[
+            f"**Read Today's Full Morning Bell Letter & Stamp Your Daily Check-In**: [{canonical_url}]({canonical_url})",
+            "**Free 3-Second Position Doctor & 1-Field 8:30 AM Club Email**: Check any of our 72 liquid US stocks free at [https://truthofmarket.com/](https://truthofmarket.com/) — zero pressure, always free to start.",
+            "**Optional Pro VIP When You're Ready**: If you ever want all 11 unmasked Top Uptrend Leaders and TradingView Pine v5 alerts, Monthly VIP ($29/mo) and Lifetime Pass ($199) are waiting quietly inside the terminal.",
+        ],
+        extra_body_md=watchlist_table_md,
+        footer_disclaimer="*Educational quantitative research from the Wall Street Morning Bell Club (`truthofmarket.com`); not personalized financial or tax advice.*",
+    )
+    tom_letter_check = validate_fandom_editor_letter("TOM", longform_md)
+    if not tom_letter_check["passed"]:
+        raise RuntimeError(f"TOM Fandom Editor Letter validation failed: {tom_letter_check}")
 
     reddit_md = (
         f"# [Portfolio Risk Study] Protecting Tech/IRA Gains With a -9% Safety Floor & {rec_smh}:{rec_xlv} $SMH/$XLV Cushion ({as_of})\n\n"
@@ -342,8 +357,18 @@ def main():
         k_dir.mkdir(parents=True, exist_ok=True)
         (k_dir / f"{INDEXNOW_KEY}.txt").write_text(INDEXNOW_KEY, encoding="utf-8")
 
+    insights_py = ROOT_DIR / "scripts" / "generate_daily_quant_insights.py"
     build_bundle_py = ROOT_DIR / "scripts" / "build_static_bundle.py"
-    if build_bundle_py.exists():
+    if no_deploy:
+        if insights_py.exists():
+            subprocess.run([sys.executable, str(insights_py)], cwd=str(ROOT_DIR), check=False, capture_output=True)
+            pub_ins = ROOT_DIR / "frontend" / "public" / "insights"
+            for dst_ins in [ROOT_DIR / "dist" / "insights", ROOT_DIR / "insights"]:
+                if pub_ins.exists():
+                    dst_ins.mkdir(parents=True, exist_ok=True)
+                    for html_f in pub_ins.glob("*.html"):
+                        (dst_ins / html_f.name).write_text(html_f.read_text(encoding="utf-8"), encoding="utf-8")
+    elif build_bundle_py.exists():
         subprocess.run([sys.executable, str(build_bundle_py)], cwd=str(ROOT_DIR), check=False, capture_output=True)
 
     semi = load_json(SEMI_PATH, {})
