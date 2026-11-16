@@ -206,11 +206,13 @@
       '      <div style="font-size:12.5px;font-weight:800;color:#6ee7b7;">MONTHLY VIP SOFTWARE</div>' +
       '      <div style="font-size:17px;font-weight:900;color:#ffffff;margin:3px 0;">Monthly VIP ($29/mo)</div>' +
       '      <div style="font-size:13px;color:#fde68a;font-weight:700;">20% Early-Bird: $23.20/mo</div>' +
+      '      <div style="font-size:11.5px;color:#cbd5e1;margin-top:4px;line-height:1.35;">Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator</div>' +
       "    </button>" +
       '    <button type="button" class="tom-wl-plan-btn" data-wl-plan="Annual VIP ($199/yr)">' +
       '      <div style="font-size:12.5px;font-weight:800;color:#fde68a;">ANNUAL VIP SOFTWARE (SAVE 43%)</div>' +
       '      <div style="font-size:17px;font-weight:900;color:#ffffff;margin:3px 0;">Annual VIP ($199/yr)</div>' +
       '      <div style="font-size:13px;color:#6ee7b7;font-weight:700;">20% Early-Bird: $159.20/yr</div>' +
+      '      <div style="font-size:11.5px;color:#cbd5e1;margin-top:4px;line-height:1.35;">Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator</div>' +
       "    </button>" +
       "  </div>" +
       '  <form id="tomVipWaitlistForm" novalidate style="display:flex;flex-direction:column;gap:10px;">' +
@@ -358,7 +360,10 @@
   window.addEventListener(
     "click",
     function (e) {
-      var el = e.target && e.target.closest ? e.target.closest("a, button, [role='button']") : null;
+      var el =
+        e.target && e.target.closest
+          ? e.target.closest(".lemonsqueezy-button") || e.target.closest("a, button, [role='button']")
+          : null;
       if (!el) return;
 
       var href = String(el.getAttribute("href") || "");
@@ -6482,7 +6487,9 @@ const PRICING_COPY = {
     t1Badge: "MONTHLY VIP",
     t1Title: "Monthly VIP Educational Calculator Suite",
     t1Period: "/ month",
+    t1Bundle: "Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator",
     t1Items: [
+      "Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator",
       "Self-Directed Educational Calculator Software across SGOV, SCHD, JEPI, VOO & US Blue-Chip Datasets",
       "Daily 08:10 EST Public Balance-Sheet & Dividend Coverage Educational Summaries",
       "Calm 2–4x/Year Portfolio Weight Rebalancing & Drawdown Math Calculators",
@@ -6493,7 +6500,9 @@ const PRICING_COPY = {
     t2Badge: "ANNUAL VIP",
     t2Title: "Annual VIP Educational Calculator Pass",
     t2Period: "/ year",
+    t2Bundle: "Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator",
     t2Items: [
+      "Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator",
       "Full 12-Month Access to All Self-Directed Educational Calculators & Visualizations",
       "Complete 26.8-Year (1998–2026) US Equity & ETF Historical CSV Datasets",
       "English & Japanese Educational Macro Research Archive + VIP Dispatch Desk",
@@ -6582,7 +6591,7 @@ function renderPricing(state) {
 
   const checkoutFallbackHtml = `
     <div style="margin-top:8px; font-size:0.74rem; color:#94a3b8; text-align:center; line-height:1.45;">
-      Questions about educational software access? Email our Educational Market Data &amp; Quantitative Research Desk at <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#93c5fd; font-weight:700; text-decoration:underline;">beable9489@gmail.com</a>.
+      Questions, software licenses, or Sponsorship / Brand &amp; Media Partnerships? Email <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Support%20%26%20Partnership" style="color:#93c5fd; font-weight:700; text-decoration:underline;">beable9489@gmail.com</a>.
     </div>
   `;
 
@@ -6617,6 +6626,9 @@ function renderPricing(state) {
             </h3>
             <div class="price-num">$29 <span style="font-size:0.86rem; color:var(--muted); font-family:var(--font-sans); font-weight:600;">${c.t1Period}</span></div>
             <div class="price-subtext">Billed monthly · Cancel anytime with 1 click · 14-Day Refund Policy</div>
+            <div style="margin:10px 0 8px; padding:9px 12px; border-radius:9px; background:rgba(16,185,129,0.14); border:1px solid rgba(52,211,153,0.45); color:#a7f3d0; font-size:0.84rem; font-weight:800; line-height:1.45;">
+              📘 ${c.t1Bundle || "Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator"}
+            </div>
             <ul class="price-list">
               ${c.t1Items.map((item) => `<li>${checkSvg}<span>${item}</span></li>`).join("")}
             </ul>
@@ -6645,6 +6657,9 @@ function renderPricing(state) {
             <div class="price-num">$199 <span style="font-size:0.86rem; color:var(--muted); font-family:var(--font-sans); font-weight:600;">${c.t2Period}</span></div>
             <div class="price-subtext">Annual recurring license ($199/yr) · Cancel anytime · 14-Day Refund Policy</div>
             <div class="price-savings-pill">⚡ Save $149/Yr vs $29/mo Monthly Billing ($199/yr vs $348/yr)</div>
+            <div style="margin:10px 0 8px; padding:9px 12px; border-radius:9px; background:rgba(251,191,36,0.12); border:1px solid rgba(251,191,36,0.45); color:#fde68a; font-size:0.84rem; font-weight:800; line-height:1.45;">
+              📘 ${c.t2Bundle || "Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator"}
+            </div>
             <ul class="price-list">
               ${c.t2Items.map((item) => `<li>${checkSvg}<span>${item}</span></li>`).join("")}
             </ul>

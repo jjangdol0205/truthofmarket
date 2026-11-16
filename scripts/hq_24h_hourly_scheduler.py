@@ -531,6 +531,38 @@ def execute_hourly_cycle(hour: int, notify: bool = True, force_all: bool = False
         except Exception as e:
             print(f"[DailyFreshnessWatchdog Warning] {e}", file=sys.stderr)
 
+    # Silent Daily/Weekly 5-Division Why-How-KPI Scorecard Sync (zero routine Telegram notifications)
+    kpi_scorecard_synced = False
+    if hour in (6, 20) or force_all:
+        try:
+            kpi_tracker_py = HQ_DIR / "scripts" / "hq_kpi_scorecard_tracker.py"
+            if kpi_tracker_py.exists():
+                kr = subprocess.run(
+                    [sys.executable, "-X", "utf8", str(kpi_tracker_py), "--silent"],
+                    cwd=str(HQ_DIR),
+                    timeout=120,
+                    capture_output=True,
+                )
+                kpi_scorecard_synced = (kr.returncode == 0)
+        except Exception as e:
+            print(f"[KPIScorecardTracker Warning] {e}", file=sys.stderr)
+
+    # Once-Daily 08:00~11:59 KST Target-vs-Actual Morning KPI Report (strictly 1x/day via atomic ledger)
+    morning_kpi_checked = False
+    if 8 <= hour <= 11:
+        try:
+            kpi_tracker_py = HQ_DIR / "scripts" / "hq_kpi_scorecard_tracker.py"
+            if kpi_tracker_py.exists():
+                mr = subprocess.run(
+                    [sys.executable, "-X", "utf8", str(kpi_tracker_py), "--morning-report", "--silent"],
+                    cwd=str(HQ_DIR),
+                    timeout=150,
+                    capture_output=True,
+                )
+                morning_kpi_checked = (mr.returncode == 0)
+        except Exception as e:
+            print(f"[MorningKPIReport Warning] {e}", file=sys.stderr)
+
     summary = (
         f"[TOM:{'RUN' if r_tom.get('executed') else 'IDLE'}] | "
         f"[KFG:{'RUN' if r_kfg.get('executed') else 'IDLE'}] | "
@@ -555,6 +587,8 @@ def execute_hourly_cycle(hour: int, notify: bool = True, force_all: bool = False
         "cross_audit_healed": audit_rep.get("total_healed", 0),
         "daytime_mailing_crm_ok": daytime_mailing_ok,
         "daytime_seo_hub_ok": daytime_hub_ok,
+        "kpi_scorecard_synced": kpi_scorecard_synced,
+        "morning_kpi_report_checked": morning_kpi_checked,
     }
     LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
     with open(LOG_FILE, "a", encoding="utf-8") as f:
