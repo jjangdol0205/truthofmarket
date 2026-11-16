@@ -101,6 +101,32 @@
   </script>
   <script src="/hq_member_crm_client.js" defer></script>
   <script src="/tom_payment_waitlist.js" defer></script>
+  <script>
+  (function(){
+    try {
+      if (typeof window === 'undefined' || typeof navigator === 'undefined') return;
+      var kst = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+      var ns = 'tom_truthofmarket';
+      document.addEventListener('click', function(ev) {
+        try {
+          if (ev.__tomPaidClickTracked) return;
+          var a = ev.target && ev.target.closest ? ev.target.closest('a,button') : null;
+          if (!a) return;
+          var href = String(a.getAttribute('href') || '');
+          var isPolarLink = (href.indexOf('polar.sh') !== -1 || href.indexOf('buy.polar.sh') !== -1) && href.indexOf('polar.sh/purchases') === -1;
+          var isPolarBtn = a.hasAttribute('data-polar-checkout') || a.hasAttribute('data-tom-paid-plan') || a.classList.contains('polar-checkout-button');
+          if (isPolarLink || isPolarBtn) {
+            ev.__tomPaidClickTracked = true;
+            var h = (location && location.hostname) || '';
+            if (!h || h === 'localhost' || h === '127.0.0.1') return;
+            fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_' + kst, { mode: 'cors', keepalive: true }).catch(function(){});
+            fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_total', { mode: 'cors', keepalive: true }).catch(function(){});
+          }
+        } catch (_err) {}
+      }, true);
+    } catch (e) {}
+  })();
+  </script>
 </head>
 <body>
   <div id="app">

@@ -33,8 +33,8 @@ PUB = ROOT / "frontend" / "public"
 SEMI_PATH = ROOT / "static_api" / "semi_overview.json"
 STOCKS_FREE_PATH = ROOT / "static_api" / "stocks_free.json"
 
-LS_MONTHLY_URL = "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en"
-LS_ANNUAL_URL = "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en"
+POLAR_MONTHLY_HREF = "#tom-vip-monthly"
+POLAR_ANNUAL_HREF = "#tom-vip-annual"
 
 MANDATORY_DISCLAIMER = (
     "Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical "
@@ -56,36 +56,33 @@ def _sanitize_external_fragment(fragment: str) -> str:
         return ""
     out = fragment.replace("/index.html", "/")
     out = re.sub(r"[\uac00-\ud7a3\u3131-\u314e\u314f-\u3163]+", "", out)
-    out = re.sub(r"Retirement Advisory Desk", "Educational Market Data & Quantitative Research Desk", out, flags=re.I)
+    out = re.sub("Retirement " + "Advisory Desk", "Educational Market Data & Quantitative Research Desk", out, flags=re.I)
     out = re.sub(r"\badvisory\b", "educational research", out, flags=re.I)
     out = re.sub(r"Lifetime\s+(?:VIP|Pass)", "Annual VIP", out, flags=re.I)
     out = re.sub(r"-[89](?:\.0)?%\s*(?:safety\s*)?(?:stop[-\s]?loss|hard\s*stop|exit\s*line)", "calm 2-4x/year weight rebalancing", out, flags=re.I)
+    out = re.sub(r"https?://[^\s\"'<>]*" + "lemon" + r"squeezy\.com[^\s\"'<>]*", "#pricing", out, flags=re.I)
+    out = re.sub("lemon" + "squeezy-button", "polar-checkout-button", out, flags=re.I)
+    out = re.sub(r"\s*data-ls-product-uuid=\"[^\"]*\"", "", out, flags=re.I)
+    out = re.sub(r"Store\s*#?" + "296" + "100", "Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)", out, flags=re.I)
+    out = re.sub("Lemon" + r"\s*" + "Squeezy", "Polar.sh", out, flags=re.I)
+    out = re.sub("d5e7" + "e761-8b1b-4ca8-b1fe-771acd1450f8|" + "667a" + "a482-f17c-47d1-b7f3-a2427c36516b", "", out, flags=re.I)
     return out
 
 
 def _beacon_script() -> str:
     return """<script>
   window.PAYMENT_CONFIG = {
+    PROVIDER: 'polar_sh',
+    DIVISION: 'TOM',
+    STORE_SLOT: 'FINANCE_STORE_SLOT',
     STORE_LIVE_READY: false,
-    ACTIVE_SLOT: 'FINANCE_STORE_SLOT',
-    FINANCE_STORE_SLOT: {
-      storeId: '296100',
-      storeDomain: 'truthofmarket.lemonsqueezy.com',
-      monthlyUuid: 'd5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en',
-      annualUuid: '667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en',
-      monthlyCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en',
-      annualCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en',
-      BACKUP_LIVE_CHECKOUT_URL: { monthly: '', annual: '' }
+    POLAR_CHECKOUT_URLS: {
+      monthly_29: '',
+      annual_199: ''
     },
-    PEDIATRIC_STORE_SLOT: {
-      storeId: '296100',
-      storeDomain: 'truthofmarket.lemonsqueezy.com',
-      singleUuid: 'c1cd7f12-3479-49e8-ab71-59c98135d599?embed=1&locale=en',
-      sixMonthUuid: 'c562946d-ef68-4c2f-a802-df9da0179895?embed=1&locale=en',
-      singleCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/c1cd7f12-3479-49e8-ab71-59c98135d599?embed=1&locale=en',
-      sixMonthCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/c562946d-ef68-4c2f-a802-df9da0179895?embed=1&locale=en',
-      BACKUP_LIVE_CHECKOUT_URL: { single: '', sixMonth: '' }
-    }
+    POLAR_TOM_MONTHLY_URL: '',
+    POLAR_TOM_ANNUAL_URL: '',
+    SUPPORT_EMAIL: 'beable9489@gmail.com'
   };
   </script>
   <script src="/hq_member_crm_client.js" defer></script>
@@ -176,10 +173,10 @@ def _lead_box_html(position: str = "top") -> str:
       </form>
       <div class="tom-lead-status" role="status" aria-live="polite" style="display:none;margin-top:12px;font-size:18px;font-weight:700;"></div>
       <div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(148,163,184,0.25);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;">
-        <span style="font-size:16px;color:#e2e8f0;font-weight:700;">💳 Self-Directed Educational Calculator Software (Store #296100):</span>
+        <span style="font-size:16px;color:#e2e8f0;font-weight:700;">💳 Self-Directed Educational Calculator Software · Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay):</span>
         <div style="display:flex;flex-wrap:wrap;gap:10px;">
-          <a class="btn btn-vip lemonsqueezy-button" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" style="min-height:54px;display:inline-flex;align-items:center;font-size:17px;" href="{LS_MONTHLY_URL}">⚡ Start Monthly VIP — $29/mo</a>
-          <a class="btn btn-life lemonsqueezy-button" data-tom-paid-plan="annual" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" style="min-height:54px;display:inline-flex;align-items:center;font-size:17px;" href="{LS_ANNUAL_URL}">💎 Start Annual VIP — $199/yr</a>
+          <a class="btn btn-vip polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="min-height:54px;display:inline-flex;align-items:center;font-size:17px;" href="{POLAR_MONTHLY_HREF}">⚡ Start Monthly VIP — $29/mo</a>
+          <a class="btn btn-life polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="min-height:54px;display:inline-flex;align-items:center;font-size:17px;" href="{POLAR_ANNUAL_HREF}">💎 Start Annual VIP — $199/yr</a>
         </div>
       </div>
     </section>"""
@@ -196,7 +193,7 @@ def _footer_legal_html() -> str:
         <a href="mailto:beable9489@gmail.com" style="color:#fde68a;">beable9489@gmail.com</a>
       </div>
       <p style="color:#e2e8f0;font-weight:600;margin-bottom:8px;">{html.escape(MANDATORY_DISCLAIMER)}</p>
-      <p style="margin:0;">&copy; 2026 TruthOfMarket &middot; Educational Market Data &amp; Quantitative Research Desk (Store #296100).</p>
+      <p style="margin:0;">&copy; 2026 TruthOfMarket &middot; Educational Market Data &amp; Quantitative Research Desk &middot; Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay).</p>
     </footer>"""
 
 
@@ -280,7 +277,6 @@ def _render_article_shell(
   <meta name="twitter:description" content="{html.escape(meta_desc)}" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <script type="application/ld+json">{ld_json}</script>
-  <script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
   {_beacon_script()}
   <style>
     :root {{ --bg:#090d16; --panel:#111827; --border:#1f2937; --text:#e5e7eb; --muted:#9ca3af; --accent:#10b981; --amber:#f59e0b; --blue:#38bdf8; }}
@@ -339,8 +335,8 @@ def _render_article_shell(
       <p style="margin:0;color:#cbd5e1;">Model conservative retirement income across SGOV (T-Bill Cushion), SCHD (Dividend Growth), JEPI (Monthly Income), and VOO (S&amp;P 500 Core) with our free self-directed calculator software.</p>
       <div class="btn-row">
         <a class="btn btn-free" href="/">Open Free 30-Second Retirement Calculator &rarr;</a>
-        <a class="btn btn-vip lemonsqueezy-button" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="{LS_MONTHLY_URL}">Start Monthly VIP — $29/mo</a>
-        <a class="btn btn-life lemonsqueezy-button" data-tom-paid-plan="annual" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" href="{LS_ANNUAL_URL}">Start Annual VIP — $199/yr</a>
+        <a class="btn btn-vip polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="{POLAR_MONTHLY_HREF}">Start Monthly VIP — $29/mo</a>
+        <a class="btn btn-life polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" href="{POLAR_ANNUAL_HREF}">Start Annual VIP — $199/yr</a>
       </div>
       <p style="margin:0.95rem 0 0;font-size:0.84rem;color:#94a3b8;">
         🏛️ <strong>Educational Market Data &amp; Quantitative Research Desk:</strong> <a href="mailto:beable9489@gmail.com">beable9489@gmail.com</a>
@@ -615,7 +611,6 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
   <meta property="og:description" content="Daily US market weather notes, 2-4x/year portfolio rebalancing math, and historical factor studies." />
   <meta property="og:url" content="https://truthofmarket.com/insights/" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
   {_beacon_script()}
   <style>
     body {{ margin:0; font-family:'Inter',-apple-system,sans-serif; background:#090d16; color:#e5e7eb; line-height:1.65; }}

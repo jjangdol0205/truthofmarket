@@ -195,26 +195,17 @@ def main() -> None:
   <script>
   window.__DEFAULT_VIEW__ = 'rightside';
   window.PAYMENT_CONFIG = {{
+    PROVIDER: 'polar_sh',
+    DIVISION: 'TOM',
+    STORE_SLOT: 'FINANCE_STORE_SLOT',
     STORE_LIVE_READY: false,
-    ACTIVE_SLOT: 'FINANCE_STORE_SLOT',
-    FINANCE_STORE_SLOT: {{
-      storeId: '296100',
-      storeDomain: 'truthofmarket.lemonsqueezy.com',
-      monthlyUuid: 'd5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en',
-      annualUuid: '667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en',
-      monthlyCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en',
-      annualCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en',
-      BACKUP_LIVE_CHECKOUT_URL: {{ monthly: '', annual: '' }}
+    POLAR_CHECKOUT_URLS: {{
+      monthly_29: '',
+      annual_199: ''
     }},
-    PEDIATRIC_STORE_SLOT: {{
-      storeId: '296100',
-      storeDomain: 'truthofmarket.lemonsqueezy.com',
-      singleUuid: 'c1cd7f12-3479-49e8-ab71-59c98135d599?embed=1&locale=en',
-      sixMonthUuid: 'c562946d-ef68-4c2f-a802-df9da0179895?embed=1&locale=en',
-      singleCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/c1cd7f12-3479-49e8-ab71-59c98135d599?embed=1&locale=en',
-      sixMonthCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/c562946d-ef68-4c2f-a802-df9da0179895?embed=1&locale=en',
-      BACKUP_LIVE_CHECKOUT_URL: {{ single: '', sixMonth: '' }}
-    }}
+    POLAR_TOM_MONTHLY_URL: '',
+    POLAR_TOM_ANNUAL_URL: '',
+    SUPPORT_EMAIL: 'beable9489@gmail.com'
   }};
   </script>
   <meta charset="UTF-8" />
@@ -284,7 +275,7 @@ def main() -> None:
             "price": "29.00",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
-            "url": "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en"
+            "url": "https://truthofmarket.com/#pricing"
           }},
           {{
             "@type": "Offer",
@@ -292,18 +283,17 @@ def main() -> None:
             "price": "199.00",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
-            "url": "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en"
+            "url": "https://truthofmarket.com/#pricing"
           }}
         ]
       }}
     ]
   }}
   </script>
-  <script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
   <script src="/hq_member_crm_client.js" defer></script>
   <script src="/tom_payment_waitlist.js" defer></script>
-  <script type="module" crossorigin src="./assets/{js_name}?v=20261116mor"></script>
-  <link rel="stylesheet" crossorigin href="./assets/{css_name}?v=20261116mor" />
+  <script type="module" crossorigin src="./assets/{js_name}?v=20261117polar"></script>
+  <link rel="stylesheet" crossorigin href="./assets/{css_name}?v=20261117polar" />
   <script>
   /* === HQ Edge Real-Human Visitor & Signup Helper (tom_truthofmarket) === */
   (function(){{
@@ -319,6 +309,23 @@ def main() -> None:
           fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup_total', {{ mode: 'cors', keepalive: true }}).catch(function(){{}});
         }} catch (e) {{}}
       }};
+      document.addEventListener('click', function(ev) {{
+        try {{
+          if (ev.__tomPaidClickTracked) return;
+          var a = ev.target && ev.target.closest ? ev.target.closest('a,button') : null;
+          if (!a) return;
+          var href = String(a.getAttribute('href') || '');
+          var isPolarLink = (href.indexOf('polar.sh') !== -1 || href.indexOf('buy.polar.sh') !== -1) && href.indexOf('polar.sh/purchases') === -1;
+          var isPolarBtn = a.hasAttribute('data-polar-checkout') || a.hasAttribute('data-tom-paid-plan') || a.classList.contains('polar-checkout-button');
+          if (isPolarLink || isPolarBtn) {{
+            ev.__tomPaidClickTracked = true;
+            var h = (location && location.hostname) || '';
+            if (!h || h === 'localhost' || h === '127.0.0.1') return;
+            fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_' + kst, {{ mode: 'cors', keepalive: true }}).catch(function(){{}});
+            fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_total', {{ mode: 'cors', keepalive: true }}).catch(function(){{}});
+          }}
+        }} catch (_err) {{}}
+      }}, true);
     }} catch (e) {{}}
   }})();
   </script>
@@ -331,10 +338,11 @@ def main() -> None:
       <p id="tomMorningBellClub" style="margin:12px 0 0;padding-top:12px;border-top:1px solid #1e293b;color:#fbbf24;font-size:1.06rem;font-weight:700;line-height:1.65;"><span id="tom-passwordless-club-signup">☕ Morning Bell Retirement &amp; Macro Club — Protecting Your Nest Egg &amp; Monthly Income Together · Free 3-Second Passwordless Membership</span></p>
       <p id="tomFreeStarterManual" style="margin:8px 0 0;color:#38bdf8;font-size:1.06rem;font-weight:700;line-height:1.65;">📘 $0 Free Public Product: US Brokerage App &amp; Calm 2–4x/Year Portfolio Weight Rebalancing Manual (Fidelity · Charles Schwab · Vanguard — SGOV/SPAXX Cash Cushion &amp; Limit Order Guide)</p>
       <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;">
-        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&amp;locale=en" class="lemonsqueezy-button" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" style="color:#6ee7b7;font-weight:800;font-size:1rem;">⚡ Start Monthly VIP — $29/mo</a>
-        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&amp;locale=en" class="lemonsqueezy-button" data-tom-paid-plan="annual" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" style="color:#fde68a;font-weight:800;font-size:1rem;">💎 Start Annual VIP — $199/yr</a>
+        <a href="#tom-vip-monthly" class="polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="color:#6ee7b7;font-weight:800;font-size:1rem;">⚡ Start Monthly VIP — $29/mo</a>
+        <a href="#tom-vip-annual" class="polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="color:#fde68a;font-weight:800;font-size:1rem;">💎 Start Annual VIP — $199/yr</a>
       </div>
       <p style="margin:10px 0 0;padding:8px 12px;border-radius:8px;background:rgba(16,185,129,0.12);border:1px solid rgba(52,211,153,0.35);color:#a7f3d0;font-size:0.96rem;font-weight:800;line-height:1.55;">📦 VIP Software Bundle ($29/mo &amp; $199/yr Annual VIP): Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator</p>
+      <p style="margin:8px 0 0;font-size:0.88rem;color:#93c5fd;font-weight:700;">💳 Checkout &amp; Billing: Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · 14-Day Refund Policy</p>
       <p style="margin:12px 0 0;padding-top:10px;border-top:1px solid rgba(148,163,184,0.2);font-size:0.9rem;color:#cbd5e1;font-weight:600;">Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.</p>
     </section>
   </div>

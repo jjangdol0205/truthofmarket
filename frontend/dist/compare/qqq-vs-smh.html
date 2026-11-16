@@ -25,31 +25,21 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How do $QQQ and $SMH compare on public trend and volume factors (2026-11-16)?", "acceptedAnswer": {"@type": "Answer", "text": "In the public quantitative factor dataset as of 2026-11-16, $SMH records a higher composite factor score (88/100, 1.68x 10-day relative volume) than $QQQ. $QQQ closed at $661.75 (RSI 51.8, lower variance ref $602.19) while $SMH closed at $461.90 (RSI 35.6, lower variance ref $420.33)."}}, {"@type": "Question", "name": "What are the moving-average and variance reference bands for $QQQ vs $SMH?", "acceptedAnswer": {"@type": "Answer", "text": "As of 2026-11-16, $QQQ (Invesco QQQ Trust (Nasdaq-100 ETF)) shows a moving-average reference of $655.13 and lower variance band of $602.19 (Score 80/100), while $SMH (VanEck Semiconductor ETF) shows a moving-average reference of $471.14 and lower variance band of $420.33 (Score 88/100)."}}]}</script>
-  <script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
-  <script type="module" crossorigin src="/assets/index-BIziPp23.js?v=20261116mor"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-CaOpdap3.css?v=20261116mor" />
+  <script type="module" crossorigin src="/assets/index-BIziPp23.js?v=20261117polar"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-CaOpdap3.css?v=20261117polar" />
   <script>
   window.PAYMENT_CONFIG = {
+    PROVIDER: 'polar_sh',
+    DIVISION: 'TOM',
+    STORE_SLOT: 'FINANCE_STORE_SLOT',
     STORE_LIVE_READY: false,
-    ACTIVE_SLOT: 'FINANCE_STORE_SLOT',
-    FINANCE_STORE_SLOT: {
-      storeId: '296100',
-      storeDomain: 'truthofmarket.lemonsqueezy.com',
-      monthlyUuid: 'd5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en',
-      annualUuid: '667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en',
-      monthlyCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en',
-      annualCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en',
-      BACKUP_LIVE_CHECKOUT_URL: { monthly: '', annual: '' }
+    POLAR_CHECKOUT_URLS: {
+      monthly_29: '',
+      annual_199: ''
     },
-    PEDIATRIC_STORE_SLOT: {
-      storeId: '296100',
-      storeDomain: 'truthofmarket.lemonsqueezy.com',
-      singleUuid: 'c1cd7f12-3479-49e8-ab71-59c98135d599?embed=1&locale=en',
-      sixMonthUuid: 'c562946d-ef68-4c2f-a802-df9da0179895?embed=1&locale=en',
-      singleCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/c1cd7f12-3479-49e8-ab71-59c98135d599?embed=1&locale=en',
-      sixMonthCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/c562946d-ef68-4c2f-a802-df9da0179895?embed=1&locale=en',
-      BACKUP_LIVE_CHECKOUT_URL: { single: '', sixMonth: '' }
-    }
+    POLAR_TOM_MONTHLY_URL: '',
+    POLAR_TOM_ANNUAL_URL: '',
+    SUPPORT_EMAIL: 'beable9489@gmail.com'
   };
   </script>
   <script src="/hq_member_crm_client.js" defer></script>
@@ -132,7 +122,7 @@
         localStorage.setItem('hq_uv_ever_' + ns, '1');
         fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/uv_total', { mode: 'cors', keepalive: true }).catch(function(){});
       }
-      if (location.search.indexOf('payment=success') !== -1 || location.search.indexOf('unlock=1') !== -1) {
+      if (location.search.indexOf('payment=success') !== -1 || location.search.indexOf('polar_checkout_success') !== -1 || location.search.indexOf('unlock=1') !== -1) {
         if (localStorage.getItem('hq_paid_' + kst) !== '1') {
           localStorage.setItem('hq_paid_' + kst, '1');
           fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_member_' + kst, { mode: 'cors', keepalive: true }).catch(function(){});
@@ -193,10 +183,10 @@
         <a href="/" style="background:#0ea5e9;color:#fff;text-decoration:none;padding:8px 13px;border-radius:6px;font-weight:800;font-size:0.78rem;">
           🏡 30-Sec Retirement Calculator
         </a>
-        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en" class="lemonsqueezy-button" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" style="background:#eab308;color:#0f172a;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:800;font-size:0.78rem;">
+        <a href="#tom-vip-monthly" class="polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="background:#eab308;color:#0f172a;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:800;font-size:0.78rem;">
           ⚡ Start Monthly VIP — $29/mo
         </a>
-        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en" class="lemonsqueezy-button" data-tom-paid-plan="annual" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" style="background:#1e293b;border:1px solid #475569;color:#f8fafc;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:700;font-size:0.78rem;">
+        <a href="#tom-vip-annual" class="polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="background:#1e293b;border:1px solid #475569;color:#f8fafc;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:700;font-size:0.78rem;">
           💎 Start Annual VIP — $199/yr
         </a>
       </div>
@@ -222,13 +212,13 @@
     <div class="tom-lead-status" role="status" aria-live="polite" style="display:none;margin-top:12px;font-size:18px;font-weight:700;line-height:1.5;"></div>
     <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(148,163,184,0.25);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
       <div style="font-size:16px;color:#e2e8f0;font-weight:700;">
-        💳 <strong>Self-Directed Educational Calculator Software:</strong> Full Dataset, Rebalancing Simulators &amp; CSV Export:
+        💳 <strong>Self-Directed Educational Calculator Software:</strong> Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay):
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:10px;">
-        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en" class="lemonsqueezy-button" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#2563eb;color:#ffffff;font-size:17px;font-weight:800;text-decoration:none;">
+        <a href="#tom-vip-monthly" class="polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#2563eb;color:#ffffff;font-size:17px;font-weight:800;text-decoration:none;">
           ⚡ Start Monthly VIP — $29/mo
         </a>
-        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en" class="lemonsqueezy-button" data-tom-paid-plan="annual" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#f59e0b;color:#0f172a;font-size:17px;font-weight:900;text-decoration:none;">
+        <a href="#tom-vip-annual" class="polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#f59e0b;color:#0f172a;font-size:17px;font-weight:900;text-decoration:none;">
           💎 Start Annual VIP — $199/yr
         </a>
       </div>
@@ -255,13 +245,13 @@
     <div class="tom-lead-status" role="status" aria-live="polite" style="display:none;margin-top:12px;font-size:18px;font-weight:700;line-height:1.5;"></div>
     <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(148,163,184,0.25);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
       <div style="font-size:16px;color:#e2e8f0;font-weight:700;">
-        💳 <strong>Self-Directed Educational Calculator Software:</strong> Full Dataset, Rebalancing Simulators &amp; CSV Export:
+        💳 <strong>Self-Directed Educational Calculator Software:</strong> Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay):
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:10px;">
-        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en" class="lemonsqueezy-button" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#2563eb;color:#ffffff;font-size:17px;font-weight:800;text-decoration:none;">
+        <a href="#tom-vip-monthly" class="polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#2563eb;color:#ffffff;font-size:17px;font-weight:800;text-decoration:none;">
           ⚡ Start Monthly VIP — $29/mo
         </a>
-        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en" class="lemonsqueezy-button" data-tom-paid-plan="annual" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#f59e0b;color:#0f172a;font-size:17px;font-weight:900;text-decoration:none;">
+        <a href="#tom-vip-annual" class="polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#f59e0b;color:#0f172a;font-size:17px;font-weight:900;text-decoration:none;">
           💎 Start Annual VIP — $199/yr
         </a>
       </div>
@@ -426,6 +416,8 @@
       <a href="mailto:beable9489@gmail.com" style="color:#fde68a;font-weight:800;text-decoration:underline;">Support: beable9489@gmail.com</a>
       <span style="color:#475569;">&middot;</span>
       <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Brand%20%26%20Media%20Partnership" style="color:#6ee7b7;font-weight:800;text-decoration:underline;">Sponsorship, Brand &amp; Media Partnerships: beable9489@gmail.com</a>
+      <span style="color:#475569;">&middot;</span>
+      <span style="color:#cbd5e1;font-weight:700;">Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)</span>
     </div>
     <p style="margin:12px 0 0;font-size:0.88rem;line-height:1.6;color:#cbd5e1;font-weight:600;">
       Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.
