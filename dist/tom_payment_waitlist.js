@@ -205,11 +205,13 @@
       '      <div style="font-size:12.5px;font-weight:800;color:#6ee7b7;">MONTHLY VIP SOFTWARE</div>' +
       '      <div style="font-size:17px;font-weight:900;color:#ffffff;margin:3px 0;">Monthly VIP ($29/mo)</div>' +
       '      <div style="font-size:13px;color:#fde68a;font-weight:700;">20% Early-Bird: $23.20/mo</div>' +
+      '      <div style="font-size:11.5px;color:#cbd5e1;margin-top:4px;line-height:1.35;">Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator</div>' +
       "    </button>" +
       '    <button type="button" class="tom-wl-plan-btn" data-wl-plan="Annual VIP ($199/yr)">' +
       '      <div style="font-size:12.5px;font-weight:800;color:#fde68a;">ANNUAL VIP SOFTWARE (SAVE 43%)</div>' +
       '      <div style="font-size:17px;font-weight:900;color:#ffffff;margin:3px 0;">Annual VIP ($199/yr)</div>' +
       '      <div style="font-size:13px;color:#6ee7b7;font-weight:700;">20% Early-Bird: $159.20/yr</div>' +
+      '      <div style="font-size:11.5px;color:#cbd5e1;margin-top:4px;line-height:1.35;">Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator</div>' +
       "    </button>" +
       "  </div>" +
       '  <form id="tomVipWaitlistForm" novalidate style="display:flex;flex-direction:column;gap:10px;">' +
@@ -357,7 +359,10 @@
   window.addEventListener(
     "click",
     function (e) {
-      var el = e.target && e.target.closest ? e.target.closest("a, button, [role='button']") : null;
+      var el =
+        e.target && e.target.closest
+          ? e.target.closest(".lemonsqueezy-button") || e.target.closest("a, button, [role='button']")
+          : null;
       if (!el) return;
 
       var href = String(el.getAttribute("href") || "");
