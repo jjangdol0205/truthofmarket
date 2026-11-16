@@ -26,6 +26,7 @@ ROOT_DIST = ROOT / "dist"
 PUB = FE / "public"
 
 MODULE_ORDER = [
+    "src/components/PaymentWaitlist.js",
     "src/locales/i18n.js",
     "src/services/api.js",
     "src/components/PositionDoctor.js",
@@ -58,8 +59,8 @@ def refresh_health_and_rss() -> tuple[str, str]:
     smh_close = 504.48
     smh_dd_pct = -24.58
     celh_close = 30.04
-    celh_stop = 27.34
-    celh_tp1 = 60.08
+    celh_low_ref = 27.34
+    celh_up_ref = 60.08
 
     if semi_path.exists():
         try:
@@ -85,8 +86,8 @@ def refresh_health_and_rss() -> tuple[str, str]:
             for row in st:
                 if row.get("ticker") == "CELH":
                     celh_close = float(row.get("close") or celh_close)
-                    celh_stop = round(celh_close * 0.91, 2)
-                    celh_tp1 = round(celh_close * 2.0, 2)
+                    celh_low_ref = round(celh_close * 0.91, 2)
+                    celh_up_ref = round(celh_close * 2.0, 2)
                     break
         except Exception:
             pass
@@ -96,84 +97,71 @@ def refresh_health_and_rss() -> tuple[str, str]:
         "mode": "static",
         "as_of_date": as_of_date,
         "updated_at": iso_now,
-        "services": ["RightSideAlpha", "SemiFearGreed"],
+        "desk": "Educational Market Data & Quantitative Research Desk",
+        "services": ["TruthOfMarket", "MarketWeather"],
     }
     health_json = json.dumps(health_obj, indent=2) + "\n"
 
     insight_items_xml = f"""
     <item>
-      <title><![CDATA[US Market Regime Dispatch ({as_of_date}): $SMH Fear & Greed at {fg_score:.1f}/100 ({regime_code}) & PW-RSI Watchlist]]></title>
+      <title><![CDATA[Morning Bell Market Weather Note ({as_of_date}): Sentiment Gauge at {fg_score:.1f}/100 ({regime_code}) & Calm 2-4x/Year Rebalancing]]></title>
       <link>https://truthofmarket.com/insights/daily-us-quant-regime-brief.html</link>
       <guid isPermaLink="true">https://truthofmarket.com/insights/daily-us-quant-regime-brief.html</guid>
       <pubDate>{rfc_now}</pubDate>
-      <description><![CDATA[Post-close institutional US market regime dispatch as of {as_of_date}: $SMH ${smh_close:.2f} ({smh_dd_pct:.2f}% off 52W high), contrarian $SMH:$XLV barbell status, and public PW-RSI leaders.]]></description>
+      <description><![CDATA[Educational US market weather summary as of {as_of_date}: $SMH ${smh_close:.2f} ({smh_dd_pct:.2f}% off 52W high), $SMH:$XLV barbell calculator context, and SGOV · SCHD · JEPI · VOO retirement allocation study.]]></description>
     </item>
     <item>
-      <title><![CDATA[Why Left-Side Dip Buyers Bleed Out: The 26.8-Year Math Behind Right-Side Ignition (PW-RSI)]]></title>
+      <title><![CDATA[Understanding Moving-Average Confirmation: 26.8-Year Empirical Factor Study (2000-2026)]]></title>
       <link>https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html</link>
       <guid isPermaLink="true">https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html</guid>
       <pubDate>{rfc_now}</pubDate>
-      <description><![CDATA[How filtering for completed 52-week washouts, MA20/MA60 reclaims, and institutional volume surges eliminates value traps across 72 liquid US stocks.]]></description>
+      <description><![CDATA[Educational quantitative study examining 52-week drawdown recovery, 20-day and 60-day moving average alignment, and 10-day relative volume across liquid US equities.]]></description>
     </item>
     <item>
-      <title><![CDATA[Surviving Chip Crashes: How the $SMH:$XLV Contrarian Barbell Cuts Max Drawdown Without Killing Alpha]]></title>
+      <title><![CDATA[Sector Correlation & Rebalancing Math: Studying the $SMH and $XLV Barbell (2000-2026)]]></title>
       <link>https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html</link>
       <guid isPermaLink="true">https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html</guid>
       <pubDate>{rfc_now}</pubDate>
-      <description><![CDATA[Empirical breakdown of pairing high-beta Semiconductors ($SMH) with low-beta Healthcare ($XLV) and shifting from 70:30 to 80:20 during Extreme Fear washouts.]]></description>
+      <description><![CDATA[Empirical educational study of combining Semiconductors ($SMH) with Healthcare ($XLV) under calm 2-4x/year weight rebalancing.]]></description>
     </item>
     <item>
-      <title><![CDATA[The Asymmetry of Ruin: Why Cutting Every Loser at -9.0% Saves Years of Dead-Money Recovery]]></title>
+      <title><![CDATA[The Mathematics of Drawdown Asymmetry: Why Portfolio Cushions Preserve Long-Term Compounding]]></title>
       <link>https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html</link>
       <guid isPermaLink="true">https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html</guid>
       <pubDate>{rfc_now}</pubDate>
-      <description><![CDATA[A -9% loss requires +9.89% to break even; a -50% bagholder drawdown demands +100%. Inside Rule 1 and the 55-day dead-money time stop.]]></description>
+      <description><![CDATA[Educational compounding math showing how deep drawdowns require nonlinear recovery gains, and how short-term US Treasury cushions reduce sequence-of-returns risk.]]></description>
     </item>"""
 
     rss_xml = f"""<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>RightSideAlpha x SemiFearGreed | US Equity Quant Terminal &amp; Semiconductor Fear &amp; Greed Index</title>
+    <title>TruthOfMarket | US 401k/IRA Retirement Cashflow &amp; Safe Rebalancing Calculator</title>
     <link>https://truthofmarket.com/</link>
     <atom:link href="https://truthofmarket.com/rss.xml" rel="self" type="application/rss+xml" />
     <atom:link href="https://pubsubhubbub.appspot.com/" rel="hub" />
-    <description>Institutional US Equity Post-Washout Right-Side Ignition (PW-RSI) Quant Terminal covering 72 US equities, daily $SMH Semiconductor Fear &amp; Greed Index (0-100), and $SMH/$XLV contrarian barbell allocation.</description>
+    <description>Self-directed educational calculator software for US 401(k)/IRA retirement cashflow simulation, 3-color market weather visualization, and calm 2-4x/year SGOV · SCHD · JEPI · VOO portfolio rebalancing.</description>
     <language>en-US</language>
     <lastBuildDate>{rfc_now}</lastBuildDate>{insight_items_xml}
     <item>
-      <title><![CDATA[RightSideAlpha x SemiFearGreed — 72 US Equity PW-RSI Turnaround Terminal & 26.8-Year Backtest (As of {as_of_date})]]></title>
+      <title><![CDATA[TruthOfMarket — 30-Second US 401(k)/IRA Retirement Cashflow & Safe Rebalancing Calculator (As of {as_of_date})]]></title>
       <link>https://truthofmarket.com/</link>
       <guid isPermaLink="true">https://truthofmarket.com/</guid>
       <pubDate>{rfc_now}</pubDate>
-      <description><![CDATA[Live institutional US equity quant screener (as of {as_of_date}) tracking 72 liquid US stocks across 52-week washout bottoms, right-side SMA20/SMA60 turnaround ignition triggers, -9.0% mechanical hard-stop protection, and 2x (TP1 +100%) asymmetric profit targets.]]></description>
+      <description><![CDATA[Self-directed educational retirement income calculator modeling SGOV (US T-Bill Cushion), SCHD (Dividend Growth), JEPI (Monthly Paycheck), and VOO (S&P 500 Core) with calm 2-4x/year weight rebalancing.]]></description>
     </item>
     <item>
-      <title><![CDATA[CNN-Edition Semiconductor Fear & Greed Index ($SMH {fg_score:.1f} {regime_code}) & $SMH/$XLV 80:20 Contrarian Barbell Engine]]></title>
+      <title><![CDATA[Public Market Weather & Sector Sentiment Gauge ({fg_score:.1f} {regime_code}) — $SMH/$XLV Barbell Calculator]]></title>
       <link>https://truthofmarket.com/semi-fear-greed.html</link>
       <guid isPermaLink="true">https://truthofmarket.com/semi-fear-greed.html</guid>
       <pubDate>{rfc_now}</pubDate>
-      <description><![CDATA[Real-time 5-factor Semiconductor Fear & Greed Index ($SMH Close ${smh_close:.2f}, {smh_dd_pct:.2f}% from 52W High as of {as_of_date}) and regime-based $SMH (VanEck Semiconductor ETF) vs. $XLV (Health Care Select Sector SPDR) contrarian barbell rebalancing simulator.]]></description>
+      <description><![CDATA[Self-directed educational sector sentiment gauge ($SMH Close ${smh_close:.2f}, {smh_dd_pct:.2f}% from 52W High as of {as_of_date}) and periodic $SMH vs. $XLV barbell weight calculator.]]></description>
     </item>
     <item>
-      <title><![CDATA[Celsius Holdings ($CELH) Institutional Deep-Dive: 52W Bottom Re-Accumulation & PW-RSI Turnaround Analysis (${celh_close:.2f})]]></title>
+      <title><![CDATA[Celsius Holdings ($CELH) Public Factor Case Study: 52W Consolidation & Volume Analysis (${celh_close:.2f})]]></title>
       <link>https://truthofmarket.com/stocks/celh.html</link>
       <guid isPermaLink="true">https://truthofmarket.com/stocks/celh.html</guid>
       <pubDate>{rfc_now}</pubDate>
-      <description><![CDATA[Comprehensive institutional audit of Celsius Holdings ($CELH, Close ${celh_close:.2f} as of {as_of_date}) following its PepsiCo inventory destocking washout: gross margin defense, international expansion catalysts, ${celh_stop:.2f} (-9.0%) hard stop floor, and ${celh_tp1:.2f} (+100% 2x) TP1 target.]]></description>
-    </item>
-    <item>
-      <title><![CDATA[Mobileye Global ($MBLY) Post-Mortem Risk Audit: Rule 1 (-9.0% Hard Stop @ $6.39) Execution & Capital Preservation]]></title>
-      <link>https://truthofmarket.com/stocks/mbly.html</link>
-      <guid isPermaLink="true">https://truthofmarket.com/stocks/mbly.html</guid>
-      <pubDate>{rfc_now}</pubDate>
-      <description><![CDATA[Transparent institutional post-mortem on Mobileye Global ($MBLY): how mechanical execution of Rule 1 (-9.0% Hard Stop at $6.39) prevented deeper drawdown after support breakdown and redeployed capital into confirmed right-side leaders.]]></description>
-    </item>
-    <item>
-      <title><![CDATA[NVIDIA ($NVDA) & VanEck Semiconductor ETF ($SMH) Institutional PW-RSI Support/Resistance Audit ({as_of_date})]]></title>
-      <link>https://truthofmarket.com/stocks/nvda.html</link>
-      <guid isPermaLink="true">https://truthofmarket.com/stocks/nvda.html</guid>
-      <pubDate>{rfc_now}</pubDate>
-      <description><![CDATA[Daily retirement safety & market weather screening ({as_of_date}) across $SGOV (US T-Bill Cushion), $SCHD (Dividend Growth), $JEPI (Monthly Paycheck), $VOO (S&P 500 Core), $SMH, and $XLV with calm 2-4x/year 3-color rebalancing guidance.]]></description>
+      <description><![CDATA[Educational factor summary of Celsius Holdings ($CELH, Close ${celh_close:.2f} as of {as_of_date}): moving-average alignment, lower variance band (${celh_low_ref:.2f}), and upper dispersion band (${celh_up_ref:.2f}).]]></description>
     </item>
   </channel>
 </rss>
@@ -182,6 +170,12 @@ def refresh_health_and_rss() -> tuple[str, str]:
 
 
 def main() -> None:
+    PUB.mkdir(parents=True, exist_ok=True)
+
+    # Export standalone tom_payment_waitlist.js to frontend/public/ so all static subpages share unified PAYMENT_CONFIG & beacons
+    waitlist_src = (FE / "src/components/PaymentWaitlist.js").read_text(encoding="utf-8")
+    (PUB / "tom_payment_waitlist.js").write_text(waitlist_src, encoding="utf-8")
+
     chunks = []
     for rel in MODULE_ORDER:
         raw = (FE / rel).read_text(encoding="utf-8")
@@ -192,35 +186,59 @@ def main() -> None:
     js_name = "index-BIziPp23.js"
     css_name = "index-CaOpdap3.css"
 
-    # Generate all 76 static /stocks/<ticker>.html pages, /semi-fear-greed.html, and clean sitemap.xml
+    # Generate static /pro-swing.html, /semi-fear-greed.html, /stocks/*.html, /compare/*.html, /insights/*.html, and canonical sitemap.xml
     seo_dir_html = generate_all_seo_pages(js_name=js_name, css_name=css_name)
 
     index_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
-  <script>window.__DEFAULT_VIEW__ = 'rightside';</script>
+  <script>
+  window.__DEFAULT_VIEW__ = 'rightside';
+  window.PAYMENT_CONFIG = {{
+    STORE_LIVE_READY: false,
+    ACTIVE_SLOT: 'FINANCE_STORE_SLOT',
+    FINANCE_STORE_SLOT: {{
+      storeId: '296100',
+      storeDomain: 'truthofmarket.lemonsqueezy.com',
+      monthlyUuid: 'd5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en',
+      annualUuid: '667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en',
+      monthlyCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en',
+      annualCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en',
+      BACKUP_LIVE_CHECKOUT_URL: {{ monthly: '', annual: '' }}
+    }},
+    PEDIATRIC_STORE_SLOT: {{
+      storeId: '296100',
+      storeDomain: 'truthofmarket.lemonsqueezy.com',
+      singleUuid: 'c1cd7f12-3479-49e8-ab71-59c98135d599?embed=1&locale=en',
+      sixMonthUuid: 'c562946d-ef68-4c2f-a802-df9da0179895?embed=1&locale=en',
+      singleCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/c1cd7f12-3479-49e8-ab71-59c98135d599?embed=1&locale=en',
+      sixMonthCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/c562946d-ef68-4c2f-a802-df9da0179895?embed=1&locale=en',
+      BACKUP_LIVE_CHECKOUT_URL: {{ single: '', sixMonth: '' }}
+    }}
+  }};
+  </script>
   <meta charset="UTF-8" />
   <meta name="google-site-verification" content="nAGlJMEUUPifbzSd8X4PCaBIyr3DtTwaa1a-q9zkbBc" />
   <meta name="google-site-verification" content="G99bl17UU6iKgNm5ndGcSWp0dHFpJ0MjJqBBp0Exfx0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income | TruthOfMarket</title>
-  <meta name="description" content="30-Second Comfortable Retirement &amp; Monthly Cashflow Simulator for 50-70s US investors. Build calm monthly income with SGOV (T-Bill Cushion), SCHD (Dividend Growth), JEPI (Monthly Paycheck) &amp; VOO (S&amp;P 500 Core) via 2-4x/year 3-color rebalancing." />
+  <meta name="description" content="Self-directed US 401k/IRA Retirement Cashflow &amp; Safe Rebalancing Calculator Software. Simulate monthly income with SGOV (T-Bill Cushion), SCHD (Dividend Growth), JEPI (Monthly Paycheck) &amp; VOO (S&amp;P 500 Core) via calm 2-4x/year rebalancing." />
   <link rel="canonical" href="https://truthofmarket.com/" />
-  <link rel="alternate" type="application/rss+xml" title="TruthOfMarket Retirement &amp; Market Weather RSS Feed" href="https://truthofmarket.com/rss.xml" />
+  <link rel="alternate" type="application/rss+xml" title="TruthOfMarket US 401k/IRA Retirement Cashflow RSS Feed" href="https://truthofmarket.com/rss.xml" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="TruthOfMarket — Retirement Cashflow Architect" />
+  <meta property="og:site_name" content="TruthOfMarket — US 401k/IRA Retirement Cashflow &amp; Safe Rebalancing Calculator" />
   <meta property="og:title" content="Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income | TruthOfMarket" />
-  <meta property="og:description" content="Design your monthly retirement paycheck in 30 seconds and protect your nest egg from -35% sequence-of-returns crashes with SGOV, SCHD, JEPI &amp; VOO calm 2-4x/year rebalancing." />
+  <meta property="og:description" content="Self-directed educational calculator software to simulate monthly retirement cashflow and calm 2-4x/year SGOV, SCHD, JEPI &amp; VOO portfolio weight rebalancing." />
   <meta property="og:url" content="https://truthofmarket.com/" />
   <meta property="og:image" content="https://truthofmarket.com/og-preview.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income | TruthOfMarket" />
-  <meta name="twitter:description" content="30-Second Retirement Cashflow Simulator &amp; 3-Bucket Blueprint (SGOV · SCHD · JEPI · VOO) for calm monthly retirement income." />
+  <meta name="twitter:description" content="30-Second US 401k/IRA Retirement Cashflow &amp; Safe Rebalancing Calculator (SGOV · SCHD · JEPI · VOO)." />
   <meta name="twitter:image" content="https://truthofmarket.com/og-preview.png" />
   <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700;800&family=Noto+Sans+JP:wght@400;600;700&family=Noto+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <script type="application/ld+json">
   {{
     "@context": "https://schema.org",
@@ -228,12 +246,12 @@ def main() -> None:
       {{
         "@type": "Organization",
         "@id": "https://truthofmarket.com/#organization",
-        "name": "RightSideAlpha × SemiFearGreed",
+        "name": "TruthOfMarket — Educational Market Data & Quantitative Research Desk",
         "url": "https://truthofmarket.com/",
+        "email": "beable9489@gmail.com",
         "logo": "https://truthofmarket.com/favicon.svg",
         "sameAs": [
           "https://www.youtube.com/@RightSideAlpha",
-          "https://t.me/truthofmarketss",
           "https://www.instagram.com/rightsidealpha",
           "https://x.com/rightsidealpha"
         ]
@@ -242,39 +260,39 @@ def main() -> None:
         "@type": "WebSite",
         "@id": "https://truthofmarket.com/#website",
         "url": "https://truthofmarket.com/",
-        "name": "RightSideAlpha × SemiFearGreed",
+        "name": "TruthOfMarket",
         "publisher": {{
           "@id": "https://truthofmarket.com/#organization"
         }},
-        "description": "Real-time Semiconductor Fear & Greed Index (0-100), $SMH/$XLV Contrarian Barbell Rebalancing Engine, and 72 US Equity Post-Washout Right-Side Ignition (PW-RSI) Terminal."
+        "description": "Self-directed educational calculator software for US 401k/IRA Retirement Cashflow & Safe Rebalancing across SGOV, SCHD, JEPI, and VOO."
       }},
       {{
         "@type": "SoftwareApplication",
         "@id": "https://truthofmarket.com/#software",
-        "name": "RightSideAlpha × SemiFearGreed Institutional Quant Terminal",
+        "name": "TruthOfMarket US 401k/IRA Retirement Cashflow & Safe Rebalancing Calculator",
         "applicationCategory": "FinanceApplication",
         "operatingSystem": "Web",
         "url": "https://truthofmarket.com/",
         "publisher": {{
           "@id": "https://truthofmarket.com/#organization"
         }},
-        "description": "72 US Equity Post-Washout Right-Side Ignition (PW-RSI) Screener, 3-Second Position Doctor, and CNN-Edition Semiconductor Fear & Greed ($SMH:$XLV) Barbell Engine.",
+        "description": "Self-directed educational market data visualization and mathematical portfolio calculator software for US 401k/IRA retirement cashflow and 2-4x/year weight rebalancing.",
         "offers": [
           {{
             "@type": "Offer",
-            "name": "Pro Quantitative Terminal (Monthly)",
+            "name": "Monthly VIP Educational Calculator Software ($29/mo)",
             "price": "29.00",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
-            "url": "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
+            "url": "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en"
           }},
           {{
             "@type": "Offer",
-            "name": "Lifetime Research & Terminal License",
+            "name": "Annual VIP Educational Calculator Software ($199/yr)",
             "price": "199.00",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
-            "url": "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b"
+            "url": "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en"
           }}
         ]
       }}
@@ -283,10 +301,11 @@ def main() -> None:
   </script>
   <script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
   <script src="/hq_member_crm_client.js" defer></script>
-  <script type="module" crossorigin src="./assets/{js_name}?v=20261116senior"></script>
-  <link rel="stylesheet" crossorigin href="./assets/{css_name}?v=20261116senior" />
+  <script src="/tom_payment_waitlist.js" defer></script>
+  <script type="module" crossorigin src="./assets/{js_name}?v=20261116mor"></script>
+  <link rel="stylesheet" crossorigin href="./assets/{css_name}?v=20261116mor" />
   <script>
-  /* === HQ Edge Real-Human Visitor & KPI Beacon (tom_truthofmarket) === */
+  /* === HQ Edge Real-Human Visitor & Signup Helper (tom_truthofmarket) === */
   (function(){{
     try {{
       if (typeof window === 'undefined' || typeof navigator === 'undefined') return;
@@ -296,51 +315,10 @@ def main() -> None:
         try {{
           var h = (location && location.hostname) || '';
           if (!h || h === 'localhost' || h === '127.0.0.1') return;
-          if (localStorage.getItem('hq_signup_' + ns + '_' + kst) !== '1') {{
-            localStorage.setItem('hq_signup_' + ns + '_' + kst, '1');
-            fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup_' + kst, {{ mode: 'cors', keepalive: true }}).catch(function(){{}});
-          }}
-          if (localStorage.getItem('hq_signup_ever_' + ns) !== '1') {{
-            localStorage.setItem('hq_signup_ever_' + ns, '1');
-            fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup_total', {{ mode: 'cors', keepalive: true }}).catch(function(){{}});
-          }}
+          fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup', {{ mode: 'cors', keepalive: true }}).catch(function(){{}});
+          fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup_total', {{ mode: 'cors', keepalive: true }}).catch(function(){{}});
         }} catch (e) {{}}
       }};
-      if (window.__HQ_BEACON_SENT_tom_truthofmarket__ || window.__HQ_KPI_TOM__) return;
-      window.__HQ_BEACON_SENT_tom_truthofmarket__ = true;
-      window.__HQ_KPI_TOM__ = true;
-      var ua = navigator.userAgent || '';
-      if (navigator.webdriver || /bot|crawl|spider|slurp|headless|lighthouse|gtmetrix|pingdom|uptimerobot|python|curl|node|axios/i.test(ua)) return;
-      var host = (location && location.hostname) || '';
-      if (!host || host === 'localhost' || host === '127.0.0.1') return;
-      fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/pv_' + kst, {{ mode: 'cors', keepalive: true }}).catch(function(){{}});
-      fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/pv_total', {{ mode: 'cors', keepalive: true }}).catch(function(){{}});
-      if (localStorage.getItem('hq_uv_' + ns + '_' + kst) !== '1') {{
-        localStorage.setItem('hq_uv_' + ns + '_' + kst, '1');
-        fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/uv_' + kst, {{ mode: 'cors', keepalive: true }}).catch(function(){{}});
-      }}
-      if (localStorage.getItem('hq_uv_ever_' + ns) !== '1') {{
-        localStorage.setItem('hq_uv_ever_' + ns, '1');
-        fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/uv_total', {{ mode: 'cors', keepalive: true }}).catch(function(){{}});
-      }}
-      if (location.search.indexOf('payment=success') !== -1 || location.search.indexOf('unlock=1') !== -1) {{
-        if (localStorage.getItem('hq_paid_' + kst) !== '1') {{
-          localStorage.setItem('hq_paid_' + kst, '1');
-          fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_member_' + kst, {{ mode: 'cors', keepalive: true }}).catch(function(){{}});
-          fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_member_total', {{ mode: 'cors', keepalive: true }}).catch(function(){{}});
-        }}
-      }}
-      document.addEventListener('click', function(e) {{
-        var el = e.target && e.target.closest ? e.target.closest('a, button, [role="button"]') : null;
-        if (!el) return;
-        var href = (el.getAttribute('href') || '').toLowerCase();
-        var txt = (el.innerText || el.textContent || '').toLowerCase();
-        var cls = (el.className || '').toLowerCase();
-        if (href.indexOf('lemonsqueezy.com') !== -1 || href.indexOf('truthofmarketss') !== -1 || cls.indexOf('pro') !== -1 || cls.indexOf('paywall') !== -1 || /pro|vip|unlock|subscribe|upgrade|checkout|\\$19|\\$29|\\$49|\\$199/.test(txt)) {{
-          fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_' + kst, {{ mode: 'cors', keepalive: true }}).catch(function(){{}});
-          fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_total', {{ mode: 'cors', keepalive: true }}).catch(function(){{}});
-        }}
-      }}, true);
     }} catch (e) {{}}
   }})();
   </script>
@@ -349,13 +327,14 @@ def main() -> None:
   <div id="app">
     <section class="seo-home-fallback" id="tom-retirement-architect" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;margin:16px auto;padding:24px;background:#0f172a;border:1px solid #10b981;border-radius:14px;color:#f8fafc;">
       <h1 style="font-size:1.75rem;font-weight:900;margin:0 0 10px;color:#ffffff;line-height:1.3;">Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income.</h1>
-      <p style="margin:0;color:#e2e8f0;font-size:1.125rem;line-height:1.72;">30-Second Comfortable Retirement &amp; Monthly Cashflow Simulator — Design your guarded monthly retirement paycheck ($150k / $400k / $800k / $1.5M presets), shield your nest egg from -35% sequence-of-returns crashes, and rebalance calmly 2–4 times a year across <b>SGOV</b> (US T-Bill Cash Cushion), <b>SCHD</b> (Dividend Growth), <b>JEPI</b> (Monthly Dividend Paycheck), and <b>VOO</b> (S&amp;P 500 Core Compounding) using our 3-Color Traffic Light.</p>
+      <p style="margin:0;color:#e2e8f0;font-size:1.125rem;line-height:1.72;">30-Second Comfortable Retirement &amp; Monthly Cashflow Calculator — Simulate your monthly retirement paycheck ($150k / $400k / $800k / $1.5M presets), cushion your nest egg from sequence-of-returns drawdowns, and rebalance calmly 2–4 times per year across <b>SGOV</b> (US T-Bill Cash Cushion), <b>SCHD</b> (Dividend Growth), <b>JEPI</b> (Monthly Dividend Paycheck), and <b>VOO</b> (S&amp;P 500 Core Compounding) aligned with our 3-Color Market Weather indicator.</p>
       <p id="tomMorningBellClub" style="margin:12px 0 0;padding-top:12px;border-top:1px solid #1e293b;color:#fbbf24;font-size:1.06rem;font-weight:700;line-height:1.65;"><span id="tom-passwordless-club-signup">☕ Morning Bell Retirement &amp; Macro Club — Protecting Your Nest Egg &amp; Monthly Income Together · Free 3-Second Passwordless Membership</span></p>
-      <p id="tomFreeStarterManual" style="margin:8px 0 0;color:#38bdf8;font-size:1.06rem;font-weight:700;line-height:1.65;">📘 $0 Free Public Product: US Brokerage App &amp; Safe Retirement Rebalancing Manual (Fidelity · Charles Schwab · Vanguard — SGOV/SPAXX Cash Cushion, Limit Orders &amp; Calm 2–4x/Year Rebalancing Guide)</p>
-      <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
-        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&amp;locale=en" class="lemonsqueezy-button" style="color:#6ee7b7;font-weight:800;font-size:1rem;">⚡ Monthly VIP ($29/mo)</a>
-        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&amp;locale=en" class="lemonsqueezy-button" style="color:#fde68a;font-weight:800;font-size:1rem;">👑 Lifetime VIP ($199 Once)</a>
+      <p id="tomFreeStarterManual" style="margin:8px 0 0;color:#38bdf8;font-size:1.06rem;font-weight:700;line-height:1.65;">📘 $0 Free Public Product: US Brokerage App &amp; Calm 2–4x/Year Portfolio Weight Rebalancing Manual (Fidelity · Charles Schwab · Vanguard — SGOV/SPAXX Cash Cushion &amp; Limit Order Guide)</p>
+      <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;">
+        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&amp;locale=en" class="lemonsqueezy-button" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" style="color:#6ee7b7;font-weight:800;font-size:1rem;">⚡ Start Monthly VIP — $29/mo</a>
+        <a href="https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&amp;locale=en" class="lemonsqueezy-button" data-tom-paid-plan="annual" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" style="color:#fde68a;font-weight:800;font-size:1rem;">💎 Start Annual VIP — $199/yr</a>
       </div>
+      <p style="margin:12px 0 0;padding-top:10px;border-top:1px solid rgba(148,163,184,0.2);font-size:0.9rem;color:#cbd5e1;font-weight:600;">Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.</p>
     </section>
   </div>
 {seo_dir_html}
@@ -369,7 +348,6 @@ def main() -> None:
         'href="https://truthofmarket.com/feed.xml" rel="self"',
     )
 
-    # Keep frontend/public/index.html, rss.xml, feed.xml, and health.json in sync
     (PUB / "index.html").write_text(index_html, encoding="utf-8")
     (PUB / "rss.xml").write_text(rss_xml, encoding="utf-8")
     (PUB / "feed.xml").write_text(feed_xml, encoding="utf-8")
@@ -377,14 +355,19 @@ def main() -> None:
     (PUB / "static_api" / "health.json").write_text(health_json, encoding="utf-8")
     (ROOT / "static_api" / "health.json").write_text(health_json, encoding="utf-8")
 
-    # Remove deprecated/leak files from public source before copying
-    for stale_rel in ["instagram_us_setup.html", "static_api/stocks_pro.json", "static_api/smh_xlv_fear_greed_history.csv"]:
+    for stale_rel in [
+        "instagram_us_setup.html",
+        "flow_10_promo_shorts_board.html",
+        "flow_10_prompts_studio.html",
+        "flow_ep11_20_prompts_studio.html",
+        "static_api/stocks_pro.json",
+        "static_api/smh_xlv_fear_greed_history.csv",
+    ]:
         sp = PUB / stale_rel
         if sp.exists():
             sp.unlink()
 
-    # Explicitly sync passwordless CRM client & mailing endpoint config across public, frontend/dist, dist, and root
-    for crm_name in ("hq_member_crm_client.js", "hq-mailing-endpoint.json"):
+    for crm_name in ("hq_member_crm_client.js", "hq-mailing-endpoint.json", "tom_payment_waitlist.js"):
         root_crm = ROOT / crm_name
         pub_crm = PUB / crm_name
         src_crm = pub_crm if pub_crm.exists() else root_crm
@@ -398,7 +381,7 @@ def main() -> None:
                     src_crm = root_crm
             except Exception:
                 pass
-        elif root_crm.exists() and pub_crm.exists() and root_crm.stat().st_mtime > pub_crm.stat().st_mtime:
+        elif crm_name != "tom_payment_waitlist.js" and root_crm.exists() and pub_crm.exists() and root_crm.stat().st_mtime > pub_crm.stat().st_mtime:
             src_crm = root_crm
         if src_crm.exists() and src_crm.resolve() != pub_crm.resolve():
             shutil.copy2(src_crm, pub_crm)
@@ -415,22 +398,35 @@ def main() -> None:
             if item.is_dir():
                 shutil.copytree(item, dest, dirs_exist_ok=True)
             else:
-                shutil.copy2(item, dest)
-        for crm_name in ("hq_member_crm_client.js", "hq-mailing-endpoint.json"):
+                if item.resolve() != dest.resolve():
+                    shutil.copy2(item, dest)
+        for crm_name in ("hq_member_crm_client.js", "hq-mailing-endpoint.json", "tom_payment_waitlist.js"):
             pub_crm = PUB / crm_name
             dest_crm = target_dir / crm_name
             if pub_crm.exists() and pub_crm.resolve() != dest_crm.resolve():
                 shutil.copy2(pub_crm, dest_crm)
-        # Write index.html, rss.xml, feed.xml, and static_api/health.json AFTER copying public files
         (target_dir / "index.html").write_text(index_html, encoding="utf-8")
         (target_dir / "rss.xml").write_text(rss_xml, encoding="utf-8")
         (target_dir / "feed.xml").write_text(feed_xml, encoding="utf-8")
         (target_dir / "static_api").mkdir(parents=True, exist_ok=True)
         (target_dir / "static_api" / "health.json").write_text(health_json, encoding="utf-8")
-        for stale_rel in ["instagram_us_setup.html", "static_api/stocks_pro.json", "static_api/smh_xlv_fear_greed_history.csv", "assets/index-BPaRJGLB.css"]:
+        for stale_rel in [
+            "instagram_us_setup.html",
+            "flow_10_promo_shorts_board.html",
+            "flow_10_prompts_studio.html",
+            "flow_ep11_20_prompts_studio.html",
+            "static_api/stocks_pro.json",
+            "static_api/smh_xlv_fear_greed_history.csv",
+            "assets/index-BPaRJGLB.css",
+            "assets/index-B8W1yRf6.js",
+            "assets/index-DIaYcqm4.css",
+            "assets/index-JnmWwMmW.css",
+        ]:
             tp = target_dir / stale_rel
             if tp.exists():
                 tp.unlink()
+        if target_dir in (DIST, ROOT_DIST) and (target_dir / "samples").exists():
+            shutil.rmtree(target_dir / "samples", ignore_errors=True)
 
     print(f"Built & synced frontend/dist, ./dist, and root static bundle ({js_name}, {css_name})")
 

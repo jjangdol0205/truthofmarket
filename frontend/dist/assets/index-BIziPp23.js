@@ -1,193 +1,718 @@
+// --- src/components/PaymentWaitlist.js ---
+/**
+ * TruthOfMarket (Division 1) — Unified PAYMENT_CONFIG, VIP Founding Member Waitlist Modal,
+ * In-App WebView PDF Guide Guard & 70% Scroll + 15s Dwell `read_complete` Beacon.
+ */
+(function initTomUnifiedPaymentAndBeacon() {
+  if (typeof window === "undefined") return;
+
+  var DEFAULT_PAYMENT_CONFIG = {
+    STORE_LIVE_READY: false,
+    ACTIVE_SLOT: "FINANCE_STORE_SLOT",
+    FINANCE_STORE_SLOT: {
+      storeId: "296100",
+      storeDomain: "truthofmarket.lemonsqueezy.com",
+      monthlyUuid: "d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en",
+      annualUuid: "667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en",
+      monthlyCheckoutUrl:
+        "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en",
+      annualCheckoutUrl:
+        "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en",
+      BACKUP_LIVE_CHECKOUT_URL: {
+        monthly: "",
+        annual: "",
+      },
+    },
+    PEDIATRIC_STORE_SLOT: {
+      storeId: "296100",
+      storeDomain: "truthofmarket.lemonsqueezy.com",
+      singleUuid: "c1cd7f12-3479-49e8-ab71-59c98135d599?embed=1&locale=en",
+      sixMonthUuid: "c562946d-ef68-4c2f-a802-df9da0179895?embed=1&locale=en",
+      singleCheckoutUrl:
+        "https://truthofmarket.lemonsqueezy.com/checkout/buy/c1cd7f12-3479-49e8-ab71-59c98135d599?embed=1&locale=en",
+      sixMonthCheckoutUrl:
+        "https://truthofmarket.lemonsqueezy.com/checkout/buy/c562946d-ef68-4c2f-a802-df9da0179895?embed=1&locale=en",
+      BACKUP_LIVE_CHECKOUT_URL: {
+        single: "",
+        sixMonth: "",
+      },
+    },
+  };
+
+  if (!window.PAYMENT_CONFIG || typeof window.PAYMENT_CONFIG !== "object") {
+    window.PAYMENT_CONFIG = DEFAULT_PAYMENT_CONFIG;
+  } else {
+    if (typeof window.PAYMENT_CONFIG.STORE_LIVE_READY !== "boolean") {
+      window.PAYMENT_CONFIG.STORE_LIVE_READY = false;
+    }
+    if (!window.PAYMENT_CONFIG.FINANCE_STORE_SLOT) {
+      window.PAYMENT_CONFIG.FINANCE_STORE_SLOT = DEFAULT_PAYMENT_CONFIG.FINANCE_STORE_SLOT;
+    } else if (!window.PAYMENT_CONFIG.FINANCE_STORE_SLOT.BACKUP_LIVE_CHECKOUT_URL) {
+      window.PAYMENT_CONFIG.FINANCE_STORE_SLOT.BACKUP_LIVE_CHECKOUT_URL = { monthly: "", annual: "" };
+    }
+    if (!window.PAYMENT_CONFIG.PEDIATRIC_STORE_SLOT) {
+      window.PAYMENT_CONFIG.PEDIATRIC_STORE_SLOT = DEFAULT_PAYMENT_CONFIG.PEDIATRIC_STORE_SLOT;
+    } else if (!window.PAYMENT_CONFIG.PEDIATRIC_STORE_SLOT.BACKUP_LIVE_CHECKOUT_URL) {
+      window.PAYMENT_CONFIG.PEDIATRIC_STORE_SLOT.BACKUP_LIVE_CHECKOUT_URL = { single: "", sixMonth: "" };
+    }
+  }
+
+  window.isTomInAppWebView = function () {
+    try {
+      var ua = (typeof navigator !== "undefined" && navigator.userAgent) || "";
+      return /Instagram|FBAN|FBAV|KAKAOTALK/i.test(ua);
+    } catch (_) {
+      return false;
+    }
+  };
+
+  function postCrmRegistrationWithFallback(opts) {
+    var cleanEmail = String((opts && opts.email) || "")
+      .trim()
+      .toLowerCase();
+    var segment = String((opts && opts.segment) || "vip_waitlist").trim();
+    var notes = String((opts && opts.notes) || "").trim();
+    var lang = String((opts && opts.lang) || "en-US").trim();
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(cleanEmail)) {
+      return Promise.resolve({ ok: false, error: "INVALID_EMAIL" });
+    }
+
+    if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.registerMember === "function") {
+      return window.DreamCompanyCRM.registerMember({
+        action: "register_member",
+        div: "TOM",
+        email: cleanEmail,
+        nickname: "",
+        segment: segment,
+        lang: lang,
+        notes: notes,
+        message: notes,
+      });
+    }
+
+    var payload = {
+      action: "register_member",
+      div: "TOM",
+      email: cleanEmail,
+      nickname: "",
+      segment: segment,
+      message: notes,
+      notes: notes,
+      lang: lang,
+      website_hp: "",
+      source_url: window.location && window.location.href ? window.location.href : "https://truthofmarket.com/",
+      client_ts: new Date().toISOString(),
+    };
+
+    try {
+      localStorage.setItem(
+        "dc_member_TOM",
+        JSON.stringify({
+          div: "TOM",
+          email: cleanEmail,
+          nickname: "",
+          segment: segment,
+          joined_at: payload.client_ts,
+        })
+      );
+    } catch (_) {}
+
+    function enqueueOffline() {
+      try {
+        var rawQ = localStorage.getItem("dc_crm_sync_queue_v1");
+        var q = rawQ ? JSON.parse(rawQ) : [];
+        if (!Array.isArray(q)) q = [];
+        q.push(payload);
+        localStorage.setItem("dc_crm_sync_queue_v1", JSON.stringify(q.slice(-25)));
+      } catch (_) {}
+      return { ok: true, queued_for_sync: true, div: "TOM", email: cleanEmail, segment: segment };
+    }
+
+    return fetch("/hq-mailing-endpoint.json?v=" + Math.floor(Date.now() / 300000), { cache: "no-store" })
+      .then(function (r) {
+        return r.ok ? r.json() : null;
+      })
+      .then(function (cfg) {
+        var execUrl = cfg && cfg.webapp_exec_url ? String(cfg.webapp_exec_url).trim() : "";
+        if (!execUrl || execUrl.indexOf("https://script.google.com/macros/s/") !== 0) {
+          return enqueueOffline();
+        }
+        return fetch(execUrl, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload),
+          redirect: "follow",
+        })
+          .then(function (res) {
+            return { ok: Boolean(res && res.ok), div: "TOM", email: cleanEmail, segment: segment };
+          })
+          .catch(function () {
+            return enqueueOffline();
+          });
+      })
+      .catch(function () {
+        return enqueueOffline();
+      });
+  }
+
+  window.submitTomVipWaitlistOrManualEmail = postCrmRegistrationWithFallback;
+
+  function ensureWaitlistModalDom() {
+    var existing = document.getElementById("tomVipWaitlistModal");
+    if (existing) return existing;
+
+    var styleEl = document.getElementById("tomVipWaitlistStyles");
+    if (!styleEl) {
+      styleEl = document.createElement("style");
+      styleEl.id = "tomVipWaitlistStyles";
+      styleEl.textContent = [
+        "#tomVipWaitlistModal{position:fixed;inset:0;z-index:10060;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(2,6,23,0.82);backdrop-filter:blur(6px);}",
+        "#tomVipWaitlistDialog{width:100%;max-width:560px;background:linear-gradient(155deg,#0f172a 0%,#071929 100%);border:2px solid #10b981;border-radius:16px;padding:24px 22px;color:#f8fafc;box-shadow:0 24px 56px rgba(0,0,0,0.65);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;max-height:92vh;overflow-y:auto;}",
+        ".tom-wl-plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}",
+        ".tom-wl-plan-btn{padding:12px 12px;border-radius:12px;border:2px solid #334155;background:rgba(15,23,42,0.85);color:#cbd5e1;text-align:left;cursor:pointer;transition:all 0.15s ease;font-family:inherit;}",
+        ".tom-wl-plan-btn.is-selected{border-color:#10b981;background:rgba(16,185,129,0.16);color:#ffffff;box-shadow:0 0 0 2px rgba(16,185,129,0.22);}",
+        "@media(max-width:540px){.tom-wl-plan-grid{grid-template-columns:1fr;}#tomVipWaitlistDialog{padding:18px 15px;}}",
+      ].join("");
+      document.head.appendChild(styleEl);
+    }
+
+    var savedEmail = "";
+    try {
+      savedEmail = localStorage.getItem("tom_free_member_email") || "";
+    } catch (_) {}
+
+    var backdrop = document.createElement("div");
+    backdrop.id = "tomVipWaitlistModal";
+    backdrop.setAttribute("role", "dialog");
+    backdrop.setAttribute("aria-modal", "true");
+    backdrop.setAttribute("aria-labelledby", "tomVipWaitlistTitle");
+    backdrop.innerHTML =
+      '<div id="tomVipWaitlistDialog">' +
+      '  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;">' +
+      '    <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.18);border:1px solid rgba(52,211,153,0.55);color:#6ee7b7;padding:4px 12px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:0.02em;">' +
+      "      FOUNDING MEMBER PRIORITY ACCESS &bull; 20% EARLY-BIRD LOCK" +
+      "    </span>" +
+      '    <button type="button" id="btnCloseTomVipWaitlist" aria-label="Close modal" style="min-height:42px;padding:6px 12px;border-radius:8px;border:1px solid #475569;background:#1e293b;color:#f8fafc;font-weight:800;font-size:15px;cursor:pointer;">✕ Close</button>' +
+      "  </div>" +
+      '  <h3 id="tomVipWaitlistTitle" style="margin:0 0 8px;font-size:clamp(1.2rem,2.4vw,1.45rem);line-height:1.32;font-weight:900;color:#ffffff;">' +
+      "    VIP Founding Member Launch Alert &amp; 20% Early-Bird Discount Reservation (1-Second Email Reserve)" +
+      "  </h3>" +
+      '  <p style="margin:0;color:#cbd5e1;font-size:16.5px;line-height:1.6;">' +
+      "    Our Store #296100 self-directed educational calculator software checkout is completing final gateway verification. Reserve your spot in <b>1 second ($0 charged today)</b> to lock in a <b>20% Founding Member Discount</b> the moment live checkout opens—plus instant free Morning Bell Club access." +
+      "  </p>" +
+      '  <div class="tom-wl-plan-grid" role="radiogroup" aria-label="Select VIP Plan to Reserve">' +
+      '    <button type="button" class="tom-wl-plan-btn is-selected" data-wl-plan="Monthly VIP ($29/mo)">' +
+      '      <div style="font-size:12.5px;font-weight:800;color:#6ee7b7;">MONTHLY VIP SOFTWARE</div>' +
+      '      <div style="font-size:17px;font-weight:900;color:#ffffff;margin:3px 0;">Monthly VIP ($29/mo)</div>' +
+      '      <div style="font-size:13px;color:#fde68a;font-weight:700;">20% Early-Bird: $23.20/mo</div>' +
+      "    </button>" +
+      '    <button type="button" class="tom-wl-plan-btn" data-wl-plan="Annual VIP ($199/yr)">' +
+      '      <div style="font-size:12.5px;font-weight:800;color:#fde68a;">ANNUAL VIP SOFTWARE (SAVE 43%)</div>' +
+      '      <div style="font-size:17px;font-weight:900;color:#ffffff;margin:3px 0;">Annual VIP ($199/yr)</div>' +
+      '      <div style="font-size:13px;color:#6ee7b7;font-weight:700;">20% Early-Bird: $159.20/yr</div>' +
+      "    </button>" +
+      "  </div>" +
+      '  <form id="tomVipWaitlistForm" novalidate style="display:flex;flex-direction:column;gap:10px;">' +
+      '    <input type="hidden" id="tomVipWaitlistSelectedPlan" value="Monthly VIP ($29/mo)" />' +
+      '    <label for="tomVipWaitlistEmail" style="font-size:14.5px;font-weight:800;color:#e2e8f0;">Your Best Email Address (Zero Spam &bull; No Card Needed Today):</label>' +
+      '    <input type="email" id="tomVipWaitlistEmail" required autocomplete="email" placeholder="Enter your email (e.g., robert@email.com)" value="' +
+      String(savedEmail).replace(/"/g, "") +
+      '" style="width:100%;min-height:56px;padding:12px 16px;border-radius:10px;border:2px solid #94a3b8;background:#ffffff;color:#0f172a;font-size:18px;font-weight:700;box-sizing:border-box;" />' +
+      '    <button type="submit" id="btnSubmitTomVipWaitlist" style="width:100%;min-height:58px;padding:13px 18px;border-radius:11px;border:none;background:linear-gradient(135deg,#10b981 0%,#059669 100%);color:#022c22;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 8px 22px rgba(16,185,129,0.32);">' +
+      "      Reserve My 20% VIP Discount &amp; Launch Alert (1-Sec) &rarr;" +
+      "    </button>" +
+      "  </form>" +
+      '  <div id="tomVipWaitlistConfirm" role="status" aria-live="polite" style="display:none;margin-top:12px;padding:14px 16px;border-radius:10px;background:rgba(16,185,129,0.16);border:1.5px solid #10b981;color:#ecfdf5;font-size:16px;line-height:1.55;font-weight:700;"></div>' +
+      '  <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(148,163,184,0.2);font-size:13px;color:#94a3b8;line-height:1.5;">' +
+      '    14-Day No-Questions-Asked Refund Policy once live &bull; Self-Directed Educational Calculator Software &bull; Support: <a href="mailto:beable9489@gmail.com" style="color:#7dd3fc;text-decoration:underline;">beable9489@gmail.com</a>' +
+      "  </div>" +
+      "</div>";
+
+    document.body.appendChild(backdrop);
+
+    var planInput = document.getElementById("tomVipWaitlistSelectedPlan");
+    var planBtns = backdrop.querySelectorAll(".tom-wl-plan-btn");
+    planBtns.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var plan = btn.getAttribute("data-wl-plan") || "Monthly VIP ($29/mo)";
+        if (planInput) planInput.value = plan;
+        planBtns.forEach(function (b) {
+          b.classList.toggle("is-selected", b === btn);
+        });
+      });
+    });
+
+    var closeBtn = document.getElementById("btnCloseTomVipWaitlist");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", function () {
+        backdrop.style.display = "none";
+      });
+    }
+    backdrop.addEventListener("click", function (ev) {
+      if (ev.target === backdrop) {
+        backdrop.style.display = "none";
+      }
+    });
+
+    var form = document.getElementById("tomVipWaitlistForm");
+    if (form) {
+      form.addEventListener("submit", function (ev) {
+        ev.preventDefault();
+        var emailEl = document.getElementById("tomVipWaitlistEmail");
+        var confirmEl = document.getElementById("tomVipWaitlistConfirm");
+        var submitBtn = document.getElementById("btnSubmitTomVipWaitlist");
+        var selectedPlan = (planInput && planInput.value) || "Monthly VIP ($29/mo)";
+        var email = String((emailEl && emailEl.value) || "")
+          .trim()
+          .toLowerCase();
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+          if (confirmEl) {
+            confirmEl.style.display = "block";
+            confirmEl.style.borderColor = "#f87171";
+            confirmEl.style.background = "rgba(239,68,68,0.16)";
+            confirmEl.style.color = "#fecaca";
+            confirmEl.textContent = "Please enter a valid email address (for example, robert@email.com).";
+          }
+          if (emailEl) emailEl.focus();
+          return;
+        }
+
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Reserving Your 20% Founding Discount...";
+        }
+
+        try {
+          localStorage.setItem("tom_free_member_email", email);
+          localStorage.setItem("tom_vip_waitlist_plan", selectedPlan);
+        } catch (_) {}
+
+        try {
+          fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/vip_waitlist", {
+            mode: "cors",
+            keepalive: true,
+          }).catch(function () {});
+          fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/signup", {
+            mode: "cors",
+            keepalive: true,
+          }).catch(function () {});
+          fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/signup_total", {
+            mode: "cors",
+            keepalive: true,
+          }).catch(function () {});
+        } catch (_) {}
+
+        postCrmRegistrationWithFallback({
+          email: email,
+          segment: "vip_waitlist",
+          lang: "en-US",
+          notes: "site=truthofmarket.com | plan=" + selectedPlan,
+        }).finally(function () {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = "Reserve My 20% VIP Discount &amp; Launch Alert (1-Sec) &rarr;";
+          }
+        });
+
+        if (confirmEl) {
+          confirmEl.style.display = "block";
+          confirmEl.style.borderColor = "#10b981";
+          confirmEl.style.background = "rgba(16,185,129,0.18)";
+          confirmEl.style.color = "#ecfdf5";
+          confirmEl.innerHTML =
+            "✅ <strong>20% Early-Bird Founding Reservation Confirmed!</strong><br/>Reserved Plan: <b>" +
+            selectedPlan.replace(/[<>&"]/g, "") +
+            "</b> for <b>" +
+            email.replace(/[<>&"]/g, "") +
+            "</b>. We will email your private 20% discount checkout link the moment Store #296100 opens—and your complimentary Morning Bell Retirement &amp; Macro Brief is now active.";
+        }
+      });
+    }
+
+    return backdrop;
+  }
+
+  window.openTomVipWaitlistModal = function (planKey) {
+    var modal = ensureWaitlistModalDom();
+    var selectedLabel = planKey === "annual" ? "Annual VIP ($199/yr)" : "Monthly VIP ($29/mo)";
+    var planInput = document.getElementById("tomVipWaitlistSelectedPlan");
+    if (planInput) planInput.value = selectedLabel;
+    modal.querySelectorAll(".tom-wl-plan-btn").forEach(function (btn) {
+      btn.classList.toggle("is-selected", btn.getAttribute("data-wl-plan") === selectedLabel);
+    });
+    var confirmEl = document.getElementById("tomVipWaitlistConfirm");
+    if (confirmEl) confirmEl.style.display = "none";
+    modal.style.display = "flex";
+    setTimeout(function () {
+      var emailEl = document.getElementById("tomVipWaitlistEmail");
+      if (emailEl && !emailEl.value) emailEl.focus();
+    }, 60);
+  };
+
+  if (window.__TOM_PAYMENT_SYSTEM_READY__) return;
+  window.__TOM_PAYMENT_SYSTEM_READY__ = true;
+
+  // 1. Unified Capture-Phase Paid Checkout Click Guard (Strictly 1 Abacus Fire Per Click)
+  window.addEventListener(
+    "click",
+    function (e) {
+      var el = e.target && e.target.closest ? e.target.closest("a, button, [role='button']") : null;
+      if (!el) return;
+
+      var href = String(el.getAttribute("href") || "");
+      var uuidAttr = String(el.getAttribute("data-ls-product-uuid") || "");
+      var planAttr = String(el.getAttribute("data-tom-paid-plan") || "").toLowerCase();
+      var cls = String(el.className || "");
+
+      var isPaidCta =
+        cls.indexOf("lemonsqueezy-button") !== -1 ||
+        href.indexOf("lemonsqueezy.com/checkout/buy/") !== -1 ||
+        Boolean(uuidAttr) ||
+        Boolean(planAttr);
+
+      if (!isPaidCta) return;
+
+      var txt = String(el.innerText || el.textContent || "").toLowerCase();
+      var isAnnual =
+        planAttr === "annual" ||
+        uuidAttr.indexOf("667aa482-f17c-47d1-b7f3-a2427c36516b") !== -1 ||
+        href.indexOf("667aa482-f17c-47d1-b7f3-a2427c36516b") !== -1 ||
+        txt.indexOf("199") !== -1 ||
+        txt.indexOf("annual") !== -1;
+      var planKey = isAnnual ? "annual" : "monthly";
+
+      // Fire Abacus paid_click & paid_click_total strictly once per click
+      try {
+        fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/paid_click", {
+          mode: "cors",
+          keepalive: true,
+        }).catch(function () {});
+        fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/paid_click_total", {
+          mode: "cors",
+          keepalive: true,
+        }).catch(function () {});
+      } catch (_) {}
+
+      var pCfg = window.PAYMENT_CONFIG || {};
+      var finSlot = pCfg.FINANCE_STORE_SLOT || {};
+      var backupMap = finSlot.BACKUP_LIVE_CHECKOUT_URL || {};
+      var backupUrl = String(backupMap[planKey] || "").trim();
+
+      if (pCfg.STORE_LIVE_READY !== true && !backupUrl) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (typeof e.stopImmediatePropagation === "function") {
+          e.stopImmediatePropagation();
+        }
+        window.openTomVipWaitlistModal(planKey);
+        return;
+      }
+
+      // Live Checkout Active Path (STORE_LIVE_READY === true or BACKUP_LIVE_CHECKOUT_URL set)
+      var liveTargetUrl =
+        backupUrl ||
+        (planKey === "annual" ? finSlot.annualCheckoutUrl : finSlot.monthlyCheckoutUrl) ||
+        href;
+
+      if (liveTargetUrl) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (typeof e.stopImmediatePropagation === "function") {
+          e.stopImmediatePropagation();
+        }
+        if (
+          liveTargetUrl.indexOf("lemonsqueezy.com") !== -1 &&
+          window.LemonSqueezy &&
+          window.LemonSqueezy.Url &&
+          typeof window.LemonSqueezy.Url.Open === "function"
+        ) {
+          window.LemonSqueezy.Url.Open(liveTargetUrl);
+        } else {
+          window.open(liveTargetUrl, "_blank", "noopener,noreferrer");
+        }
+      }
+    },
+    true
+  );
+
+  // 2. Escape key closes VIP Waitlist Modal + Lemon Squeezy Checkout.Success Listener Kept Intact
+  window.addEventListener("keydown", function (ev) {
+    if (ev.key === "Escape") {
+      var wl = document.getElementById("tomVipWaitlistModal");
+      if (wl && wl.style.display === "flex") {
+        wl.style.display = "none";
+      }
+    }
+  });
+
+  function setupSubpageLemonSqueezySuccess() {
+    try {
+      if (window.__rsaLsPostMessageBound) return;
+      if (typeof window.createLemonSqueezy === "function") {
+        window.createLemonSqueezy();
+      }
+      if (window.LemonSqueezy && typeof window.LemonSqueezy.Setup === "function") {
+        window.LemonSqueezy.Setup({
+          eventHandler: function (event) {
+            if (event && event.event === "Checkout.Success") {
+              try {
+                localStorage.setItem("rsa_pro_unlocked", "true");
+                localStorage.setItem("rsa_token", "RSA-PRO-2026-LS-CHECKOUT");
+              } catch (_) {}
+            }
+          },
+        });
+      }
+    } catch (_) {}
+  }
+  window.addEventListener("load", setupSubpageLemonSqueezySuccess);
+
+  // 3. Session-Scoped `read_complete` Beacon (Scroll Depth >= 70% AND Dwell Time >= 15000ms)
+  (function bindReadCompleteBeacon() {
+    var SESSION_KEY = "tom_read_complete_fired_v1";
+    try {
+      if (sessionStorage.getItem(SESSION_KEY) === "1") return;
+    } catch (_) {}
+
+    var reachedScroll70 = false;
+    var reachedDwell15s = false;
+    var fired = false;
+
+    function maybeFireReadComplete() {
+      if (fired || !reachedScroll70 || !reachedDwell15s) return;
+      try {
+        if (sessionStorage.getItem(SESSION_KEY) === "1") {
+          fired = true;
+          return;
+        }
+        sessionStorage.setItem(SESSION_KEY, "1");
+      } catch (_) {}
+      fired = true;
+      try {
+        fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/read_complete", {
+          mode: "cors",
+          keepalive: true,
+        }).catch(function () {});
+      } catch (_) {}
+    }
+
+    function checkScrollDepth() {
+      if (reachedScroll70) return;
+      try {
+        var docEl = document.documentElement || document.body;
+        var scrollTop =
+          window.pageYOffset ||
+          (docEl && docEl.scrollTop) ||
+          (document.body && document.body.scrollTop) ||
+          0;
+        var winH = window.innerHeight || (docEl && docEl.clientHeight) || 0;
+        var fullH = Math.max(
+          document.body ? document.body.scrollHeight : 0,
+          docEl ? docEl.scrollHeight : 0,
+          document.body ? document.body.offsetHeight : 0,
+          docEl ? docEl.offsetHeight : 0,
+          1
+        );
+        if (fullH <= winH * 1.05) {
+          reachedScroll70 = true;
+        } else if (scrollTop > 0) {
+          var viewedRatio = (scrollTop + winH) / fullH;
+          var trackRatio = scrollTop / Math.max(1, fullH - winH);
+          if (viewedRatio >= 0.7 || trackRatio >= 0.7) {
+            reachedScroll70 = true;
+          }
+        }
+        if (reachedScroll70) {
+          maybeFireReadComplete();
+        }
+      } catch (_) {}
+    }
+
+    window.addEventListener("scroll", checkScrollDepth, { passive: true });
+    window.addEventListener("resize", checkScrollDepth, { passive: true });
+    setTimeout(function () {
+      reachedDwell15s = true;
+      checkScrollDepth();
+      maybeFireReadComplete();
+    }, 15000);
+  })();
+})();
+
+
 // --- src/locales/i18n.js ---
 const enCopy = {
   // Global Navigation & Header
-  brandSubtitle: "RETIREMENT CASHFLOW & 72 US SIGNALS",
-  navRightSide: "72 US Signals",
-  navSemiFg: "Semi Fear & Greed",
-  marketUniverseTag: "NYSE & NASDAQ · 72 US EQUITIES",
+  brandSubtitle: "SELF-DIRECTED EDUCATIONAL CALCULATOR SOFTWARE",
+  navRightSide: "Retirement Calculator",
+  navSemiFg: "Market Weather & Barbell",
+  marketUniverseTag: "US 401(k) / IRA · 4-CORE RETIREMENT & ETF CALCULATOR",
   statusFree: "FREE ACCESS",
-  statusPro: "PRO VIP ACTIVE",
+  statusPro: "VIP SOFTWARE ACTIVE",
   btnLicense: "License Key",
   btnAdmin: "Config",
   btnTelegram: "Telegram",
-  btnUnlockPro: "Unlock Pro ($29/mo)",
+  btnUnlockPro: "Start Monthly VIP — $29/mo",
 
-  // RightSideAlpha Hero & KPIs (B2C 3-Second Hook)
-  heroTag: "COMFORTABLE RETIREMENT & MONTHLY CASHFLOW ARCHITECT · 26.8-YR AUDITED DATA",
+  // Hero & Calm Educational Metrics (B2C 3-Second Hook)
+  heroTag: "SELF-DIRECTED EDUCATIONAL CALCULATOR SOFTWARE · 26.8-YR HISTORICAL DATA",
   heroTitle: "Turn Your 401(k) & Savings Into Calm, Reliable Monthly Retirement Income.",
   heroDesc:
-    "Design your monthly retirement paycheck in 30 seconds, protect your nest egg from -35% sequence-of-returns crashes, and rebalance SGOV, SCHD, JEPI & VOO calmly 2–4 times a year with our 3-Color Traffic Light.",
-  pwRsiExplainerBtn: "How It Works",
-  pwRsiModalTitle: "PW-RSI (Post-Washout Right-Side Ignition) Methodology",
-  kpi1_label: "1Y 2x (+100%) Hit Rate",
-  kpi1_sub: "vs 28.91% blind 52W-low dip buying",
-  kpi2_label: "Median Days Underwater",
-  kpi2_sub: "Cut from 81d via 55D Time-Stop",
-  kpi3_label: "26.8-Yr Net CAGR",
-  kpi3_sub: "80.5x net cumulative after tax & slippage",
-  kpi4_label: "Severe Loss (≤ -20%) Risk",
-  kpi4_sub: "vs 24.82% without -9% stop floor",
+    "Design your monthly retirement paycheck in 30 seconds, protect your nest egg from -35% sequence-of-returns crashes, and rebalance SGOV, SCHD, JEPI & VOO calmly 2–4 times a year with our 3-Color Market Weather indicator.",
+  pwRsiExplainerBtn: "How 2–4x/Yr Rebalancing Works",
+  pwRsiModalTitle: "Calm 2–4x/Year 3-Bucket Portfolio Rebalancing Methodology",
+  kpi1_label: "Historical Data Span",
+  kpi1_sub: "1998–2026 public US market datasets",
+  kpi2_label: "Core Retirement Pillars",
+  kpi2_sub: "SGOV · SCHD · JEPI · VOO allocation math",
+  kpi3_label: "Calm Rebalancing Cadence",
+  kpi3_sub: "2–4x/year 3-Color Market Weather review",
+  kpi4_label: "Privacy & Calculation Mode",
+  kpi4_sub: "100% browser-local educational software",
 
-  // Audited Comparative Return Curve Card
-  auditedCardTag: "AUDITED BACKTEST TRACK RECORD · 1998–2026 (26.8 YEARS)",
-  auditedCardTitle: "SMH/XLV Contrarian Barbell (+28.4%) vs. S&P 500 (+14.2%) Benchmark",
+  // Historical Comparative Allocation Card
+  auditedCardTag: "HISTORICAL ALLOCATION RESEARCH · 1998–2026 (26.8 YEARS)",
+  auditedCardTitle: "SMH/XLV Barbell Allocation (+28.4%) vs. S&P 500 (+14.2%) Historical Study",
   auditedCardDesc:
-    "Audited point-in-time backtest across 6,625 trading days with zero look-ahead bias. Rebalanced annually with dynamic 80:20 contrarian tilt during semiconductor drawdowns ≥ -20%.",
-  auditedBarbellLabel: "SMH 70% : XLV 30% Contrarian Barbell",
+    "Point-in-time educational historical study across 6,625 trading days. Rebalanced calmly with an 80:20 educational weight shift during deep semiconductor pulldowns.",
+  auditedBarbellLabel: "SMH 70% : XLV 30% Barbell Model",
   auditedSpyLabel: "S&P 500 (SPY) Benchmark",
-  auditedMetricCagr: "Annualized Return",
-  auditedMetricMdd: "Maximum Drawdown",
+  auditedMetricCagr: "Historical Annualized Rate",
+  auditedMetricMdd: "Historical Max Drawdown",
   auditedMetricSharpe: "Sharpe Ratio",
-  auditedMetricGrowth: "Growth of $10,000",
-  auditedAlphaBadge: "+14.2% Annualized Alpha vs S&P 500 · 2.03x Sharpe Efficiency",
+  auditedMetricGrowth: "Historical $10,000 Curve",
+  auditedAlphaBadge: "+14.2% Historical Spread vs S&P 500 · 2.03x Sharpe Ratio",
 
-  // Soft Paywall Call to Action
-  softPaywallUnlockCta: "Unlock Pro ($29/mo)",
-  softPaywallTitle: "🔒 7 VIP Breakout Signals Active Today",
+  // Soft Paywall Call to Action (Used in /pro-swing.html Quantitative Archive)
+  softPaywallUnlockCta: "Start Monthly VIP — $29/mo",
+  softPaywallTitle: "🔒 Full Quantitative Factor Dataset & Historical CSV Suite",
   softPaywallDesc:
-    "$CELH is unlocked free as today's #1 showcase. Upgrade to Pro ($29/mo or $199 Lifetime) to reveal all hidden VIP breakout tickers, exact entry triggers, -9% stop floors, and Pine Script v5.",
+    "$CELH is displayed as an open educational factor example. Upgrade to Monthly VIP ($29/mo) or Annual VIP ($199/yr) to access the full self-directed quantitative factor dataset, Pine Script v5 overlay, and 26.8-year CSV archive.",
 
-  // Empirical Benchmark Table
-  proofHeading: "26.8-Year Backtest · Blind Dip Buying vs. Verified Right-Side Breakouts",
-  proofCopyScorecardBtn: "Export Tear Sheet (PNG)",
-  th_arch: "Entry Strategy (N = 394,371 US Stock-Days)",
-  th_2x: "1Y 2x (+100%) Rate",
-  th_med: "1Y Median Return",
-  th_mdd: "Post-Entry Median MDD",
-  th_dead: "Days Underwater",
-  th_trap: "1Y Tail Loss (≤ -20%)",
+  // Empirical Factor Table (/pro-swing.html)
+  proofHeading: "26.8-Year Historical Factor Study · Moving-Average Trend Filter vs. Unfiltered Lows",
+  proofCopyScorecardBtn: "Export Study Card (PNG)",
+  th_arch: "Historical Factor Cohort (N = 394,371 US Stock-Days)",
+  th_2x: "Historical Upper Band",
+  th_med: "1Y Median Historical Return",
+  th_mdd: "Post-Entry Median Drawdown",
+  th_dead: "Median Recovery Days",
+  th_trap: "1Y Deep Drawdown (≤ -20%)",
 
-  // Screener Controls & Table Columns
-  searchPlaceholder: "Search Ticker, Company, or Sector (e.g. NVDA, CELH, Semiconductors)...",
-  filterAll: "All 72",
-  filterIgnition: "Turnaround Signal",
-  filterWatch: "Washout Base Watch",
-  filterKnife: "Downtrend",
-  filterTrap: "Value Trap",
+  // Screener Controls & Table Columns (/pro-swing.html)
+  searchPlaceholder: "Search Ticker, Company, or Sector (e.g. MSFT, NVDA, Semiconductors)...",
+  filterAll: "All Universe",
+  filterIgnition: "MA20/60 Reclaimed",
+  filterWatch: "Base Consolidation",
+  filterKnife: "Sub-MA60 Trend",
+  filterTrap: "Fundamental Lag",
   colTicker: "Ticker / Sector",
-  colZone: "3-Color Safety Signal",
-  colScore: "Safety Score",
+  colZone: "3-Color Trend State",
+  colScore: "Factor Score",
   colClose: "Last Close & 52W Range",
   colProx: "vs 52W Low",
   colDD: "52W Drawdown",
-  colMA: "vs 20D / 60D Trend",
+  colMA: "vs 20D / 60D MA",
   colVol: "10D Volume",
-  colHist: "Hist 2x Rate",
-  colTrigger: "Buy Trigger / -9% Safety Stop",
+  colHist: "Hist Factor Rate",
+  colTrigger: "MA60 Ref / Risk Band",
   colActions: "Details & Charts",
 
-  // Pro Vault & Tools
-  vaultBadgeLocked: "PRO ANALYTICS SUITE · LOCKED",
-  vaultBadgeUnlocked: "PRO ANALYTICS SUITE · UNLOCKED",
-  vaultTitle: "Pro Execution, Portfolio Doctor 2.0 & Sector Matrix",
-  vaultUnlockBtn: "🔑 Unlock Pro ($29/mo)",
-  tool1Title: "3-SEC POSITION DOCTOR · FREE EXIT CHECK",
-  tool1Sub: "Check Any US Stock Against Our -9% Stop & 55-Day Time-Stop Rules",
+  // Quantitative Research Vault (/pro-swing.html)
+  vaultBadgeLocked: "VIP EDUCATIONAL CALCULATOR SUITE · LOCKED",
+  vaultBadgeUnlocked: "VIP EDUCATIONAL CALCULATOR SUITE · UNLOCKED",
+  vaultTitle: "Self-Directed Quantitative Factor Calculators & Sector Matrix",
+  vaultUnlockBtn: "🔑 Start Monthly VIP — $29/mo",
+  tool1Title: "COST-BASIS DRAWDOWN & WEIGHT CALCULATOR",
+  tool1Sub: "Mathematical Cost-Basis & Holding-Period Variance Calculator",
   tool1Desc:
-    "Enter any ticker, your buy price ($), and days held to get an instant Hold, Trim, or Exit diagnosis.",
-  tool1Btn: "🩺 Diagnose Position Now",
-  tool2Title: "MODULE 02 · RETIREMENT DIVIDEND & BALANCE-SHEET RESEARCH",
-  tool2Sub: "10-K / 10-Q Cashflow & Dividend Safety Briefs",
-  tool2Desc: "Updated daily at 08:10 EST from audited balance sheets, dividend coverage, and EPS stability:",
-  tool2ViewBtn: "Open Institutional Research Archive",
-  tool3Title: "MODULE 03 · TRADINGVIEW PINE SCRIPT v5 OVERLAY",
-  tool3Sub: "Automated MA20/MA60 Ignition & Washout Plotter",
+    "Enter any US ticker, your reference cost ($), and days held to compute mathematical variance against historical moving averages.",
+  tool1Btn: "🧮 Calculate Cost-Basis Variance",
+  tool2Title: "MODULE 02 · BALANCE-SHEET & DIVIDEND COVERAGE ARCHIVE",
+  tool2Sub: "10-K / 10-Q Cashflow & Dividend Coverage Summaries",
+  tool2Desc: "Updated daily at 08:10 EST from public SEC filings, dividend payout ratios, and balance-sheet metrics:",
+  tool2ViewBtn: "Open Educational Filing Summaries",
+  tool3Title: "MODULE 03 · TRADINGVIEW PINE SCRIPT v5 EDUCATIONAL OVERLAY",
+  tool3Sub: "Moving-Average & Relative-Volume Visualization Script",
   tool3Desc:
-    "Paste into TradingView Pine Editor to plot MA20/MA60 breakouts, 1.4x volume surges, and -9% hard stop lines:",
+    "Paste into TradingView Pine Editor to visualize 20-day/60-day moving averages and 1.4x relative volume bars:",
   tool3CopyBtn: "Copy Pine Script v5 Source",
 
   // Cross-Platform Banner
-  crossTitle: "COMPANION SENTIMENT ENGINE · SEMIFEARGREED",
-  crossHeading: "Investing in Semiconductor & Healthcare ETFs ($SMH / $XLV / $SOXX)?",
+  crossTitle: "COMPANION MARKET WEATHER CALCULATOR · SEMIFEARGREED",
+  crossHeading: "Tracking US Semiconductor & Healthcare ETFs ($SMH / $XLV)?",
   crossDesc:
-    "Check the live 7-Factor Semiconductor Fear & Greed Index and 26-year $SMH 70% : $XLV 30% contrarian barbell calculator.",
-  crossBtn: "Open Semi Fear & Greed Index",
+    "Explore the 7-Factor Semiconductor Fear & Greed Index and 26.8-year $SMH 70% : $XLV 30% educational barbell rebalancing calculator.",
+  crossBtn: "Open Market Weather & Barbell Calculator",
 
   // SemiFearGreed (CNN-Style UI/UX)
-  cnnBadge: "LIVE CHIP & AI SENTIMENT · UPDATED DAILY",
-  cnnTitle: "Live Semiconductor Fear & Greed Index",
+  cnnBadge: "PUBLIC MARKET SENTIMENT DATA · UPDATED DAILY",
+  cnnTitle: "Semiconductor Fear & Greed Index (Educational Data Gauge)",
   cnnSubtitle:
-    "Track real-time chip sector panic vs. euphoria—and know the exact day to shift your $SMH:$XLV barbell from 70:30 to 80:20.",
+    "Visualize public semiconductor sector sentiment (0–100) and explore historical 70:30 vs. 80:20 $SMH:$XLV portfolio weight math.",
   cnnTabOverview: "Overview",
   cnnTabTimeline: "Timeline",
   cnnLastUpdated: "Last updated",
   cnnExportGauge: "Export Index Card (PNG)",
   cnnTelegramBtn: "Telegram Briefing",
   cnnHistoryTitle: "Historical Sentiment Comparison",
-  cnnActiveRuleLabel: "ACTIVE BARBELL ALLOCATION SIGNAL",
-  cnnIndicatorsHeading: "7 Semiconductor Fear & Greed Indicators",
+  cnnActiveRuleLabel: "EDUCATIONAL BARBELL WEIGHT MODEL",
+  cnnIndicatorsHeading: "7 Semiconductor Fear & Greed Data Factors",
   cnnIndicatorsSub:
-    "Calculated daily from live $SMH, $XLV, and $QQQ momentum, 52-week drawdown, safe-haven spread, RSI-14, volatility, relative alpha, and barbell weight drift.",
-  rebalSectionTag: "BARBELL ASSET ALLOCATION & TAX OPTIMIZER",
-  rebalSectionTitle: "$SMH + $XLV Contrarian Rebalancing Engine (70:30 ↔ 80:20)",
+    "Computed daily from public $SMH, $XLV, and $QQQ momentum, 52-week drawdown, defensive spread, RSI-14, realized volatility, relative spread, and weight drift.",
+  rebalSectionTag: "SELF-DIRECTED BARBELL ALLOCATION CALCULATOR",
+  rebalSectionTitle: "$SMH + $XLV Educational Weight Calculator (70:30 ↔ 80:20)",
   rebalSectionDesc:
-    "Pair high-growth AI semiconductors ($SMH 70%) with defensive healthcare cash flow ($XLV 30%), shifting automatically to 80:20 when Fear & Greed drops below 25.",
-  lumpSectionTag: "CAPITAL DEPLOYMENT PROTOCOL",
-  lumpSectionTitle: "3-Stage Lump-Sum Entry Planner",
+    "Simulate pairing semiconductor ETF ($SMH 70%) with healthcare ETF ($XLV 30%), and model 2–4x/year weight adjustments when sentiment drops below 25.",
+  lumpSectionTag: "TRANCHE ALLOCATION CALCULATOR",
+  lumpSectionTitle: "3-Stage Cash Deployment Math Calculator",
   lumpSectionDesc:
-    "Eliminate market-timing regret by splitting new cash between Day-1 deployment and yielding USD reserve tranches based on today's Fear & Greed score.",
-  eraSectionTag: "26.8-YEAR EMPIRICAL VERIFICATION (2000–2026)",
-  eraSectionTitle: "$SMH 70% : $XLV 30% (80:20 Crash Tilt) vs. 100% $QQQ Benchmark",
+    "Model splitting new capital across staged tranches and short-term Treasury cash reserves based on current sentiment readings.",
+  eraSectionTag: "26.8-YEAR HISTORICAL DATA ARCHIVE (2000–2026)",
+  eraSectionTitle: "$SMH 70% : $XLV 30% Barbell Model vs. 100% $QQQ Historical Comparison",
   eraSectionDesc:
-    "Verified across 6,625 trading days including the 2000 Dot-Com Bust, 2008 GFC, 2020 Pandemic, and 2022 Rate Shock.",
+    "Historical point-in-time public market series across 6,625 trading days (2000–2026).",
 
   disclaimer:
-    "Regulatory & Compliance Disclosure: RightSideAlpha and SemiFearGreed are quantitative financial data analytics and historical backtesting software tools. Nothing on this platform constitutes personalized investment, legal, or tax advice. Past performance (2000–2026) does not guarantee future results.",
+    "Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.",
   copyright:
-    "© 2026 RightSideAlpha & SemiFearGreed Quantitative Analytics. Merchant of Record: Lemon Squeezy.",
+    "© 2026 TruthOfMarket — Educational Market Data & Quantitative Research Desk. Merchant of Record: Lemon Squeezy (Store #296100).",
 };
 const translations = {
   en: enCopy,
   jp: {
     ...enCopy,
-    brandSubtitle: "米国株72銘柄ブレイクアウト端末",
-    navRightSide: "米国株72シグナル",
-    navSemiFg: "半導体 恐怖＆強欲",
-    marketUniverseTag: "NYSE & NASDAQ · 米国上場 72銘柄",
+    brandSubtitle: "自己判断型・教育用ポートフォリオ計算ソフトウェア",
+    navRightSide: "老後キャッシュフロー計算機",
+    navSemiFg: "市場天気＆バーベル計算機",
+    marketUniverseTag: "米国ETF（SGOV・SCHD・JEPI・VOO）教育用シミュレーター",
     statusFree: "無料アクセス",
-    statusPro: "PRO VIP 有効",
+    statusPro: "VIP有効",
     btnLicense: "ライセンス認証",
     btnAdmin: "設定",
     btnTelegram: "Telegram",
-    btnUnlockPro: "Proを解除 ($29/月)",
+    btnUnlockPro: "Start Monthly VIP — $29/mo",
 
-    heroTag: "米国株26.8年間監査済バックテスト · 394,371営業日検証",
-    heroTitle: "落ちるナイフ掴みを卒業—明確な-9%損切基準で機関投資家のブレイク初動を捕捉",
+    heroTag: "教育用ポートフォリオ計算ソフトウェア · 26.8年間公開市場データ",
+    heroTitle: "401(k)・退職資産を、穏やかで安定した毎月キャッシュフローへ設計",
     heroDesc:
-      "NYSE・NASDAQ主要72銘柄を毎日スキャンし、出来高急増とともに20日・60日移動平均線を奪還した右側ターンアラウンド銘柄と明確な-9%損切ラインを提示します。",
-    pwRsiExplainerBtn: "手法の仕組み",
-    pwRsiModalTitle: "PW-RSI（セリングクライマックス後 右側イグニッション）の計算原理",
-    kpi1_label: "1年 2倍 (+100%) 到達率",
-    kpi1_sub: "単純な52週安値買い (28.91%) 比",
-    kpi2_label: "含み損期間（中央値）",
-    kpi2_sub: "55日タイムストップで81日から短縮",
-    kpi3_label: "26.8年間 純CAGR",
-    kpi3_sub: "税・スリッページ控除後 累計80.5倍",
-    kpi4_label: "重大損失 (≤ -20%) 確率",
-    kpi4_sub: "-9%ハード損切ルール適用時",
+      "30秒で毎月の取り崩し・配当キャッシュフローを試算し、SGOV・SCHD・JEPI・VOOの4コア資産を3色マーケット天気と連動して年2〜4回穏やかにリバランスする教育用シミュレーターです。",
+    pwRsiExplainerBtn: "年2〜4回リバランスの仕組み",
+    pwRsiModalTitle: "3色マーケット天気連動・年2〜4回穏やかリバランスの計算原理",
+    kpi1_label: "検証データ期間",
+    kpi1_sub: "1998–2026年 米国市場公開データ",
+    kpi2_label: "老後4コアETF",
+    kpi2_sub: "SGOV · SCHD · JEPI · VOO 配分計算",
+    kpi3_label: "穏やかな見直し頻度",
+    kpi3_sub: "年2〜4回の比率リバランス設計",
+    kpi4_label: "プライバシー保護設計",
+    kpi4_sub: "100%ブラウザ内ローカル計算ソフト",
 
-    softPaywallUnlockCta: "Unlock Pro ($29/mo)",
-    softPaywallTitle: "🔒 本日のVIPブレイクアウト 7銘柄点灯中",
+    softPaywallUnlockCta: "Start Monthly VIP — $29/mo",
+    softPaywallTitle: "🔒 教育用クオンツデータセット＆過去26.8年CSVアーカイブ",
     softPaywallDesc:
-      "注目株 #1 ($CELH) は無料公開中。Pro VIP ($29/月 または $199永久パス) で全VIP銘柄のエントリー価格・-9%損切ライン・Pine Script v5を即座に解除できます。",
-
-    searchPlaceholder: "ティッカー・企業名・セクター検索 (例: NVDA, CELH)...",
-    filterAll: "全72銘柄",
-    filterIgnition: "転換シグナル",
-    filterWatch: "底固め監視",
-    filterKnife: "下降トレンド",
-    filterTrap: "トラップ除外",
-
-    tool1Title: "3秒ポジションドクター · 無料エグジット診断",
-    tool1Sub: "保有米国株を-9%損切＆55日タイムストップ基準で即時判定",
-    tool1Desc:
-      "ティッカー・取得単価($)・保有営業日数を入力すると、保有継続・一部利確・損切の明確な診断結果を表示します。",
-    tool1Btn: "🩺 3秒ポジション診断を実行",
-
-    cnnBadge: "半導体・AI市場センチメント · 毎日更新",
-    cnnTitle: "Live Semiconductor Fear & Greed Index",
-    cnnSubtitle:
-      "半導体セクターの恐怖と強欲を7指標で数値化し、$SMH:$XLVバーベルを70:30から80:20へ切り替える最適タイミングを判定します。",
+      "Monthly VIP ($29/mo) または Annual VIP ($199/yr) で全ファクターデータ・TradingViewスクリプト・26.8年CSVデータを解除できます。",
   },
   kr: { ...enCopy },
 };
@@ -230,7 +755,7 @@ function getVipTelegramUrl(isPro = false) {
 }
 const CANONICAL_TOM_MONTHLY_URL =
   "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en";
-const CANONICAL_TOM_LIFETIME_URL =
+const CANONICAL_TOM_ANNUAL_URL =
   "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en";
 function formatCheckoutUrl(
   rawUrl,
@@ -247,7 +772,7 @@ function formatCheckoutUrl(
     base.includes("667aa482-f17c-47d1-b7f3-a2427c36516b") ||
     base.includes("c9ad1a1c-21c5-4d95-88a2-b570a860a147")
   ) {
-    return CANONICAL_TOM_LIFETIME_URL;
+    return CANONICAL_TOM_ANNUAL_URL;
   }
   let out = base;
   if (!/[?&]embed=1\b/i.test(out)) {
@@ -604,9 +1129,9 @@ async function validateLicense(licenseKey) {
         return {
           valid: true,
           license_key: key.toUpperCase(),
-          tier: key.toUpperCase().includes("-LTD-") ? "pro_lifetime" : "pro",
+          tier: key.toUpperCase().includes("-LTD-") ? "pro_annual" : "pro",
           expires_at: "2099-12-31T23:59:59Z",
-          message: "Pro Terminal License Activated — All 72 US Equity Targets & 26Y CSV Unlocked.",
+          message: "VIP Calculator Software License Activated — Full Dataset & 26Y CSV Unlocked.",
         };
       }
       if (
@@ -673,14 +1198,14 @@ async function validateLicense(licenseKey) {
             finalStatus !== "disabled" &&
             finalStatus !== "expired"
         );
-        const isLifetime = Number(lsData?.meta?.product_id) === 1491891;
+        const isAnnual = Number(lsData?.meta?.product_id) === 1491891;
         return {
           valid,
           license_key: valid ? key : null,
-          tier: valid ? (isLifetime ? "pro_lifetime" : "pro") : "free",
+          tier: valid ? (isAnnual ? "pro_annual" : "pro") : "free",
           expires_at: valid ? lsData?.license_key?.expires_at || "2099-12-31T23:59:59Z" : null,
           message: valid
-            ? "Pro Terminal License Verified via Lemon Squeezy (Store #296100)."
+            ? "VIP Software License Verified via Lemon Squeezy (Store #296100)."
             : (lsData && lsData.error) ||
               "Invalid or expired license key. Please verify your Lemon Squeezy receipt or subscribe below.",
         };
@@ -765,10 +1290,10 @@ async function evaluatePositionDoctor(data) {
         return {
           ticker: tClean,
           status_code: "HARD_STOP",
-          status_label: "🛑 Hard Stop Loss Triggered",
+          status_label: "Below Lower Historical Variance Band",
           return_pct: retPct,
-          rule_triggered: "Rule 1 (-9.0% Hard Stop Loss)",
-          action_plan: "Exit immediately. Do not average down on broken support.",
+          rule_triggered: "Band 1 (Below Historical Variance Floor)",
+          action_plan: "Mathematical simulation note: price is below the modeled lower variance band relative to entry basis.",
           is_critical: true,
           current_price: curr,
           entry_price: Number(entry.toFixed(2)),
@@ -780,11 +1305,11 @@ async function evaluatePositionDoctor(data) {
         return {
           ticker: tClean,
           status_code: "TIME_STOP",
-          status_label: "⏳ 55-Day Time Stop Triggered",
+          status_label: "55-Day Holding Window Exceeded",
           return_pct: retPct,
-          rule_triggered: "Rule 2 (55-Day Dead-Money Exit)",
+          rule_triggered: "Band 2 (55-Day Holding Duration Variance)",
           action_plan:
-            "Exit position. Rebound momentum has stalled; reallocate into active right-side ignition candidates.",
+            "Mathematical simulation note: holding period has exceeded 55 trading days with muted relative momentum.",
           is_critical: false,
           current_price: curr,
           entry_price: Number(entry.toFixed(2)),
@@ -796,11 +1321,11 @@ async function evaluatePositionDoctor(data) {
         return {
           ticker: tClean,
           status_code: "TP1_HARVEST",
-          status_label: "🎯 100% Target Price 1 Achieved",
+          status_label: "Upper Historical Variance Band Reached",
           return_pct: retPct,
-          rule_triggered: "Rule 3 (+100% Principal Recovery)",
+          rule_triggered: "Band 3 (Upper Dispersion Reference)",
           action_plan:
-            "Sell 50% of position to recoup 100% initial capital. Set trailing stop on remaining 50% using MA60.",
+            "Mathematical simulation note: simulated return has reached the upper dispersion reference band.",
           is_critical: false,
           current_price: curr,
           entry_price: Number(entry.toFixed(2)),
@@ -812,11 +1337,11 @@ async function evaluatePositionDoctor(data) {
         return {
           ticker: tClean,
           status_code: "HOLD",
-          status_label: "🟢 Active Right-Side Trend Follow",
+          status_label: "Within Modeled Moving-Average Band",
           return_pct: retPct,
-          rule_triggered: "Rule 4 (Healthy Trend Follow)",
+          rule_triggered: "Band 4 (Standard Trend Dispersion)",
           action_plan:
-            "Maintain position. Monitor MA20/MA60 trailing support; runner target is +100% TP1.",
+            "Mathematical simulation note: price remains within normal MA20/MA60 dispersion range.",
           is_critical: false,
           current_price: curr,
           entry_price: Number(entry.toFixed(2)),
@@ -1070,26 +1595,26 @@ async function evaluatePortfolioDoctor(payload) {
 
         if (retPct <= -9.0) {
           statusCode = "HARD_STOP";
-          action = "CRITICAL_STOP_EXIT";
+          action = "LOWER_BAND_VARIANCE";
           isCritical = true;
-          directive = `RULE 1: -9% Hard Stop breached (${retPct.toFixed(2)}%). Exit full position immediately.`;
+          directive = `BAND 1: Below lower variance reference (${retPct.toFixed(2)}%). Review simulated allocation weight.`;
           hardStopCount += 1;
         } else if (days >= 55 && retPct < 8.0) {
           statusCode = "TIME_STOP";
-          action = "DEAD_MONEY_ROTATE";
+          action = "DURATION_VARIANCE";
           isCritical = false;
-          directive = `RULE 2: 55-Day Dead-Money holding (${days} days, ${retPct >= 0 ? "+" : ""}${retPct.toFixed(2)}%). Reallocate to active ignition candidates.`;
+          directive = `BAND 2: 55-Day holding window (${days} days, ${retPct >= 0 ? "+" : ""}${retPct.toFixed(2)}%). Simulated momentum muted.`;
           deadMoneyCount += 1;
         } else if (retPct >= 100.0) {
           statusCode = "TP1_HARVEST";
-          action = "TP1_TAKE_PROFIT";
+          action = "UPPER_BAND_VARIANCE";
           isCritical = false;
-          directive = `RULE 3: +100% TP1 achieved (+${retPct.toFixed(2)}%). Sell 50% to recoup 100% principal; trail stop on remaining.`;
+          directive = `BAND 3: Upper dispersion band reached (+${retPct.toFixed(2)}%). Simulated weight drift elevated.`;
         } else {
           statusCode = "HOLD";
-          action = "ACTIVE_HOLD";
+          action = "WITHIN_BAND";
           isCritical = false;
-          directive = `RULE 4: Healthy active trend follow (${retPct >= 0 ? "+" : ""}${retPct.toFixed(2)}%). Trailing stop floor at $${hardStopP.toFixed(2)}.`;
+          directive = `BAND 4: Within modeled trend dispersion (${retPct >= 0 ? "+" : ""}${retPct.toFixed(2)}%). Lower reference band: $${hardStopP.toFixed(2)}.`;
         }
 
         diagnostics.push({
@@ -1361,32 +1886,32 @@ async function calculateSemiRebalance(data) {
       if (mode === "BASELINE_70_30") {
         smhW = 0.7;
         xlvW = 0.3;
-        ruleEn = "Fixed 70% $SMH : 30% $XLV Golden Barbell Baseline";
-        ruleJp = "70% $SMH : 30% $XLV 基本黄金バーベル比率";
+        ruleEn = "Fixed 70% $SMH : 30% $XLV Barbell Weight Model";
+        ruleJp = ruleEn;
         ruleKr = ruleEn;
       } else if (mode === "CONTRARIAN_80_20") {
         smhW = 0.8;
         xlvW = 0.2;
-        ruleEn = "Contrarian 80% $SMH : 20% $XLV Crash Accumulation Tilt";
-        ruleJp = "80% $SMH : 20% $XLV 暴落時・逆張り買い増しモード";
+        ruleEn = "80% $SMH : 20% $XLV Drawdown Rebalance Model";
+        ruleJp = ruleEn;
         ruleKr = ruleEn;
       } else if (mode === "AGGRESSIVE_90_10") {
         smhW = 0.9;
         xlvW = 0.1;
-        ruleEn = "90% $SMH : 10% $XLV Right-Side Momentum Tilt";
-        ruleJp = "90% $SMH : 10% $XLV 右側モメンタム集中モード";
+        ruleEn = "90% $SMH : 10% $XLV Growth Weight Model";
+        ruleJp = ruleEn;
         ruleKr = ruleEn;
       } else if (isExtreme) {
         smhW = 0.8;
         xlvW = 0.2;
-        ruleEn = `AUTO REGIME: Extreme Fear (${fgScore}/100, DD ${ddPct.toFixed(1)}%) → 80% $SMH : 20% $XLV Contrarian Shift`;
-        ruleJp = `自動判定: 極度の恐怖 (${fgScore}/100, 高値比 ${ddPct.toFixed(1)}%) → 80% $SMH : 20% $XLV 逆張り転換`;
+        ruleEn = `AUTO REGIME: Extreme Fear (${fgScore}/100, DD ${ddPct.toFixed(1)}%) -> 80% $SMH : 20% $XLV Model Weight`;
+        ruleJp = ruleEn;
         ruleKr = ruleEn;
       } else {
         smhW = 0.7;
         xlvW = 0.3;
-        ruleEn = `AUTO REGIME: Standard Regime (${fgScore}/100) → 70% $SMH : 30% $XLV Core Barbell`;
-        ruleJp = `自動判定: 通常レジーム (${fgScore}/100) → 70% $SMH : 30% $XLV 基本比率`;
+        ruleEn = `AUTO REGIME: Standard Regime (${fgScore}/100) -> 70% $SMH : 30% $XLV Model Weight`;
+        ruleJp = ruleEn;
         ruleKr = ruleEn;
       }
 
@@ -1424,12 +1949,9 @@ async function calculateSemiRebalance(data) {
 
       const taxEn =
         gainKrw <= dedLimit
-          ? `Unrealized gain (₩${gainKrw.toLocaleString()}) is within the ₩2,500,000 annual tax-free allowance. Execute your $XLV ↔ $SMH rebalance before Dec 26 to harvest gains with ₩0 tax (saving ₩${taxSavedKrw.toLocaleString()}).`
-          : `Unrealized gain (₩${gainKrw.toLocaleString()}) exceeds the ₩2.5M tax-free cap by ₩${taxableKrw.toLocaleString()}. Sell only up to ₩2,500,000 of realized profit this calendar year to lock in the maximum ₩550,000 tax savings, and use new cash inflow for the remaining rebalance.`;
-      const taxJp =
-        gainKrw <= dedLimit
-          ? `評価益 (₩${gainKrw.toLocaleString()}) は年間非課税枠 (₩2,500,000) 以内です。年末までにリバランスを実行することで譲渡所得税 ₩0 (節税額 ₩${taxSavedKrw.toLocaleString()}) で利益確定と取得単価引き上げが可能です。`
-          : `評価益 (₩${gainKrw.toLocaleString()}) が非課税枠を ₩${taxableKrw.toLocaleString()} 超過しています。今年の売却益を250万ウォンまでに抑えて最大 ₩550,000 を節税し、残りは新規積立資金で比率調整するのが最適です。`;
+          ? `Modeled annual rebalancing drag (${taxDrag}%) remains low under a 2-4x/year schedule, preserving compounding efficiency inside tax-advantaged 401(k)/IRA accounts.`
+          : `For taxable accounts, spacing portfolio weight adjustments to 2-4x/year reduces turnover drag (${taxDrag}%) compared with high-frequency trading.`;
+      const taxJp = taxEn;
       const taxKr = taxEn;
 
       return {
@@ -1504,26 +2026,26 @@ async function calculateSemiLumpSum(data) {
           capital_usd: cap,
           fg_score_used: fgScore,
           case_code: "CASE_1_FEAR_100PCT",
-          case_title_en: "Case 1 (Score 0–40 · Fear Regime): 100% Immediate Lump-Sum Entry",
-          case_title_jp: "ケース1 (スコア 0–40 · 恐怖圏): 100% 即時一括エントリー",
-          case_title_kr: "Case 1 (Score 0–40 · Fear Regime): 100% Immediate Lump-Sum Entry",
+          case_title_en: "Case 1 (Score 0–40 · Fear Regime): 100% Immediate Lump-Sum Model",
+          case_title_jp: "Case 1 (Score 0–40 · Fear Regime): 100% Immediate Lump-Sum Model",
+          case_title_kr: "Case 1 (Score 0–40 · Fear Regime): 100% Immediate Lump-Sum Model",
           summary_en:
-            "Semiconductors are already discounted. Do not hold excess cash—deploy 100% today and rebalance back to 70:30 when $SMH recovers within -10% of its 52-week high.",
+            "Simulated fear regime: historical model deploys 100% into target weights and rebalances 2–4x/year back to 70:30 as drawdown narrows.",
           summary_jp:
-            "半導体セクターは既に割安圏にあります。現金を遊ばせず本日100%投入し、$SMHが高値比-10%以内へ回復した時点で70:30へ戻します。",
+            "Simulated fear regime: historical model deploys 100% into target weights and rebalances 2–4x/year back to 70:30 as drawdown narrows.",
           summary_kr:
-            "Semiconductors are already discounted. Deploy 100% today and rebalance back to 70:30 when $SMH recovers within -10% of its 52-week high.",
+            "Simulated fear regime: historical model deploys 100% into target weights and rebalances 2–4x/year back to 70:30 as drawdown narrows.",
           immediate_deploy_pct: 100.0,
           parked_cash_rp_pct: 0.0,
           tranches: [
             {
               step: 1,
-              title_en: "Tranche 1 (Day 1 Immediate 100% Deployment)",
-              title_jp: "第1トランシェ (初日 100% 一括エントリー)",
-              title_kr: "Tranche 1 (Day 1 Immediate 100% Deployment)",
-              timing_en: "Execute Today (Market Open / Close)",
-              timing_jp: "本日即時執行 (Fear ≤ 40 割安圏)",
-              timing_kr: "Execute Today (Market Open / Close)",
+              title_en: "Tranche 1 (Day 1 Simulated 100% Weighting)",
+              title_jp: "Tranche 1 (Day 1 Simulated 100% Weighting)",
+              title_kr: "Tranche 1 (Day 1 Simulated 100% Weighting)",
+              timing_en: "Modeled Day 1 Weighting",
+              timing_jp: "Modeled Day 1 Weighting",
+              timing_kr: "Modeled Day 1 Weighting",
               allocation_pct: 100.0,
               amount_usd: cap,
               smh_usd: smhUsd,
@@ -1531,15 +2053,15 @@ async function calculateSemiLumpSum(data) {
               cash_rp_usd: 0.0,
               smh_shares: Math.floor(smhUsd / smhP),
               xlv_shares: Math.floor(xlvUsd / xlvP),
-              note_en: `Deploy 100% immediately at ${Math.round(smhW * 100)}:${Math.round(
+              note_en: `Modeled ${Math.round(smhW * 100)}:${Math.round(
                 xlvW * 100
-              )} ($SMH:$XLV). Historical 1-year forward win rate when entering below score 25 exceeds 91%.`,
-              note_jp: `${Math.round(smhW * 100)}:${Math.round(
+              )} ($SMH:$XLV) split. Historical 1-year forward positive cohort rate below score 25 exceeded 91%.`,
+              note_jp: `Modeled ${Math.round(smhW * 100)}:${Math.round(
                 xlvW * 100
-              )} ($SMH:$XLV) 比率で100%即時エントリー。スコア25以下でのエントリーは過去1年後の勝率が91%超。`,
-              note_kr: `Deploy 100% immediately at ${Math.round(smhW * 100)}:${Math.round(
+              )} ($SMH:$XLV) split. Historical 1-year forward positive cohort rate below score 25 exceeded 91%.`,
+              note_kr: `Modeled ${Math.round(smhW * 100)}:${Math.round(
                 xlvW * 100
-              )} ($SMH:$XLV). Historical 1-year forward win rate when entering below score 25 exceeds 91%.`,
+              )} ($SMH:$XLV) split. Historical 1-year forward positive cohort rate below score 25 exceeded 91%.`,
             },
           ],
         };
@@ -1555,26 +2077,26 @@ async function calculateSemiLumpSum(data) {
           capital_usd: cap,
           fg_score_used: fgScore,
           case_code: "CASE_2_NEUTRAL_65_35",
-          case_title_en: "Case 2 (Score 40–68 · Neutral Regime): 65% Immediate + 35% Pullback Reserve",
-          case_title_jp: "ケース2 (スコア 40–68 · 中立圏): 65% 初日投入 + 35% 押し目待機",
-          case_title_kr: "Case 2 (Score 40–68 · Neutral Regime): 65% Immediate + 35% Pullback Reserve",
+          case_title_en: "Case 2 (Score 40–68 · Neutral Regime): 65% Initial + 35% T-Bill Reserve Model",
+          case_title_jp: "Case 2 (Score 40–68 · Neutral Regime): 65% Initial + 35% T-Bill Reserve Model",
+          case_title_kr: "Case 2 (Score 40–68 · Neutral Regime): 65% Initial + 35% T-Bill Reserve Model",
           summary_en:
-            "Balanced deployment: lock in your 30% $XLV anchor and half of $SMH today, while keeping 35% dry powder for volatility.",
+            "Balanced allocation simulation: models 30% $XLV defensive sleeve and half of $SMH initially, keeping 35% in T-Bill/MMF reserve.",
           summary_jp:
-            "バランス型エントリー：$XLV 30%と$SMH半分を初日に確保し、35%の余力で押し目に備えます。",
+            "Balanced allocation simulation: models 30% $XLV defensive sleeve and half of $SMH initially, keeping 35% in T-Bill/MMF reserve.",
           summary_kr:
-            "Balanced deployment: lock in your 30% $XLV anchor and half of $SMH today, while keeping 35% dry powder for volatility.",
+            "Balanced allocation simulation: models 30% $XLV defensive sleeve and half of $SMH initially, keeping 35% in T-Bill/MMF reserve.",
           immediate_deploy_pct: 65.0,
           parked_cash_rp_pct: 35.0,
           tranches: [
             {
               step: 1,
-              title_en: "Tranche 1 (Day 1 Core 65% Deployment)",
-              title_jp: "第1トランシェ (初日 65% コア投入)",
-              title_kr: "Tranche 1 (Day 1 Core 65% Deployment)",
-              timing_en: "Execute Today (30% $XLV Full + 35% $SMH Half)",
-              timing_jp: "本日執行 ($XLV 30%全額 + $SMH 35%半分)",
-              timing_kr: "Execute Today (30% $XLV Full + 35% $SMH Half)",
+              title_en: "Tranche 1 (Day 1 Core 65% Weighting)",
+              title_jp: "Tranche 1 (Day 1 Core 65% Weighting)",
+              title_kr: "Tranche 1 (Day 1 Core 65% Weighting)",
+              timing_en: "Modeled Initial Weight (30% $XLV + 35% $SMH)",
+              timing_jp: "Modeled Initial Weight (30% $XLV + 35% $SMH)",
+              timing_kr: "Modeled Initial Weight (30% $XLV + 35% $SMH)",
               allocation_pct: 65.0,
               amount_usd: d1Tot,
               smh_usd: d1Smh,
@@ -1583,20 +2105,20 @@ async function calculateSemiLumpSum(data) {
               smh_shares: Math.floor(d1Smh / smhP),
               xlv_shares: Math.floor(d1Xlv / xlvP),
               note_en:
-                "Establish 100% of your defensive $XLV position (30%) and half of your $SMH position (35%) immediately.",
+                "Models 100% of defensive $XLV sleeve (30%) and half of $SMH sleeve (35%) initially.",
               note_jp:
-                "ディフェンシブ枠の$XLV (30%) 全額と、成長枠$SMHの半分 (35%) を初日に構築します。",
+                "Models 100% of defensive $XLV sleeve (30%) and half of $SMH sleeve (35%) initially.",
               note_kr:
-                "Establish 100% of your defensive $XLV position (30%) and half of your $SMH position (35%) immediately.",
+                "Models 100% of defensive $XLV sleeve (30%) and half of $SMH sleeve (35%) initially.",
             },
             {
               step: 2,
-              title_en: "Tranche 2 (Remaining 35% $SMH Reserve in USD RP)",
-              title_jp: "第2トランシェ (残り35% $SMH待機資金・米ドルMMF)",
-              title_kr: "Tranche 2 (Remaining 35% $SMH Reserve in USD RP)",
-              timing_en: "Deploy when FG Score ≤ 40 OR split across D+30 / D+60 / D+90",
-              timing_jp: "スコア40以下へ低下時、または30日・60日・90日で3分割投入",
-              timing_kr: "Deploy when FG Score ≤ 40 OR split across D+30 / D+60 / D+90",
+              title_en: "Tranche 2 (Remaining 35% Reserve in T-Bills / MMF)",
+              title_jp: "Tranche 2 (Remaining 35% Reserve in T-Bills / MMF)",
+              title_kr: "Tranche 2 (Remaining 35% Reserve in T-Bills / MMF)",
+              timing_en: "Modeled Staged Tranche (D+30 / D+60 / D+90)",
+              timing_jp: "Modeled Staged Tranche (D+30 / D+60 / D+90)",
+              timing_kr: "Modeled Staged Tranche (D+30 / D+60 / D+90)",
               allocation_pct: 35.0,
               amount_usd: t2Smh,
               smh_usd: t2Smh,
@@ -1605,11 +2127,11 @@ async function calculateSemiLumpSum(data) {
               smh_shares: Math.floor(t2Smh / smhP),
               xlv_shares: 0,
               note_en:
-                "Earn ~4.5% USD RP yield while waiting for a pullback below score 40, or auto-deploy over 90 days.",
+                "Models ~4.5% USD T-Bill/MMF yield while staging across 90 days.",
               note_jp:
-                "米ドルMMFで金利を受け取りながらスコア40以下への押し目を待つか、90日間で機械的に分割投入します。",
+                "Models ~4.5% USD T-Bill/MMF yield while staging across 90 days.",
               note_kr:
-                "Earn ~4.5% USD RP yield while waiting for a pullback below score 40, or auto-deploy over 90 days.",
+                "Models ~4.5% USD T-Bill/MMF yield while staging across 90 days.",
             },
           ],
         };
@@ -1624,28 +2146,28 @@ async function calculateSemiLumpSum(data) {
           fg_score_used: fgScore,
           case_code: "CASE_3_GREED_DEFENSIVE_FIRST",
           case_title_en:
-            "Case 3 (Score 68–100 · Greed Regime): 30% $XLV Today + 70% $SMH Parked in USD RP",
+            "Case 3 (Score 68–100 · Greed Regime): 30% $XLV + 70% T-Bill Cushion Model",
           case_title_jp:
-            "ケース3 (スコア 68–100 · 強欲圏): 初日 $XLV 30%のみ + 70% 米ドルMMF待機",
+            "Case 3 (Score 68–100 · Greed Regime): 30% $XLV + 70% T-Bill Cushion Model",
           case_title_kr:
-            "Case 3 (Score 68–100 · Greed Regime): 30% $XLV Today + 70% $SMH Parked in USD RP",
+            "Case 3 (Score 68–100 · Greed Regime): 30% $XLV + 70% T-Bill Cushion Model",
           summary_en:
-            "Protect principal against euphoria: buy only the 30% $XLV sleeve today and keep 70% in USD RP until Fear & Greed cools to 45 or below.",
+            "Overheated sentiment model: allocates 30% to $XLV defensive sleeve initially and parks 70% in T-Bill/MMF cushion.",
           summary_jp:
-            "高値掴み防止ルール：初日は$XLV 30%のみを購入し、70%は指数が45以下に冷めるまで米ドルMMFで待機します。",
+            "Overheated sentiment model: allocates 30% to $XLV defensive sleeve initially and parks 70% in T-Bill/MMF cushion.",
           summary_kr:
-            "Protect principal against euphoria: buy only the 30% $XLV sleeve today and keep 70% in USD RP until Fear & Greed cools to 45 or below.",
+            "Overheated sentiment model: allocates 30% to $XLV defensive sleeve initially and parks 70% in T-Bill/MMF cushion.",
           immediate_deploy_pct: 30.0,
           parked_cash_rp_pct: 70.0,
           tranches: [
             {
               step: 1,
-              title_en: "Tranche 1 (Day 1 Defensive $XLV 30% Only)",
-              title_jp: "第1トランシェ (初日はディフェンシブ $XLV 30% のみ購入)",
-              title_kr: "Tranche 1 (Day 1 Defensive $XLV 30% Only)",
-              timing_en: "Execute Today ($XLV Anchor Only — Zero $SMH Chasing)",
-              timing_jp: "本日執行 ($XLV 30%のみ・過熱した$SMHの高値追い禁止)",
-              timing_kr: "Execute Today ($XLV Anchor Only — Zero $SMH Chasing)",
+              title_en: "Tranche 1 (Day 1 Defensive $XLV 30% Sleeve)",
+              title_jp: "Tranche 1 (Day 1 Defensive $XLV 30% Sleeve)",
+              title_kr: "Tranche 1 (Day 1 Defensive $XLV 30% Sleeve)",
+              timing_en: "Modeled Defensive Sleeve ($XLV 30%)",
+              timing_jp: "Modeled Defensive Sleeve ($XLV 30%)",
+              timing_kr: "Modeled Defensive Sleeve ($XLV 30%)",
               allocation_pct: 30.0,
               amount_usd: d1Xlv,
               smh_usd: 0.0,
@@ -1654,20 +2176,20 @@ async function calculateSemiLumpSum(data) {
               smh_shares: 0,
               xlv_shares: Math.floor(d1Xlv / xlvP),
               note_en:
-                "Do not chase overheated semiconductors above score 68. Deploy only the 30% Healthcare anchor on Day 1.",
+                "Avoids overheated growth concentration above score 68 by modeling the 30% Healthcare sleeve first.",
               note_jp:
-                "スコア68超の過熱局面での半導体ジャンピングキャッチを回避し、ヘルスケア枠30%のみを先行構築します。",
+                "Avoids overheated growth concentration above score 68 by modeling the 30% Healthcare sleeve first.",
               note_kr:
-                "Do not chase overheated semiconductors above score 68. Deploy only the 30% Healthcare anchor on Day 1.",
+                "Avoids overheated growth concentration above score 68 by modeling the 30% Healthcare sleeve first.",
             },
             {
               step: 2,
-              title_en: "Tranche 2 (70% $SMH Capital Parked in Yielding USD RP)",
-              title_jp: "第2トランシェ (70% $SMH資金は米ドルMMFで冷却待機)",
-              title_kr: "Tranche 2 (70% $SMH Capital Parked in Yielding USD RP)",
-              timing_en: "Deploy when FG Score cools ≤ 45 (or 4 monthly tranches)",
-              timing_jp: "スコア45以下へ冷却時、または4ヶ月分割で順次エントリー",
-              timing_kr: "Deploy when FG Score cools ≤ 45 (or 4 monthly tranches)",
+              title_en: "Tranche 2 (70% Reserve Parked in USD T-Bill / MMF)",
+              title_jp: "Tranche 2 (70% Reserve Parked in USD T-Bill / MMF)",
+              title_kr: "Tranche 2 (70% Reserve Parked in USD T-Bill / MMF)",
+              timing_en: "Modeled 4-Month Staged Rebalance",
+              timing_jp: "Modeled 4-Month Staged Rebalance",
+              timing_kr: "Modeled 4-Month Staged Rebalance",
               allocation_pct: 70.0,
               amount_usd: pSmh,
               smh_usd: pSmh,
@@ -1676,11 +2198,11 @@ async function calculateSemiLumpSum(data) {
               smh_shares: Math.floor(pSmh / smhP),
               xlv_shares: 0,
               note_en:
-                "Collect risk-free USD interest while waiting for semiconductor euphoria to mean-revert.",
+                "Models short-term T-Bill interest while sentiment mean-reverts toward neutral.",
               note_jp:
-                "米ドル金利を確保しながら、半導体の過熱感が冷めるのを待って安全にエントリーします。",
+                "Models short-term T-Bill interest while sentiment mean-reverts toward neutral.",
               note_kr:
-                "Collect risk-free USD interest while waiting for semiconductor euphoria to mean-revert.",
+                "Models short-term T-Bill interest while sentiment mean-reverts toward neutral.",
             },
           ],
         };
@@ -1715,42 +2237,21 @@ async function buildClientTelegramPreview({
   const xlv1d = xlvEtf ? Number(xlvEtf.ret_1d_pct ?? 0.0) : 0.0;
 
   const buildSemiText = () => {
-    const dSmhSign = reb.delta_smh_usd >= 0 ? "BUY +" : "SELL -";
-    const dXlvSign = reb.delta_xlv_usd >= 0 ? "BUY +" : "SELL -";
+    const dSmhSign = reb.delta_smh_usd >= 0 ? "ADD +" : "TRIM -";
+    const dXlvSign = reb.delta_xlv_usd >= 0 ? "ADD +" : "TRIM -";
     const smhShSign = reb.delta_smh_shares >= 0 ? `+${reb.delta_smh_shares}` : `${reb.delta_smh_shares}`;
     const xlvShSign = reb.delta_xlv_shares >= 0 ? `+${reb.delta_xlv_shares}` : `${reb.delta_xlv_shares}`;
 
-    if (lg === "jp") {
-      return [
-        `🧭 [SemiFearGreed] 半導体恐怖＆強欲指数・日次ブリーフィング (${ov.date})`,
-        `• 恐怖＆強欲スコア: ${Number(ov.fg_score).toFixed(1)} / 100 (${ov.regime_jp})`,
-        `• $SMH: $${Number(ov.smh_close).toFixed(2)} (52週高値比 ${Number(ov.smh_dd_pct).toFixed(2)}%)`,
-        `• $XLV: $${Number(ov.xlv_close).toFixed(2)} (${xlv1d >= 0 ? "+" : ""}${xlv1d.toFixed(2)}% 1D) | $QQQ: $${Number(ov.qqq_close).toFixed(2)} (${qqq1d >= 0 ? "+" : ""}${qqq1d.toFixed(2)}% 1D)`,
-        `• 為替レート: ₩${Number(ov.usdkrw).toLocaleString()} / USD`,
-        ``,
-        `⚡ 現在のバーベル配分シグナル: ${ov.recommended_smh_weight}% $SMH : ${ov.recommended_xlv_weight}% $XLV`,
-        `• ${ov.action_headline_jp}`,
-        ``,
-        `📊 $100,000 基準リバランス注文:`,
-        `• $SMH (${reb.target_smh_weight_pct}%): $${Number(reb.target_smh_usd).toLocaleString()} (${reb.target_smh_shares}株) → ${dSmhSign}$${Math.abs(Number(reb.delta_smh_usd)).toLocaleString()} (${smhShSign}株)`,
-        `• $XLV (${reb.target_xlv_weight_pct}%): $${Number(reb.target_xlv_usd).toLocaleString()} (${reb.target_xlv_shares}株) → ${dXlvSign}$${Math.abs(Number(reb.delta_xlv_usd)).toLocaleString()} (${xlvShSign}株)`,
-        `🔗 ターミナル: https://truthofmarket.com/semi-fear-greed.html`,
-      ].join("\n");
-    }
     return [
-      `🧭 [SemiFearGreed] Daily Semiconductor & Barbell Briefing (${ov.date})`,
-      `• Fear & Greed Score: ${Number(ov.fg_score).toFixed(1)} / 100 (${String(ov.regime_en).toUpperCase()})`,
+      `🧭 [TruthOfMarket] Daily Market Weather & Barbell Calculator Summary (${ov.date})`,
+      `• Sentiment Gauge: ${Number(ov.fg_score).toFixed(1)} / 100 (${String(ov.regime_en).toUpperCase()})`,
       `• $SMH: $${Number(ov.smh_close).toFixed(2)} (${Number(ov.smh_dd_pct).toFixed(2)}% 52W DD)`,
       `• $XLV: $${Number(ov.xlv_close).toFixed(2)} (${xlv1d >= 0 ? "+" : ""}${xlv1d.toFixed(2)}% 1D) | $QQQ: $${Number(ov.qqq_close).toFixed(2)} (${qqq1d >= 0 ? "+" : ""}${qqq1d.toFixed(2)}% 1D)`,
-      `• FX Rate: ₩${Number(ov.usdkrw).toLocaleString()} / USD`,
       ``,
-      `⚡ Active Signal: Target ${ov.recommended_smh_weight}% $SMH : ${ov.recommended_xlv_weight}% $XLV`,
-      `• ${ov.action_headline_en}`,
-      ``,
-      `📊 $100,000 Standard Rebalance Orders:`,
-      `• $SMH (${reb.target_smh_weight_pct}%): $${Number(reb.target_smh_usd).toLocaleString()} (${reb.target_smh_shares} sh) → ${dSmhSign}$${Math.abs(Number(reb.delta_smh_usd)).toLocaleString()} (${smhShSign} sh)`,
-      `• $XLV (${reb.target_xlv_weight_pct}%): $${Number(reb.target_xlv_usd).toLocaleString()} (${reb.target_xlv_shares} sh) → ${dXlvSign}$${Math.abs(Number(reb.delta_xlv_usd)).toLocaleString()} (${xlvShSign} sh)`,
-      `🔗 Terminal: https://truthofmarket.com/semi-fear-greed.html`,
+      `📊 $100,000 Simulated Weight Calculation (${ov.recommended_smh_weight}% $SMH : ${ov.recommended_xlv_weight}% $XLV):`,
+      `• $SMH (${reb.target_smh_weight_pct}%): $${Number(reb.target_smh_usd).toLocaleString()} (${reb.target_smh_shares} sh) -> ${dSmhSign}$${Math.abs(Number(reb.delta_smh_usd)).toLocaleString()} (${smhShSign} sh)`,
+      `• $XLV (${reb.target_xlv_weight_pct}%): $${Number(reb.target_xlv_usd).toLocaleString()} (${reb.target_xlv_shares} sh) -> ${dXlvSign}$${Math.abs(Number(reb.delta_xlv_usd)).toLocaleString()} (${xlvShSign} sh)`,
+      `🔗 Calculator: https://truthofmarket.com/semi-fear-greed.html`,
     ].join("\n");
   };
 
@@ -1760,35 +2261,24 @@ async function buildClientTelegramPreview({
     const rows = ignStocks
       .map((s, idx) => {
         if (!proUnlocked && idx >= 1) {
-          return `${idx + 1}. 🔒 VIP IGNITION #${idx + 1} — Unlock Pro at truthofmarket.com`;
+          return `${idx + 1}. 🔒 VIP DATASET ROW #${idx + 1} — Unlock VIP Software at truthofmarket.com`;
         }
         const trig = s.entry_trigger_price ?? s.ma60_price ?? s.close;
         const stopP = s.stop_loss_price ?? Number((s.close * 0.91).toFixed(2));
         const tp1P = s.tp1_2x_price ?? Number((s.close * 2.0).toFixed(2));
-        return `${idx + 1}. $${s.ticker} ($${Number(s.close).toFixed(2)}) · Score ${Number(s.score).toFixed(0)}/100\n   52W DD ${Number(s.dd_high52_pct).toFixed(1)}% | Vol ${Number(s.vol_surge_10d).toFixed(2)}x | TRG $${Number(trig).toFixed(2)} | Stop $${Number(stopP).toFixed(2)} | TP1 $${Number(tp1P).toFixed(2)}`;
+        return `${idx + 1}. $${s.ticker} ($${Number(s.close).toFixed(2)}) · Score ${Number(s.score).toFixed(0)}/100\n   52W DD ${Number(s.dd_high52_pct).toFixed(1)}% | Vol ${Number(s.vol_surge_10d).toFixed(2)}x | MA60 Ref $${Number(trig).toFixed(2)} | Band $${Number(stopP).toFixed(2)}-$${Number(tp1P).toFixed(2)}`;
       })
       .join("\n");
 
     const ignCount = allStocks.filter((s) => s.zone_code === "IGNITION_ZONE").length;
-    if (lg === "jp") {
-      return [
-        `🚀 [RightSideAlpha] 米国株 PW-RSI 右側イグニッション上位銘柄 (${asOf})`,
-        `対象ユニバース: 米国上場 ${allStocks.length}銘柄 | イグニッション点灯: ${ignCount}銘柄`,
-        ``,
-        rows,
-        ``,
-        `🛡️ エグジット原則: -9.0% ハード損切 | 55日(+8%未満) タイムストップ | +100% TP1 半分利確`,
-        `🔗 スクリーナー: https://truthofmarket.com/`,
-      ].join("\n");
-    }
     return [
-      `🚀 [RightSideAlpha] Top US PW-RSI Right-Side Ignition Signals (${asOf})`,
-      `Universe: ${allStocks.length} NYSE/NASDAQ Equities | Active Ignition Count: ${ignCount}`,
+      `📊 [TruthOfMarket] Historical US Equity Factor Summary (${asOf})`,
+      `Universe: ${allStocks.length} NYSE/NASDAQ Equities | Factor Filter Count: ${ignCount}`,
       ``,
       rows,
       ``,
-      `🛡️ Exit Rules: -9.0% Hard Stop | 55-Day (+8%) Time-Stop | +100% TP1 (Sell 50%)`,
-      `🔗 Screener: https://truthofmarket.com/`,
+      `📘 Self-Directed Educational Calculator Software (Not personalized investment advice)`,
+      `🔗 Archive: https://truthofmarket.com/pro-swing.html`,
     ].join("\n");
   };
 
@@ -1810,12 +2300,12 @@ async function buildClientTelegramPreview({
       days_held: days_held ?? 42,
     });
     const text = [
-      `🩺 [Position Doctor] $${doc.ticker} Asymmetric Exit Audit (${doc.as_of_date})`,
-      `• Status: ${doc.status_label} (${doc.status_code})`,
+      `🧮 [Variance Calculator] $${doc.ticker} Historical Band Summary (${doc.as_of_date})`,
+      `• Band Status: ${doc.status_label} (${doc.status_code})`,
       `• Latest Close: $${Number(doc.current_price).toFixed(2)} | Cost Basis: $${Number(doc.entry_price).toFixed(2)} | Held: ${days_held ?? 42}d`,
-      `• Current Return: ${doc.return_pct >= 0 ? "+" : ""}${Number(doc.return_pct).toFixed(2)}%`,
-      `• -9% Hard Stop: $${Number(doc.stop_price).toFixed(2)} | +100% Target (TP1): $${Number(doc.tp1_price).toFixed(2)}`,
-      `• Action Plan: ${doc.action_plan}`,
+      `• Simulated Return: ${doc.return_pct >= 0 ? "+" : ""}${Number(doc.return_pct).toFixed(2)}%`,
+      `• Lower Band Ref: $${Number(doc.stop_price).toFixed(2)} | Upper Band Ref: $${Number(doc.tp1_price).toFixed(2)}`,
+      `• Note: ${doc.action_plan}`,
     ].join("\n");
     return { text, as_of_date: doc.as_of_date || "2026-10-30", alert_type: atype, lang: lg };
   }
@@ -2038,7 +2528,7 @@ function renderPositionDoctorForm(state) {
   const defaultDate = celh && celh.date ? celh.date : "2026-11-13";
   const initialDoc = state.docLastResult
     ? formatDoctorResult(state.docLastResult, state)
-    : `<div style="color:var(--muted); font-size:0.76rem; line-height:1.4;">Type any US ticker (e.g. <b>NVDA</b>, <b>CELH</b>, <b>TSLA</b>) and click <b>Diagnose Position</b> for instant -9% stop &amp; 55-day time-stop rules.</div>`;
+    : `<div style="color:var(--muted); font-size:0.76rem; line-height:1.4;">Type any US ticker (e.g. <b>NVDA</b>, <b>CELH</b>, <b>TSLA</b>) and click <b>Calculate Variance</b> for instant historical dispersion &amp; 55-day duration bands.</div>`;
 
   return `
     <div id="position-doctor-card" style="background:#090d16; border:1px solid rgba(16,185,129,0.38); border-top:2px solid var(--fin-up); border-radius:6px; padding:10px 12px; display:flex; flex-direction:column; gap:6px; scroll-margin-top:84px;">
@@ -2247,34 +2737,36 @@ function renderDoctorVipUnlockPreview(state) {
     ? `
       <div class="doc-vip-action-bar" style="margin-top:12px; display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
         <a href="${docMonthlyUrl}"
+           data-tom-paid-plan="monthly"
            data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
            class="btn btn-primary lemonsqueezy-button"
            id="btnDocUnlockMonthly"
            style="flex:1; min-width:180px; justify-content:center; padding:9px 12px; font-weight:800; font-size:0.78rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
-          ⚡ Monthly VIP ($29/mo)
+          ⚡ Start Monthly VIP — $29/mo
         </a>
         <a href="${docLifetimeUrl}"
+           data-tom-paid-plan="annual"
            data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b"
            class="btn lemonsqueezy-button"
            id="btnDocUnlockLifetime"
            style="flex:1; min-width:180px; justify-content:center; padding:9px 12px; font-weight:800; font-size:0.78rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color:#000; border:none;">
-          💎 Lifetime VIP ($199 · SAVE 43%)
+          💎 Start Annual VIP — $199/yr
         </a>
       </div>
       <div class="doc-compliance-notice" style="margin-top:8px; font-size:0.66rem; color:var(--muted); text-align:center; font-family:var(--font-mono); line-height:1.45;">
-        🔒 Lemon Squeezy Store #296100 Live · PCI-DSS Encrypted · Instant Receipt &amp; License Key Delivery
+        🔒 Lemon Squeezy Store #296100 · Self-Directed Educational Calculator Software · 14-Day Refund Policy
       </div>
       <div style="margin-top:6px; font-size:0.7rem; color:#94a3b8; text-align:center; line-height:1.45;">
-        Checkout issue in your region? Join <a href="https://t.me/truthofmarketss" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">@truthofmarketss</a> or request instant Pro activation via <a href="mailto:beable9489@gmail.com?subject=Instant%20Pro%20Activation%20Request%20(TruthOfMarket)" style="color:#93c5fd; font-weight:700; text-decoration:underline;">email</a>.
+        Support Desk: <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#93c5fd; font-weight:700; text-decoration:underline;">beable9489@gmail.com</a>
       </div>
     `
     : `
       <div class="doc-vip-active-banner" style="margin-top:10px; padding:8px 12px; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:4px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
         <span class="mono" style="font-size:0.72rem; color:#34d399; font-weight:700;">
-          👑 PRO VIP ACTIVE · All 72 Institutional Breakout Signals Unlocked
+          👑 VIP SOFTWARE ACTIVE · Full Quantitative Factor Dataset Unlocked
         </span>
-        <a href="#pro-vault" class="btn btn-sm" style="padding:3px 8px; font-size:0.68rem; border-color:rgba(16,185,129,0.4); color:#34d399;">
-          Open Pro Vault →
+        <a href="#proVaultSection" class="btn btn-sm" style="padding:3px 8px; font-size:0.68rem; border-color:rgba(16,185,129,0.4); color:#34d399;">
+          Open Factor Suite →
         </a>
       </div>
     `;
@@ -2285,7 +2777,7 @@ function renderDoctorVipUnlockPreview(state) {
         <div style="display:flex; align-items:center; gap:6px;">
           <span style="font-size:0.85rem;">🔒</span>
           <span class="mono" style="font-size:0.74rem; font-weight:800; color:#fbbf24; letter-spacing:0.03em;">
-            INSTITUTIONAL IGNITION SIGNALS TOP 3 PREVIEW (REALLOCATION TARGETS)
+            SELF-DIRECTED QUANTITATIVE FACTOR TOP 3 ARCHIVE PREVIEW
           </span>
         </div>
         ${headerBadge}
@@ -2382,8 +2874,8 @@ function renderPortfolioDoctorForm(state) {
   const totalCap = Number((state && state.proPortfolioUsd) || 50000);
   const outputHtml = (state && state.portfolioDocResult)
     ? formatPortfolioDoctorResult(state.portfolioDocResult, state)
-    : `<div style="color:var(--muted); font-size:0.78rem; padding:12px 14px; background:#05080f; border-radius:4px; border:1px solid var(--border); border-left:3px solid var(--fin-blue); line-height:1.5;">
-        Enter up to 10 equity positions and click <b>Run VIP Portfolio Diagnostic</b> to evaluate aggregate health score, Rule 1 -9% stop loss risks, 3 macro volatility stress scenarios, and 1.35% risk parity rebalancing directives.
+    : `<div style="color:var(--muted); font-size:0.78rem; padding:12px 14px; background:#05080f; border-radius:4px; border-1px solid var(--border); border-left:3px solid var(--fin-blue); line-height:1.5;">
+        Enter up to 10 equity positions and click <b>Run Multi-Asset Calculator</b> to evaluate aggregate variance score, lower band dispersion, 3 macro volatility stress scenarios, and simulated weight balance.
       </div>`;
 
   return `
@@ -2391,13 +2883,13 @@ function renderPortfolioDoctorForm(state) {
       <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
         <div>
           <div style="font-size:0.7rem; font-family:var(--font-mono); font-weight:700; color:#818cf8; letter-spacing:0.05em; text-transform:uppercase;">
-            👑 PRO VIP EXCLUSIVE · MULTI-POSITION PORTFOLIO DOCTOR 2.0
+            👑 VIP SOFTWARE · MULTI-ASSET VARIANCE CALCULATOR
           </div>
           <h3 style="font-size:1.05rem; font-weight:800; margin:4px 0; color:#ffffff;">
-            Multi-Asset Health Score, 3-Scenario Stress Testing &amp; 1.35% Risk Parity Rebalancer
+            Multi-Asset Dispersion Score, 3-Scenario Stress Simulator &amp; Weight Calculator
           </h3>
           <p style="font-size:0.78rem; color:var(--muted); margin:0; line-height:1.5;">
-            Audit up to 10 positions simultaneously against Rule 1 (-9% Stop), Rule 2 (55D Time Stop), and Rule 3 (+100% TP1). Volatility stress-test against Semiconductor Fear Shocks and simulate capital reallocation into today's Top 3 Ignition Setups.
+            Evaluate up to 10 positions simultaneously against historical lower variance bands, 55-day duration windows, and upper dispersion bands. Self-directed educational calculator software only.
           </p>
         </div>
         <div style="display:flex; align-items:center; gap:6px;">
@@ -2492,10 +2984,10 @@ function formatPortfolioDoctorResult(result, state) {
   const scoreColor = score >= 80 ? "#10b981" : score >= 50 ? "#fbbf24" : "#ef4444";
   const scoreLabel = score >= 80 ? "HEALTHY (LOW RISK)" : score >= 50 ? "MODERATE RISK (CAUTION)" : "CRITICAL RISK (IMMEDIATE ACTION)";
   const scoreDesc = score >= 80
-    ? "All positions follow mechanical stop-loss rules. Minimal capital at risk."
+    ? "All positions align with modeled variance bands."
     : score >= 50
-    ? "Dead money holding or stop-loss proximity detected. Rebalancing advised."
-    : "Rule 1 -9% Hard Stop breached. Immediate liquidation required to preserve principal.";
+    ? "Extended sideways holding or band proximity detected. Weight review indicated."
+    : "Modeled risk band exceeded. Review position sizing mathematically.";
 
   const totalInvested = Number(result.total_invested || 0);
   const totalPnl = Number(result.total_unrealized_pnl || 0);
@@ -2537,14 +3029,14 @@ function formatPortfolioDoctorResult(result, state) {
           </div>
         </div>
 
-        <!-- Capital at Risk against Rule 1 Stop Loss -->
+        <!-- Simulated Variance Exposure -->
         <div style="background:#090d16; border:1px solid var(--border); border-radius:4px; padding:12px; display:flex; flex-direction:column; justify-content:center;">
-          <div class="mono" style="font-size:0.68rem; color:var(--muted); text-transform:uppercase;">Rule 1 Capital at Risk (-9% Stop)</div>
+          <div class="mono" style="font-size:0.68rem; color:var(--muted); text-transform:uppercase;">Simulated Lower-Band Variance</div>
           <div class="mono" style="font-size:1.15rem; font-weight:800; color:#fbbf24; margin:3px 0;">
             $${capitalAtRisk.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
           <div style="font-size:0.72rem; color:var(--muted);">
-            Max account drawdown if all positions hit their hard stop floor.
+            Modeled variance if all positions reach their lower dispersion band.
           </div>
         </div>
       </div>
@@ -2552,7 +3044,7 @@ function formatPortfolioDoctorResult(result, state) {
       <!-- Section 2: Asset Diagnostic Table -->
       <div style="margin-bottom:16px;">
         <div class="mono" style="font-size:0.7rem; color:var(--fin-up); font-weight:800; letter-spacing:0.04em; margin-bottom:6px; text-transform:uppercase;">
-          📋 INDIVIDUAL ASSET DIAGNOSTIC BREAKDOWN (${items.length} POSITIONS)
+          📋 INDIVIDUAL ASSET DISPERSION BREAKDOWN (${items.length} POSITIONS)
         </div>
         <div class="table-responsive-scroll">
           <table class="stock-table" style="font-size:0.76rem; width:100%;">
@@ -2562,9 +3054,9 @@ function formatPortfolioDoctorResult(result, state) {
                 <th>Return %</th>
                 <th>Entry Price</th>
                 <th>Latest Close</th>
-                <th>-9% Hard Stop</th>
-                <th>Status Rule</th>
-                <th>Actionable Tactical Directive</th>
+                <th>Lower Band Ref</th>
+                <th>Band Status</th>
+                <th>Simulation Note</th>
               </tr>
             </thead>
             <tbody>
@@ -2709,13 +3201,13 @@ function formatPortfolioDoctorResult(result, state) {
 // --- src/components/ChartBlindTest.js ---
 
 /**
- * Interactive 15-Second Wall Street Chart Blind Test & $10,000 Dip-Buyer vs Quant Battle
- * Designed as the primary Shorts/Reels -> Web traffic magnet on truthofmarket.com.
+ * Interactive 15-Second Historical Chart Pattern Quiz & $10,000 Backtest Study
+ * Self-directed educational pattern exercise on /pro-swing.html.
  */
 
 const BLIND_TEST_I18N = {
   en: {
-    badge: "🎯 VIRAL SHORTS CHALLENGE · 15-SECOND WALL STREET CHART BLIND TEST",
+    badge: "🎯 EDUCATIONAL PATTERN QUIZ · 15-SECOND HISTORICAL CHART STUDY",
     title: "Can You Beat 92% of Retail Dip-Buyers? Spot the Real Institutional Breakout vs. Bull Trap",
     subtitle:
       "Most investors lose money buying 'cheap' stocks below their 60-day moving average (Left-Side Knife). Test your Quant IQ on 3 live anonymized S&P 500 / Nasdaq setups right now.",
@@ -2738,35 +3230,35 @@ const BLIND_TEST_I18N = {
     vipUnlockBannerTitle: "🔥 ROUND 3 FEATURED A 3.41x VOLUME ANOMALY — UNLOCK ALL 72 QUANT FACTOR DATASETS & PINE SCRIPT",
     vipUnlockBannerSub:
       "Public preview displays #1 Showcase ($CELH · 2.46x Vol). Pro License holders unlock the complete 72-stock factor matrix, Pine Script v5 source code, and 26-year historical CSV datasets.",
-    unlockMonthlyBtn: "👑 Unlock #2 & #3 VIP Tickers ($29/mo)",
-    unlockLifetimeBtn: "💎 Lifetime VIP All-Access ($199)",
+    unlockMonthlyBtn: "👑 Start Monthly VIP — $29/mo",
+    unlockLifetimeBtn: "💎 Start Annual VIP — $199/yr",
   },
   jp: {
-    badge: "🎯 ショート動画連動 · 15秒ウォール街チャート・ブラインドテスト",
-    title: "個人投資家の92%が騙される「落ちるナイフ」vs「機関投資家の右側ブレイク」を見抜けますか？",
+    badge: "🎯 教育用ヒストリカル検証 · チャートパターン認識クイズ",
+    title: "MA60（60日移動平均線）下の下降トレンドと右側トレンド回復を見分けられますか？",
     subtitle:
-      "60日移動平均線(MA60)の下で「安くなったから」と逆張りナンピンすると資金が塩漬けになります。実在する米国株72銘柄から匿名化された3つの実戦チャートで、あなたのクオンツIQを今すぐ診断してください。",
+      "過去の匿名化された米国株3銘柄の移動平均線・出来高データを使って、トレンド構造を学習する教育用クイズです。",
     roundLabel: "ラウンド",
-    allRoundsView: "全3問 実践チャート・ブラインドテスト",
-    scoreBadgePrefix: "あなたのクオンツIQ:",
+    allRoundsView: "全3問 チャート構造学習クイズ",
+    scoreBadgePrefix: "スコア:",
     answeredCountSuffix: "/ 3 完了",
-    resetBtn: "↻ もう一度挑戦",
-    jumpDocBtn: "🩺 保有銘柄を3秒無料診断",
-    buyBtn: "🟢 今すぐ買い (右側ブレイク · IGNITION)",
-    trapBtn: "🔴 見送り・罠 (落ちるナイフ · TRAP)",
-    correctTag: "✅ クオンツ正解！機関投資家の視点です:",
-    wrongTag: "❌ 個人投資家の罠！理由を確認:",
-    revealTickerLabel: "実際の銘柄を公開",
-    battleTitle: "💰 $10,000 実戦口座シミュレーション：左側逆張りナンピン vs 右側PW-RSIクオンツ",
-    retailSideTitle: "❌ 個人投資家の逆張りナンピン (MA60割れ)",
-    retailSideDesc: "MA60の下で下落中の銘柄($NVDA/$SMCI/$INTC等)をリバランス基準なしで買い下がり、1回の暴落で資産半減",
-    quantSideTitle: "🟢 RightSideAlpha PW-RSI + 出来高急増ブレイク",
-    quantSideDesc: "MA60奪還＋機関出来高1.4倍〜3.4倍爆発を確認してエントリー＆-9.0%機械的損切り(口座リスク-1.35%限定)",
-    vipUnlockBannerTitle: "🔥 第3問の「出来高3.41倍爆発(スコア98)」銘柄を含むVIP限定シグナルを今すぐアンロック",
+    resetBtn: "↻ リセット",
+    jumpDocBtn: "🧮 コスト基準計算機へ",
+    buyBtn: "🟢 右側MA60回復 (Trend Reclaim)",
+    trapBtn: "🔴 MA60下トレンド (Sub-MA60)",
+    correctTag: "✅ パターン一致:",
+    wrongTag: "❌ トレンド構造を確認:",
+    revealTickerLabel: "検証銘柄",
+    battleTitle: "📊 $10,000 ヒストリカルデータ比較：MA60割れ vs MA60回復モデル",
+    retailSideTitle: "❌ MA60下のトレンド逆行モデル (-18% Below MA60)",
+    retailSideDesc: "移動平均線の下で推移する銘柄群の過去ドローダウン推移シミュレーション",
+    quantSideTitle: "🟢 MA60回復＋出来高ファクターモデル",
+    quantSideDesc: "MA60回復＋相対出来高1.4倍以上の過去データ群におけるシミュレーション",
+    vipUnlockBannerTitle: "🔥 全72銘柄ファクターデータセット＆Pine Script v5をアンロック",
     vipUnlockBannerSub:
-      "無料プレビューでは#1ショーケース($CELH・出来高2.46倍)のみ公開中。Pro VIPに参加すると、本日出来高3.41倍・3.17倍を記録した#2・#3銘柄と全72銘柄のエントリー・損切り・利確ラインが即座に解放されます。",
-    unlockMonthlyBtn: "👑 #2・#3 VIP銘柄をアンロック ($29/月)",
-    unlockLifetimeBtn: "💎 永久VIPフルアクセス ($199)",
+      "Monthly VIP ($29/mo) または Annual VIP ($199/yr) で全72銘柄の教育用ファクターマトリクスと26.8年CSVデータを閲覧できます。",
+    unlockMonthlyBtn: "👑 Start Monthly VIP — $29/mo",
+    unlockLifetimeBtn: "💎 Start Annual VIP — $199/yr",
   },
 };
 BLIND_TEST_I18N.kr = BLIND_TEST_I18N.en;
@@ -2856,14 +3348,11 @@ function buildRoundsData(state) {
         { label: "Price vs MA60", value: `+${Math.abs(Number(celh.vs_ma60_pct || 12.7)).toFixed(1)}% (Reclaimed)`, color: "#34d399" },
         { label: "10D Vol Surge", value: `${Number(celh.vol_surge_10d || 2.46).toFixed(2)}x (Surge!)`, color: "#34d399" },
         { label: "Quant Score", value: `${Number(celh.score || 84).toFixed(0)} / 100`, color: "#38bdf8" },
-        { label: "Stop-Loss Rule", value: `-9.0% ($${Number(celh.stop_loss_price || 30.2).toFixed(2)})`, color: "#fbbf24" },
+        { label: "Lower Band Ref", value: `$${Number(celh.stop_loss_price || 30.2).toFixed(2)}`, color: "#fbbf24" },
       ],
       revealedTicker: `$${celh.ticker} ($${Number(celh.close || 33.19).toFixed(2)}) — #1 FREE SHOWCASE`,
       revealedBadge: "🟢 IGNITION_ZONE · INSTITUTIONAL ACCUMULATION",
-      explanation:
-        lang === "jp"
-          ? `正解は【今すぐ買い(右側ブレイク)】です！本日の無料ショーケース銘柄 $${celh.ticker} ($${Number(celh.close || 33.19).toFixed(2)})。底固めを終えてMA60を+12.7%上抜け、機関投資家の出来高が2.46倍に急増しました。損切り-9.0% ($${Number(celh.stop_loss_price || 30.2).toFixed(2)})・目標株価 $${Number(celh.target_1_price || 66.38).toFixed(2)} の高リスクリワード局面です。`
-          : `Correct regime is RIGHT-SIDE BREAKOUT! This is today's #1 Public Showcase $${celh.ticker} ($${Number(celh.close || 33.19).toFixed(2)}). After base consolidation, it reclaimed MA60 (+12.7%) on 2.46x institutional volume (modeled -9.0% risk band $${Number(celh.stop_loss_price || 30.2).toFixed(2)}, 2x excursion band $${Number(celh.target_1_price || 66.38).toFixed(2)}).`,
+      explanation: `Correct regime is ABOVE-MA60 TREND! This is public showcase $${celh.ticker} ($${Number(celh.close || 33.19).toFixed(2)}). After base consolidation, it reclaimed MA60 (+12.7%) on 2.46x volume (lower variance ref $${Number(celh.stop_loss_price || 30.2).toFixed(2)}, upper dispersion band $${Number(celh.target_1_price || 66.38).toFixed(2)}).`,
     },
     {
       id: "r3",
@@ -3183,6 +3672,7 @@ function renderChartBlindTest(state) {
                 : `
                   <a
                     href="${monthlyUrl}"
+                    data-tom-paid-plan="monthly"
                     data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
                     class="lemonsqueezy-button btn btn-sm"
                     style="background:#10b981; border:1px solid #059669; color:#052e16; font-weight:800; font-size:0.74rem; padding:7px 12px; border-radius:6px; text-decoration:none;"
@@ -3191,6 +3681,7 @@ function renderChartBlindTest(state) {
                   </a>
                   <a
                     href="${lifetimeUrl}"
+                    data-tom-paid-plan="annual"
                     data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b"
                     class="lemonsqueezy-button btn btn-sm"
                     style="background:rgba(245,158,11,0.2); border:1px solid #f59e0b; color:#fbbf24; font-weight:800; font-size:0.74rem; padding:7px 12px; border-radius:6px; text-decoration:none;"
@@ -3247,7 +3738,7 @@ function renderHeader(state) {
   const xlv1d = xlvEtf && xlvEtf.ret_1d_pct !== undefined ? Number(xlvEtf.ret_1d_pct) : 0.22;
   const lsMonthlyHref = formatCheckoutUrl(
     state.config?.ls_site1_monthly_url,
-    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en"
   );
   const ytUrl = state.config?.youtube_url || "https://www.youtube.com/@RightSideAlpha";
   const igUrl = state.config?.instagram_url || "https://www.instagram.com/rightsidealpha";
@@ -3258,10 +3749,13 @@ function renderHeader(state) {
   const isAdminMode =
     (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("admin") === "1") ||
     Boolean(state.isAdminAuthenticated);
+  const isProSwing =
+    typeof window !== "undefined" &&
+    (window.__DEFAULT_VIEW__ === "pro_swing" || window.location.pathname.toLowerCase().includes("pro-swing"));
 
   return `
     <span id="pro-vip-telegram" style="display:none;" aria-hidden="true"></span>
-    <!-- INSTITUTIONAL MARKET TAPE RIBBON -->
+    <!-- MARKET DATA RIBBON -->
     <div class="market-ribbon">
       <div class="market-ribbon-inner">
         <div class="market-tape">
@@ -3285,42 +3779,43 @@ function renderHeader(state) {
             <span class="${xlv1d >= 0 ? "tape-up" : "tape-down"}">${xlv1d >= 0 ? "+" : ""}${xlv1d.toFixed(2)}%</span>
           </span>
           <span class="tape-item" style="cursor:pointer;" id="ribbonSwitchSemi">
-            <span class="tape-sym">SEMI FEAR &amp; GREED</span>
+            <span class="tape-sym">MARKET WEATHER</span>
             <span class="${Number(semiScore) >= 55 ? "tape-up" : "tape-down"}" style="font-weight:700;">${semiScore} / 100 (${semiRegime})</span>
           </span>
         </div>
         <div class="mono ribbon-date-note" style="font-size:0.68rem; color:var(--muted);">
-          LATEST CLOSE (${semiDate}) · NYSE / NASDAQ
+          LATEST CLOSE (${semiDate}) · PUBLIC MARKET DATA
         </div>
       </div>
     </div>
 
-    <!-- MAIN INSTITUTIONAL TOPBAR -->
+    <!-- MAIN TOPBAR -->
     <header class="topbar">
       <div class="topbar-inner">
         <div class="brand-cluster">
-          <div class="brand" id="brandHomeBtn">
+          <a href="/" class="brand" id="brandHomeBtn" style="text-decoration:none;">
             <span class="brand-mark">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
                 <polyline points="16 7 22 7 22 13"></polyline>
               </svg>
             </span>
-            <span>${activeView === "semi" ? "SemiFearGreed" : "RightSideAlpha"}</span>
+            <span>TruthOfMarket</span>
             <span class="brand-badge" id="brandSubtitle">${t.brandSubtitle}</span>
-          </div>
+          </a>
 
           <!-- PLATFORM SWITCHER -->
-          <div class="platform-switcher" role="tablist" aria-label="Platform Switcher">
-            <button
-              type="button"
-              class="platform-tab ${activeView === "rightside" ? "active-rsa" : ""}"
+          <div class="platform-switcher" role="tablist" aria-label="Calculator Navigation">
+            <a
+              href="/"
+              class="platform-tab ${!isProSwing && activeView === "rightside" ? "active-rsa" : ""}"
               id="navTabRightSide"
               data-view="rightside"
+              style="text-decoration:none;"
             >
               <span>${t.navRightSide}</span>
-              <span class="platform-tab-tag">72 US</span>
-            </button>
+              <span class="platform-tab-tag">4-Core</span>
+            </a>
             <button
               type="button"
               class="platform-tab ${activeView === "semi" ? "active-semi" : ""}"
@@ -3330,6 +3825,14 @@ function renderHeader(state) {
               <span>${t.navSemiFg}</span>
               <span class="platform-tab-tag" id="headerSemiScoreTag" style="color:#fca5a5; background:rgba(220,38,38,0.2);">${semiScore}</span>
             </button>
+            <a
+              href="/pro-swing.html"
+              class="platform-tab ${isProSwing ? "active-rsa" : ""}"
+              style="text-decoration:none;"
+              title="Self-Directed Quantitative Factor Research Archive"
+            >
+              <span>Quant Archive</span>
+            </a>
           </div>
         </div>
 
@@ -3348,7 +3851,7 @@ function renderHeader(state) {
             type="button"
             class="btn btn-sm"
             id="btnToggleTomTheme"
-            title="Switch between Daylight Light Mode and Dark Terminal Mode"
+            title="Switch between Daylight Light Mode and Dark Mode"
             style="min-height:38px; padding:4px 9px; font-weight:800; border-color:rgba(251,191,36,0.5); color:#fbbf24;"
           >
             ${state.uiTheme === "light" ? "🌙 Dark" : "☀️ Daylight"}
@@ -3420,7 +3923,7 @@ function renderHeader(state) {
             id="headerTelegramLink"
             href="${tgUrl}"
             ${isPro ? 'target="_blank" rel="noopener noreferrer"' : ""}
-            title="${isPro ? "Open Pro VIP Telegram News & Signal Channel" : "Pro Subscribers Only — Unlock VIP Telegram Channel"}"
+            title="${isPro ? "Open VIP Telegram Educational Research Channel" : "VIP Subscribers — Educational Research Channel"}"
             style="border-color:rgba(56,189,248,0.45); color:#38bdf8;"
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -3445,6 +3948,7 @@ function renderHeader(state) {
           <a
             class="btn btn-primary lemonsqueezy-button"
             id="topSubscribeBtn"
+            data-tom-paid-plan="monthly"
             data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
             href="${lsMonthlyHref}"
             target="_blank"
@@ -3471,11 +3975,11 @@ const TOM_MORNING_CLUB_NOTES = [
 ];
 const TOM_MORNING_CLUB_COMPANION_MSG = {
   steady:
-    "🤝 Right beside you — staying calm in quality uptrends while keeping a -9% safety floor is how retirement wealth compounds.",
+    "🤝 Right beside you — staying calm in quality dividend & index compounders while rebalancing 2–4 times a year is how retirement wealth endures.",
   watch:
-    "👀 Wise patience — waiting calmly on the sidelines until buyers prove themselves protects both your sleep and your savings.",
+    "👀 Wise patience — waiting calmly on the sidelines while collecting steady dividend income protects both your sleep and your savings.",
   cash:
-    "🛡️ Smart defense — holding cash in uncertain weeks keeps your nest egg intact and ready for the next clear green light.",
+    "🛡️ Smart defense — holding T-Bill & money-market cash cushions in uncertain weeks keeps your nest egg intact for the next calm uptrend.",
 };
 function getTomMorningClubTodayKey() {
   try {
@@ -3805,7 +4309,7 @@ function bindTomPasswordlessClubEvents(state, showToastFn) {
       if (topStatusEl) {
         topStatusEl.style.display = "block";
         topStatusEl.style.color = "#34d399";
-        topStatusEl.textContent = `✅ Free Morning Signal Active (${email}) — Your 2 Bonus Watchlist Setups below are unlocked!`;
+        topStatusEl.textContent = `✅ Free Morning Retirement Brief Active (${email}) — Your 4-Core Allocation Guide below is unlocked!`;
       }
       const bonusCardEl = document.getElementById("tomFreeMemberBonusCard");
       if (bonusCardEl) bonusCardEl.style.display = "block";
@@ -3821,10 +4325,10 @@ function bindTomPasswordlessClubEvents(state, showToastFn) {
         feedbackEl.innerHTML = `
           <div class="tom-crm-feedback-copy">
             <strong>✅ Passwordless Morning Bell Macro Club membership is active for ${escapeTomCrmHtml(email)}!</strong>
-            <span>${nickname ? `Welcome, ${escapeTomCrmHtml(nickname)} — ` : ""}Focus: <b>${escapeTomCrmHtml(segLabel)}</b> · Daily US Rates, Liquidity, S&amp;P/Semis &amp; 3-Color Regime Signals will arrive in your inbox before the opening bell.</span>
+            <span>${nickname ? `Welcome, ${escapeTomCrmHtml(nickname)} — ` : ""}Focus: <b>${escapeTomCrmHtml(segLabel)}</b> · Daily US Rates, Liquidity, S&amp;P/ETF &amp; 3-Color Market Weather Educational Briefings will arrive in your inbox before the opening bell.</span>
           </div>
           <a href="#tomFreeStarterManual" class="tom-crm-manual-jump-btn" id="tom-club-jump-manual-btn">
-            📘 Open Your Free $0 Safe Order Manual ->
+            📘 Open Your Free $0 Calm Rebalancing Manual ->
           </a>
         `;
       }
@@ -3891,7 +4395,7 @@ function computeTomRetirementPlan({ nestEgg, years, monthlyAdd, weatherMode }) {
         )
       : Math.round(egg);
 
-  // Guarded 3-Bucket + -9% Stop Path (4.5% blended safe withdrawal + dividend yield)
+  // Guarded 3-Bucket Calm 2-4x/Year Rebalance Path (4.5% blended safe withdrawal + dividend yield)
   const guardedAnnual = Math.round(projectedNestEgg * 0.045);
   const guardedMonthly = Math.round(guardedAnnual / 12);
 
@@ -4169,16 +4673,18 @@ function renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRed }) {
         <a
           href="${lsMonthly}"
           class="tom-retire-cta-btn step-vip lemonsqueezy-button"
-          data-ls-modal="true"
+          data-tom-paid-plan="monthly"
+          data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
         >
-          ⚡ Step 3: Monthly VIP ($29/mo)
+          ⚡ Step 3: Start Monthly VIP — $29/mo
         </a>
         <a
           href="${lsLtd}"
           class="tom-retire-cta-btn step-ltd lemonsqueezy-button"
-          data-ls-modal="true"
+          data-tom-paid-plan="annual"
+          data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b"
         >
-          👑 Lifetime VIP ($199 Once)
+          👑 Start Annual VIP — $199/yr
         </a>
       </div>
     </section>
@@ -4299,7 +4805,7 @@ function bindTomRetirementArchitectEvents(state, showToastFn) {
         if (emailInput && emailInput.focus) emailInput.focus();
       }, 280);
       if (typeof showToastFn === "function") {
-        showToastFn("☕ Enter your email below for daily 401(k)/IRA Retirement Cashflow & 3-Color Signals!");
+        showToastFn("☕ Enter your email below for daily 401(k)/IRA Retirement Cashflow & 3-Color Market Weather Briefs!");
       }
     });
   }
@@ -4371,22 +4877,22 @@ function renderHero(state) {
         </div>
       </div>
 
-      <!-- 🚦 JARGON-FREE 3-COLOR TRAFFIC LIGHT SUMMARY (50-70s US INVESTORS · CALM 2-4X/YR REBALANCING) -->
-      <div class="tom-traffic-strip" id="tomTrafficLightStrip" role="group" aria-label="Today's 3-Color Retirement Rebalancing Signals">
-        <button type="button" class="tom-traffic-card t-green" data-traffic-zone="IGNITION_ZONE">
-          <span style="font-size:0.96rem; font-weight:800; color:#34d399;">🟢 CALM UPTREND (${cntGreen} Leaders)</span>
-          <strong style="font-size:1.1rem; color:var(--text);">Hold $VOO &amp; $SCHD Core Compounders</strong>
-          <span style="font-size:1rem; line-height:1.55; color:var(--text-secondary);">Healthy uptrend · Let dividends &amp; S&amp;P core compound calmly →</span>
+      <!-- 🚦 JARGON-FREE 3-COLOR MARKET WEATHER SUMMARY (50-70s US INVESTORS · CALM 2-4X/YR REBALANCING) -->
+      <div class="tom-traffic-strip" id="tomTrafficLightStrip" role="group" aria-label="Today's 3-Color Market Weather Indicators">
+        <button type="button" class="tom-traffic-card t-green" data-traffic-zone="RETIRE_SIM">
+          <span style="font-size:0.96rem; font-weight:800; color:#34d399;">🟢 CALM UPTREND WEATHER</span>
+          <strong style="font-size:1.1rem; color:var(--text);">20% $SGOV · 35% $JEPI+$SCHD · 45% $VOO</strong>
+          <span style="font-size:1rem; line-height:1.55; color:var(--text-secondary);">Healthy broad trend · Let dividends &amp; S&amp;P 500 core compound calmly →</span>
         </button>
-        <button type="button" class="tom-traffic-card t-yellow" data-traffic-zone="WASHOUT_WATCH">
-          <span style="font-size:0.96rem; font-weight:800; color:#fbbf24;">🟡 WAIT &amp; COLLECT INCOME (${cntYellow} Leaders)</span>
-          <strong style="font-size:1.1rem; color:var(--text);">Enjoy $JEPI &amp; $SCHD Monthly Paychecks</strong>
-          <span style="font-size:1rem; line-height:1.55; color:var(--text-secondary);">Pause aggressive buying · Collect steady dividends while bases form →</span>
+        <button type="button" class="tom-traffic-card t-yellow" data-traffic-zone="RETIRE_SIM">
+          <span style="font-size:0.96rem; font-weight:800; color:#fbbf24;">🟡 CAUTIOUS BASE WEATHER</span>
+          <strong style="font-size:1.1rem; color:var(--text);">30% $SGOV · 40% $JEPI+$SCHD · 30% $VOO</strong>
+          <span style="font-size:1rem; line-height:1.55; color:var(--text-secondary);">Mixed breadth · Collect steady monthly dividends while bases form →</span>
         </button>
-        <button type="button" class="tom-traffic-card t-red" data-traffic-zone="DOCTOR">
-          <span style="font-size:0.96rem; font-weight:800; color:#f87171;">🔴 SHIFT TO T-BILL CUSHION (${cntRed} Weak)</span>
-          <strong style="font-size:1.1rem; color:var(--text);">Rebalance Gently Into $SGOV (~4.7% Yield)</strong>
-          <span style="font-size:1rem; line-height:1.55; color:var(--text-secondary);">Calm 2–4x/yr trim · Check any holding in 3 seconds below →</span>
+        <button type="button" class="tom-traffic-card t-red" data-traffic-zone="MANUAL">
+          <span style="font-size:0.96rem; font-weight:800; color:#f87171;">🔴 CRASH DEFENSE WEATHER</span>
+          <strong style="font-size:1.1rem; color:var(--text);">40% $SGOV · 40% $JEPI+$SCHD · 20% $VOO</strong>
+          <span style="font-size:1rem; line-height:1.55; color:var(--text-secondary);">Calm 2–4x/yr weight rebalance · Open the $0 Safe Rebalancing Manual →</span>
         </button>
       </div>
 
@@ -4619,38 +5125,38 @@ function renderHero(state) {
         </div>
       </div>
 
-      <!-- 3 BIG INTUITIVE ACTION CARDS / BUTTONS RIGHT ABOVE THE FOLD -->
-      <div class="hero-action-grid" role="group" aria-label="Quick Actions">
-        <button type="button" class="hero-cta-card primary" id="btnHeroActionSignals">
-          <span>📊 View 72 Live Breakout Signals</span>
+      <!-- 3 BIG INTUITIVE EDUCATIONAL CALCULATOR SHORTCUTS -->
+      <div class="hero-action-grid" role="group" aria-label="Educational Calculator Shortcuts">
+        <button type="button" class="hero-cta-card primary" id="btnHeroActionRetireSim">
+          <span>🧭 30-Sec Retirement Cashflow Calculator</span>
         </button>
-        <button type="button" class="hero-cta-card emerald" id="btnHeroActionDoctor">
-          <span>🩺 3-Sec Position Doctor (Check Any Ticker)</span>
+        <button type="button" class="hero-cta-card emerald" id="btnHeroActionManual">
+          <span>📘 $0 Brokerage &amp; 2–4x/Yr Rebalance Guide</span>
         </button>
         <a href="/semi-fear-greed.html" class="hero-cta-card semi" id="btnHeroActionSemiFg">
-          <span>🌡️ Live Semi Fear &amp; Greed Index (${semiScore})</span>
+          <span>🌡️ Market Weather &amp; Barbell Calculator (${semiScore})</span>
         </a>
       </div>
 
       <div class="kpi-grid">
         <div class="kpi-card kpi-emerald">
           <div class="kpi-label" id="kpi1_label">${t.kpi1_label}</div>
-          <div class="kpi-val">${hitRate}%</div>
+          <div class="kpi-val">26.8 Yrs</div>
           <div class="kpi-sub" id="kpi1_sub">${t.kpi1_sub}</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label" id="kpi2_label">${t.kpi2_label}</div>
-          <div class="kpi-val">${underwater}d</div>
+          <div class="kpi-val">4 ETFs</div>
           <div class="kpi-sub" id="kpi2_sub">${t.kpi2_sub}</div>
         </div>
         <div class="kpi-card kpi-emerald">
           <div class="kpi-label" id="kpi3_label">${t.kpi3_label}</div>
-          <div class="kpi-val">+${netCagr}%</div>
+          <div class="kpi-val">2–4x/Yr</div>
           <div class="kpi-sub" id="kpi3_sub">${t.kpi3_sub}</div>
         </div>
         <div class="kpi-card kpi-amber">
           <div class="kpi-label" id="kpi4_label">${t.kpi4_label}</div>
-          <div class="kpi-val">${severeRisk}%</div>
+          <div class="kpi-val">100% Local</div>
           <div class="kpi-sub" id="kpi4_sub">${t.kpi4_sub}</div>
         </div>
       </div>
@@ -4662,48 +5168,52 @@ function renderFreeStarterManual(state) {
   const lsMonthly =
     cfg.ls_site1_monthly_url ||
     "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en";
-  const lsLtd =
+  const lsAnnual =
     cfg.ls_site1_ltd_url ||
     "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en";
+  const isWebView =
+    typeof window !== "undefined" &&
+    typeof window.isTomInAppWebView === "function" &&
+    window.isTomInAppWebView();
 
   return `
-    <section class="tom-starter-manual-section" id="tomFreeStarterManual" aria-label="$0 Free Public Product: US Brokerage App & Safe Order Starter Manual">
+    <section class="tom-starter-manual-section" id="tomFreeStarterManual" aria-label="$0 Free Public Product: US Brokerage App & Calm 2-4x/Year Rebalancing Starter Manual">
       <div class="tom-manual-top-row">
-        <span class="tom-manual-free-pill">📘 $0 FREE PUBLIC PRODUCT · OPEN TO ALL INVESTORS</span>
+        <span class="tom-manual-free-pill">📘 $0 FREE PUBLIC PRODUCT · SELF-DIRECTED EDUCATIONAL GUIDE</span>
         <span class="tom-manual-broker-pill">🏦 Fidelity · Charles Schwab · Vanguard Ready</span>
       </div>
 
       <h2 class="tom-manual-heading">
-        US Brokerage App &amp; Safe Order Starter Manual ($0 Free Edition)
+        US Brokerage App &amp; Calm 2–4x/Year Portfolio Rebalancing Manual ($0 Free Edition)
       </h2>
       <p class="tom-manual-lead">
-        Whether you are placing your very first self-directed trade or managing a lifelong <b>401(k) / IRA</b> nest egg, learn the 3 calm brokerage habits that stop 9:30 AM price traps, shield your principal automatically, and pay steady monthly interest while waiting in cash.
+        Managing a lifelong <b>401(k) or IRA</b> nest egg does not require stressful daily trading. Learn the 3 calm self-directed brokerage habits: placing safe Limit Orders, rebalancing <b>SGOV · SCHD · JEPI · VOO</b> weights 2–4 times a year with our 3-Color Market Weather indicator, and earning steady government money-market yield on cash cushions.
       </p>
 
       <div class="tom-manual-steps-grid">
         <button type="button" class="tom-manual-step-card btn-open-tom-manual-step" data-manual-step="tomManualStep1">
-          <span class="tom-manual-step-badge step-b1">STEP 1 · SAFE BUYING</span>
+          <span class="tom-manual-step-badge step-b1">STEP 1 · SAFE ORDER ENTRY</span>
           <strong class="tom-manual-step-title">Limit Order vs. Market Order</strong>
           <span class="tom-manual-step-desc">
-            Why tapping &ldquo;Market Order&rdquo; at 9:30 AM ET risks overpaying &mdash; and how to place a safe <b>Limit Order</b> in 3 taps on Fidelity, Schwab, or Vanguard.
+            Why tapping &ldquo;Market Order&rdquo; at 9:30 AM ET risks overpaying on wide morning spreads &mdash; and how to place a calm <b>Limit Order</b> in 3 taps on Fidelity, Schwab, or Vanguard.
           </span>
           <span class="tom-manual-step-cta">Read Step 1 Guide →</span>
         </button>
 
         <button type="button" class="tom-manual-step-card btn-open-tom-manual-step" data-manual-step="tomManualStep2">
-          <span class="tom-manual-step-badge step-b2">STEP 2 · PRINCIPAL SHIELD</span>
-          <strong class="tom-manual-step-title">Automatic -8% to -9% Stop-Loss</strong>
+          <span class="tom-manual-step-badge step-b2">STEP 2 · CALM WEIGHT REBALANCING</span>
+          <strong class="tom-manual-step-title">2–4x/Year Portfolio Weight Rebalancing</strong>
           <span class="tom-manual-step-desc">
-            How to set an automatic <b>Stop Order</b> safety net right after buying so a sudden market drop can never cut your retirement account in half.
+            How to review and gently adjust your <b>SGOV · SCHD · JEPI · VOO</b> bucket percentages just <b>2–4 times per year</b> aligned with our 3-Color Market Weather indicator.
           </span>
           <span class="tom-manual-step-cta">Read Step 2 Guide →</span>
         </button>
 
         <button type="button" class="tom-manual-step-card btn-open-tom-manual-step" data-manual-step="tomManualStep3">
-          <span class="tom-manual-step-badge step-b3">STEP 3 · RED-LIGHT CASH YIELD</span>
+          <span class="tom-manual-step-badge step-b3">STEP 3 · T-BILL &amp; MMF CUSHION</span>
           <strong class="tom-manual-step-title">401(k) / IRA Cash MMF Cushion</strong>
           <span class="tom-manual-step-desc">
-            When the signal is 🔴 Red (Protect Cash), park idle cash in <b>SPAXX</b>, <b>SWVXX</b>, or <b>VMFXX</b> to collect monthly interest until the next 🟢 Green light.
+            During 🔴 Red (Crash Defense Weather), keep your Bucket 1 cushion in <b>SGOV</b>, <b>SPAXX</b>, <b>SWVXX</b>, or <b>VMFXX</b> to collect monthly interest without selling core holdings.
           </span>
           <span class="tom-manual-step-cta">Read Step 3 Guide →</span>
         </button>
@@ -4711,26 +5221,28 @@ function renderFreeStarterManual(state) {
 
       <div class="tom-manual-cta-bar">
         <button type="button" class="tom-manual-open-btn" id="btnOpenTomStarterManual">
-          📖 Open Complete $0 Starter Manual (Print / Save PDF) →
+          ${isWebView ? "📖 Read Complete $0 Manual &amp; Email Me This PDF Guide →" : "📖 Open Complete $0 Starter Manual (Read / Save PDF) →"}
         </button>
         <button type="button" class="tom-manual-sec-btn btn-jump-tom-morning">
-          📧 Get Free Daily 3-Color Signals ($0)
+          📧 Get Free Daily 3-Color Market Weather ($0)
         </button>
         <a
           href="${lsMonthly}"
           class="tom-manual-vip-link lemonsqueezy-button"
           data-direct-ls="1"
+          data-tom-paid-plan="monthly"
           data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
         >
-          ⚡ Monthly VIP ($29/mo)
+          ⚡ Start Monthly VIP — $29/mo
         </a>
         <a
-          href="${lsLtd}"
+          href="${lsAnnual}"
           class="tom-manual-vip-link is-ltd lemonsqueezy-button"
           data-direct-ls="1"
+          data-tom-paid-plan="annual"
           data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b"
         >
-          👑 Lifetime VIP ($199)
+          👑 Start Annual VIP — $199/yr
         </a>
       </div>
     </section>
@@ -4790,11 +5302,11 @@ function renderEasyProfitSimulator(state) {
   const plainSignal =
     zone === "IGNITION_ZONE"
       ? {
-          badge: "🟢 GREEN REGIME · RIGHT-SIDE IGNITION",
+          badge: "🟢 GREEN REGIME · ABOVE MA20/MA60",
           color: "#34d399",
           bg: "rgba(16,185,129,0.12)",
           border: "rgba(16,185,129,0.4)",
-          summary: `Base washout confirmed with institutional volume surge (${Number(selectedStock.vol_surge_10d || 1.5).toFixed(2)}x volume). Historical model applies a -9.0% risk threshold.`,
+          summary: `Base consolidation confirmed with volume expansion (${Number(selectedStock.vol_surge_10d || 1.5).toFixed(2)}x volume). Historical factor model tracks standard dispersion bands.`,
         }
       : zone === "WASHOUT_WATCH"
       ? {
@@ -4802,14 +5314,14 @@ function renderEasyProfitSimulator(state) {
           color: "#fbbf24",
           bg: "rgba(245,158,11,0.12)",
           border: "rgba(245,158,11,0.4)",
-          summary: `Valuation washout detected (PW-RSI ${Number(selectedStock.score || 22).toFixed(1)}), awaiting institutional volume confirmation above moving averages.`,
+          summary: `Valuation compression detected (Score ${Number(selectedStock.score || 22).toFixed(1)}), awaiting volume confirmation above moving averages.`,
         }
       : {
           badge: "🔴 RED REGIME · BELOW MA60 DOWNTREND",
           color: "#f87171",
           bg: "rgba(239,68,68,0.12)",
           border: "rgba(239,68,68,0.4)",
-          summary: `Left-side downtrend remains active below 20-day & 60-day moving averages. Historical factor filter excludes sub-MA60 trends.`,
+          summary: `Price remains below 20-day & 60-day moving averages. Historical factor filter excludes sub-MA60 trends.`,
         };
 
   return `
@@ -4821,10 +5333,10 @@ function renderEasyProfitSimulator(state) {
             <span>PLAIN-ENGLISH QUANT METHODOLOGY · ZERO JARGON GUIDE</span>
           </div>
           <h2 style="font-size:1.08rem; font-weight:800; color:#ffffff; margin:0 0 4px 0;">
-            How Our Quantitative Factor Model Evaluates Risk &amp; Asymmetric Setups in 3 Steps
+            How Our Quantitative Factor Model Evaluates Dispersion &amp; Allocation Weights in 3 Steps
           </h2>
           <p style="font-size:0.8rem; color:#cbd5e1; margin:0; line-height:1.5;">
-            Explore the <b>3-State Factor Regime</b> below and simulate historical position sizing, -9.0% risk bands, and R-multiple scenarios (educational research only).
+            Explore the <b>3-State Factor Regime</b> below and simulate historical position sizing, variance bands, and compounding scenarios (self-directed educational calculator software only).
           </p>
         </div>
         <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
@@ -4850,34 +5362,34 @@ function renderEasyProfitSimulator(state) {
             STEP 1 · REGIME FILTER (GREEN STATE)
           </div>
           <div style="font-size:0.8rem; font-weight:700; color:#ffffff; margin-bottom:3px;">
-            Isolate &ldquo;IGNITION ZONE&rdquo; Factor Setups
+            Filter Trend-Confirmed Factor Cohorts
           </div>
           <div style="font-size:0.74rem; color:#94a3b8; line-height:1.45;">
-            Identifies post-washout equities (<b>PW-RSI &le; 25</b>) reclaiming moving averages alongside institutional volume expansion (<b>Volume &ge; 1.4x</b>).
+            Identifies post-drawdown equities reclaiming 20-day and 60-day moving averages alongside volume expansion (<b>Volume &ge; 1.4x</b>).
           </div>
         </div>
 
         <div style="background:rgba(15,23,42,0.75); border:1px solid rgba(245,158,11,0.28); border-left:3px solid #f59e0b; border-radius:6px; padding:10px 12px;">
           <div style="font-size:0.72rem; font-weight:800; color:#fbbf24; font-family:var(--font-mono); margin-bottom:3px;">
-            STEP 2 · DOWNSIDE BOUNDARY (-9% MODEL)
+            STEP 2 · LOWER VARIANCE BOUNDARY
           </div>
           <div style="font-size:0.8rem; font-weight:700; color:#ffffff; margin-bottom:3px;">
-            Model a Mechanical -9.0% Risk Threshold
+            Model Position Weight &amp; Drawdown Variance
           </div>
           <div style="font-size:0.74rem; color:#94a3b8; line-height:1.45;">
-            Unhedged drawdowns (-50%) erode compounding math. Modeling a strict <b>-9.0%</b> invalidation boundary caps simulated single-position portfolio risk at -1.35%.
+            Deep drawdowns erode compounding math. Modeling a disciplined single-slot weight caps simulated portfolio variance impact at ~1.35%.
           </div>
         </div>
 
         <div style="background:rgba(15,23,42,0.75); border:1px solid rgba(56,189,248,0.28); border-left:3px solid #38bdf8; border-radius:6px; padding:10px 12px;">
           <div style="font-size:0.72rem; font-weight:800; color:#38bdf8; font-family:var(--font-mono); margin-bottom:3px;">
-            STEP 3 · ASYMMETRIC R-MULTIPLE PROFILE
+            STEP 3 · HISTORICAL DISPERSION PROFILE
           </div>
           <div style="font-size:0.8rem; font-weight:700; color:#ffffff; margin-bottom:3px;">
-            Historical +50% to +100% Excursion Bands
+            Multi-Year Empirical Return Distribution
           </div>
           <div style="font-size:0.74rem; color:#94a3b8; line-height:1.45;">
-            Across 2000–2026 empirical data, a <b>55% hit rate</b> with asymmetric payoff yielded <b>+${netCagrStr}%/yr</b> backtested net CAGR (past performance does not guarantee future results).
+            Across 2000–2026 empirical data, trend-confirmed factor cohorts yielded <b>+${netCagrStr}%/yr</b> backtested net CAGR (past performance does not guarantee future results).
           </div>
         </div>
       </div>
@@ -4886,14 +5398,14 @@ function renderEasyProfitSimulator(state) {
       <div style="background:#080c15; border:1px solid rgba(56,189,248,0.3); border-radius:6px; padding:12px 14px;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
           <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; max-width:100%;">
-            <span class="mono" style="font-size:0.72rem; font-weight:800; color:#38bdf8;">🎯 INTERACTIVE POSITION SIZING &amp; RISK SIMULATOR:</span>
+            <span class="mono" style="font-size:0.72rem; font-weight:800; color:#38bdf8;">🎯 INTERACTIVE POSITION WEIGHT &amp; VARIANCE SIMULATOR:</span>
             <select id="easySimTickerSelect" style="min-height:40px; max-width:100%; background:#0f172a; color:#ffffff; border:1px solid #38bdf8; border-radius:4px; padding:6px 8px; font-family:var(--font-mono); font-size:0.76rem; font-weight:700; cursor:pointer;">
               ${selectableStocks
                 .map(
                   (s) =>
                     `<option value="${s.ticker}" ${s.ticker === selectedStock.ticker ? "selected" : ""}>$${s.ticker} (${s.name_en || s.ticker}) — $${Number(
                       s.close || 0
-                    ).toFixed(2)} [${s.zone_code === "IGNITION_ZONE" ? "🟢 IGNITION" : s.zone_code}]</option>`
+                    ).toFixed(2)} [${s.zone_code === "IGNITION_ZONE" ? "🟢 GREEN" : s.zone_code}]</option>`
                 )
                 .join("")}
             </select>
@@ -4928,22 +5440,22 @@ function renderEasyProfitSimulator(state) {
           </div>
 
           <div style="background:#0d1424; border:1px solid rgba(239,68,68,0.3); border-radius:5px; padding:9px 11px;">
-            <div class="mono" style="font-size:0.66rem; color:#f87171;">② SIMULATED DRAWDOWN CAP (-9% BAND)</div>
+            <div class="mono" style="font-size:0.66rem; color:#f87171;">② SIMULATED LOWER VARIANCE BAND</div>
             <div class="mono" style="font-size:1.05rem; font-weight:800; color:#f87171; margin-top:3px;">
-              -$${maxLossUsd.toLocaleString()} <span style="font-size:0.74rem; color:#fca5a5;">(Band @ $${stopPrice})</span>
+              -$${maxLossUsd.toLocaleString()} <span style="font-size:0.74rem; color:#fca5a5;">(Ref @ $${stopPrice})</span>
             </div>
             <div style="font-size:0.7rem; color:#94a3b8; margin-top:2px;">
-              Caps simulated impact to <b>-1.35%</b> of $${capUsd.toLocaleString()} model
+              Caps simulated impact to <b>~1.35%</b> of $${capUsd.toLocaleString()} model
             </div>
           </div>
 
           <div style="background:#0d1424; border:1px solid rgba(16,185,129,0.35); border-radius:5px; padding:9px 11px;">
-            <div class="mono" style="font-size:0.66rem; color:#34d399;">③ HISTORICAL EXCURSION BAND (+50% / +100%)</div>
+            <div class="mono" style="font-size:0.66rem; color:#34d399;">③ HISTORICAL UPPER DISPERSION BAND</div>
             <div class="mono" style="font-size:1.05rem; font-weight:800; color:#34d399; margin-top:3px;">
               +$${profit1Usd.toLocaleString()} ~ +$${profit2Usd.toLocaleString()}
             </div>
             <div style="font-size:0.7rem; color:#94a3b8; margin-top:2px;">
-              +50% Band ($${target1Price}) · 2.0x Band ($${target2Price})
+              Mid Band ($${target1Price}) · Upper Band ($${target2Price})
             </div>
           </div>
 
@@ -5264,13 +5776,13 @@ function renderStockTable(state) {
       ? `
     <div class="soft-paywall-barrier">
       <div style="font-size:0.72rem; font-family:var(--font-mono); color:#93c5fd; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">
-        ${t.softPaywallTitle || "🔒 Pro VIP Ignition Picks & Exact Trigger Levels"}
+        ${t.softPaywallTitle || "🔒 VIP Historical Factor Dataset & Reference Bands"}
       </div>
       <p style="color:#cbd5e1; font-size:0.82rem; margin:0 0 12px; line-height:1.5;">
-        ${t.softPaywallDesc || "Click any unlocked stock row for factor details, or unlock Pro ($29/mo) to reveal all hidden VIP Ignition tickers, exact MA60 entry triggers, and -9% hard stops."}
+        ${t.softPaywallDesc || "Click any unlocked stock row for factor details, or unlock Monthly VIP ($29/mo) to reveal all hidden dataset rows, MA60 reference bands, and CSV exports."}
       </p>
-      <a class="soft-paywall-btn lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${monthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:42px;">
-        🔒 ${t.softPaywallUnlockCta || "Unlock Pro ($29/mo)"} →
+      <a class="soft-paywall-btn lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${monthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:42px;">
+        🔒 ${t.softPaywallUnlockCta || "Start Monthly VIP — $29/mo"} →
       </a>
     </div>
   `
@@ -5371,8 +5883,8 @@ function renderStockRows(state) {
             </div>
             <div class="mobile-stock-card-summary" style="margin-top:8px; padding-top:7px; border-top:1px solid rgba(51,65,85,0.55); align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap;">
               <span class="badge ${badgeClass}">${cleanZoneLabel}</span>
-              <a class="btn btn-primary btn-sm lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:40px; white-space:nowrap; font-weight:700;">
-                🔒 Unlock Pro ($29/mo)
+              <a class="btn btn-primary btn-sm lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:40px; white-space:nowrap; font-weight:700;">
+                🔒 Start Monthly VIP — $29/mo
               </a>
             </div>
           </div>
@@ -5401,13 +5913,13 @@ function renderStockRows(state) {
         <td class="mono col-num" style="color:#34d399; font-weight:700;">&ge;1.40x</td>
         <td class="mono col-num" style="color:#94a3b8;">🔒 VIP</td>
         <td>
-          <a class="btn btn-primary btn-sm lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:38px; white-space:nowrap; font-weight:700;">
-            🔒 Unlock Pro ($29/mo)
+          <a class="btn btn-primary btn-sm lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:38px; white-space:nowrap; font-weight:700;">
+            🔒 Start Monthly VIP — $29/mo
           </a>
         </td>
         <td>
-          <a class="btn btn-primary btn-sm lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:38px; white-space:nowrap; font-weight:700;">
-            🔒 Unlock Pro ($29/mo)
+          <a class="btn btn-primary btn-sm lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:38px; white-space:nowrap; font-weight:700;">
+            🔒 Start Monthly VIP — $29/mo
           </a>
         </td>
       </tr>
@@ -5446,8 +5958,8 @@ function renderStockRows(state) {
              }</div>
              <div><span style="color:var(--muted);">STP</span> <span style="color:var(--fin-down); font-weight:600;">${stopDisp}</span> · <span style="color:var(--fin-up);">TP ${tp1Disp}</span></div>
            </div>`
-        : `<a class="btn btn-sm lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:38px; white-space:nowrap; font-weight:700; border-color:rgba(59,130,246,0.45); color:#93c5fd; background:rgba(37,99,235,0.14);">
-             🔒 Unlock Pro ($29/mo)
+        : `<a class="btn btn-sm lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:38px; white-space:nowrap; font-weight:700; border-color:rgba(59,130,246,0.45); color:#93c5fd; background:rgba(37,99,235,0.14);">
+             🔒 Start Monthly VIP — $29/mo
            </a>`;
 
       const tvUrl = `https://www.tradingview.com/symbols/${encodeURIComponent(s.ticker)}/?aff_id=${tvAffId}`;
@@ -5493,8 +6005,8 @@ function renderStockRows(state) {
                 <span class="badge ${badgeClass}">${cleanZoneLabel}</span>
                 ${
                   showTargets
-                    ? `<span class="mono" style="font-size:0.72rem; color:#cbd5e1;">TRG <b style="color:#60a5fa;">${ma60Disp}</b> · STP <b style="color:var(--fin-down);">${stopDisp}</b></span>`
-                    : `<span class="mono" style="font-size:0.71rem; color:#93c5fd;">🔒 Pro Trigger &amp; -9% Stop</span>`
+                    ? `<span class="mono" style="font-size:0.72rem; color:#cbd5e1;">MA60 <b style="color:#60a5fa;">${ma60Disp}</b> · REF <b style="color:var(--fin-down);">${stopDisp}</b></span>`
+                    : `<span class="mono" style="font-size:0.71rem; color:#93c5fd;">🔒 VIP Factor Reference Bands</span>`
                 }
               </div>
               <button type="button" class="btn btn-sm btn-open-stock-detail" data-ticker="${s.ticker}" style="min-height:40px; padding:5px 10px; border-color:rgba(56,189,248,0.45); color:#38bdf8; font-weight:700;">
@@ -5670,15 +6182,15 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
           !isPro
             ? `<div id="vaultOverlayUnlock" style="position:absolute; inset:0; z-index:10; display:flex; align-items:center; justify-content:center; background:rgba(6,9,17,0.58); border-radius:6px; cursor:pointer;">
                  <div style="background:#0d1424; border:1px solid var(--fin-blue); box-shadow:0 12px 32px rgba(0,0,0,0.75); border-radius:6px; padding:22px 26px; text-align:center; max-width:500px;">
-                   <div class="mono" style="font-size:0.72rem; color:#fbbf24; font-weight:800; letter-spacing:0.05em;">👑 PRO VIP ALPHA COMMAND CENTER LOCKED</div>
+                   <div class="mono" style="font-size:0.72rem; color:#fbbf24; font-weight:800; letter-spacing:0.05em;">👑 VIP EDUCATIONAL CALCULATOR SUITE LOCKED</div>
                    <div style="font-size:1.05rem; font-weight:800; color:#ffffff; margin:8px 0;">
-                     Unlock All 72 Stock Targets, Daily Ignition Order Book, Position Sizing Calculator & Pine Script v5
+                     Unlock All 72 Factor Datasets, Position Sizing Math Calculator &amp; Pine Script v5
                    </div>
                    <div style="font-size:0.8rem; color:var(--muted); margin-bottom:14px; line-height:1.5;">
-                     Free users see only 1 sample stock ($CELH). Upgrade to Pro ($29/mo or $199 Lifetime) to reveal all hidden VIP Ignition picks, exact share-sizing orders, Position Doctor diagnostics, and the 26-Year Semiconductor CSV.
+                     Free users see 1 open factor example ($CELH). Upgrade to Monthly VIP ($29/mo) or Annual VIP ($199/yr) to access the full quantitative factor dataset, mathematical share-sizing models, and the 26.8-Year Semiconductor CSV.
                    </div>
                    <span class="btn btn-primary" style="justify-content:center; width:100%; padding:10px; font-weight:800;">
-                     🔑 Enter Pro License Key / Subscribe Now →
+                     🔑 Enter License Key / Reserve VIP Access →
                    </span>
                  </div>
                </div>`
@@ -5691,10 +6203,10 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; background:rgba(2,132,199,0.14); border:1px solid rgba(56,189,248,0.45); border-radius:6px; padding:12px 14px; margin-bottom:14px;">
           <div>
             <div class="mono" style="font-size:0.68rem; color:#38bdf8; font-weight:800; letter-spacing:0.05em;">
-              🔒 PRO SUBSCRIBERS ONLY · PRIVATE VIP TELEGRAM NEWS & SIGNAL DESK
+              🔒 VIP SUBSCRIBERS ONLY · EDUCATIONAL DATA &amp; QUANTITATIVE RESEARCH DESK
             </div>
             <div style="font-size:0.86rem; font-weight:800; color:#ffffff; margin-top:2px;">
-              Real-Time $SMH / $XLV & 72-Equity Breaking News + Daily Unmasked Ignition Order Book Alerts
+              Daily $SMH / $XLV &amp; 72-Equity Factor Data Summaries + Educational Briefings
             </div>
           </div>
           <a
@@ -5726,14 +6238,14 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
           <table class="stock-table" style="font-size:0.78rem;">
             <thead>
               <tr>
-                <th>VIP Pick</th>
-                <th>PW Score</th>
+                <th>Factor Row</th>
+                <th>Factor Score</th>
                 <th>Latest Close</th>
-                <th>Entry Trigger (MA20/60)</th>
-                <th>-9.0% Hard Stop</th>
-                <th>+100% TP1 Target</th>
-                <th>15% Slot Allocation ($${perSlotUsd.toLocaleString()})</th>
-                <th>Max Loss Impact</th>
+                <th>MA20/60 Reference</th>
+                <th>Lower Band Ref</th>
+                <th>Upper Band Ref</th>
+                <th>15% Slot Simulation ($${perSlotUsd.toLocaleString()})</th>
+                <th>Simulated Variance</th>
               </tr>
             </thead>
             <tbody>
@@ -5769,7 +6281,7 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
                       <td class="mono" style="color:#60a5fa; font-weight:700;">$${trig}</td>
                       <td class="mono" style="color:var(--fin-down); font-weight:700;">$${stp}</td>
                       <td class="mono" style="color:var(--fin-up); font-weight:700;">$${tp1}</td>
-                      <td class="mono" style="color:#ffffff; font-weight:800;">Buy ${sh} shares ($${Math.round(sh * c).toLocaleString()})</td>
+                      <td class="mono" style="color:#ffffff; font-weight:800;">Model ${sh} shares ($${Math.round(sh * c).toLocaleString()})</td>
                       <td class="mono" style="color:var(--fin-amber);">-$${maxLossUsd.toLocaleString()} (-1.35% Eq)</td>
                     </tr>
                   `;
@@ -5844,7 +6356,7 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
       </div>
 
       <div id="vaultContentWrap" class="${isPro ? "" : "blur-locked"}" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap:16px;">
-        <!-- Module 01: Position Doctor rendered in free unblurred section above -->
+        <!-- Module 01: Variance Calculator rendered in unblurred section above -->
 
         <!-- Module 02: Institutional SEC Research Vault -->
         <div style="background:#090d16; border:1px solid var(--border); border-top:2px solid var(--fin-blue); border-radius:4px; padding:18px; display:flex; flex-direction:column; justify-content:space-between;">
@@ -5964,86 +6476,89 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
 
 const PRICING_COPY = {
   en: {
-    heading: "Simple, Transparent VIP Access — Unlocks Instantly After Payment",
-    subheading: "Choose Monthly or Lifetime below. Your screen unlocks automatically the moment checkout finishes — no license key typing required.",
+    heading: "Self-Directed Educational Calculator Software — Simple VIP Access",
+    subheading:
+      "Public market data visualization & dividend/allocation calculator software for self-directed learners. Backed by our 14-Day No-Questions-Asked Refund Policy.",
     t1Badge: "MONTHLY VIP",
-    t1Title: "Monthly VIP Terminal & Daily Signals",
+    t1Title: "Monthly VIP Educational Calculator Suite",
     t1Period: "/ month",
     t1Items: [
-      "Full 3-Color Rebalance Signals Across SGOV, SCHD, JEPI, VOO & 72 US Leaders",
-      "Daily 08:10 EST Retirement Cashflow & Corporate Balance-Sheet Briefs",
-      "Portfolio Doctor: Calm 2–4x/Year Weight Check & Drawdown Protection",
-      "Full TradingView Trend Script + 26-Year US Market Weather CSV",
+      "Self-Directed Educational Calculator Software across SGOV, SCHD, JEPI, VOO & US Blue-Chip Datasets",
+      "Daily 08:10 EST Public Balance-Sheet & Dividend Coverage Educational Summaries",
+      "Calm 2–4x/Year Portfolio Weight Rebalancing & Drawdown Math Calculators",
+      "TradingView Educational Trend Overlay Script + 26.8-Year US Market Weather CSV",
     ],
     t1Btn: "Start Monthly VIP — $29/mo",
-    t1PayNote: "🍎 Apple Pay · Google Pay · Credit Card (1-Click Cancel Anytime)",
-    t2Badge: "LIFETIME VIP",
-    t2Title: "Lifetime VIP All-Access Pass",
-    t2Period: "/ one-time",
+    t1PayNote: "🍎 Apple Pay · Google Pay · Credit Card (1-Click Cancel Anytime · 14-Day Refund Policy)",
+    t2Badge: "ANNUAL VIP",
+    t2Title: "Annual VIP Educational Calculator Pass",
+    t2Period: "/ year",
     t2Items: [
-      "Pay Once, Own Forever — Zero recurring monthly charges",
-      "Complete 26.8-Year (2000–2026) US Equity & Semiconductor Datasets",
-      "English & Japanese Research Briefs + VIP Alert Channel",
-      "Permanent Access to Both RightSideAlpha & SemiFearGreed Pro",
+      "Full 12-Month Access to All Self-Directed Educational Calculators & Visualizations",
+      "Complete 26.8-Year (1998–2026) US Equity & ETF Historical CSV Datasets",
+      "English & Japanese Educational Macro Research Archive + VIP Dispatch Desk",
+      "Unified Access Across TruthOfMarket Retirement & Market Weather Calculators",
     ],
-    t2Btn: "Get Lifetime VIP — $199",
-    t2PayNote: "🍎 Apple Pay · Google Pay · Credit Card (One-Time · Instant Auto-Unlock)",
-    autoUnlockNote: "✨ Instant Auto-Unlock: All 72 VIP stock setups open automatically on this screen right after payment.",
-    restoreSummary: "🔑 Switching devices or already paid? Restore your VIP License Key here",
+    t2Btn: "Start Annual VIP — $199/yr",
+    t2PayNote: "🍎 Apple Pay · Google Pay · Credit Card (Billed Annually · 14-Day Refund Policy)",
+    autoUnlockNote:
+      "✨ Instant Software Activation: Your self-directed educational calculators and CSV datasets unlock on screen automatically after checkout.",
+    restoreSummary: "🔑 Switching devices or already subscribed? Restore your VIP License Key here",
     restoreBtn: "Open License Key Restore Box",
     t3Badge: "OPTIONAL EXTERNAL CHARTING & COMMUNITY LINKS",
     t3Title: "External Charting Platforms & Free Public Channels",
-    t3Desc: "Optional third-party charting tools and official public channels (separate from your TruthOfMarket VIP pass):",
+    t3Desc: "Optional third-party charting tools and official public channels (separate from your TruthOfMarket VIP software pass):",
     t3Items: [
-      "<b>TradingView Pro (ID: 1173809)</b> — Multi-timeframe MA20/MA60 & Pine Script v5 execution",
-      "<b>Seeking Alpha Premium (better_life333)</b> — Quant Grades & 1-2Y consensus EPS revision tracking",
-      "<b>TrendSpider Automated Charting (rightside)</b> — Institutional AI trendline, breakout & unusual options scanner",
+      "<b>TradingView Pro (ID: 1173809)</b> — Multi-timeframe moving-average & Pine Script v5 visualization",
+      "<b>Seeking Alpha Premium (better_life333)</b> — Public dividend grades & consensus EPS data",
+      "<b>TrendSpider Charting Software (rightside)</b> — Multi-factor technical charting workspace",
     ],
-    tvBtn: "📈 Launch TradingView Terminal ↗",
-    saBtn: "📊 Open Seeking Alpha EPS Consensus ↗",
-    tsBtn: "⚡ Launch TrendSpider AI Scanner ↗",
-    tgBtn: "🔒 Pro VIP Telegram ($SMH/$XLV & 72-Stock Live News)",
+    tvBtn: "📈 Launch TradingView Charting ↗",
+    saBtn: "📊 Open Seeking Alpha Dividend Data ↗",
+    tsBtn: "⚡ Launch TrendSpider Workspace ↗",
+    tgBtn: "🔒 VIP Telegram Educational Research Desk",
   },
   jp: {
-    heading: "シンプルでわかりやすいVIPプラン — 決済完了と同時に自動アンロック",
-    subheading: "月額プランまたは永久パスをお選びください。決済完了と同時にこの画面で自動解放されます（36桁キーのコピー＆貼り付け不要）。",
+    heading: "自己判断型・教育用ポートフォリオ計算ソフトウェア — VIPプラン",
+    subheading:
+      "公開市場データの可視化および配当・資産配分シミュレーションを行う教育用計算ソフトウェアです（14日間返金保証付き）。",
     t1Badge: "MONTHLY VIP",
-    t1Title: "月額VIPターミナル＆日次SECリサーチ",
+    t1Title: "Monthly VIP 教育用計算ソフト＆財務データ",
     t1Period: "/ 月額",
     t1Items: [
-      "SGOV・SCHD・JEPI・VOOおよび米国優良株の3色リバランス判定を完全公開",
-      "毎朝08:10 EST更新・配当安定性＆財務キャッシュフロー分析ブリーフ",
-      "ポートフォリオ診断：年2〜4回の穏やかな配分チェック",
-      "TradingView トレンドスクリプト＋米国市場26年分CSVダウンロード",
+      "SGOV・SCHD・JEPI・VOOおよび米国主要ETFの3色リバランス比率計算ソフト",
+      "毎朝08:10 EST更新・公開財務データ＆配当カバレッジ教育サマリー",
+      "年2〜4回の穏やかな資産配分チェック＆ドローダウン数学シミュレーター",
+      "TradingView 教育用トレンド表示スクリプト＋米国市場26.8年CSVデータ",
     ],
-    t1Btn: "Start Monthly VIP — $29/mo (月額VIPを始める)",
-    t1PayNote: "🍎 Apple Pay · Google Pay · Credit Card (1-Click Cancel Anytime / いつでも1クリック解約)",
-    t2Badge: "LIFETIME VIP",
-    t2Title: "永久VIPオールアクセスパス (買い切り)",
-    t2Period: "/ 買い切り(永久)",
+    t1Btn: "Start Monthly VIP — $29/mo",
+    t1PayNote: "🍎 Apple Pay · Google Pay · Credit Card (いつでも1クリック解約 · 14日間返金保証)",
+    t2Badge: "ANNUAL VIP",
+    t2Title: "Annual VIP 年間オールアクセスパス",
+    t2Period: "/ 年額",
     t2Items: [
-      "1回のお支払いのみ — 毎月のサブスクリプション費用ゼロ",
-      "26.8年間(2000–2026)の米国株＆半導体ETF完全データセット収録",
-      "英語・日本語対応のSECリサーチブリーフ＆VIPアラート連携",
-      "RightSideAlpha＋SemiFearGreedの全Pro機能を永久アンロック",
+      "月額比43%割引 — 全教育用シミュレーター＆データ可視化ツールの年間利用権",
+      "26.8年間(1998–2026)の米国株＆ETFヒストリカルCSVデータセット完全収録",
+      "英語・日本語対応の教育用マクロリサーチアーカイブ閲覧",
+      "TruthOfMarket 老後キャッシュフロー＆市場天気ツールの全機能アクセス",
     ],
-    t2Btn: "Get Lifetime VIP — $199 (永久VIPパスを取得)",
-    t2PayNote: "🍎 Apple Pay · Google Pay · Credit Card (買い切り・決済後すぐ自動アンロック)",
-    autoUnlockNote: "✨ 決済完了と同時にブラウザ上で全72銘柄のVIPデータが自動解放されます（キー入力不要）。",
+    t2Btn: "Start Annual VIP — $199/yr",
+    t2PayNote: "🍎 Apple Pay · Google Pay · Credit Card (年額プラン · 14日間返金保証)",
+    autoUnlockNote: "✨ 決済完了と同時にブラウザ上で教育用計算ツールとCSVデータが自動解放されます。",
     restoreSummary: "🔑 機種変更・別ブラウザでのVIPライセンスキー復元はこちら",
     restoreBtn: "ライセンスキー復元ウィンドウを開く",
     t3Badge: "OPTIONAL EXTERNAL CHARTING & COMMUNITY LINKS",
     t3Title: "外部チャート検証ツール＆公式SNSチャンネル（任意）",
-    t3Desc: "MA20/MA60出来高ブレイクの確認やEPSコンセンサス検証に便利な外部提携ツール＆公式チャンネル：",
+    t3Desc: "チャート確認や公開財務データ参照に便利な外部提携ツール＆公式チャンネル：",
     t3Items: [
-      "<b>TradingView Pro (1173809)</b> — マルチタイムフレームMA20/MA60＆Pine Script v5実行",
-      "<b>Seeking Alpha Premium (better_life333)</b> — クオンツ評価＆1〜2年先EPSコンセンサス推移",
-      "<b>TrendSpider AI Charting (rightside)</b> — 自動トレンドライン＆機関投資家ブレイクスキャナー",
+      "<b>TradingView Pro (1173809)</b> — マルチタイムフレーム移動平均線＆Pine Script v5表示",
+      "<b>Seeking Alpha Premium (better_life333)</b> — 配当データ＆コンセンサスEPS推移",
+      "<b>TrendSpider Charting (rightside)</b> — チャート分析ワークスペース",
     ],
     tvBtn: "📈 TradingView チャートを開く ↗",
-    saBtn: "📊 Seeking Alpha EPSコンセンサス ↗",
-    tsBtn: "⚡ TrendSpider AIスキャナーを開く ↗",
-    tgBtn: "🔒 Pro専用 VIP Telegram ($SMH/$XLV & 72銘柄リアルタイムニュース)",
+    saBtn: "📊 Seeking Alpha 財務データ ↗",
+    tsBtn: "⚡ TrendSpider チャートを開く ↗",
+    tgBtn: "🔒 VIP専用 Telegram 教育リサーチデスク",
   },
 };
 PRICING_COPY.kr = PRICING_COPY.en;
@@ -6052,11 +6567,11 @@ function renderPricing(state) {
   const c = PRICING_COPY[state.lang] || PRICING_COPY.en;
   const lsMonthly = formatCheckoutUrl(
     cfg.ls_site1_monthly_url,
-    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en"
   );
-  const lsLtd = formatCheckoutUrl(
+  const lsAnnual = formatCheckoutUrl(
     cfg.ls_site1_ltd_url,
-    "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b"
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en"
   );
   const tvAffId = encodeURIComponent(cfg.tradingview_aff_id || "1173809");
   const saSource = encodeURIComponent(cfg.seekingalpha_source || "better_life333");
@@ -6066,8 +6581,8 @@ function renderPricing(state) {
   const directTsUrl = `https://trendspider.com/?_go=${tsAffId}`;
 
   const checkoutFallbackHtml = `
-    <div style="margin-top:8px; font-size:0.71rem; color:#94a3b8; text-align:center; line-height:1.45;">
-      Checkout issue in your region? Join <a href="https://t.me/truthofmarketss" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">@truthofmarketss</a> or request instant Pro activation via <a href="mailto:beable9489@gmail.com?subject=Instant%20Pro%20Activation%20Request%20(TruthOfMarket)" style="color:#93c5fd; font-weight:700; text-decoration:underline;">email</a>.
+    <div style="margin-top:8px; font-size:0.74rem; color:#94a3b8; text-align:center; line-height:1.45;">
+      Questions about educational software access? Email our Educational Market Data &amp; Quantitative Research Desk at <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#93c5fd; font-weight:700; text-decoration:underline;">beable9489@gmail.com</a>.
     </div>
   `;
 
@@ -6083,11 +6598,14 @@ function renderPricing(state) {
     <div id="pricing" style="scroll-margin-top:80px;">
       <span id="pricingSection" style="display:block; height:0; overflow:hidden;"></span>
       <div style="max-width:980px; margin:0 auto 14px; text-align:center;">
+        <div style="display:inline-block; margin-bottom:8px; padding:4px 12px; border-radius:999px; background:rgba(56,189,248,0.14); border:1px solid rgba(56,189,248,0.4); color:#7dd3fc; font-size:0.8rem; font-weight:800; letter-spacing:0.02em;">
+          SELF-DIRECTED EDUCATIONAL CALCULATOR SOFTWARE &bull; PUBLIC MARKET DATA VISUALIZATION
+        </div>
         <h2 style="font-size:1.35rem; font-weight:900; color:#ffffff; margin:0 0 6px;">${c.heading}</h2>
-        <p style="font-size:0.9rem; color:#cbd5e1; margin:0; line-height:1.5;">${c.subheading}</p>
+        <p style="font-size:0.95rem; color:#cbd5e1; margin:0; line-height:1.55;">${c.subheading}</p>
       </div>
       <div class="pricing-grid">
-        <!-- Tier 1: Pro Monthly -->
+        <!-- Tier 1: Monthly VIP ($29/mo) -->
         <div class="price-card featured">
           <div>
             <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
@@ -6098,23 +6616,23 @@ function renderPricing(state) {
               ${c.t1Title}
             </h3>
             <div class="price-num">$29 <span style="font-size:0.86rem; color:var(--muted); font-family:var(--font-sans); font-weight:600;">${c.t1Period}</span></div>
-            <div class="price-subtext">Billed monthly · Cancel anytime with 1 click</div>
+            <div class="price-subtext">Billed monthly · Cancel anytime with 1 click · 14-Day Refund Policy</div>
             <ul class="price-list">
               ${c.t1Items.map((item) => `<li>${checkSvg}<span>${item}</span></li>`).join("")}
             </ul>
           </div>
           <div>
-            <a class="btn btn-primary lemonsqueezy-button" id="cardMonthlyBtn" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthly}" style="justify-content:center; min-height:64px; padding:14px 18px; width:100%; font-size:1.06rem; font-weight:800; border-radius:12px;">
+            <a class="btn btn-primary lemonsqueezy-button" id="cardMonthlyBtn" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthly}" style="justify-content:center; min-height:64px; padding:14px 18px; width:100%; font-size:1.06rem; font-weight:800; border-radius:12px;">
               ${c.t1Btn}
             </a>
-            <div style="margin-top:9px; font-size:0.8rem; color:#e2e8f0; font-weight:700; text-align:center; line-height:1.4;">
+            <div style="margin-top:9px; font-size:0.82rem; color:#e2e8f0; font-weight:700; text-align:center; line-height:1.4;">
               ${c.t1PayNote}
             </div>
             ${checkoutFallbackHtml}
           </div>
         </div>
 
-        <!-- Tier 2: Lifetime Pass -->
+        <!-- Tier 2: Annual VIP ($199/yr) -->
         <div class="price-card best-value">
           <div>
             <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
@@ -6125,17 +6643,17 @@ function renderPricing(state) {
               ${c.t2Title}
             </h3>
             <div class="price-num">$199 <span style="font-size:0.86rem; color:var(--muted); font-family:var(--font-sans); font-weight:600;">${c.t2Period}</span></div>
-            <div class="price-subtext">One-time payment · Instant automatic unlock on screen</div>
-            <div class="price-savings-pill">⚡ Breakeven in 6.8 Months vs $29/mo ($199 vs $348/yr) · 100% Free Thereafter</div>
+            <div class="price-subtext">Annual recurring license ($199/yr) · Cancel anytime · 14-Day Refund Policy</div>
+            <div class="price-savings-pill">⚡ Save $149/Yr vs $29/mo Monthly Billing ($199/yr vs $348/yr)</div>
             <ul class="price-list">
               ${c.t2Items.map((item) => `<li>${checkSvg}<span>${item}</span></li>`).join("")}
             </ul>
           </div>
           <div>
-            <a class="btn btn-emerald lemonsqueezy-button" id="cardLtdBtn" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" href="${lsLtd}" style="justify-content:center; min-height:64px; padding:14px 18px; width:100%; font-size:1.06rem; font-weight:800; border-radius:12px;">
+            <a class="btn btn-emerald lemonsqueezy-button" id="cardLtdBtn" data-tom-paid-plan="annual" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" href="${lsAnnual}" style="justify-content:center; min-height:64px; padding:14px 18px; width:100%; font-size:1.06rem; font-weight:800; border-radius:12px;">
               ${c.t2Btn}
             </a>
-            <div style="margin-top:9px; font-size:0.8rem; color:#a7f3d0; font-weight:700; text-align:center; line-height:1.4;">
+            <div style="margin-top:9px; font-size:0.82rem; color:#a7f3d0; font-weight:700; text-align:center; line-height:1.4;">
               ${c.t2PayNote}
             </div>
             ${checkoutFallbackHtml}
@@ -6143,16 +6661,21 @@ function renderPricing(state) {
         </div>
       </div>
 
+      <!-- MANDATORY PERMANENT EDUCATIONAL SOFTWARE DISCLAIMER -->
+      <div id="tomPricingDisclaimerBox" role="note" style="max-width:980px; margin:16px auto 0; padding:14px 18px; border-radius:10px; background:rgba(15,23,42,0.9); border:1.5px solid rgba(251,191,36,0.45); color:#f8fafc; font-size:0.94rem; line-height:1.62; text-align:left;">
+        Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.
+      </div>
+
       <!-- Instant Auto-Unlock Note & Collapsible Device License Restore -->
-      <div style="max-width:980px; margin:10px auto 0; text-align:center;">
-        <div style="font-size:0.82rem; color:#34d399; font-weight:700; margin-bottom:10px;">
+      <div style="max-width:980px; margin:12px auto 0; text-align:center;">
+        <div style="font-size:0.84rem; color:#34d399; font-weight:700; margin-bottom:10px;">
           ${c.autoUnlockNote}
         </div>
         <details style="background:#0b1120; border:1px solid rgba(148,163,184,0.22); border-radius:10px; padding:10px 16px; text-align:left;">
-          <summary style="cursor:pointer; font-size:0.82rem; font-weight:700; color:#93c5fd; list-style:none;">
+          <summary style="cursor:pointer; font-size:0.84rem; font-weight:700; color:#93c5fd; list-style:none;">
             ${c.restoreSummary} ▾
           </summary>
-          <div style="margin-top:10px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; font-size:0.8rem; color:#cbd5e1;">
+          <div style="margin-top:10px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; font-size:0.82rem; color:#cbd5e1;">
             <span>Already have a Lemon Squeezy receipt key on another computer or phone? Restore your VIP session with 1 click:</span>
             <button type="button" class="btn btn-sm" onclick="var b=document.getElementById('btnOpenLicense');if(b){b.click();}else{var m=document.getElementById('licenseModal');if(m)m.style.display='flex';}" style="font-weight:700; border-color:rgba(147,197,253,0.45); color:#93c5fd;">
               ${c.restoreBtn} →
@@ -6161,37 +6684,37 @@ function renderPricing(state) {
         </details>
       </div>
 
-      <!-- Trust & Security Micro-Ribbon (Lemon Squeezy PCI-DSS & Instant Key Delivery) -->
+      <!-- Trust & Security Micro-Ribbon -->
       <div class="pricing-trust-ribbon" style="max-width:980px; margin:16px auto 0;">
         <div class="trust-badge">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
           </svg>
-          <span>Merchant of Record: <b>Lemon Squeezy, LLC</b></span>
+          <span>Merchant of Record: <b>Lemon Squeezy, LLC (Store #296100)</b></span>
         </div>
         <div class="trust-badge">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
           </svg>
-          <span>256-Bit SSL Encrypted Inline Checkout</span>
+          <span>14-Day No-Questions-Asked Refund Policy</span>
         </div>
         <div class="trust-badge">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
-          <span>Instant On-Screen Auto-Unlock &amp; Receipt Key</span>
+          <span>Self-Directed Educational Calculator Software</span>
         </div>
       </div>
 
       <!-- Separated Lower Footer Section: Tier 3 Partner Tools & Public Channels -->
       <details style="max-width:980px; margin:18px auto 0; background:rgba(15,23,42,0.55); border:1px solid var(--border-card); border-radius:10px; padding:12px 18px;">
-        <summary style="cursor:pointer; font-size:0.8rem; font-weight:700; color:#94a3b8; display:flex; align-items:center; justify-content:space-between; gap:8px;">
+        <summary style="cursor:pointer; font-size:0.82rem; font-weight:700; color:#94a3b8; display:flex; align-items:center; justify-content:space-between; gap:8px;">
           <span>🔗 ${c.t3Title}</span>
-          <span style="font-size:0.72rem; color:#64748b;">Expand Partner Tools &amp; Community ▾</span>
+          <span style="font-size:0.74rem; color:#64748b;">Expand Charting Tools &amp; Community ▾</span>
         </summary>
         <div style="margin-top:14px; padding-top:12px; border-top:1px solid rgba(148,163,184,0.14);">
-          <p style="color:var(--muted); font-size:0.8rem; margin:0 0 10px; line-height:1.5;">
+          <p style="color:var(--muted); font-size:0.82rem; margin:0 0 10px; line-height:1.5;">
             ${c.t3Desc}
           </p>
           <ul class="price-list" style="margin-bottom:12px;">
@@ -6208,7 +6731,7 @@ function renderPricing(state) {
               ${c.tsBtn}
             </a>
             <a class="btn ${state.isProUnlocked ? "" : "btn-gated-vip-tg"}" id="pricingTelegramChannelBtn" href="${getVipTelegramUrl(state.isProUnlocked)}" ${state.isProUnlocked ? 'target="_blank" rel="noopener noreferrer"' : ""} style="justify-content:center; border-color:rgba(56,189,248,0.45); color:#38bdf8; font-weight:700;">
-              ${state.isProUnlocked ? "👑 Enter Pro VIP Telegram Channel ↗" : c.tgBtn}
+              ${state.isProUnlocked ? "👑 Open VIP Educational Research Desk ↗" : c.tgBtn}
             </a>
             <a class="btn" id="pricingYoutubeBtn" href="${cfg.youtube_url || "https://www.youtube.com/@RightSideAlpha"}" target="_blank" rel="noopener noreferrer" style="justify-content:center; border-color:rgba(239,68,68,0.4); color:#fca5a5;">
               📺 YouTube (@RightSideAlpha) ↗
@@ -6232,7 +6755,7 @@ function renderModals(state) {
     cfg.ls_site1_monthly_url,
     "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en"
   );
-  const lsLtd = formatCheckoutUrl(
+  const lsAnnual = formatCheckoutUrl(
     cfg.ls_site1_ltd_url,
     "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en"
   );
@@ -6255,7 +6778,15 @@ function renderModals(state) {
   const ovW2 = ov.recommended_xlv_weight ?? 20;
   const tgPreview =
     state.telegramPreviewText ||
-    `🧭 [SemiFearGreed] Daily Semiconductor & Barbell Briefing (${ovDate})\n• Fear & Greed Score: ${ovScore} / 100 (${ovRegime})\n• $SMH (Semiconductor): $${ovSmh} (${ovDd}% 52W DD | RSI ${ovRsi})\n• $XLV (Healthcare Vault): $${ovXlv} | $QQQ: $${ovQqq}\n• Active Signal: Target ${ovW1}% $SMH : ${ovW2}% $XLV Barbell Allocation`;
+    `🧭 [TruthOfMarket] Daily Market Weather & Barbell Summary (${ovDate})\n• Sentiment Score: ${ovScore} / 100 (${ovRegime})\n• $SMH: $${ovSmh} (${ovDd}% 52W DD | RSI ${ovRsi})\n• $XLV: $${ovXlv} | $QQQ: $${ovQqq}\n• Educational Barbell Model: ${ovW1}% $SMH : ${ovW2}% $XLV`;
+
+  const isWebView =
+    typeof window !== "undefined" &&
+    typeof window.isTomInAppWebView === "function" &&
+    window.isTomInAppWebView();
+  const savedEmail =
+    (state && state.freeMemberEmail) ||
+    (typeof localStorage !== "undefined" ? localStorage.getItem("tom_free_member_email") || "" : "");
 
   return `
     <!-- LICENSE ACTIVATION MODAL -->
@@ -6263,44 +6794,27 @@ function renderModals(state) {
       <div class="modal" style="max-width:540px;">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
           <div style="font-size:0.68rem; font-family:var(--font-mono); color:#93c5fd; text-transform:uppercase; letter-spacing:0.05em;">
-            1-TAP INLINE CHECKOUT · INSTANT AUTO-UNLOCK
+            SELF-DIRECTED EDUCATIONAL CALCULATOR SOFTWARE · VIP ACCESS
           </div>
           <button type="button" class="btn btn-sm" id="btnCancelLicense" style="padding:4px 10px;">✕ Close</button>
         </div>
-        <h3 style="font-size:1.18rem; font-weight:800; margin-top:4px; color:#ffffff;">Unlock All 72 VIP Stock Setups</h3>
+        <h3 style="font-size:1.18rem; font-weight:800; margin-top:4px; color:#ffffff;">Unlock Full VIP Educational Calculators &amp; Datasets</h3>
         <p style="color:#cbd5e1; font-size:0.86rem; margin-top:6px; line-height:1.5;">
-          Pick a plan below. Your screen unlocks <b>automatically</b> the second payment finishes — no need to copy or type any license key.
+          Choose Monthly VIP ($29/mo) or Annual VIP ($199/yr) below. Backed by our 14-Day No-Questions-Asked Refund Policy.
         </p>
         <div style="display:grid; grid-template-columns:1fr; gap:10px; margin:14px 0 10px;">
-          <a class="btn btn-primary lemonsqueezy-button" data-direct-ls="1" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthly}" style="justify-content:center; min-height:62px; padding:12px 16px; font-size:1.02rem; font-weight:800; border-radius:12px;">
+          <a class="btn btn-primary lemonsqueezy-button" data-direct-ls="1" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthly}" style="justify-content:center; min-height:62px; padding:12px 16px; font-size:1.02rem; font-weight:800; border-radius:12px;">
             Start Monthly VIP — $29/mo
           </a>
-          <a class="btn btn-emerald lemonsqueezy-button" data-direct-ls="1" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" href="${lsLtd}" style="justify-content:center; min-height:62px; padding:12px 16px; font-size:1.02rem; font-weight:800; border-radius:12px;">
-            Get Lifetime VIP — $199 (Save 43%)
+          <a class="btn btn-emerald lemonsqueezy-button" data-direct-ls="1" data-tom-paid-plan="annual" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" href="${lsAnnual}" style="justify-content:center; min-height:62px; padding:12px 16px; font-size:1.02rem; font-weight:800; border-radius:12px;">
+            Start Annual VIP — $199/yr (Save 43%)
           </a>
         </div>
         <div style="margin-bottom:8px; font-size:0.78rem; color:#e2e8f0; font-weight:700; text-align:center; line-height:1.45;">
-          🍎 Apple Pay · Google Pay · Credit Card (1-Click Cancel Anytime)
+          🍎 Apple Pay · Google Pay · Credit Card (1-Click Cancel Anytime · 14-Day Refund Policy)
         </div>
         <div style="margin-bottom:12px; font-size:0.72rem; color:#94a3b8; text-align:center; line-height:1.45;">
-          Checkout issue in your region? Join <a href="https://t.me/truthofmarketss" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">@truthofmarketss</a> or request instant Pro activation via <a href="mailto:beable9489@gmail.com?subject=Instant%20Pro%20Activation%20Request%20(TruthOfMarket)" style="color:#93c5fd; font-weight:700; text-decoration:underline;">email</a>.
-        </div>
-        <div id="instantVipBridgeBox" style="display:none !important;">
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:6px; flex-wrap:wrap;">
-            <span style="font-size:0.7rem; font-family:var(--font-mono); color:#34d399; font-weight:800; text-transform:uppercase;">
-              ⚡ INTERACTIVE PRO TERMINAL PREVIEW &amp; 7-DAY TRIAL PASS
-            </span>
-            <span class="badge badge-ignition" style="font-size:0.64rem; padding:2px 6px;">INSTANT SANDBOX KEY</span>
-          </div>
-          <p style="color:#cbd5e1; font-size:0.76rem; margin:6px 0 8px; line-height:1.45;">
-            Want to test the unlocked Pro Terminal before subscribing (or reviewing our Store #296100 deliverables)? Enter your email below to generate an <b>instant 7-Day Pro Preview License Key</b> that unmasks our 6 VIP Ignition setups, Position Doctor, and the 26-year historical backtest CSV dataset:
-          </p>
-          <div style="display:flex; gap:6px; flex-wrap:wrap;">
-            <input type="email" id="vipTrialEmailInput" placeholder="Enter your email for instant 7-Day Pro Trial Key..." autocomplete="email" style="flex:1; min-width:200px; margin:0; padding:8px 10px; font-size:0.8rem;" />
-            <button type="button" class="btn btn-emerald btn-sm" id="btnInstantVipTrialUnlock" style="font-weight:800; padding:8px 12px; white-space:nowrap;">
-              ⚡ Issue 7-Day Pro Trial Key
-            </button>
-          </div>
+          Support Desk: <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20VIP%20Software%20Support" style="color:#93c5fd; font-weight:700; text-decoration:underline;">beable9489@gmail.com</a>
         </div>
         <div id="licenseMsg" style="font-size:0.8rem; margin-bottom:8px; min-height:1.1em;"></div>
         <details id="licenseRestoreDetails" ${state.isProUnlocked ? "open" : ""} style="background:#0b1120; border:1px solid rgba(148,163,184,0.25); border-radius:10px; padding:10px 12px;">
@@ -6326,16 +6840,16 @@ function renderModals(state) {
       </div>
     </div>
 
-    <!-- TELEGRAM QUANTITATIVE ALERT & BOT HUB MODAL -->
+    <!-- TELEGRAM RESEARCH DISPATCH HUB MODAL -->
     <div class="modal-backdrop" id="telegramModal">
       <div class="modal" style="max-width:640px;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
           <div>
             <div style="font-size:0.68rem; font-family:var(--font-mono); color:#38bdf8; text-transform:uppercase; letter-spacing:0.05em;">
-              REAL-TIME DISPATCH · TELEGRAM BOT & CHANNEL INTEGRATION
+              EDUCATIONAL MARKET DATA &amp; QUANTITATIVE RESEARCH DESK
             </div>
             <h3 style="font-size:1.12rem; font-weight:800; margin-top:3px; color:#ffffff;">
-              Telegram Quantitative Alert & Briefing Hub
+              Telegram Educational Research &amp; Briefing Hub
             </h3>
           </div>
           <div style="display:flex; gap:6px; flex-wrap:wrap;">
@@ -6352,7 +6866,7 @@ function renderModals(state) {
         </div>
 
         <p style="color:var(--muted); font-size:0.8rem; margin-top:6px; margin-bottom:12px; line-height:1.5;">
-          Join our Official Broadcast Channel <a href="${tgChannelUrl}" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700;">t.me/truthofmarketss</a> (<code class="mono" style="color:#93c5fd;">@truthofmarketss</code>) for automated daily US Market & Semiconductor briefings.
+          Join our Official Broadcast Channel <a href="${tgChannelUrl}" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700;">t.me/truthofmarketss</a> (<code class="mono" style="color:#93c5fd;">@truthofmarketss</code>) for daily US Market Weather &amp; ETF educational summaries.
         </p>
 
         ${
@@ -6382,13 +6896,12 @@ function renderModals(state) {
           <div>
             <label style="font-size:0.68rem; color:var(--muted); font-family:var(--font-mono);">BRIEFING TEMPLATE</label>
             <select id="tgAlertTypeSelect" style="width:100%; padding:9px 10px; margin-top:4px; background:#060911; border:1px solid var(--border); color:#fff; border-radius:4px; font-family:var(--font-sans); font-size:0.82rem; font-weight:600;">
-              <option value="SEMI_BRIEFING" ${tgType === "SEMI_BRIEFING" ? "selected" : ""}>1. SemiFearGreed Index & $SMH:$XLV Rebalance</option>
-              <option value="RSA_IGNITION" ${tgType === "RSA_IGNITION" ? "selected" : ""}>2. RightSideAlpha US Top 5 Ignition Signals</option>
-              <option value="FULL_DAILY" ${tgType === "FULL_DAILY" ? "selected" : ""}>3. Full Combined Daily Briefing (Semi + US Stocks)</option>
-              <option value="POSITION_DOCTOR" ${tgType === "POSITION_DOCTOR" ? "selected" : ""}>4. Position Doctor Diagnostic ($CELH)</option>
+              <option value="SEMI_BRIEFING" ${tgType === "SEMI_BRIEFING" ? "selected" : ""}>1. Market Weather &amp; $SMH:$XLV Barbell Summary</option>
+              <option value="RSA_IGNITION" ${tgType === "RSA_IGNITION" ? "selected" : ""}>2. US Factor Research Snapshot</option>
+              <option value="FULL_DAILY" ${tgType === "FULL_DAILY" ? "selected" : ""}>3. Full Combined Educational Summary</option>
               ${
                 state.isAdminAuthenticated
-                  ? `<option value="TEST_PING" ${tgType === "TEST_PING" ? "selected" : ""}>5. Bot Connection Verification Ping</option>`
+                  ? `<option value="TEST_PING" ${tgType === "TEST_PING" ? "selected" : ""}>4. Bot Connection Verification Ping</option>`
                   : ""
               }
             </select>
@@ -6402,7 +6915,7 @@ function renderModals(state) {
           <div style="display:flex; gap:6px;">
             ${
               state.isAdminAuthenticated
-                ? `<button class="btn btn-sm" id="btnVerifyTelegram" title="Test Bot Token with Telegram API">Verify & Save Bot</button>`
+                ? `<button class="btn btn-sm" id="btnVerifyTelegram" title="Test Bot Token with Telegram API">Verify &amp; Save Bot</button>`
                 : ""
             }
             <button class="btn btn-sm" id="btnPreviewTelegram">Refresh Preview</button>
@@ -6416,7 +6929,7 @@ function renderModals(state) {
 
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
           <span class="mono" style="font-size:0.68rem; color:var(--muted);">
-            Official Channel: @truthofmarketss · Live Daily Briefings
+            Official Channel: @truthofmarketss · Educational Market Data
           </span>
           <div style="display:flex; gap:8px;">
             <button class="btn" id="btnCloseTelegram">Close</button>
@@ -6435,17 +6948,17 @@ function renderModals(state) {
       </div>
     </div>
 
-    <!-- ADMIN LOGIN MODAL (SHA-256 PROTECTED, NO PLAINTEXT IN GIT) -->
+    <!-- ADMIN LOGIN MODAL -->
     <div class="modal-backdrop" id="adminLoginModal">
       <div class="modal" style="max-width:440px;">
         <div style="font-size:0.68rem; font-family:var(--font-mono); color:#f59e0b; text-transform:uppercase; letter-spacing:0.05em;">
           RESTRICTED ACCESS · ADMINISTRATOR AUTHENTICATION
         </div>
         <h3 style="font-size:1.12rem; font-weight:800; margin-top:4px; color:#ffffff;">
-          🔒 Admin Terminal Login
+          🔒 Admin Software Login
         </h3>
         <p style="color:var(--muted); font-size:0.8rem; margin-top:6px; margin-bottom:12px; line-height:1.5;">
-          Enter your Administrator ID and Password to unlock Terminal Configuration, Lemon Squeezy Checkout Setup, Affiliate Routing, and full Pro Terminal access.
+          Enter your Administrator ID and Password to manage Checkout &amp; Partner parameters.
         </p>
 
         <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">ADMIN ID</label>
@@ -6463,44 +6976,31 @@ function renderModals(state) {
       </div>
     </div>
 
-    <!-- TERMINAL & AFFILIATE CONFIG MODAL -->
+    <!-- TERMINAL & PARTNER CONFIG MODAL -->
     <div class="modal-backdrop" id="configModal">
       <div class="modal" style="max-width:640px;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
           <div>
             <div style="font-size:0.68rem; font-family:var(--font-mono); color:#93c5fd; text-transform:uppercase; letter-spacing:0.05em;">
-              ADMINISTRATION · MONETIZATION & PARTNER ROUTING
+              ADMINISTRATION · CHECKOUT &amp; PARTNER ROUTING
             </div>
-            <h3 style="font-size:1.12rem; font-weight:800; margin-top:4px; color:#ffffff;">Checkout & Affiliate Parameter Configuration</h3>
+            <h3 style="font-size:1.12rem; font-weight:800; margin-top:4px; color:#ffffff;">Checkout &amp; Partner Parameter Configuration</h3>
           </div>
           <button class="btn btn-sm" id="btnAdminLogout" style="border-color:rgba(246,70,93,0.45); color:var(--fin-down);">
             🔒 Admin Logout
           </button>
         </div>
-        <p style="color:var(--muted); font-size:0.8rem; margin-top:4px; margin-bottom:10px;">
-          Update Lemon Squeezy checkout endpoints, Telegram channel link, and affiliate attribution identifiers. Changes persist to the backend and browser storage.
-        </p>
 
-        <div style="background:rgba(37,99,235,0.1); border:1px solid rgba(59,130,246,0.35); border-radius:4px; padding:10px 12px; margin-bottom:12px; display:flex; gap:6px; align-items:center; justify-content:space-between; flex-wrap:wrap;">
-          <span class="mono" style="font-size:0.7rem; color:#93c5fd; font-weight:700;">⚡ QUICK PARTNER PORTALS:</span>
-          <div style="display:flex; gap:6px; flex-wrap:wrap;">
-            <a class="btn btn-sm" href="https://app.lemonsqueezy.com/products" target="_blank" rel="noopener noreferrer" style="font-size:0.7rem; padding:4px 8px;">🍋 Lemon Squeezy ↗</a>
-            <a class="btn btn-sm" href="https://www.tradingview.com/partner-program/" target="_blank" rel="noopener noreferrer" style="font-size:0.7rem; padding:4px 8px;">📈 TradingView Aff ↗</a>
-            <a class="btn btn-sm" href="https://affiliates.seekingalpha.com/" target="_blank" rel="noopener noreferrer" style="font-size:0.7rem; padding:4px 8px;">📊 Seeking Alpha Aff ↗</a>
-            <a class="btn btn-sm" href="https://trendspider.com/?_go=rightside" target="_blank" rel="noopener noreferrer" style="font-size:0.7rem; padding:4px 8px;">⚡ TrendSpider Aff ↗</a>
-          </div>
-        </div>
-
-        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">PLATFORM DOMAIN (TEAR SHEET WATERMARK)</label>
+        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">PLATFORM DOMAIN</label>
         <input type="text" id="cfgSite1Url" value="${cfg.site1_url || "https://truthofmarket.com"}" />
 
-        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">LEMON SQUEEZY MONTHLY CHECKOUT URL ($29/MO)</label>
-        <input type="text" id="cfgLsMonthly" value="${cfg.ls_site1_monthly_url || "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"}" />
+        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">LEMON SQUEEZY MONTHLY VIP URL ($29/MO)</label>
+        <input type="text" id="cfgLsMonthly" value="${cfg.ls_site1_monthly_url || "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en"}" />
 
-        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">LEMON SQUEEZY LIFETIME CHECKOUT URL ($199)</label>
-        <input type="text" id="cfgLsLtd" value="${cfg.ls_site1_ltd_url || "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b"}" />
+        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">LEMON SQUEEZY ANNUAL VIP URL ($199/YR)</label>
+        <input type="text" id="cfgLsLtd" value="${cfg.ls_site1_ltd_url || "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en"}" />
 
-        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">TELEGRAM OFFICIAL CHANNEL / SUPPORT URL</label>
+        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">TELEGRAM OFFICIAL CHANNEL URL</label>
         <input type="text" id="cfgTgChannel" value="${tgChannelUrl}" />
 
         <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">OFFICIAL YOUTUBE CHANNEL URL (@RightSideAlpha)</label>
@@ -6509,16 +7009,16 @@ function renderModals(state) {
         <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">OFFICIAL INSTAGRAM PROFILE URL (@rightsidealpha)</label>
         <input type="text" id="cfgInstagramUrl" value="${igUrl}" />
 
-        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">TRADINGVIEW AFFILIATE ID</label>
+        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">TRADINGVIEW PARTNER ID</label>
         <input type="text" id="cfgAffTv" value="${cfg.tradingview_aff_id || "1173809"}" />
 
         <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">SEEKING ALPHA PARTNER SOURCE TAG</label>
         <input type="text" id="cfgAffSa" value="${cfg.seekingalpha_source || "better_life333"}" />
 
-        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">TRENDSPIDER / US EQUITY SCANNER PARTNER LABEL</label>
+        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">TRENDSPIDER PARTNER LABEL</label>
         <input type="text" id="cfgBrokerName" value="${cfg.broker_name || "TrendSpider (rightside)"}" />
 
-        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">TRENDSPIDER / US EQUITY SCANNER REFERRAL URL</label>
+        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">TRENDSPIDER PARTNER URL</label>
         <input type="text" id="cfgBrokerUrl" value="${cfg.broker_referral_url || "https://trendspider.com/?_go=rightside"}" />
 
         <div id="configMsg" style="font-size:0.8rem; margin-bottom:12px; min-height:1.2em;"></div>
@@ -6530,157 +7030,135 @@ function renderModals(state) {
       </div>
     </div>
 
-    <!-- INSTITUTIONAL RESEARCH BRIEF MODAL -->
+    <!-- EDUCATIONAL SEC FILING SUMMARY MODAL -->
     <div class="modal-backdrop" id="researchModal">
       <div class="modal" style="max-width:760px;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
-          <h3 style="font-size:1.1rem; font-weight:800; color:#ffffff;" id="researchModalTitle">SEC Primary Filing Turnaround Brief</h3>
+          <h3 style="font-size:1.1rem; font-weight:800; color:#ffffff;" id="researchModalTitle">Public SEC Filing Educational Summary</h3>
           <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
-            <button type="button" class="btn btn-sm btn-switch-research" data-ticker="CELH" id="btnSwitchResearchCelh">$CELH Brief</button>
-            <button type="button" class="btn btn-sm btn-switch-research" data-ticker="MBLY" id="btnSwitchResearchMbly">$MBLY Brief</button>
+            <button type="button" class="btn btn-sm btn-switch-research" data-ticker="CELH" id="btnSwitchResearchCelh">$CELH Summary</button>
+            <button type="button" class="btn btn-sm btn-switch-research" data-ticker="MBLY" id="btnSwitchResearchMbly">$MBLY Summary</button>
             <button class="btn btn-sm" id="btnCloseResearch">Close ✕</button>
           </div>
         </div>
         <div id="researchModalBody" style="font-size:0.84rem; color:var(--text); line-height:1.65; max-height:62vh; overflow-y:auto; background:#05080f; padding:18px; border-radius:4px; border:1px solid var(--border);">
-          Loading institutional brief...
+          Loading public filing summary...
         </div>
       </div>
     </div>
 
-    <!-- LEGAL, PRIVACY, REFUND POLICY & SUPPORT MODAL -->
+    <!-- LEGAL, PRIVACY, 14-DAY REFUND POLICY & SUPPORT MODAL -->
     <div class="modal-backdrop" id="legalModal">
       <div class="modal" style="max-width:740px;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
           <div>
             <div style="font-size:0.68rem; font-family:var(--font-mono); color:#93c5fd; text-transform:uppercase; letter-spacing:0.05em;">
-              LEGAL & COMPLIANCE · MERCHANT OF RECORD: LEMON SQUEEZY
+              LEGAL &amp; COMPLIANCE · MERCHANT OF RECORD: LEMON SQUEEZY (STORE #296100)
             </div>
             <h3 style="font-size:1.1rem; font-weight:800; color:#ffffff; margin-top:3px;" id="legalModalTitle">
-              Terms of Service, Privacy Policy & Refund Policy
+              Terms of Service, Privacy Policy &amp; 14-Day Refund Policy
             </h3>
           </div>
           <div style="display:flex; gap:6px; flex-wrap:wrap;">
-            <button type="button" class="btn btn-sm btn-legal-tab" data-legal-tab="terms">Terms of Service</button>
-            <button type="button" class="btn btn-sm btn-legal-tab" data-legal-tab="privacy">Privacy Policy</button>
-            <button type="button" class="btn btn-sm btn-legal-tab" data-legal-tab="refund">Refund Policy</button>
-            <button type="button" class="btn btn-sm btn-legal-tab" data-legal-tab="support">Support Contact</button>
+            <a class="btn btn-sm" href="/terms.html">Terms Page ↗</a>
+            <a class="btn btn-sm" href="/privacy.html">Privacy Page ↗</a>
+            <a class="btn btn-sm" href="/refund.html">14-Day Refund Page ↗</a>
             <button type="button" class="btn btn-sm" id="btnCloseLegalModal">Close ✕</button>
           </div>
         </div>
-        <div id="legalModalBody" style="font-size:0.82rem; color:var(--text); line-height:1.68; max-height:62vh; overflow-y:auto; background:#05080f; padding:18px; border-radius:4px; border:1px solid var(--border);">
+        <div id="legalModalBody" style="font-size:0.84rem; color:var(--text); line-height:1.68; max-height:62vh; overflow-y:auto; background:#05080f; padding:18px; border-radius:4px; border:1px solid var(--border);">
           <div data-legal-section="terms">
-            <h4 style="color:#ffffff; font-size:0.95rem; font-weight:800; margin-bottom:6px;">1. Terms of Service & Non-Advisory Disclosure</h4>
+            <h4 style="color:#ffffff; font-size:0.95rem; font-weight:800; margin-bottom:6px;">1. Terms of Service &amp; Educational Software Scope</h4>
             <p style="color:var(--muted); margin-bottom:10px;">
-              RightSideAlpha and SemiFearGreed (<code class="mono">truthofmarket.com</code>) provide quantitative financial data analytics, empirical backtesting outputs (2000–2026), and algorithmic screening tools for US-listed equities and ETFs. Nothing on this platform constitutes personalized investment advice, brokerage solicitation, legal advice, or tax counsel. Users are solely responsible for their own investment decisions and trade executions.
-            </p>
-            <p style="color:var(--muted); margin-bottom:12px;">
-              Pro Terminal licenses grant single-user access to quantitative target levels, daily SEC primary-filing briefs, Position Doctor diagnostics, and Pine Script v5 indicators. Redistribution or unauthorized sharing of license keys or private VIP Telegram invite links is strictly prohibited.
+              TruthOfMarket (<code class="mono">truthofmarket.com</code>) provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice. Users are solely responsible for their own financial decisions.
             </p>
           </div>
           <div data-legal-section="privacy" style="border-top:1px solid var(--border); padding-top:12px; margin-top:12px;">
             <h4 style="color:#ffffff; font-size:0.95rem; font-weight:800; margin-bottom:6px;">2. Privacy Policy</h4>
             <p style="color:var(--muted); margin-bottom:10px;">
-              We respect your financial privacy. Portfolio inputs entered into the Position Sizing Calculator, Position Doctor, or $SMH:$XLV Barbell Rebalancing Engine are processed locally in your browser and are never sold or shared with third parties. Payment processing and billing data are handled securely by our Merchant of Record, <b>Lemon Squeezy, LLC</b>, under PCI-DSS compliance.
+              Portfolio inputs entered into our calculators are processed locally in your browser and are never sold or shared with third parties. Payment processing is handled securely by our Merchant of Record, <b>Lemon Squeezy, LLC</b> (Store #296100), under PCI-DSS Level 1 compliance.
             </p>
           </div>
           <div data-legal-section="refund" style="border-top:1px solid var(--border); padding-top:12px; margin-top:12px;">
-            <h4 style="color:#ffffff; font-size:0.95rem; font-weight:800; margin-bottom:6px;">3. Subscription Cancellation & Refund Policy</h4>
+            <h4 style="color:#ffffff; font-size:0.95rem; font-weight:800; margin-bottom:6px;">3. 14-Day No-Questions-Asked Refund Policy &amp; 1-Click Cancellation</h4>
             <p style="color:var(--muted); margin-bottom:10px;">
-              Monthly Pro subscriptions ($29/mo) can be canceled at any time with one click via your Lemon Squeezy customer billing portal or by contacting support; access remains active through the end of the current billing period with zero cancellation fees. Because digital quantitative data, downloadable 26.8-year CSV datasets, and Pine Script v5 source code are delivered immediately upon activation, Lifetime Pass ($199) and activated digital licenses are non-refundable once accessed, except where required by applicable consumer protection law or in cases of duplicate billing.
+              Both Monthly VIP ($29/mo) and Annual VIP ($199/yr) software subscriptions are backed by a <b>14-Day No-Questions-Asked Full Refund Guarantee</b>. Email <a href="mailto:beable9489@gmail.com" style="color:#60a5fa; font-weight:700;">beable9489@gmail.com</a> within 14 calendar days of initial purchase for a 100% full refund to your original payment method. You may also cancel recurring billing anytime in 1 click via your Lemon Squeezy Customer Billing Portal.
             </p>
           </div>
           <div data-legal-section="support" style="border-top:1px solid var(--border); padding-top:12px; margin-top:12px;">
-            <h4 style="color:#ffffff; font-size:0.95rem; font-weight:800; margin-bottom:6px;">4. Customer Support & Billing Inquiries</h4>
+            <h4 style="color:#ffffff; font-size:0.95rem; font-weight:800; margin-bottom:6px;">4. Educational Market Data &amp; Quantitative Research Desk</h4>
             <p style="color:var(--muted);">
               • <b>Official Support Email</b>: <a href="mailto:beable9489@gmail.com" style="color:#60a5fa; font-weight:700;">beable9489@gmail.com</a><br/>
-              • <b>Merchant of Record</b>: Lemon Squeezy, LLC (<a href="https://app.lemonsqueezy.com/my-orders" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;">Manage Orders & Receipts ↗</a>)<br/>
-              • <b>Public Broadcast Desk</b>: <a href="https://t.me/truthofmarketss" target="_blank" rel="noopener noreferrer" style="color:#38bdf8;">t.me/truthofmarketss (@truthofmarketss) ↗</a>
+              • <b>Merchant of Record</b>: Lemon Squeezy, LLC (Store #296100 · <a href="https://app.lemonsqueezy.com/my-orders" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;">Manage Orders &amp; Receipts ↗</a>)
             </p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- PW-RSI METHODOLOGY EXPLAINER MODAL -->
+    <!-- CALM 2-4X/YEAR REBALANCING METHODOLOGY MODAL -->
     <div class="modal-backdrop" id="pwRsiModal">
       <div class="modal" style="max-width:680px;">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:10px;">
           <div>
             <div style="font-size:0.68rem; font-family:var(--font-mono); color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; font-weight:800;">
-              QUANTITATIVE FOUNDATION · ZERO LOOK-AHEAD BIAS
+              SELF-DIRECTED EDUCATIONAL CALCULATOR METHODOLOGY
             </div>
             <h3 style="font-size:1.15rem; font-weight:800; color:#ffffff; margin:3px 0 0;">
-              ${t.pwRsiModalTitle || "PW-RSI (Post-Washout Right-Side Ignition) Methodology"}
+              ${t.pwRsiModalTitle || "Calm 2–4x/Year 3-Bucket Portfolio Rebalancing Methodology"}
             </h3>
           </div>
           <button class="btn btn-sm" id="btnClosePwRsiModal" style="padding:4px 8px;">✕ Close</button>
         </div>
 
-        <div style="max-height:70vh; overflow-y:auto; padding-right:4px; font-size:0.83rem; line-height:1.55; color:#cbd5e1;">
-          <div style="background:#0b1322; border:1px solid rgba(56,189,248,0.25); border-radius:6px; padding:12px 14px; margin-bottom:12px;">
-            <div style="font-weight:800; color:#ffffff; margin-bottom:4px; font-size:0.88rem;">
-              Why "Catching the Falling Knife" Fails in Growth Equities
+        <div style="max-height:70vh; overflow-y:auto; padding-right:4px; font-size:0.92rem; line-height:1.65; color:#cbd5e1;">
+          <div style="background:#0b1322; border:1px solid rgba(56,189,248,0.25); border-radius:8px; padding:14px 16px; margin-bottom:12px;">
+            <div style="font-weight:800; color:#ffffff; margin-bottom:4px; font-size:0.98rem;">
+              Why Calm 2–4x/Year Weight Rebalancing Protects Retirement Longevity
             </div>
-            <p style="margin:0; color:var(--muted); font-size:0.78rem;">
-              Empirical analysis across 394,371 US stock-days (2000–2026) demonstrates that blindly buying stocks near 52-week lows traps investor capital for a median of <b>81.0 trading days</b> underwater, with an average post-entry additional drawdown of <b>-30.3%</b> and a <b>25.54% risk of severe loss (&le; -20%)</b>.
+            <p style="margin:0; color:var(--muted); font-size:0.88rem;">
+              Sequence-of-returns shocks occur when retirees are forced to sell depressed equity holdings to pay monthly living bills during a market downturn. Separating your nest egg into 3 clear buckets keeps 2–3 years of living expenses insulated in short-term US Treasuries while dividends and S&amp;P 500 compounding replenish cash calmly.
             </p>
           </div>
 
           <div style="display:grid; grid-template-columns:1fr; gap:10px; margin-bottom:12px;">
-            <div style="background:#090d16; border:1px solid #1e293b; border-radius:6px; padding:12px 14px;">
-              <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-                <span style="font-size:0.75rem; font-family:var(--font-mono); font-weight:900; color:#38bdf8; background:rgba(56,189,248,0.14); padding:2px 7px; border-radius:3px;">
-                  STEP 1: PW · POST-WASHOUT
-                </span>
-                <span style="font-weight:700; color:#ffffff;">Volume Exhaustion &amp; Capitulation</span>
-              </div>
-              <p style="margin:0; font-size:0.78rem; color:var(--muted);">
-                We demand at least <b>1.35x to 1.40x 10-day volume surge</b> on severe down-days, signaling institutional climax liquidation where retail hands capitulate and smart money absorbs liquidity.
+            <div style="background:#090d16; border:1px solid #1e293b; border-radius:8px; padding:12px 14px;">
+              <div style="font-weight:800; color:#38bdf8; margin-bottom:4px;">Bucket 1: US T-Bill &amp; Government MMF Cushion ($SGOV · SPAXX · SWVXX · VMFXX)</div>
+              <p style="margin:0; font-size:0.86rem; color:var(--muted);">
+                Holds 20% to 40% depending on our 3-Color Market Weather indicator, earning monthly Treasury interest while insulating near-term retirement cashflow.
               </p>
             </div>
-
-            <div style="background:#090d16; border:1px solid #1e293b; border-radius:6px; padding:12px 14px;">
-              <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-                <span style="font-size:0.75rem; font-family:var(--font-mono); font-weight:900; color:#34d399; background:rgba(14,203,129,0.14); padding:2px 7px; border-radius:3px;">
-                  STEP 2: RS · RIGHT-SIDE
-                </span>
-                <span style="font-weight:700; color:#ffffff;">Dual Moving Average Reclamation</span>
-              </div>
-              <p style="margin:0; font-size:0.78rem; color:var(--muted);">
-                Never enter while a stock is below declining moving averages. Entry is only permitted once price climbs <b>+10% to +45% off the 52-week low</b> and cleanly reclaims both the <b>20-day (short-term momentum)</b> and <b>60-day (intermediate institutional trend)</b> moving averages.
+            <div style="background:#090d16; border:1px solid #1e293b; border-radius:8px; padding:12px 14px;">
+              <div style="font-weight:800; color:#34d399; margin-bottom:4px;">Bucket 2: Monthly &amp; Rising Dividend Income ($JEPI · $SCHD · $XLV)</div>
+              <p style="margin:0; font-size:0.86rem; color:var(--muted);">
+                Holds 35% to 40% across monthly distribution and 10+ year dividend-growth ETFs to support predictable retirement income.
               </p>
             </div>
-
-            <div style="background:#090d16; border:1px solid #1e293b; border-radius:6px; padding:12px 14px;">
-              <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-                <span style="font-size:0.75rem; font-family:var(--font-mono); font-weight:900; color:#fbbf24; background:rgba(245,158,11,0.14); padding:2px 7px; border-radius:3px;">
-                  STEP 3: I · IGNITION
-                </span>
-                <span style="font-weight:700; color:#ffffff;">Strict 4-Tier Risk &amp; Harvest Rules</span>
-              </div>
-              <p style="margin:0; font-size:0.78rem; color:var(--muted);">
-                Every position is bounded by 4 mechanical exit rules: <b>Rule 1: -9.0% hard stop floor</b> (eliminates tail risk to 0.93%), <b>Rule 2: 55-day time stop</b> (+8% threshold cuts underwater time from 81 to 29 days), <b>Rule 3: +100% (2x) principal harvest</b>, and <b>Rule 4: Barbell capital preservation</b>.
+            <div style="background:#090d16; border:1px solid #1e293b; border-radius:8px; padding:12px 14px;">
+              <div style="font-weight:800; color:#fbbf24; margin-bottom:4px;">Bucket 3: S&amp;P 500 Core Compounding ($VOO)</div>
+              <p style="margin:0; font-size:0.86rem; color:var(--muted);">
+                Holds 20% to 45% in ultra-low-cost broad US equities, rebalanced calmly just 2–4 times per year when 3-Color Market Weather shifts.
               </p>
             </div>
           </div>
 
           <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px; border-top:1px solid var(--border); padding-top:10px;">
-            <button type="button" class="btn btn-primary btn-sm" id="btnUnderstandPwRsi" style="min-height:40px;">Got it, Explore 72 Setups</button>
+            <button type="button" class="btn btn-primary btn-sm" id="btnUnderstandPwRsi" style="min-height:42px;">Got It — Return to Calculator</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- STOCK DETAIL DIAGNOSTIC MODAL -->
+    <!-- STOCK DETAIL SNAPSHOT MODAL (Used on /pro-swing.html & /stocks/*.html) -->
     <div class="modal-backdrop" id="stockDetailModal">
       <div class="modal" style="max-width:580px;">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:10px;">
           <div>
             <div style="font-size:0.68rem; font-family:var(--font-mono); color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; font-weight:800;">
-              PW-RSI QUANTITATIVE FACTOR SNAPSHOT
+              QUANTITATIVE FACTOR DATA SNAPSHOT
             </div>
             <h3 style="font-size:1.12rem; font-weight:800; color:#ffffff; margin:3px 0 0;" id="stockDetailTitle">
-              Stock Signal Details
+              Factor Snapshot Details
             </h3>
           </div>
           <button type="button" class="btn btn-sm" id="btnCloseStockDetail" style="min-height:40px; padding:6px 12px;">✕ Close</button>
@@ -6690,19 +7168,19 @@ function renderModals(state) {
       </div>
     </div>
 
-    <!-- $0 FREE PUBLIC PRODUCT: US BROKERAGE APP & SAFE ORDER STARTER MANUAL MODAL -->
+    <!-- $0 FREE PUBLIC PRODUCT: US BROKERAGE APP & CALM 2-4X/YEAR REBALANCING MANUAL MODAL -->
     <div class="modal-backdrop" id="tomStarterManualModal" role="dialog" aria-modal="true" aria-labelledby="tomStarterManualModalTitle">
       <div class="modal tom-manual-modal-dialog">
         <div class="tom-manual-modal-header">
           <div style="min-width:0;">
             <div class="tom-manual-modal-kicker">📘 $0 FREE PUBLIC PRODUCT · FIDELITY · CHARLES SCHWAB · VANGUARD</div>
             <h3 id="tomStarterManualModalTitle" class="tom-manual-modal-title">
-              US Brokerage App &amp; Safe Order Starter Manual
+              US Brokerage App &amp; Calm 2–4x/Year Rebalancing Starter Manual
             </h3>
           </div>
           <div class="tom-manual-modal-actions">
             <button type="button" class="tom-manual-print-btn" id="btnPrintTomStarterManual">
-              🖨️ Print / Save PDF
+              ${isWebView ? "📩 Email Me This PDF Guide" : "🖨️ Print / Save PDF"}
             </button>
             <button type="button" class="tom-manual-close-btn" id="btnCloseTomStarterManual">
               ✕ Close
@@ -6712,99 +7190,146 @@ function renderModals(state) {
 
         <div class="tom-manual-jump-nav" role="navigation" aria-label="Manual Chapters">
           <button type="button" class="tom-manual-jump-pill" data-manual-target="tomManualStep1">Step 1: Safe Limit Order</button>
-          <button type="button" class="tom-manual-jump-pill" data-manual-target="tomManualStep2">Step 2: -9% Safety Stop</button>
+          <button type="button" class="tom-manual-jump-pill" data-manual-target="tomManualStep2">Step 2: Calm 2–4x/Yr Rebalancing</button>
           <button type="button" class="tom-manual-jump-pill" data-manual-target="tomManualStep3">Step 3: 401(k)/IRA Cash MMF</button>
         </div>
 
         <div class="tom-manual-modal-body" id="tomStarterManualPrintArea">
+          <!-- INLINE EMAIL-ME-THIS-PDF-GUIDE FORM (Auto-highlighted in Instagram/FB/Kakao WebViews + available anytime) -->
+          <div
+            id="tomWebviewPdfEmailBox"
+            class="no-print-tom"
+            style="background:linear-gradient(135deg,rgba(6,95,70,0.32),rgba(15,23,42,0.95));border:2px solid #10b981;border-radius:12px;padding:16px;display:${isWebView ? "block" : "block"};"
+          >
+            <div style="font-size:0.82rem;font-weight:900;color:#6ee7b7;letter-spacing:0.02em;margin-bottom:4px;">
+              📩 ${isWebView ? "IN-APP BROWSER DETECTED — SAVE THIS GUIDE TO YOUR INBOX" : "INSTANT EMAIL COPY + FREE CLUB ACCESS"}
+            </div>
+            <h4 style="margin:0 0 6px;font-size:1.12rem;font-weight:900;color:#ffffff;">
+              Email Me This PDF Guide Now (Instant Free Club Access)
+            </h4>
+            <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.55;color:#e2e8f0;">
+              Enter your email below and we will send this complete 3-Step Brokerage &amp; Calm 2–4x/Year Rebalancing Guide straight to your inbox along with free Morning Bell Retirement &amp; Macro Club membership ($0).
+            </p>
+            <form id="tomWebviewPdfEmailForm" novalidate style="display:flex;flex-wrap:wrap;gap:10px;">
+              <input
+                type="email"
+                id="tomWebviewPdfEmailInput"
+                required
+                autocomplete="email"
+                value="${String(savedEmail).replace(/"/g, "")}"
+                placeholder="Enter your email address (e.g., robert@email.com)"
+                style="flex:1 1 240px;min-height:52px;padding:10px 14px;border-radius:10px;border:2px solid #94a3b8;background:#ffffff;color:#0f172a;font-size:1rem;font-weight:700;"
+              />
+              <button
+                type="submit"
+                id="btnSubmitTomWebviewPdfEmail"
+                style="min-height:52px;padding:10px 20px;border-radius:10px;border:none;background:linear-gradient(135deg,#10b981,#059669);color:#022c22;font-size:1rem;font-weight:900;cursor:pointer;"
+              >
+                📩 Email Me This PDF Guide Now &rarr;
+              </button>
+            </form>
+            <div
+              id="tomWebviewPdfEmailStatus"
+              role="status"
+              aria-live="polite"
+              style="display:none;margin-top:10px;font-size:0.95rem;font-weight:800;color:#6ee7b7;line-height:1.5;"
+            ></div>
+          </div>
+
           <article class="tom-manual-chapter" id="tomManualStep1">
-            <div class="tom-manual-chapter-tag tag-green">STEP 1 OF 3 · SAFE BUYING HABIT</div>
+            <div class="tom-manual-chapter-tag tag-green">STEP 1 OF 3 · SAFE ORDER ENTRY</div>
             <h4>Fidelity · Charles Schwab · Vanguard Safe Buying: Limit Order vs. Market Order</h4>
             <p>
-              <b>Why 9:30 AM ET Market Orders Are Risky:</b> During the first 15 to 30 minutes after the 9:30 AM Eastern opening bell, buyer and seller quotes often swing wide apart. Tapping <b>Market Order</b> tells your brokerage app, <i>&ldquo;Buy immediately at whatever price sellers ask right now&rdquo;</i> — which can cause you to overpay by 2% to 5% in seconds. A <b>Limit Order</b> sets the exact maximum dollar price you are willing to pay per share, and never a penny higher.
+              <b>Why 9:30 AM ET Market Orders Are Risky:</b> During the first 15 to 30 minutes after the 9:30 AM Eastern opening bell, bid-ask spreads on ETFs and stocks often widen temporarily. Tapping <b>Market Order</b> instructs your brokerage app to fill immediately at the prevailing ask price. Setting a calm <b>Limit Order</b> defines the exact maximum dollar price per share you are comfortable paying.
             </p>
             <div class="tom-manual-broker-list">
               <div class="tom-manual-broker-item">
                 <strong>🟢 Fidelity App / Fidelity.com (3 Taps):</strong>
-                <span>1) Tap <b>Transact → Trade</b> and enter the stock symbol &amp; share count. 2) Change <b>Order Type</b> from <i>Market</i> to <b>Limit</b> and type your maximum buy price. 3) Keep Time-in-Force on <b>Day</b>, tap <b>Preview</b>, and confirm.</span>
+                <span>1) Tap <b>Transact → Trade</b> and enter the ETF symbol (such as SGOV, SCHD, JEPI, or VOO). 2) Switch <b>Order Type</b> from <i>Market</i> to <b>Limit</b> and enter your limit price. 3) Keep Time-in-Force on <b>Day</b>, tap <b>Preview</b>, and confirm.</span>
               </div>
               <div class="tom-manual-broker-item">
                 <strong>🔵 Charles Schwab Mobile / Web (3 Taps):</strong>
-                <span>1) Tap <b>Trade</b>, enter the ticker, and choose <b>Buy</b>. 2) Under <b>Order Type</b>, switch to <b>Limit</b> and enter your target Limit Price. 3) Select <b>Timing: Day</b>, review total dollar cost, and tap <b>Place Order</b>.</span>
+                <span>1) Tap <b>Trade</b>, enter the symbol, and choose <b>Buy</b>. 2) Under <b>Order Type</b>, select <b>Limit</b> and enter your target Limit Price. 3) Choose <b>Timing: Day</b>, review total dollar amount, and tap <b>Place Order</b>.</span>
               </div>
               <div class="tom-manual-broker-item">
                 <strong>🔴 Vanguard App / Vanguard.com (3 Taps):</strong>
-                <span>1) Open <b>Transact → Buy &amp; sell stocks and ETFs</b>. 2) Enter ticker &amp; shares, then select <b>Order Type: Limit</b> (never Market at the open). 3) Enter your maximum share price, select <b>Duration: Day</b>, and submit.</span>
+                <span>1) Open <b>Transact → Buy &amp; sell stocks and ETFs</b>. 2) Enter ticker &amp; shares, then choose <b>Order Type: Limit</b>. 3) Enter your maximum share price, select <b>Duration: Day</b>, and submit.</span>
               </div>
             </div>
           </article>
 
           <article class="tom-manual-chapter" id="tomManualStep2">
-            <div class="tom-manual-chapter-tag tag-amber">STEP 2 OF 3 · AUTOMATIC PRINCIPAL PROTECTION</div>
-            <h4>Setting Your Automatic -8% to -9% Stop-Loss Safety Net</h4>
+            <div class="tom-manual-chapter-tag tag-amber">STEP 2 OF 3 · CALM 2–4X/YEAR PORTFOLIO WEIGHT REBALANCING</div>
+            <h4>Aligning Your 3 Retirement Buckets 2–4 Times a Year with the 3-Color Market Weather Indicator</h4>
             <p>
-              <b>How You Prevent Steep Account Losses Forever:</b> A small <b>-8% to -9% exit</b> only needs about <b>+9% to +10%</b> on your next trade to recover in full. By contrast, holding a falling stock down <b>-50%</b> requires a <b>+100% double</b> just to break even. Placing an automatic <b>Stop Order</b> right after your buy fills protects your principal even while you are away from your phone.
+              <b>No Daily Stress or Frequent Trading:</b> Instead of reacting to noisy daily headlines, self-directed retirement investors review portfolio weights calmly just <b>2 to 4 times per year</b> across four liquid, low-fee core ETFs (<b>SGOV · SCHD · JEPI · VOO</b>) aligned with our 3-Color Market Weather indicator:
             </p>
             <div class="tom-manual-broker-list">
               <div class="tom-manual-broker-item">
-                <strong>🧮 Simple 5-Second Floor Math:</strong>
-                <span>Multiply your buy price by <b>0.91</b> (for a -9% safety stop) or <b>0.92</b> (for an -8% safety stop). <i>Example: Bought at <b>$50.00</b> × 0.91 = <b>$45.50</b> Stop Price.</i></span>
+                <strong>🟢 Calm Uptrend Weather (20% SGOV · 35% JEPI+SCHD · 45% VOO):</strong>
+                <span>Maintain a 2-year T-Bill cash cushion in <b>SGOV</b> while allowing dividend growth (<b>SCHD</b>), monthly distributions (<b>JEPI</b>), and broad S&amp;P 500 compounding (<b>VOO</b>) to work steadily.</span>
               </div>
               <div class="tom-manual-broker-item">
-                <strong>🛡️ Entering the Stop Order (Fidelity · Schwab · Vanguard):</strong>
-                <span>Open your owned position and tap <b>Sell</b> → Change <b>Order Type</b> to <b>Stop</b> (or <b>Stop Limit</b> with a limit $0.25 below your stop) → Enter <b>$45.50</b> as your Stop Price → Choose <b>GTC (Good &rsquo;Til Canceled)</b> so your safety net stays active automatically every trading day.</span>
+                <strong>🟡 Cautious Base Weather (30% SGOV · 40% JEPI+SCHD · 30% VOO):</strong>
+                <span>When market breadth is mixed, emphasize monthly income and dividend stability while holding 30% in short-term Treasury cash reserves.</span>
+              </div>
+              <div class="tom-manual-broker-item">
+                <strong>🔴 Crash Defense Weather (40% SGOV · 40% JEPI+SCHD · 20% VOO):</strong>
+                <span>During elevated market volatility, gently rebalance up to 40% into <b>SGOV</b> / government money-market reserves so 2–3 years of retirement living expenses are insulated from sequence-of-returns drawdowns.</span>
               </div>
             </div>
           </article>
 
           <article class="tom-manual-chapter" id="tomManualStep3">
-            <div class="tom-manual-chapter-tag tag-sky">STEP 3 OF 3 · RED-LIGHT CASH YIELD GUIDE</div>
-            <h4>401(k) / IRA Red-Light Cash Cushion: Earning Steady MMF Interest</h4>
+            <div class="tom-manual-chapter-tag tag-sky">STEP 3 OF 3 · T-BILL &amp; GOVERNMENT MMF CASH CUSHION</div>
+            <h4>401(k) / IRA Cash Cushion: Earning Steady Monthly Money-Market Yield</h4>
             <p>
-              <b>Patience Pays Monthly Interest:</b> When our daily traffic light shows 🔴 <b>Red (Protect Cash)</b>, staying on the sidelines does <i>not</i> mean earning 0%. Parking uninvested retirement cash in your broker&rsquo;s government <b>Money Market Fund (MMF)</b> keeps a steady $1.00 target share value while paying monthly yield until the next confirmed 🟢 <b>Green (Safe Uptrend)</b> appears:
+              <b>Patience Pays Monthly Interest:</b> Holding a 20%–40% safety cushion during uncertain market weather does <i>not</i> mean earning 0%. Parking Bucket 1 cash in short-term US Treasury ETFs (<b>SGOV</b>) or your broker&rsquo;s government <b>Money Market Fund (MMF)</b> collects monthly yield while keeping principal ready:
             </p>
             <div class="tom-manual-broker-list">
               <div class="tom-manual-broker-item">
                 <strong>🏦 Fidelity — SPAXX (Fidelity Government Money Market Fund):</strong>
-                <span>Default core cash sweep for most Fidelity IRAs and brokerage accounts. Uninvested cash earns monthly government money-market interest automatically and stays 100% ready when you place a buy order.</span>
+                <span>Default core cash sweep for most Fidelity IRAs and brokerage accounts. Uninvested cash earns monthly government money-market interest automatically.</span>
               </div>
               <div class="tom-manual-broker-item">
                 <strong>🏦 Charles Schwab — SWVXX (Schwab Value Advantage Money Fund):</strong>
-                <span>In Schwab IRAs or brokerage accounts, tap <b>Trade → Mutual Funds</b> and buy <b>SWVXX</b> ($0 transaction fee) to earn full money-market yield on sidelined cash; selling settles the very next business day.</span>
+                <span>In Schwab IRAs or brokerage accounts, tap <b>Trade → Mutual Funds</b> and select <b>SWVXX</b> ($0 transaction fee) for sidelined cash; redemptions settle the next business day.</span>
               </div>
               <div class="tom-manual-broker-item">
                 <strong>🏦 Vanguard — VMFXX (Vanguard Federal Money Market Fund):</strong>
-                <span>Default Vanguard settlement fund — every dollar of sidelined cash automatically earns federal money-market yield while you wait calmly for safe green-light setups.</span>
+                <span>Default Vanguard settlement fund — sidelined cash automatically earns federal money-market yield while you wait calmly between quarterly rebalancing checks.</span>
               </div>
             </div>
           </article>
 
           <div class="tom-manual-funnel-box no-print-tom">
             <div class="tom-manual-funnel-title">
-              🚦 Ready to Put These 3 Safe Habits to Work Every Morning?
+              🧭 Ready to Use Our Self-Directed Educational Calculators?
             </div>
             <p class="tom-manual-funnel-sub">
-              Use our free daily <b>🟢 Green / 🟡 Yellow / 🔴 Red</b> morning safety brief — or unlock all 72 US stock setups, exact buy triggers, and -9% safety stops with VIP access:
+              Join our free daily 8:30 AM ET 3-Color Market Weather brief — or explore full VIP Educational Calculator Software access (Monthly $29/mo or Annual $199/yr):
             </p>
             <div class="tom-manual-funnel-btns">
               <button type="button" class="tom-manual-funnel-free" id="btnModalJumpTomFreeSignal">
-                📧 Step 1: Join Free 8:30 AM ET 3-Color Brief ($0)
+                📧 Step 1: Join Free 8:30 AM ET Market Weather Brief ($0)
               </button>
               <a
                 href="${lsMonthly}"
                 class="tom-manual-funnel-paid lemonsqueezy-button"
                 data-direct-ls="1"
+                data-tom-paid-plan="monthly"
                 data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
               >
                 ⚡ Start Monthly VIP — $29/mo
               </a>
               <a
-                href="${lsLtd}"
+                href="${lsAnnual}"
                 class="tom-manual-funnel-paid is-ltd lemonsqueezy-button"
                 data-direct-ls="1"
+                data-tom-paid-plan="annual"
                 data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b"
               >
-                👑 Get Lifetime VIP — $199 (Save 43%)
+                👑 Start Annual VIP — $199/yr
               </a>
             </div>
           </div>
@@ -7544,25 +8069,30 @@ function renderSemiFearGreedView(state) {
       </div>
     </section>
 
-    <!-- SECTION 5: PRO TERMINAL & LIFETIME LICENSE PRICING -->
+    <!-- SECTION 5: MONTHLY & ANNUAL VIP EDUCATIONAL SOFTWARE PRICING -->
     ${renderPricing(state)}
 
-    <!-- CROSS-PLATFORM SWITCH BANNER BACK TO RIGHTSIDEALPHA -->
+    <!-- CROSS-PLATFORM SWITCH BANNER BACK TO RETIREMENT ARCHITECT & QUANT ARCHIVE -->
     <section class="cross-banner" style="border-left-color:var(--fin-blue);">
       <div>
         <div style="font-size:0.72rem; font-family:var(--font-mono); font-weight:700; color:#93c5fd; text-transform:uppercase;">
-          COMPANION US INDIVIDUAL EQUITY SCREENER · RIGHTSIDEALPHA
+          COMPANION SELF-DIRECTED EDUCATIONAL CALCULATORS · TRUTHOFMARKET
         </div>
         <h3 style="font-size:1.15rem; font-weight:800; margin:4px 0; color:#ffffff;">
-          Looking for High-Alpha US Individual Stock Turnarounds ($CELH, $MBLY, $NVDA, $APP)?
+          Planning Your 401(k)/IRA Monthly Retirement Cashflow or Reviewing Individual Equity Factors?
         </h3>
         <p style="font-size:0.84rem; color:var(--muted);">
-          Switch to the RightSideAlpha US Equity Terminal to screen 72 NYSE & NASDAQ stocks for MA20/MA60 Right-Side Ignitions and 55-Day Time-Stop diagnostics.
+          Return to our 30-Second Retirement Cashflow Calculator (SGOV · SCHD · JEPI · VOO) or explore the Quantitative Factor Research Archive.
         </p>
       </div>
-      <button class="btn btn-primary" id="btnSwitchToRightSide">
-        Open RightSideAlpha US Equity Terminal →
-      </button>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <a class="btn btn-primary" href="/">
+          30-Sec Retirement Calculator →
+        </a>
+        <a class="btn" href="/pro-swing.html" style="border-color:rgba(56,189,248,0.45); color:#38bdf8;">
+          Quant Research Archive →
+        </a>
+      </div>
     </section>
   `;
 }
@@ -7804,11 +8334,63 @@ function applyClientFilterAndSort() {
   state.filteredStocks = list;
 }
 
-function renderRightSideView() {
+function isProSwingOrEquitySubpage() {
+  if (typeof window === "undefined") return false;
+  if (window.__DEFAULT_VIEW__ === "pro_swing") return true;
+  const p = (window.location.pathname || "/").toLowerCase();
+  return p.includes("/pro-swing") || p.includes("/stocks/") || p.includes("/compare/");
+}
+
+function renderHomeRetirementView() {
   const t = state.t;
   return `
     ${renderHero(state)}
     ${renderFreeStarterManual(state)}
+    ${renderPricing(state)}
+
+    <!-- COMPANION EDUCATIONAL TOOLS & ARCHIVE LINKS -->
+    <section class="cross-banner">
+      <div>
+        <div style="font-size:0.74rem; font-family:var(--font-mono); font-weight:800; color:#38bdf8; text-transform:uppercase; letter-spacing:0.05em;" id="crossTitle">
+          ${t.crossTitle}
+        </div>
+        <h3 style="font-size:1.15rem; font-weight:800; margin:4px 0; color:#ffffff;" id="crossHeading">
+          ${t.crossHeading}
+        </h3>
+        <p style="font-size:0.92rem; color:var(--muted);" id="crossDesc">
+          ${t.crossDesc}
+        </p>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button type="button" class="btn btn-primary" id="crossFunnelSwitchBtn" style="min-height:46px; background:#0284c7; border-color:#38bdf8;">
+          <span id="crossBtn">${t.crossBtn} →</span>
+        </button>
+        <a href="/pro-swing.html" class="btn" style="min-height:46px; border-color:rgba(148,163,184,0.4); color:#cbd5e1; font-weight:700;">
+          Self-Directed Quantitative Research Archive →
+        </a>
+      </div>
+    </section>
+  `;
+}
+
+function renderProSwingArchiveView() {
+  const t = state.t;
+  return `
+    <section style="margin:12px 0 18px; padding:18px 20px; background:linear-gradient(135deg,#0f172a 0%,#0b1324 100%); border:1.5px solid #38bdf8; border-radius:12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div>
+          <span class="mono" style="font-size:0.74rem; font-weight:800; color:#38bdf8; letter-spacing:0.04em;">
+            SELF-DIRECTED QUANTITATIVE RESEARCH ARCHIVE · EDUCATIONAL CALCULATOR SOFTWARE
+          </span>
+          <h2 style="font-size:1.28rem; font-weight:900; color:#ffffff; margin:4px 0;">
+            Historical US Equity Factor Dataset &amp; Mathematical Variance Calculators
+          </h2>
+          <p style="margin:0; font-size:0.92rem; color:#cbd5e1; line-height:1.55;">
+            Self-directed public market data visualization and historical moving-average / volume factor archive. Looking for 401(k)/IRA monthly retirement income planning? <a href="/" style="color:#6ee7b7; font-weight:800; text-decoration:underline;">Return to the 30-Second Retirement Cashflow Calculator →</a>
+          </p>
+        </div>
+      </div>
+    </section>
     <section style="margin-bottom:12px;">
       ${renderPositionDoctorForm(state)}
     </section>
@@ -7824,7 +8406,7 @@ function renderRightSideView() {
     ${renderProVault(state)}
     ${renderPricing(state)}
 
-    <!-- CROSS-PLATFORM BANNER TO SEMIFEARGREED -->
+    <!-- CROSS-PLATFORM BANNER TO MARKET WEATHER -->
     <section class="cross-banner">
       <div>
         <div style="font-size:0.72rem; font-family:var(--font-mono); font-weight:700; color:#f87171; text-transform:uppercase; letter-spacing:0.05em;" id="crossTitle">
@@ -7849,14 +8431,25 @@ function renderApp() {
   if (!appEl) return;
 
   const t = state.t;
+  const mainBodyHtml =
+    state.activeView === "semi"
+      ? renderSemiFearGreedView(state)
+      : isProSwingOrEquitySubpage()
+      ? renderProSwingArchiveView()
+      : renderHomeRetirementView();
+
   appEl.innerHTML = `
     ${renderHeader(state)}
     <main class="container">
-      ${state.activeView === "semi" ? renderSemiFearGreedView(state) : renderRightSideView()}
+      ${mainBodyHtml}
 
-      <footer style="border-top:1px solid var(--border); padding-top:20px; margin-top:28px; color:var(--muted); font-size:0.76rem; line-height:1.6;">
+      <footer class="tom-fixed-legal-footer" style="border-top:1px solid var(--border); padding-top:20px; margin-top:28px; color:var(--muted); font-size:0.82rem; line-height:1.65;">
         <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
-          <span class="mono" style="font-size:0.72rem; color:var(--text); font-weight:700;">OFFICIAL CHANNELS:</span>
+          <span class="mono" style="font-size:0.74rem; color:var(--text); font-weight:800;">EDUCATIONAL MARKET DATA &amp; QUANTITATIVE RESEARCH DESK:</span>
+          <a href="mailto:beable9489@gmail.com" style="color:#38bdf8; text-decoration:underline; font-weight:800;">
+            ✉️ beable9489@gmail.com
+          </a>
+          <span style="color:var(--border);">|</span>
           <a href="${state.config.youtube_url || DEFAULT_YOUTUBE_URL}" target="_blank" rel="noopener noreferrer" style="color:#fca5a5; text-decoration:none; font-weight:600;">
             📺 YouTube (@RightSideAlpha) ↗
           </a>
@@ -7868,31 +8461,20 @@ function renderApp() {
           <a href="${state.config.x_url || "https://x.com/rightsidealpha"}" target="_blank" rel="noopener noreferrer" style="color:#e2e8f0; text-decoration:none; font-weight:600;">
             𝕏 (@rightsidealpha) ↗
           </a>
-          <span style="color:var(--border);">|</span>
-          <a
-            href="${getVipTelegramUrl(state.isProUnlocked)}"
-            class="${state.isProUnlocked ? "" : "btn-gated-vip-tg"}"
-            ${state.isProUnlocked ? 'target="_blank" rel="noopener noreferrer"' : ""}
-            style="color:#38bdf8; text-decoration:none; font-weight:600;"
-          >
-            ${state.isProUnlocked ? "👑 Pro VIP Telegram Channel ↗" : "🔒 Pro VIP Telegram ($SMH/$XLV & 72-Stock News)"}
-          </a>
         </div>
-        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:10px; font-size:0.74rem;">
-          <a href="/terms.html" class="btn-open-legal" data-legal-tab="terms" style="color:#93c5fd; text-decoration:none; font-weight:600;">Terms of Service</a>
+        <div style="display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin-bottom:12px; padding:10px 14px; background:rgba(15,23,42,0.75); border:1px solid rgba(148,163,184,0.22); border-radius:8px; font-size:0.84rem;">
+          <a href="/terms.html" style="color:#93c5fd; text-decoration:underline; font-weight:800;">Terms of Service</a>
           <span style="color:var(--border);">·</span>
-          <a href="/privacy.html" class="btn-open-legal" data-legal-tab="privacy" style="color:#93c5fd; text-decoration:none; font-weight:600;">Privacy Policy</a>
+          <a href="/privacy.html" style="color:#93c5fd; text-decoration:underline; font-weight:800;">Privacy Policy</a>
           <span style="color:var(--border);">·</span>
-          <a href="/refund.html" class="btn-open-legal" data-legal-tab="refund" style="color:#93c5fd; text-decoration:none; font-weight:600;">Refund & Cancellation Policy</a>
+          <a href="/refund.html" style="color:#6ee7b7; text-decoration:underline; font-weight:800;">14-Day Refund Policy</a>
           <span style="color:var(--border);">·</span>
-          <a href="/contact.html" style="color:#93c5fd; text-decoration:none; font-weight:600;">Contact Desk</a>
+          <a href="/contact.html" style="color:#93c5fd; text-decoration:underline; font-weight:700;">Contact Desk</a>
           <span style="color:var(--border);">·</span>
-          <a href="mailto:beable9489@gmail.com" style="color:#93c5fd; text-decoration:none; font-weight:600;">Support: beable9489@gmail.com</a>
-          <span style="color:var(--border);">·</span>
-          <span style="color:#cbd5e1; font-weight:600;">Operated by Yoonju Lee · KIDS-FIT Global Studio (Lemon Squeezy Store #296100 · <a href="https://kisfitglobal.com" target="_blank" rel="noopener noreferrer" style="color:#93c5fd; text-decoration:none;">kisfitglobal.com</a> &amp; <a href="https://truthofmarket.com" style="color:#93c5fd; text-decoration:none;">truthofmarket.com</a>)</span>
+          <a href="mailto:beable9489@gmail.com" style="color:#fde68a; text-decoration:underline; font-weight:800;">Support: beable9489@gmail.com</a>
         </div>
-        <p id="disclaimerText">${t.disclaimer}</p>
-        <p style="margin-top:8px; font-family:var(--font-mono); font-size:0.72rem;" id="copyrightText">${t.copyright}</p>
+        <p id="disclaimerText" style="color:#cbd5e1; font-weight:600;">${t.disclaimer}</p>
+        <p style="margin-top:8px; font-family:var(--font-mono); font-size:0.74rem;" id="copyrightText">${t.copyright}</p>
       </footer>
     </main>
     <canvas id="scoreCanvas" width="900" height="500" style="display:none;"></canvas>
@@ -8021,10 +8603,20 @@ function bindEvents() {
     });
   }
 
-  // 3-Color Traffic Light Strip Actions
+  // 3-Color Market Weather Strip Actions
   document.querySelectorAll(".tom-traffic-card").forEach((card) => {
     card.addEventListener("click", () => {
       const z = card.getAttribute("data-traffic-zone");
+      if (z === "RETIRE_SIM") {
+        const simEl = document.getElementById("tom-retirement-architect");
+        if (simEl && simEl.scrollIntoView) simEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+      if (z === "MANUAL") {
+        const manEl = document.getElementById("tomFreeStarterManual");
+        if (manEl && manEl.scrollIntoView) manEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
       if (z === "DOCTOR") {
         const docEl = document.getElementById("position-doctor-card");
         if (docEl && docEl.scrollIntoView) docEl.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -8040,7 +8632,7 @@ function bindEvents() {
     });
   });
 
-  // 1-Field Free Morning Signal Signup Form
+  // 1-Field Free Morning Retirement Brief Signup Form
   const tomMorningForm = document.getElementById("tomMorningSignalForm");
   if (tomMorningForm) {
     tomMorningForm.addEventListener("submit", (e) => {
@@ -8076,10 +8668,10 @@ function bindEvents() {
       if (statusEl) {
         statusEl.style.display = "block";
         statusEl.style.color = "#34d399";
-        statusEl.textContent = `🎉 Welcome aboard (${email})! Your 8:30 AM ET Safety Brief & 2 Bonus Watchlist Setups are now unlocked.`;
+        statusEl.textContent = `🎉 Welcome aboard (${email})! Your 8:30 AM ET Retirement Weather Brief & 4-Core Allocation Guide are now unlocked.`;
       }
       if (bonusEl) bonusEl.style.display = "block";
-      showToast("✅ Free Daily Morning Signals & -9% Alerts Activated!");
+      showToast("✅ Free Daily Morning Retirement Brief Activated!");
     });
   }
 
@@ -8156,11 +8748,25 @@ function bindEvents() {
     btn.addEventListener("click", jumpToTomMorningBox);
   });
 
-  // $0 Free US Brokerage App & Safe Order Starter Manual Modal
+  // $0 Free US Brokerage App & Calm 2-4x/Year Rebalancing Manual Modal + WebView Branching
   const tomStarterManualModal = document.getElementById("tomStarterManualModal");
+  const isWebViewEnv = () =>
+    typeof window !== "undefined" &&
+    typeof window.isTomInAppWebView === "function" &&
+    window.isTomInAppWebView();
+
   const openTomStarterManual = (stepId) => {
     if (!tomStarterManualModal) return;
     tomStarterManualModal.style.display = "flex";
+    if (isWebViewEnv() && !stepId) {
+      const wvBox = document.getElementById("tomWebviewPdfEmailBox");
+      const wvInp = document.getElementById("tomWebviewPdfEmailInput");
+      if (wvBox) wvBox.style.display = "block";
+      setTimeout(() => {
+        if (wvInp && !wvInp.value) wvInp.focus();
+      }, 80);
+      return;
+    }
     if (stepId) {
       setTimeout(() => {
         const targetEl = document.getElementById(stepId);
@@ -8209,7 +8815,21 @@ function bindEvents() {
 
   const btnPrintTomStarterManual = document.getElementById("btnPrintTomStarterManual");
   if (btnPrintTomStarterManual) {
-    btnPrintTomStarterManual.addEventListener("click", () => {
+    btnPrintTomStarterManual.addEventListener("click", (e) => {
+      if (isWebViewEnv()) {
+        if (e) e.preventDefault();
+        if (tomStarterManualModal) tomStarterManualModal.style.display = "flex";
+        const wvBox = document.getElementById("tomWebviewPdfEmailBox");
+        const wvInp = document.getElementById("tomWebviewPdfEmailInput");
+        if (wvBox) {
+          wvBox.style.display = "block";
+          if (wvBox.scrollIntoView) wvBox.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+        setTimeout(() => {
+          if (wvInp) wvInp.focus();
+        }, 80);
+        return;
+      }
       try {
         document.body.classList.add("printing-tom-manual");
         window.print();
@@ -8219,6 +8839,58 @@ function bindEvents() {
       } catch (_) {
         document.body.classList.remove("printing-tom-manual");
       }
+    });
+  }
+
+  const tomWebviewPdfEmailForm = document.getElementById("tomWebviewPdfEmailForm");
+  if (tomWebviewPdfEmailForm) {
+    tomWebviewPdfEmailForm.addEventListener("submit", (ev) => {
+      ev.preventDefault();
+      const inp = document.getElementById("tomWebviewPdfEmailInput");
+      const statusEl = document.getElementById("tomWebviewPdfEmailStatus");
+      const email = String((inp && inp.value) || "").trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+        if (statusEl) {
+          statusEl.style.display = "block";
+          statusEl.style.color = "#fca5a5";
+          statusEl.textContent = "Please enter a valid email address (for example, robert@email.com).";
+        }
+        if (inp) inp.focus();
+        return;
+      }
+      state.freeMemberEmail = email;
+      try {
+        localStorage.setItem("tom_free_member_email", email);
+        fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/signup", {
+          mode: "cors",
+          keepalive: true,
+        }).catch(() => {});
+        fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/signup_total", {
+          mode: "cors",
+          keepalive: true,
+        }).catch(() => {});
+        if (typeof window.submitTomVipWaitlistOrManualEmail === "function") {
+          window.submitTomVipWaitlistOrManualEmail({
+            email,
+            segment: "starter_manual_pdf",
+            lang: "en-US",
+            notes: "site=truthofmarket.com | source=starter_manual_pdf",
+          }).catch(() => {});
+        } else {
+          registerTomClubMemberSafe({
+            email,
+            nickname: "",
+            segment: "starter_manual_pdf",
+            website_hp: "",
+          }).catch(() => {});
+        }
+      } catch (_) {}
+      if (statusEl) {
+        statusEl.style.display = "block";
+        statusEl.style.color = "#6ee7b7";
+        statusEl.textContent = `✅ PDF Guide & Instant Free Morning Bell Club Access activated for ${email}! Check your inbox.`;
+      }
+      showToast("✅ $0 PDF Guide & Free Club Access Sent!");
     });
   }
 
@@ -8297,6 +8969,19 @@ function bindEvents() {
       }
     }, 240);
   };
+  const btnHeroActionRetireSim = document.getElementById("btnHeroActionRetireSim");
+  if (btnHeroActionRetireSim) {
+    btnHeroActionRetireSim.addEventListener("click", () => {
+      const simEl = document.getElementById("tom-retirement-architect");
+      if (simEl && typeof simEl.scrollIntoView === "function") {
+        simEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  }
+  const btnHeroActionManual = document.getElementById("btnHeroActionManual");
+  if (btnHeroActionManual) {
+    btnHeroActionManual.addEventListener("click", () => openTomStarterManual(""));
+  }
   const btnHeroActionSignals = document.getElementById("btnHeroActionSignals");
   if (btnHeroActionSignals) {
     btnHeroActionSignals.addEventListener("click", () => {
@@ -8387,7 +9072,7 @@ function bindEvents() {
     });
   }
 
-  // 15-Second Wall Street Chart Blind Test Controls
+  // 15-Second Historical Chart Study Controls
   document.querySelectorAll(".btn-blind-test-pick").forEach((btn) => {
     btn.addEventListener("click", () => {
       const rId = btn.getAttribute("data-round");
@@ -8403,7 +9088,7 @@ function bindEvents() {
     btnResetBlindTest.addEventListener("click", () => {
       state.blindTestAnswers = {};
       renderApp();
-      showToast("Chart Blind Test Reset — Try All 3 Setups Again");
+      showToast("Historical Pattern Quiz Reset — Try All 3 Setups Again");
     });
   }
 
@@ -8490,14 +9175,14 @@ function bindEvents() {
   const vaultOverlayUnlock = document.getElementById("vaultOverlayUnlock");
   if (vaultOverlayUnlock) vaultOverlayUnlock.addEventListener("click", () => openLicenseModal(false));
 
-  // Gated Pro VIP Telegram Channel buttons -> open License / Subscribe modal for Free users
+  // Gated VIP Telegram Channel buttons -> open License / VIP modal for Free users
   document.querySelectorAll(".btn-gated-vip-tg").forEach((el) => {
     el.addEventListener("click", (e) => {
       if (!state.isProUnlocked) {
         e.preventDefault();
         openLicenseModal(
           false,
-          "🔒 Pro VIP Telegram Channel ($SMH/$XLV & 72-Stock Real-Time News + Unmasked Ignition Signals) is exclusively for Pro Subscribers ($29/mo or $199 Lifetime)."
+          "🔒 VIP Telegram Educational Research Channel is available for Monthly VIP ($29/mo) and Annual VIP ($199/yr) subscribers."
         );
       }
     });
@@ -8647,28 +9332,7 @@ function bindEvents() {
     }
   });
 
-  // Delegated Lemon Squeezy Checkout Overlay Interceptor
-  // Handles both static and dynamically rendered checkout buttons (e.g. inside #docOutput)
-  if (!window.__rsaLsClickDelegated) {
-    window.__rsaLsClickDelegated = true;
-    document.addEventListener("click", (e) => {
-      const btn = e.target.closest(".lemonsqueezy-button");
-      if (!btn) return;
-      const rawHref = btn.getAttribute("href") || "";
-      const href =
-        typeof formatCheckoutUrl === "function" ? formatCheckoutUrl(rawHref, rawHref) : rawHref;
-      if (href && href !== rawHref) {
-        btn.setAttribute("href", href);
-      }
-      if (typeof window.__bindRsaLemonSqueezyEvents === "function") {
-        window.__bindRsaLemonSqueezyEvents();
-      }
-      if (window.LemonSqueezy && window.LemonSqueezy.Url && typeof window.LemonSqueezy.Url.Open === "function") {
-        e.preventDefault();
-        window.LemonSqueezy.Url.Open(href);
-      }
-    });
-  }
+  // Unified checkout handling is enforced by PaymentWaitlist.js (window.PAYMENT_CONFIG)
 
   // Admin Login & Config Modal Controls
   const adminLoginModal = document.getElementById("adminLoginModal");
@@ -9058,11 +9722,11 @@ function bindEvents() {
   if (btnDownloadPro72Csv) {
     btnDownloadPro72Csv.addEventListener("click", () => {
       if (!state.isProUnlocked) {
-        openLicenseModal(false, "🔒 Upgrade to Pro VIP ($29/mo or $199 Lifetime) to download the full 72-Stock Institutional Action Sheet (.CSV).");
+        openLicenseModal(false, "🔒 Upgrade to VIP Software ($29/mo Monthly VIP or $199/yr Annual VIP) to download the full Historical Factor Dataset (.CSV).");
         return;
       }
       const perSlot = Math.round((state.proPortfolioUsd || 30000) * 0.15);
-      const header = "Rank,Ticker,Company,Sector,PW_RSI_Score,Zone,Latest_Close,Entry_Trigger_MA60,Hard_Stop_Minus9Pct,Target_2X_TP1,Recommended_Shares_15Pct_Slot\n";
+      const header = "Rank,Ticker,Company,Sector,Factor_Score,Zone,Latest_Close,MA60_Reference,Lower_Variance_Band,Upper_Model_Band,Simulated_Shares_15Pct_Slot\n";
       const rows = (state.stocks || []).map((s, idx) => {
         const c = Number(s.close || 0);
         const trig = Number(s.entry_trigger_price ?? s.ma60_price ?? c).toFixed(2);
@@ -9075,12 +9739,12 @@ function bindEvents() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `RightSideAlpha_VIP_72Stocks_${new Date().toISOString().slice(0, 10)}.csv`;
+      a.download = `TruthOfMarket_Factor_Dataset_${new Date().toISOString().slice(0, 10)}.csv`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showToast("📥 Downloaded Full 72-Stock VIP Action Sheet (.CSV)");
+      showToast("📥 Downloaded Historical Factor Dataset (.CSV)");
     });
   }
 
@@ -9088,13 +9752,13 @@ function bindEvents() {
   if (btnCopyTvWatchlist) {
     btnCopyTvWatchlist.addEventListener("click", async () => {
       if (!state.isProUnlocked) {
-        openLicenseModal(false, "🔒 Upgrade to Pro VIP to copy the 1-Click TradingView 72-Ticker Institutional Watchlist.");
+        openLicenseModal(false, "🔒 Upgrade to VIP Software to copy the 1-Click TradingView Research Watchlist.");
         return;
       }
       const tickers = ["AMEX:SMH", "AMEX:XLV", "NASDAQ:QQQ"].concat((state.stocks || []).map((s) => s.ticker)).join(",");
       try {
         await navigator.clipboard.writeText(tickers);
-        showToast("📋 Copied 72-Stock + $SMH/$XLV TradingView Watchlist to Clipboard!");
+        showToast("📋 Copied Research Watchlist + $SMH/$XLV to Clipboard!");
       } catch (_) {
         showToast("TradingView Watchlist Ready");
       }
@@ -9105,28 +9769,28 @@ function bindEvents() {
   if (btnCopyTvWebhookJson) {
     btnCopyTvWebhookJson.addEventListener("click", async () => {
       if (!state.isProUnlocked) {
-        openLicenseModal(false, "🔒 Upgrade to Pro VIP to unlock the TradingView Automated Alert Webhook JSON.");
+        openLicenseModal(false, "🔒 Upgrade to VIP Software to unlock the TradingView Alert Webhook JSON Template.");
         return;
       }
       const webhookJson = JSON.stringify({
         platform: "truthofmarket.com",
-        signal: "RIGHT_SIDE_IGNITION",
+        mode: "EDUCATIONAL_FACTOR_LOG",
         ticker: "{{ticker}}",
         close: "{{close}}",
         volume: "{{volume}}",
-        stop_loss_9pct: "{{plot_0}}",
-        action: "BUY_15PCT_SLOT"
+        lower_band_ref: "{{plot_0}}",
+        note: "SELF_DIRECTED_SIMULATION"
       }, null, 2);
       try {
         await navigator.clipboard.writeText(webhookJson);
-        showToast("🔔 Copied TradingView Webhook JSON Payload to Clipboard!");
+        showToast("🔔 Copied TradingView Webhook JSON Template to Clipboard!");
       } catch (_) {
         showToast("Webhook JSON Ready");
       }
     });
   }
 
-  // Position Doctor Controls
+  // Variance Calculator Controls
   document.querySelectorAll(".btn-quick-doc").forEach((btn) => {
     btn.addEventListener("click", async () => {
       const tick = btn.getAttribute("data-ticker");
@@ -9232,7 +9896,7 @@ function bindEvents() {
       return;
     }
     const perSlot = Math.round((state.proPortfolioUsd || 30000) * 0.15);
-    const header = "Rank,Ticker,Company,Sector,PW_RSI_Score,Zone,Close,Entry_Trigger,Stop_Loss_9Pct,Target_2X_TP1,Recommended_Shares_15Pct_Slot\n";
+    const header = "Rank,Ticker,Company,Sector,Factor_Score,Zone,Close,MA60_Reference,Lower_Variance_Band,Upper_Model_Band,Simulated_Shares_15Pct_Slot\n";
     const rows = starredStocks.map((s, idx) => {
       const c = Number(s.close || 0);
       const trig = Number(s.entry_trigger_price ?? s.ma60_price ?? c).toFixed(2);
@@ -9318,7 +9982,7 @@ function bindEvents() {
     btnAddPortRow.addEventListener("click", () => {
       const currentPositions = getPortfolioPositionsFromDOM();
       if (currentPositions.length >= 10) {
-        showToast("Maximum 10 positions allowed in Portfolio Doctor 2.0");
+        showToast("Maximum 10 positions allowed in Multi-Asset Factor Calculator");
         return;
       }
       currentPositions.push({ ticker: "", entry_price: 25.0, shares: 100, days_held: 15, current_price: null });
@@ -9396,7 +10060,7 @@ function bindEvents() {
   if (btnRunPortfolioDoctor) {
     btnRunPortfolioDoctor.addEventListener("click", async () => {
       if (!state.isProUnlocked) {
-        openLicenseModal(false, "Upgrade to Pro to unlock the Multi-Position Portfolio Doctor 2.0 & Volatility Stress Testing.");
+        openLicenseModal(false, "Upgrade to VIP Software to unlock the Multi-Asset Factor Calculator & Volatility Stress Simulator.");
         return;
       }
       const positions = getPortfolioPositionsFromDOM();
@@ -9619,7 +10283,7 @@ function bindEvents() {
       const langTitle = data[`title_${state.lang}`] || data.title;
       const safeTitle =
         langTitle ||
-        `${data.company_name || ticker} ($${data.ticker || ticker}) — ${data.opinion || "STRONG_BUY"} | Latest Close $${cPrice} (${asOf})`;
+        `${data.company_name || ticker} ($${data.ticker || ticker}) — ${data.opinion || "FACTOR_CASE_STUDY"} | Latest Close $${cPrice} (${asOf})`;
       if (titleEl) titleEl.textContent = safeTitle;
       if (bodyEl) {
         const rawMarkdown = data[`content_${state.lang}`] || data.content || "";
@@ -9628,9 +10292,9 @@ function bindEvents() {
         const metaHeader = `
           <div style="display:flex; flex-wrap:wrap; gap:14px; background:#090d16; border:1px solid var(--border); border-left:3px solid ${isStopped ? "var(--fin-down)" : "var(--fin-up)"}; padding:10px 14px; border-radius:4px; margin-bottom:14px; font-family:var(--font-mono); font-size:0.76rem;">
             <span>LATEST CLOSE (${asOf}): <b style="color:#ffffff;">$${cPrice}</b></span>
-            <span>RULE 1 HARD STOP (-9%): <b style="color:var(--fin-down);">$${sPrice}</b></span>
-            <span>TP1 TARGET (2x): <b style="color:var(--fin-up);">$${tPrice}</b></span>
-            <span>STATUS / RRR: <b style="color:${isStopped ? "#fca5a5" : "#93c5fd"};">${data.rrr_ratio || "1 : 11.1"}</b></span>
+            <span>LOWER VARIANCE REF: <b style="color:var(--fin-down);">$${sPrice}</b></span>
+            <span>UPPER MODEL REF: <b style="color:var(--fin-up);">$${tPrice}</b></span>
+            <span>VARIANCE RATIO: <b style="color:${isStopped ? "#fca5a5" : "#93c5fd"};">${data.rrr_ratio || "1 : 11.1"}</b></span>
           </div>
         `;
         const tvAff = encodeURIComponent(state.config.tradingview_aff_id || "1173809");
@@ -9813,7 +10477,7 @@ function bindEvents() {
     btnDownloadSemiCsv.addEventListener("click", async () => {
       if (!state.isProUnlocked) {
         openLicenseModal(false);
-        showToast("Unlock Pro ($29/mo or $199 Lifetime) to download the 26-Year Daily CSV Dataset");
+        showToast("Unlock VIP Software ($29/mo Monthly VIP or $199/yr Annual VIP) to download the 26-Year Daily CSV Dataset");
         return;
       }
       const key = encodeURIComponent(state.licenseKey || "");
@@ -9926,18 +10590,18 @@ function openStockDetailModal(ticker) {
     ${
       showTargets
         ? `<div style="background:#05080f; border:1px solid rgba(16,185,129,0.35); border-radius:6px; padding:10px 12px; margin-bottom:12px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;" class="mono">
-             <span>Entry Trigger: <b style="color:#60a5fa;">$${trig}</b></span>
-             <span>-9% Stop: <b style="color:var(--fin-down);">$${stop}</b></span>
-             <span>2x Target: <b style="color:var(--fin-up);">$${tp1}</b></span>
+             <span>MA60 Reference: <b style="color:#60a5fa;">$${trig}</b></span>
+             <span>Lower Band Ref: <b style="color:var(--fin-down);">$${stop}</b></span>
+             <span>Upper Model Ref: <b style="color:var(--fin-up);">$${tp1}</b></span>
            </div>`
         : `<div style="background:rgba(37,99,235,0.1); border:1px solid rgba(59,130,246,0.38); border-radius:6px; padding:12px; margin-bottom:12px;">
-             <div style="font-weight:800; color:#ffffff; margin-bottom:6px;">🔒 Exact Entry Trigger, -9% Hard Stop &amp; 2x Target Levels</div>
+             <div style="font-weight:800; color:#ffffff; margin-bottom:6px;">🔒 Historical Factor Reference Bands &amp; CSV Export</div>
              <div style="display:flex; gap:8px; flex-wrap:wrap;">
-               <a class="btn btn-primary btn-sm lemonsqueezy-button" data-direct-ls="1" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthly}" target="_blank" rel="noopener noreferrer" style="min-height:40px; font-weight:800;">
-                 🔒 Unlock Pro ($29/mo)
+               <a class="btn btn-primary btn-sm lemonsqueezy-button" data-direct-ls="1" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthly}" target="_blank" rel="noopener noreferrer" style="min-height:40px; font-weight:800;">
+                 🔒 Start Monthly VIP — $29/mo
                </a>
-               <a class="btn btn-emerald btn-sm lemonsqueezy-button" data-direct-ls="1" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" href="${lsLtd}" target="_blank" rel="noopener noreferrer" style="min-height:40px; font-weight:800;">
-                 💎 Lifetime VIP ($199)
+               <a class="btn btn-emerald btn-sm lemonsqueezy-button" data-direct-ls="1" data-tom-paid-plan="annual" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" href="${lsLtd}" target="_blank" rel="noopener noreferrer" style="min-height:40px; font-weight:800;">
+                 💎 Start Annual VIP — $199/yr
                </a>
              </div>
            </div>`
@@ -9945,7 +10609,7 @@ function openStockDetailModal(ticker) {
 
     <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:space-between;">
       <button type="button" class="btn btn-emerald btn-sm" id="btnModalDiagnoseStock" data-ticker="${s.ticker}" style="min-height:40px; font-weight:800;">
-        🩺 Diagnose $${s.ticker} in Position Doctor
+        🧮 Simulate $${s.ticker} Variance Math
       </button>
       <a class="btn btn-sm" href="${tvUrl}" target="_blank" rel="noopener noreferrer" style="min-height:40px;">
         📈 Open $${s.ticker} Chart on TradingView ↗
@@ -10096,7 +10760,7 @@ function generateScorecardPng(stock) {
 
     ctx.fillStyle = "#93c5fd";
     ctx.font = "bold 24px JetBrains Mono, monospace";
-    ctx.fillText(`Signal Regime: ${stock.zone_label_en}  |  PW-RSI Score: ${stock.score}/100`, 45, 175);
+    ctx.fillText(`Factor Regime: ${stock.zone_label_en}  |  Factor Score: ${stock.score}/100`, 45, 175);
 
     ctx.fillStyle = "#cbd5e1";
     ctx.font = "20px JetBrains Mono, monospace";
@@ -10110,7 +10774,7 @@ function generateScorecardPng(stock) {
       45,
       270
     );
-    ctx.fillText(`Historical 1Y 2x (+100%) Hit Rate after -40% Drawdown: ${stock.hist_2x_rate}%`, 45, 315);
+    ctx.fillText(`Historical Recovery Cohort Rate after -40% Drawdown: ${stock.hist_2x_rate}%`, 45, 315);
   } else {
     ctx.fillStyle = "#ffffff";
     ctx.font = "bold 34px Inter, sans-serif";
@@ -10487,7 +11151,7 @@ async function init() {
   }
 
   const checkoutParam = (initialSearch.get("checkout") || initialSearch.get("unlock") || "").toLowerCase();
-  if (checkoutParam === "monthly" || checkoutParam === "lifetime" || checkoutParam === "pro") {
+  if (checkoutParam === "monthly" || checkoutParam === "annual" || checkoutParam === "pro") {
     setTimeout(() => {
       const licModal = document.getElementById("licenseModal");
       const msgEl = document.getElementById("licenseMsg");
@@ -10495,9 +11159,9 @@ async function init() {
         licModal.style.display = "flex";
         if (msgEl) {
           msgEl.style.color = "#34d399";
-          msgEl.textContent = checkoutParam === "lifetime"
-            ? "🏆 Lifetime Pass ($199): Click Lifetime Pass ($199) above for official Lemon Squeezy checkout, or paste your License Key below to unlock immediately."
-            : "🍋 Pro Monthly ($29/mo): Click Subscribe Pro ($29/mo) above for official Lemon Squeezy checkout, or paste your License Key below to unlock immediately.";
+          msgEl.textContent = checkoutParam === "annual"
+            ? "🏆 Annual VIP ($199/yr): Click Start Annual VIP — $199/yr above, or paste your License Key below to unlock immediately."
+            : "🍋 Monthly VIP ($29/mo): Click Start Monthly VIP — $29/mo above, or paste your License Key below to unlock immediately.";
         }
       }
     }, 200);
@@ -10552,18 +11216,6 @@ init();
       localStorage.setItem('hq_uv_ever_' + ns, '1');
       fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/uv_total', { mode: 'cors', keepalive: true }).catch(function(){});
     }
-  } catch (e) {}
-})();
-
-/* === HQ KPI Conversion Tracker (Division 1: Paid Member Click & Checkout Tracking) === */
-(function(){
-  try {
-    if (typeof window === 'undefined' || window.__HQ_KPI_TOM__) return;
-    window.__HQ_KPI_TOM__ = true;
-    var host = (location && location.hostname) || '';
-    if (!host || host === 'localhost' || host === '127.0.0.1') return;
-    var kst = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
-    var ns = 'tom_truthofmarket';
     if (location.search.indexOf('payment=success') !== -1 || location.search.indexOf('unlock=1') !== -1) {
       if (localStorage.getItem('hq_paid_' + kst) !== '1') {
         localStorage.setItem('hq_paid_' + kst, '1');
@@ -10571,16 +11223,5 @@ init();
         fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_member_total', { mode: 'cors', keepalive: true }).catch(function(){});
       }
     }
-    document.addEventListener('click', function(e) {
-      var el = e.target && e.target.closest ? e.target.closest('a, button, [role="button"]') : null;
-      if (!el) return;
-      var href = (el.getAttribute('href') || '').toLowerCase();
-      var txt = (el.innerText || el.textContent || '').toLowerCase();
-      var cls = (el.className || '').toLowerCase();
-      if (href.indexOf('lemonsqueezy.com') !== -1 || cls.indexOf('pro') !== -1 || cls.indexOf('paywall') !== -1 || /upgrade|unlock pro|vip|subscribe/.test(txt)) {
-        fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_' + kst, { mode: 'cors', keepalive: true }).catch(function(){});
-        fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_total', { mode: 'cors', keepalive: true }).catch(function(){});
-      }
-    }, true);
   } catch (e) {}
 })();

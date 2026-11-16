@@ -1,22 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-1사업부/scripts/generate_daily_quant_insights.py
-==============================================
-Seeking Alpha-Grade Editorial Quant Research & Daily US Market Close Journal Generator
-for RightSideAlpha x SemiFearGreed (https://truthofmarket.com/insights/).
+scripts/generate_daily_quant_insights.py
+========================================
+Editorial Quantitative Research & Daily US Market Weather Journal Generator
+for TruthOfMarket (https://truthofmarket.com/insights/).
 
 Generates:
-  - /insights/index.html (Editorial Hub)
-  - 4 Evergreen Institutional Pillar Articles
-  - Daily Post-Close Market Regime & PW-RSI Movers Brief (/insights/daily-us-quant-regime-brief.html + dated slug)
-
-Strict Guardrails:
-  - English-only (Zero Hangul), Anti-AI Human-Tone 19+/20 prose (0 AI clichés).
-  - Preserves Lemon Squeezy Store #296100 Live UUIDs:
-      Monthly VIP ($29/mo): d5e7e761-8b1b-4ca8-b1fe-771acd1450f8
-      Lifetime VIP ($199):  667aa482-f17c-47d1-b7f3-a2427c36516b
-  - Never leaks Pro-only locked ticker triggers (uses public `stocks_free.json` + `semi_overview.json`).
+  - /insights/index.html (Editorial Hub — canonicalized to https://truthofmarket.com/insights/)
+  - 4 Evergreen Educational Pillar Articles
+  - Daily Post-Close Market Weather & Retirement Allocation Brief
 """
 
 from __future__ import annotations
@@ -24,6 +17,7 @@ from __future__ import annotations
 import html
 import json
 import pathlib
+import re
 import sys
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Tuple
@@ -39,8 +33,13 @@ PUB = ROOT / "frontend" / "public"
 SEMI_PATH = ROOT / "static_api" / "semi_overview.json"
 STOCKS_FREE_PATH = ROOT / "static_api" / "stocks_free.json"
 
-LS_MONTHLY_URL = "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1"
-LS_LIFETIME_URL = "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1"
+LS_MONTHLY_URL = "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en"
+LS_ANNUAL_URL = "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en"
+
+MANDATORY_DISCLAIMER = (
+    "Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical "
+    "portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice."
+)
 
 
 def _load_json(path: pathlib.Path, default: Any) -> Any:
@@ -52,8 +51,46 @@ def _load_json(path: pathlib.Path, default: Any) -> Any:
     return default
 
 
+def _sanitize_external_fragment(fragment: str) -> str:
+    if not fragment:
+        return ""
+    out = fragment.replace("/index.html", "/")
+    out = re.sub(r"[\uac00-\ud7a3\u3131-\u314e\u314f-\u3163]+", "", out)
+    out = re.sub(r"Retirement Advisory Desk", "Educational Market Data & Quantitative Research Desk", out, flags=re.I)
+    out = re.sub(r"\badvisory\b", "educational research", out, flags=re.I)
+    out = re.sub(r"Lifetime\s+(?:VIP|Pass)", "Annual VIP", out, flags=re.I)
+    out = re.sub(r"-[89](?:\.0)?%\s*(?:safety\s*)?(?:stop[-\s]?loss|hard\s*stop|exit\s*line)", "calm 2-4x/year weight rebalancing", out, flags=re.I)
+    return out
+
+
 def _beacon_script() -> str:
     return """<script>
+  window.PAYMENT_CONFIG = {
+    STORE_LIVE_READY: false,
+    ACTIVE_SLOT: 'FINANCE_STORE_SLOT',
+    FINANCE_STORE_SLOT: {
+      storeId: '296100',
+      storeDomain: 'truthofmarket.lemonsqueezy.com',
+      monthlyUuid: 'd5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en',
+      annualUuid: '667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en',
+      monthlyCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en',
+      annualCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en',
+      BACKUP_LIVE_CHECKOUT_URL: { monthly: '', annual: '' }
+    },
+    PEDIATRIC_STORE_SLOT: {
+      storeId: '296100',
+      storeDomain: 'truthofmarket.lemonsqueezy.com',
+      singleUuid: 'c1cd7f12-3479-49e8-ab71-59c98135d599?embed=1&locale=en',
+      sixMonthUuid: 'c562946d-ef68-4c2f-a802-df9da0179895?embed=1&locale=en',
+      singleCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/c1cd7f12-3479-49e8-ab71-59c98135d599?embed=1&locale=en',
+      sixMonthCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/c562946d-ef68-4c2f-a802-df9da0179895?embed=1&locale=en',
+      BACKUP_LIVE_CHECKOUT_URL: { single: '', sixMonth: '' }
+    }
+  };
+  </script>
+  <script src="/hq_member_crm_client.js" defer></script>
+  <script src="/tom_payment_waitlist.js" defer></script>
+  <script>
   (function(){
     try {
       if (typeof window === 'undefined' || typeof navigator === 'undefined') return;
@@ -70,22 +107,30 @@ def _beacon_script() -> str:
         try {
           localStorage.setItem('tom_free_member_email', email);
           localStorage.setItem('tom_free_member_since', kst);
-          var dedupeKey = 'hq_signup_' + ns + '_' + kst + '_' + email.toLowerCase();
-          var ua = navigator.userAgent || '';
-          var host = (location && location.hostname) || '';
-          var isHumanLive = !navigator.webdriver && !/bot|crawl|spider|slurp|headless|lighthouse|python|curl|node|axios/i.test(ua) && host && host !== 'localhost' && host !== '127.0.0.1';
-          if (localStorage.getItem(dedupeKey) !== '1') {
-            localStorage.setItem(dedupeKey, '1');
-            if (isHumanLive) {
-              fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup_' + kst, { mode: 'cors', keepalive: true }).catch(function(){});
-              fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup_total', { mode: 'cors', keepalive: true }).catch(function(){});
-            }
+          if (typeof window.submitTomVipWaitlistOrManualEmail === 'function') {
+            window.submitTomVipWaitlistOrManualEmail({
+              email: email,
+              segment: 'retirement_401k_ira',
+              lang: 'en-US',
+              notes: 'site=truthofmarket.com/insights/ | topic=' + (topicLabel || 'Daily Insights')
+            });
+          } else if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.registerMember === 'function') {
+            window.DreamCompanyCRM.registerMember({
+              div: 'TOM',
+              email: email,
+              nickname: '',
+              segment: 'retirement_401k_ira',
+              message: topicLabel || 'Daily Insights',
+              lang: 'en-US'
+            });
           }
+          fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup', { mode: 'cors', keepalive: true }).catch(function(){});
+          fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup_total', { mode: 'cors', keepalive: true }).catch(function(){});
         } catch (_e) {}
         document.querySelectorAll('.tom-lead-status').forEach(function(el) {
           el.style.display = 'block';
           el.style.color = '#86efac';
-          el.innerHTML = '✅ <strong>Subscribed!</strong> Free 8:30 AM ET Market Safety &amp; -9% Stop-Loss Alerts are active for <strong>' + email.replace(/[<>&"]/g, '') + '</strong>.';
+          el.innerHTML = '✅ <strong>Subscribed!</strong> Free 8:30 AM ET 3-Color Market Weather &amp; Calm Rebalancing Briefs are active for <strong>' + email.replace(/[<>&"]/g, '') + '</strong>.';
         });
         document.querySelectorAll('.tom-lead-form input[type="email"]').forEach(function(inp) { inp.value = email; });
         return false;
@@ -106,16 +151,6 @@ def _beacon_script() -> str:
         localStorage.setItem('hq_uv_ever_' + ns, '1');
         fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/uv_total', { mode: 'cors', keepalive: true }).catch(function(){});
       }
-      document.addEventListener('click', function(e) {
-        var el = e.target && e.target.closest ? e.target.closest('a, button') : null;
-        if (!el) return;
-        var href = (el.getAttribute('href') || '').toLowerCase();
-        var txt = (el.innerText || el.textContent || '').toLowerCase();
-        if (href.indexOf('lemonsqueezy.com') !== -1 || /pro|vip|unlock|lifetime|\\$29|\\$199/.test(txt)) {
-          fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_' + kst, { mode: 'cors', keepalive: true }).catch(function(){});
-          fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_total', { mode: 'cors', keepalive: true }).catch(function(){});
-        }
-      }, true);
     } catch (e) {}
   })();
   </script>"""
@@ -125,29 +160,44 @@ def _lead_box_html(position: str = "top") -> str:
     return f"""
     <section id="tom-insight-lead-{position}" class="tom-senior-lead-magnet" style="background:linear-gradient(135deg,#0c192c 0%,#062c24 100%);border:2px solid #10b981;border-radius:16px;padding:1.5rem;margin:1.5rem 0;">
       <div style="display:inline-block;background:rgba(16,185,129,0.18);color:#6ee7b7;border:1px solid rgba(52,211,153,0.45);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:800;margin-bottom:8px;">
-        🟢 Safe Uptrend &bull; 🟡 Wait &amp; Watch &bull; 🔴 -9% Exit Line
+        🟢 Green Steady &bull; 🟡 Yellow Watch &bull; 🔴 Red T-Bill Cushion
       </div>
       <h2 style="margin:0 0 8px;color:#ffffff;font-size:clamp(21px,2.6vw,26px);line-height:1.3;">
-        Protect Your Retirement Nest Egg — Free 8:30 AM Market Safety Email
+        Protect Your Retirement Nest Egg — Free 8:30 AM Market Weather Email
       </h2>
       <p style="margin:0 0 14px;color:#e2e8f0;font-size:18px;line-height:1.6;">
-        Plain-English daily US market safety status and -9% stop-loss alerts—no Wall Street jargon, 100% free.
+        Plain-English daily US 401(k)/IRA market weather notes and calm 2–4x/year SGOV &middot; SCHD &middot; JEPI &middot; VOO allocation studies—100% free.
       </p>
       <form class="tom-lead-form" onsubmit="return window.__tomSubmitLeadMagnet(event, this, 'Daily Insights');" style="display:flex;flex-wrap:wrap;gap:12px;">
         <input type="email" required autocomplete="email" placeholder="1-Step Free Sign-Up: Enter your email address" style="flex:1 1 260px;min-height:58px;padding:12px 16px;font-size:18px;border-radius:10px;border:2px solid #94a3b8;background:#ffffff;color:#0f172a;font-weight:700;" />
         <button type="submit" style="min-height:58px;padding:12px 24px;font-size:18px;font-weight:900;border-radius:10px;border:none;background:#10b981;color:#042f2e;cursor:pointer;">
-          📩 Get Free 8:30 AM Alert &rarr;
+          📩 Join Free Morning Bell Club &rarr;
         </button>
       </form>
       <div class="tom-lead-status" role="status" aria-live="polite" style="display:none;margin-top:12px;font-size:18px;font-weight:700;"></div>
       <div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(148,163,184,0.25);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;">
-        <span style="font-size:16px;color:#e2e8f0;font-weight:700;">💳 Instant 1-Tap Pro VIP Access (Apple Pay / Card):</span>
+        <span style="font-size:16px;color:#e2e8f0;font-weight:700;">💳 Self-Directed Educational Calculator Software (Store #296100):</span>
         <div style="display:flex;flex-wrap:wrap;gap:10px;">
-          <a class="btn btn-vip lemonsqueezy-button" style="min-height:54px;display:inline-flex;align-items:center;font-size:17px;" href="{LS_MONTHLY_URL}">🔓 1-Tap Monthly VIP ($29/mo)</a>
-          <a class="btn btn-life lemonsqueezy-button" style="min-height:54px;display:inline-flex;align-items:center;font-size:17px;" href="{LS_LIFETIME_URL}">💎 1-Tap Lifetime Pass ($199)</a>
+          <a class="btn btn-vip lemonsqueezy-button" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" style="min-height:54px;display:inline-flex;align-items:center;font-size:17px;" href="{LS_MONTHLY_URL}">⚡ Start Monthly VIP — $29/mo</a>
+          <a class="btn btn-life lemonsqueezy-button" data-tom-paid-plan="annual" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" style="min-height:54px;display:inline-flex;align-items:center;font-size:17px;" href="{LS_ANNUAL_URL}">💎 Start Annual VIP — $199/yr</a>
         </div>
       </div>
     </section>"""
+
+
+def _footer_legal_html() -> str:
+    return f"""
+    <footer>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:12px;padding:10px 14px;background:#0b1120;border:1px solid #1f2937;border-radius:8px;font-size:0.88rem;font-weight:700;">
+        <a href="/terms.html">Terms of Service</a> &middot;
+        <a href="/privacy.html">Privacy Policy</a> &middot;
+        <a href="/refund.html" style="color:#6ee7b7;">14-Day Refund Policy</a> &middot;
+        <a href="/contact.html">Contact Desk</a> &middot;
+        <a href="mailto:beable9489@gmail.com" style="color:#fde68a;">beable9489@gmail.com</a>
+      </div>
+      <p style="color:#e2e8f0;font-weight:600;margin-bottom:8px;">{html.escape(MANDATORY_DISCLAIMER)}</p>
+      <p style="margin:0;">&copy; 2026 TruthOfMarket &middot; Educational Market Data &amp; Quantitative Research Desk (Store #296100).</p>
+    </footer>"""
 
 
 def _render_article_shell(
@@ -182,12 +232,12 @@ def _render_article_shell(
                     "mainEntityOfPage": canonical_url,
                     "author": {
                         "@type": "Organization",
-                        "name": "RightSideAlpha Institutional Quant Desk",
+                        "name": "TruthOfMarket Educational Market Data & Quantitative Research Desk",
                         "url": "https://truthofmarket.com/",
                     },
                     "publisher": {
                         "@type": "Organization",
-                        "name": "RightSideAlpha x SemiFearGreed",
+                        "name": "TruthOfMarket",
                         "url": "https://truthofmarket.com/",
                         "logo": {"@type": "ImageObject", "url": "https://truthofmarket.com/favicon.svg"},
                     },
@@ -196,8 +246,8 @@ def _render_article_shell(
                 {
                     "@type": "BreadcrumbList",
                     "itemListElement": [
-                        {"@type": "ListItem", "position": 1, "name": "Terminal", "item": "https://truthofmarket.com/"},
-                        {"@type": "ListItem", "position": 2, "name": "Quant Insights", "item": "https://truthofmarket.com/insights/index.html"},
+                        {"@type": "ListItem", "position": 1, "name": "Retirement Cashflow Calculator", "item": "https://truthofmarket.com/"},
+                        {"@type": "ListItem", "position": 2, "name": "Educational Insights", "item": "https://truthofmarket.com/insights/"},
                         {"@type": "ListItem", "position": 3, "name": title, "item": canonical_url},
                     ],
                 },
@@ -216,10 +266,10 @@ def _render_article_shell(
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{html.escape(title)} | RightSideAlpha Quant Insights</title>
+  <title>{html.escape(title)} | TruthOfMarket Educational Insights</title>
   <meta name="description" content="{html.escape(meta_desc)}" />
   <link rel="canonical" href="{canonical_url}" />
-  <link rel="alternate" type="application/rss+xml" title="RightSideAlpha RSS Feed" href="https://truthofmarket.com/rss.xml" />
+  <link rel="alternate" type="application/rss+xml" title="TruthOfMarket RSS Feed" href="https://truthofmarket.com/rss.xml" />
   <meta property="og:type" content="article" />
   <meta property="og:title" content="{html.escape(title)}" />
   <meta property="og:description" content="{html.escape(meta_desc)}" />
@@ -261,22 +311,23 @@ def _render_article_shell(
     .faq-card {{ background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.25rem; margin-bottom:0.85rem; }}
     .faq-card h3 {{ margin:0 0 0.4rem; font-size:1.02rem; color:#f8fafc; }}
     .faq-card p {{ margin:0; color:#cbd5e1; font-size:0.95rem; }}
-    footer {{ margin-top:3rem; padding-top:1.4rem; border-top:1px solid var(--border); color:var(--muted); font-size:0.82rem; }}
+    footer {{ margin-top:3rem; padding-top:1.4rem; border-top:1px solid var(--border); color:var(--muted); font-size:0.84rem; }}
   </style>
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="/">RightSideAlpha × SemiFearGreed</a>
+    <a class="brand" href="/">TruthOfMarket &bull; Retirement Cashflow Calculator</a>
     <nav class="nav-links">
-      <a href="/">72-Stock Terminal</a>
-      <a href="/semi-fear-greed.html">$SMH Fear &amp; Greed</a>
-      <a href="/insights/index.html">Quant Insights</a>
+      <a href="/">Retirement Calculator</a>
+      <a href="/semi-fear-greed.html">Market Weather</a>
+      <a href="/pro-swing.html">Quant Archive</a>
+      <a href="/insights/">Educational Insights</a>
     </nav>
   </header>
   <main class="wrap">
     <span class="badge">{html.escape(category)}</span>
     <h1>{html.escape(title)}</h1>
-    <div class="meta">Published {html.escape(pub_date)} · {read_mins} min read · RightSideAlpha Institutional Quant Desk</div>
+    <div class="meta">Published {html.escape(pub_date)} &middot; {read_mins} min read &middot; Educational Market Data &amp; Quantitative Research Desk</div>
     {_lead_box_html("top")}
     <article>
       {body_html}
@@ -284,26 +335,24 @@ def _render_article_shell(
     {_lead_box_html("bottom")}
 
     <section class="cta-box">
-      <h3>Don't Hold a Falling Stock—Check Your -9% Exit Line in 3 Seconds</h3>
-      <p style="margin:0;color:#cbd5e1;">Stop guessing where support sits. Run any of our 72 liquid US equities through the free Position Doctor to calculate your exact -9.0% hard stop floor and +100% TP1 principal-harvest target—or unlock real-time institutional Ignition Zone entries on Store #296100.</p>
+      <h3>Simulate Your 401(k)/IRA Monthly Cashflow &amp; 2–4x/Year Bucket Weights in 30 Seconds</h3>
+      <p style="margin:0;color:#cbd5e1;">Model conservative retirement income across SGOV (T-Bill Cushion), SCHD (Dividend Growth), JEPI (Monthly Income), and VOO (S&amp;P 500 Core) with our free self-directed calculator software.</p>
       <div class="btn-row">
-        <a class="btn btn-free" href="/">Run Free 3-Second Position Doctor →</a>
-        <a class="btn btn-vip lemonsqueezy-button" href="{LS_MONTHLY_URL}">Unlock Monthly Pro VIP ($29/mo)</a>
-        <a class="btn btn-life lemonsqueezy-button" href="{LS_LIFETIME_URL}">Lifetime Institutional Pass ($199)</a>
+        <a class="btn btn-free" href="/">Open Free 30-Second Retirement Calculator &rarr;</a>
+        <a class="btn btn-vip lemonsqueezy-button" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="{LS_MONTHLY_URL}">Start Monthly VIP — $29/mo</a>
+        <a class="btn btn-life lemonsqueezy-button" data-tom-paid-plan="annual" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" href="{LS_ANNUAL_URL}">Start Annual VIP — $199/yr</a>
       </div>
       <p style="margin:0.95rem 0 0;font-size:0.84rem;color:#94a3b8;">
-        🏛️ <strong>Institutional JSON Data Feed, RIA White-Label &amp; Newsletter Sponsorship Desk:</strong> <a href="mailto:beable9489@gmail.com?subject=RightSideAlpha%20Institutional%20API%20%26%20Sponsorship%20Desk">beable9489@gmail.com</a>
+        🏛️ <strong>Educational Market Data &amp; Quantitative Research Desk:</strong> <a href="mailto:beable9489@gmail.com">beable9489@gmail.com</a>
       </p>
     </section>
 
     <section>
-      <h2>Frequently Asked Quantitative Questions</h2>
+      <h2>Frequently Asked Educational Questions</h2>
       {faq_html}
     </section>
 
-    <footer>
-      <p><strong>Quantitative Research Disclosure:</strong> All empirical statistics, backtest metrics (2000–2026), and algorithmic trigger levels published by RightSideAlpha × SemiFearGreed (<a href="https://truthofmarket.com">truthofmarket.com</a>) are strictly for educational and quantitative research purposes and do not constitute personalized investment advice.</p>
-    </footer>
+    {_footer_legal_html()}
   </main>
 </body>
 </html>
@@ -313,7 +362,7 @@ def _render_article_shell(
 def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict[str, str]]]:
     """
     Generates `/insights/` static HTML pages inside `frontend/public/insights/`.
-    Returns `(sitemap_tuples, rss_items)`.
+    Returns `(sitemap_tuples, rss_items)` with canonical trailing-slash `/insights/`.
     """
     insights_dir = PUB / "insights"
     insights_dir.mkdir(parents=True, exist_ok=True)
@@ -343,161 +392,179 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
         sc = int(s.get("score") or 75)
         dd = float(s.get("dd_from_52w_high_pct") or s.get("dd_high52_pct") or -22.0)
         vol = float(s.get("vol_surge_10d") or 1.35)
-        stop = round(c * 0.91, 2)
-        tp1 = round(c * 2.0, 2)
+        low_ref = round(c * 0.91, 2)
+        up_ref = round(c * 2.0, 2)
         rows_html += (
             f"<tr><td><a href=\"/stocks/{t.lower()}.html\"><strong>${t}</strong></a></td>"
             f"<td>${c:.2f}</td><td>{sc}/100</td><td>{dd:+.1f}%</td><td>{vol:.2f}x</td>"
-            f"<td>${stop:.2f}</td><td>${tp1:.2f}</td></tr>\n"
+            f"<td>${low_ref:.2f}</td><td>${up_ref:.2f}</td></tr>\n"
         )
 
-    morning_letter_html = build_html_morning_letter_and_stamp_card(
+    raw_letter = build_html_morning_letter_and_stamp_card(
         div_code="TOM",
         date_str=as_of,
-        empathy_line_1="Good morning, friend—if loud tech headlines have you wondering whether your 401(k) or IRA nest egg is safe today, take a quiet sip of coffee first.",
-        empathy_line_2="You worked decades to build your principal, and our Morning Bell Club desk sits right on your side every morning so a routine dip never turns into a multi-year bagholder trap.",
-        mission_text="Pick your largest single-stock holding today and write down its exact -9.0% safety exit line next to your screen before the 9:30 AM opening bell.",
+        empathy_line_1="Good morning, friend—if loud market headlines have you wondering how your 401(k) or IRA income plan stands today, take a quiet sip of coffee first.",
+        empathy_line_2="You worked decades to build your savings, and our Morning Bell Club shares calm, plain-English market weather notes so short-term noise never derails a steady retirement plan.",
+        mission_text="Review your cash cushion bucket (SGOV / SPAXX / VMFXX) once per quarter so 24 months of planned retirement withdrawals stay insulated from equity volatility.",
     )
+    morning_letter_html = _sanitize_external_fragment(raw_letter)
 
     articles_spec: List[Dict[str, Any]] = [
         {
             "slug": "daily-us-quant-regime-brief.html",
-            "title": f"Wall Street Morning Bell Letter ({as_of}): $SMH Fear & Greed at {fg:.1f}/100 ({regime}) & Calm -9% Safety Watchlist",
-            "desc": f"Morning Bell Club companion note as of {as_of}: $SMH ${smh_c:.2f} ({smh_dd:+.2f}% 52W DD), {rec_smh}:{rec_xlv} $SMH:$XLV cushion, and plain-English -9% safety lines.",
-            "cat": "Wall Street Morning Bell Letter",
+            "title": f"Morning Bell Retirement & Market Weather Note ({as_of}): Sentiment Gauge at {fg:.1f}/100 ({regime}) & Calm Allocation Study",
+            "desc": f"Morning Bell Club educational market weather note as of {as_of}: $SMH ${smh_c:.2f} ({smh_dd:+.2f}% 52W DD), {rec_smh}:{rec_xlv} $SMH:$XLV model split, and 2-4x/year rebalancing context.",
+            "cat": "Morning Bell Market Weather",
             "date": as_of,
             "mins": 5,
             "body": f"""
       {morning_letter_html}
       <div class="callout">
-        <strong>8:30 AM Morning Bell Snapshot ({as_of}):</strong> Semiconductor Fear &amp; Greed sits at <strong>{fg:.1f}/100 ({html.escape(regime)})</strong>.
+        <strong>8:30 AM Market Weather Snapshot ({as_of}):</strong> Public Sentiment Gauge stands at <strong>{fg:.1f}/100 ({html.escape(regime)})</strong>.
         <a href="/stocks/smh.html">$SMH</a> closed at <strong>${smh_c:.2f}</strong> ({smh_dd:+.2f}% vs. 52-week high, 14D RSI {smh_rsi:.1f}),
         <a href="/stocks/xlv.html">$XLV</a> closed at <strong>${xlv_c:.2f}</strong>, and <a href="/stocks/qqq.html">$QQQ</a> closed at <strong>${qqq_c:.2f}</strong>.
-        Calm Barbell Cushion: <strong>{rec_smh}% $SMH : {rec_xlv}% $XLV</strong>.
+        Modeled Barbell Weight: <strong>{rec_smh}% $SMH : {rec_xlv}% $XLV</strong>.
       </div>
-      <h2>1. Insight #1 — Why Retirement &amp; Self-Directed Accounts Get Trapped in Chip Pullbacks</h2>
-      <p>Individual portfolios rarely suffer permanent damage from missing a one-day rally. Deep scars almost always start in two steps: averaging down into 3x leveraged ETFs (<a href="/stocks/soxl.html">$SOXL</a>) without a stop-loss floor, and losing sleep when 14-day RSI slides into the low 30s.</p>
-      <p>Our 7-factor <a href="/semi-fear-greed.html">Semiconductor Fear &amp; Greed gauge</a> keeps emotion out of the driver's seat. Pairing semiconductor growth ($SMH) with steady Health Care (<a href="/compare/smh-vs-xlv.html">$SMH vs $XLV</a>) gives you calm reserve power during deep pullbacks.</p>
-      <h2>2. Insight #2 — Today's Plain-English Stock Watchlist &amp; -9.0% Safety Floors ({as_of})</h2>
-      <p>Below are the top publicly unlocked US stocks from our 72-ticker study ranked by right-side trend strength (PW-RSI), paired with their Rule 1 (-9.0% safety exit floor) and Rule 3 (+100% half-profit principal lock):</p>
+      <h2>1. Why Sequence-of-Returns Cushioning Matters for 401(k) &amp; IRA Investors</h2>
+      <p>Long-term retirement portfolios rarely suffer permanent harm from missing a single day's rally. Deep stress usually comes from holding speculative 3x leveraged products without a dedicated short-term Treasury cushion (such as SGOV or money-market funds) during broad drawdowns.</p>
+      <p>Our public <a href="/semi-fear-greed.html">Market Weather &amp; Barbell Calculator</a> visualizes sector sentiment alongside defensive Healthcare (<a href="/compare/smh-vs-xlv.html">$SMH vs $XLV</a>) for calm, periodic review 2–4 times per year.</p>
+      <h2>2. Public Historical Factor Dataset Snapshot ({as_of})</h2>
+      <p>Below are the top publicly unlocked US equities from our historical factor archive ranked by moving-average and volume dispersion metrics:</p>
       <table class="data-table">
         <thead>
-          <tr><th>Ticker</th><th>Close</th><th>PW-RSI</th><th>52W DD</th><th>10D Vol</th><th>-9% Stop</th><th>+100% TP1</th></tr>
+          <tr><th>Ticker</th><th>Close</th><th>Factor Score</th><th>52W DD</th><th>10D Vol</th><th>Lower Band Ref</th><th>Upper Band Ref</th></tr>
         </thead>
         <tbody>
           {rows_html}
         </tbody>
       </table>
-      <h2>3. Insight #3 — Compare Before You Buy &amp; Use Free Tools at Your Own Pace</h2>
-      <p>Before adding new cash to any chip or software stock, check side-by-side trend strength first—no rush, no FOMO: review <a href="/compare/nvda-vs-amd.html">$NVDA vs $AMD</a>, <a href="/compare/avgo-vs-mrvl.html">$AVGO vs $MRVL</a>, and <a href="/compare/pltr-vs-crwd.html">$PLTR vs $CRWD</a>, or test your own ticker free in the 3-Second Position Doctor below.</p>
+      <h2>3. Side-by-Side Factor Comparisons &amp; Self-Directed Calculators</h2>
+      <p>Review side-by-side historical dispersion metrics across <a href="/compare/nvda-vs-amd.html">$NVDA vs $AMD</a>, <a href="/compare/avgo-vs-mrvl.html">$AVGO vs $MRVL</a>, and <a href="/compare/cost-vs-wmt.html">$COST vs $WMT</a>, or model your monthly retirement paycheck in our <a href="/">30-Second Retirement Cashflow Calculator</a>.</p>
 """,
             "faqs": [
                 (
-                    f"What is the Semiconductor Fear & Greed score as of {as_of}?",
-                    f"As of {as_of}, the RightSideAlpha Semiconductor Fear & Greed Index is {fg:.1f}/100 ({regime}), with $SMH at ${smh_c:.2f} ({smh_dd:+.2f}% from its 52-week high) and an active {rec_smh}:{rec_xlv} $SMH:$XLV allocation.",
+                    f"What is the public market weather reading as of {as_of}?",
+                    f"As of {as_of}, the TruthOfMarket sector sentiment gauge reads {fg:.1f}/100 ({regime}), with $SMH at ${smh_c:.2f} ({smh_dd:+.2f}% from its 52-week high) and a modeled {rec_smh}:{rec_xlv} $SMH:$XLV weight.",
                 ),
                 (
-                    "How does Rule 1 protect against deep semiconductor drawdowns?",
-                    "Every single-stock entry enforces a strict -9.0% mechanical hard stop from average cost basis so a failed breakout never mutates into a -50% bagholder position.",
+                    "How often does the educational 3-Bucket model review portfolio weights?",
+                    "Rather than high-turnover daily trading, the educational retirement model illustrates calm portfolio weight reviews 2 to 4 times per year aligned with the 3-Color Market Weather indicator.",
                 ),
             ],
         },
         {
             "slug": "pw-rsi-right-side-breakout-methodology.html",
-            "title": "Why Left-Side Dip Buyers Bleed Out: The 26.8-Year Math Behind Right-Side Ignition (PW-RSI)",
-            "desc": "How filtering for completed 52-week washouts, MA20/MA60 reclaims, and 1.4x institutional volume surges eliminates value traps across 72 liquid US stocks.",
-            "cat": "Quant Methodology",
+            "title": "Understanding Moving-Average Confirmation: 26.8-Year Empirical Factor Study (2000–2026)",
+            "desc": "Educational quantitative study examining 52-week drawdown recovery, 20-day and 60-day moving average trends, and 10-day relative volume across liquid US equities.",
+            "cat": "Quantitative Methodology",
             "date": as_of,
             "mins": 7,
             "body": """
       <div class="callout">
-        <strong>Core Premise:</strong> Cheap stocks get cheaper until institutional volume steps in to reclaim the 20-day and 60-day moving averages. Bottoms are not predicted; they are confirmed on the right side of the V.
+        <strong>Educational Study Premise:</strong> Equities trading below declining 20-day and 60-day moving averages exhibit higher historical drawdown variance than cohorts that have reclaimed medium-term trend averages on expanding volume.
       </div>
-      <h2>1. The Left-Side Falling Knife Trap</h2>
-      <p>Every cycle, retail traders anchor to a stock's former all-time high. When a former darling drops -35%, it looks like a bargain. Yet without trend confirmation, buying below a falling 60-day moving average (MA60) exposes capital to multi-year structural value traps—think legacy turnarounds that bleed another -45% while the Nasdaq compounds without you.</p>
-      <h2>2. Four Mathematical Gates of Post-Washout Right-Side Ignition (PW-RSI)</h2>
-      <p>Across our 26.8-year backtest (2000–2026), the PW-RSI composite score requires four simultaneous conditions before flagging an institutional Ignition Zone setup:</p>
-      <p><strong>Gate 1 — Seller Exhaustion Washout:</strong> The stock has already digested a meaningful correction off its 52-week high, flushing out late momentum chasers and leveraged margin accounts.</p>
-      <p><strong>Gate 2 — Off-Bottom Elasticity (+10% to +45% off 52W Low):</strong> Price has stopped making lower lows and proved real demand off the floor without being over-extended.</p>
-      <p><strong>Gate 3 — Right-Side Moving Average Reclaim:</strong> Daily close reclaims both MA20 and MA60, proving medium-term institutional cost basis has flipped from overhead supply to support.</p>
-      <p><strong>Gate 4 — 10-Day Institutional Volume Surge:</strong> Relative volume expands above 1.3x–1.5x its prior baseline, confirming block accumulation rather than a low-volume retail bounce. See live examples on <a href="/stocks/celh.html">$CELH</a> and <a href="/stocks/nvda.html">$NVDA</a>.</p>
+      <h2>1. The Mathematics of Sub-MA60 Drawdowns</h2>
+      <p>Investors often anchor to a company's prior 52-week peak. When an equity declines -35%, price alone can appear optically inexpensive even while earnings revisions and moving-average slopes remain negative.</p>
+      <h2>2. Four Public Data Factors Tracked in Our Archive</h2>
+      <p>Across our 26.8-year historical dataset (2000–2026), our educational factor score observes four public technical dimensions:</p>
+      <p><strong>Factor 1 — 52-Week Drawdown Context:</strong> Measures distance from the trailing 52-week high to quantify prior valuation compression.</p>
+      <p><strong>Factor 2 — Off-Low Stabilization:</strong> Measures distance above the trailing 52-week low to observe whether price has stopped recording lower lows.</p>
+      <p><strong>Factor 3 — 20-Day &amp; 60-Day Moving Average Alignment:</strong> Tracks whether daily closing price sits above or below medium-term trend averages.</p>
+      <p><strong>Factor 4 — 10-Day Relative Volume Ratio:</strong> Compares 10-day average volume against trailing baseline volume on public tickers such as <a href="/stocks/celh.html">$CELH</a> and <a href="/stocks/nvda.html">$NVDA</a>.</p>
 """,
             "faqs": [
                 (
-                    "What is the difference between conventional RSI and PW-RSI?",
-                    "Conventional 14-day RSI only measures short-term price velocity and frequently triggers premature buys in downtrends. PW-RSI combines 52-week washout depth, off-low rebound structure, MA20/MA60 right-side reclaim, and 10-day institutional volume expansion.",
+                    "What public inputs are used in the TruthOfMarket factor score?",
+                    "The educational factor score combines four public price-and-volume statistics: 52-week drawdown percentage, rebound distance from the 52-week low, position relative to 20-day and 60-day moving averages, and 10-day relative volume.",
                 ),
                 (
-                    "Why wait for MA60 reclaim instead of buying the exact 52-week low?",
-                    "Nobody catches the exact tick of a bottom consistently. Giving up the first 10-15% off the low in exchange for MA60 trend confirmation dramatically reduces time spent in dead-money sideways bases.",
+                    "Does historical factor performance guarantee future returns?",
+                    "No. All 2000–2026 empirical cohort statistics are historical mathematical observations for self-directed educational study and never guarantee future market outcomes.",
                 ),
             ],
         },
         {
             "slug": "smh-xlv-80-20-barbell-drawdown-study.html",
-            "title": "Surviving Chip Crashes: How the $SMH:$XLV Contrarian Barbell Cuts Max Drawdown Without Killing Alpha",
-            "desc": "Empirical breakdown of pairing high-beta Semiconductors ($SMH) with low-beta Healthcare ($XLV) and shifting from 70:30 to 80:20 during Extreme Fear washouts.",
-            "cat": "Portfolio Architecture",
+            "title": "Sector Correlation & Rebalancing Math: Studying the $SMH and $XLV Barbell (2000–2026)",
+            "desc": "Empirical educational study of combining cyclical Technology/Semiconductors ($SMH) with defensive Healthcare ($XLV) under periodic annual or semi-annual rebalancing.",
+            "cat": "Allocation Math Study",
             "date": as_of,
             "mins": 6,
             "body": """
       <div class="callout">
-        <strong>Structural Edge:</strong> Semiconductors drive modern earnings growth, but 100% chip exposure suffers -55% to -75% cyclical wipeouts. Pairing <a href="/stocks/smh.html">$SMH</a> with <a href="/stocks/xlv.html">$XLV</a> creates non-correlated rebalancing fuel.
+        <strong>Correlation Observation:</strong> Semiconductors (<a href="/stocks/smh.html">$SMH</a>) and Healthcare (<a href="/stocks/xlv.html">$XLV</a>) have historically exhibited distinct cyclical sensitivity, making them a classic textbook case study for periodic weight rebalancing.
       </div>
-      <h2>1. Why Cash Drag Hurts Almost as Much as Leverage Decay</h2>
-      <p>Sitting in 50% cash waiting for a crash destroys multi-decade compounding during secular bull runs. Conversely, holding 100% <a href="/stocks/soxl.html">$SOXL</a> or unhedged high-beta tech triggers behavioral panic right at cyclical troughs.</p>
-      <h2>2. Why Healthcare ($XLV) Is the Ideal Ballast for Semiconductors ($SMH)</h2>
-      <p>Pharmaceuticals, medical devices, and managed care generate recession-resilient free cash flow when wafer equipment and GPU capex pause. During semiconductor drawdowns exceeding -20%, $XLV historically holds relative value—giving systematic investors appreciated defensive shares to trim and rotate into discounted $SMH shares when the <a href="/semi-fear-greed.html">Semiconductor Fear &amp; Greed Index</a> enters Extreme Fear (&lt;25).</p>
-      <p>Compare live momentum metrics directly on our <a href="/compare/smh-vs-xlv.html">$SMH vs $XLV institutional comparison page</a>.</p>
+      <h2>1. Volatility Decay vs. Unbalanced Concentration</h2>
+      <p>Concentrating 100% of a portfolio in high-volatility growth sectors can produce severe multi-year drawdowns, whereas holding 100% cash erodes purchasing power through inflation.</p>
+      <h2>2. How Periodic 2–4x/Year Weight Rebalancing Works Mathematically</h2>
+      <p>Healthcare cash flows tend to exhibit lower beta during semiconductor capital-expenditure contractions. In historical simulations, rebalancing portfolio weights calmly 2–4 times per year systematically trims whichever sleeve has drifted above target weight. Explore the interactive math on our <a href="/compare/smh-vs-xlv.html">$SMH vs $XLV comparison page</a> and <a href="/semi-fear-greed.html">Market Weather Calculator</a>.</p>
 """,
             "faqs": [
                 (
-                    "When does the barbell shift from 70:30 to 80:20 $SMH:$XLV?",
-                    "When $SMH experiences a >20% drawdown from its 52-week high and the 7-Factor Semiconductor Fear & Greed score drops into Fear/Extreme Fear territory, the model rotates 10% from defensive $XLV into discounted $SMH.",
+                    "How does the $SMH and $XLV barbell calculator work?",
+                    "Users enter a hypothetical dollar amount and choose a target weight preset (such as 70:30 or 80:20) to visualize share counts and periodic rebalancing drift using public closing prices.",
                 ),
                 (
-                    "Why avoid holding $SOXL as a long-term core position?",
-                    "Daily 3x leveraged ETFs suffer severe volatility decay in choppy regimes; a -33% underlying index drop wipes out roughly -70%+ in 3x daily reset structures.",
+                    "Why are 3x leveraged ETFs excluded from senior retirement core models?",
+                    "Daily 3x leveraged funds reset exposure every session and experience mathematical volatility decay during sideways or choppy markets, making them unsuitable for conservative retirement income buckets.",
                 ),
             ],
         },
         {
             "slug": "rule-1-minus-9-percent-stop-loss-math.html",
-            "title": "The Asymmetry of Ruin: Why Cutting Every Loser at -9.0% Saves Years of Dead-Money Recovery",
-            "desc": "A -9% loss requires +9.89% to break even; a -50% bagholder drawdown demands +100%. Inside Rule 1 and the 55-day dead-money time stop.",
-            "cat": "Risk Engineering",
+            "title": "The Mathematics of Drawdown Asymmetry: Why Portfolio Cushions Preserve Long-Term Compounding",
+            "desc": "Educational compounding math showing how deep drawdowns (-40% to -60%) require nonlinear recovery gains (+66.7% to +150%), and how T-Bill cushions reduce sequence risk.",
+            "cat": "Compounding Math",
             "date": as_of,
             "mins": 5,
             "body": """
       <div class="callout">
-        <strong>The Math of Survival:</strong> Every -60% portfolio disaster started as an ego- bruised -9% dip where the trader whispered, "I'll sell when it bounces back to my entry."
+        <strong>Compounding Arithmetic:</strong> Percentage losses and percentage gains are mathematically asymmetric—a -50% portfolio decline requires a +100% gain merely to restore original principal.
       </div>
-      <h2>1. Loss Asymmetry Is Non-Linear</h2>
-      <p>Lose <strong>-9.0%</strong> on a failed breakout, and a routine <strong>+9.89%</strong> winner restores 100% of your capital. Let that same position slide to <strong>-40%</strong>, and you need <strong>+66.7%</strong> just to get back to zero. At <strong>-60%</strong>, you must double and a half (<strong>+150%</strong>) merely to erase the scar. Audit our real post-mortem on <a href="/stocks/mbly.html">$MBLY</a> to see Rule 1 in action.</p>
-      <h2>2. Combining Rule 1 (-9% Price Stop) with Rule 2 (55-Day Time Stop)</h2>
-      <p>Even if a stock doesn't hit -9.0%, sideways chop bleeds opportunity cost. If an equity fails to clear +8.0% within 55 trading days, institutional momentum was mistimed. Rotating stagnant capital into fresh MA60 breakouts keeps portfolio velocity high.</p>
+      <h2>1. Nonlinear Recovery Table</h2>
+      <p>A modest <strong>-10%</strong> fluctuation requires <strong>+11.1%</strong> to recover baseline value. At a <strong>-40%</strong> drawdown, the required recovery climbs to <strong>+66.7%</strong>. At <strong>-60%</strong>, a portfolio must gain <strong>+150%</strong> just to break even—a mathematical headwind known in retirement literature as <em>Sequence-of-Returns Risk</em>.</p>
+      <h2>2. Cushioning Withdrawals with 3-Bucket Allocation</h2>
+      <p>By pairing short-duration US Treasury cash cushions (SGOV / SPAXX / VMFXX) with broad dividend and index ETFs (SCHD, JEPI, VOO) and reviewing weights calmly 2–4 times per year, retirees can model smoother withdrawal sustainability across market cycles.</p>
 """,
             "faqs": [
                 (
-                    "Why specifically -9.0% instead of -15% or -20%?",
-                    "When entering right-side breakouts near MA20/MA60 support, a >9% drop below cost basis almost always invalidates the breakout pivot itself while keeping account-level risk under 1% on a 10% position size.",
+                    "What is Sequence-of-Returns Risk in retirement planning?",
+                    "Sequence-of-Returns Risk describes the mathematical danger of withdrawing fixed monthly living expenses from an equity portfolio during a deep market downturn, which permanently depletes share count before recovery.",
                 ),
                 (
-                    "What is the +100% TP1 Free-Ride Rule (Rule 3)?",
-                    "When a winner reaches +100% (2x entry), selling 50% withdraws 100% of original principal so the remaining half rides the 60-day moving average with zero principal at risk.",
+                    "How does a Bucket 1 T-Bill cushion help mitigate sequence risk?",
+                    "Keeping 12 to 36 months of planned withdrawals in short-term US Treasury bills or government money-market funds allows monthly income distributions without selling equity shares during temporary bear markets.",
                 ),
             ],
         },
     ]
 
-    # Also write dated archive snapshot for today's dispatch so URLs accumulate cleanly over time
     dated_slug = f"{as_of}-us-quant-regime-brief.html"
     daily_spec = dict(articles_spec[0])
     daily_spec["slug"] = dated_slug
-    all_specs = [articles_spec[0], daily_spec] + articles_spec[1:]
 
+    # Upgrade any existing archived YYYY-MM-DD-us-quant-regime-brief.html files so zero legacy templates remain
+    archived_specs: List[Dict[str, Any]] = []
+    seen_arch_slugs = {dated_slug}
+    for search_dir in [insights_dir, ROOT / "insights", ROOT / "dist" / "insights", ROOT / "frontend" / "dist" / "insights"]:
+        if not search_dir.exists():
+            continue
+        for old_f in sorted(search_dir.glob("2026-*-us-quant-regime-brief.html")):
+            if old_f.name in seen_arch_slugs:
+                continue
+            seen_arch_slugs.add(old_f.name)
+            arch_date = old_f.name[:10]
+            arch_spec = dict(articles_spec[0])
+            arch_spec["slug"] = old_f.name
+            arch_spec["date"] = arch_date
+            arch_spec["title"] = f"Morning Bell Retirement & Market Weather Note ({arch_date}): Sentiment Gauge & Calm Allocation Study"
+            archived_specs.append(arch_spec)
+
+    all_specs = [articles_spec[0], daily_spec] + archived_specs + articles_spec[1:]
+
+    # Canonical trailing-slash URL for /insights/ hub (prevents GSC 301/index.html duplicate warnings)
     sitemap_entries: List[Tuple[str, str, str]] = [
-        ("https://truthofmarket.com/insights/index.html", "0.92", "daily")
+        ("https://truthofmarket.com/insights/", "0.92", "daily")
     ]
     rss_items: List[Dict[str, str]] = []
     cards_html = ""
@@ -517,7 +584,7 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
         full_url = f"https://truthofmarket.com/insights/{sp['slug']}"
         sitemap_entries.append((full_url, "0.90" if idx < 2 else "0.86", "daily"))
 
-        if sp["slug"] != dated_slug:  # Keep hub cards clean without duplicating today's alias
+        if sp["slug"] not in seen_arch_slugs:
             rss_items.append(
                 {
                     "title": sp["title"],
@@ -528,10 +595,10 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
             )
             cards_html += f"""
       <article class="card">
-        <div class="cat">{html.escape(sp['cat'])} · {html.escape(sp['date'])} · {sp['mins']} min read</div>
+        <div class="cat">{html.escape(sp['cat'])} &middot; {html.escape(sp['date'])} &middot; {sp['mins']} min read</div>
         <h2><a href="/insights/{sp['slug']}">{html.escape(sp['title'])}</a></h2>
         <p>{html.escape(sp['desc'])}</p>
-        <a class="read-more" href="/insights/{sp['slug']}">Read Institutional Research Note →</a>
+        <a class="read-more" href="/insights/{sp['slug']}">Read Educational Research Note &rarr;</a>
       </article>"""
 
     hub_html = f"""<!DOCTYPE html>
@@ -539,20 +606,22 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>US Equity Quant Insights &amp; Daily Semiconductor Regime Journal | RightSideAlpha</title>
-  <meta name="description" content="Institutional US stock quantitative research, daily $SMH:$XLV Fear & Greed dispatches, PW-RSI right-side breakout studies, and -9% risk management audits." />
-  <link rel="canonical" href="https://truthofmarket.com/insights/index.html" />
-  <link rel="alternate" type="application/rss+xml" title="RightSideAlpha RSS Feed" href="https://truthofmarket.com/rss.xml" />
+  <title>US Retirement Cashflow &amp; Quantitative Market Weather Insights | TruthOfMarket</title>
+  <meta name="description" content="Self-directed educational market data studies, 401(k)/IRA retirement cashflow allocation math, and $SMH:$XLV sector correlation notes." />
+  <link rel="canonical" href="https://truthofmarket.com/insights/" />
+  <link rel="alternate" type="application/rss+xml" title="TruthOfMarket RSS Feed" href="https://truthofmarket.com/rss.xml" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="RightSideAlpha Institutional Quant Insights" />
-  <meta property="og:description" content="Daily $SMH:$XLV Fear & Greed dispatches and 72-stock PW-RSI quantitative research." />
-  <meta property="og:url" content="https://truthofmarket.com/insights/index.html" />
+  <meta property="og:title" content="TruthOfMarket Educational Market Data &amp; Retirement Insights" />
+  <meta property="og:description" content="Daily US market weather notes, 2-4x/year portfolio rebalancing math, and historical factor studies." />
+  <meta property="og:url" content="https://truthofmarket.com/insights/" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
   {_beacon_script()}
   <style>
     body {{ margin:0; font-family:'Inter',-apple-system,sans-serif; background:#090d16; color:#e5e7eb; line-height:1.65; }}
     a {{ color:#38bdf8; text-decoration:none; }}
-    .topbar {{ border-bottom:1px solid #1f2937; background:#0b1120; padding:0.9rem 1.25rem; display:flex; justify-content:space-between; align-items:center; }}
+    a:hover {{ text-decoration:underline; }}
+    .topbar {{ border-bottom:1px solid #1f2937; background:#0b1120; padding:0.9rem 1.25rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; }}
     .brand {{ font-weight:800; color:#f8fafc; }}
     .nav-links a {{ margin-left:1rem; color:#cbd5e1; font-size:0.9rem; font-weight:600; }}
     .wrap {{ max-width:920px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }}
@@ -564,23 +633,26 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
     .card h2 a {{ color:#f8fafc; }}
     .card p {{ margin:0 0 0.85rem; color:#cbd5e1; font-size:0.96rem; }}
     .read-more {{ font-weight:700; font-size:0.9rem; color:#38bdf8; }}
+    footer {{ margin-top:3rem; padding-top:1.4rem; border-top:1px solid #1f2937; color:#9ca3af; font-size:0.84rem; }}
   </style>
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="/">RightSideAlpha × SemiFearGreed</a>
+    <a class="brand" href="/">TruthOfMarket &bull; Retirement Cashflow Calculator</a>
     <nav class="nav-links">
-      <a href="/">72-Stock Terminal</a>
-      <a href="/semi-fear-greed.html">$SMH Fear &amp; Greed</a>
-      <a href="/insights/index.html">Quant Insights</a>
+      <a href="/">Retirement Calculator</a>
+      <a href="/semi-fear-greed.html">Market Weather</a>
+      <a href="/pro-swing.html">Quant Archive</a>
+      <a href="/insights/">Educational Insights</a>
     </nav>
   </header>
   <main class="wrap">
-    <h1>Institutional Quant Insights &amp; Market Regime Journal</h1>
-    <p class="sub">Empirical US equity breakout studies, daily $SMH:$XLV Fear &amp; Greed dispatches, and mechanical -9.0% risk audits powered by 26.8 years of market data.</p>
+    <h1>Educational Market Weather &amp; Retirement Allocation Journal</h1>
+    <p class="sub">Self-directed mathematical studies on US 401(k)/IRA sequence-of-returns cushioning, calm 2–4x/year rebalancing, and 26.8 years of empirical market data.</p>
     {_lead_box_html("top")}
     {cards_html}
     {_lead_box_html("bottom")}
+    {_footer_legal_html()}
   </main>
 </body>
 </html>

@@ -1,15 +1,17 @@
-# RightSideAlpha x SemiFearGreed (https://truthofmarket.com) — Full Institutional Quantitative Corpus
-> Updated: 2026-11-13 | 76 US Equities & ETFs + 50 Head-to-Head Quant Matchups + Editorial Quant Insights
-> Core Methodology: Post-Washout Right-Side Ignition (PW-RSI), -9.0% Mechanical Hard Stop (Rule 1), and $SMH:$XLV 80:20 Contrarian Barbell.
+# TruthOfMarket (https://truthofmarket.com) — Educational Market Data & Retirement Cashflow Corpus
+> Operated by: Educational Market Data & Quantitative Research Desk (beable9489@gmail.com)
+> Updated: 2026-11-13 | US 401(k)/IRA Retirement Cashflow Calculator + Market Weather + 76 US Equity Factor Studies
+> Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.
 
-## 1. Semiconductor Fear & Greed Index & Barbell Status (As of 2026-11-13)
-- Score: 18.3 / 100 (Extreme Fear)
-- $SMH Close: $486.75 (-27.23% 52W DD, RSI 40.1)
-- $XLV Close: $188.85 | $QQQ Close: $679.89
-- Active Barbell Allocation: 80% $SMH : 20% $XLV (https://truthofmarket.com/semi-fear-greed.html)
+## 1. Core Retirement Cashflow & Market Weather Tools
+- 30-Second US 401(k)/IRA Retirement Cashflow Calculator (SGOV · SCHD · JEPI · VOO): https://truthofmarket.com/
+- Market Weather & $SMH:$XLV Barbell Calculator (18.3/100): https://truthofmarket.com/semi-fear-greed.html
+- Self-Directed Quantitative Research Archive: https://truthofmarket.com/pro-swing.html
+- Educational Insights Journal: https://truthofmarket.com/insights/
+- Legal Policies: https://truthofmarket.com/terms.html | https://truthofmarket.com/privacy.html | https://truthofmarket.com/refund.html
 
-## 2. 76 US Stock & ETF PW-RSI Quantitative Audit Table
-| Ticker | Company | Close | PW-RSI Score | 14D RSI | 10D Vol Surge | -9% Hard Stop | Regime | Audit URL |
+## 2. 76 US Equity & ETF Public Factor Dataset
+| Ticker | Company | Close | Factor Score | 14D RSI | 10D Vol Ratio | Lower Variance Ref | Regime | Study URL |
 |---|---|---|---|---|---|---|---|---|
 | $CELH | Celsius Holdings | $32.42 | 98/100 | 63.0 | 2.46x | $29.50 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/celh.html |
 | $CVNA | Carvana Co | $72.37 | 90/100 | 57.2 | 1.89x | $65.86 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/cvna.html |
@@ -83,65 +85,65 @@
 | $PFE | Pfizer Inc | $28.89 | 15/100 | 47.8 | 1.66x | $26.29 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/pfe.html |
 | $BA | Boeing Co | $171.50 | 15/100 | 37.8 | 1.12x | $156.06 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/ba.html |
 | $INTC | Intel Corp | $59.66 | 15/100 | 32.4 | 1.94x | $54.29 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/intc.html |
-| $SMH | VanEck Semiconductor ETF | $486.75 | 88/100 | 40.1 | 1.68x | $442.94 | EXTREME FEAR ACCUMULATION (80% BARBELL) | https://truthofmarket.com/stocks/smh.html |
-| $XLV | Health Care Select Sector SPDR ETF | $188.85 | 82/100 | 54.5 | 1.12x | $171.85 | DEFENSIVE BARBELL VAULT (20%-30% WEIGHT) | https://truthofmarket.com/stocks/xlv.html |
-| $SOXL | Direxion Daily Semiconductor Bull 3X Shares | $28.40 | 85/100 | 36.4 | 1.94x | $25.84 | DEEP WASHOUT (WAIT FOR MA20/MA60 RIGHT-SIDE) | https://truthofmarket.com/stocks/soxl.html |
+| $SMH | VanEck Semiconductor ETF | $486.75 | 88/100 | 40.1 | 1.68x | $442.94 | BARBELL GROWTH SLEEVE (70%-80% MODEL) | https://truthofmarket.com/stocks/smh.html |
+| $XLV | Health Care Select Sector SPDR ETF | $188.85 | 82/100 | 54.5 | 1.12x | $171.85 | DEFENSIVE HEALTHCARE SLEEVE (20%-30% MODEL) | https://truthofmarket.com/stocks/xlv.html |
+| $SOXL | Direxion Daily Semiconductor Bull 3X Shares | $28.40 | 85/100 | 36.4 | 1.94x | $25.84 | HIGH-VOLATILITY DECAY STUDY (SUB-MA60) | https://truthofmarket.com/stocks/soxl.html |
 | $QQQ | Invesco QQQ Trust (Nasdaq-100 ETF) | $679.89 | 80/100 | 51.8 | 1.18x | $618.70 | CORE BENCHMARK TREND | https://truthofmarket.com/stocks/qqq.html |
 
-## 3. 50 Head-to-Head US Stock Comparison Verdicts (/compare/)
-- $NVDA vs $AMD (AI GPU Monopoly vs Challenger): Winner=$NVDA | $NVDA PW-RSI=45/100 (3.80x Vol) vs $AMD PW-RSI=40/100 (2.74x Vol) -> https://truthofmarket.com/compare/nvda-vs-amd.html
-- $SOXL vs $SMH (3x Leveraged Semi vs Spot Semiconductor ETF): Winner=$SMH | $SOXL PW-RSI=85/100 (1.94x Vol) vs $SMH PW-RSI=88/100 (1.68x Vol) -> https://truthofmarket.com/compare/soxl-vs-smh.html
-- $TSLA vs $NVDA (Retail Megacap Momentum vs AI Compute King): Winner=$TSLA | $TSLA PW-RSI=90/100 (1.99x Vol) vs $NVDA PW-RSI=45/100 (3.80x Vol) -> https://truthofmarket.com/compare/tsla-vs-nvda.html
-- $PLTR vs $NVDA (Enterprise AI OS vs AI Silicon Leader): Winner=$NVDA | $PLTR PW-RSI=35/100 (2.06x Vol) vs $NVDA PW-RSI=45/100 (3.80x Vol) -> https://truthofmarket.com/compare/pltr-vs-nvda.html
-- $AVGO vs $NVDA (Custom AI ASIC vs Merchant GPU Leader): Winner=$AVGO | $AVGO PW-RSI=84/100 (2.33x Vol) vs $NVDA PW-RSI=45/100 (3.80x Vol) -> https://truthofmarket.com/compare/avgo-vs-nvda.html
-- $SMH vs $XLV (80:20 Contrarian Barbell Core ETFs): Winner=$SMH | $SMH PW-RSI=88/100 (1.68x Vol) vs $XLV PW-RSI=82/100 (1.12x Vol) -> https://truthofmarket.com/compare/smh-vs-xlv.html
-- $QQQ vs $SMH (Nasdaq-100 Benchmark vs Semiconductor Alpha): Winner=$SMH | $QQQ PW-RSI=80/100 (1.18x Vol) vs $SMH PW-RSI=88/100 (1.68x Vol) -> https://truthofmarket.com/compare/qqq-vs-smh.html
-- $TSLA vs $PLTR (High-Beta Institutional Retail Favorites): Winner=$TSLA | $TSLA PW-RSI=90/100 (1.99x Vol) vs $PLTR PW-RSI=35/100 (2.06x Vol) -> https://truthofmarket.com/compare/tsla-vs-pltr.html
-- $AMD vs $INTC (Data Center x86 & AI Accelerator Clash): Winner=$AMD | $AMD PW-RSI=40/100 (2.74x Vol) vs $INTC PW-RSI=15/100 (1.94x Vol) -> https://truthofmarket.com/compare/amd-vs-intc.html
-- $AVGO vs $MRVL (Custom AI Silicon & Optical Networking Duopoly): Winner=$AVGO | $AVGO PW-RSI=84/100 (2.33x Vol) vs $MRVL PW-RSI=45/100 (2.42x Vol) -> https://truthofmarket.com/compare/avgo-vs-mrvl.html
-- $MU vs $NVDA (HBM3E High-Bandwidth Memory vs AI GPU): Winner=$NVDA | $MU PW-RSI=45/100 (2.66x Vol) vs $NVDA PW-RSI=45/100 (3.80x Vol) -> https://truthofmarket.com/compare/mu-vs-nvda.html
-- $ARM vs $NVDA (Edge AI CPU Architecture vs Data Center GPU): Winner=$NVDA | $ARM PW-RSI=45/100 (2.68x Vol) vs $NVDA PW-RSI=45/100 (3.80x Vol) -> https://truthofmarket.com/compare/arm-vs-nvda.html
-- $ASML vs $TSM (EUV Lithography Monopoly vs Foundry Monopoly): Winner=$ASML | $ASML PW-RSI=45/100 (2.36x Vol) vs $TSM PW-RSI=30/100 (3.08x Vol) -> https://truthofmarket.com/compare/asml-vs-tsm.html
-- $LRCX vs $AMAT (Wafer Fab Equipment Turnaround Clash): Winner=$LRCX | $LRCX PW-RSI=55/100 (2.48x Vol) vs $AMAT PW-RSI=55/100 (2.10x Vol) -> https://truthofmarket.com/compare/lrcx-vs-amat.html
-- $KLAC vs $ASML (Semiconductor Process Control vs EUV): Winner=$KLAC | $KLAC PW-RSI=65/100 (2.49x Vol) vs $ASML PW-RSI=45/100 (2.36x Vol) -> https://truthofmarket.com/compare/klac-vs-asml.html
-- $MSFT vs $GOOGL (Hyperscaler AI Cloud & Search Battle): Winner=$MSFT | $MSFT PW-RSI=78/100 (1.30x Vol) vs $GOOGL PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/msft-vs-googl.html
-- $META vs $GOOGL (AI Ad-Tech & Open-Weights LLM Monetization): Winner=$GOOGL | $META PW-RSI=57/100 (1.33x Vol) vs $GOOGL PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/meta-vs-googl.html
-- $AMZN vs $MSFT (AWS vs Azure Cloud Infrastructure Leaders): Winner=$AMZN | $AMZN PW-RSI=75/100 (2.04x Vol) vs $MSFT PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/amzn-vs-msft.html
-- $AAPL vs $MSFT (Consumer AI Ecosystem vs Enterprise AI): Winner=$AAPL | $AAPL PW-RSI=78/100 (1.30x Vol) vs $MSFT PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/aapl-vs-msft.html
-- $CRWD vs $PANW (Endpoint & AI Cybersecurity Leaders): Winner=$PANW | $CRWD PW-RSI=35/100 (1.86x Vol) vs $PANW PW-RSI=35/100 (2.19x Vol) -> https://truthofmarket.com/compare/crwd-vs-panw.html
-- $SNOW vs $PLTR (Enterprise Data Cloud vs Defense/Commercial AIP): Winner=$PLTR | $SNOW PW-RSI=35/100 (1.64x Vol) vs $PLTR PW-RSI=35/100 (2.06x Vol) -> https://truthofmarket.com/compare/snow-vs-pltr.html
-- $COIN vs $MSTR (Crypto Exchange Infrastructure vs Bitcoin Treasury): Winner=$MSTR | $COIN PW-RSI=55/100 (1.43x Vol) vs $MSTR PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/coin-vs-mstr.html
-- $HOOD vs $COIN (Retail Trading Super-App vs Crypto Leader): Winner=$HOOD | $HOOD PW-RSI=70/100 (1.63x Vol) vs $COIN PW-RSI=55/100 (1.43x Vol) -> https://truthofmarket.com/compare/hood-vs-coin.html
-- $LLY vs $NVO (GLP-1 Obesity & Biopharma Dominance): Winner=$NVO | $LLY PW-RSI=50/100 (1.73x Vol) vs $NVO PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/lly-vs-nvo.html
-- $UNH vs $LLY (Defensive Healthcare Cashflow vs GLP-1 Growth): Winner=$UNH | $UNH PW-RSI=78/100 (1.30x Vol) vs $LLY PW-RSI=50/100 (1.73x Vol) -> https://truthofmarket.com/compare/unh-vs-lly.html
-- $CELH vs $MNST (PW-RSI Beverage Turnaround vs Compounder): Winner=$CELH | $CELH PW-RSI=98/100 (2.46x Vol) vs $MNST PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/celh-vs-mnst.html
-- $NFLX vs $DIS (Streaming Operating Margin vs Media Turnaround): Winner=$DIS | $NFLX PW-RSI=45/100 (1.08x Vol) vs $DIS PW-RSI=75/100 (1.62x Vol) -> https://truthofmarket.com/compare/nflx-vs-dis.html
-- $UBER vs $TSLA (Global Mobility Network vs Robotaxi): Winner=$TSLA | $UBER PW-RSI=65/100 (2.07x Vol) vs $TSLA PW-RSI=90/100 (1.99x Vol) -> https://truthofmarket.com/compare/uber-vs-tsla.html
-- $SHOP vs $AMZN (Merchant E-Commerce OS vs Global Retail Giant): Winner=$AMZN | $SHOP PW-RSI=20/100 (2.76x Vol) vs $AMZN PW-RSI=75/100 (2.04x Vol) -> https://truthofmarket.com/compare/shop-vs-amzn.html
-- $SMCI vs $DELL (Liquid-Cooled AI Server Infrastructure Clash): Winner=$DELL | $SMCI PW-RSI=70/100 (2.40x Vol) vs $DELL PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/smci-vs-dell.html
-- $QQQ vs $TQQQ (Nasdaq-100 Spot vs 3x Leveraged Decay Risk): Winner=$QQQ | $QQQ PW-RSI=80/100 (1.18x Vol) vs $TQQQ PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/qqq-vs-tqqq.html
-- $SOXL vs $NVDA (3x Semi ETF Volatility vs Single-Stock Leader): Winner=$SOXL | $SOXL PW-RSI=85/100 (1.94x Vol) vs $NVDA PW-RSI=45/100 (3.80x Vol) -> https://truthofmarket.com/compare/soxl-vs-nvda.html
-- $NVDA vs $TSM (Fabless AI Architect vs CoWoS Foundry Monopoly): Winner=$NVDA | $NVDA PW-RSI=45/100 (3.80x Vol) vs $TSM PW-RSI=30/100 (3.08x Vol) -> https://truthofmarket.com/compare/nvda-vs-tsm.html
-- $PLTR vs $CRWD (AI Defense OS vs AI Endpoint Cybersecurity): Winner=$PLTR | $PLTR PW-RSI=35/100 (2.06x Vol) vs $CRWD PW-RSI=35/100 (1.86x Vol) -> https://truthofmarket.com/compare/pltr-vs-crwd.html
-- $SMH vs $SOXL (Institutional Spot Semi ETF vs 3x Leveraged Bull): Winner=$SMH | $SMH PW-RSI=88/100 (1.68x Vol) vs $SOXL PW-RSI=85/100 (1.94x Vol) -> https://truthofmarket.com/compare/smh-vs-soxl.html
-- $TSLA vs $RIVN (EV Profit Leader vs High-Beta EV Turnaround): Winner=$TSLA | $TSLA PW-RSI=90/100 (1.99x Vol) vs $RIVN PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/tsla-vs-rivn.html
-- $META vs $NFLX (Consumer Attention & AI Reel Monetization): Winner=$META | $META PW-RSI=57/100 (1.33x Vol) vs $NFLX PW-RSI=45/100 (1.08x Vol) -> https://truthofmarket.com/compare/meta-vs-nflx.html
-- $AMZN vs $WMT (Cloud Retail Giant vs Omnichannel Defensive King): Winner=$AMZN | $AMZN PW-RSI=75/100 (2.04x Vol) vs $WMT PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/amzn-vs-wmt.html
-- $JPM vs $GS (Fortress Money-Center Bank vs Wall Street IB): Winner=$JPM | $JPM PW-RSI=78/100 (1.30x Vol) vs $GS PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/jpm-vs-gs.html
-- $V vs $MA (Global Payment Network Duopoly Comparison): Winner=$V | $V PW-RSI=78/100 (1.30x Vol) vs $MA PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/v-vs-ma.html
-- $COST vs $WMT (Membership Warehouse Compounder vs Value Giant): Winner=$COST | $COST PW-RSI=78/100 (1.30x Vol) vs $WMT PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/cost-vs-wmt.html
-- $BA vs $LMT (Commercial Aerospace Turnaround vs Defense Prime): Winner=$LMT | $BA PW-RSI=15/100 (1.12x Vol) vs $LMT PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/ba-vs-lmt.html
-- $XOM vs $CVX (Integrated Energy Supermajor Cashflow Clash): Winner=$CVX | $XOM PW-RSI=30/100 (1.95x Vol) vs $CVX PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/xom-vs-cvx.html
-- $ENPH vs $FSLR (Residential Microinverter vs Utility Solar Turnaround): Winner=$FSLR | $ENPH PW-RSI=55/100 (2.16x Vol) vs $FSLR PW-RSI=65/100 (3.41x Vol) -> https://truthofmarket.com/compare/enph-vs-fslr.html
-- $ABNB vs $BKNG (Alternative Travel Platform vs Global OTA Leader): Winner=$ABNB | $ABNB PW-RSI=78/100 (1.30x Vol) vs $BKNG PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/abnb-vs-bkng.html
-- $INTC vs $QCOM (Foundry Turnaround vs Mobile/Edge AI NPU): Winner=$QCOM | $INTC PW-RSI=15/100 (1.94x Vol) vs $QCOM PW-RSI=84/100 (3.12x Vol) -> https://truthofmarket.com/compare/intc-vs-qcom.html
-- $ORCL vs $CRM (OCI AI Cloud Database vs Enterprise Agentforce): Winner=$ORCL | $ORCL PW-RSI=78/100 (1.30x Vol) vs $CRM PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/orcl-vs-crm.html
-- $PYPL vs $SQ (Fintech Checkout Turnaround vs Merchant Ecosystem): Winner=$SQ | $PYPL PW-RSI=42/100 (1.26x Vol) vs $SQ PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/pypl-vs-sq.html
-- $DKNG vs $HOOD (High-Beta Consumer Gaming vs Retail Trading App): Winner=$DKNG | $DKNG PW-RSI=78/100 (1.30x Vol) vs $HOOD PW-RSI=70/100 (1.63x Vol) -> https://truthofmarket.com/compare/dkng-vs-hood.html
-- $CELH vs $PEP (High-Growth Energy Drink Ignition vs Beverage Titan): Winner=$CELH | $CELH PW-RSI=98/100 (2.46x Vol) vs $PEP PW-RSI=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/celh-vs-pep.html
+## 3. 50 Side-by-Side Quantitative Factor Comparisons (/compare/)
+- $NVDA vs $AMD (AI GPU Leader vs Data Center Challenger): Higher Factor Score=$NVDA | $NVDA=45/100 (3.80x Vol) vs $AMD=40/100 (2.74x Vol) -> https://truthofmarket.com/compare/nvda-vs-amd.html
+- $SOXL vs $SMH (3x Leveraged Decay vs Spot Semiconductor ETF): Higher Factor Score=$SMH | $SOXL=85/100 (1.94x Vol) vs $SMH=88/100 (1.68x Vol) -> https://truthofmarket.com/compare/soxl-vs-smh.html
+- $TSLA vs $NVDA (Megacap Volatility vs AI Compute Scale): Higher Factor Score=$TSLA | $TSLA=90/100 (1.99x Vol) vs $NVDA=45/100 (3.80x Vol) -> https://truthofmarket.com/compare/tsla-vs-nvda.html
+- $PLTR vs $NVDA (Enterprise AI Software vs AI Silicon): Higher Factor Score=$NVDA | $PLTR=35/100 (2.06x Vol) vs $NVDA=45/100 (3.80x Vol) -> https://truthofmarket.com/compare/pltr-vs-nvda.html
+- $AVGO vs $NVDA (Custom AI Networking vs GPU Architecture): Higher Factor Score=$AVGO | $AVGO=84/100 (2.33x Vol) vs $NVDA=45/100 (3.80x Vol) -> https://truthofmarket.com/compare/avgo-vs-nvda.html
+- $SMH vs $XLV (Barbell Core ETF Correlation Study): Higher Factor Score=$SMH | $SMH=88/100 (1.68x Vol) vs $XLV=82/100 (1.12x Vol) -> https://truthofmarket.com/compare/smh-vs-xlv.html
+- $QQQ vs $SMH (Nasdaq-100 Benchmark vs Semiconductor ETF): Higher Factor Score=$SMH | $QQQ=80/100 (1.18x Vol) vs $SMH=88/100 (1.68x Vol) -> https://truthofmarket.com/compare/qqq-vs-smh.html
+- $TSLA vs $PLTR (High-Beta Large-Cap Dispersion Study): Higher Factor Score=$TSLA | $TSLA=90/100 (1.99x Vol) vs $PLTR=35/100 (2.06x Vol) -> https://truthofmarket.com/compare/tsla-vs-pltr.html
+- $AMD vs $INTC (Data Center x86 & Accelerator Comparison): Higher Factor Score=$AMD | $AMD=40/100 (2.74x Vol) vs $INTC=15/100 (1.94x Vol) -> https://truthofmarket.com/compare/amd-vs-intc.html
+- $AVGO vs $MRVL (Custom Silicon & Optical Networking): Higher Factor Score=$AVGO | $AVGO=84/100 (2.33x Vol) vs $MRVL=45/100 (2.42x Vol) -> https://truthofmarket.com/compare/avgo-vs-mrvl.html
+- $MU vs $NVDA (HBM Memory vs GPU Compute): Higher Factor Score=$NVDA | $MU=45/100 (2.66x Vol) vs $NVDA=45/100 (3.80x Vol) -> https://truthofmarket.com/compare/mu-vs-nvda.html
+- $ARM vs $NVDA (CPU Architecture Licensing vs Data Center GPU): Higher Factor Score=$NVDA | $ARM=45/100 (2.68x Vol) vs $NVDA=45/100 (3.80x Vol) -> https://truthofmarket.com/compare/arm-vs-nvda.html
+- $ASML vs $TSM (EUV Lithography vs Foundry Scale): Higher Factor Score=$ASML | $ASML=45/100 (2.36x Vol) vs $TSM=30/100 (3.08x Vol) -> https://truthofmarket.com/compare/asml-vs-tsm.html
+- $LRCX vs $AMAT (Wafer Fabrication Equipment Comparison): Higher Factor Score=$LRCX | $LRCX=55/100 (2.48x Vol) vs $AMAT=55/100 (2.10x Vol) -> https://truthofmarket.com/compare/lrcx-vs-amat.html
+- $KLAC vs $ASML (Semiconductor Process Control vs EUV): Higher Factor Score=$KLAC | $KLAC=65/100 (2.49x Vol) vs $ASML=45/100 (2.36x Vol) -> https://truthofmarket.com/compare/klac-vs-asml.html
+- $MSFT vs $GOOGL (Hyperscaler Cloud & Search Cashflow): Higher Factor Score=$MSFT | $MSFT=78/100 (1.30x Vol) vs $GOOGL=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/msft-vs-googl.html
+- $META vs $GOOGL (Digital Platform Operating Margin Study): Higher Factor Score=$GOOGL | $META=57/100 (1.33x Vol) vs $GOOGL=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/meta-vs-googl.html
+- $AMZN vs $MSFT (AWS vs Azure Cloud Infrastructure): Higher Factor Score=$AMZN | $AMZN=75/100 (2.04x Vol) vs $MSFT=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/amzn-vs-msft.html
+- $AAPL vs $MSFT (Consumer Hardware Ecosystem vs Enterprise Cloud): Higher Factor Score=$AAPL | $AAPL=78/100 (1.30x Vol) vs $MSFT=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/aapl-vs-msft.html
+- $CRWD vs $PANW (Enterprise Cybersecurity Platform Study): Higher Factor Score=$PANW | $CRWD=35/100 (1.86x Vol) vs $PANW=35/100 (2.19x Vol) -> https://truthofmarket.com/compare/crwd-vs-panw.html
+- $SNOW vs $PLTR (Enterprise Data Cloud vs Analytics Platform): Higher Factor Score=$PLTR | $SNOW=35/100 (1.64x Vol) vs $PLTR=35/100 (2.06x Vol) -> https://truthofmarket.com/compare/snow-vs-pltr.html
+- $COIN vs $MSTR (Digital Asset Exchange vs Treasury Volatility): Higher Factor Score=$MSTR | $COIN=55/100 (1.43x Vol) vs $MSTR=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/coin-vs-mstr.html
+- $HOOD vs $COIN (Retail Brokerage Platform vs Digital Exchange): Higher Factor Score=$HOOD | $HOOD=70/100 (1.63x Vol) vs $COIN=55/100 (1.43x Vol) -> https://truthofmarket.com/compare/hood-vs-coin.html
+- $LLY vs $NVO (Metabolic & Biopharma Cashflow Study): Higher Factor Score=$NVO | $LLY=50/100 (1.73x Vol) vs $NVO=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/lly-vs-nvo.html
+- $UNH vs $LLY (Managed Care Cashflow vs Biopharma Growth): Higher Factor Score=$UNH | $UNH=78/100 (1.30x Vol) vs $LLY=50/100 (1.73x Vol) -> https://truthofmarket.com/compare/unh-vs-lly.html
+- $CELH vs $MNST (Beverage Distribution & Margin Study): Higher Factor Score=$CELH | $CELH=98/100 (2.46x Vol) vs $MNST=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/celh-vs-mnst.html
+- $NFLX vs $DIS (Streaming Operating Margin vs Media Assets): Higher Factor Score=$DIS | $NFLX=45/100 (1.08x Vol) vs $DIS=75/100 (1.62x Vol) -> https://truthofmarket.com/compare/nflx-vs-dis.html
+- $UBER vs $TSLA (Global Mobility Network vs Autonomous Fleet): Higher Factor Score=$TSLA | $UBER=65/100 (2.07x Vol) vs $TSLA=90/100 (1.99x Vol) -> https://truthofmarket.com/compare/uber-vs-tsla.html
+- $SHOP vs $AMZN (Merchant E-Commerce Software vs Global Retail): Higher Factor Score=$AMZN | $SHOP=20/100 (2.76x Vol) vs $AMZN=75/100 (2.04x Vol) -> https://truthofmarket.com/compare/shop-vs-amzn.html
+- $SMCI vs $DELL (Data Center Server Infrastructure Study): Higher Factor Score=$DELL | $SMCI=70/100 (2.40x Vol) vs $DELL=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/smci-vs-dell.html
+- $QQQ vs $TQQQ (Nasdaq-100 Spot vs 3x Daily Reset Volatility Decay): Higher Factor Score=$QQQ | $QQQ=80/100 (1.18x Vol) vs $TQQQ=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/qqq-vs-tqqq.html
+- $SOXL vs $NVDA (3x Leveraged ETF Decay vs Single-Stock Trend): Higher Factor Score=$SOXL | $SOXL=85/100 (1.94x Vol) vs $NVDA=45/100 (3.80x Vol) -> https://truthofmarket.com/compare/soxl-vs-nvda.html
+- $NVDA vs $TSM (Fabless Silicon Design vs Foundry Manufacturing): Higher Factor Score=$NVDA | $NVDA=45/100 (3.80x Vol) vs $TSM=30/100 (3.08x Vol) -> https://truthofmarket.com/compare/nvda-vs-tsm.html
+- $PLTR vs $CRWD (Enterprise AI Software vs Endpoint Security): Higher Factor Score=$PLTR | $PLTR=35/100 (2.06x Vol) vs $CRWD=35/100 (1.86x Vol) -> https://truthofmarket.com/compare/pltr-vs-crwd.html
+- $SMH vs $SOXL (Spot Semiconductor ETF vs 3x Daily Reset ETF): Higher Factor Score=$SMH | $SMH=88/100 (1.68x Vol) vs $SOXL=85/100 (1.94x Vol) -> https://truthofmarket.com/compare/smh-vs-soxl.html
+- $TSLA vs $RIVN (EV Scale Profitability vs Early-Stage EV): Higher Factor Score=$TSLA | $TSLA=90/100 (1.99x Vol) vs $RIVN=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/tsla-vs-rivn.html
+- $META vs $NFLX (Digital Media Free Cash Flow Comparison): Higher Factor Score=$META | $META=57/100 (1.33x Vol) vs $NFLX=45/100 (1.08x Vol) -> https://truthofmarket.com/compare/meta-vs-nflx.html
+- $AMZN vs $WMT (Cloud Retail vs Omnichannel Consumer Staple): Higher Factor Score=$AMZN | $AMZN=75/100 (2.04x Vol) vs $WMT=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/amzn-vs-wmt.html
+- $JPM vs $GS (Money-Center Banking vs Capital Markets): Higher Factor Score=$JPM | $JPM=78/100 (1.30x Vol) vs $GS=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/jpm-vs-gs.html
+- $V vs $MA (Global Payment Network Margin Comparison): Higher Factor Score=$V | $V=78/100 (1.30x Vol) vs $MA=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/v-vs-ma.html
+- $COST vs $WMT (Membership Warehouse vs Value Retail Dividend): Higher Factor Score=$COST | $COST=78/100 (1.30x Vol) vs $WMT=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/cost-vs-wmt.html
+- $BA vs $LMT (Commercial Aerospace vs Defense Cashflow): Higher Factor Score=$LMT | $BA=15/100 (1.12x Vol) vs $LMT=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/ba-vs-lmt.html
+- $XOM vs $CVX (Integrated Energy Dividend & Cashflow Study): Higher Factor Score=$CVX | $XOM=30/100 (1.95x Vol) vs $CVX=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/xom-vs-cvx.html
+- $ENPH vs $FSLR (Residential Solar Inverter vs Utility Solar): Higher Factor Score=$FSLR | $ENPH=55/100 (2.16x Vol) vs $FSLR=65/100 (3.41x Vol) -> https://truthofmarket.com/compare/enph-vs-fslr.html
+- $ABNB vs $BKNG (Alternative Lodging Platform vs Global Travel): Higher Factor Score=$ABNB | $ABNB=78/100 (1.30x Vol) vs $BKNG=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/abnb-vs-bkng.html
+- $INTC vs $QCOM (Foundry Restructuring vs Mobile/Edge Silicon): Higher Factor Score=$QCOM | $INTC=15/100 (1.94x Vol) vs $QCOM=84/100 (3.12x Vol) -> https://truthofmarket.com/compare/intc-vs-qcom.html
+- $ORCL vs $CRM (Enterprise Cloud Database vs Enterprise SaaS): Higher Factor Score=$ORCL | $ORCL=78/100 (1.30x Vol) vs $CRM=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/orcl-vs-crm.html
+- $PYPL vs $SQ (Digital Checkout Cashflow vs Merchant Ecosystem): Higher Factor Score=$SQ | $PYPL=42/100 (1.26x Vol) vs $SQ=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/pypl-vs-sq.html
+- $DKNG vs $HOOD (Consumer Digital Platform Volatility Study): Higher Factor Score=$DKNG | $DKNG=78/100 (1.30x Vol) vs $HOOD=70/100 (1.63x Vol) -> https://truthofmarket.com/compare/dkng-vs-hood.html
+- $CELH vs $PEP (Growth Beverage vs Dividend Aristocrat): Higher Factor Score=$CELH | $CELH=98/100 (2.46x Vol) vs $PEP=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/celh-vs-pep.html
 
-## 4. Institutional Editorial Quant Insights (/insights/)
-- Wall Street Morning Bell Letter (2026-11-13): $SMH Fear & Greed at 18.3/100 (Extreme Fear) & Calm -9% Safety Watchlist -> https://truthofmarket.com/insights/daily-us-quant-regime-brief.html
-- Why Left-Side Dip Buyers Bleed Out: The 26.8-Year Math Behind Right-Side Ignition (PW-RSI) -> https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html
-- Surviving Chip Crashes: How the $SMH:$XLV Contrarian Barbell Cuts Max Drawdown Without Killing Alpha -> https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html
-- The Asymmetry of Ruin: Why Cutting Every Loser at -9.0% Saves Years of Dead-Money Recovery -> https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html
+## 4. Educational Market Weather & Allocation Journal (/insights/)
+- Morning Bell Retirement & Market Weather Note (2026-11-13): Sentiment Gauge at 18.3/100 (Extreme Fear) & Calm Allocation Study -> https://truthofmarket.com/insights/daily-us-quant-regime-brief.html
+- Understanding Moving-Average Confirmation: 26.8-Year Empirical Factor Study (2000–2026) -> https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html
+- Sector Correlation & Rebalancing Math: Studying the $SMH and $XLV Barbell (2000–2026) -> https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html
+- The Mathematics of Drawdown Asymmetry: Why Portfolio Cushions Preserve Long-Term Compounding -> https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html

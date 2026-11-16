@@ -1,13 +1,13 @@
 import { formatCheckoutUrl } from "../services/api.js";
 
 /**
- * Interactive 15-Second Wall Street Chart Blind Test & $10,000 Dip-Buyer vs Quant Battle
- * Designed as the primary Shorts/Reels -> Web traffic magnet on truthofmarket.com.
+ * Interactive 15-Second Historical Chart Pattern Quiz & $10,000 Backtest Study
+ * Self-directed educational pattern exercise on /pro-swing.html.
  */
 
 const BLIND_TEST_I18N = {
   en: {
-    badge: "🎯 VIRAL SHORTS CHALLENGE · 15-SECOND WALL STREET CHART BLIND TEST",
+    badge: "🎯 EDUCATIONAL PATTERN QUIZ · 15-SECOND HISTORICAL CHART STUDY",
     title: "Can You Beat 92% of Retail Dip-Buyers? Spot the Real Institutional Breakout vs. Bull Trap",
     subtitle:
       "Most investors lose money buying 'cheap' stocks below their 60-day moving average (Left-Side Knife). Test your Quant IQ on 3 live anonymized S&P 500 / Nasdaq setups right now.",
@@ -30,35 +30,35 @@ const BLIND_TEST_I18N = {
     vipUnlockBannerTitle: "🔥 ROUND 3 FEATURED A 3.41x VOLUME ANOMALY — UNLOCK ALL 72 QUANT FACTOR DATASETS & PINE SCRIPT",
     vipUnlockBannerSub:
       "Public preview displays #1 Showcase ($CELH · 2.46x Vol). Pro License holders unlock the complete 72-stock factor matrix, Pine Script v5 source code, and 26-year historical CSV datasets.",
-    unlockMonthlyBtn: "👑 Unlock #2 & #3 VIP Tickers ($29/mo)",
-    unlockLifetimeBtn: "💎 Lifetime VIP All-Access ($199)",
+    unlockMonthlyBtn: "👑 Start Monthly VIP — $29/mo",
+    unlockLifetimeBtn: "💎 Start Annual VIP — $199/yr",
   },
   jp: {
-    badge: "🎯 ショート動画連動 · 15秒ウォール街チャート・ブラインドテスト",
-    title: "個人投資家の92%が騙される「落ちるナイフ」vs「機関投資家の右側ブレイク」を見抜けますか？",
+    badge: "🎯 教育用ヒストリカル検証 · チャートパターン認識クイズ",
+    title: "MA60（60日移動平均線）下の下降トレンドと右側トレンド回復を見分けられますか？",
     subtitle:
-      "60日移動平均線(MA60)の下で「安くなったから」と逆張りナンピンすると資金が塩漬けになります。実在する米国株72銘柄から匿名化された3つの実戦チャートで、あなたのクオンツIQを今すぐ診断してください。",
+      "過去の匿名化された米国株3銘柄の移動平均線・出来高データを使って、トレンド構造を学習する教育用クイズです。",
     roundLabel: "ラウンド",
-    allRoundsView: "全3問 実践チャート・ブラインドテスト",
-    scoreBadgePrefix: "あなたのクオンツIQ:",
+    allRoundsView: "全3問 チャート構造学習クイズ",
+    scoreBadgePrefix: "スコア:",
     answeredCountSuffix: "/ 3 完了",
-    resetBtn: "↻ もう一度挑戦",
-    jumpDocBtn: "🩺 保有銘柄を3秒無料診断",
-    buyBtn: "🟢 今すぐ買い (右側ブレイク · IGNITION)",
-    trapBtn: "🔴 見送り・罠 (落ちるナイフ · TRAP)",
-    correctTag: "✅ クオンツ正解！機関投資家の視点です:",
-    wrongTag: "❌ 個人投資家の罠！理由を確認:",
-    revealTickerLabel: "実際の銘柄を公開",
-    battleTitle: "💰 $10,000 実戦口座シミュレーション：左側逆張りナンピン vs 右側PW-RSIクオンツ",
-    retailSideTitle: "❌ 個人投資家の逆張りナンピン (MA60割れ)",
-    retailSideDesc: "MA60の下で下落中の銘柄($NVDA/$SMCI/$INTC等)をリバランス基準なしで買い下がり、1回の暴落で資産半減",
-    quantSideTitle: "🟢 RightSideAlpha PW-RSI + 出来高急増ブレイク",
-    quantSideDesc: "MA60奪還＋機関出来高1.4倍〜3.4倍爆発を確認してエントリー＆-9.0%機械的損切り(口座リスク-1.35%限定)",
-    vipUnlockBannerTitle: "🔥 第3問の「出来高3.41倍爆発(スコア98)」銘柄を含むVIP限定シグナルを今すぐアンロック",
+    resetBtn: "↻ リセット",
+    jumpDocBtn: "🧮 コスト基準計算機へ",
+    buyBtn: "🟢 右側MA60回復 (Trend Reclaim)",
+    trapBtn: "🔴 MA60下トレンド (Sub-MA60)",
+    correctTag: "✅ パターン一致:",
+    wrongTag: "❌ トレンド構造を確認:",
+    revealTickerLabel: "検証銘柄",
+    battleTitle: "📊 $10,000 ヒストリカルデータ比較：MA60割れ vs MA60回復モデル",
+    retailSideTitle: "❌ MA60下のトレンド逆行モデル (-18% Below MA60)",
+    retailSideDesc: "移動平均線の下で推移する銘柄群の過去ドローダウン推移シミュレーション",
+    quantSideTitle: "🟢 MA60回復＋出来高ファクターモデル",
+    quantSideDesc: "MA60回復＋相対出来高1.4倍以上の過去データ群におけるシミュレーション",
+    vipUnlockBannerTitle: "🔥 全72銘柄ファクターデータセット＆Pine Script v5をアンロック",
     vipUnlockBannerSub:
-      "無料プレビューでは#1ショーケース($CELH・出来高2.46倍)のみ公開中。Pro VIPに参加すると、本日出来高3.41倍・3.17倍を記録した#2・#3銘柄と全72銘柄のエントリー・損切り・利確ラインが即座に解放されます。",
-    unlockMonthlyBtn: "👑 #2・#3 VIP銘柄をアンロック ($29/月)",
-    unlockLifetimeBtn: "💎 永久VIPフルアクセス ($199)",
+      "Monthly VIP ($29/mo) または Annual VIP ($199/yr) で全72銘柄の教育用ファクターマトリクスと26.8年CSVデータを閲覧できます。",
+    unlockMonthlyBtn: "👑 Start Monthly VIP — $29/mo",
+    unlockLifetimeBtn: "💎 Start Annual VIP — $199/yr",
   },
 };
 BLIND_TEST_I18N.kr = BLIND_TEST_I18N.en;
@@ -148,14 +148,11 @@ function buildRoundsData(state) {
         { label: "Price vs MA60", value: `+${Math.abs(Number(celh.vs_ma60_pct || 12.7)).toFixed(1)}% (Reclaimed)`, color: "#34d399" },
         { label: "10D Vol Surge", value: `${Number(celh.vol_surge_10d || 2.46).toFixed(2)}x (Surge!)`, color: "#34d399" },
         { label: "Quant Score", value: `${Number(celh.score || 84).toFixed(0)} / 100`, color: "#38bdf8" },
-        { label: "Stop-Loss Rule", value: `-9.0% ($${Number(celh.stop_loss_price || 30.2).toFixed(2)})`, color: "#fbbf24" },
+        { label: "Lower Band Ref", value: `$${Number(celh.stop_loss_price || 30.2).toFixed(2)}`, color: "#fbbf24" },
       ],
       revealedTicker: `$${celh.ticker} ($${Number(celh.close || 33.19).toFixed(2)}) — #1 FREE SHOWCASE`,
       revealedBadge: "🟢 IGNITION_ZONE · INSTITUTIONAL ACCUMULATION",
-      explanation:
-        lang === "jp"
-          ? `正解は【今すぐ買い(右側ブレイク)】です！本日の無料ショーケース銘柄 $${celh.ticker} ($${Number(celh.close || 33.19).toFixed(2)})。底固めを終えてMA60を+12.7%上抜け、機関投資家の出来高が2.46倍に急増しました。損切り-9.0% ($${Number(celh.stop_loss_price || 30.2).toFixed(2)})・目標株価 $${Number(celh.target_1_price || 66.38).toFixed(2)} の高リスクリワード局面です。`
-          : `Correct regime is RIGHT-SIDE BREAKOUT! This is today's #1 Public Showcase $${celh.ticker} ($${Number(celh.close || 33.19).toFixed(2)}). After base consolidation, it reclaimed MA60 (+12.7%) on 2.46x institutional volume (modeled -9.0% risk band $${Number(celh.stop_loss_price || 30.2).toFixed(2)}, 2x excursion band $${Number(celh.target_1_price || 66.38).toFixed(2)}).`,
+      explanation: `Correct regime is ABOVE-MA60 TREND! This is public showcase $${celh.ticker} ($${Number(celh.close || 33.19).toFixed(2)}). After base consolidation, it reclaimed MA60 (+12.7%) on 2.46x volume (lower variance ref $${Number(celh.stop_loss_price || 30.2).toFixed(2)}, upper dispersion band $${Number(celh.target_1_price || 66.38).toFixed(2)}).`,
     },
     {
       id: "r3",
@@ -476,6 +473,7 @@ export function renderChartBlindTest(state) {
                 : `
                   <a
                     href="${monthlyUrl}"
+                    data-tom-paid-plan="monthly"
                     data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
                     class="lemonsqueezy-button btn btn-sm"
                     style="background:#10b981; border:1px solid #059669; color:#052e16; font-weight:800; font-size:0.74rem; padding:7px 12px; border-radius:6px; text-decoration:none;"
@@ -484,6 +482,7 @@ export function renderChartBlindTest(state) {
                   </a>
                   <a
                     href="${lifetimeUrl}"
+                    data-tom-paid-plan="annual"
                     data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b"
                     class="lemonsqueezy-button btn btn-sm"
                     style="background:rgba(245,158,11,0.2); border:1px solid #f59e0b; color:#fbbf24; font-weight:800; font-size:0.74rem; padding:7px 12px; border-radius:6px; text-decoration:none;"

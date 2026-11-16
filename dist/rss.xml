@@ -1,75 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>RightSideAlpha x SemiFearGreed | US Equity Quant Terminal &amp; Semiconductor Fear &amp; Greed Index</title>
+    <title>TruthOfMarket | US 401k/IRA Retirement Cashflow &amp; Safe Rebalancing Calculator</title>
     <link>https://truthofmarket.com/</link>
     <atom:link href="https://truthofmarket.com/rss.xml" rel="self" type="application/rss+xml" />
     <atom:link href="https://pubsubhubbub.appspot.com/" rel="hub" />
-    <description>Institutional US Equity Post-Washout Right-Side Ignition (PW-RSI) Quant Terminal covering 72 US equities, daily $SMH Semiconductor Fear &amp; Greed Index (0-100), and $SMH/$XLV contrarian barbell allocation.</description>
+    <description>Self-directed educational calculator software for US 401(k)/IRA retirement cashflow simulation, 3-color market weather visualization, and calm 2-4x/year SGOV · SCHD · JEPI · VOO portfolio rebalancing.</description>
     <language>en-US</language>
     <lastBuildDate>Fri, 13 Nov 2026 21:00:00 +0000</lastBuildDate>
     <item>
-      <title><![CDATA[US Market Regime Dispatch (2026-11-13): $SMH Fear & Greed at 18.3/100 (EXTREME_FEAR) & PW-RSI Watchlist]]></title>
+      <title><![CDATA[Morning Bell Market Weather Note (2026-11-13): Sentiment Gauge at 18.3/100 (EXTREME_FEAR) & Calm 2-4x/Year Rebalancing]]></title>
       <link>https://truthofmarket.com/insights/daily-us-quant-regime-brief.html</link>
       <guid isPermaLink="true">https://truthofmarket.com/insights/daily-us-quant-regime-brief.html</guid>
       <pubDate>Fri, 13 Nov 2026 21:00:00 +0000</pubDate>
-      <description><![CDATA[Post-close institutional US market regime dispatch as of 2026-11-13: $SMH $486.75 (-27.23% off 52W high), contrarian $SMH:$XLV barbell status, and public PW-RSI leaders.]]></description>
+      <description><![CDATA[Educational US market weather summary as of 2026-11-13: $SMH $486.75 (-27.23% off 52W high), $SMH:$XLV barbell calculator context, and SGOV · SCHD · JEPI · VOO retirement allocation study.]]></description>
     </item>
     <item>
-      <title><![CDATA[Why Left-Side Dip Buyers Bleed Out: The 26.8-Year Math Behind Right-Side Ignition (PW-RSI)]]></title>
+      <title><![CDATA[Understanding Moving-Average Confirmation: 26.8-Year Empirical Factor Study (2000-2026)]]></title>
       <link>https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html</link>
       <guid isPermaLink="true">https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html</guid>
       <pubDate>Fri, 13 Nov 2026 21:00:00 +0000</pubDate>
-      <description><![CDATA[How filtering for completed 52-week washouts, MA20/MA60 reclaims, and institutional volume surges eliminates value traps across 72 liquid US stocks.]]></description>
+      <description><![CDATA[Educational quantitative study examining 52-week drawdown recovery, 20-day and 60-day moving average alignment, and 10-day relative volume across liquid US equities.]]></description>
     </item>
     <item>
-      <title><![CDATA[Surviving Chip Crashes: How the $SMH:$XLV Contrarian Barbell Cuts Max Drawdown Without Killing Alpha]]></title>
+      <title><![CDATA[Sector Correlation & Rebalancing Math: Studying the $SMH and $XLV Barbell (2000-2026)]]></title>
       <link>https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html</link>
       <guid isPermaLink="true">https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html</guid>
       <pubDate>Fri, 13 Nov 2026 21:00:00 +0000</pubDate>
-      <description><![CDATA[Empirical breakdown of pairing high-beta Semiconductors ($SMH) with low-beta Healthcare ($XLV) and shifting from 70:30 to 80:20 during Extreme Fear washouts.]]></description>
+      <description><![CDATA[Empirical educational study of combining Semiconductors ($SMH) with Healthcare ($XLV) under calm 2-4x/year weight rebalancing.]]></description>
     </item>
     <item>
-      <title><![CDATA[The Asymmetry of Ruin: Why Cutting Every Loser at -9.0% Saves Years of Dead-Money Recovery]]></title>
+      <title><![CDATA[The Mathematics of Drawdown Asymmetry: Why Portfolio Cushions Preserve Long-Term Compounding]]></title>
       <link>https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html</link>
       <guid isPermaLink="true">https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html</guid>
       <pubDate>Fri, 13 Nov 2026 21:00:00 +0000</pubDate>
-      <description><![CDATA[A -9% loss requires +9.89% to break even; a -50% bagholder drawdown demands +100%. Inside Rule 1 and the 55-day dead-money time stop.]]></description>
+      <description><![CDATA[Educational compounding math showing how deep drawdowns require nonlinear recovery gains, and how short-term US Treasury cushions reduce sequence-of-returns risk.]]></description>
     </item>
     <item>
-      <title><![CDATA[RightSideAlpha x SemiFearGreed — 72 US Equity PW-RSI Turnaround Terminal & 26.8-Year Backtest (As of 2026-11-13)]]></title>
+      <title><![CDATA[TruthOfMarket — 30-Second US 401(k)/IRA Retirement Cashflow & Safe Rebalancing Calculator (As of 2026-11-13)]]></title>
       <link>https://truthofmarket.com/</link>
       <guid isPermaLink="true">https://truthofmarket.com/</guid>
       <pubDate>Fri, 13 Nov 2026 21:00:00 +0000</pubDate>
-      <description><![CDATA[Live institutional US equity quant screener (as of 2026-11-13) tracking 72 liquid US stocks across 52-week washout bottoms, right-side SMA20/SMA60 turnaround ignition triggers, -9.0% mechanical hard-stop protection, and 2x (TP1 +100%) asymmetric profit targets.]]></description>
+      <description><![CDATA[Self-directed educational retirement income calculator modeling SGOV (US T-Bill Cushion), SCHD (Dividend Growth), JEPI (Monthly Paycheck), and VOO (S&P 500 Core) with calm 2-4x/year weight rebalancing.]]></description>
     </item>
     <item>
-      <title><![CDATA[CNN-Edition Semiconductor Fear & Greed Index ($SMH 18.3 EXTREME_FEAR) & $SMH/$XLV 80:20 Contrarian Barbell Engine]]></title>
+      <title><![CDATA[Public Market Weather & Sector Sentiment Gauge (18.3 EXTREME_FEAR) — $SMH/$XLV Barbell Calculator]]></title>
       <link>https://truthofmarket.com/semi-fear-greed.html</link>
       <guid isPermaLink="true">https://truthofmarket.com/semi-fear-greed.html</guid>
       <pubDate>Fri, 13 Nov 2026 21:00:00 +0000</pubDate>
-      <description><![CDATA[Real-time 5-factor Semiconductor Fear & Greed Index ($SMH Close $486.75, -27.23% from 52W High as of 2026-11-13) and regime-based $SMH (VanEck Semiconductor ETF) vs. $XLV (Health Care Select Sector SPDR) contrarian barbell rebalancing simulator.]]></description>
+      <description><![CDATA[Self-directed educational sector sentiment gauge ($SMH Close $486.75, -27.23% from 52W High as of 2026-11-13) and periodic $SMH vs. $XLV barbell weight calculator.]]></description>
     </item>
     <item>
-      <title><![CDATA[Celsius Holdings ($CELH) Institutional Deep-Dive: 52W Bottom Re-Accumulation & PW-RSI Turnaround Analysis ($32.42)]]></title>
+      <title><![CDATA[Celsius Holdings ($CELH) Public Factor Case Study: 52W Consolidation & Volume Analysis ($32.42)]]></title>
       <link>https://truthofmarket.com/stocks/celh.html</link>
       <guid isPermaLink="true">https://truthofmarket.com/stocks/celh.html</guid>
       <pubDate>Fri, 13 Nov 2026 21:00:00 +0000</pubDate>
-      <description><![CDATA[Comprehensive institutional audit of Celsius Holdings ($CELH, Close $32.42 as of 2026-11-13) following its PepsiCo inventory destocking washout: gross margin defense, international expansion catalysts, $29.50 (-9.0%) hard stop floor, and $64.84 (+100% 2x) TP1 target.]]></description>
-    </item>
-    <item>
-      <title><![CDATA[Mobileye Global ($MBLY) Post-Mortem Risk Audit: Rule 1 (-9.0% Hard Stop @ $6.39) Execution & Capital Preservation]]></title>
-      <link>https://truthofmarket.com/stocks/mbly.html</link>
-      <guid isPermaLink="true">https://truthofmarket.com/stocks/mbly.html</guid>
-      <pubDate>Fri, 13 Nov 2026 21:00:00 +0000</pubDate>
-      <description><![CDATA[Transparent institutional post-mortem on Mobileye Global ($MBLY): how mechanical execution of Rule 1 (-9.0% Hard Stop at $6.39) prevented deeper drawdown after support breakdown and redeployed capital into confirmed right-side leaders.]]></description>
-    </item>
-    <item>
-      <title><![CDATA[NVIDIA ($NVDA) & VanEck Semiconductor ETF ($SMH) Institutional PW-RSI Support/Resistance Audit (2026-11-13)]]></title>
-      <link>https://truthofmarket.com/stocks/nvda.html</link>
-      <guid isPermaLink="true">https://truthofmarket.com/stocks/nvda.html</guid>
-      <pubDate>Fri, 13 Nov 2026 21:00:00 +0000</pubDate>
-      <description><![CDATA[Daily retirement safety & market weather screening (2026-11-13) across $SGOV (US T-Bill Cushion), $SCHD (Dividend Growth), $JEPI (Monthly Paycheck), $VOO (S&P 500 Core), $SMH, and $XLV with calm 2-4x/year 3-color rebalancing guidance.]]></description>
+      <description><![CDATA[Educational factor summary of Celsius Holdings ($CELH, Close $32.42 as of 2026-11-13): moving-average alignment, lower variance band ($29.50), and upper dispersion band ($64.84).]]></description>
     </item>
   </channel>
 </rss>

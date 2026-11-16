@@ -91,15 +91,15 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
           !isPro
             ? `<div id="vaultOverlayUnlock" style="position:absolute; inset:0; z-index:10; display:flex; align-items:center; justify-content:center; background:rgba(6,9,17,0.58); border-radius:6px; cursor:pointer;">
                  <div style="background:#0d1424; border:1px solid var(--fin-blue); box-shadow:0 12px 32px rgba(0,0,0,0.75); border-radius:6px; padding:22px 26px; text-align:center; max-width:500px;">
-                   <div class="mono" style="font-size:0.72rem; color:#fbbf24; font-weight:800; letter-spacing:0.05em;">👑 PRO VIP ALPHA COMMAND CENTER LOCKED</div>
+                   <div class="mono" style="font-size:0.72rem; color:#fbbf24; font-weight:800; letter-spacing:0.05em;">👑 VIP EDUCATIONAL CALCULATOR SUITE LOCKED</div>
                    <div style="font-size:1.05rem; font-weight:800; color:#ffffff; margin:8px 0;">
-                     Unlock All 72 Stock Targets, Daily Ignition Order Book, Position Sizing Calculator & Pine Script v5
+                     Unlock All 72 Factor Datasets, Position Sizing Math Calculator &amp; Pine Script v5
                    </div>
                    <div style="font-size:0.8rem; color:var(--muted); margin-bottom:14px; line-height:1.5;">
-                     Free users see only 1 sample stock ($CELH). Upgrade to Pro ($29/mo or $199 Lifetime) to reveal all hidden VIP Ignition picks, exact share-sizing orders, Position Doctor diagnostics, and the 26-Year Semiconductor CSV.
+                     Free users see 1 open factor example ($CELH). Upgrade to Monthly VIP ($29/mo) or Annual VIP ($199/yr) to access the full quantitative factor dataset, mathematical share-sizing models, and the 26.8-Year Semiconductor CSV.
                    </div>
                    <span class="btn btn-primary" style="justify-content:center; width:100%; padding:10px; font-weight:800;">
-                     🔑 Enter Pro License Key / Subscribe Now →
+                     🔑 Enter License Key / Reserve VIP Access →
                    </span>
                  </div>
                </div>`
@@ -112,10 +112,10 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; background:rgba(2,132,199,0.14); border:1px solid rgba(56,189,248,0.45); border-radius:6px; padding:12px 14px; margin-bottom:14px;">
           <div>
             <div class="mono" style="font-size:0.68rem; color:#38bdf8; font-weight:800; letter-spacing:0.05em;">
-              🔒 PRO SUBSCRIBERS ONLY · PRIVATE VIP TELEGRAM NEWS & SIGNAL DESK
+              🔒 VIP SUBSCRIBERS ONLY · EDUCATIONAL DATA &amp; QUANTITATIVE RESEARCH DESK
             </div>
             <div style="font-size:0.86rem; font-weight:800; color:#ffffff; margin-top:2px;">
-              Real-Time $SMH / $XLV & 72-Equity Breaking News + Daily Unmasked Ignition Order Book Alerts
+              Daily $SMH / $XLV &amp; 72-Equity Factor Data Summaries + Educational Briefings
             </div>
           </div>
           <a
@@ -147,14 +147,14 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
           <table class="stock-table" style="font-size:0.78rem;">
             <thead>
               <tr>
-                <th>VIP Pick</th>
-                <th>PW Score</th>
+                <th>Factor Row</th>
+                <th>Factor Score</th>
                 <th>Latest Close</th>
-                <th>Entry Trigger (MA20/60)</th>
-                <th>-9.0% Hard Stop</th>
-                <th>+100% TP1 Target</th>
-                <th>15% Slot Allocation ($${perSlotUsd.toLocaleString()})</th>
-                <th>Max Loss Impact</th>
+                <th>MA20/60 Reference</th>
+                <th>Lower Band Ref</th>
+                <th>Upper Band Ref</th>
+                <th>15% Slot Simulation ($${perSlotUsd.toLocaleString()})</th>
+                <th>Simulated Variance</th>
               </tr>
             </thead>
             <tbody>
@@ -190,7 +190,7 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
                       <td class="mono" style="color:#60a5fa; font-weight:700;">$${trig}</td>
                       <td class="mono" style="color:var(--fin-down); font-weight:700;">$${stp}</td>
                       <td class="mono" style="color:var(--fin-up); font-weight:700;">$${tp1}</td>
-                      <td class="mono" style="color:#ffffff; font-weight:800;">Buy ${sh} shares ($${Math.round(sh * c).toLocaleString()})</td>
+                      <td class="mono" style="color:#ffffff; font-weight:800;">Model ${sh} shares ($${Math.round(sh * c).toLocaleString()})</td>
                       <td class="mono" style="color:var(--fin-amber);">-$${maxLossUsd.toLocaleString()} (-1.35% Eq)</td>
                     </tr>
                   `;
@@ -265,7 +265,7 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
       </div>
 
       <div id="vaultContentWrap" class="${isPro ? "" : "blur-locked"}" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap:16px;">
-        <!-- Module 01: Position Doctor rendered in free unblurred section above -->
+        <!-- Module 01: Variance Calculator rendered in unblurred section above -->
 
         <!-- Module 02: Institutional SEC Research Vault -->
         <div style="background:#090d16; border:1px solid var(--border); border-top:2px solid var(--fin-blue); border-radius:4px; padding:18px; display:flex; flex-direction:column; justify-content:space-between;">

@@ -118,13 +118,13 @@ export function renderStockTable(state) {
       ? `
     <div class="soft-paywall-barrier">
       <div style="font-size:0.72rem; font-family:var(--font-mono); color:#93c5fd; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">
-        ${t.softPaywallTitle || "🔒 Pro VIP Ignition Picks & Exact Trigger Levels"}
+        ${t.softPaywallTitle || "🔒 VIP Historical Factor Dataset & Reference Bands"}
       </div>
       <p style="color:#cbd5e1; font-size:0.82rem; margin:0 0 12px; line-height:1.5;">
-        ${t.softPaywallDesc || "Click any unlocked stock row for factor details, or unlock Pro ($29/mo) to reveal all hidden VIP Ignition tickers, exact MA60 entry triggers, and -9% hard stops."}
+        ${t.softPaywallDesc || "Click any unlocked stock row for factor details, or unlock Monthly VIP ($29/mo) to reveal all hidden dataset rows, MA60 reference bands, and CSV exports."}
       </p>
-      <a class="soft-paywall-btn lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${monthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:42px;">
-        🔒 ${t.softPaywallUnlockCta || "Unlock Pro ($29/mo)"} →
+      <a class="soft-paywall-btn lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${monthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:42px;">
+        🔒 ${t.softPaywallUnlockCta || "Start Monthly VIP — $29/mo"} →
       </a>
     </div>
   `
@@ -226,8 +226,8 @@ export function renderStockRows(state) {
             </div>
             <div class="mobile-stock-card-summary" style="margin-top:8px; padding-top:7px; border-top:1px solid rgba(51,65,85,0.55); align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap;">
               <span class="badge ${badgeClass}">${cleanZoneLabel}</span>
-              <a class="btn btn-primary btn-sm lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:40px; white-space:nowrap; font-weight:700;">
-                🔒 Unlock Pro ($29/mo)
+              <a class="btn btn-primary btn-sm lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:40px; white-space:nowrap; font-weight:700;">
+                🔒 Start Monthly VIP — $29/mo
               </a>
             </div>
           </div>
@@ -256,13 +256,13 @@ export function renderStockRows(state) {
         <td class="mono col-num" style="color:#34d399; font-weight:700;">&ge;1.40x</td>
         <td class="mono col-num" style="color:#94a3b8;">🔒 VIP</td>
         <td>
-          <a class="btn btn-primary btn-sm lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:38px; white-space:nowrap; font-weight:700;">
-            🔒 Unlock Pro ($29/mo)
+          <a class="btn btn-primary btn-sm lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:38px; white-space:nowrap; font-weight:700;">
+            🔒 Start Monthly VIP — $29/mo
           </a>
         </td>
         <td>
-          <a class="btn btn-primary btn-sm lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:38px; white-space:nowrap; font-weight:700;">
-            🔒 Unlock Pro ($29/mo)
+          <a class="btn btn-primary btn-sm lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:38px; white-space:nowrap; font-weight:700;">
+            🔒 Start Monthly VIP — $29/mo
           </a>
         </td>
       </tr>
@@ -301,8 +301,8 @@ export function renderStockRows(state) {
              }</div>
              <div><span style="color:var(--muted);">STP</span> <span style="color:var(--fin-down); font-weight:600;">${stopDisp}</span> · <span style="color:var(--fin-up);">TP ${tp1Disp}</span></div>
            </div>`
-        : `<a class="btn btn-sm lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:38px; white-space:nowrap; font-weight:700; border-color:rgba(59,130,246,0.45); color:#93c5fd; background:rgba(37,99,235,0.14);">
-             🔒 Unlock Pro ($29/mo)
+        : `<a class="btn btn-sm lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:38px; white-space:nowrap; font-weight:700; border-color:rgba(59,130,246,0.45); color:#93c5fd; background:rgba(37,99,235,0.14);">
+             🔒 Start Monthly VIP — $29/mo
            </a>`;
 
       const tvUrl = `https://www.tradingview.com/symbols/${encodeURIComponent(s.ticker)}/?aff_id=${tvAffId}`;
@@ -348,8 +348,8 @@ export function renderStockRows(state) {
                 <span class="badge ${badgeClass}">${cleanZoneLabel}</span>
                 ${
                   showTargets
-                    ? `<span class="mono" style="font-size:0.72rem; color:#cbd5e1;">TRG <b style="color:#60a5fa;">${ma60Disp}</b> · STP <b style="color:var(--fin-down);">${stopDisp}</b></span>`
-                    : `<span class="mono" style="font-size:0.71rem; color:#93c5fd;">🔒 Pro Trigger &amp; -9% Stop</span>`
+                    ? `<span class="mono" style="font-size:0.72rem; color:#cbd5e1;">MA60 <b style="color:#60a5fa;">${ma60Disp}</b> · REF <b style="color:var(--fin-down);">${stopDisp}</b></span>`
+                    : `<span class="mono" style="font-size:0.71rem; color:#93c5fd;">🔒 VIP Factor Reference Bands</span>`
                 }
               </div>
               <button type="button" class="btn btn-sm btn-open-stock-detail" data-ticker="${s.ticker}" style="min-height:40px; padding:5px 10px; border-color:rgba(56,189,248,0.45); color:#38bdf8; font-weight:700;">

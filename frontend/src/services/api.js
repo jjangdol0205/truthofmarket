@@ -37,7 +37,7 @@ export function getVipTelegramUrl(isPro = false) {
 
 export const CANONICAL_TOM_MONTHLY_URL =
   "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en";
-export const CANONICAL_TOM_LIFETIME_URL =
+export const CANONICAL_TOM_ANNUAL_URL =
   "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en";
 
 export function formatCheckoutUrl(
@@ -55,7 +55,7 @@ export function formatCheckoutUrl(
     base.includes("667aa482-f17c-47d1-b7f3-a2427c36516b") ||
     base.includes("c9ad1a1c-21c5-4d95-88a2-b570a860a147")
   ) {
-    return CANONICAL_TOM_LIFETIME_URL;
+    return CANONICAL_TOM_ANNUAL_URL;
   }
   let out = base;
   if (!/[?&]embed=1\b/i.test(out)) {
@@ -419,9 +419,9 @@ export async function validateLicense(licenseKey) {
         return {
           valid: true,
           license_key: key.toUpperCase(),
-          tier: key.toUpperCase().includes("-LTD-") ? "pro_lifetime" : "pro",
+          tier: key.toUpperCase().includes("-LTD-") ? "pro_annual" : "pro",
           expires_at: "2099-12-31T23:59:59Z",
-          message: "Pro Terminal License Activated — All 72 US Equity Targets & 26Y CSV Unlocked.",
+          message: "VIP Calculator Software License Activated — Full Dataset & 26Y CSV Unlocked.",
         };
       }
       if (
@@ -488,14 +488,14 @@ export async function validateLicense(licenseKey) {
             finalStatus !== "disabled" &&
             finalStatus !== "expired"
         );
-        const isLifetime = Number(lsData?.meta?.product_id) === 1491891;
+        const isAnnual = Number(lsData?.meta?.product_id) === 1491891;
         return {
           valid,
           license_key: valid ? key : null,
-          tier: valid ? (isLifetime ? "pro_lifetime" : "pro") : "free",
+          tier: valid ? (isAnnual ? "pro_annual" : "pro") : "free",
           expires_at: valid ? lsData?.license_key?.expires_at || "2099-12-31T23:59:59Z" : null,
           message: valid
-            ? "Pro Terminal License Verified via Lemon Squeezy (Store #296100)."
+            ? "VIP Software License Verified via Lemon Squeezy (Store #296100)."
             : (lsData && lsData.error) ||
               "Invalid or expired license key. Please verify your Lemon Squeezy receipt or subscribe below.",
         };
@@ -583,10 +583,10 @@ export async function evaluatePositionDoctor(data) {
         return {
           ticker: tClean,
           status_code: "HARD_STOP",
-          status_label: "🛑 Hard Stop Loss Triggered",
+          status_label: "Below Lower Historical Variance Band",
           return_pct: retPct,
-          rule_triggered: "Rule 1 (-9.0% Hard Stop Loss)",
-          action_plan: "Exit immediately. Do not average down on broken support.",
+          rule_triggered: "Band 1 (Below Historical Variance Floor)",
+          action_plan: "Mathematical simulation note: price is below the modeled lower variance band relative to entry basis.",
           is_critical: true,
           current_price: curr,
           entry_price: Number(entry.toFixed(2)),
@@ -598,11 +598,11 @@ export async function evaluatePositionDoctor(data) {
         return {
           ticker: tClean,
           status_code: "TIME_STOP",
-          status_label: "⏳ 55-Day Time Stop Triggered",
+          status_label: "55-Day Holding Window Exceeded",
           return_pct: retPct,
-          rule_triggered: "Rule 2 (55-Day Dead-Money Exit)",
+          rule_triggered: "Band 2 (55-Day Holding Duration Variance)",
           action_plan:
-            "Exit position. Rebound momentum has stalled; reallocate into active right-side ignition candidates.",
+            "Mathematical simulation note: holding period has exceeded 55 trading days with muted relative momentum.",
           is_critical: false,
           current_price: curr,
           entry_price: Number(entry.toFixed(2)),
@@ -614,11 +614,11 @@ export async function evaluatePositionDoctor(data) {
         return {
           ticker: tClean,
           status_code: "TP1_HARVEST",
-          status_label: "🎯 100% Target Price 1 Achieved",
+          status_label: "Upper Historical Variance Band Reached",
           return_pct: retPct,
-          rule_triggered: "Rule 3 (+100% Principal Recovery)",
+          rule_triggered: "Band 3 (Upper Dispersion Reference)",
           action_plan:
-            "Sell 50% of position to recoup 100% initial capital. Set trailing stop on remaining 50% using MA60.",
+            "Mathematical simulation note: simulated return has reached the upper dispersion reference band.",
           is_critical: false,
           current_price: curr,
           entry_price: Number(entry.toFixed(2)),
@@ -630,11 +630,11 @@ export async function evaluatePositionDoctor(data) {
         return {
           ticker: tClean,
           status_code: "HOLD",
-          status_label: "🟢 Active Right-Side Trend Follow",
+          status_label: "Within Modeled Moving-Average Band",
           return_pct: retPct,
-          rule_triggered: "Rule 4 (Healthy Trend Follow)",
+          rule_triggered: "Band 4 (Standard Trend Dispersion)",
           action_plan:
-            "Maintain position. Monitor MA20/MA60 trailing support; runner target is +100% TP1.",
+            "Mathematical simulation note: price remains within normal MA20/MA60 dispersion range.",
           is_critical: false,
           current_price: curr,
           entry_price: Number(entry.toFixed(2)),
@@ -894,26 +894,26 @@ export async function evaluatePortfolioDoctor(payload) {
 
         if (retPct <= -9.0) {
           statusCode = "HARD_STOP";
-          action = "CRITICAL_STOP_EXIT";
+          action = "LOWER_BAND_VARIANCE";
           isCritical = true;
-          directive = `RULE 1: -9% Hard Stop breached (${retPct.toFixed(2)}%). Exit full position immediately.`;
+          directive = `BAND 1: Below lower variance reference (${retPct.toFixed(2)}%). Review simulated allocation weight.`;
           hardStopCount += 1;
         } else if (days >= 55 && retPct < 8.0) {
           statusCode = "TIME_STOP";
-          action = "DEAD_MONEY_ROTATE";
+          action = "DURATION_VARIANCE";
           isCritical = false;
-          directive = `RULE 2: 55-Day Dead-Money holding (${days} days, ${retPct >= 0 ? "+" : ""}${retPct.toFixed(2)}%). Reallocate to active ignition candidates.`;
+          directive = `BAND 2: 55-Day holding window (${days} days, ${retPct >= 0 ? "+" : ""}${retPct.toFixed(2)}%). Simulated momentum muted.`;
           deadMoneyCount += 1;
         } else if (retPct >= 100.0) {
           statusCode = "TP1_HARVEST";
-          action = "TP1_TAKE_PROFIT";
+          action = "UPPER_BAND_VARIANCE";
           isCritical = false;
-          directive = `RULE 3: +100% TP1 achieved (+${retPct.toFixed(2)}%). Sell 50% to recoup 100% principal; trail stop on remaining.`;
+          directive = `BAND 3: Upper dispersion band reached (+${retPct.toFixed(2)}%). Simulated weight drift elevated.`;
         } else {
           statusCode = "HOLD";
-          action = "ACTIVE_HOLD";
+          action = "WITHIN_BAND";
           isCritical = false;
-          directive = `RULE 4: Healthy active trend follow (${retPct >= 0 ? "+" : ""}${retPct.toFixed(2)}%). Trailing stop floor at $${hardStopP.toFixed(2)}.`;
+          directive = `BAND 4: Within modeled trend dispersion (${retPct >= 0 ? "+" : ""}${retPct.toFixed(2)}%). Lower reference band: $${hardStopP.toFixed(2)}.`;
         }
 
         diagnostics.push({
@@ -1191,32 +1191,32 @@ export async function calculateSemiRebalance(data) {
       if (mode === "BASELINE_70_30") {
         smhW = 0.7;
         xlvW = 0.3;
-        ruleEn = "Fixed 70% $SMH : 30% $XLV Golden Barbell Baseline";
-        ruleJp = "70% $SMH : 30% $XLV 基本黄金バーベル比率";
+        ruleEn = "Fixed 70% $SMH : 30% $XLV Barbell Weight Model";
+        ruleJp = ruleEn;
         ruleKr = ruleEn;
       } else if (mode === "CONTRARIAN_80_20") {
         smhW = 0.8;
         xlvW = 0.2;
-        ruleEn = "Contrarian 80% $SMH : 20% $XLV Crash Accumulation Tilt";
-        ruleJp = "80% $SMH : 20% $XLV 暴落時・逆張り買い増しモード";
+        ruleEn = "80% $SMH : 20% $XLV Drawdown Rebalance Model";
+        ruleJp = ruleEn;
         ruleKr = ruleEn;
       } else if (mode === "AGGRESSIVE_90_10") {
         smhW = 0.9;
         xlvW = 0.1;
-        ruleEn = "90% $SMH : 10% $XLV Right-Side Momentum Tilt";
-        ruleJp = "90% $SMH : 10% $XLV 右側モメンタム集中モード";
+        ruleEn = "90% $SMH : 10% $XLV Growth Weight Model";
+        ruleJp = ruleEn;
         ruleKr = ruleEn;
       } else if (isExtreme) {
         smhW = 0.8;
         xlvW = 0.2;
-        ruleEn = `AUTO REGIME: Extreme Fear (${fgScore}/100, DD ${ddPct.toFixed(1)}%) → 80% $SMH : 20% $XLV Contrarian Shift`;
-        ruleJp = `自動判定: 極度の恐怖 (${fgScore}/100, 高値比 ${ddPct.toFixed(1)}%) → 80% $SMH : 20% $XLV 逆張り転換`;
+        ruleEn = `AUTO REGIME: Extreme Fear (${fgScore}/100, DD ${ddPct.toFixed(1)}%) -> 80% $SMH : 20% $XLV Model Weight`;
+        ruleJp = ruleEn;
         ruleKr = ruleEn;
       } else {
         smhW = 0.7;
         xlvW = 0.3;
-        ruleEn = `AUTO REGIME: Standard Regime (${fgScore}/100) → 70% $SMH : 30% $XLV Core Barbell`;
-        ruleJp = `自動判定: 通常レジーム (${fgScore}/100) → 70% $SMH : 30% $XLV 基本比率`;
+        ruleEn = `AUTO REGIME: Standard Regime (${fgScore}/100) -> 70% $SMH : 30% $XLV Model Weight`;
+        ruleJp = ruleEn;
         ruleKr = ruleEn;
       }
 
@@ -1254,12 +1254,9 @@ export async function calculateSemiRebalance(data) {
 
       const taxEn =
         gainKrw <= dedLimit
-          ? `Unrealized gain (₩${gainKrw.toLocaleString()}) is within the ₩2,500,000 annual tax-free allowance. Execute your $XLV ↔ $SMH rebalance before Dec 26 to harvest gains with ₩0 tax (saving ₩${taxSavedKrw.toLocaleString()}).`
-          : `Unrealized gain (₩${gainKrw.toLocaleString()}) exceeds the ₩2.5M tax-free cap by ₩${taxableKrw.toLocaleString()}. Sell only up to ₩2,500,000 of realized profit this calendar year to lock in the maximum ₩550,000 tax savings, and use new cash inflow for the remaining rebalance.`;
-      const taxJp =
-        gainKrw <= dedLimit
-          ? `評価益 (₩${gainKrw.toLocaleString()}) は年間非課税枠 (₩2,500,000) 以内です。年末までにリバランスを実行することで譲渡所得税 ₩0 (節税額 ₩${taxSavedKrw.toLocaleString()}) で利益確定と取得単価引き上げが可能です。`
-          : `評価益 (₩${gainKrw.toLocaleString()}) が非課税枠を ₩${taxableKrw.toLocaleString()} 超過しています。今年の売却益を250万ウォンまでに抑えて最大 ₩550,000 を節税し、残りは新規積立資金で比率調整するのが最適です。`;
+          ? `Modeled annual rebalancing drag (${taxDrag}%) remains low under a 2-4x/year schedule, preserving compounding efficiency inside tax-advantaged 401(k)/IRA accounts.`
+          : `For taxable accounts, spacing portfolio weight adjustments to 2-4x/year reduces turnover drag (${taxDrag}%) compared with high-frequency trading.`;
+      const taxJp = taxEn;
       const taxKr = taxEn;
 
       return {
@@ -1335,26 +1332,26 @@ export async function calculateSemiLumpSum(data) {
           capital_usd: cap,
           fg_score_used: fgScore,
           case_code: "CASE_1_FEAR_100PCT",
-          case_title_en: "Case 1 (Score 0–40 · Fear Regime): 100% Immediate Lump-Sum Entry",
-          case_title_jp: "ケース1 (スコア 0–40 · 恐怖圏): 100% 即時一括エントリー",
-          case_title_kr: "Case 1 (Score 0–40 · Fear Regime): 100% Immediate Lump-Sum Entry",
+          case_title_en: "Case 1 (Score 0–40 · Fear Regime): 100% Immediate Lump-Sum Model",
+          case_title_jp: "Case 1 (Score 0–40 · Fear Regime): 100% Immediate Lump-Sum Model",
+          case_title_kr: "Case 1 (Score 0–40 · Fear Regime): 100% Immediate Lump-Sum Model",
           summary_en:
-            "Semiconductors are already discounted. Do not hold excess cash—deploy 100% today and rebalance back to 70:30 when $SMH recovers within -10% of its 52-week high.",
+            "Simulated fear regime: historical model deploys 100% into target weights and rebalances 2–4x/year back to 70:30 as drawdown narrows.",
           summary_jp:
-            "半導体セクターは既に割安圏にあります。現金を遊ばせず本日100%投入し、$SMHが高値比-10%以内へ回復した時点で70:30へ戻します。",
+            "Simulated fear regime: historical model deploys 100% into target weights and rebalances 2–4x/year back to 70:30 as drawdown narrows.",
           summary_kr:
-            "Semiconductors are already discounted. Deploy 100% today and rebalance back to 70:30 when $SMH recovers within -10% of its 52-week high.",
+            "Simulated fear regime: historical model deploys 100% into target weights and rebalances 2–4x/year back to 70:30 as drawdown narrows.",
           immediate_deploy_pct: 100.0,
           parked_cash_rp_pct: 0.0,
           tranches: [
             {
               step: 1,
-              title_en: "Tranche 1 (Day 1 Immediate 100% Deployment)",
-              title_jp: "第1トランシェ (初日 100% 一括エントリー)",
-              title_kr: "Tranche 1 (Day 1 Immediate 100% Deployment)",
-              timing_en: "Execute Today (Market Open / Close)",
-              timing_jp: "本日即時執行 (Fear ≤ 40 割安圏)",
-              timing_kr: "Execute Today (Market Open / Close)",
+              title_en: "Tranche 1 (Day 1 Simulated 100% Weighting)",
+              title_jp: "Tranche 1 (Day 1 Simulated 100% Weighting)",
+              title_kr: "Tranche 1 (Day 1 Simulated 100% Weighting)",
+              timing_en: "Modeled Day 1 Weighting",
+              timing_jp: "Modeled Day 1 Weighting",
+              timing_kr: "Modeled Day 1 Weighting",
               allocation_pct: 100.0,
               amount_usd: cap,
               smh_usd: smhUsd,
@@ -1362,15 +1359,15 @@ export async function calculateSemiLumpSum(data) {
               cash_rp_usd: 0.0,
               smh_shares: Math.floor(smhUsd / smhP),
               xlv_shares: Math.floor(xlvUsd / xlvP),
-              note_en: `Deploy 100% immediately at ${Math.round(smhW * 100)}:${Math.round(
+              note_en: `Modeled ${Math.round(smhW * 100)}:${Math.round(
                 xlvW * 100
-              )} ($SMH:$XLV). Historical 1-year forward win rate when entering below score 25 exceeds 91%.`,
-              note_jp: `${Math.round(smhW * 100)}:${Math.round(
+              )} ($SMH:$XLV) split. Historical 1-year forward positive cohort rate below score 25 exceeded 91%.`,
+              note_jp: `Modeled ${Math.round(smhW * 100)}:${Math.round(
                 xlvW * 100
-              )} ($SMH:$XLV) 比率で100%即時エントリー。スコア25以下でのエントリーは過去1年後の勝率が91%超。`,
-              note_kr: `Deploy 100% immediately at ${Math.round(smhW * 100)}:${Math.round(
+              )} ($SMH:$XLV) split. Historical 1-year forward positive cohort rate below score 25 exceeded 91%.`,
+              note_kr: `Modeled ${Math.round(smhW * 100)}:${Math.round(
                 xlvW * 100
-              )} ($SMH:$XLV). Historical 1-year forward win rate when entering below score 25 exceeds 91%.`,
+              )} ($SMH:$XLV) split. Historical 1-year forward positive cohort rate below score 25 exceeded 91%.`,
             },
           ],
         };
@@ -1386,26 +1383,26 @@ export async function calculateSemiLumpSum(data) {
           capital_usd: cap,
           fg_score_used: fgScore,
           case_code: "CASE_2_NEUTRAL_65_35",
-          case_title_en: "Case 2 (Score 40–68 · Neutral Regime): 65% Immediate + 35% Pullback Reserve",
-          case_title_jp: "ケース2 (スコア 40–68 · 中立圏): 65% 初日投入 + 35% 押し目待機",
-          case_title_kr: "Case 2 (Score 40–68 · Neutral Regime): 65% Immediate + 35% Pullback Reserve",
+          case_title_en: "Case 2 (Score 40–68 · Neutral Regime): 65% Initial + 35% T-Bill Reserve Model",
+          case_title_jp: "Case 2 (Score 40–68 · Neutral Regime): 65% Initial + 35% T-Bill Reserve Model",
+          case_title_kr: "Case 2 (Score 40–68 · Neutral Regime): 65% Initial + 35% T-Bill Reserve Model",
           summary_en:
-            "Balanced deployment: lock in your 30% $XLV anchor and half of $SMH today, while keeping 35% dry powder for volatility.",
+            "Balanced allocation simulation: models 30% $XLV defensive sleeve and half of $SMH initially, keeping 35% in T-Bill/MMF reserve.",
           summary_jp:
-            "バランス型エントリー：$XLV 30%と$SMH半分を初日に確保し、35%の余力で押し目に備えます。",
+            "Balanced allocation simulation: models 30% $XLV defensive sleeve and half of $SMH initially, keeping 35% in T-Bill/MMF reserve.",
           summary_kr:
-            "Balanced deployment: lock in your 30% $XLV anchor and half of $SMH today, while keeping 35% dry powder for volatility.",
+            "Balanced allocation simulation: models 30% $XLV defensive sleeve and half of $SMH initially, keeping 35% in T-Bill/MMF reserve.",
           immediate_deploy_pct: 65.0,
           parked_cash_rp_pct: 35.0,
           tranches: [
             {
               step: 1,
-              title_en: "Tranche 1 (Day 1 Core 65% Deployment)",
-              title_jp: "第1トランシェ (初日 65% コア投入)",
-              title_kr: "Tranche 1 (Day 1 Core 65% Deployment)",
-              timing_en: "Execute Today (30% $XLV Full + 35% $SMH Half)",
-              timing_jp: "本日執行 ($XLV 30%全額 + $SMH 35%半分)",
-              timing_kr: "Execute Today (30% $XLV Full + 35% $SMH Half)",
+              title_en: "Tranche 1 (Day 1 Core 65% Weighting)",
+              title_jp: "Tranche 1 (Day 1 Core 65% Weighting)",
+              title_kr: "Tranche 1 (Day 1 Core 65% Weighting)",
+              timing_en: "Modeled Initial Weight (30% $XLV + 35% $SMH)",
+              timing_jp: "Modeled Initial Weight (30% $XLV + 35% $SMH)",
+              timing_kr: "Modeled Initial Weight (30% $XLV + 35% $SMH)",
               allocation_pct: 65.0,
               amount_usd: d1Tot,
               smh_usd: d1Smh,
@@ -1414,20 +1411,20 @@ export async function calculateSemiLumpSum(data) {
               smh_shares: Math.floor(d1Smh / smhP),
               xlv_shares: Math.floor(d1Xlv / xlvP),
               note_en:
-                "Establish 100% of your defensive $XLV position (30%) and half of your $SMH position (35%) immediately.",
+                "Models 100% of defensive $XLV sleeve (30%) and half of $SMH sleeve (35%) initially.",
               note_jp:
-                "ディフェンシブ枠の$XLV (30%) 全額と、成長枠$SMHの半分 (35%) を初日に構築します。",
+                "Models 100% of defensive $XLV sleeve (30%) and half of $SMH sleeve (35%) initially.",
               note_kr:
-                "Establish 100% of your defensive $XLV position (30%) and half of your $SMH position (35%) immediately.",
+                "Models 100% of defensive $XLV sleeve (30%) and half of $SMH sleeve (35%) initially.",
             },
             {
               step: 2,
-              title_en: "Tranche 2 (Remaining 35% $SMH Reserve in USD RP)",
-              title_jp: "第2トランシェ (残り35% $SMH待機資金・米ドルMMF)",
-              title_kr: "Tranche 2 (Remaining 35% $SMH Reserve in USD RP)",
-              timing_en: "Deploy when FG Score ≤ 40 OR split across D+30 / D+60 / D+90",
-              timing_jp: "スコア40以下へ低下時、または30日・60日・90日で3分割投入",
-              timing_kr: "Deploy when FG Score ≤ 40 OR split across D+30 / D+60 / D+90",
+              title_en: "Tranche 2 (Remaining 35% Reserve in T-Bills / MMF)",
+              title_jp: "Tranche 2 (Remaining 35% Reserve in T-Bills / MMF)",
+              title_kr: "Tranche 2 (Remaining 35% Reserve in T-Bills / MMF)",
+              timing_en: "Modeled Staged Tranche (D+30 / D+60 / D+90)",
+              timing_jp: "Modeled Staged Tranche (D+30 / D+60 / D+90)",
+              timing_kr: "Modeled Staged Tranche (D+30 / D+60 / D+90)",
               allocation_pct: 35.0,
               amount_usd: t2Smh,
               smh_usd: t2Smh,
@@ -1436,11 +1433,11 @@ export async function calculateSemiLumpSum(data) {
               smh_shares: Math.floor(t2Smh / smhP),
               xlv_shares: 0,
               note_en:
-                "Earn ~4.5% USD RP yield while waiting for a pullback below score 40, or auto-deploy over 90 days.",
+                "Models ~4.5% USD T-Bill/MMF yield while staging across 90 days.",
               note_jp:
-                "米ドルMMFで金利を受け取りながらスコア40以下への押し目を待つか、90日間で機械的に分割投入します。",
+                "Models ~4.5% USD T-Bill/MMF yield while staging across 90 days.",
               note_kr:
-                "Earn ~4.5% USD RP yield while waiting for a pullback below score 40, or auto-deploy over 90 days.",
+                "Models ~4.5% USD T-Bill/MMF yield while staging across 90 days.",
             },
           ],
         };
@@ -1455,28 +1452,28 @@ export async function calculateSemiLumpSum(data) {
           fg_score_used: fgScore,
           case_code: "CASE_3_GREED_DEFENSIVE_FIRST",
           case_title_en:
-            "Case 3 (Score 68–100 · Greed Regime): 30% $XLV Today + 70% $SMH Parked in USD RP",
+            "Case 3 (Score 68–100 · Greed Regime): 30% $XLV + 70% T-Bill Cushion Model",
           case_title_jp:
-            "ケース3 (スコア 68–100 · 強欲圏): 初日 $XLV 30%のみ + 70% 米ドルMMF待機",
+            "Case 3 (Score 68–100 · Greed Regime): 30% $XLV + 70% T-Bill Cushion Model",
           case_title_kr:
-            "Case 3 (Score 68–100 · Greed Regime): 30% $XLV Today + 70% $SMH Parked in USD RP",
+            "Case 3 (Score 68–100 · Greed Regime): 30% $XLV + 70% T-Bill Cushion Model",
           summary_en:
-            "Protect principal against euphoria: buy only the 30% $XLV sleeve today and keep 70% in USD RP until Fear & Greed cools to 45 or below.",
+            "Overheated sentiment model: allocates 30% to $XLV defensive sleeve initially and parks 70% in T-Bill/MMF cushion.",
           summary_jp:
-            "高値掴み防止ルール：初日は$XLV 30%のみを購入し、70%は指数が45以下に冷めるまで米ドルMMFで待機します。",
+            "Overheated sentiment model: allocates 30% to $XLV defensive sleeve initially and parks 70% in T-Bill/MMF cushion.",
           summary_kr:
-            "Protect principal against euphoria: buy only the 30% $XLV sleeve today and keep 70% in USD RP until Fear & Greed cools to 45 or below.",
+            "Overheated sentiment model: allocates 30% to $XLV defensive sleeve initially and parks 70% in T-Bill/MMF cushion.",
           immediate_deploy_pct: 30.0,
           parked_cash_rp_pct: 70.0,
           tranches: [
             {
               step: 1,
-              title_en: "Tranche 1 (Day 1 Defensive $XLV 30% Only)",
-              title_jp: "第1トランシェ (初日はディフェンシブ $XLV 30% のみ購入)",
-              title_kr: "Tranche 1 (Day 1 Defensive $XLV 30% Only)",
-              timing_en: "Execute Today ($XLV Anchor Only — Zero $SMH Chasing)",
-              timing_jp: "本日執行 ($XLV 30%のみ・過熱した$SMHの高値追い禁止)",
-              timing_kr: "Execute Today ($XLV Anchor Only — Zero $SMH Chasing)",
+              title_en: "Tranche 1 (Day 1 Defensive $XLV 30% Sleeve)",
+              title_jp: "Tranche 1 (Day 1 Defensive $XLV 30% Sleeve)",
+              title_kr: "Tranche 1 (Day 1 Defensive $XLV 30% Sleeve)",
+              timing_en: "Modeled Defensive Sleeve ($XLV 30%)",
+              timing_jp: "Modeled Defensive Sleeve ($XLV 30%)",
+              timing_kr: "Modeled Defensive Sleeve ($XLV 30%)",
               allocation_pct: 30.0,
               amount_usd: d1Xlv,
               smh_usd: 0.0,
@@ -1485,20 +1482,20 @@ export async function calculateSemiLumpSum(data) {
               smh_shares: 0,
               xlv_shares: Math.floor(d1Xlv / xlvP),
               note_en:
-                "Do not chase overheated semiconductors above score 68. Deploy only the 30% Healthcare anchor on Day 1.",
+                "Avoids overheated growth concentration above score 68 by modeling the 30% Healthcare sleeve first.",
               note_jp:
-                "スコア68超の過熱局面での半導体ジャンピングキャッチを回避し、ヘルスケア枠30%のみを先行構築します。",
+                "Avoids overheated growth concentration above score 68 by modeling the 30% Healthcare sleeve first.",
               note_kr:
-                "Do not chase overheated semiconductors above score 68. Deploy only the 30% Healthcare anchor on Day 1.",
+                "Avoids overheated growth concentration above score 68 by modeling the 30% Healthcare sleeve first.",
             },
             {
               step: 2,
-              title_en: "Tranche 2 (70% $SMH Capital Parked in Yielding USD RP)",
-              title_jp: "第2トランシェ (70% $SMH資金は米ドルMMFで冷却待機)",
-              title_kr: "Tranche 2 (70% $SMH Capital Parked in Yielding USD RP)",
-              timing_en: "Deploy when FG Score cools ≤ 45 (or 4 monthly tranches)",
-              timing_jp: "スコア45以下へ冷却時、または4ヶ月分割で順次エントリー",
-              timing_kr: "Deploy when FG Score cools ≤ 45 (or 4 monthly tranches)",
+              title_en: "Tranche 2 (70% Reserve Parked in USD T-Bill / MMF)",
+              title_jp: "Tranche 2 (70% Reserve Parked in USD T-Bill / MMF)",
+              title_kr: "Tranche 2 (70% Reserve Parked in USD T-Bill / MMF)",
+              timing_en: "Modeled 4-Month Staged Rebalance",
+              timing_jp: "Modeled 4-Month Staged Rebalance",
+              timing_kr: "Modeled 4-Month Staged Rebalance",
               allocation_pct: 70.0,
               amount_usd: pSmh,
               smh_usd: pSmh,
@@ -1507,11 +1504,11 @@ export async function calculateSemiLumpSum(data) {
               smh_shares: Math.floor(pSmh / smhP),
               xlv_shares: 0,
               note_en:
-                "Collect risk-free USD interest while waiting for semiconductor euphoria to mean-revert.",
+                "Models short-term T-Bill interest while sentiment mean-reverts toward neutral.",
               note_jp:
-                "米ドル金利を確保しながら、半導体の過熱感が冷めるのを待って安全にエントリーします。",
+                "Models short-term T-Bill interest while sentiment mean-reverts toward neutral.",
               note_kr:
-                "Collect risk-free USD interest while waiting for semiconductor euphoria to mean-revert.",
+                "Models short-term T-Bill interest while sentiment mean-reverts toward neutral.",
             },
           ],
         };
@@ -1547,42 +1544,21 @@ export async function buildClientTelegramPreview({
   const xlv1d = xlvEtf ? Number(xlvEtf.ret_1d_pct ?? 0.0) : 0.0;
 
   const buildSemiText = () => {
-    const dSmhSign = reb.delta_smh_usd >= 0 ? "BUY +" : "SELL -";
-    const dXlvSign = reb.delta_xlv_usd >= 0 ? "BUY +" : "SELL -";
+    const dSmhSign = reb.delta_smh_usd >= 0 ? "ADD +" : "TRIM -";
+    const dXlvSign = reb.delta_xlv_usd >= 0 ? "ADD +" : "TRIM -";
     const smhShSign = reb.delta_smh_shares >= 0 ? `+${reb.delta_smh_shares}` : `${reb.delta_smh_shares}`;
     const xlvShSign = reb.delta_xlv_shares >= 0 ? `+${reb.delta_xlv_shares}` : `${reb.delta_xlv_shares}`;
 
-    if (lg === "jp") {
-      return [
-        `🧭 [SemiFearGreed] 半導体恐怖＆強欲指数・日次ブリーフィング (${ov.date})`,
-        `• 恐怖＆強欲スコア: ${Number(ov.fg_score).toFixed(1)} / 100 (${ov.regime_jp})`,
-        `• $SMH: $${Number(ov.smh_close).toFixed(2)} (52週高値比 ${Number(ov.smh_dd_pct).toFixed(2)}%)`,
-        `• $XLV: $${Number(ov.xlv_close).toFixed(2)} (${xlv1d >= 0 ? "+" : ""}${xlv1d.toFixed(2)}% 1D) | $QQQ: $${Number(ov.qqq_close).toFixed(2)} (${qqq1d >= 0 ? "+" : ""}${qqq1d.toFixed(2)}% 1D)`,
-        `• 為替レート: ₩${Number(ov.usdkrw).toLocaleString()} / USD`,
-        ``,
-        `⚡ 現在のバーベル配分シグナル: ${ov.recommended_smh_weight}% $SMH : ${ov.recommended_xlv_weight}% $XLV`,
-        `• ${ov.action_headline_jp}`,
-        ``,
-        `📊 $100,000 基準リバランス注文:`,
-        `• $SMH (${reb.target_smh_weight_pct}%): $${Number(reb.target_smh_usd).toLocaleString()} (${reb.target_smh_shares}株) → ${dSmhSign}$${Math.abs(Number(reb.delta_smh_usd)).toLocaleString()} (${smhShSign}株)`,
-        `• $XLV (${reb.target_xlv_weight_pct}%): $${Number(reb.target_xlv_usd).toLocaleString()} (${reb.target_xlv_shares}株) → ${dXlvSign}$${Math.abs(Number(reb.delta_xlv_usd)).toLocaleString()} (${xlvShSign}株)`,
-        `🔗 ターミナル: https://truthofmarket.com/semi-fear-greed.html`,
-      ].join("\n");
-    }
     return [
-      `🧭 [SemiFearGreed] Daily Semiconductor & Barbell Briefing (${ov.date})`,
-      `• Fear & Greed Score: ${Number(ov.fg_score).toFixed(1)} / 100 (${String(ov.regime_en).toUpperCase()})`,
+      `🧭 [TruthOfMarket] Daily Market Weather & Barbell Calculator Summary (${ov.date})`,
+      `• Sentiment Gauge: ${Number(ov.fg_score).toFixed(1)} / 100 (${String(ov.regime_en).toUpperCase()})`,
       `• $SMH: $${Number(ov.smh_close).toFixed(2)} (${Number(ov.smh_dd_pct).toFixed(2)}% 52W DD)`,
       `• $XLV: $${Number(ov.xlv_close).toFixed(2)} (${xlv1d >= 0 ? "+" : ""}${xlv1d.toFixed(2)}% 1D) | $QQQ: $${Number(ov.qqq_close).toFixed(2)} (${qqq1d >= 0 ? "+" : ""}${qqq1d.toFixed(2)}% 1D)`,
-      `• FX Rate: ₩${Number(ov.usdkrw).toLocaleString()} / USD`,
       ``,
-      `⚡ Active Signal: Target ${ov.recommended_smh_weight}% $SMH : ${ov.recommended_xlv_weight}% $XLV`,
-      `• ${ov.action_headline_en}`,
-      ``,
-      `📊 $100,000 Standard Rebalance Orders:`,
-      `• $SMH (${reb.target_smh_weight_pct}%): $${Number(reb.target_smh_usd).toLocaleString()} (${reb.target_smh_shares} sh) → ${dSmhSign}$${Math.abs(Number(reb.delta_smh_usd)).toLocaleString()} (${smhShSign} sh)`,
-      `• $XLV (${reb.target_xlv_weight_pct}%): $${Number(reb.target_xlv_usd).toLocaleString()} (${reb.target_xlv_shares} sh) → ${dXlvSign}$${Math.abs(Number(reb.delta_xlv_usd)).toLocaleString()} (${xlvShSign} sh)`,
-      `🔗 Terminal: https://truthofmarket.com/semi-fear-greed.html`,
+      `📊 $100,000 Simulated Weight Calculation (${ov.recommended_smh_weight}% $SMH : ${ov.recommended_xlv_weight}% $XLV):`,
+      `• $SMH (${reb.target_smh_weight_pct}%): $${Number(reb.target_smh_usd).toLocaleString()} (${reb.target_smh_shares} sh) -> ${dSmhSign}$${Math.abs(Number(reb.delta_smh_usd)).toLocaleString()} (${smhShSign} sh)`,
+      `• $XLV (${reb.target_xlv_weight_pct}%): $${Number(reb.target_xlv_usd).toLocaleString()} (${reb.target_xlv_shares} sh) -> ${dXlvSign}$${Math.abs(Number(reb.delta_xlv_usd)).toLocaleString()} (${xlvShSign} sh)`,
+      `🔗 Calculator: https://truthofmarket.com/semi-fear-greed.html`,
     ].join("\n");
   };
 
@@ -1592,35 +1568,24 @@ export async function buildClientTelegramPreview({
     const rows = ignStocks
       .map((s, idx) => {
         if (!proUnlocked && idx >= 1) {
-          return `${idx + 1}. 🔒 VIP IGNITION #${idx + 1} — Unlock Pro at truthofmarket.com`;
+          return `${idx + 1}. 🔒 VIP DATASET ROW #${idx + 1} — Unlock VIP Software at truthofmarket.com`;
         }
         const trig = s.entry_trigger_price ?? s.ma60_price ?? s.close;
         const stopP = s.stop_loss_price ?? Number((s.close * 0.91).toFixed(2));
         const tp1P = s.tp1_2x_price ?? Number((s.close * 2.0).toFixed(2));
-        return `${idx + 1}. $${s.ticker} ($${Number(s.close).toFixed(2)}) · Score ${Number(s.score).toFixed(0)}/100\n   52W DD ${Number(s.dd_high52_pct).toFixed(1)}% | Vol ${Number(s.vol_surge_10d).toFixed(2)}x | TRG $${Number(trig).toFixed(2)} | Stop $${Number(stopP).toFixed(2)} | TP1 $${Number(tp1P).toFixed(2)}`;
+        return `${idx + 1}. $${s.ticker} ($${Number(s.close).toFixed(2)}) · Score ${Number(s.score).toFixed(0)}/100\n   52W DD ${Number(s.dd_high52_pct).toFixed(1)}% | Vol ${Number(s.vol_surge_10d).toFixed(2)}x | MA60 Ref $${Number(trig).toFixed(2)} | Band $${Number(stopP).toFixed(2)}-$${Number(tp1P).toFixed(2)}`;
       })
       .join("\n");
 
     const ignCount = allStocks.filter((s) => s.zone_code === "IGNITION_ZONE").length;
-    if (lg === "jp") {
-      return [
-        `🚀 [RightSideAlpha] 米国株 PW-RSI 右側イグニッション上位銘柄 (${asOf})`,
-        `対象ユニバース: 米国上場 ${allStocks.length}銘柄 | イグニッション点灯: ${ignCount}銘柄`,
-        ``,
-        rows,
-        ``,
-        `🛡️ エグジット原則: -9.0% ハード損切 | 55日(+8%未満) タイムストップ | +100% TP1 半分利確`,
-        `🔗 スクリーナー: https://truthofmarket.com/`,
-      ].join("\n");
-    }
     return [
-      `🚀 [RightSideAlpha] Top US PW-RSI Right-Side Ignition Signals (${asOf})`,
-      `Universe: ${allStocks.length} NYSE/NASDAQ Equities | Active Ignition Count: ${ignCount}`,
+      `📊 [TruthOfMarket] Historical US Equity Factor Summary (${asOf})`,
+      `Universe: ${allStocks.length} NYSE/NASDAQ Equities | Factor Filter Count: ${ignCount}`,
       ``,
       rows,
       ``,
-      `🛡️ Exit Rules: -9.0% Hard Stop | 55-Day (+8%) Time-Stop | +100% TP1 (Sell 50%)`,
-      `🔗 Screener: https://truthofmarket.com/`,
+      `📘 Self-Directed Educational Calculator Software (Not personalized investment advice)`,
+      `🔗 Archive: https://truthofmarket.com/pro-swing.html`,
     ].join("\n");
   };
 
@@ -1642,12 +1607,12 @@ export async function buildClientTelegramPreview({
       days_held: days_held ?? 42,
     });
     const text = [
-      `🩺 [Position Doctor] $${doc.ticker} Asymmetric Exit Audit (${doc.as_of_date})`,
-      `• Status: ${doc.status_label} (${doc.status_code})`,
+      `🧮 [Variance Calculator] $${doc.ticker} Historical Band Summary (${doc.as_of_date})`,
+      `• Band Status: ${doc.status_label} (${doc.status_code})`,
       `• Latest Close: $${Number(doc.current_price).toFixed(2)} | Cost Basis: $${Number(doc.entry_price).toFixed(2)} | Held: ${days_held ?? 42}d`,
-      `• Current Return: ${doc.return_pct >= 0 ? "+" : ""}${Number(doc.return_pct).toFixed(2)}%`,
-      `• -9% Hard Stop: $${Number(doc.stop_price).toFixed(2)} | +100% Target (TP1): $${Number(doc.tp1_price).toFixed(2)}`,
-      `• Action Plan: ${doc.action_plan}`,
+      `• Simulated Return: ${doc.return_pct >= 0 ? "+" : ""}${Number(doc.return_pct).toFixed(2)}%`,
+      `• Lower Band Ref: $${Number(doc.stop_price).toFixed(2)} | Upper Band Ref: $${Number(doc.tp1_price).toFixed(2)}`,
+      `• Note: ${doc.action_plan}`,
     ].join("\n");
     return { text, as_of_date: doc.as_of_date || "2026-10-30", alert_type: atype, lang: lg };
   }

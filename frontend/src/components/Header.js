@@ -36,7 +36,7 @@ export function renderHeader(state) {
   const xlv1d = xlvEtf && xlvEtf.ret_1d_pct !== undefined ? Number(xlvEtf.ret_1d_pct) : 0.22;
   const lsMonthlyHref = formatCheckoutUrl(
     state.config?.ls_site1_monthly_url,
-    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
+    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en"
   );
   const ytUrl = state.config?.youtube_url || "https://www.youtube.com/@RightSideAlpha";
   const igUrl = state.config?.instagram_url || "https://www.instagram.com/rightsidealpha";
@@ -47,10 +47,13 @@ export function renderHeader(state) {
   const isAdminMode =
     (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("admin") === "1") ||
     Boolean(state.isAdminAuthenticated);
+  const isProSwing =
+    typeof window !== "undefined" &&
+    (window.__DEFAULT_VIEW__ === "pro_swing" || window.location.pathname.toLowerCase().includes("pro-swing"));
 
   return `
     <span id="pro-vip-telegram" style="display:none;" aria-hidden="true"></span>
-    <!-- INSTITUTIONAL MARKET TAPE RIBBON -->
+    <!-- MARKET DATA RIBBON -->
     <div class="market-ribbon">
       <div class="market-ribbon-inner">
         <div class="market-tape">
@@ -74,42 +77,43 @@ export function renderHeader(state) {
             <span class="${xlv1d >= 0 ? "tape-up" : "tape-down"}">${xlv1d >= 0 ? "+" : ""}${xlv1d.toFixed(2)}%</span>
           </span>
           <span class="tape-item" style="cursor:pointer;" id="ribbonSwitchSemi">
-            <span class="tape-sym">SEMI FEAR &amp; GREED</span>
+            <span class="tape-sym">MARKET WEATHER</span>
             <span class="${Number(semiScore) >= 55 ? "tape-up" : "tape-down"}" style="font-weight:700;">${semiScore} / 100 (${semiRegime})</span>
           </span>
         </div>
         <div class="mono ribbon-date-note" style="font-size:0.68rem; color:var(--muted);">
-          LATEST CLOSE (${semiDate}) · NYSE / NASDAQ
+          LATEST CLOSE (${semiDate}) · PUBLIC MARKET DATA
         </div>
       </div>
     </div>
 
-    <!-- MAIN INSTITUTIONAL TOPBAR -->
+    <!-- MAIN TOPBAR -->
     <header class="topbar">
       <div class="topbar-inner">
         <div class="brand-cluster">
-          <div class="brand" id="brandHomeBtn">
+          <a href="/" class="brand" id="brandHomeBtn" style="text-decoration:none;">
             <span class="brand-mark">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
                 <polyline points="16 7 22 7 22 13"></polyline>
               </svg>
             </span>
-            <span>${activeView === "semi" ? "SemiFearGreed" : "RightSideAlpha"}</span>
+            <span>TruthOfMarket</span>
             <span class="brand-badge" id="brandSubtitle">${t.brandSubtitle}</span>
-          </div>
+          </a>
 
           <!-- PLATFORM SWITCHER -->
-          <div class="platform-switcher" role="tablist" aria-label="Platform Switcher">
-            <button
-              type="button"
-              class="platform-tab ${activeView === "rightside" ? "active-rsa" : ""}"
+          <div class="platform-switcher" role="tablist" aria-label="Calculator Navigation">
+            <a
+              href="/"
+              class="platform-tab ${!isProSwing && activeView === "rightside" ? "active-rsa" : ""}"
               id="navTabRightSide"
               data-view="rightside"
+              style="text-decoration:none;"
             >
               <span>${t.navRightSide}</span>
-              <span class="platform-tab-tag">72 US</span>
-            </button>
+              <span class="platform-tab-tag">4-Core</span>
+            </a>
             <button
               type="button"
               class="platform-tab ${activeView === "semi" ? "active-semi" : ""}"
@@ -119,6 +123,14 @@ export function renderHeader(state) {
               <span>${t.navSemiFg}</span>
               <span class="platform-tab-tag" id="headerSemiScoreTag" style="color:#fca5a5; background:rgba(220,38,38,0.2);">${semiScore}</span>
             </button>
+            <a
+              href="/pro-swing.html"
+              class="platform-tab ${isProSwing ? "active-rsa" : ""}"
+              style="text-decoration:none;"
+              title="Self-Directed Quantitative Factor Research Archive"
+            >
+              <span>Quant Archive</span>
+            </a>
           </div>
         </div>
 
@@ -137,7 +149,7 @@ export function renderHeader(state) {
             type="button"
             class="btn btn-sm"
             id="btnToggleTomTheme"
-            title="Switch between Daylight Light Mode and Dark Terminal Mode"
+            title="Switch between Daylight Light Mode and Dark Mode"
             style="min-height:38px; padding:4px 9px; font-weight:800; border-color:rgba(251,191,36,0.5); color:#fbbf24;"
           >
             ${state.uiTheme === "light" ? "🌙 Dark" : "☀️ Daylight"}
@@ -209,7 +221,7 @@ export function renderHeader(state) {
             id="headerTelegramLink"
             href="${tgUrl}"
             ${isPro ? 'target="_blank" rel="noopener noreferrer"' : ""}
-            title="${isPro ? "Open Pro VIP Telegram News & Signal Channel" : "Pro Subscribers Only — Unlock VIP Telegram Channel"}"
+            title="${isPro ? "Open VIP Telegram Educational Research Channel" : "VIP Subscribers — Educational Research Channel"}"
             style="border-color:rgba(56,189,248,0.45); color:#38bdf8;"
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -234,6 +246,7 @@ export function renderHeader(state) {
           <a
             class="btn btn-primary lemonsqueezy-button"
             id="topSubscribeBtn"
+            data-tom-paid-plan="monthly"
             data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
             href="${lsMonthlyHref}"
             target="_blank"

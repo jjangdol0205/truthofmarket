@@ -8,7 +8,7 @@ export function renderPositionDoctorForm(state) {
   const defaultDate = celh && celh.date ? celh.date : "2026-11-13";
   const initialDoc = state.docLastResult
     ? formatDoctorResult(state.docLastResult, state)
-    : `<div style="color:var(--muted); font-size:0.76rem; line-height:1.4;">Type any US ticker (e.g. <b>NVDA</b>, <b>CELH</b>, <b>TSLA</b>) and click <b>Diagnose Position</b> for instant -9% stop &amp; 55-day time-stop rules.</div>`;
+    : `<div style="color:var(--muted); font-size:0.76rem; line-height:1.4;">Type any US ticker (e.g. <b>NVDA</b>, <b>CELH</b>, <b>TSLA</b>) and click <b>Calculate Variance</b> for instant historical dispersion &amp; 55-day duration bands.</div>`;
 
   return `
     <div id="position-doctor-card" style="background:#090d16; border:1px solid rgba(16,185,129,0.38); border-top:2px solid var(--fin-up); border-radius:6px; padding:10px 12px; display:flex; flex-direction:column; gap:6px; scroll-margin-top:84px;">
@@ -218,34 +218,36 @@ export function renderDoctorVipUnlockPreview(state) {
     ? `
       <div class="doc-vip-action-bar" style="margin-top:12px; display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
         <a href="${docMonthlyUrl}"
+           data-tom-paid-plan="monthly"
            data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
            class="btn btn-primary lemonsqueezy-button"
            id="btnDocUnlockMonthly"
            style="flex:1; min-width:180px; justify-content:center; padding:9px 12px; font-weight:800; font-size:0.78rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
-          ⚡ Monthly VIP ($29/mo)
+          ⚡ Start Monthly VIP — $29/mo
         </a>
         <a href="${docLifetimeUrl}"
+           data-tom-paid-plan="annual"
            data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b"
            class="btn lemonsqueezy-button"
            id="btnDocUnlockLifetime"
            style="flex:1; min-width:180px; justify-content:center; padding:9px 12px; font-weight:800; font-size:0.78rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color:#000; border:none;">
-          💎 Lifetime VIP ($199 · SAVE 43%)
+          💎 Start Annual VIP — $199/yr
         </a>
       </div>
       <div class="doc-compliance-notice" style="margin-top:8px; font-size:0.66rem; color:var(--muted); text-align:center; font-family:var(--font-mono); line-height:1.45;">
-        🔒 Lemon Squeezy Store #296100 Live · PCI-DSS Encrypted · Instant Receipt &amp; License Key Delivery
+        🔒 Lemon Squeezy Store #296100 · Self-Directed Educational Calculator Software · 14-Day Refund Policy
       </div>
       <div style="margin-top:6px; font-size:0.7rem; color:#94a3b8; text-align:center; line-height:1.45;">
-        Checkout issue in your region? Join <a href="https://t.me/truthofmarketss" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">@truthofmarketss</a> or request instant Pro activation via <a href="mailto:beable9489@gmail.com?subject=Instant%20Pro%20Activation%20Request%20(TruthOfMarket)" style="color:#93c5fd; font-weight:700; text-decoration:underline;">email</a>.
+        Support Desk: <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#93c5fd; font-weight:700; text-decoration:underline;">beable9489@gmail.com</a>
       </div>
     `
     : `
       <div class="doc-vip-active-banner" style="margin-top:10px; padding:8px 12px; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:4px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
         <span class="mono" style="font-size:0.72rem; color:#34d399; font-weight:700;">
-          👑 PRO VIP ACTIVE · All 72 Institutional Breakout Signals Unlocked
+          👑 VIP SOFTWARE ACTIVE · Full Quantitative Factor Dataset Unlocked
         </span>
-        <a href="#pro-vault" class="btn btn-sm" style="padding:3px 8px; font-size:0.68rem; border-color:rgba(16,185,129,0.4); color:#34d399;">
-          Open Pro Vault →
+        <a href="#proVaultSection" class="btn btn-sm" style="padding:3px 8px; font-size:0.68rem; border-color:rgba(16,185,129,0.4); color:#34d399;">
+          Open Factor Suite →
         </a>
       </div>
     `;
@@ -256,7 +258,7 @@ export function renderDoctorVipUnlockPreview(state) {
         <div style="display:flex; align-items:center; gap:6px;">
           <span style="font-size:0.85rem;">🔒</span>
           <span class="mono" style="font-size:0.74rem; font-weight:800; color:#fbbf24; letter-spacing:0.03em;">
-            INSTITUTIONAL IGNITION SIGNALS TOP 3 PREVIEW (REALLOCATION TARGETS)
+            SELF-DIRECTED QUANTITATIVE FACTOR TOP 3 ARCHIVE PREVIEW
           </span>
         </div>
         ${headerBadge}
@@ -355,8 +357,8 @@ export function renderPortfolioDoctorForm(state) {
   const totalCap = Number((state && state.proPortfolioUsd) || 50000);
   const outputHtml = (state && state.portfolioDocResult)
     ? formatPortfolioDoctorResult(state.portfolioDocResult, state)
-    : `<div style="color:var(--muted); font-size:0.78rem; padding:12px 14px; background:#05080f; border-radius:4px; border:1px solid var(--border); border-left:3px solid var(--fin-blue); line-height:1.5;">
-        Enter up to 10 equity positions and click <b>Run VIP Portfolio Diagnostic</b> to evaluate aggregate health score, Rule 1 -9% stop loss risks, 3 macro volatility stress scenarios, and 1.35% risk parity rebalancing directives.
+    : `<div style="color:var(--muted); font-size:0.78rem; padding:12px 14px; background:#05080f; border-radius:4px; border-1px solid var(--border); border-left:3px solid var(--fin-blue); line-height:1.5;">
+        Enter up to 10 equity positions and click <b>Run Multi-Asset Calculator</b> to evaluate aggregate variance score, lower band dispersion, 3 macro volatility stress scenarios, and simulated weight balance.
       </div>`;
 
   return `
@@ -364,13 +366,13 @@ export function renderPortfolioDoctorForm(state) {
       <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
         <div>
           <div style="font-size:0.7rem; font-family:var(--font-mono); font-weight:700; color:#818cf8; letter-spacing:0.05em; text-transform:uppercase;">
-            👑 PRO VIP EXCLUSIVE · MULTI-POSITION PORTFOLIO DOCTOR 2.0
+            👑 VIP SOFTWARE · MULTI-ASSET VARIANCE CALCULATOR
           </div>
           <h3 style="font-size:1.05rem; font-weight:800; margin:4px 0; color:#ffffff;">
-            Multi-Asset Health Score, 3-Scenario Stress Testing &amp; 1.35% Risk Parity Rebalancer
+            Multi-Asset Dispersion Score, 3-Scenario Stress Simulator &amp; Weight Calculator
           </h3>
           <p style="font-size:0.78rem; color:var(--muted); margin:0; line-height:1.5;">
-            Audit up to 10 positions simultaneously against Rule 1 (-9% Stop), Rule 2 (55D Time Stop), and Rule 3 (+100% TP1). Volatility stress-test against Semiconductor Fear Shocks and simulate capital reallocation into today's Top 3 Ignition Setups.
+            Evaluate up to 10 positions simultaneously against historical lower variance bands, 55-day duration windows, and upper dispersion bands. Self-directed educational calculator software only.
           </p>
         </div>
         <div style="display:flex; align-items:center; gap:6px;">
@@ -466,10 +468,10 @@ export function formatPortfolioDoctorResult(result, state) {
   const scoreColor = score >= 80 ? "#10b981" : score >= 50 ? "#fbbf24" : "#ef4444";
   const scoreLabel = score >= 80 ? "HEALTHY (LOW RISK)" : score >= 50 ? "MODERATE RISK (CAUTION)" : "CRITICAL RISK (IMMEDIATE ACTION)";
   const scoreDesc = score >= 80
-    ? "All positions follow mechanical stop-loss rules. Minimal capital at risk."
+    ? "All positions align with modeled variance bands."
     : score >= 50
-    ? "Dead money holding or stop-loss proximity detected. Rebalancing advised."
-    : "Rule 1 -9% Hard Stop breached. Immediate liquidation required to preserve principal.";
+    ? "Extended sideways holding or band proximity detected. Weight review indicated."
+    : "Modeled risk band exceeded. Review position sizing mathematically.";
 
   const totalInvested = Number(result.total_invested || 0);
   const totalPnl = Number(result.total_unrealized_pnl || 0);
@@ -511,14 +513,14 @@ export function formatPortfolioDoctorResult(result, state) {
           </div>
         </div>
 
-        <!-- Capital at Risk against Rule 1 Stop Loss -->
+        <!-- Simulated Variance Exposure -->
         <div style="background:#090d16; border:1px solid var(--border); border-radius:4px; padding:12px; display:flex; flex-direction:column; justify-content:center;">
-          <div class="mono" style="font-size:0.68rem; color:var(--muted); text-transform:uppercase;">Rule 1 Capital at Risk (-9% Stop)</div>
+          <div class="mono" style="font-size:0.68rem; color:var(--muted); text-transform:uppercase;">Simulated Lower-Band Variance</div>
           <div class="mono" style="font-size:1.15rem; font-weight:800; color:#fbbf24; margin:3px 0;">
             $${capitalAtRisk.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
           <div style="font-size:0.72rem; color:var(--muted);">
-            Max account drawdown if all positions hit their hard stop floor.
+            Modeled variance if all positions reach their lower dispersion band.
           </div>
         </div>
       </div>
@@ -526,7 +528,7 @@ export function formatPortfolioDoctorResult(result, state) {
       <!-- Section 2: Asset Diagnostic Table -->
       <div style="margin-bottom:16px;">
         <div class="mono" style="font-size:0.7rem; color:var(--fin-up); font-weight:800; letter-spacing:0.04em; margin-bottom:6px; text-transform:uppercase;">
-          📋 INDIVIDUAL ASSET DIAGNOSTIC BREAKDOWN (${items.length} POSITIONS)
+          📋 INDIVIDUAL ASSET DISPERSION BREAKDOWN (${items.length} POSITIONS)
         </div>
         <div class="table-responsive-scroll">
           <table class="stock-table" style="font-size:0.76rem; width:100%;">
@@ -536,9 +538,9 @@ export function formatPortfolioDoctorResult(result, state) {
                 <th>Return %</th>
                 <th>Entry Price</th>
                 <th>Latest Close</th>
-                <th>-9% Hard Stop</th>
-                <th>Status Rule</th>
-                <th>Actionable Tactical Directive</th>
+                <th>Lower Band Ref</th>
+                <th>Band Status</th>
+                <th>Simulation Note</th>
               </tr>
             </thead>
             <tbody>

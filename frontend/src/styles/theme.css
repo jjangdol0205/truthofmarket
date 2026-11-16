@@ -1076,7 +1076,7 @@ a {
 }
 
 /* ==========================================================================
-   PRO VAULT & POSITION DOCTOR
+   PRO VAULT & VARIANCE CALCULATOR
    ========================================================================== */
 .doctor-inputs-grid {
   display: grid;
@@ -1734,7 +1734,7 @@ a {
 }
 
 /* ==========================================================================
-   POSITION DOCTOR VIP CONVERSION FUNNEL & TOP 3 BLUR PREVIEW
+   VARIANCE CALCULATOR PREVIEW & BLUR STYLES
    ========================================================================== */
 .doc-vip-preview-card {
   position: relative;

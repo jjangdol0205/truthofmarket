@@ -727,25 +727,30 @@ export function renderSemiFearGreedView(state) {
       </div>
     </section>
 
-    <!-- SECTION 5: PRO TERMINAL & LIFETIME LICENSE PRICING -->
+    <!-- SECTION 5: MONTHLY & ANNUAL VIP EDUCATIONAL SOFTWARE PRICING -->
     ${renderPricing(state)}
 
-    <!-- CROSS-PLATFORM SWITCH BANNER BACK TO RIGHTSIDEALPHA -->
+    <!-- CROSS-PLATFORM SWITCH BANNER BACK TO RETIREMENT ARCHITECT & QUANT ARCHIVE -->
     <section class="cross-banner" style="border-left-color:var(--fin-blue);">
       <div>
         <div style="font-size:0.72rem; font-family:var(--font-mono); font-weight:700; color:#93c5fd; text-transform:uppercase;">
-          COMPANION US INDIVIDUAL EQUITY SCREENER · RIGHTSIDEALPHA
+          COMPANION SELF-DIRECTED EDUCATIONAL CALCULATORS · TRUTHOFMARKET
         </div>
         <h3 style="font-size:1.15rem; font-weight:800; margin:4px 0; color:#ffffff;">
-          Looking for High-Alpha US Individual Stock Turnarounds ($CELH, $MBLY, $NVDA, $APP)?
+          Planning Your 401(k)/IRA Monthly Retirement Cashflow or Reviewing Individual Equity Factors?
         </h3>
         <p style="font-size:0.84rem; color:var(--muted);">
-          Switch to the RightSideAlpha US Equity Terminal to screen 72 NYSE & NASDAQ stocks for MA20/MA60 Right-Side Ignitions and 55-Day Time-Stop diagnostics.
+          Return to our 30-Second Retirement Cashflow Calculator (SGOV · SCHD · JEPI · VOO) or explore the Quantitative Factor Research Archive.
         </p>
       </div>
-      <button class="btn btn-primary" id="btnSwitchToRightSide">
-        Open RightSideAlpha US Equity Terminal →
-      </button>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <a class="btn btn-primary" href="/">
+          30-Sec Retirement Calculator →
+        </a>
+        <a class="btn" href="/pro-swing.html" style="border-color:rgba(56,189,248,0.45); color:#38bdf8;">
+          Quant Research Archive →
+        </a>
+      </div>
     </section>
   `;
 }

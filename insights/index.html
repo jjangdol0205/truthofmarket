@@ -3,15 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>US Equity Quant Insights &amp; Daily Semiconductor Regime Journal | RightSideAlpha</title>
-  <meta name="description" content="Institutional US stock quantitative research, daily $SMH:$XLV Fear & Greed dispatches, PW-RSI right-side breakout studies, and -9% risk management audits." />
-  <link rel="canonical" href="https://truthofmarket.com/insights/index.html" />
-  <link rel="alternate" type="application/rss+xml" title="RightSideAlpha RSS Feed" href="https://truthofmarket.com/rss.xml" />
+  <title>US Retirement Cashflow &amp; Quantitative Market Weather Insights | TruthOfMarket</title>
+  <meta name="description" content="Self-directed educational market data studies, 401(k)/IRA retirement cashflow allocation math, and $SMH:$XLV sector correlation notes." />
+  <link rel="canonical" href="https://truthofmarket.com/insights/" />
+  <link rel="alternate" type="application/rss+xml" title="TruthOfMarket RSS Feed" href="https://truthofmarket.com/rss.xml" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="RightSideAlpha Institutional Quant Insights" />
-  <meta property="og:description" content="Daily $SMH:$XLV Fear & Greed dispatches and 72-stock PW-RSI quantitative research." />
-  <meta property="og:url" content="https://truthofmarket.com/insights/index.html" />
+  <meta property="og:title" content="TruthOfMarket Educational Market Data &amp; Retirement Insights" />
+  <meta property="og:description" content="Daily US market weather notes, 2-4x/year portfolio rebalancing math, and historical factor studies." />
+  <meta property="og:url" content="https://truthofmarket.com/insights/" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <script src="https://assets.lemonsqueezy.com/lemon.js" defer></script>
+  <script>
+  window.PAYMENT_CONFIG = {
+    STORE_LIVE_READY: false,
+    ACTIVE_SLOT: 'FINANCE_STORE_SLOT',
+    FINANCE_STORE_SLOT: {
+      storeId: '296100',
+      storeDomain: 'truthofmarket.lemonsqueezy.com',
+      monthlyUuid: 'd5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en',
+      annualUuid: '667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en',
+      monthlyCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en',
+      annualCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en',
+      BACKUP_LIVE_CHECKOUT_URL: { monthly: '', annual: '' }
+    },
+    PEDIATRIC_STORE_SLOT: {
+      storeId: '296100',
+      storeDomain: 'truthofmarket.lemonsqueezy.com',
+      singleUuid: 'c1cd7f12-3479-49e8-ab71-59c98135d599?embed=1&locale=en',
+      sixMonthUuid: 'c562946d-ef68-4c2f-a802-df9da0179895?embed=1&locale=en',
+      singleCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/c1cd7f12-3479-49e8-ab71-59c98135d599?embed=1&locale=en',
+      sixMonthCheckoutUrl: 'https://truthofmarket.lemonsqueezy.com/checkout/buy/c562946d-ef68-4c2f-a802-df9da0179895?embed=1&locale=en',
+      BACKUP_LIVE_CHECKOUT_URL: { single: '', sixMonth: '' }
+    }
+  };
+  </script>
+  <script src="/hq_member_crm_client.js" defer></script>
+  <script src="/tom_payment_waitlist.js" defer></script>
   <script>
   (function(){
     try {
@@ -29,22 +56,30 @@
         try {
           localStorage.setItem('tom_free_member_email', email);
           localStorage.setItem('tom_free_member_since', kst);
-          var dedupeKey = 'hq_signup_' + ns + '_' + kst + '_' + email.toLowerCase();
-          var ua = navigator.userAgent || '';
-          var host = (location && location.hostname) || '';
-          var isHumanLive = !navigator.webdriver && !/bot|crawl|spider|slurp|headless|lighthouse|python|curl|node|axios/i.test(ua) && host && host !== 'localhost' && host !== '127.0.0.1';
-          if (localStorage.getItem(dedupeKey) !== '1') {
-            localStorage.setItem(dedupeKey, '1');
-            if (isHumanLive) {
-              fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup_' + kst, { mode: 'cors', keepalive: true }).catch(function(){});
-              fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup_total', { mode: 'cors', keepalive: true }).catch(function(){});
-            }
+          if (typeof window.submitTomVipWaitlistOrManualEmail === 'function') {
+            window.submitTomVipWaitlistOrManualEmail({
+              email: email,
+              segment: 'retirement_401k_ira',
+              lang: 'en-US',
+              notes: 'site=truthofmarket.com/insights/ | topic=' + (topicLabel || 'Daily Insights')
+            });
+          } else if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.registerMember === 'function') {
+            window.DreamCompanyCRM.registerMember({
+              div: 'TOM',
+              email: email,
+              nickname: '',
+              segment: 'retirement_401k_ira',
+              message: topicLabel || 'Daily Insights',
+              lang: 'en-US'
+            });
           }
+          fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup', { mode: 'cors', keepalive: true }).catch(function(){});
+          fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup_total', { mode: 'cors', keepalive: true }).catch(function(){});
         } catch (_e) {}
         document.querySelectorAll('.tom-lead-status').forEach(function(el) {
           el.style.display = 'block';
           el.style.color = '#86efac';
-          el.innerHTML = '✅ <strong>Subscribed!</strong> Free 8:30 AM ET Market Safety &amp; -9% Stop-Loss Alerts are active for <strong>' + email.replace(/[<>&"]/g, '') + '</strong>.';
+          el.innerHTML = '✅ <strong>Subscribed!</strong> Free 8:30 AM ET 3-Color Market Weather &amp; Calm Rebalancing Briefs are active for <strong>' + email.replace(/[<>&"]/g, '') + '</strong>.';
         });
         document.querySelectorAll('.tom-lead-form input[type="email"]').forEach(function(inp) { inp.value = email; });
         return false;
@@ -65,23 +100,14 @@
         localStorage.setItem('hq_uv_ever_' + ns, '1');
         fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/uv_total', { mode: 'cors', keepalive: true }).catch(function(){});
       }
-      document.addEventListener('click', function(e) {
-        var el = e.target && e.target.closest ? e.target.closest('a, button') : null;
-        if (!el) return;
-        var href = (el.getAttribute('href') || '').toLowerCase();
-        var txt = (el.innerText || el.textContent || '').toLowerCase();
-        if (href.indexOf('lemonsqueezy.com') !== -1 || /pro|vip|unlock|lifetime|\$29|\$199/.test(txt)) {
-          fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_' + kst, { mode: 'cors', keepalive: true }).catch(function(){});
-          fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_total', { mode: 'cors', keepalive: true }).catch(function(){});
-        }
-      }, true);
     } catch (e) {}
   })();
   </script>
   <style>
     body { margin:0; font-family:'Inter',-apple-system,sans-serif; background:#090d16; color:#e5e7eb; line-height:1.65; }
     a { color:#38bdf8; text-decoration:none; }
-    .topbar { border-bottom:1px solid #1f2937; background:#0b1120; padding:0.9rem 1.25rem; display:flex; justify-content:space-between; align-items:center; }
+    a:hover { text-decoration:underline; }
+    .topbar { border-bottom:1px solid #1f2937; background:#0b1120; padding:0.9rem 1.25rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; }
     .brand { font-weight:800; color:#f8fafc; }
     .nav-links a { margin-left:1rem; color:#cbd5e1; font-size:0.9rem; font-weight:600; }
     .wrap { max-width:920px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
@@ -93,97 +119,111 @@
     .card h2 a { color:#f8fafc; }
     .card p { margin:0 0 0.85rem; color:#cbd5e1; font-size:0.96rem; }
     .read-more { font-weight:700; font-size:0.9rem; color:#38bdf8; }
+    footer { margin-top:3rem; padding-top:1.4rem; border-top:1px solid #1f2937; color:#9ca3af; font-size:0.84rem; }
   </style>
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="/">RightSideAlpha × SemiFearGreed</a>
+    <a class="brand" href="/">TruthOfMarket &bull; Retirement Cashflow Calculator</a>
     <nav class="nav-links">
-      <a href="/">72-Stock Terminal</a>
-      <a href="/semi-fear-greed.html">$SMH Fear &amp; Greed</a>
-      <a href="/insights/index.html">Quant Insights</a>
+      <a href="/">Retirement Calculator</a>
+      <a href="/semi-fear-greed.html">Market Weather</a>
+      <a href="/pro-swing.html">Quant Archive</a>
+      <a href="/insights/">Educational Insights</a>
     </nav>
   </header>
   <main class="wrap">
-    <h1>Institutional Quant Insights &amp; Market Regime Journal</h1>
-    <p class="sub">Empirical US equity breakout studies, daily $SMH:$XLV Fear &amp; Greed dispatches, and mechanical -9.0% risk audits powered by 26.8 years of market data.</p>
+    <h1>Educational Market Weather &amp; Retirement Allocation Journal</h1>
+    <p class="sub">Self-directed mathematical studies on US 401(k)/IRA sequence-of-returns cushioning, calm 2–4x/year rebalancing, and 26.8 years of empirical market data.</p>
     
     <section id="tom-insight-lead-top" class="tom-senior-lead-magnet" style="background:linear-gradient(135deg,#0c192c 0%,#062c24 100%);border:2px solid #10b981;border-radius:16px;padding:1.5rem;margin:1.5rem 0;">
       <div style="display:inline-block;background:rgba(16,185,129,0.18);color:#6ee7b7;border:1px solid rgba(52,211,153,0.45);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:800;margin-bottom:8px;">
-        🟢 Safe Uptrend &bull; 🟡 Wait &amp; Watch &bull; 🔴 -9% Exit Line
+        🟢 Green Steady &bull; 🟡 Yellow Watch &bull; 🔴 Red T-Bill Cushion
       </div>
       <h2 style="margin:0 0 8px;color:#ffffff;font-size:clamp(21px,2.6vw,26px);line-height:1.3;">
-        Protect Your Retirement Nest Egg — Free 8:30 AM Market Safety Email
+        Protect Your Retirement Nest Egg — Free 8:30 AM Market Weather Email
       </h2>
       <p style="margin:0 0 14px;color:#e2e8f0;font-size:18px;line-height:1.6;">
-        Plain-English daily US market safety status and -9% stop-loss alerts—no Wall Street jargon, 100% free.
+        Plain-English daily US 401(k)/IRA market weather notes and calm 2–4x/year SGOV &middot; SCHD &middot; JEPI &middot; VOO allocation studies—100% free.
       </p>
       <form class="tom-lead-form" onsubmit="return window.__tomSubmitLeadMagnet(event, this, 'Daily Insights');" style="display:flex;flex-wrap:wrap;gap:12px;">
         <input type="email" required autocomplete="email" placeholder="1-Step Free Sign-Up: Enter your email address" style="flex:1 1 260px;min-height:58px;padding:12px 16px;font-size:18px;border-radius:10px;border:2px solid #94a3b8;background:#ffffff;color:#0f172a;font-weight:700;" />
         <button type="submit" style="min-height:58px;padding:12px 24px;font-size:18px;font-weight:900;border-radius:10px;border:none;background:#10b981;color:#042f2e;cursor:pointer;">
-          📩 Get Free 8:30 AM Alert &rarr;
+          📩 Join Free Morning Bell Club &rarr;
         </button>
       </form>
       <div class="tom-lead-status" role="status" aria-live="polite" style="display:none;margin-top:12px;font-size:18px;font-weight:700;"></div>
       <div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(148,163,184,0.25);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;">
-        <span style="font-size:16px;color:#e2e8f0;font-weight:700;">💳 Instant 1-Tap Pro VIP Access (Apple Pay / Card):</span>
+        <span style="font-size:16px;color:#e2e8f0;font-weight:700;">💳 Self-Directed Educational Calculator Software (Store #296100):</span>
         <div style="display:flex;flex-wrap:wrap;gap:10px;">
-          <a class="btn btn-vip lemonsqueezy-button" style="min-height:54px;display:inline-flex;align-items:center;font-size:17px;" href="https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1">🔓 1-Tap Monthly VIP ($29/mo)</a>
-          <a class="btn btn-life lemonsqueezy-button" style="min-height:54px;display:inline-flex;align-items:center;font-size:17px;" href="https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1">💎 1-Tap Lifetime Pass ($199)</a>
+          <a class="btn btn-vip lemonsqueezy-button" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" style="min-height:54px;display:inline-flex;align-items:center;font-size:17px;" href="https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en">⚡ Start Monthly VIP — $29/mo</a>
+          <a class="btn btn-life lemonsqueezy-button" data-tom-paid-plan="annual" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" style="min-height:54px;display:inline-flex;align-items:center;font-size:17px;" href="https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en">💎 Start Annual VIP — $199/yr</a>
         </div>
       </div>
     </section>
     
       <article class="card">
-        <div class="cat">Wall Street Morning Bell Letter · 2026-11-13 · 5 min read</div>
-        <h2><a href="/insights/daily-us-quant-regime-brief.html">Wall Street Morning Bell Letter (2026-11-13): $SMH Fear &amp; Greed at 18.3/100 (Extreme Fear) &amp; Calm -9% Safety Watchlist</a></h2>
-        <p>Morning Bell Club companion note as of 2026-11-13: $SMH $486.75 (-27.23% 52W DD), 80:20 $SMH:$XLV cushion, and plain-English -9% safety lines.</p>
-        <a class="read-more" href="/insights/daily-us-quant-regime-brief.html">Read Institutional Research Note →</a>
+        <div class="cat">Morning Bell Market Weather &middot; 2026-11-13 &middot; 5 min read</div>
+        <h2><a href="/insights/daily-us-quant-regime-brief.html">Morning Bell Retirement &amp; Market Weather Note (2026-11-13): Sentiment Gauge at 18.3/100 (Extreme Fear) &amp; Calm Allocation Study</a></h2>
+        <p>Morning Bell Club educational market weather note as of 2026-11-13: $SMH $486.75 (-27.23% 52W DD), 80:20 $SMH:$XLV model split, and 2-4x/year rebalancing context.</p>
+        <a class="read-more" href="/insights/daily-us-quant-regime-brief.html">Read Educational Research Note &rarr;</a>
       </article>
       <article class="card">
-        <div class="cat">Quant Methodology · 2026-11-13 · 7 min read</div>
-        <h2><a href="/insights/pw-rsi-right-side-breakout-methodology.html">Why Left-Side Dip Buyers Bleed Out: The 26.8-Year Math Behind Right-Side Ignition (PW-RSI)</a></h2>
-        <p>How filtering for completed 52-week washouts, MA20/MA60 reclaims, and 1.4x institutional volume surges eliminates value traps across 72 liquid US stocks.</p>
-        <a class="read-more" href="/insights/pw-rsi-right-side-breakout-methodology.html">Read Institutional Research Note →</a>
+        <div class="cat">Quantitative Methodology &middot; 2026-11-13 &middot; 7 min read</div>
+        <h2><a href="/insights/pw-rsi-right-side-breakout-methodology.html">Understanding Moving-Average Confirmation: 26.8-Year Empirical Factor Study (2000–2026)</a></h2>
+        <p>Educational quantitative study examining 52-week drawdown recovery, 20-day and 60-day moving average trends, and 10-day relative volume across liquid US equities.</p>
+        <a class="read-more" href="/insights/pw-rsi-right-side-breakout-methodology.html">Read Educational Research Note &rarr;</a>
       </article>
       <article class="card">
-        <div class="cat">Portfolio Architecture · 2026-11-13 · 6 min read</div>
-        <h2><a href="/insights/smh-xlv-80-20-barbell-drawdown-study.html">Surviving Chip Crashes: How the $SMH:$XLV Contrarian Barbell Cuts Max Drawdown Without Killing Alpha</a></h2>
-        <p>Empirical breakdown of pairing high-beta Semiconductors ($SMH) with low-beta Healthcare ($XLV) and shifting from 70:30 to 80:20 during Extreme Fear washouts.</p>
-        <a class="read-more" href="/insights/smh-xlv-80-20-barbell-drawdown-study.html">Read Institutional Research Note →</a>
+        <div class="cat">Allocation Math Study &middot; 2026-11-13 &middot; 6 min read</div>
+        <h2><a href="/insights/smh-xlv-80-20-barbell-drawdown-study.html">Sector Correlation &amp; Rebalancing Math: Studying the $SMH and $XLV Barbell (2000–2026)</a></h2>
+        <p>Empirical educational study of combining cyclical Technology/Semiconductors ($SMH) with defensive Healthcare ($XLV) under periodic annual or semi-annual rebalancing.</p>
+        <a class="read-more" href="/insights/smh-xlv-80-20-barbell-drawdown-study.html">Read Educational Research Note &rarr;</a>
       </article>
       <article class="card">
-        <div class="cat">Risk Engineering · 2026-11-13 · 5 min read</div>
-        <h2><a href="/insights/rule-1-minus-9-percent-stop-loss-math.html">The Asymmetry of Ruin: Why Cutting Every Loser at -9.0% Saves Years of Dead-Money Recovery</a></h2>
-        <p>A -9% loss requires +9.89% to break even; a -50% bagholder drawdown demands +100%. Inside Rule 1 and the 55-day dead-money time stop.</p>
-        <a class="read-more" href="/insights/rule-1-minus-9-percent-stop-loss-math.html">Read Institutional Research Note →</a>
+        <div class="cat">Compounding Math &middot; 2026-11-13 &middot; 5 min read</div>
+        <h2><a href="/insights/rule-1-minus-9-percent-stop-loss-math.html">The Mathematics of Drawdown Asymmetry: Why Portfolio Cushions Preserve Long-Term Compounding</a></h2>
+        <p>Educational compounding math showing how deep drawdowns (-40% to -60%) require nonlinear recovery gains (+66.7% to +150%), and how T-Bill cushions reduce sequence risk.</p>
+        <a class="read-more" href="/insights/rule-1-minus-9-percent-stop-loss-math.html">Read Educational Research Note &rarr;</a>
       </article>
     
     <section id="tom-insight-lead-bottom" class="tom-senior-lead-magnet" style="background:linear-gradient(135deg,#0c192c 0%,#062c24 100%);border:2px solid #10b981;border-radius:16px;padding:1.5rem;margin:1.5rem 0;">
       <div style="display:inline-block;background:rgba(16,185,129,0.18);color:#6ee7b7;border:1px solid rgba(52,211,153,0.45);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:800;margin-bottom:8px;">
-        🟢 Safe Uptrend &bull; 🟡 Wait &amp; Watch &bull; 🔴 -9% Exit Line
+        🟢 Green Steady &bull; 🟡 Yellow Watch &bull; 🔴 Red T-Bill Cushion
       </div>
       <h2 style="margin:0 0 8px;color:#ffffff;font-size:clamp(21px,2.6vw,26px);line-height:1.3;">
-        Protect Your Retirement Nest Egg — Free 8:30 AM Market Safety Email
+        Protect Your Retirement Nest Egg — Free 8:30 AM Market Weather Email
       </h2>
       <p style="margin:0 0 14px;color:#e2e8f0;font-size:18px;line-height:1.6;">
-        Plain-English daily US market safety status and -9% stop-loss alerts—no Wall Street jargon, 100% free.
+        Plain-English daily US 401(k)/IRA market weather notes and calm 2–4x/year SGOV &middot; SCHD &middot; JEPI &middot; VOO allocation studies—100% free.
       </p>
       <form class="tom-lead-form" onsubmit="return window.__tomSubmitLeadMagnet(event, this, 'Daily Insights');" style="display:flex;flex-wrap:wrap;gap:12px;">
         <input type="email" required autocomplete="email" placeholder="1-Step Free Sign-Up: Enter your email address" style="flex:1 1 260px;min-height:58px;padding:12px 16px;font-size:18px;border-radius:10px;border:2px solid #94a3b8;background:#ffffff;color:#0f172a;font-weight:700;" />
         <button type="submit" style="min-height:58px;padding:12px 24px;font-size:18px;font-weight:900;border-radius:10px;border:none;background:#10b981;color:#042f2e;cursor:pointer;">
-          📩 Get Free 8:30 AM Alert &rarr;
+          📩 Join Free Morning Bell Club &rarr;
         </button>
       </form>
       <div class="tom-lead-status" role="status" aria-live="polite" style="display:none;margin-top:12px;font-size:18px;font-weight:700;"></div>
       <div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(148,163,184,0.25);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;">
-        <span style="font-size:16px;color:#e2e8f0;font-weight:700;">💳 Instant 1-Tap Pro VIP Access (Apple Pay / Card):</span>
+        <span style="font-size:16px;color:#e2e8f0;font-weight:700;">💳 Self-Directed Educational Calculator Software (Store #296100):</span>
         <div style="display:flex;flex-wrap:wrap;gap:10px;">
-          <a class="btn btn-vip lemonsqueezy-button" style="min-height:54px;display:inline-flex;align-items:center;font-size:17px;" href="https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1">🔓 1-Tap Monthly VIP ($29/mo)</a>
-          <a class="btn btn-life lemonsqueezy-button" style="min-height:54px;display:inline-flex;align-items:center;font-size:17px;" href="https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1">💎 1-Tap Lifetime Pass ($199)</a>
+          <a class="btn btn-vip lemonsqueezy-button" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" style="min-height:54px;display:inline-flex;align-items:center;font-size:17px;" href="https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en">⚡ Start Monthly VIP — $29/mo</a>
+          <a class="btn btn-life lemonsqueezy-button" data-tom-paid-plan="annual" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" style="min-height:54px;display:inline-flex;align-items:center;font-size:17px;" href="https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en">💎 Start Annual VIP — $199/yr</a>
         </div>
       </div>
     </section>
+    
+    <footer>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:12px;padding:10px 14px;background:#0b1120;border:1px solid #1f2937;border-radius:8px;font-size:0.88rem;font-weight:700;">
+        <a href="/terms.html">Terms of Service</a> &middot;
+        <a href="/privacy.html">Privacy Policy</a> &middot;
+        <a href="/refund.html" style="color:#6ee7b7;">14-Day Refund Policy</a> &middot;
+        <a href="/contact.html">Contact Desk</a> &middot;
+        <a href="mailto:beable9489@gmail.com" style="color:#fde68a;">beable9489@gmail.com</a>
+      </div>
+      <p style="color:#e2e8f0;font-weight:600;margin-bottom:8px;">Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.</p>
+      <p style="margin:0;">&copy; 2026 TruthOfMarket &middot; Educational Market Data &amp; Quantitative Research Desk (Store #296100).</p>
+    </footer>
   </main>
 </body>
 </html>

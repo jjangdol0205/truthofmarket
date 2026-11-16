@@ -10,11 +10,11 @@ const TOM_MORNING_CLUB_NOTES = [
 
 export const TOM_MORNING_CLUB_COMPANION_MSG = {
   steady:
-    "🤝 Right beside you — staying calm in quality uptrends while keeping a -9% safety floor is how retirement wealth compounds.",
+    "🤝 Right beside you — staying calm in quality dividend & index compounders while rebalancing 2–4 times a year is how retirement wealth endures.",
   watch:
-    "👀 Wise patience — waiting calmly on the sidelines until buyers prove themselves protects both your sleep and your savings.",
+    "👀 Wise patience — waiting calmly on the sidelines while collecting steady dividend income protects both your sleep and your savings.",
   cash:
-    "🛡️ Smart defense — holding cash in uncertain weeks keeps your nest egg intact and ready for the next clear green light.",
+    "🛡️ Smart defense — holding T-Bill & money-market cash cushions in uncertain weeks keeps your nest egg intact for the next calm uptrend.",
 };
 
 export function getTomMorningClubTodayKey() {
@@ -354,7 +354,7 @@ export function bindTomPasswordlessClubEvents(state, showToastFn) {
       if (topStatusEl) {
         topStatusEl.style.display = "block";
         topStatusEl.style.color = "#34d399";
-        topStatusEl.textContent = `✅ Free Morning Signal Active (${email}) — Your 2 Bonus Watchlist Setups below are unlocked!`;
+        topStatusEl.textContent = `✅ Free Morning Retirement Brief Active (${email}) — Your 4-Core Allocation Guide below is unlocked!`;
       }
       const bonusCardEl = document.getElementById("tomFreeMemberBonusCard");
       if (bonusCardEl) bonusCardEl.style.display = "block";
@@ -370,10 +370,10 @@ export function bindTomPasswordlessClubEvents(state, showToastFn) {
         feedbackEl.innerHTML = `
           <div class="tom-crm-feedback-copy">
             <strong>✅ Passwordless Morning Bell Macro Club membership is active for ${escapeTomCrmHtml(email)}!</strong>
-            <span>${nickname ? `Welcome, ${escapeTomCrmHtml(nickname)} — ` : ""}Focus: <b>${escapeTomCrmHtml(segLabel)}</b> · Daily US Rates, Liquidity, S&amp;P/Semis &amp; 3-Color Regime Signals will arrive in your inbox before the opening bell.</span>
+            <span>${nickname ? `Welcome, ${escapeTomCrmHtml(nickname)} — ` : ""}Focus: <b>${escapeTomCrmHtml(segLabel)}</b> · Daily US Rates, Liquidity, S&amp;P/ETF &amp; 3-Color Market Weather Educational Briefings will arrive in your inbox before the opening bell.</span>
           </div>
           <a href="#tomFreeStarterManual" class="tom-crm-manual-jump-btn" id="tom-club-jump-manual-btn">
-            📘 Open Your Free $0 Safe Order Manual ->
+            📘 Open Your Free $0 Calm Rebalancing Manual ->
           </a>
         `;
       }
@@ -446,7 +446,7 @@ export function computeTomRetirementPlan({ nestEgg, years, monthlyAdd, weatherMo
         )
       : Math.round(egg);
 
-  // Guarded 3-Bucket + -9% Stop Path (4.5% blended safe withdrawal + dividend yield)
+  // Guarded 3-Bucket Calm 2-4x/Year Rebalance Path (4.5% blended safe withdrawal + dividend yield)
   const guardedAnnual = Math.round(projectedNestEgg * 0.045);
   const guardedMonthly = Math.round(guardedAnnual / 12);
 
@@ -725,16 +725,18 @@ export function renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRe
         <a
           href="${lsMonthly}"
           class="tom-retire-cta-btn step-vip lemonsqueezy-button"
-          data-ls-modal="true"
+          data-tom-paid-plan="monthly"
+          data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
         >
-          ⚡ Step 3: Monthly VIP ($29/mo)
+          ⚡ Step 3: Start Monthly VIP — $29/mo
         </a>
         <a
           href="${lsLtd}"
           class="tom-retire-cta-btn step-ltd lemonsqueezy-button"
-          data-ls-modal="true"
+          data-tom-paid-plan="annual"
+          data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b"
         >
-          👑 Lifetime VIP ($199 Once)
+          👑 Start Annual VIP — $199/yr
         </a>
       </div>
     </section>
@@ -856,7 +858,7 @@ export function bindTomRetirementArchitectEvents(state, showToastFn) {
         if (emailInput && emailInput.focus) emailInput.focus();
       }, 280);
       if (typeof showToastFn === "function") {
-        showToastFn("☕ Enter your email below for daily 401(k)/IRA Retirement Cashflow & 3-Color Signals!");
+        showToastFn("☕ Enter your email below for daily 401(k)/IRA Retirement Cashflow & 3-Color Market Weather Briefs!");
       }
     });
   }
@@ -929,22 +931,22 @@ export function renderHero(state) {
         </div>
       </div>
 
-      <!-- 🚦 JARGON-FREE 3-COLOR TRAFFIC LIGHT SUMMARY (50-70s US INVESTORS · CALM 2-4X/YR REBALANCING) -->
-      <div class="tom-traffic-strip" id="tomTrafficLightStrip" role="group" aria-label="Today's 3-Color Retirement Rebalancing Signals">
-        <button type="button" class="tom-traffic-card t-green" data-traffic-zone="IGNITION_ZONE">
-          <span style="font-size:0.96rem; font-weight:800; color:#34d399;">🟢 CALM UPTREND (${cntGreen} Leaders)</span>
-          <strong style="font-size:1.1rem; color:var(--text);">Hold $VOO &amp; $SCHD Core Compounders</strong>
-          <span style="font-size:1rem; line-height:1.55; color:var(--text-secondary);">Healthy uptrend · Let dividends &amp; S&amp;P core compound calmly →</span>
+      <!-- 🚦 JARGON-FREE 3-COLOR MARKET WEATHER SUMMARY (50-70s US INVESTORS · CALM 2-4X/YR REBALANCING) -->
+      <div class="tom-traffic-strip" id="tomTrafficLightStrip" role="group" aria-label="Today's 3-Color Market Weather Indicators">
+        <button type="button" class="tom-traffic-card t-green" data-traffic-zone="RETIRE_SIM">
+          <span style="font-size:0.96rem; font-weight:800; color:#34d399;">🟢 CALM UPTREND WEATHER</span>
+          <strong style="font-size:1.1rem; color:var(--text);">20% $SGOV · 35% $JEPI+$SCHD · 45% $VOO</strong>
+          <span style="font-size:1rem; line-height:1.55; color:var(--text-secondary);">Healthy broad trend · Let dividends &amp; S&amp;P 500 core compound calmly →</span>
         </button>
-        <button type="button" class="tom-traffic-card t-yellow" data-traffic-zone="WASHOUT_WATCH">
-          <span style="font-size:0.96rem; font-weight:800; color:#fbbf24;">🟡 WAIT &amp; COLLECT INCOME (${cntYellow} Leaders)</span>
-          <strong style="font-size:1.1rem; color:var(--text);">Enjoy $JEPI &amp; $SCHD Monthly Paychecks</strong>
-          <span style="font-size:1rem; line-height:1.55; color:var(--text-secondary);">Pause aggressive buying · Collect steady dividends while bases form →</span>
+        <button type="button" class="tom-traffic-card t-yellow" data-traffic-zone="RETIRE_SIM">
+          <span style="font-size:0.96rem; font-weight:800; color:#fbbf24;">🟡 CAUTIOUS BASE WEATHER</span>
+          <strong style="font-size:1.1rem; color:var(--text);">30% $SGOV · 40% $JEPI+$SCHD · 30% $VOO</strong>
+          <span style="font-size:1rem; line-height:1.55; color:var(--text-secondary);">Mixed breadth · Collect steady monthly dividends while bases form →</span>
         </button>
-        <button type="button" class="tom-traffic-card t-red" data-traffic-zone="DOCTOR">
-          <span style="font-size:0.96rem; font-weight:800; color:#f87171;">🔴 SHIFT TO T-BILL CUSHION (${cntRed} Weak)</span>
-          <strong style="font-size:1.1rem; color:var(--text);">Rebalance Gently Into $SGOV (~4.7% Yield)</strong>
-          <span style="font-size:1rem; line-height:1.55; color:var(--text-secondary);">Calm 2–4x/yr trim · Check any holding in 3 seconds below →</span>
+        <button type="button" class="tom-traffic-card t-red" data-traffic-zone="MANUAL">
+          <span style="font-size:0.96rem; font-weight:800; color:#f87171;">🔴 CRASH DEFENSE WEATHER</span>
+          <strong style="font-size:1.1rem; color:var(--text);">40% $SGOV · 40% $JEPI+$SCHD · 20% $VOO</strong>
+          <span style="font-size:1rem; line-height:1.55; color:var(--text-secondary);">Calm 2–4x/yr weight rebalance · Open the $0 Safe Rebalancing Manual →</span>
         </button>
       </div>
 
@@ -1177,38 +1179,38 @@ export function renderHero(state) {
         </div>
       </div>
 
-      <!-- 3 BIG INTUITIVE ACTION CARDS / BUTTONS RIGHT ABOVE THE FOLD -->
-      <div class="hero-action-grid" role="group" aria-label="Quick Actions">
-        <button type="button" class="hero-cta-card primary" id="btnHeroActionSignals">
-          <span>📊 View 72 Live Breakout Signals</span>
+      <!-- 3 BIG INTUITIVE EDUCATIONAL CALCULATOR SHORTCUTS -->
+      <div class="hero-action-grid" role="group" aria-label="Educational Calculator Shortcuts">
+        <button type="button" class="hero-cta-card primary" id="btnHeroActionRetireSim">
+          <span>🧭 30-Sec Retirement Cashflow Calculator</span>
         </button>
-        <button type="button" class="hero-cta-card emerald" id="btnHeroActionDoctor">
-          <span>🩺 3-Sec Position Doctor (Check Any Ticker)</span>
+        <button type="button" class="hero-cta-card emerald" id="btnHeroActionManual">
+          <span>📘 $0 Brokerage &amp; 2–4x/Yr Rebalance Guide</span>
         </button>
         <a href="/semi-fear-greed.html" class="hero-cta-card semi" id="btnHeroActionSemiFg">
-          <span>🌡️ Live Semi Fear &amp; Greed Index (${semiScore})</span>
+          <span>🌡️ Market Weather &amp; Barbell Calculator (${semiScore})</span>
         </a>
       </div>
 
       <div class="kpi-grid">
         <div class="kpi-card kpi-emerald">
           <div class="kpi-label" id="kpi1_label">${t.kpi1_label}</div>
-          <div class="kpi-val">${hitRate}%</div>
+          <div class="kpi-val">26.8 Yrs</div>
           <div class="kpi-sub" id="kpi1_sub">${t.kpi1_sub}</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label" id="kpi2_label">${t.kpi2_label}</div>
-          <div class="kpi-val">${underwater}d</div>
+          <div class="kpi-val">4 ETFs</div>
           <div class="kpi-sub" id="kpi2_sub">${t.kpi2_sub}</div>
         </div>
         <div class="kpi-card kpi-emerald">
           <div class="kpi-label" id="kpi3_label">${t.kpi3_label}</div>
-          <div class="kpi-val">+${netCagr}%</div>
+          <div class="kpi-val">2–4x/Yr</div>
           <div class="kpi-sub" id="kpi3_sub">${t.kpi3_sub}</div>
         </div>
         <div class="kpi-card kpi-amber">
           <div class="kpi-label" id="kpi4_label">${t.kpi4_label}</div>
-          <div class="kpi-val">${severeRisk}%</div>
+          <div class="kpi-val">100% Local</div>
           <div class="kpi-sub" id="kpi4_sub">${t.kpi4_sub}</div>
         </div>
       </div>
@@ -1221,48 +1223,52 @@ export function renderFreeStarterManual(state) {
   const lsMonthly =
     cfg.ls_site1_monthly_url ||
     "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en";
-  const lsLtd =
+  const lsAnnual =
     cfg.ls_site1_ltd_url ||
     "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en";
+  const isWebView =
+    typeof window !== "undefined" &&
+    typeof window.isTomInAppWebView === "function" &&
+    window.isTomInAppWebView();
 
   return `
-    <section class="tom-starter-manual-section" id="tomFreeStarterManual" aria-label="$0 Free Public Product: US Brokerage App & Safe Order Starter Manual">
+    <section class="tom-starter-manual-section" id="tomFreeStarterManual" aria-label="$0 Free Public Product: US Brokerage App & Calm 2-4x/Year Rebalancing Starter Manual">
       <div class="tom-manual-top-row">
-        <span class="tom-manual-free-pill">📘 $0 FREE PUBLIC PRODUCT · OPEN TO ALL INVESTORS</span>
+        <span class="tom-manual-free-pill">📘 $0 FREE PUBLIC PRODUCT · SELF-DIRECTED EDUCATIONAL GUIDE</span>
         <span class="tom-manual-broker-pill">🏦 Fidelity · Charles Schwab · Vanguard Ready</span>
       </div>
 
       <h2 class="tom-manual-heading">
-        US Brokerage App &amp; Safe Order Starter Manual ($0 Free Edition)
+        US Brokerage App &amp; Calm 2–4x/Year Portfolio Rebalancing Manual ($0 Free Edition)
       </h2>
       <p class="tom-manual-lead">
-        Whether you are placing your very first self-directed trade or managing a lifelong <b>401(k) / IRA</b> nest egg, learn the 3 calm brokerage habits that stop 9:30 AM price traps, shield your principal automatically, and pay steady monthly interest while waiting in cash.
+        Managing a lifelong <b>401(k) or IRA</b> nest egg does not require stressful daily trading. Learn the 3 calm self-directed brokerage habits: placing safe Limit Orders, rebalancing <b>SGOV · SCHD · JEPI · VOO</b> weights 2–4 times a year with our 3-Color Market Weather indicator, and earning steady government money-market yield on cash cushions.
       </p>
 
       <div class="tom-manual-steps-grid">
         <button type="button" class="tom-manual-step-card btn-open-tom-manual-step" data-manual-step="tomManualStep1">
-          <span class="tom-manual-step-badge step-b1">STEP 1 · SAFE BUYING</span>
+          <span class="tom-manual-step-badge step-b1">STEP 1 · SAFE ORDER ENTRY</span>
           <strong class="tom-manual-step-title">Limit Order vs. Market Order</strong>
           <span class="tom-manual-step-desc">
-            Why tapping &ldquo;Market Order&rdquo; at 9:30 AM ET risks overpaying &mdash; and how to place a safe <b>Limit Order</b> in 3 taps on Fidelity, Schwab, or Vanguard.
+            Why tapping &ldquo;Market Order&rdquo; at 9:30 AM ET risks overpaying on wide morning spreads &mdash; and how to place a calm <b>Limit Order</b> in 3 taps on Fidelity, Schwab, or Vanguard.
           </span>
           <span class="tom-manual-step-cta">Read Step 1 Guide →</span>
         </button>
 
         <button type="button" class="tom-manual-step-card btn-open-tom-manual-step" data-manual-step="tomManualStep2">
-          <span class="tom-manual-step-badge step-b2">STEP 2 · PRINCIPAL SHIELD</span>
-          <strong class="tom-manual-step-title">Automatic -8% to -9% Stop-Loss</strong>
+          <span class="tom-manual-step-badge step-b2">STEP 2 · CALM WEIGHT REBALANCING</span>
+          <strong class="tom-manual-step-title">2–4x/Year Portfolio Weight Rebalancing</strong>
           <span class="tom-manual-step-desc">
-            How to set an automatic <b>Stop Order</b> safety net right after buying so a sudden market drop can never cut your retirement account in half.
+            How to review and gently adjust your <b>SGOV · SCHD · JEPI · VOO</b> bucket percentages just <b>2–4 times per year</b> aligned with our 3-Color Market Weather indicator.
           </span>
           <span class="tom-manual-step-cta">Read Step 2 Guide →</span>
         </button>
 
         <button type="button" class="tom-manual-step-card btn-open-tom-manual-step" data-manual-step="tomManualStep3">
-          <span class="tom-manual-step-badge step-b3">STEP 3 · RED-LIGHT CASH YIELD</span>
+          <span class="tom-manual-step-badge step-b3">STEP 3 · T-BILL &amp; MMF CUSHION</span>
           <strong class="tom-manual-step-title">401(k) / IRA Cash MMF Cushion</strong>
           <span class="tom-manual-step-desc">
-            When the signal is 🔴 Red (Protect Cash), park idle cash in <b>SPAXX</b>, <b>SWVXX</b>, or <b>VMFXX</b> to collect monthly interest until the next 🟢 Green light.
+            During 🔴 Red (Crash Defense Weather), keep your Bucket 1 cushion in <b>SGOV</b>, <b>SPAXX</b>, <b>SWVXX</b>, or <b>VMFXX</b> to collect monthly interest without selling core holdings.
           </span>
           <span class="tom-manual-step-cta">Read Step 3 Guide →</span>
         </button>
@@ -1270,26 +1276,28 @@ export function renderFreeStarterManual(state) {
 
       <div class="tom-manual-cta-bar">
         <button type="button" class="tom-manual-open-btn" id="btnOpenTomStarterManual">
-          📖 Open Complete $0 Starter Manual (Print / Save PDF) →
+          ${isWebView ? "📖 Read Complete $0 Manual &amp; Email Me This PDF Guide →" : "📖 Open Complete $0 Starter Manual (Read / Save PDF) →"}
         </button>
         <button type="button" class="tom-manual-sec-btn btn-jump-tom-morning">
-          📧 Get Free Daily 3-Color Signals ($0)
+          📧 Get Free Daily 3-Color Market Weather ($0)
         </button>
         <a
           href="${lsMonthly}"
           class="tom-manual-vip-link lemonsqueezy-button"
           data-direct-ls="1"
+          data-tom-paid-plan="monthly"
           data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
         >
-          ⚡ Monthly VIP ($29/mo)
+          ⚡ Start Monthly VIP — $29/mo
         </a>
         <a
-          href="${lsLtd}"
+          href="${lsAnnual}"
           class="tom-manual-vip-link is-ltd lemonsqueezy-button"
           data-direct-ls="1"
+          data-tom-paid-plan="annual"
           data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b"
         >
-          👑 Lifetime VIP ($199)
+          👑 Start Annual VIP — $199/yr
         </a>
       </div>
     </section>
@@ -1350,11 +1358,11 @@ export function renderEasyProfitSimulator(state) {
   const plainSignal =
     zone === "IGNITION_ZONE"
       ? {
-          badge: "🟢 GREEN REGIME · RIGHT-SIDE IGNITION",
+          badge: "🟢 GREEN REGIME · ABOVE MA20/MA60",
           color: "#34d399",
           bg: "rgba(16,185,129,0.12)",
           border: "rgba(16,185,129,0.4)",
-          summary: `Base washout confirmed with institutional volume surge (${Number(selectedStock.vol_surge_10d || 1.5).toFixed(2)}x volume). Historical model applies a -9.0% risk threshold.`,
+          summary: `Base consolidation confirmed with volume expansion (${Number(selectedStock.vol_surge_10d || 1.5).toFixed(2)}x volume). Historical factor model tracks standard dispersion bands.`,
         }
       : zone === "WASHOUT_WATCH"
       ? {
@@ -1362,14 +1370,14 @@ export function renderEasyProfitSimulator(state) {
           color: "#fbbf24",
           bg: "rgba(245,158,11,0.12)",
           border: "rgba(245,158,11,0.4)",
-          summary: `Valuation washout detected (PW-RSI ${Number(selectedStock.score || 22).toFixed(1)}), awaiting institutional volume confirmation above moving averages.`,
+          summary: `Valuation compression detected (Score ${Number(selectedStock.score || 22).toFixed(1)}), awaiting volume confirmation above moving averages.`,
         }
       : {
           badge: "🔴 RED REGIME · BELOW MA60 DOWNTREND",
           color: "#f87171",
           bg: "rgba(239,68,68,0.12)",
           border: "rgba(239,68,68,0.4)",
-          summary: `Left-side downtrend remains active below 20-day & 60-day moving averages. Historical factor filter excludes sub-MA60 trends.`,
+          summary: `Price remains below 20-day & 60-day moving averages. Historical factor filter excludes sub-MA60 trends.`,
         };
 
   return `
@@ -1381,10 +1389,10 @@ export function renderEasyProfitSimulator(state) {
             <span>PLAIN-ENGLISH QUANT METHODOLOGY · ZERO JARGON GUIDE</span>
           </div>
           <h2 style="font-size:1.08rem; font-weight:800; color:#ffffff; margin:0 0 4px 0;">
-            How Our Quantitative Factor Model Evaluates Risk &amp; Asymmetric Setups in 3 Steps
+            How Our Quantitative Factor Model Evaluates Dispersion &amp; Allocation Weights in 3 Steps
           </h2>
           <p style="font-size:0.8rem; color:#cbd5e1; margin:0; line-height:1.5;">
-            Explore the <b>3-State Factor Regime</b> below and simulate historical position sizing, -9.0% risk bands, and R-multiple scenarios (educational research only).
+            Explore the <b>3-State Factor Regime</b> below and simulate historical position sizing, variance bands, and compounding scenarios (self-directed educational calculator software only).
           </p>
         </div>
         <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
@@ -1410,34 +1418,34 @@ export function renderEasyProfitSimulator(state) {
             STEP 1 · REGIME FILTER (GREEN STATE)
           </div>
           <div style="font-size:0.8rem; font-weight:700; color:#ffffff; margin-bottom:3px;">
-            Isolate &ldquo;IGNITION ZONE&rdquo; Factor Setups
+            Filter Trend-Confirmed Factor Cohorts
           </div>
           <div style="font-size:0.74rem; color:#94a3b8; line-height:1.45;">
-            Identifies post-washout equities (<b>PW-RSI &le; 25</b>) reclaiming moving averages alongside institutional volume expansion (<b>Volume &ge; 1.4x</b>).
+            Identifies post-drawdown equities reclaiming 20-day and 60-day moving averages alongside volume expansion (<b>Volume &ge; 1.4x</b>).
           </div>
         </div>
 
         <div style="background:rgba(15,23,42,0.75); border:1px solid rgba(245,158,11,0.28); border-left:3px solid #f59e0b; border-radius:6px; padding:10px 12px;">
           <div style="font-size:0.72rem; font-weight:800; color:#fbbf24; font-family:var(--font-mono); margin-bottom:3px;">
-            STEP 2 · DOWNSIDE BOUNDARY (-9% MODEL)
+            STEP 2 · LOWER VARIANCE BOUNDARY
           </div>
           <div style="font-size:0.8rem; font-weight:700; color:#ffffff; margin-bottom:3px;">
-            Model a Mechanical -9.0% Risk Threshold
+            Model Position Weight &amp; Drawdown Variance
           </div>
           <div style="font-size:0.74rem; color:#94a3b8; line-height:1.45;">
-            Unhedged drawdowns (-50%) erode compounding math. Modeling a strict <b>-9.0%</b> invalidation boundary caps simulated single-position portfolio risk at -1.35%.
+            Deep drawdowns erode compounding math. Modeling a disciplined single-slot weight caps simulated portfolio variance impact at ~1.35%.
           </div>
         </div>
 
         <div style="background:rgba(15,23,42,0.75); border:1px solid rgba(56,189,248,0.28); border-left:3px solid #38bdf8; border-radius:6px; padding:10px 12px;">
           <div style="font-size:0.72rem; font-weight:800; color:#38bdf8; font-family:var(--font-mono); margin-bottom:3px;">
-            STEP 3 · ASYMMETRIC R-MULTIPLE PROFILE
+            STEP 3 · HISTORICAL DISPERSION PROFILE
           </div>
           <div style="font-size:0.8rem; font-weight:700; color:#ffffff; margin-bottom:3px;">
-            Historical +50% to +100% Excursion Bands
+            Multi-Year Empirical Return Distribution
           </div>
           <div style="font-size:0.74rem; color:#94a3b8; line-height:1.45;">
-            Across 2000–2026 empirical data, a <b>55% hit rate</b> with asymmetric payoff yielded <b>+${netCagrStr}%/yr</b> backtested net CAGR (past performance does not guarantee future results).
+            Across 2000–2026 empirical data, trend-confirmed factor cohorts yielded <b>+${netCagrStr}%/yr</b> backtested net CAGR (past performance does not guarantee future results).
           </div>
         </div>
       </div>
@@ -1446,14 +1454,14 @@ export function renderEasyProfitSimulator(state) {
       <div style="background:#080c15; border:1px solid rgba(56,189,248,0.3); border-radius:6px; padding:12px 14px;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
           <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; max-width:100%;">
-            <span class="mono" style="font-size:0.72rem; font-weight:800; color:#38bdf8;">🎯 INTERACTIVE POSITION SIZING &amp; RISK SIMULATOR:</span>
+            <span class="mono" style="font-size:0.72rem; font-weight:800; color:#38bdf8;">🎯 INTERACTIVE POSITION WEIGHT &amp; VARIANCE SIMULATOR:</span>
             <select id="easySimTickerSelect" style="min-height:40px; max-width:100%; background:#0f172a; color:#ffffff; border:1px solid #38bdf8; border-radius:4px; padding:6px 8px; font-family:var(--font-mono); font-size:0.76rem; font-weight:700; cursor:pointer;">
               ${selectableStocks
                 .map(
                   (s) =>
                     `<option value="${s.ticker}" ${s.ticker === selectedStock.ticker ? "selected" : ""}>$${s.ticker} (${s.name_en || s.ticker}) — $${Number(
                       s.close || 0
-                    ).toFixed(2)} [${s.zone_code === "IGNITION_ZONE" ? "🟢 IGNITION" : s.zone_code}]</option>`
+                    ).toFixed(2)} [${s.zone_code === "IGNITION_ZONE" ? "🟢 GREEN" : s.zone_code}]</option>`
                 )
                 .join("")}
             </select>
@@ -1488,22 +1496,22 @@ export function renderEasyProfitSimulator(state) {
           </div>
 
           <div style="background:#0d1424; border:1px solid rgba(239,68,68,0.3); border-radius:5px; padding:9px 11px;">
-            <div class="mono" style="font-size:0.66rem; color:#f87171;">② SIMULATED DRAWDOWN CAP (-9% BAND)</div>
+            <div class="mono" style="font-size:0.66rem; color:#f87171;">② SIMULATED LOWER VARIANCE BAND</div>
             <div class="mono" style="font-size:1.05rem; font-weight:800; color:#f87171; margin-top:3px;">
-              -$${maxLossUsd.toLocaleString()} <span style="font-size:0.74rem; color:#fca5a5;">(Band @ $${stopPrice})</span>
+              -$${maxLossUsd.toLocaleString()} <span style="font-size:0.74rem; color:#fca5a5;">(Ref @ $${stopPrice})</span>
             </div>
             <div style="font-size:0.7rem; color:#94a3b8; margin-top:2px;">
-              Caps simulated impact to <b>-1.35%</b> of $${capUsd.toLocaleString()} model
+              Caps simulated impact to <b>~1.35%</b> of $${capUsd.toLocaleString()} model
             </div>
           </div>
 
           <div style="background:#0d1424; border:1px solid rgba(16,185,129,0.35); border-radius:5px; padding:9px 11px;">
-            <div class="mono" style="font-size:0.66rem; color:#34d399;">③ HISTORICAL EXCURSION BAND (+50% / +100%)</div>
+            <div class="mono" style="font-size:0.66rem; color:#34d399;">③ HISTORICAL UPPER DISPERSION BAND</div>
             <div class="mono" style="font-size:1.05rem; font-weight:800; color:#34d399; margin-top:3px;">
               +$${profit1Usd.toLocaleString()} ~ +$${profit2Usd.toLocaleString()}
             </div>
             <div style="font-size:0.7rem; color:#94a3b8; margin-top:2px;">
-              +50% Band ($${target1Price}) · 2.0x Band ($${target2Price})
+              Mid Band ($${target1Price}) · Upper Band ($${target2Price})
             </div>
           </div>
 

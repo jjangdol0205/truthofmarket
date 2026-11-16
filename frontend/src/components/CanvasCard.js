@@ -69,7 +69,7 @@ export function renderScoreboardCard(stock, config = {}) {
   ctx.fillText(`• 10D Institutional Volume Washout: ${Number(volSurge).toFixed(2)}x Avg  |  RSI(14): ${Number(rsi).toFixed(1)}`, 42, 336);
 
   ctx.fillStyle = "#34d399";
-  ctx.fillText(`• Historical 1Y 2x (+100%) Win Rate: ${Number(hist2x).toFixed(1)}%   (MA60 Breakout: ${ma60Price})`, 42, 382);
+  ctx.fillText(`• Historical Factor Cohort Rate: ${Number(hist2x).toFixed(1)}%   (MA60 Ref: ${ma60Price})`, 42, 382);
 
   // Watermark Compliance Footer
   ctx.fillStyle = "#64748b";

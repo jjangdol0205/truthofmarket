@@ -57,6 +57,7 @@ import {
 } from "./components/PositionDoctor.js";
 import { renderPricing } from "./components/Pricing.js";
 import { renderModals } from "./components/Modals.js";
+import "./components/PaymentWaitlist.js";
 import { renderSemiFearGreedView } from "./components/SemiFearGreedView.js";
 
 const initialPath = window.location.pathname.toLowerCase();
@@ -282,11 +283,63 @@ function applyClientFilterAndSort() {
   state.filteredStocks = list;
 }
 
-function renderRightSideView() {
+function isProSwingOrEquitySubpage() {
+  if (typeof window === "undefined") return false;
+  if (window.__DEFAULT_VIEW__ === "pro_swing") return true;
+  const p = (window.location.pathname || "/").toLowerCase();
+  return p.includes("/pro-swing") || p.includes("/stocks/") || p.includes("/compare/");
+}
+
+function renderHomeRetirementView() {
   const t = state.t;
   return `
     ${renderHero(state)}
     ${renderFreeStarterManual(state)}
+    ${renderPricing(state)}
+
+    <!-- COMPANION EDUCATIONAL TOOLS & ARCHIVE LINKS -->
+    <section class="cross-banner">
+      <div>
+        <div style="font-size:0.74rem; font-family:var(--font-mono); font-weight:800; color:#38bdf8; text-transform:uppercase; letter-spacing:0.05em;" id="crossTitle">
+          ${t.crossTitle}
+        </div>
+        <h3 style="font-size:1.15rem; font-weight:800; margin:4px 0; color:#ffffff;" id="crossHeading">
+          ${t.crossHeading}
+        </h3>
+        <p style="font-size:0.92rem; color:var(--muted);" id="crossDesc">
+          ${t.crossDesc}
+        </p>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button type="button" class="btn btn-primary" id="crossFunnelSwitchBtn" style="min-height:46px; background:#0284c7; border-color:#38bdf8;">
+          <span id="crossBtn">${t.crossBtn} →</span>
+        </button>
+        <a href="/pro-swing.html" class="btn" style="min-height:46px; border-color:rgba(148,163,184,0.4); color:#cbd5e1; font-weight:700;">
+          Self-Directed Quantitative Research Archive →
+        </a>
+      </div>
+    </section>
+  `;
+}
+
+function renderProSwingArchiveView() {
+  const t = state.t;
+  return `
+    <section style="margin:12px 0 18px; padding:18px 20px; background:linear-gradient(135deg,#0f172a 0%,#0b1324 100%); border:1.5px solid #38bdf8; border-radius:12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div>
+          <span class="mono" style="font-size:0.74rem; font-weight:800; color:#38bdf8; letter-spacing:0.04em;">
+            SELF-DIRECTED QUANTITATIVE RESEARCH ARCHIVE · EDUCATIONAL CALCULATOR SOFTWARE
+          </span>
+          <h2 style="font-size:1.28rem; font-weight:900; color:#ffffff; margin:4px 0;">
+            Historical US Equity Factor Dataset &amp; Mathematical Variance Calculators
+          </h2>
+          <p style="margin:0; font-size:0.92rem; color:#cbd5e1; line-height:1.55;">
+            Self-directed public market data visualization and historical moving-average / volume factor archive. Looking for 401(k)/IRA monthly retirement income planning? <a href="/" style="color:#6ee7b7; font-weight:800; text-decoration:underline;">Return to the 30-Second Retirement Cashflow Calculator →</a>
+          </p>
+        </div>
+      </div>
+    </section>
     <section style="margin-bottom:12px;">
       ${renderPositionDoctorForm(state)}
     </section>
@@ -302,7 +355,7 @@ function renderRightSideView() {
     ${renderProVault(state)}
     ${renderPricing(state)}
 
-    <!-- CROSS-PLATFORM BANNER TO SEMIFEARGREED -->
+    <!-- CROSS-PLATFORM BANNER TO MARKET WEATHER -->
     <section class="cross-banner">
       <div>
         <div style="font-size:0.72rem; font-family:var(--font-mono); font-weight:700; color:#f87171; text-transform:uppercase; letter-spacing:0.05em;" id="crossTitle">
@@ -327,14 +380,25 @@ function renderApp() {
   if (!appEl) return;
 
   const t = state.t;
+  const mainBodyHtml =
+    state.activeView === "semi"
+      ? renderSemiFearGreedView(state)
+      : isProSwingOrEquitySubpage()
+      ? renderProSwingArchiveView()
+      : renderHomeRetirementView();
+
   appEl.innerHTML = `
     ${renderHeader(state)}
     <main class="container">
-      ${state.activeView === "semi" ? renderSemiFearGreedView(state) : renderRightSideView()}
+      ${mainBodyHtml}
 
-      <footer style="border-top:1px solid var(--border); padding-top:20px; margin-top:28px; color:var(--muted); font-size:0.76rem; line-height:1.6;">
+      <footer class="tom-fixed-legal-footer" style="border-top:1px solid var(--border); padding-top:20px; margin-top:28px; color:var(--muted); font-size:0.82rem; line-height:1.65;">
         <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
-          <span class="mono" style="font-size:0.72rem; color:var(--text); font-weight:700;">OFFICIAL CHANNELS:</span>
+          <span class="mono" style="font-size:0.74rem; color:var(--text); font-weight:800;">EDUCATIONAL MARKET DATA &amp; QUANTITATIVE RESEARCH DESK:</span>
+          <a href="mailto:beable9489@gmail.com" style="color:#38bdf8; text-decoration:underline; font-weight:800;">
+            ✉️ beable9489@gmail.com
+          </a>
+          <span style="color:var(--border);">|</span>
           <a href="${state.config.youtube_url || DEFAULT_YOUTUBE_URL}" target="_blank" rel="noopener noreferrer" style="color:#fca5a5; text-decoration:none; font-weight:600;">
             📺 YouTube (@RightSideAlpha) ↗
           </a>
@@ -346,31 +410,20 @@ function renderApp() {
           <a href="${state.config.x_url || "https://x.com/rightsidealpha"}" target="_blank" rel="noopener noreferrer" style="color:#e2e8f0; text-decoration:none; font-weight:600;">
             𝕏 (@rightsidealpha) ↗
           </a>
-          <span style="color:var(--border);">|</span>
-          <a
-            href="${getVipTelegramUrl(state.isProUnlocked)}"
-            class="${state.isProUnlocked ? "" : "btn-gated-vip-tg"}"
-            ${state.isProUnlocked ? 'target="_blank" rel="noopener noreferrer"' : ""}
-            style="color:#38bdf8; text-decoration:none; font-weight:600;"
-          >
-            ${state.isProUnlocked ? "👑 Pro VIP Telegram Channel ↗" : "🔒 Pro VIP Telegram ($SMH/$XLV & 72-Stock News)"}
-          </a>
         </div>
-        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:10px; font-size:0.74rem;">
-          <a href="/terms.html" class="btn-open-legal" data-legal-tab="terms" style="color:#93c5fd; text-decoration:none; font-weight:600;">Terms of Service</a>
+        <div style="display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin-bottom:12px; padding:10px 14px; background:rgba(15,23,42,0.75); border:1px solid rgba(148,163,184,0.22); border-radius:8px; font-size:0.84rem;">
+          <a href="/terms.html" style="color:#93c5fd; text-decoration:underline; font-weight:800;">Terms of Service</a>
           <span style="color:var(--border);">·</span>
-          <a href="/privacy.html" class="btn-open-legal" data-legal-tab="privacy" style="color:#93c5fd; text-decoration:none; font-weight:600;">Privacy Policy</a>
+          <a href="/privacy.html" style="color:#93c5fd; text-decoration:underline; font-weight:800;">Privacy Policy</a>
           <span style="color:var(--border);">·</span>
-          <a href="/refund.html" class="btn-open-legal" data-legal-tab="refund" style="color:#93c5fd; text-decoration:none; font-weight:600;">Refund & Cancellation Policy</a>
+          <a href="/refund.html" style="color:#6ee7b7; text-decoration:underline; font-weight:800;">14-Day Refund Policy</a>
           <span style="color:var(--border);">·</span>
-          <a href="/contact.html" style="color:#93c5fd; text-decoration:none; font-weight:600;">Contact Desk</a>
+          <a href="/contact.html" style="color:#93c5fd; text-decoration:underline; font-weight:700;">Contact Desk</a>
           <span style="color:var(--border);">·</span>
-          <a href="mailto:beable9489@gmail.com" style="color:#93c5fd; text-decoration:none; font-weight:600;">Support: beable9489@gmail.com</a>
-          <span style="color:var(--border);">·</span>
-          <span style="color:#cbd5e1; font-weight:600;">Operated by Yoonju Lee · KIDS-FIT Global Studio (Lemon Squeezy Store #296100 · <a href="https://kisfitglobal.com" target="_blank" rel="noopener noreferrer" style="color:#93c5fd; text-decoration:none;">kisfitglobal.com</a> &amp; <a href="https://truthofmarket.com" style="color:#93c5fd; text-decoration:none;">truthofmarket.com</a>)</span>
+          <a href="mailto:beable9489@gmail.com" style="color:#fde68a; text-decoration:underline; font-weight:800;">Support: beable9489@gmail.com</a>
         </div>
-        <p id="disclaimerText">${t.disclaimer}</p>
-        <p style="margin-top:8px; font-family:var(--font-mono); font-size:0.72rem;" id="copyrightText">${t.copyright}</p>
+        <p id="disclaimerText" style="color:#cbd5e1; font-weight:600;">${t.disclaimer}</p>
+        <p style="margin-top:8px; font-family:var(--font-mono); font-size:0.74rem;" id="copyrightText">${t.copyright}</p>
       </footer>
     </main>
     <canvas id="scoreCanvas" width="900" height="500" style="display:none;"></canvas>
@@ -499,10 +552,20 @@ function bindEvents() {
     });
   }
 
-  // 3-Color Traffic Light Strip Actions
+  // 3-Color Market Weather Strip Actions
   document.querySelectorAll(".tom-traffic-card").forEach((card) => {
     card.addEventListener("click", () => {
       const z = card.getAttribute("data-traffic-zone");
+      if (z === "RETIRE_SIM") {
+        const simEl = document.getElementById("tom-retirement-architect");
+        if (simEl && simEl.scrollIntoView) simEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+      if (z === "MANUAL") {
+        const manEl = document.getElementById("tomFreeStarterManual");
+        if (manEl && manEl.scrollIntoView) manEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
       if (z === "DOCTOR") {
         const docEl = document.getElementById("position-doctor-card");
         if (docEl && docEl.scrollIntoView) docEl.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -518,7 +581,7 @@ function bindEvents() {
     });
   });
 
-  // 1-Field Free Morning Signal Signup Form
+  // 1-Field Free Morning Retirement Brief Signup Form
   const tomMorningForm = document.getElementById("tomMorningSignalForm");
   if (tomMorningForm) {
     tomMorningForm.addEventListener("submit", (e) => {
@@ -554,10 +617,10 @@ function bindEvents() {
       if (statusEl) {
         statusEl.style.display = "block";
         statusEl.style.color = "#34d399";
-        statusEl.textContent = `🎉 Welcome aboard (${email})! Your 8:30 AM ET Safety Brief & 2 Bonus Watchlist Setups are now unlocked.`;
+        statusEl.textContent = `🎉 Welcome aboard (${email})! Your 8:30 AM ET Retirement Weather Brief & 4-Core Allocation Guide are now unlocked.`;
       }
       if (bonusEl) bonusEl.style.display = "block";
-      showToast("✅ Free Daily Morning Signals & -9% Alerts Activated!");
+      showToast("✅ Free Daily Morning Retirement Brief Activated!");
     });
   }
 
@@ -634,11 +697,25 @@ function bindEvents() {
     btn.addEventListener("click", jumpToTomMorningBox);
   });
 
-  // $0 Free US Brokerage App & Safe Order Starter Manual Modal
+  // $0 Free US Brokerage App & Calm 2-4x/Year Rebalancing Manual Modal + WebView Branching
   const tomStarterManualModal = document.getElementById("tomStarterManualModal");
+  const isWebViewEnv = () =>
+    typeof window !== "undefined" &&
+    typeof window.isTomInAppWebView === "function" &&
+    window.isTomInAppWebView();
+
   const openTomStarterManual = (stepId) => {
     if (!tomStarterManualModal) return;
     tomStarterManualModal.style.display = "flex";
+    if (isWebViewEnv() && !stepId) {
+      const wvBox = document.getElementById("tomWebviewPdfEmailBox");
+      const wvInp = document.getElementById("tomWebviewPdfEmailInput");
+      if (wvBox) wvBox.style.display = "block";
+      setTimeout(() => {
+        if (wvInp && !wvInp.value) wvInp.focus();
+      }, 80);
+      return;
+    }
     if (stepId) {
       setTimeout(() => {
         const targetEl = document.getElementById(stepId);
@@ -687,7 +764,21 @@ function bindEvents() {
 
   const btnPrintTomStarterManual = document.getElementById("btnPrintTomStarterManual");
   if (btnPrintTomStarterManual) {
-    btnPrintTomStarterManual.addEventListener("click", () => {
+    btnPrintTomStarterManual.addEventListener("click", (e) => {
+      if (isWebViewEnv()) {
+        if (e) e.preventDefault();
+        if (tomStarterManualModal) tomStarterManualModal.style.display = "flex";
+        const wvBox = document.getElementById("tomWebviewPdfEmailBox");
+        const wvInp = document.getElementById("tomWebviewPdfEmailInput");
+        if (wvBox) {
+          wvBox.style.display = "block";
+          if (wvBox.scrollIntoView) wvBox.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+        setTimeout(() => {
+          if (wvInp) wvInp.focus();
+        }, 80);
+        return;
+      }
       try {
         document.body.classList.add("printing-tom-manual");
         window.print();
@@ -697,6 +788,58 @@ function bindEvents() {
       } catch (_) {
         document.body.classList.remove("printing-tom-manual");
       }
+    });
+  }
+
+  const tomWebviewPdfEmailForm = document.getElementById("tomWebviewPdfEmailForm");
+  if (tomWebviewPdfEmailForm) {
+    tomWebviewPdfEmailForm.addEventListener("submit", (ev) => {
+      ev.preventDefault();
+      const inp = document.getElementById("tomWebviewPdfEmailInput");
+      const statusEl = document.getElementById("tomWebviewPdfEmailStatus");
+      const email = String((inp && inp.value) || "").trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+        if (statusEl) {
+          statusEl.style.display = "block";
+          statusEl.style.color = "#fca5a5";
+          statusEl.textContent = "Please enter a valid email address (for example, robert@email.com).";
+        }
+        if (inp) inp.focus();
+        return;
+      }
+      state.freeMemberEmail = email;
+      try {
+        localStorage.setItem("tom_free_member_email", email);
+        fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/signup", {
+          mode: "cors",
+          keepalive: true,
+        }).catch(() => {});
+        fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/signup_total", {
+          mode: "cors",
+          keepalive: true,
+        }).catch(() => {});
+        if (typeof window.submitTomVipWaitlistOrManualEmail === "function") {
+          window.submitTomVipWaitlistOrManualEmail({
+            email,
+            segment: "starter_manual_pdf",
+            lang: "en-US",
+            notes: "site=truthofmarket.com | source=starter_manual_pdf",
+          }).catch(() => {});
+        } else {
+          registerTomClubMemberSafe({
+            email,
+            nickname: "",
+            segment: "starter_manual_pdf",
+            website_hp: "",
+          }).catch(() => {});
+        }
+      } catch (_) {}
+      if (statusEl) {
+        statusEl.style.display = "block";
+        statusEl.style.color = "#6ee7b7";
+        statusEl.textContent = `✅ PDF Guide & Instant Free Morning Bell Club Access activated for ${email}! Check your inbox.`;
+      }
+      showToast("✅ $0 PDF Guide & Free Club Access Sent!");
     });
   }
 
@@ -775,6 +918,19 @@ function bindEvents() {
       }
     }, 240);
   };
+  const btnHeroActionRetireSim = document.getElementById("btnHeroActionRetireSim");
+  if (btnHeroActionRetireSim) {
+    btnHeroActionRetireSim.addEventListener("click", () => {
+      const simEl = document.getElementById("tom-retirement-architect");
+      if (simEl && typeof simEl.scrollIntoView === "function") {
+        simEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  }
+  const btnHeroActionManual = document.getElementById("btnHeroActionManual");
+  if (btnHeroActionManual) {
+    btnHeroActionManual.addEventListener("click", () => openTomStarterManual(""));
+  }
   const btnHeroActionSignals = document.getElementById("btnHeroActionSignals");
   if (btnHeroActionSignals) {
     btnHeroActionSignals.addEventListener("click", () => {
@@ -865,7 +1021,7 @@ function bindEvents() {
     });
   }
 
-  // 15-Second Wall Street Chart Blind Test Controls
+  // 15-Second Historical Chart Study Controls
   document.querySelectorAll(".btn-blind-test-pick").forEach((btn) => {
     btn.addEventListener("click", () => {
       const rId = btn.getAttribute("data-round");
@@ -881,7 +1037,7 @@ function bindEvents() {
     btnResetBlindTest.addEventListener("click", () => {
       state.blindTestAnswers = {};
       renderApp();
-      showToast("Chart Blind Test Reset — Try All 3 Setups Again");
+      showToast("Historical Pattern Quiz Reset — Try All 3 Setups Again");
     });
   }
 
@@ -968,14 +1124,14 @@ function bindEvents() {
   const vaultOverlayUnlock = document.getElementById("vaultOverlayUnlock");
   if (vaultOverlayUnlock) vaultOverlayUnlock.addEventListener("click", () => openLicenseModal(false));
 
-  // Gated Pro VIP Telegram Channel buttons -> open License / Subscribe modal for Free users
+  // Gated VIP Telegram Channel buttons -> open License / VIP modal for Free users
   document.querySelectorAll(".btn-gated-vip-tg").forEach((el) => {
     el.addEventListener("click", (e) => {
       if (!state.isProUnlocked) {
         e.preventDefault();
         openLicenseModal(
           false,
-          "🔒 Pro VIP Telegram Channel ($SMH/$XLV & 72-Stock Real-Time News + Unmasked Ignition Signals) is exclusively for Pro Subscribers ($29/mo or $199 Lifetime)."
+          "🔒 VIP Telegram Educational Research Channel is available for Monthly VIP ($29/mo) and Annual VIP ($199/yr) subscribers."
         );
       }
     });
@@ -1125,28 +1281,7 @@ function bindEvents() {
     }
   });
 
-  // Delegated Lemon Squeezy Checkout Overlay Interceptor
-  // Handles both static and dynamically rendered checkout buttons (e.g. inside #docOutput)
-  if (!window.__rsaLsClickDelegated) {
-    window.__rsaLsClickDelegated = true;
-    document.addEventListener("click", (e) => {
-      const btn = e.target.closest(".lemonsqueezy-button");
-      if (!btn) return;
-      const rawHref = btn.getAttribute("href") || "";
-      const href =
-        typeof formatCheckoutUrl === "function" ? formatCheckoutUrl(rawHref, rawHref) : rawHref;
-      if (href && href !== rawHref) {
-        btn.setAttribute("href", href);
-      }
-      if (typeof window.__bindRsaLemonSqueezyEvents === "function") {
-        window.__bindRsaLemonSqueezyEvents();
-      }
-      if (window.LemonSqueezy && window.LemonSqueezy.Url && typeof window.LemonSqueezy.Url.Open === "function") {
-        e.preventDefault();
-        window.LemonSqueezy.Url.Open(href);
-      }
-    });
-  }
+  // Unified checkout handling is enforced by PaymentWaitlist.js (window.PAYMENT_CONFIG)
 
   // Admin Login & Config Modal Controls
   const adminLoginModal = document.getElementById("adminLoginModal");
@@ -1536,11 +1671,11 @@ function bindEvents() {
   if (btnDownloadPro72Csv) {
     btnDownloadPro72Csv.addEventListener("click", () => {
       if (!state.isProUnlocked) {
-        openLicenseModal(false, "🔒 Upgrade to Pro VIP ($29/mo or $199 Lifetime) to download the full 72-Stock Institutional Action Sheet (.CSV).");
+        openLicenseModal(false, "🔒 Upgrade to VIP Software ($29/mo Monthly VIP or $199/yr Annual VIP) to download the full Historical Factor Dataset (.CSV).");
         return;
       }
       const perSlot = Math.round((state.proPortfolioUsd || 30000) * 0.15);
-      const header = "Rank,Ticker,Company,Sector,PW_RSI_Score,Zone,Latest_Close,Entry_Trigger_MA60,Hard_Stop_Minus9Pct,Target_2X_TP1,Recommended_Shares_15Pct_Slot\n";
+      const header = "Rank,Ticker,Company,Sector,Factor_Score,Zone,Latest_Close,MA60_Reference,Lower_Variance_Band,Upper_Model_Band,Simulated_Shares_15Pct_Slot\n";
       const rows = (state.stocks || []).map((s, idx) => {
         const c = Number(s.close || 0);
         const trig = Number(s.entry_trigger_price ?? s.ma60_price ?? c).toFixed(2);
@@ -1553,12 +1688,12 @@ function bindEvents() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `RightSideAlpha_VIP_72Stocks_${new Date().toISOString().slice(0, 10)}.csv`;
+      a.download = `TruthOfMarket_Factor_Dataset_${new Date().toISOString().slice(0, 10)}.csv`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showToast("📥 Downloaded Full 72-Stock VIP Action Sheet (.CSV)");
+      showToast("📥 Downloaded Historical Factor Dataset (.CSV)");
     });
   }
 
@@ -1566,13 +1701,13 @@ function bindEvents() {
   if (btnCopyTvWatchlist) {
     btnCopyTvWatchlist.addEventListener("click", async () => {
       if (!state.isProUnlocked) {
-        openLicenseModal(false, "🔒 Upgrade to Pro VIP to copy the 1-Click TradingView 72-Ticker Institutional Watchlist.");
+        openLicenseModal(false, "🔒 Upgrade to VIP Software to copy the 1-Click TradingView Research Watchlist.");
         return;
       }
       const tickers = ["AMEX:SMH", "AMEX:XLV", "NASDAQ:QQQ"].concat((state.stocks || []).map((s) => s.ticker)).join(",");
       try {
         await navigator.clipboard.writeText(tickers);
-        showToast("📋 Copied 72-Stock + $SMH/$XLV TradingView Watchlist to Clipboard!");
+        showToast("📋 Copied Research Watchlist + $SMH/$XLV to Clipboard!");
       } catch (_) {
         showToast("TradingView Watchlist Ready");
       }
@@ -1583,28 +1718,28 @@ function bindEvents() {
   if (btnCopyTvWebhookJson) {
     btnCopyTvWebhookJson.addEventListener("click", async () => {
       if (!state.isProUnlocked) {
-        openLicenseModal(false, "🔒 Upgrade to Pro VIP to unlock the TradingView Automated Alert Webhook JSON.");
+        openLicenseModal(false, "🔒 Upgrade to VIP Software to unlock the TradingView Alert Webhook JSON Template.");
         return;
       }
       const webhookJson = JSON.stringify({
         platform: "truthofmarket.com",
-        signal: "RIGHT_SIDE_IGNITION",
+        mode: "EDUCATIONAL_FACTOR_LOG",
         ticker: "{{ticker}}",
         close: "{{close}}",
         volume: "{{volume}}",
-        stop_loss_9pct: "{{plot_0}}",
-        action: "BUY_15PCT_SLOT"
+        lower_band_ref: "{{plot_0}}",
+        note: "SELF_DIRECTED_SIMULATION"
       }, null, 2);
       try {
         await navigator.clipboard.writeText(webhookJson);
-        showToast("🔔 Copied TradingView Webhook JSON Payload to Clipboard!");
+        showToast("🔔 Copied TradingView Webhook JSON Template to Clipboard!");
       } catch (_) {
         showToast("Webhook JSON Ready");
       }
     });
   }
 
-  // Position Doctor Controls
+  // Variance Calculator Controls
   document.querySelectorAll(".btn-quick-doc").forEach((btn) => {
     btn.addEventListener("click", async () => {
       const tick = btn.getAttribute("data-ticker");
@@ -1710,7 +1845,7 @@ function bindEvents() {
       return;
     }
     const perSlot = Math.round((state.proPortfolioUsd || 30000) * 0.15);
-    const header = "Rank,Ticker,Company,Sector,PW_RSI_Score,Zone,Close,Entry_Trigger,Stop_Loss_9Pct,Target_2X_TP1,Recommended_Shares_15Pct_Slot\n";
+    const header = "Rank,Ticker,Company,Sector,Factor_Score,Zone,Close,MA60_Reference,Lower_Variance_Band,Upper_Model_Band,Simulated_Shares_15Pct_Slot\n";
     const rows = starredStocks.map((s, idx) => {
       const c = Number(s.close || 0);
       const trig = Number(s.entry_trigger_price ?? s.ma60_price ?? c).toFixed(2);
@@ -1796,7 +1931,7 @@ function bindEvents() {
     btnAddPortRow.addEventListener("click", () => {
       const currentPositions = getPortfolioPositionsFromDOM();
       if (currentPositions.length >= 10) {
-        showToast("Maximum 10 positions allowed in Portfolio Doctor 2.0");
+        showToast("Maximum 10 positions allowed in Multi-Asset Factor Calculator");
         return;
       }
       currentPositions.push({ ticker: "", entry_price: 25.0, shares: 100, days_held: 15, current_price: null });
@@ -1874,7 +2009,7 @@ function bindEvents() {
   if (btnRunPortfolioDoctor) {
     btnRunPortfolioDoctor.addEventListener("click", async () => {
       if (!state.isProUnlocked) {
-        openLicenseModal(false, "Upgrade to Pro to unlock the Multi-Position Portfolio Doctor 2.0 & Volatility Stress Testing.");
+        openLicenseModal(false, "Upgrade to VIP Software to unlock the Multi-Asset Factor Calculator & Volatility Stress Simulator.");
         return;
       }
       const positions = getPortfolioPositionsFromDOM();
@@ -2097,7 +2232,7 @@ function bindEvents() {
       const langTitle = data[`title_${state.lang}`] || data.title;
       const safeTitle =
         langTitle ||
-        `${data.company_name || ticker} ($${data.ticker || ticker}) — ${data.opinion || "STRONG_BUY"} | Latest Close $${cPrice} (${asOf})`;
+        `${data.company_name || ticker} ($${data.ticker || ticker}) — ${data.opinion || "FACTOR_CASE_STUDY"} | Latest Close $${cPrice} (${asOf})`;
       if (titleEl) titleEl.textContent = safeTitle;
       if (bodyEl) {
         const rawMarkdown = data[`content_${state.lang}`] || data.content || "";
@@ -2106,9 +2241,9 @@ function bindEvents() {
         const metaHeader = `
           <div style="display:flex; flex-wrap:wrap; gap:14px; background:#090d16; border:1px solid var(--border); border-left:3px solid ${isStopped ? "var(--fin-down)" : "var(--fin-up)"}; padding:10px 14px; border-radius:4px; margin-bottom:14px; font-family:var(--font-mono); font-size:0.76rem;">
             <span>LATEST CLOSE (${asOf}): <b style="color:#ffffff;">$${cPrice}</b></span>
-            <span>RULE 1 HARD STOP (-9%): <b style="color:var(--fin-down);">$${sPrice}</b></span>
-            <span>TP1 TARGET (2x): <b style="color:var(--fin-up);">$${tPrice}</b></span>
-            <span>STATUS / RRR: <b style="color:${isStopped ? "#fca5a5" : "#93c5fd"};">${data.rrr_ratio || "1 : 11.1"}</b></span>
+            <span>LOWER VARIANCE REF: <b style="color:var(--fin-down);">$${sPrice}</b></span>
+            <span>UPPER MODEL REF: <b style="color:var(--fin-up);">$${tPrice}</b></span>
+            <span>VARIANCE RATIO: <b style="color:${isStopped ? "#fca5a5" : "#93c5fd"};">${data.rrr_ratio || "1 : 11.1"}</b></span>
           </div>
         `;
         const tvAff = encodeURIComponent(state.config.tradingview_aff_id || "1173809");
@@ -2291,7 +2426,7 @@ function bindEvents() {
     btnDownloadSemiCsv.addEventListener("click", async () => {
       if (!state.isProUnlocked) {
         openLicenseModal(false);
-        showToast("Unlock Pro ($29/mo or $199 Lifetime) to download the 26-Year Daily CSV Dataset");
+        showToast("Unlock VIP Software ($29/mo Monthly VIP or $199/yr Annual VIP) to download the 26-Year Daily CSV Dataset");
         return;
       }
       const key = encodeURIComponent(state.licenseKey || "");
@@ -2404,18 +2539,18 @@ function openStockDetailModal(ticker) {
     ${
       showTargets
         ? `<div style="background:#05080f; border:1px solid rgba(16,185,129,0.35); border-radius:6px; padding:10px 12px; margin-bottom:12px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;" class="mono">
-             <span>Entry Trigger: <b style="color:#60a5fa;">$${trig}</b></span>
-             <span>-9% Stop: <b style="color:var(--fin-down);">$${stop}</b></span>
-             <span>2x Target: <b style="color:var(--fin-up);">$${tp1}</b></span>
+             <span>MA60 Reference: <b style="color:#60a5fa;">$${trig}</b></span>
+             <span>Lower Band Ref: <b style="color:var(--fin-down);">$${stop}</b></span>
+             <span>Upper Model Ref: <b style="color:var(--fin-up);">$${tp1}</b></span>
            </div>`
         : `<div style="background:rgba(37,99,235,0.1); border:1px solid rgba(59,130,246,0.38); border-radius:6px; padding:12px; margin-bottom:12px;">
-             <div style="font-weight:800; color:#ffffff; margin-bottom:6px;">🔒 Exact Entry Trigger, -9% Hard Stop &amp; 2x Target Levels</div>
+             <div style="font-weight:800; color:#ffffff; margin-bottom:6px;">🔒 Historical Factor Reference Bands &amp; CSV Export</div>
              <div style="display:flex; gap:8px; flex-wrap:wrap;">
-               <a class="btn btn-primary btn-sm lemonsqueezy-button" data-direct-ls="1" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthly}" target="_blank" rel="noopener noreferrer" style="min-height:40px; font-weight:800;">
-                 🔒 Unlock Pro ($29/mo)
+               <a class="btn btn-primary btn-sm lemonsqueezy-button" data-direct-ls="1" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthly}" target="_blank" rel="noopener noreferrer" style="min-height:40px; font-weight:800;">
+                 🔒 Start Monthly VIP — $29/mo
                </a>
-               <a class="btn btn-emerald btn-sm lemonsqueezy-button" data-direct-ls="1" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" href="${lsLtd}" target="_blank" rel="noopener noreferrer" style="min-height:40px; font-weight:800;">
-                 💎 Lifetime VIP ($199)
+               <a class="btn btn-emerald btn-sm lemonsqueezy-button" data-direct-ls="1" data-tom-paid-plan="annual" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" href="${lsLtd}" target="_blank" rel="noopener noreferrer" style="min-height:40px; font-weight:800;">
+                 💎 Start Annual VIP — $199/yr
                </a>
              </div>
            </div>`
@@ -2423,7 +2558,7 @@ function openStockDetailModal(ticker) {
 
     <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:space-between;">
       <button type="button" class="btn btn-emerald btn-sm" id="btnModalDiagnoseStock" data-ticker="${s.ticker}" style="min-height:40px; font-weight:800;">
-        🩺 Diagnose $${s.ticker} in Position Doctor
+        🧮 Simulate $${s.ticker} Variance Math
       </button>
       <a class="btn btn-sm" href="${tvUrl}" target="_blank" rel="noopener noreferrer" style="min-height:40px;">
         📈 Open $${s.ticker} Chart on TradingView ↗
@@ -2574,7 +2709,7 @@ function generateScorecardPng(stock) {
 
     ctx.fillStyle = "#93c5fd";
     ctx.font = "bold 24px JetBrains Mono, monospace";
-    ctx.fillText(`Signal Regime: ${stock.zone_label_en}  |  PW-RSI Score: ${stock.score}/100`, 45, 175);
+    ctx.fillText(`Factor Regime: ${stock.zone_label_en}  |  Factor Score: ${stock.score}/100`, 45, 175);
 
     ctx.fillStyle = "#cbd5e1";
     ctx.font = "20px JetBrains Mono, monospace";
@@ -2588,7 +2723,7 @@ function generateScorecardPng(stock) {
       45,
       270
     );
-    ctx.fillText(`Historical 1Y 2x (+100%) Hit Rate after -40% Drawdown: ${stock.hist_2x_rate}%`, 45, 315);
+    ctx.fillText(`Historical Recovery Cohort Rate after -40% Drawdown: ${stock.hist_2x_rate}%`, 45, 315);
   } else {
     ctx.fillStyle = "#ffffff";
     ctx.font = "bold 34px Inter, sans-serif";
@@ -2965,7 +3100,7 @@ async function init() {
   }
 
   const checkoutParam = (initialSearch.get("checkout") || initialSearch.get("unlock") || "").toLowerCase();
-  if (checkoutParam === "monthly" || checkoutParam === "lifetime" || checkoutParam === "pro") {
+  if (checkoutParam === "monthly" || checkoutParam === "annual" || checkoutParam === "pro") {
     setTimeout(() => {
       const licModal = document.getElementById("licenseModal");
       const msgEl = document.getElementById("licenseMsg");
@@ -2973,9 +3108,9 @@ async function init() {
         licModal.style.display = "flex";
         if (msgEl) {
           msgEl.style.color = "#34d399";
-          msgEl.textContent = checkoutParam === "lifetime"
-            ? "🏆 Lifetime Pass ($199): Click Lifetime Pass ($199) above for official Lemon Squeezy checkout, or paste your License Key below to unlock immediately."
-            : "🍋 Pro Monthly ($29/mo): Click Subscribe Pro ($29/mo) above for official Lemon Squeezy checkout, or paste your License Key below to unlock immediately.";
+          msgEl.textContent = checkoutParam === "annual"
+            ? "🏆 Annual VIP ($199/yr): Click Start Annual VIP — $199/yr above, or paste your License Key below to unlock immediately."
+            : "🍋 Monthly VIP ($29/mo): Click Start Monthly VIP — $29/mo above, or paste your License Key below to unlock immediately.";
         }
       }
     }, 200);
@@ -3030,18 +3165,6 @@ init();
       localStorage.setItem('hq_uv_ever_' + ns, '1');
       fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/uv_total', { mode: 'cors', keepalive: true }).catch(function(){});
     }
-  } catch (e) {}
-})();
-
-/* === HQ KPI Conversion Tracker (Division 1: Paid Member Click & Checkout Tracking) === */
-(function(){
-  try {
-    if (typeof window === 'undefined' || window.__HQ_KPI_TOM__) return;
-    window.__HQ_KPI_TOM__ = true;
-    var host = (location && location.hostname) || '';
-    if (!host || host === 'localhost' || host === '127.0.0.1') return;
-    var kst = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
-    var ns = 'tom_truthofmarket';
     if (location.search.indexOf('payment=success') !== -1 || location.search.indexOf('unlock=1') !== -1) {
       if (localStorage.getItem('hq_paid_' + kst) !== '1') {
         localStorage.setItem('hq_paid_' + kst, '1');
@@ -3049,16 +3172,5 @@ init();
         fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_member_total', { mode: 'cors', keepalive: true }).catch(function(){});
       }
     }
-    document.addEventListener('click', function(e) {
-      var el = e.target && e.target.closest ? e.target.closest('a, button, [role="button"]') : null;
-      if (!el) return;
-      var href = (el.getAttribute('href') || '').toLowerCase();
-      var txt = (el.innerText || el.textContent || '').toLowerCase();
-      var cls = (el.className || '').toLowerCase();
-      if (href.indexOf('lemonsqueezy.com') !== -1 || cls.indexOf('pro') !== -1 || cls.indexOf('paywall') !== -1 || /upgrade|unlock pro|vip|subscribe/.test(txt)) {
-        fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_' + kst, { mode: 'cors', keepalive: true }).catch(function(){});
-        fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_total', { mode: 'cors', keepalive: true }).catch(function(){});
-      }
-    }, true);
   } catch (e) {}
 })();
