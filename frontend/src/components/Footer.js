@@ -11,6 +11,8 @@ export function renderFooter(state) {
         <a href="/refund.html" style="color:#93c5fd; text-decoration:underline;">14-Day Refund Policy</a>
         <span>·</span>
         <a href="mailto:beable9489@gmail.com" style="color:#38bdf8; text-decoration:underline;">Support: beable9489@gmail.com</a>
+        <span>·</span>
+        <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Brand%20%26%20Media%20Partnership" style="color:#6ee7b7; text-decoration:underline;">Sponsorship &amp; Media Partnerships: beable9489@gmail.com</a>
       </div>
       <p>${t.disclaimer}</p>
       <p style="margin-top:8px;">${t.copyright}</p>

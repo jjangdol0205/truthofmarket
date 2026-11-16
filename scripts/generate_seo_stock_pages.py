@@ -333,6 +333,8 @@ def build_ticker_directory_html(
       <a href="{prefix}contact.html" style="color:#93c5fd;font-weight:700;text-decoration:underline;">Contact Support</a>
       <span style="color:#475569;">&middot;</span>
       <a href="mailto:beable9489@gmail.com" style="color:#fde68a;font-weight:800;text-decoration:underline;">Support: beable9489@gmail.com</a>
+      <span style="color:#475569;">&middot;</span>
+      <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Brand%20%26%20Media%20Partnership" style="color:#6ee7b7;font-weight:800;text-decoration:underline;">Sponsorship, Brand &amp; Media Partnerships: beable9489@gmail.com</a>
     </div>
     <p style="margin:12px 0 0;font-size:0.88rem;line-height:1.6;color:#cbd5e1;font-weight:600;">
       {html.escape(MANDATORY_DISCLAIMER)}
