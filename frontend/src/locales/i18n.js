@@ -133,7 +133,7 @@ const enCopy = {
   disclaimer:
     "Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.",
   copyright:
-    "© 2026 TruthOfMarket — Educational Market Data & Quantitative Research Desk. Merchant of Record: Lemon Squeezy (Store #296100).",
+    "© 2026 TruthOfMarket — Educational Market Data & Quantitative Research Desk · Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay).",
 };
 
 export const translations = {

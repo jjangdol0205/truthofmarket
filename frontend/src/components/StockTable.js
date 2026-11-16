@@ -101,8 +101,8 @@ export function renderStockTable(state) {
   const stocks = (state.filteredStocks || []).filter((s) => !String(s.ticker).includes("."));
   const cfg = state.config || {};
   const monthlyUrl = formatCheckoutUrl(
-    cfg.ls_site1_monthly_url,
-    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en"
+    cfg.polar_tom_monthly_url || cfg.ls_site1_monthly_url,
+    "#tom-vip-monthly"
   );
 
   const renderSortTh = (col, label, isNum = false) => {
@@ -123,7 +123,7 @@ export function renderStockTable(state) {
       <p style="color:#cbd5e1; font-size:0.82rem; margin:0 0 12px; line-height:1.5;">
         ${t.softPaywallDesc || "Click any unlocked stock row for factor details, or unlock Monthly VIP ($29/mo) to reveal all hidden dataset rows, MA60 reference bands, and CSV exports."}
       </p>
-      <a class="soft-paywall-btn lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${monthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:42px;">
+      <a class="soft-paywall-btn polar-checkout-button btn-unlock-row" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${monthlyUrl}" style="min-height:42px;">
         🔒 ${t.softPaywallUnlockCta || "Start Monthly VIP — $29/mo"} →
       </a>
     </div>
@@ -173,9 +173,9 @@ export function renderStockRows(state) {
   const lang = state.lang || "en";
   const isPro = state.isProUnlocked;
   const cfg = state.config || {};
-  const lsMonthlyUrl = formatCheckoutUrl(
-    cfg.ls_site1_monthly_url,
-    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
+  const polarMonthlyUrl = formatCheckoutUrl(
+    cfg.polar_tom_monthly_url || cfg.ls_site1_monthly_url,
+    "#tom-vip-monthly"
   );
   const tvAffId = encodeURIComponent(cfg.tradingview_aff_id || "1173809");
   const saSource = encodeURIComponent(cfg.seekingalpha_source || "better_life333");
@@ -226,7 +226,7 @@ export function renderStockRows(state) {
             </div>
             <div class="mobile-stock-card-summary" style="margin-top:8px; padding-top:7px; border-top:1px solid rgba(51,65,85,0.55); align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap;">
               <span class="badge ${badgeClass}">${cleanZoneLabel}</span>
-              <a class="btn btn-primary btn-sm lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:40px; white-space:nowrap; font-weight:700;">
+              <a class="btn btn-primary btn-sm polar-checkout-button btn-unlock-row" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthlyUrl}" style="min-height:40px; white-space:nowrap; font-weight:700;">
                 🔒 Start Monthly VIP — $29/mo
               </a>
             </div>
@@ -256,12 +256,12 @@ export function renderStockRows(state) {
         <td class="mono col-num" style="color:#34d399; font-weight:700;">&ge;1.40x</td>
         <td class="mono col-num" style="color:#94a3b8;">🔒 VIP</td>
         <td>
-          <a class="btn btn-primary btn-sm lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:38px; white-space:nowrap; font-weight:700;">
+          <a class="btn btn-primary btn-sm polar-checkout-button btn-unlock-row" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthlyUrl}" style="min-height:38px; white-space:nowrap; font-weight:700;">
             🔒 Start Monthly VIP — $29/mo
           </a>
         </td>
         <td>
-          <a class="btn btn-primary btn-sm lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:38px; white-space:nowrap; font-weight:700;">
+          <a class="btn btn-primary btn-sm polar-checkout-button btn-unlock-row" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthlyUrl}" style="min-height:38px; white-space:nowrap; font-weight:700;">
             🔒 Start Monthly VIP — $29/mo
           </a>
         </td>
@@ -301,7 +301,7 @@ export function renderStockRows(state) {
              }</div>
              <div><span style="color:var(--muted);">STP</span> <span style="color:var(--fin-down); font-weight:600;">${stopDisp}</span> · <span style="color:var(--fin-up);">TP ${tp1Disp}</span></div>
            </div>`
-        : `<a class="btn btn-sm lemonsqueezy-button btn-unlock-row" data-direct-ls="1" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthlyUrl}" target="_blank" rel="noopener noreferrer" style="min-height:38px; white-space:nowrap; font-weight:700; border-color:rgba(59,130,246,0.45); color:#93c5fd; background:rgba(37,99,235,0.14);">
+        : `<a class="btn btn-sm polar-checkout-button btn-unlock-row" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthlyUrl}" style="min-height:38px; white-space:nowrap; font-weight:700; border-color:rgba(59,130,246,0.45); color:#93c5fd; background:rgba(37,99,235,0.14);">
              🔒 Start Monthly VIP — $29/mo
            </a>`;
 

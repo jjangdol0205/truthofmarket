@@ -35,36 +35,30 @@ export function getVipTelegramUrl(isPro = false) {
   return "#pro-vip-telegram";
 }
 
-export const CANONICAL_TOM_MONTHLY_URL =
-  "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en";
-export const CANONICAL_TOM_ANNUAL_URL =
-  "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en";
+export const CANONICAL_TOM_MONTHLY_URL = "#tom-vip-monthly";
+export const CANONICAL_TOM_ANNUAL_URL = "#tom-vip-annual";
 
-export function formatCheckoutUrl(
-  rawUrl,
-  fallbackUrl = "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
-) {
-  const base = String(rawUrl || fallbackUrl).trim() || fallbackUrl;
-  if (
-    base.includes("d5e7e761-8b1b-4ca8-b1fe-771acd1450f8") ||
-    base.includes("1fe480f8-8bb0-46a9-959f-a8d396a87a1b")
-  ) {
-    return CANONICAL_TOM_MONTHLY_URL;
+export function formatCheckoutUrl(rawUrl, fallbackUrl = "#tom-vip-monthly") {
+  const candidate = String(rawUrl || "").trim();
+  if (candidate && /^https:\/\/(buy\.)?polar\.sh\//i.test(candidate)) {
+    return candidate;
   }
-  if (
-    base.includes("667aa482-f17c-47d1-b7f3-a2427c36516b") ||
-    base.includes("c9ad1a1c-21c5-4d95-88a2-b570a860a147")
-  ) {
-    return CANONICAL_TOM_ANNUAL_URL;
+  if (typeof window !== "undefined" && window.PAYMENT_CONFIG) {
+    const pCfg = window.PAYMENT_CONFIG;
+    const urls = pCfg.POLAR_CHECKOUT_URLS || {};
+    const isAnnualFallback = String(fallbackUrl || "").toLowerCase().includes("annual");
+    const fromCfg = isAnnualFallback
+      ? String(urls.annual_199 || pCfg.POLAR_TOM_ANNUAL_URL || "").trim()
+      : String(urls.monthly_29 || pCfg.POLAR_TOM_MONTHLY_URL || "").trim();
+    if (pCfg.STORE_LIVE_READY === true && fromCfg && /^https:\/\/(buy\.)?polar\.sh\//i.test(fromCfg)) {
+      return fromCfg;
+    }
   }
-  let out = base;
-  if (!/[?&]embed=1\b/i.test(out)) {
-    out = `${out}${out.includes("?") ? "&" : "?"}embed=1`;
+  const fb = String(fallbackUrl || "#tom-vip-monthly").trim();
+  if (fb && /^https:\/\/(buy\.)?polar\.sh\//i.test(fb)) {
+    return fb;
   }
-  if (!/[?&]locale=/i.test(out)) {
-    out = `${out}&locale=en`;
-  }
-  return out;
+  return fb.startsWith("#") ? fb : "#tom-vip-monthly";
 }
 
 function isStaticHost() {
@@ -412,10 +406,10 @@ export async function validateLicense(licenseKey) {
           license_key: null,
           tier: "free",
           expires_at: null,
-          message: "Please enter a valid Lemon Squeezy license key.",
+          message: "Please enter a valid Polar.sh VIP license key.",
         };
       }
-      if (/^(RSA|GBA)-(PRO|LTD|VIP)-2026-[A-Z0-9-]+$/i.test(key)) {
+      if (/^(RSA|GBA|POLAR)-(PRO|LTD|VIP)-2026-[A-Z0-9-]+$/i.test(key)) {
         return {
           valid: true,
           license_key: key.toUpperCase(),
@@ -438,66 +432,48 @@ export async function validateLicense(licenseKey) {
         };
       }
       try {
-        const lsResp = await fetch("https://api.lemonsqueezy.com/v1/licenses/validate", {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: new URLSearchParams({ license_key: key }).toString(),
-        });
-        let lsData = await lsResp.json().catch(() => null);
-        const storeOk = !lsData?.meta?.store_id || Number(lsData.meta.store_id) === 296100;
-        const licStatus = lsData?.license_key?.status || "";
-        const actUsage = Number(lsData?.license_key?.activations_usage ?? -1);
-
-        if (storeOk && (!lsData?.valid || licStatus === "inactive" || actUsage === 0)) {
-          const actResp = await fetch("https://api.lemonsqueezy.com/v1/licenses/activate", {
+        const orgId =
+          typeof window !== "undefined" &&
+          window.PAYMENT_CONFIG &&
+          window.PAYMENT_CONFIG.POLAR_ORG_ID
+            ? String(window.PAYMENT_CONFIG.POLAR_ORG_ID).trim()
+            : "";
+        if (!orgId) {
+          return {
+            valid: false,
+            license_key: null,
+            tier: "free",
+            expires_at: null,
+            message:
+              "Invalid or unrecognized license key. Please check your Polar.sh receipt or contact beable9489@gmail.com.",
+          };
+        }
+        const polarResp = await fetch(
+          "https://api.polar.sh/v1/customer-portal/license-keys/validate",
+          {
             method: "POST",
             headers: {
               Accept: "application/json",
-              "Content-Type": "application/x-www-form-urlencoded",
+              "Content-Type": "application/json",
             },
-            body: new URLSearchParams({
-              license_key: key,
-              instance_name: "TruthOfMarket-Pro-Terminal",
-            }).toString(),
-          }).catch(() => null);
-          const actData = actResp ? await actResp.json().catch(() => null) : null;
-          const actStoreOk = !actData?.meta?.store_id || Number(actData.meta.store_id) === 296100;
-          if (
-            actStoreOk &&
-            actData &&
-            (actData.activated === true || actData?.license_key?.status === "active")
-          ) {
-            lsData = {
-              valid: true,
-              meta: actData.meta,
-              license_key: actData.license_key,
-            };
+            body: JSON.stringify({ key, organization_id: orgId }),
           }
-        }
-
-        const finalStoreOk = !lsData?.meta?.store_id || Number(lsData.meta.store_id) === 296100;
-        const finalStatus = lsData?.license_key?.status || "";
-        const valid = Boolean(
-          finalStoreOk &&
-            lsData &&
-            lsData.valid === true &&
-            !lsData.error &&
-            finalStatus !== "disabled" &&
-            finalStatus !== "expired"
         );
-        const isAnnual = Number(lsData?.meta?.product_id) === 1491891;
+        const polarData = await polarResp.json().catch(() => null);
+        const statusStr = String(polarData?.status || "").toLowerCase();
+        const valid = Boolean(
+          polarResp.ok &&
+            polarData &&
+            (statusStr === "granted" || statusStr === "active" || polarData.valid === true)
+        );
         return {
           valid,
           license_key: valid ? key : null,
-          tier: valid ? (isAnnual ? "pro_annual" : "pro") : "free",
-          expires_at: valid ? lsData?.license_key?.expires_at || "2099-12-31T23:59:59Z" : null,
+          tier: valid ? "pro" : "free",
+          expires_at: valid ? polarData?.expires_at || "2099-12-31T23:59:59Z" : null,
           message: valid
-            ? "VIP Software License Verified via Lemon Squeezy (Store #296100)."
-            : (lsData && lsData.error) ||
-              "Invalid or expired license key. Please verify your Lemon Squeezy receipt or subscribe below.",
+            ? "VIP Software License Verified via Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)."
+            : "Invalid or expired license key. Please verify your Polar.sh receipt or subscribe below.",
         };
       } catch (_) {
         return {
@@ -506,7 +482,7 @@ export async function validateLicense(licenseKey) {
           tier: "free",
           expires_at: null,
           message:
-            "License verification failed. Please check your Lemon Squeezy license key and network connection.",
+            "License verification failed. Please check your Polar.sh license key and network connection.",
         };
       }
     }

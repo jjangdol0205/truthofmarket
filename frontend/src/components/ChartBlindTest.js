@@ -299,12 +299,12 @@ export function renderChartBlindTest(state) {
   const iqScore = solvedCount === 0 ? "—" : `${Math.round((correctCount / solvedCount) * 100)} / 100`;
   const cfg = state.config || {};
   const monthlyUrl = formatCheckoutUrl(
-    cfg.ls_site1_monthly_url,
-    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
+    cfg.polar_tom_monthly_url || cfg.ls_site1_monthly_url,
+    "#tom-vip-monthly"
   );
-  const lifetimeUrl = formatCheckoutUrl(
-    cfg.ls_site1_ltd_url,
-    "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b"
+  const annualUrl = formatCheckoutUrl(
+    cfg.polar_tom_annual_url || cfg.ls_site1_ltd_url,
+    "#tom-vip-annual"
   );
 
   return `
@@ -473,18 +473,20 @@ export function renderChartBlindTest(state) {
                 : `
                   <a
                     href="${monthlyUrl}"
+                    data-polar-checkout
+                    data-polar-plan="monthly_29"
                     data-tom-paid-plan="monthly"
-                    data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
-                    class="lemonsqueezy-button btn btn-sm"
+                    class="polar-checkout-button btn btn-sm"
                     style="background:#10b981; border:1px solid #059669; color:#052e16; font-weight:800; font-size:0.74rem; padding:7px 12px; border-radius:6px; text-decoration:none;"
                   >
                     ${copy.unlockMonthlyBtn}
                   </a>
                   <a
-                    href="${lifetimeUrl}"
+                    href="${annualUrl}"
+                    data-polar-checkout
+                    data-polar-plan="annual_199"
                     data-tom-paid-plan="annual"
-                    data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b"
-                    class="lemonsqueezy-button btn btn-sm"
+                    class="polar-checkout-button btn btn-sm"
                     style="background:rgba(245,158,11,0.2); border:1px solid #f59e0b; color:#fbbf24; font-weight:800; font-size:0.74rem; padding:7px 12px; border-radius:6px; text-decoration:none;"
                   >
                     ${copy.unlockLifetimeBtn}

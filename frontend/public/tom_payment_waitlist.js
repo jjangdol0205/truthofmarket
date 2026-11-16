@@ -1,69 +1,125 @@
 /**
- * TruthOfMarket (Division 1) — Unified PAYMENT_CONFIG, VIP Founding Member Waitlist Modal,
- * In-App WebView PDF Guide Guard & 70% Scroll + 15s Dwell `read_complete` Beacon.
+ * TruthOfMarket (Division 1) — Polar.sh Native PAYMENT_CONFIG, VIP Founding Member Waitlist Modal,
+ * In-App WebView Safe Redirect & PDF Guide Guard & 70% Scroll + 15s Dwell `read_complete` Beacon.
  */
 (function initTomUnifiedPaymentAndBeacon() {
   if (typeof window === "undefined") return;
 
   var DEFAULT_PAYMENT_CONFIG = {
+    PROVIDER: "polar_sh",
+    DIVISION: "TOM",
+    STORE_SLOT: "FINANCE_STORE_SLOT",
     STORE_LIVE_READY: false,
-    ACTIVE_SLOT: "FINANCE_STORE_SLOT",
-    FINANCE_STORE_SLOT: {
-      storeId: "296100",
-      storeDomain: "truthofmarket.lemonsqueezy.com",
-      monthlyUuid: "d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en",
-      annualUuid: "667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en",
-      monthlyCheckoutUrl:
-        "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en",
-      annualCheckoutUrl:
-        "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en",
-      BACKUP_LIVE_CHECKOUT_URL: {
-        monthly: "",
-        annual: "",
-      },
+    POLAR_CHECKOUT_URLS: {
+      monthly_29: "",
+      annual_199: "",
     },
-    PEDIATRIC_STORE_SLOT: {
-      storeId: "296100",
-      storeDomain: "truthofmarket.lemonsqueezy.com",
-      singleUuid: "c1cd7f12-3479-49e8-ab71-59c98135d599?embed=1&locale=en",
-      sixMonthUuid: "c562946d-ef68-4c2f-a802-df9da0179895?embed=1&locale=en",
-      singleCheckoutUrl:
-        "https://truthofmarket.lemonsqueezy.com/checkout/buy/c1cd7f12-3479-49e8-ab71-59c98135d599?embed=1&locale=en",
-      sixMonthCheckoutUrl:
-        "https://truthofmarket.lemonsqueezy.com/checkout/buy/c562946d-ef68-4c2f-a802-df9da0179895?embed=1&locale=en",
-      BACKUP_LIVE_CHECKOUT_URL: {
-        single: "",
-        sixMonth: "",
-      },
-    },
+    POLAR_TOM_MONTHLY_URL: "",
+    POLAR_TOM_ANNUAL_URL: "",
+    SUPPORT_EMAIL: "beable9489@gmail.com",
   };
 
   if (!window.PAYMENT_CONFIG || typeof window.PAYMENT_CONFIG !== "object") {
     window.PAYMENT_CONFIG = DEFAULT_PAYMENT_CONFIG;
   } else {
+    window.PAYMENT_CONFIG.PROVIDER = "polar_sh";
+    window.PAYMENT_CONFIG.DIVISION = window.PAYMENT_CONFIG.DIVISION || "TOM";
+    window.PAYMENT_CONFIG.STORE_SLOT = window.PAYMENT_CONFIG.STORE_SLOT || "FINANCE_STORE_SLOT";
     if (typeof window.PAYMENT_CONFIG.STORE_LIVE_READY !== "boolean") {
       window.PAYMENT_CONFIG.STORE_LIVE_READY = false;
     }
-    if (!window.PAYMENT_CONFIG.FINANCE_STORE_SLOT) {
-      window.PAYMENT_CONFIG.FINANCE_STORE_SLOT = DEFAULT_PAYMENT_CONFIG.FINANCE_STORE_SLOT;
-    } else if (!window.PAYMENT_CONFIG.FINANCE_STORE_SLOT.BACKUP_LIVE_CHECKOUT_URL) {
-      window.PAYMENT_CONFIG.FINANCE_STORE_SLOT.BACKUP_LIVE_CHECKOUT_URL = { monthly: "", annual: "" };
+    if (
+      !window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS ||
+      typeof window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS !== "object"
+    ) {
+      window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS = {
+        monthly_29: "",
+        annual_199: "",
+      };
+    } else {
+      if (typeof window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29 !== "string") {
+        window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29 = "";
+      }
+      if (typeof window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199 !== "string") {
+        window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199 = "";
+      }
     }
-    if (!window.PAYMENT_CONFIG.PEDIATRIC_STORE_SLOT) {
-      window.PAYMENT_CONFIG.PEDIATRIC_STORE_SLOT = DEFAULT_PAYMENT_CONFIG.PEDIATRIC_STORE_SLOT;
-    } else if (!window.PAYMENT_CONFIG.PEDIATRIC_STORE_SLOT.BACKUP_LIVE_CHECKOUT_URL) {
-      window.PAYMENT_CONFIG.PEDIATRIC_STORE_SLOT.BACKUP_LIVE_CHECKOUT_URL = { single: "", sixMonth: "" };
+    if (typeof window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL !== "string") {
+      window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL = "";
+    }
+    if (typeof window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL !== "string") {
+      window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL = "";
+    }
+    if (!window.PAYMENT_CONFIG.SUPPORT_EMAIL) {
+      window.PAYMENT_CONFIG.SUPPORT_EMAIL = "beable9489@gmail.com";
+    }
+  }
+
+  function getKstDateString() {
+    try {
+      return new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+    } catch (_) {
+      return "2026-11-17";
     }
   }
 
   window.isTomInAppWebView = function () {
     try {
       var ua = (typeof navigator !== "undefined" && navigator.userAgent) || "";
-      return /Instagram|FBAN|FBAV|KAKAOTALK/i.test(ua);
+      return /Instagram|FBAN|FBAV|KAKAOTALK|Line/i.test(ua);
     } catch (_) {
       return false;
     }
   };
+
+  function getKnownTomMemberEmail() {
+    try {
+      if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.getLocalMember === "function") {
+        var crmRec = window.DreamCompanyCRM.getLocalMember("TOM");
+        if (crmRec && crmRec.email && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(crmRec.email).trim())) {
+          return String(crmRec.email).trim().toLowerCase();
+        }
+      }
+      var rawDc = localStorage.getItem("dc_member_TOM");
+      if (rawDc) {
+        var parsedDc = JSON.parse(rawDc);
+        if (parsedDc && parsedDc.email && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(parsedDc.email).trim())) {
+          return String(parsedDc.email).trim().toLowerCase();
+        }
+      }
+      var freeEmail = String(localStorage.getItem("tom_free_member_email") || localStorage.getItem("rsa_vip_email") || "").trim();
+      if (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(freeEmail)) {
+        return freeEmail.toLowerCase();
+      }
+    } catch (_) {}
+    return "";
+  }
+
+  function resolvePolarCheckoutUrl(planKey) {
+    var pCfg = window.PAYMENT_CONFIG || {};
+    var urls = pCfg.POLAR_CHECKOUT_URLS || {};
+    var raw =
+      planKey === "annual"
+        ? String(urls.annual_199 || pCfg.POLAR_TOM_ANNUAL_URL || "").trim()
+        : String(urls.monthly_29 || pCfg.POLAR_TOM_MONTHLY_URL || "").trim();
+    if (raw && /^https:\/\/(buy\.)?polar\.sh\//i.test(raw)) {
+      return raw;
+    }
+    return "";
+  }
+
+  function appendPolarCustomerEmail(checkoutUrl, emailOverride) {
+    var url = String(checkoutUrl || "").trim();
+    if (!url) return "";
+    var memberEmail = String(emailOverride || getKnownTomMemberEmail() || "").trim().toLowerCase();
+    if (memberEmail && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(memberEmail) && url.indexOf("customer_email=") === -1) {
+      return url + (url.indexOf("?") !== -1 ? "&" : "?") + "customer_email=" + encodeURIComponent(memberEmail);
+    }
+    return url;
+  }
+
+  window.resolveTomPolarCheckoutUrl = resolvePolarCheckoutUrl;
+  window.appendTomPolarCustomerEmail = appendPolarCustomerEmail;
 
   function postCrmRegistrationWithFallback(opts) {
     var cleanEmail = String((opts && opts.email) || "")
@@ -176,10 +232,7 @@
       document.head.appendChild(styleEl);
     }
 
-    var savedEmail = "";
-    try {
-      savedEmail = localStorage.getItem("tom_free_member_email") || "";
-    } catch (_) {}
+    var savedEmail = getKnownTomMemberEmail();
 
     var backdrop = document.createElement("div");
     backdrop.id = "tomVipWaitlistModal";
@@ -198,7 +251,7 @@
       "    VIP Founding Member Launch Alert &amp; 20% Early-Bird Discount Reservation (1-Second Email Reserve)" +
       "  </h3>" +
       '  <p style="margin:0;color:#cbd5e1;font-size:16.5px;line-height:1.6;">' +
-      "    Our Store #296100 self-directed educational calculator software checkout is completing final gateway verification. Reserve your spot in <b>1 second ($0 charged today)</b> to lock in a <b>20% Founding Member Discount</b> the moment live checkout opens—plus instant free Morning Bell Club access." +
+      "    Our Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) self-directed educational calculator software checkout is completing final gateway activation. Reserve your spot in <b>1 second ($0 charged today)</b> to lock in a <b>20% Founding Member Discount</b> the moment live checkout opens—plus instant free Morning Bell Club access." +
       "  </p>" +
       '  <div class="tom-wl-plan-grid" role="radiogroup" aria-label="Select VIP Plan to Reserve">' +
       '    <button type="button" class="tom-wl-plan-btn is-selected" data-wl-plan="Monthly VIP ($29/mo)">' +
@@ -226,7 +279,7 @@
       "  </form>" +
       '  <div id="tomVipWaitlistConfirm" role="status" aria-live="polite" style="display:none;margin-top:12px;padding:14px 16px;border-radius:10px;background:rgba(16,185,129,0.16);border:1.5px solid #10b981;color:#ecfdf5;font-size:16px;line-height:1.55;font-weight:700;"></div>' +
       '  <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(148,163,184,0.2);font-size:13px;color:#94a3b8;line-height:1.5;">' +
-      '    14-Day No-Questions-Asked Refund Policy once live &bull; Self-Directed Educational Calculator Software &bull; Support: <a href="mailto:beable9489@gmail.com" style="color:#7dd3fc;text-decoration:underline;">beable9489@gmail.com</a>' +
+      '    Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) &bull; 14-Day No-Questions-Asked Refund Policy once live &bull; Self-Directed Educational Calculator Software &bull; Support: <a href="mailto:beable9489@gmail.com" style="color:#7dd3fc;text-decoration:underline;">beable9489@gmail.com</a>' +
       "  </div>" +
       "</div>";
 
@@ -291,6 +344,15 @@
         } catch (_) {}
 
         try {
+          var kst = getKstDateString();
+          fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/vip_waitlist_" + kst, {
+            mode: "cors",
+            keepalive: true,
+          }).catch(function () {});
+          fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/vip_waitlist_total", {
+            mode: "cors",
+            keepalive: true,
+          }).catch(function () {});
           fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/vip_waitlist", {
             mode: "cors",
             keepalive: true,
@@ -309,7 +371,7 @@
           email: email,
           segment: "vip_waitlist",
           lang: "en-US",
-          notes: "site=truthofmarket.com | plan=" + selectedPlan,
+          notes: "site=truthofmarket.com | provider=polar_sh | plan=" + selectedPlan,
         }).finally(function () {
           if (submitBtn) {
             submitBtn.disabled = false;
@@ -327,7 +389,7 @@
             selectedPlan.replace(/[<>&"]/g, "") +
             "</b> for <b>" +
             email.replace(/[<>&"]/g, "") +
-            "</b>. We will email your private 20% discount checkout link the moment Store #296100 opens—and your complimentary Morning Bell Retirement &amp; Macro Brief is now active.";
+            "</b>. We will email your private 20% discount Polar.sh checkout link the moment live billing opens—and your complimentary Morning Bell Retirement &amp; Macro Brief is now active.";
         }
       });
     }
@@ -343,11 +405,15 @@
     modal.querySelectorAll(".tom-wl-plan-btn").forEach(function (btn) {
       btn.classList.toggle("is-selected", btn.getAttribute("data-wl-plan") === selectedLabel);
     });
+    var emailEl = document.getElementById("tomVipWaitlistEmail");
+    if (emailEl && !emailEl.value) {
+      var latestEmail = getKnownTomMemberEmail();
+      if (latestEmail) emailEl.value = latestEmail;
+    }
     var confirmEl = document.getElementById("tomVipWaitlistConfirm");
     if (confirmEl) confirmEl.style.display = "none";
     modal.style.display = "flex";
     setTimeout(function () {
-      var emailEl = document.getElementById("tomVipWaitlistEmail");
       if (emailEl && !emailEl.value) emailEl.focus();
     }, 60);
   };
@@ -361,50 +427,62 @@
     function (e) {
       var el =
         e.target && e.target.closest
-          ? e.target.closest(".lemonsqueezy-button") || e.target.closest("a, button, [role='button']")
+          ? e.target.closest(".polar-checkout-button, [data-polar-checkout], [data-tom-paid-plan]") ||
+            e.target.closest("a, button, [role='button']")
           : null;
       if (!el) return;
 
       var href = String(el.getAttribute("href") || "");
-      var uuidAttr = String(el.getAttribute("data-ls-product-uuid") || "");
       var planAttr = String(el.getAttribute("data-tom-paid-plan") || "").toLowerCase();
+      var polarPlanAttr = String(el.getAttribute("data-polar-plan") || "").toLowerCase();
       var cls = String(el.className || "");
 
+      var isPortalManageLink = href.indexOf("polar.sh/purchases") !== -1;
       var isPaidCta =
-        cls.indexOf("lemonsqueezy-button") !== -1 ||
-        href.indexOf("lemonsqueezy.com/checkout/buy/") !== -1 ||
-        Boolean(uuidAttr) ||
-        Boolean(planAttr);
+        !isPortalManageLink &&
+        (cls.indexOf("polar-checkout-button") !== -1 ||
+          el.hasAttribute("data-polar-checkout") ||
+          Boolean(planAttr) ||
+          Boolean(polarPlanAttr) ||
+          href.indexOf("buy.polar.sh") !== -1 ||
+          href.indexOf("polar.sh/checkout") !== -1 ||
+          href.indexOf("#tom-vip-") === 0);
 
       if (!isPaidCta) return;
 
       var txt = String(el.innerText || el.textContent || "").toLowerCase();
       var isAnnual =
         planAttr === "annual" ||
-        uuidAttr.indexOf("667aa482-f17c-47d1-b7f3-a2427c36516b") !== -1 ||
-        href.indexOf("667aa482-f17c-47d1-b7f3-a2427c36516b") !== -1 ||
+        polarPlanAttr === "annual_199" ||
+        href.indexOf("annual") !== -1 ||
         txt.indexOf("199") !== -1 ||
         txt.indexOf("annual") !== -1;
       var planKey = isAnnual ? "annual" : "monthly";
 
-      // Fire Abacus paid_click & paid_click_total strictly once per click
-      try {
-        fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/paid_click", {
-          mode: "cors",
-          keepalive: true,
-        }).catch(function () {});
-        fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/paid_click_total", {
-          mode: "cors",
-          keepalive: true,
-        }).catch(function () {});
-      } catch (_) {}
+      // Fire Abacus paid_click_<YYYY-MM-DD> & paid_click_total strictly once per click
+      if (!e.__tomPaidClickTracked) {
+        e.__tomPaidClickTracked = true;
+        try {
+          var kst = getKstDateString();
+          fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/paid_click_" + kst, {
+            mode: "cors",
+            keepalive: true,
+          }).catch(function () {});
+          fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/paid_click_total", {
+            mode: "cors",
+            keepalive: true,
+          }).catch(function () {});
+          fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/paid_click", {
+            mode: "cors",
+            keepalive: true,
+          }).catch(function () {});
+        } catch (_) {}
+      }
 
       var pCfg = window.PAYMENT_CONFIG || {};
-      var finSlot = pCfg.FINANCE_STORE_SLOT || {};
-      var backupMap = finSlot.BACKUP_LIVE_CHECKOUT_URL || {};
-      var backupUrl = String(backupMap[planKey] || "").trim();
+      var resolvedPolarUrl = resolvePolarCheckoutUrl(planKey);
 
-      if (pCfg.STORE_LIVE_READY !== true && !backupUrl) {
+      if (pCfg.STORE_LIVE_READY !== true || !resolvedPolarUrl) {
         e.preventDefault();
         e.stopPropagation();
         if (typeof e.stopImmediatePropagation === "function") {
@@ -414,34 +492,30 @@
         return;
       }
 
-      // Live Checkout Active Path (STORE_LIVE_READY === true or BACKUP_LIVE_CHECKOUT_URL set)
-      var liveTargetUrl =
-        backupUrl ||
-        (planKey === "annual" ? finSlot.annualCheckoutUrl : finSlot.monthlyCheckoutUrl) ||
-        href;
+      // Live Polar.sh Checkout Active Path (STORE_LIVE_READY === true AND valid Polar URL configured)
+      e.preventDefault();
+      e.stopPropagation();
+      if (typeof e.stopImmediatePropagation === "function") {
+        e.stopImmediatePropagation();
+      }
 
-      if (liveTargetUrl) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (typeof e.stopImmediatePropagation === "function") {
-          e.stopImmediatePropagation();
-        }
-        if (
-          liveTargetUrl.indexOf("lemonsqueezy.com") !== -1 &&
-          window.LemonSqueezy &&
-          window.LemonSqueezy.Url &&
-          typeof window.LemonSqueezy.Url.Open === "function"
-        ) {
-          window.LemonSqueezy.Url.Open(liveTargetUrl);
-        } else {
-          window.open(liveTargetUrl, "_blank", "noopener,noreferrer");
-        }
+      var checkoutUrl = appendPolarCustomerEmail(resolvedPolarUrl);
+      if (window.isTomInAppWebView()) {
+        window.location.href = checkoutUrl;
+        return;
+      }
+      if (window.PolarEmbedCheckout && typeof window.PolarEmbedCheckout.create === "function") {
+        window.PolarEmbedCheckout.create(checkoutUrl, "dark").catch(function () {
+          window.location.href = checkoutUrl;
+        });
+      } else {
+        window.location.href = checkoutUrl;
       }
     },
     true
   );
 
-  // 2. Escape key closes VIP Waitlist Modal + Lemon Squeezy Checkout.Success Listener Kept Intact
+  // 2. Escape key closes VIP Waitlist Modal + Polar.sh Checkout Success Unlock
   window.addEventListener("keydown", function (ev) {
     if (ev.key === "Escape") {
       var wl = document.getElementById("tomVipWaitlistModal");
@@ -451,27 +525,62 @@
     }
   });
 
-  function setupSubpageLemonSqueezySuccess() {
+  function applyPolarCheckoutUnlock(orderRef) {
+    var cleanRef = String(orderRef || "RSA-PRO-2026-POLAR-VIP").trim();
     try {
-      if (window.__rsaLsPostMessageBound) return;
-      if (typeof window.createLemonSqueezy === "function") {
-        window.createLemonSqueezy();
+      localStorage.setItem("rsa_pro_unlocked", "true");
+      localStorage.setItem("rsa_token", cleanRef);
+      var kst = getKstDateString();
+      if (localStorage.getItem("hq_paid_" + kst) !== "1") {
+        localStorage.setItem("hq_paid_" + kst, "1");
+        fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/paid_member_" + kst, {
+          mode: "cors",
+          keepalive: true,
+        }).catch(function () {});
+        fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/paid_member_total", {
+          mode: "cors",
+          keepalive: true,
+        }).catch(function () {});
       }
-      if (window.LemonSqueezy && typeof window.LemonSqueezy.Setup === "function") {
-        window.LemonSqueezy.Setup({
-          eventHandler: function (event) {
-            if (event && event.event === "Checkout.Success") {
-              try {
-                localStorage.setItem("rsa_pro_unlocked", "true");
-                localStorage.setItem("rsa_token", "RSA-PRO-2026-LS-CHECKOUT");
-              } catch (_) {}
+    } catch (_) {}
+  }
+
+  function setupPolarCheckoutSuccess() {
+    try {
+      var searchStr = (window.location && window.location.search) || "";
+      if (
+        searchStr.indexOf("payment=success") !== -1 ||
+        searchStr.indexOf("polar_checkout_success") !== -1
+      ) {
+        var sp = new URLSearchParams(searchStr);
+        var cid = sp.get("checkout_id") || sp.get("customer_session_token") || "POLAR-VIP";
+        applyPolarCheckoutUnlock("RSA-PRO-2026-" + cid);
+      }
+      if (!window.__tomPolarPostMessageBound) {
+        window.__tomPolarPostMessageBound = true;
+        window.addEventListener("message", function (ev) {
+          try {
+            var origin = String((ev && ev.origin) || "").toLowerCase();
+            if (origin.indexOf("polar.sh") === -1) return;
+            var d = ev.data;
+            var isSuccess =
+              d === "polar_checkout_success" ||
+              (d &&
+                typeof d === "object" &&
+                (d.event === "success" ||
+                  d.event === "polar_checkout_success" ||
+                  d.type === "polar_checkout_success" ||
+                  d.status === "succeeded"));
+            if (isSuccess) {
+              applyPolarCheckoutUnlock("RSA-PRO-2026-POLAR-EMBED");
             }
-          },
+          } catch (_) {}
         });
       }
     } catch (_) {}
   }
-  window.addEventListener("load", setupSubpageLemonSqueezySuccess);
+  setupPolarCheckoutSuccess();
+  window.addEventListener("load", setupPolarCheckoutSuccess);
 
   // 3. Session-Scoped `read_complete` Beacon (Scroll Depth >= 70% AND Dwell Time >= 15000ms)
   (function bindReadCompleteBeacon() {

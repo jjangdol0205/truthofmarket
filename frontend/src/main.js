@@ -93,19 +93,11 @@ const defaultView =
       localStorage.setItem("rsa_cfg_site1_url", "https://truthofmarket.com");
     }
     const oldM = localStorage.getItem("rsa_cfg_ls_monthly") || "";
-    if (
-      oldM.includes("rightsidealpha.lemonsqueezy.com") ||
-      oldM.includes("pro-monthly") ||
-      oldM.includes("checkout/custom/")
-    ) {
+    if (oldM && !/^https:\/\/(buy\.)?polar\.sh\//i.test(oldM)) {
       localStorage.removeItem("rsa_cfg_ls_monthly");
     }
     const oldL = localStorage.getItem("rsa_cfg_ls_ltd") || "";
-    if (
-      oldL.includes("rightsidealpha.lemonsqueezy.com") ||
-      oldL.includes("lifetime-pass") ||
-      oldL.includes("checkout/custom/")
-    ) {
+    if (oldL && !/^https:\/\/(buy\.)?polar\.sh\//i.test(oldL)) {
       localStorage.removeItem("rsa_cfg_ls_ltd");
     }
     const oldTv = localStorage.getItem("rsa_cfg_aff_tv") || "";
@@ -202,12 +194,16 @@ const state = {
     site1_name: "RightSideAlpha",
     site1_url: localStorage.getItem("rsa_cfg_site1_url") || "https://truthofmarket.com",
     site2_url: "https://truthofmarket.com",
-    ls_site1_monthly_url:
+    polar_tom_monthly_url:
+      localStorage.getItem("rsa_cfg_polar_monthly") ||
       localStorage.getItem("rsa_cfg_ls_monthly") ||
-      "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8",
-    ls_site1_ltd_url:
+      "",
+    polar_tom_annual_url:
+      localStorage.getItem("rsa_cfg_polar_annual") ||
       localStorage.getItem("rsa_cfg_ls_ltd") ||
-      "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b",
+      "",
+    ls_site1_monthly_url: "",
+    ls_site1_ltd_url: "",
     tradingview_aff_id: localStorage.getItem("rsa_cfg_aff_tv") || "1173809",
     seekingalpha_source: localStorage.getItem("rsa_cfg_aff_sa") || "better_life333",
     trendspider_aff_id: "rightside",
@@ -445,8 +441,8 @@ function switchView(targetView) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-async function handleLemonSqueezyCheckoutSuccess(orderRef) {
-  const tokenVal = String(orderRef || "RSA-PRO-2026-LS-CHECKOUT").trim();
+async function handlePolarCheckoutSuccess(orderRef) {
+  const tokenVal = String(orderRef || "RSA-PRO-2026-POLAR-CHECKOUT").trim();
   state.isProUnlocked = true;
   state.licenseKey = tokenVal;
   try {
@@ -470,41 +466,30 @@ async function handleLemonSqueezyCheckoutSuccess(orderRef) {
   if (licModal) licModal.style.display = "none";
   renderApp();
   showToast(
-    "🎉 Lemon Squeezy Payment Confirmed! All 72 Pro Setups Unlocked (Check your email for your permanent License Key)."
+    "🎉 Polar.sh Payment Confirmed! All 72 Pro Setups Unlocked (Check your email for your permanent License Key)."
   );
 }
 
-function bindRsaLemonSqueezyEvents() {
+function bindRsaPolarCheckoutEvents() {
   if (typeof window === "undefined") return;
   try {
-    if (typeof window.createLemonSqueezy === "function") {
-      window.createLemonSqueezy();
-    }
-    if (window.LemonSqueezy && typeof window.LemonSqueezy.Setup === "function") {
-      window.LemonSqueezy.Setup({
-        eventHandler: (event) => {
-          if (event && event.event === "Checkout.Success") {
-            const ordId =
-              event?.data?.order?.data?.attributes?.identifier ||
-              event?.data?.order?.data?.id ||
-              "RSA-PRO-2026-LS-CHECKOUT";
-            handleLemonSqueezyCheckoutSuccess(`RSA-PRO-2026-${ordId}`);
-          }
-        },
-      });
-    }
-    if (!window.__rsaLsPostMessageBound && typeof window.addEventListener === "function") {
-      window.__rsaLsPostMessageBound = true;
+    if (!window.__rsaPolarPostMessageBound && typeof window.addEventListener === "function") {
+      window.__rsaPolarPostMessageBound = true;
       window.addEventListener("message", (ev) => {
         try {
           const origin = String(ev?.origin || "").toLowerCase();
-          if (!origin.includes("lemonsqueezy.com")) return;
+          if (!origin.includes("polar.sh")) return;
+          const d = ev.data;
           const isSuccess =
-            ev.data === "Checkout.Success" ||
-            (ev.data && typeof ev.data === "object" && ev.data.event === "Checkout.Success") ||
-            (typeof ev.data === "string" && ev.data.includes("Checkout.Success"));
+            d === "polar_checkout_success" ||
+            (d &&
+              typeof d === "object" &&
+              (d.event === "success" ||
+                d.event === "polar_checkout_success" ||
+                d.type === "polar_checkout_success" ||
+                d.status === "succeeded"));
           if (isSuccess) {
-            handleLemonSqueezyCheckoutSuccess("RSA-PRO-2026-LS-IFRAME");
+            handlePolarCheckoutSuccess("RSA-PRO-2026-POLAR-EMBED");
           }
         } catch (_) {}
       });
@@ -513,8 +498,8 @@ function bindRsaLemonSqueezyEvents() {
 }
 
 if (typeof window !== "undefined") {
-  window.__bindRsaLemonSqueezyEvents = bindRsaLemonSqueezyEvents;
-  window.addEventListener("load", bindRsaLemonSqueezyEvents);
+  window.__bindRsaPolarCheckoutEvents = bindRsaPolarCheckoutEvents;
+  window.addEventListener("load", bindRsaPolarCheckoutEvents);
   try {
     const initTheme = localStorage.getItem("tom_ui_theme") || "dark";
     const initFont = localStorage.getItem("tom_font_size") || "normal";
@@ -524,8 +509,8 @@ if (typeof window !== "undefined") {
 }
 
 function bindEvents() {
-  // Initialize Lemon Squeezy checkout overlay & Checkout.Success auto-unlock handler
-  bindRsaLemonSqueezyEvents();
+  // Initialize Polar.sh checkout postMessage & auto-unlock handler
+  bindRsaPolarCheckoutEvents();
 
   // Senior Font Size & Daylight Theme Toggles
   const btnToggleTomFont = document.getElementById("btnToggleTomFont");
@@ -1161,7 +1146,7 @@ function bindEvents() {
     if (!key) {
       if (msgEl) {
         msgEl.style.color = "var(--fin-down)";
-        msgEl.textContent = "Please enter your Lemon Squeezy Pro license key.";
+        msgEl.textContent = "Please enter your Polar.sh VIP license key.";
       }
       return;
     }
@@ -1186,7 +1171,7 @@ function bindEvents() {
         if (msgEl) {
           msgEl.style.color = "var(--fin-down)";
           msgEl.textContent =
-            res.message || "Invalid or expired license key. Please verify your Lemon Squeezy receipt or subscribe below.";
+            res.message || "Invalid or expired license key. Please verify your Polar.sh receipt or subscribe below.";
         }
       }
     } catch (err) {
@@ -1387,8 +1372,8 @@ function bindEvents() {
   if (btnSaveConfig) {
     btnSaveConfig.addEventListener("click", async () => {
       const s1Url = document.getElementById("cfgSite1Url")?.value.trim() || state.config.site1_url;
-      const lsM = document.getElementById("cfgLsMonthly")?.value.trim() || state.config.ls_site1_monthly_url;
-      const lsL = document.getElementById("cfgLsLtd")?.value.trim() || state.config.ls_site1_ltd_url;
+      const polarM = document.getElementById("cfgLsMonthly")?.value.trim() || "";
+      const polarA = document.getElementById("cfgLsLtd")?.value.trim() || "";
       const tgCh = document.getElementById("cfgTgChannel")?.value.trim() || state.config.telegram_channel_url || DEFAULT_TG_CHANNEL_URL;
       const ytUrl = document.getElementById("cfgYoutubeUrl")?.value.trim() || state.config.youtube_url || DEFAULT_YOUTUBE_URL;
       const igUrl = document.getElementById("cfgInstagramUrl")?.value.trim() || state.config.instagram_url || DEFAULT_INSTAGRAM_URL;
@@ -1400,8 +1385,8 @@ function bindEvents() {
         "https://trendspider.com/?_go=rightside";
 
       state.config.site1_url = s1Url;
-      state.config.ls_site1_monthly_url = lsM;
-      state.config.ls_site1_ltd_url = lsL;
+      state.config.polar_tom_monthly_url = polarM;
+      state.config.polar_tom_annual_url = polarA;
       state.config.telegram_channel_url = tgCh;
       state.config.youtube_url = ytUrl;
       state.config.instagram_url = igUrl;
@@ -1411,8 +1396,8 @@ function bindEvents() {
       state.config.broker_referral_url = brkUrl;
 
       localStorage.setItem("rsa_cfg_site1_url", s1Url);
-      localStorage.setItem("rsa_cfg_ls_monthly", lsM);
-      localStorage.setItem("rsa_cfg_ls_ltd", lsL);
+      localStorage.setItem("rsa_cfg_polar_monthly", polarM);
+      localStorage.setItem("rsa_cfg_polar_annual", polarA);
       localStorage.setItem("rsa_tg_channel_url", tgCh);
       localStorage.setItem("rsa_cfg_youtube_url", ytUrl);
       localStorage.setItem("rsa_cfg_instagram_url", igUrl);
@@ -1427,8 +1412,8 @@ function bindEvents() {
           seekingalpha_source: saSrc,
           broker_name: brkName,
           broker_referral_url: brkUrl,
-          ls_site1_monthly_url: lsM,
-          ls_site1_ltd_url: lsL,
+          polar_tom_monthly_url: polarM,
+          polar_tom_annual_url: polarA,
           site1_url: s1Url,
           telegram_channel_url: tgCh,
           youtube_url: ytUrl,
@@ -2482,13 +2467,13 @@ function openStockDetailModal(ticker) {
   const trig = Number(s.entry_trigger_price ?? s.ma60_price ?? closeVal * 1.02).toFixed(2);
   const stop = Number(s.stop_loss_price ?? closeVal * 0.91).toFixed(2);
   const tp1 = Number(s.tp1_2x_price ?? closeVal * 2.0).toFixed(2);
-  const lsMonthly = formatCheckoutUrl(
-    state.config?.ls_site1_monthly_url,
-    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
+  const polarMonthly = formatCheckoutUrl(
+    state.config?.polar_tom_monthly_url || state.config?.ls_site1_monthly_url,
+    "#tom-vip-monthly"
   );
-  const lsLtd = formatCheckoutUrl(
-    state.config?.ls_site1_ltd_url,
-    "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b"
+  const polarAnnual = formatCheckoutUrl(
+    state.config?.polar_tom_annual_url || state.config?.ls_site1_ltd_url,
+    "#tom-vip-annual"
   );
   const tvAffId = encodeURIComponent(state.config?.tradingview_aff_id || "1173809");
   const tvUrl = `https://www.tradingview.com/symbols/${encodeURIComponent(s.ticker)}/?aff_id=${tvAffId}`;
@@ -2546,10 +2531,10 @@ function openStockDetailModal(ticker) {
         : `<div style="background:rgba(37,99,235,0.1); border:1px solid rgba(59,130,246,0.38); border-radius:6px; padding:12px; margin-bottom:12px;">
              <div style="font-weight:800; color:#ffffff; margin-bottom:6px;">🔒 Historical Factor Reference Bands &amp; CSV Export</div>
              <div style="display:flex; gap:8px; flex-wrap:wrap;">
-               <a class="btn btn-primary btn-sm lemonsqueezy-button" data-direct-ls="1" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthly}" target="_blank" rel="noopener noreferrer" style="min-height:40px; font-weight:800;">
+               <a class="btn btn-primary btn-sm polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthly}" style="min-height:40px; font-weight:800;">
                  🔒 Start Monthly VIP — $29/mo
                </a>
-               <a class="btn btn-emerald btn-sm lemonsqueezy-button" data-direct-ls="1" data-tom-paid-plan="annual" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" href="${lsLtd}" target="_blank" rel="noopener noreferrer" style="min-height:40px; font-weight:800;">
+               <a class="btn btn-emerald btn-sm polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" href="${polarAnnual}" style="min-height:40px; font-weight:800;">
                  💎 Start Annual VIP — $199/yr
                </a>
              </div>
@@ -2958,6 +2943,12 @@ async function loadAllData() {
     if (refCfg && typeof refCfg === "object") {
       Object.entries(refCfg).forEach(([k, v]) => {
         if (v !== undefined && v !== null && v !== "") {
+          if (
+            (k === "ls_site1_monthly_url" || k === "ls_site1_ltd_url") &&
+            !/^https:\/\/(buy\.)?polar\.sh\//i.test(String(v))
+          ) {
+            return;
+          }
           state.config[k] = v;
         }
       });
@@ -3077,7 +3068,17 @@ async function init() {
   renderApp();
   handleSpecialAnchorScroll();
 
-  // Auto-unlock Pro Terminal when returning from Lemon Squeezy checkout with ?license_key=, ?order_key=, or ?key=
+  // Auto-unlock Pro Terminal when returning from Polar.sh checkout with ?payment=success, ?polar_checkout_success=1, ?license_key=, ?order_key=, or ?key=
+  if (
+    initialSearch.get("payment") === "success" ||
+    initialSearch.get("polar_checkout_success") === "1"
+  ) {
+    const cid = initialSearch.get("checkout_id") || initialSearch.get("customer_session_token") || "POLAR-VIP";
+    if (!state.isProUnlocked) {
+      await handlePolarCheckoutSuccess(`RSA-PRO-2026-${cid}`);
+    }
+  }
+
   const urlLicenseKey = (
     initialSearch.get("license_key") ||
     initialSearch.get("order_key") ||
@@ -3094,7 +3095,7 @@ async function init() {
         localStorage.setItem("rsa_token", urlLicenseKey);
         await loadAllData();
         renderApp();
-        showToast("🎉 Lemon Squeezy Pro License Verified — All 72 US Equity Targets Unlocked!");
+        showToast("🎉 Polar.sh VIP License Verified — All 72 US Equity Targets Unlocked!");
       }
     } catch (_) {}
   }
@@ -3110,7 +3111,7 @@ async function init() {
           msgEl.style.color = "#34d399";
           msgEl.textContent = checkoutParam === "annual"
             ? "🏆 Annual VIP ($199/yr): Click Start Annual VIP — $199/yr above, or paste your License Key below to unlock immediately."
-            : "🍋 Monthly VIP ($29/mo): Click Start Monthly VIP — $29/mo above, or paste your License Key below to unlock immediately.";
+            : "⚡ Monthly VIP ($29/mo): Click Start Monthly VIP — $29/mo above, or paste your License Key below to unlock immediately.";
         }
       }
     }, 200);

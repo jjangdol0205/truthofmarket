@@ -17,7 +17,7 @@ const PRICING_COPY = {
       "TradingView Educational Trend Overlay Script + 26.8-Year US Market Weather CSV",
     ],
     t1Btn: "Start Monthly VIP — $29/mo",
-    t1PayNote: "🍎 Apple Pay · Google Pay · Credit Card (1-Click Cancel Anytime · 14-Day Refund Policy)",
+    t1PayNote: "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · 1-Click Cancel · 14-Day Refund Policy",
     t2Badge: "ANNUAL VIP",
     t2Title: "Annual VIP Educational Calculator Pass",
     t2Period: "/ year",
@@ -30,7 +30,7 @@ const PRICING_COPY = {
       "Unified Access Across TruthOfMarket Retirement & Market Weather Calculators",
     ],
     t2Btn: "Start Annual VIP — $199/yr",
-    t2PayNote: "🍎 Apple Pay · Google Pay · Credit Card (Billed Annually · 14-Day Refund Policy)",
+    t2PayNote: "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · Billed Annually · 14-Day Refund Policy",
     autoUnlockNote:
       "✨ Instant Software Activation: Your self-directed educational calculators and CSV datasets unlock on screen automatically after checkout.",
     restoreSummary: "🔑 Switching devices or already subscribed? Restore your VIP License Key here",
@@ -62,7 +62,7 @@ const PRICING_COPY = {
       "TradingView 教育用トレンド表示スクリプト＋米国市場26.8年CSVデータ",
     ],
     t1Btn: "Start Monthly VIP — $29/mo",
-    t1PayNote: "🍎 Apple Pay · Google Pay · Credit Card (いつでも1クリック解約 · 14日間返金保証)",
+    t1PayNote: "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · いつでも1クリック解約 · 14日間返金保証",
     t2Badge: "ANNUAL VIP",
     t2Title: "Annual VIP 年間オールアクセスパス",
     t2Period: "/ 年額",
@@ -73,7 +73,7 @@ const PRICING_COPY = {
       "TruthOfMarket 老後キャッシュフロー＆市場天気ツールの全機能アクセス",
     ],
     t2Btn: "Start Annual VIP — $199/yr",
-    t2PayNote: "🍎 Apple Pay · Google Pay · Credit Card (年額プラン · 14日間返金保証)",
+    t2PayNote: "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · 年額プラン · 14日間返金保証",
     autoUnlockNote: "✨ 決済完了と同時にブラウザ上で教育用計算ツールとCSVデータが自動解放されます。",
     restoreSummary: "🔑 機種変更・別ブラウザでのVIPライセンスキー復元はこちら",
     restoreBtn: "ライセンスキー復元ウィンドウを開く",
@@ -96,13 +96,13 @@ PRICING_COPY.kr = PRICING_COPY.en;
 export function renderPricing(state) {
   const cfg = state.config || {};
   const c = PRICING_COPY[state.lang] || PRICING_COPY.en;
-  const lsMonthly = formatCheckoutUrl(
-    cfg.ls_site1_monthly_url,
-    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en"
+  const polarMonthly = formatCheckoutUrl(
+    cfg.polar_tom_monthly_url || cfg.ls_site1_monthly_url,
+    "#tom-vip-monthly"
   );
-  const lsAnnual = formatCheckoutUrl(
-    cfg.ls_site1_ltd_url,
-    "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en"
+  const polarAnnual = formatCheckoutUrl(
+    cfg.polar_tom_annual_url || cfg.ls_site1_ltd_url,
+    "#tom-vip-annual"
   );
   const tvAffId = encodeURIComponent(cfg.tradingview_aff_id || "1173809");
   const saSource = encodeURIComponent(cfg.seekingalpha_source || "better_life333");
@@ -156,7 +156,7 @@ export function renderPricing(state) {
             </ul>
           </div>
           <div>
-            <a class="btn btn-primary lemonsqueezy-button" id="cardMonthlyBtn" data-tom-paid-plan="monthly" data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" href="${lsMonthly}" style="justify-content:center; min-height:64px; padding:14px 18px; width:100%; font-size:1.06rem; font-weight:800; border-radius:12px;">
+            <a class="btn btn-primary polar-checkout-button" id="cardMonthlyBtn" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthly}" style="justify-content:center; min-height:64px; padding:14px 18px; width:100%; font-size:1.06rem; font-weight:800; border-radius:12px;">
               ${c.t1Btn}
             </a>
             <div style="margin-top:9px; font-size:0.82rem; color:#e2e8f0; font-weight:700; text-align:center; line-height:1.4;">
@@ -187,7 +187,7 @@ export function renderPricing(state) {
             </ul>
           </div>
           <div>
-            <a class="btn btn-emerald lemonsqueezy-button" id="cardLtdBtn" data-tom-paid-plan="annual" data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b" href="${lsAnnual}" style="justify-content:center; min-height:64px; padding:14px 18px; width:100%; font-size:1.06rem; font-weight:800; border-radius:12px;">
+            <a class="btn btn-emerald polar-checkout-button" id="cardLtdBtn" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" href="${polarAnnual}" style="justify-content:center; min-height:64px; padding:14px 18px; width:100%; font-size:1.06rem; font-weight:800; border-radius:12px;">
               ${c.t2Btn}
             </a>
             <div style="margin-top:9px; font-size:0.82rem; color:#a7f3d0; font-weight:700; text-align:center; line-height:1.4;">
@@ -213,7 +213,7 @@ export function renderPricing(state) {
             ${c.restoreSummary} ▾
           </summary>
           <div style="margin-top:10px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; font-size:0.82rem; color:#cbd5e1;">
-            <span>Already have a Lemon Squeezy receipt key on another computer or phone? Restore your VIP session with 1 click:</span>
+            <span>Already have a Polar.sh VIP receipt key on another computer or phone? Restore your VIP session with 1 click:</span>
             <button type="button" class="btn btn-sm" onclick="var b=document.getElementById('btnOpenLicense');if(b){b.click();}else{var m=document.getElementById('licenseModal');if(m)m.style.display='flex';}" style="font-weight:700; border-color:rgba(147,197,253,0.45); color:#93c5fd;">
               ${c.restoreBtn} →
             </button>
@@ -228,7 +228,7 @@ export function renderPricing(state) {
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
           </svg>
-          <span>Merchant of Record: <b>Lemon Squeezy, LLC (Store #296100)</b></span>
+          <span><b>Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)</b></span>
         </div>
         <div class="trust-badge">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

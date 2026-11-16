@@ -1,3 +1,5 @@
+import { formatCheckoutUrl } from "../services/api.js";
+
 const TOM_MORNING_CLUB_NOTES = [
   "Good morning, Club Member — you never have to chase every rally. Protecting your principal comes first.",
   "Good morning, friend — cash in your 401(k) or IRA is a safe harbor, never a missed opportunity.",
@@ -494,12 +496,14 @@ function fmtUsdInt(n) {
 
 export function renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRed }) {
   const cfg = (state && state.config) || {};
-  const lsMonthly =
-    cfg.ls_site1_monthly_url ||
-    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en";
-  const lsLtd =
-    cfg.ls_site1_ltd_url ||
-    "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en";
+  const polarMonthly = formatCheckoutUrl(
+    cfg.polar_tom_monthly_url || cfg.ls_site1_monthly_url,
+    "#tom-vip-monthly"
+  );
+  const polarAnnual = formatCheckoutUrl(
+    cfg.polar_tom_annual_url || cfg.ls_site1_ltd_url,
+    "#tom-vip-annual"
+  );
 
   const liveMode = detectTomLiveWeatherMode(semiScore, cntGreen, cntRed);
   const defaultEgg = 400000;
@@ -723,18 +727,20 @@ export function renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRe
           ☕ Step 2 (Free 3-Sec Club): Daily Retirement Cashflow Brief
         </button>
         <a
-          href="${lsMonthly}"
-          class="tom-retire-cta-btn step-vip lemonsqueezy-button"
+          href="${polarMonthly}"
+          class="tom-retire-cta-btn step-vip polar-checkout-button"
+          data-polar-checkout
+          data-polar-plan="monthly_29"
           data-tom-paid-plan="monthly"
-          data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
         >
           ⚡ Step 3: Start Monthly VIP — $29/mo
         </a>
         <a
-          href="${lsLtd}"
-          class="tom-retire-cta-btn step-ltd lemonsqueezy-button"
+          href="${polarAnnual}"
+          class="tom-retire-cta-btn step-ltd polar-checkout-button"
+          data-polar-checkout
+          data-polar-plan="annual_199"
           data-tom-paid-plan="annual"
-          data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b"
         >
           👑 Start Annual VIP — $199/yr
         </a>
@@ -1220,12 +1226,14 @@ export function renderHero(state) {
 
 export function renderFreeStarterManual(state) {
   const cfg = (state && state.config) || {};
-  const lsMonthly =
-    cfg.ls_site1_monthly_url ||
-    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en";
-  const lsAnnual =
-    cfg.ls_site1_ltd_url ||
-    "https://truthofmarket.lemonsqueezy.com/checkout/buy/667aa482-f17c-47d1-b7f3-a2427c36516b?embed=1&locale=en";
+  const polarMonthly = formatCheckoutUrl(
+    cfg.polar_tom_monthly_url || cfg.ls_site1_monthly_url,
+    "#tom-vip-monthly"
+  );
+  const polarAnnual = formatCheckoutUrl(
+    cfg.polar_tom_annual_url || cfg.ls_site1_ltd_url,
+    "#tom-vip-annual"
+  );
   const isWebView =
     typeof window !== "undefined" &&
     typeof window.isTomInAppWebView === "function" &&
@@ -1282,20 +1290,20 @@ export function renderFreeStarterManual(state) {
           📧 Get Free Daily 3-Color Market Weather ($0)
         </button>
         <a
-          href="${lsMonthly}"
-          class="tom-manual-vip-link lemonsqueezy-button"
-          data-direct-ls="1"
+          href="${polarMonthly}"
+          class="tom-manual-vip-link polar-checkout-button"
+          data-polar-checkout
+          data-polar-plan="monthly_29"
           data-tom-paid-plan="monthly"
-          data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
         >
           ⚡ Start Monthly VIP — $29/mo
         </a>
         <a
-          href="${lsAnnual}"
-          class="tom-manual-vip-link is-ltd lemonsqueezy-button"
-          data-direct-ls="1"
+          href="${polarAnnual}"
+          class="tom-manual-vip-link is-ltd polar-checkout-button"
+          data-polar-checkout
+          data-polar-plan="annual_199"
           data-tom-paid-plan="annual"
-          data-ls-product-uuid="667aa482-f17c-47d1-b7f3-a2427c36516b"
         >
           👑 Start Annual VIP — $199/yr
         </a>

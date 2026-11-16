@@ -34,9 +34,9 @@ export function renderHeader(state) {
       ? Number(ov.smh_dd_pct)
       : -29.02;
   const xlv1d = xlvEtf && xlvEtf.ret_1d_pct !== undefined ? Number(xlvEtf.ret_1d_pct) : 0.22;
-  const lsMonthlyHref = formatCheckoutUrl(
-    state.config?.ls_site1_monthly_url,
-    "https://truthofmarket.lemonsqueezy.com/checkout/buy/d5e7e761-8b1b-4ca8-b1fe-771acd1450f8?embed=1&locale=en"
+  const polarMonthlyHref = formatCheckoutUrl(
+    state.config?.polar_tom_monthly_url || state.config?.ls_site1_monthly_url,
+    "#tom-vip-monthly"
   );
   const ytUrl = state.config?.youtube_url || "https://www.youtube.com/@RightSideAlpha";
   const igUrl = state.config?.instagram_url || "https://www.instagram.com/rightsidealpha";
@@ -244,13 +244,12 @@ export function renderHeader(state) {
           }
 
           <a
-            class="btn btn-primary lemonsqueezy-button"
+            class="btn btn-primary polar-checkout-button"
             id="topSubscribeBtn"
+            data-polar-checkout
+            data-polar-plan="monthly_29"
             data-tom-paid-plan="monthly"
-            data-ls-product-uuid="d5e7e761-8b1b-4ca8-b1fe-771acd1450f8"
-            href="${lsMonthlyHref}"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="${polarMonthlyHref}"
           >
             <span id="btnUnlockPro">${t.btnUnlockPro}</span>
           </a>
