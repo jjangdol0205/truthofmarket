@@ -170,7 +170,8 @@
 - $KO vs $PEP (Classic Beverage Dividend Aristocrats Cashflow Comparison): Higher Factor Score=$KO | $KO=87/100 (1.28x Vol) vs $PEP=85/100 (1.28x Vol) -> https://truthofmarket.com/compare/ko-vs-pep.html
 
 ## 4. Educational Market Weather & Allocation Journal (/insights/)
-- Morning Bell Retirement & Market Weather Note (2026-11-17): Sentiment Gauge at 11.4/100 (Extreme Fear) & Calm Allocation Study -> https://truthofmarket.com/insights/daily-us-quant-regime-brief.html
-- Understanding Moving-Average Confirmation: 26.8-Year Empirical Factor Study (2000–2026) -> https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html
-- Sector Correlation & Rebalancing Math: Studying the $SMH and $XLV Barbell (2000–2026) -> https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html
-- The Mathematics of Drawdown Asymmetry: Why Portfolio Cushions Preserve Long-Term Compounding -> https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html
+- Why Quiet Barbells Outlast Loud Bull Markets -> https://truthofmarket.com/insights/why-quiet-barbells-outlast-loud-bull-markets.html
+- Two Clocks in One Portfolio: Twenty-Six Years of $SMH and $XLV -> https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html
+- Morning Note (2026-11-17): Sector Sentiment at 11.4/100 (Extreme Fear) -> https://truthofmarket.com/insights/daily-us-quant-regime-brief.html
+- Why Cheap-Looking Charts Keep Falling: Notes on Moving-Average Discipline -> https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html
+- The Quiet Arithmetic of Drawdowns and Treasury Cushions -> https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html

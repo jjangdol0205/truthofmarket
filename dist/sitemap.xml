@@ -964,60 +964,66 @@
     <loc>https://truthofmarket.com/insights/</loc>
     <lastmod>2026-11-17</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.92</priority>
+    <priority>0.94</priority>
   </url>
   <url>
-    <loc>https://truthofmarket.com/insights/daily-us-quant-regime-brief.html</loc>
+    <loc>https://truthofmarket.com/insights/why-quiet-barbells-outlast-loud-bull-markets.html</loc>
     <lastmod>2026-11-17</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.90</priority>
-  </url>
-  <url>
-    <loc>https://truthofmarket.com/insights/2026-11-17-us-quant-regime-brief.html</loc>
-    <lastmod>2026-11-17</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.90</priority>
-  </url>
-  <url>
-    <loc>https://truthofmarket.com/insights/2026-11-11-us-quant-regime-brief.html</loc>
-    <lastmod>2026-11-17</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.86</priority>
-  </url>
-  <url>
-    <loc>https://truthofmarket.com/insights/2026-11-12-us-quant-regime-brief.html</loc>
-    <lastmod>2026-11-17</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.86</priority>
-  </url>
-  <url>
-    <loc>https://truthofmarket.com/insights/2026-11-13-us-quant-regime-brief.html</loc>
-    <lastmod>2026-11-17</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.86</priority>
-  </url>
-  <url>
-    <loc>https://truthofmarket.com/insights/2026-11-16-us-quant-regime-brief.html</loc>
-    <lastmod>2026-11-17</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.86</priority>
-  </url>
-  <url>
-    <loc>https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html</loc>
-    <lastmod>2026-11-17</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.86</priority>
+    <priority>0.93</priority>
   </url>
   <url>
     <loc>https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html</loc>
     <lastmod>2026-11-17</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.86</priority>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://truthofmarket.com/insights/daily-us-quant-regime-brief.html</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://truthofmarket.com/insights/2026-11-17-us-quant-regime-brief.html</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://truthofmarket.com/insights/2026-11-11-us-quant-regime-brief.html</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://truthofmarket.com/insights/2026-11-12-us-quant-regime-brief.html</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://truthofmarket.com/insights/2026-11-13-us-quant-regime-brief.html</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://truthofmarket.com/insights/2026-11-16-us-quant-regime-brief.html</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html</loc>
+    <lastmod>2026-11-17</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.88</priority>
   </url>
   <url>
     <loc>https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html</loc>
     <lastmod>2026-11-17</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.86</priority>
+    <priority>0.88</priority>
   </url>
 </urlset>

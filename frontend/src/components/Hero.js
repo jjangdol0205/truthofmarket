@@ -1020,6 +1020,21 @@ export function renderHero(state) {
           </div>
         </div>
       </div>
+
+      <aside class="tom-substack-preview-card" aria-label="Read Today's Editorial Note" style="max-width:1020px;margin:0 auto 22px;padding:22px 24px;background:#fcfcfa;border:1.5px solid #e6e4dd;border-left:4px solid #059669;border-radius:14px;color:#1a1a1a;">
+        <div style="font-size:0.78rem;font-weight:800;letter-spacing:0.07em;text-transform:uppercase;color:#059669;margin-bottom:6px;">
+          Editorial Essay &middot; Arthur Vance &middot; 6 Min Read
+        </div>
+        <h3 style="font-family:Georgia,serif;font-size:1.38rem;font-weight:700;margin:0 0 8px;color:#1a1a1a;line-height:1.3;">
+          <a href="/insights/why-quiet-barbells-outlast-loud-bull-markets.html" style="color:inherit;text-decoration:none;">Why Quiet Barbells Outlast Loud Bull Markets</a>
+        </h3>
+        <p style="font-family:Georgia,serif;font-size:1.04rem;line-height:1.72;color:#3d3d3a;margin:0 0 12px;">
+          &ldquo;Late on a Tuesday evening after a sharp Nasdaq selloff, almost nobody opens their brokerage app to admire a twenty-year compounding chart&mdash;they open it to ask whether twenty years of patient saving are still intact...&rdquo;
+        </p>
+        <a href="/insights/why-quiet-barbells-outlast-loud-bull-markets.html" style="display:inline-flex;align-items:center;font-weight:800;font-size:0.96rem;color:#1d4ed8;text-decoration:underline;">
+          Read Today&rsquo;s Editorial Note &rarr;
+        </a>
+      </aside>
     </section>
   `;
 }

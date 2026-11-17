@@ -3,15 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>US Retirement Cashflow &amp; Quantitative Market Weather Insights | TruthOfMarket</title>
-  <meta name="description" content="Self-directed educational market data studies, 401(k)/IRA retirement cashflow allocation math, and $VOO · $SCHD · $JEPI · $SGOV rebalancing notes." />
+  <title>Editorial Notes &amp; SMH × XLV Sector Studies | TruthOfMarket</title>
+  <meta name="description" content="Unrushed, plain-English essays on the $SMH × $XLV sector balance, 26-year drawdown arithmetic, and daily US market sentiment indicators." />
   <link rel="canonical" href="https://truthofmarket.com/insights/" />
   <link rel="alternate" type="application/rss+xml" title="TruthOfMarket RSS Feed" href="https://truthofmarket.com/rss.xml" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="TruthOfMarket Educational Market Data &amp; Retirement Insights" />
-  <meta property="og:description" content="Daily US market weather notes, 2-4x/year portfolio rebalancing math, and historical factor studies." />
+  <meta property="og:title" content="TruthOfMarket Editorial Notes &amp; Sector Balance Archive" />
+  <meta property="og:description" content="Plain-English research essays on pairing semiconductor growth ($SMH) with healthcare resilience ($XLV)." />
   <meta property="og:url" content="https://truthofmarket.com/insights/" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700&display=swap" rel="stylesheet" />
   <script>
   window.PAYMENT_CONFIG = {
     PROVIDER: 'polar_sh',
@@ -26,6 +29,8 @@
     POLAR_TOM_ANNUAL_URL: 'https://buy.polar.sh/polar_cl_IPZpLD1EeUXCrNMxo1Yji8oT8RPgD9jhdassj38WMyf?locale=en',
     SUPPORT_EMAIL: 'beable9489@gmail.com'
   };
+  var COPY_MODE = (window.PAYMENT_CONFIG && window.PAYMENT_CONFIG.STORE_LIVE_READY) ? 'LIVE_SHARP' : 'UNDERWRITING_SAFE';
+  window.TOM_COPY_MODE = COPY_MODE;
   </script>
   <script src="/hq_member_crm_client.js" defer></script>
   <script src="/tom_payment_waitlist.js" defer></script>
@@ -35,45 +40,98 @@
       if (typeof window === 'undefined' || typeof navigator === 'undefined') return;
       var kst = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
       var ns = 'tom_truthofmarket';
-      window.__tomSubmitLeadMagnet = function(ev, formEl, topicLabel) {
+      window.__tomCopyEssayLink = function(btnEl) {
+        var url = (window.location && window.location.href) ? window.location.href : 'https://truthofmarket.com/insights/index.html';
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(function() {
+            if (btnEl) {
+              var orig = btnEl.getAttribute('data-orig') || btnEl.textContent;
+              btnEl.setAttribute('data-orig', orig);
+              btnEl.textContent = 'Copied Link';
+              setTimeout(function() { btnEl.textContent = orig; }, 2200);
+            }
+          }).catch(function(){});
+        }
+      };
+      window.__tomSubmitSubstackSubscribe = function(ev, formEl, essaySlug) {
         if (ev && ev.preventDefault) ev.preventDefault();
         var input = formEl ? formEl.querySelector('input[type="email"]') : null;
-        var email = input ? String(input.value || '').trim() : '';
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        var statusEl = formEl && formEl.parentNode ? formEl.parentNode.querySelector('.substack-sub-status') : null;
+        var btnEl = formEl ? formEl.querySelector('button[type="submit"]') : null;
+        var email = input ? String(input.value || '').trim().toLowerCase() : '';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+          if (statusEl) {
+            statusEl.style.display = 'block';
+            statusEl.style.color = '#991b1b';
+            statusEl.textContent = 'Please enter a valid email address.';
+          }
           if (input) input.focus();
           return false;
         }
+        if (btnEl) {
+          btnEl.disabled = true;
+          btnEl.textContent = 'Subscribing...';
+        }
+        var noteStr = 'site=truthofmarket.com/insights/ | essay=' + (essaySlug || 'index.html');
         try {
           localStorage.setItem('tom_free_member_email', email);
           localStorage.setItem('tom_free_member_since', kst);
-          if (typeof window.submitTomVipWaitlistOrManualEmail === 'function') {
-            window.submitTomVipWaitlistOrManualEmail({
-              email: email,
-              segment: 'retirement_401k_ira',
-              lang: 'en-US',
-              notes: 'site=truthofmarket.com/insights/ | topic=' + (topicLabel || 'Daily Insights')
-            });
-          } else if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.registerMember === 'function') {
-            window.DreamCompanyCRM.registerMember({
-              div: 'TOM',
-              email: email,
-              nickname: '',
-              segment: 'retirement_401k_ira',
-              message: topicLabel || 'Daily Insights',
-              lang: 'en-US'
-            });
-          }
+          localStorage.setItem('dc_member_TOM', JSON.stringify({
+            div: 'TOM',
+            email: email,
+            nickname: '',
+            segment: 'substack_essay_reader',
+            notes: noteStr,
+            joined_at: new Date().toISOString()
+          }));
           fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup', { mode: 'cors', keepalive: true }).catch(function(){});
           fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup_total', { mode: 'cors', keepalive: true }).catch(function(){});
         } catch (_e) {}
-        document.querySelectorAll('.tom-lead-status').forEach(function(el) {
-          el.style.display = 'block';
-          el.style.color = '#86efac';
-          el.innerHTML = '✅ <strong>Subscribed!</strong> Free 8:30 AM ET 3-Color Market Weather &amp; Calm Allocation Review Briefs are active for <strong>' + email.replace(/[<>&"]/g, '') + '</strong>.';
-        });
-        document.querySelectorAll('.tom-lead-form input[type="email"]').forEach(function(inp) { inp.value = email; });
+
+        var finishOk = function() {
+          if (btnEl) {
+            btnEl.disabled = false;
+            btnEl.textContent = 'Subscribed';
+          }
+          if (statusEl) {
+            statusEl.style.display = 'block';
+            statusEl.style.color = '#065f46';
+            statusEl.innerHTML = 'Thank you. Future morning notes will arrive quietly at <strong>' + email.replace(/[<>&"]/g, '') + '</strong> (no password needed, 1-click unsubscribe anytime).';
+          }
+        };
+
+        if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.registerMember === 'function') {
+          window.DreamCompanyCRM.registerMember({
+            div: 'TOM',
+            email: email,
+            nickname: '',
+            segment: 'substack_essay_reader',
+            lang: 'en-US',
+            notes: noteStr,
+            message: noteStr
+          }).then(finishOk).catch(finishOk);
+        } else if (typeof window.submitTomVipWaitlistOrManualEmail === 'function') {
+          window.submitTomVipWaitlistOrManualEmail({
+            email: email,
+            segment: 'substack_essay_reader',
+            lang: 'en-US',
+            notes: noteStr
+          }).then(finishOk).catch(finishOk);
+        } else {
+          finishOk();
+        }
         return false;
       };
+      document.addEventListener('DOMContentLoaded', function() {
+        try {
+          var saved = localStorage.getItem('tom_free_member_email');
+          if (saved) {
+            document.querySelectorAll('.substack-inline-form input[type="email"]').forEach(function(inp) {
+              if (!inp.value) inp.value = saved;
+            });
+          }
+        } catch (_e2) {}
+      });
       if (window.__HQ_KPI_TOM__) return;
       window.__HQ_KPI_TOM__ = true;
       var ua = navigator.userAgent || '';
@@ -94,99 +152,112 @@
   })();
   </script>
   <style>
-    body { margin:0; font-family:'Inter',-apple-system,sans-serif; font-size:18px; background:#f8fafc; color:#0f172a; line-height:1.7; }
+    body { margin:0; background:#fcfcfa; color:#1a1a1a; font-family:'Newsreader',Georgia,serif; font-size:19px; line-height:1.8; }
     a { color:#1d4ed8; text-decoration:none; }
     a:hover { text-decoration:underline; }
-    .topbar { border-bottom:1.5px solid #cbd5e1; background:#ffffff; padding:0.95rem 1.25rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; }
-    .brand { font-weight:800; color:#0f172a; }
-    .nav-links a { margin-left:1rem; color:#1e293b; font-size:0.95rem; font-weight:700; }
-    .wrap { max-width:920px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }
-    h1 { color:#0f172a; font-size:clamp(1.8rem,3.5vw,2.4rem); margin-bottom:0.5rem; }
-    .sub { color:#334155; font-size:1.06rem; margin-bottom:2rem; }
-    .card { background:#ffffff; border:1.5px solid #cbd5e1; border-radius:12px; padding:1.5rem; margin-bottom:1.15rem; }
-    .cat { color:#047857; font-size:0.82rem; font-weight:800; text-transform:uppercase; letter-spacing:0.04em; }
-    .card h2 { margin:0.45rem 0 0.55rem; font-size:1.28rem; }
-    .card h2 a { color:#0f172a; }
-    .card p { margin:0 0 0.85rem; color:#334155; font-size:1rem; }
-    .read-more { font-weight:800; font-size:0.95rem; color:#1d4ed8; }
-    footer { margin-top:3rem; padding-top:1.4rem; border-top:1px solid #cbd5e1; color:#475569; font-size:0.9rem; }
+    .essay-topbar { border-bottom:1px solid #e6e4dd; background:#fcfcfa; font-family:'Inter',sans-serif; }
+    .essay-topbar-inner { max-width:680px; margin:0 auto; padding:14px 20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+    .essay-pub-brand { font-weight:800; color:#1a1a1a; font-size:0.98rem; }
+    .essay-top-nav { display:flex; gap:14px; font-size:0.88rem; font-weight:600; }
+    .essay-top-nav a { color:#6b6b66; }
+    .reading-column { max-width:680px; margin:0 auto; padding:44px 20px 72px; }
+    h1 { font-size:clamp(2rem,4vw,2.5rem); line-height:1.2; margin:0 0 10px; }
+    .hub-lead { color:#6b6b66; font-size:1.12rem; margin:0 0 32px; padding-bottom:20px; border-bottom:1px solid #e6e4dd; }
+    .hub-essay-item { padding:22px 0; border-bottom:1px solid #e6e4dd; }
+    .hub-kicker { font-family:'Inter',sans-serif; font-size:0.76rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#059669; margin-bottom:6px; }
+    .hub-essay-item h2 { margin:0 0 8px; font-size:1.45rem; line-height:1.3; }
+    .hub-essay-item h2 a { color:#1a1a1a; }
+    .hub-essay-item p { margin:0 0 10px; color:#3d3d3a; font-size:1.02rem; line-height:1.65; }
+    .hub-byline { font-family:'Inter',sans-serif; font-size:0.84rem; color:#6b6b66; font-weight:600; }
+    .substack-subscribe-box { margin:40px 0 24px; padding:28px 24px; background:#ffffff; border:1px solid #e6e4dd; border-radius:12px; text-align:center; font-family:'Inter',sans-serif; }
+    .substack-sub-title { font-family:'Newsreader',Georgia,serif; font-size:1.4rem; font-weight:700; margin-bottom:6px; }
+    .substack-sub-desc { font-size:0.92rem; color:#6b6b66; max-width:500px; margin:0 auto 16px; line-height:1.6; }
+    .substack-inline-form { display:flex; max-width:460px; margin:0 auto; gap:8px; flex-wrap:wrap; }
+    .substack-inline-form input { flex:1 1 220px; min-height:48px; padding:10px 14px; border:1px solid #c9c6bc; border-radius:8px; font-size:0.96rem; }
+    .substack-inline-form button { min-height:48px; padding:10px 20px; border:none; border-radius:8px; background:#059669; color:#ffffff; font-weight:700; font-size:0.95rem; cursor:pointer; }
+    .editorial-postscript { padding:18px 20px; background:#f5f4ef; border-radius:10px; font-family:'Inter',sans-serif; font-size:0.9rem; color:#3d3d3a; line-height:1.65; }
+    .ps-label { font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#6b6b66; margin-bottom:5px; }
+    .essay-footer { margin-top:40px; padding-top:20px; border-top:1px solid #e6e4dd; font-family:'Inter',sans-serif; font-size:0.84rem; color:#6b6b66; line-height:1.65; }
+    .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="/">TruthOfMarket &bull; Retirement Cashflow Calculator</a>
-    <nav class="nav-links">
-      <a href="/#tom-retirement-architect">30-Sec Income Simulator</a>
-      <a href="/#tomTrafficLightStrip">3-Color Market Weather</a>
-      <a href="/#tomFreeStarterManual">$0 Broker Guide</a>
-      <a href="/#pricing">VIP Benefits</a>
-    </nav>
+  <header class="essay-topbar">
+    <div class="essay-topbar-inner">
+      <a class="essay-pub-brand" href="/">TruthOfMarket &middot; Editorial Notes</a>
+      <nav class="essay-top-nav">
+        <a href="/#tom-retirement-architect">4-Step Balance Survey</a>
+        <a href="/#pricing">Daily Digest</a>
+      </nav>
+    </div>
   </header>
-  <main class="wrap">
-    <h1>Educational Market Weather &amp; Retirement Allocation Journal</h1>
-    <p class="sub">Self-directed mathematical studies on US 401(k)/IRA sequence-of-returns cushioning, calm 2–4x/year rebalancing, and empirical market data.</p>
+  <main class="reading-column">
+    <h1>TruthOfMarket Editorial Notes</h1>
+    <p class="hub-lead">Quiet, data-grounded essays by Arthur Vance on pairing semiconductor innovation ($SMH) with healthcare resilience ($XLV) across market seasons.</p>
     
-      <article class="card">
-        <div class="cat">Morning Bell Market Weather &middot; 2026-11-17 &middot; 5 min read</div>
-        <h2><a href="/insights/daily-us-quant-regime-brief.html">Morning Bell Retirement &amp; Market Weather Note (2026-11-17): Sentiment Gauge at 11.4/100 (Extreme Fear) &amp; Calm Allocation Study</a></h2>
-        <p>Morning Bell Club educational market weather note as of 2026-11-17: $SMH $460.10 (-31.22% 52W DD), 80:20 $SMH:$XLV model split, and 2-4x/year rebalancing context.</p>
-        <a class="read-more" href="/insights/daily-us-quant-regime-brief.html">Read Educational Research Note &rarr;</a>
+      <article class="hub-essay-item">
+        <div class="hub-kicker">Flagship Editorial Essay &middot; 2026-11-17 &middot; 6 min read</div>
+        <h2><a href="/insights/why-quiet-barbells-outlast-loud-bull-markets.html">Why Quiet Barbells Outlast Loud Bull Markets</a></h2>
+        <p>On kitchen-table drawdowns, the hidden cost of 100% tech concentration, and why pairing semiconductor growth ($SMH) with healthcare resilience ($XLV) lets ordinary households stay invested.</p>
+        <div class="hub-byline">By Arthur Vance &middot; <a href="/insights/why-quiet-barbells-outlast-loud-bull-markets.html">Read essay &rarr;</a></div>
       </article>
-      <article class="card">
-        <div class="cat">Quantitative Methodology &middot; 2026-11-17 &middot; 7 min read</div>
-        <h2><a href="/insights/pw-rsi-right-side-breakout-methodology.html">Understanding Moving-Average Confirmation: 26.8-Year Empirical Factor Study (2000–2026)</a></h2>
-        <p>Educational quantitative study examining 52-week drawdown recovery, 20-day and 60-day moving average trends, and 10-day relative volume across liquid US equities.</p>
-        <a class="read-more" href="/insights/pw-rsi-right-side-breakout-methodology.html">Read Educational Research Note &rarr;</a>
+      <article class="hub-essay-item">
+        <div class="hub-kicker">Historical Sector Study &middot; 2026-11-17 &middot; 6 min read</div>
+        <h2><a href="/insights/smh-xlv-80-20-barbell-drawdown-study.html">Two Clocks in One Portfolio: Twenty-Six Years of $SMH and $XLV</a></h2>
+        <p>What public closing prices from 2000 through 2026 reveal when cyclical semiconductor innovation meets steady healthcare demand.</p>
+        <div class="hub-byline">By Arthur Vance &middot; <a href="/insights/smh-xlv-80-20-barbell-drawdown-study.html">Read essay &rarr;</a></div>
       </article>
-      <article class="card">
-        <div class="cat">Allocation Math Study &middot; 2026-11-17 &middot; 6 min read</div>
-        <h2><a href="/insights/smh-xlv-80-20-barbell-drawdown-study.html">Sector Correlation &amp; Rebalancing Math: Studying the $SMH and $XLV Barbell (2000–2026)</a></h2>
-        <p>Empirical educational study of combining cyclical Technology/Semiconductors ($SMH) with defensive Healthcare ($XLV) under periodic annual or semi-annual rebalancing.</p>
-        <a class="read-more" href="/insights/smh-xlv-80-20-barbell-drawdown-study.html">Read Educational Research Note &rarr;</a>
+      <article class="hub-essay-item">
+        <div class="hub-kicker">Daily Morning Note &middot; 2026-11-17 &middot; 5 min read</div>
+        <h2><a href="/insights/daily-us-quant-regime-brief.html">Morning Note (2026-11-17): Sector Sentiment at 11.4/100 (Extreme Fear)</a></h2>
+        <p>A calm pre-bell look at $SMH ($460.10), $XLV ($185.24), and where public breadth indicators sit today.</p>
+        <div class="hub-byline">By Arthur Vance &middot; <a href="/insights/daily-us-quant-regime-brief.html">Read essay &rarr;</a></div>
       </article>
-      <article class="card">
-        <div class="cat">Compounding Math &middot; 2026-11-17 &middot; 5 min read</div>
-        <h2><a href="/insights/rule-1-minus-9-percent-stop-loss-math.html">The Mathematics of Drawdown Asymmetry: Why Portfolio Cushions Preserve Long-Term Compounding</a></h2>
-        <p>Educational compounding math showing how deep drawdowns (-40% to -60%) require nonlinear recovery gains (+66.7% to +150%), and how T-Bill cushions reduce sequence risk.</p>
-        <a class="read-more" href="/insights/rule-1-minus-9-percent-stop-loss-math.html">Read Educational Research Note &rarr;</a>
+      <article class="hub-essay-item">
+        <div class="hub-kicker">Quantitative Research Note &middot; 2026-11-17 &middot; 6 min read</div>
+        <h2><a href="/insights/pw-rsi-right-side-breakout-methodology.html">Why Cheap-Looking Charts Keep Falling: Notes on Moving-Average Discipline</a></h2>
+        <p>Observations from 26.8 years of public US equity price and volume series (2000–2026).</p>
+        <div class="hub-byline">By Arthur Vance &middot; <a href="/insights/pw-rsi-right-side-breakout-methodology.html">Read essay &rarr;</a></div>
+      </article>
+      <article class="hub-essay-item">
+        <div class="hub-kicker">Compounding &amp; Risk Essay &middot; 2026-11-17 &middot; 5 min read</div>
+        <h2><a href="/insights/rule-1-minus-9-percent-stop-loss-math.html">The Quiet Arithmetic of Drawdowns and Treasury Cushions</a></h2>
+        <p>Why avoiding deep portfolio craters matters more than chasing the loudest year of a bull run.</p>
+        <div class="hub-byline">By Arthur Vance &middot; <a href="/insights/rule-1-minus-9-percent-stop-loss-math.html">Read essay &rarr;</a></div>
       </article>
     
-    <section id="tom-insight-lead-bottom" class="tom-senior-lead-magnet" style="background:linear-gradient(135deg,#0c192c 0%,#062c24 100%);border:2px solid #10b981;border-radius:16px;padding:1.5rem;margin:1.5rem 0;">
-      <div style="display:inline-block;background:rgba(16,185,129,0.18);color:#6ee7b7;border:1px solid rgba(52,211,153,0.45);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:800;margin-bottom:8px;">
-        🟢 Green Steady &bull; 🟡 Yellow Watch &bull; 🔴 Red T-Bill Cushion
-      </div>
-      <h2 style="margin:0 0 8px;color:#ffffff;font-size:clamp(21px,2.6vw,26px);line-height:1.3;">
-        Protect Your Retirement Nest Egg — Free 8:30 AM Market Weather Email
-      </h2>
-      <p style="margin:0 0 14px;color:#e2e8f0;font-size:18px;line-height:1.6;">
-        Plain-English daily US 401(k)/IRA market weather notes and calm 2–4x/year SGOV &middot; SCHD &middot; JEPI &middot; VOO allocation studies—100% free.
+    <section class="substack-subscribe-box" aria-label="Subscribe to Morning Notes">
+      <div class="substack-sub-title">Ready for the next morning note?</div>
+      <p class="substack-sub-desc">
+        Unrushed, plain-English research notes on the $SMH &times; $XLV sector balance and public market risk indicators. Free, zero password, 1-click unsubscribe anytime.
       </p>
-      <form class="tom-lead-form" onsubmit="return window.__tomSubmitLeadMagnet(event, this, 'Daily Insights');" style="display:flex;flex-wrap:wrap;gap:12px;">
-        <input type="email" required autocomplete="email" placeholder="1-Step Free Sign-Up: Enter your email address" style="flex:1 1 260px;min-height:58px;padding:12px 16px;font-size:18px;border-radius:10px;border:2px solid #94a3b8;background:#ffffff;color:#0f172a;font-weight:700;" />
-        <button type="submit" style="min-height:58px;padding:12px 24px;font-size:18px;font-weight:900;border-radius:10px;border:none;background:#10b981;color:#042f2e;cursor:pointer;">
-          📩 Join Free Morning Bell Club &rarr;
-        </button>
+      <form class="substack-inline-form" onsubmit="return window.__tomSubmitSubstackSubscribe(event, this, 'index.html');" novalidate>
+        <label for="substackEmailInput" class="sr-only">Email address</label>
+        <input id="substackEmailInput" type="email" required autocomplete="email" placeholder="Type your email..." />
+        <button type="submit">Subscribe Free</button>
       </form>
-      <div class="tom-lead-status" role="status" aria-live="polite" style="display:none;margin-top:12px;font-size:18px;font-weight:700;"></div>
-      <div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(148,163,184,0.25);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;">
-        <span style="font-size:16px;color:#e2e8f0;font-weight:700;">💳 Self-Directed Educational Calculator Software · Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay):</span>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;">
-          <a class="btn btn-vip polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="min-height:54px;display:inline-flex;align-items:center;font-size:17px;" href="#tom-vip-monthly">⚡ Start Monthly VIP — $29/mo</a>
-          <a class="btn btn-life polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="min-height:54px;display:inline-flex;align-items:center;font-size:17px;" href="#tom-vip-annual">💎 Start Annual VIP — $199/yr</a>
-        </div>
-      </div>
+      <div class="substack-sub-status" role="status" aria-live="polite" style="display:none;"></div>
     </section>
+
+    <aside class="editorial-postscript" aria-label="Tools and Daily Data Digest">
+      <div class="ps-label">Editorial Postscript &middot; Self-Directed Tools</div>
+      <p>
+        Want to check where your own portfolio sits on the historical growth-versus-defense spectrum? Run our free 4-tap <a href="/#tom-retirement-architect"><strong>SMH &times; XLV Sector Balance Survey</strong></a>, or explore our automated morning indicator digest (<a href="#tom-vip-monthly" class="polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly">Monthly VIP $29/mo</a> &middot; <a href="#tom-vip-annual" class="polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual">Annual VIP $199/yr</a> via Polar.sh).
+      </p>
+    </aside>
     
-    <footer>
-      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:12px;padding:10px 14px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;font-size:0.9rem;font-weight:700;">
-        <a href="/terms.html">Terms of Service</a> &middot;
-        <a href="/privacy.html">Privacy Policy</a> &middot;
-        <a href="/refund.html" style="color:#047857;">14-Day Refund Policy</a> &middot;
-        <a href="/contact.html">Contact Desk</a> &middot;
-        <a href="mailto:beable9489@gmail.com" style="color:#b45309;">beable9489@gmail.com</a>
+    <footer class="essay-footer">
+      <div class="essay-footer-links">
+        <a href="/">Home Simulator</a> &middot;
+        <a href="/insights/">All Essays</a> &middot;
+        <a href="/terms.html">Terms</a> &middot;
+        <a href="/privacy.html">Privacy</a> &middot;
+        <a href="/refund.html">14-Day Refund Policy</a> &middot;
+        <a href="/contact.html">Contact</a> &middot;
+        <a href="mailto:beable9489@gmail.com">beable9489@gmail.com</a>
       </div>
-      <p style="color:#334155;font-weight:600;margin-bottom:8px;">Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.</p>
-      <p style="margin:0;">&copy; 2026 TruthOfMarket &middot; Educational Market Data &amp; Quantitative Research Desk &middot; Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay).</p>
+      <p class="essay-disclaimer">Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.</p>
+      <p class="essay-copy">&copy; 2026 TruthOfMarket &middot; Educational Market Data &amp; Quantitative Research Desk &middot; Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay).</p>
     </footer>
   </main>
 </body>
