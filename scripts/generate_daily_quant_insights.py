@@ -59,7 +59,7 @@ def _sanitize_external_fragment(fragment: str) -> str:
     out = re.sub("Retirement " + "Advisory Desk", "Educational Market Data & Quantitative Research Desk", out, flags=re.I)
     out = re.sub(r"\badvisory\b", "educational research", out, flags=re.I)
     out = re.sub(r"Lifetime\s+(?:VIP|Pass)", "Annual VIP", out, flags=re.I)
-    out = re.sub(r"-[89](?:\.0)?%\s*(?:safety\s*)?(?:stop[-\s]?loss|hard\s*stop|exit\s*line)", "calm 2-4x/year weight rebalancing", out, flags=re.I)
+    out = re.sub(r"-[89](?:\.0)?%\s*(?:safety\s*)?(?:stop[-\s]?loss|hard\s*stop|exit\s*line)", "calm 2-4x/year weight allocation review", out, flags=re.I)
     out = re.sub(r"https?://[^\s\"'<>]*" + "lemon" + r"squeezy\.com[^\s\"'<>]*", "#pricing", out, flags=re.I)
     out = re.sub("lemon" + "squeezy-button", "polar-checkout-button", out, flags=re.I)
     out = re.sub(r"\s*data-ls-product-uuid=\"[^\"]*\"", "", out, flags=re.I)
@@ -77,11 +77,11 @@ def _beacon_script() -> str:
     STORE_SLOT: 'FINANCE_STORE_SLOT',
     STORE_LIVE_READY: false,
     POLAR_CHECKOUT_URLS: {
-      monthly_29: '',
-      annual_199: ''
+      monthly_29: 'https://buy.polar.sh/polar_cl_ifEzJdkptSMdHoPJ8MriuYleze1To288pYefu3QvaLc?locale=en',
+      annual_199: 'https://buy.polar.sh/polar_cl_IPZpLD1EeUXCrNMxo1Yji8oT8RPgD9jhdassj38WMyf?locale=en'
     },
-    POLAR_TOM_MONTHLY_URL: '',
-    POLAR_TOM_ANNUAL_URL: '',
+    POLAR_TOM_MONTHLY_URL: 'https://buy.polar.sh/polar_cl_ifEzJdkptSMdHoPJ8MriuYleze1To288pYefu3QvaLc?locale=en',
+    POLAR_TOM_ANNUAL_URL: 'https://buy.polar.sh/polar_cl_IPZpLD1EeUXCrNMxo1Yji8oT8RPgD9jhdassj38WMyf?locale=en',
     SUPPORT_EMAIL: 'beable9489@gmail.com'
   };
   </script>
@@ -127,7 +127,7 @@ def _beacon_script() -> str:
         document.querySelectorAll('.tom-lead-status').forEach(function(el) {
           el.style.display = 'block';
           el.style.color = '#86efac';
-          el.innerHTML = '✅ <strong>Subscribed!</strong> Free 8:30 AM ET 3-Color Market Weather &amp; Calm Rebalancing Briefs are active for <strong>' + email.replace(/[<>&"]/g, '') + '</strong>.';
+          el.innerHTML = '✅ <strong>Subscribed!</strong> Free 8:30 AM ET 3-Color Market Weather &amp; Calm Allocation Review Briefs are active for <strong>' + email.replace(/[<>&"]/g, '') + '</strong>.';
         });
         document.querySelectorAll('.tom-lead-form input[type="email"]').forEach(function(inp) { inp.value = email; });
         return false;
@@ -487,7 +487,7 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
             "mins": 6,
             "body": """
       <div class="callout">
-        <strong>Correlation Observation:</strong> Semiconductors (<a href="/stocks/smh.html">$SMH</a>) and Healthcare (<a href="/stocks/xlv.html">$XLV</a>) have historically exhibited distinct cyclical sensitivity, making them a classic textbook case study for periodic weight rebalancing.
+        <strong>Correlation Observation:</strong> Semiconductors (<a href="/stocks/smh.html">$SMH</a>) and Healthcare (<a href="/stocks/xlv.html">$XLV</a>) have historically exhibited distinct cyclical sensitivity, making them a classic textbook case study for periodic weight allocation review.
       </div>
       <h2>1. Volatility Decay vs. Unbalanced Concentration</h2>
       <p>Concentrating 100% of a portfolio in high-volatility growth sectors can produce severe multi-year drawdowns, whereas holding 100% cash erodes purchasing power through inflation.</p>

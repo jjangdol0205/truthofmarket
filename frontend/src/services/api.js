@@ -39,9 +39,18 @@ export const CANONICAL_TOM_MONTHLY_URL = "#tom-vip-monthly";
 export const CANONICAL_TOM_ANNUAL_URL = "#tom-vip-annual";
 
 export function formatCheckoutUrl(rawUrl, fallbackUrl = "#tom-vip-monthly") {
+  const withEnLocale = (uStr) => {
+    try {
+      const u = new URL(uStr);
+      u.searchParams.set("locale", "en");
+      return u.toString();
+    } catch (_) {
+      return uStr.includes("locale=") ? uStr : uStr + (uStr.includes("?") ? "&" : "?") + "locale=en";
+    }
+  };
   const candidate = String(rawUrl || "").trim();
   if (candidate && /^https:\/\/(buy\.)?polar\.sh\//i.test(candidate)) {
-    return candidate;
+    return withEnLocale(candidate);
   }
   if (typeof window !== "undefined" && window.PAYMENT_CONFIG) {
     const pCfg = window.PAYMENT_CONFIG;
@@ -51,12 +60,12 @@ export function formatCheckoutUrl(rawUrl, fallbackUrl = "#tom-vip-monthly") {
       ? String(urls.annual_199 || pCfg.POLAR_TOM_ANNUAL_URL || "").trim()
       : String(urls.monthly_29 || pCfg.POLAR_TOM_MONTHLY_URL || "").trim();
     if (pCfg.STORE_LIVE_READY === true && fromCfg && /^https:\/\/(buy\.)?polar\.sh\//i.test(fromCfg)) {
-      return fromCfg;
+      return withEnLocale(fromCfg);
     }
   }
   const fb = String(fallbackUrl || "#tom-vip-monthly").trim();
   if (fb && /^https:\/\/(buy\.)?polar\.sh\//i.test(fb)) {
-    return fb;
+    return withEnLocale(fb);
   }
   return fb.startsWith("#") ? fb : "#tom-vip-monthly";
 }

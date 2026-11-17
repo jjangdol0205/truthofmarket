@@ -6,8 +6,35 @@
 (function initTomUnifiedPaymentAndBeacon() {
   if (typeof window === "undefined") return;
 
-  var PRE_SEEDED_TOM_MONTHLY_URL = "https://buy.polar.sh/polar_cl_ifEzJdkptSMdHoPJ8MriuYleze1To288pYefu3QvaLc";
-  var PRE_SEEDED_TOM_ANNUAL_URL = "https://buy.polar.sh/polar_cl_IPZpLD1EeUXCrNMxo1Yji8oT8RPgD9jhdassj38WMyf";
+  var PRE_SEEDED_TOM_MONTHLY_URL = "https://buy.polar.sh/polar_cl_ifEzJdkptSMdHoPJ8MriuYleze1To288pYefu3QvaLc?locale=en";
+  var PRE_SEEDED_TOM_ANNUAL_URL = "https://buy.polar.sh/polar_cl_IPZpLD1EeUXCrNMxo1Yji8oT8RPgD9jhdassj38WMyf?locale=en";
+
+  function ensurePolarLocaleUrl(rawUrl, defaultLocale, emailOverride) {
+    var url = String(rawUrl || "").trim();
+    if (!url || !/^https:\/\/(buy\.)?polar\.sh\//i.test(url)) return "";
+    var loc = String(defaultLocale || "en").trim() || "en";
+    var memberEmail = String(emailOverride || "").trim().toLowerCase();
+    var validEmail = memberEmail && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(memberEmail) ? memberEmail : "";
+    try {
+      var u = new URL(url);
+      u.searchParams.set("locale", loc);
+      if (validEmail && !u.searchParams.get("customer_email")) {
+        u.searchParams.set("customer_email", validEmail);
+      }
+      return u.toString();
+    } catch (_) {
+      var cleanBase = url
+        .replace(/([?&])locale=[^&]*/gi, "$1")
+        .replace(/\?&/, "?")
+        .replace(/[?&]+$/, "");
+      var sep = cleanBase.indexOf("?") !== -1 ? "&" : "?";
+      var out = cleanBase + sep + "locale=" + encodeURIComponent(loc);
+      if (validEmail && out.indexOf("customer_email=") === -1) {
+        out += "&customer_email=" + encodeURIComponent(validEmail);
+      }
+      return out;
+    }
+  }
 
   var DEFAULT_PAYMENT_CONFIG = {
     PROVIDER: "polar_sh",
@@ -43,16 +70,28 @@
     } else {
       if (!window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29) {
         window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29 = PRE_SEEDED_TOM_MONTHLY_URL;
+      } else {
+        window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29 =
+          ensurePolarLocaleUrl(window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29, "en") || PRE_SEEDED_TOM_MONTHLY_URL;
       }
       if (!window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199) {
         window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199 = PRE_SEEDED_TOM_ANNUAL_URL;
+      } else {
+        window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199 =
+          ensurePolarLocaleUrl(window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199, "en") || PRE_SEEDED_TOM_ANNUAL_URL;
       }
     }
     if (!window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL) {
       window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL = PRE_SEEDED_TOM_MONTHLY_URL;
+    } else {
+      window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL =
+        ensurePolarLocaleUrl(window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL, "en") || PRE_SEEDED_TOM_MONTHLY_URL;
     }
     if (!window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL) {
       window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL = PRE_SEEDED_TOM_ANNUAL_URL;
+    } else {
+      window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL =
+        ensurePolarLocaleUrl(window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL, "en") || PRE_SEEDED_TOM_ANNUAL_URL;
     }
     if (!window.PAYMENT_CONFIG.SUPPORT_EMAIL) {
       window.PAYMENT_CONFIG.SUPPORT_EMAIL = "beable9489@gmail.com";
@@ -107,7 +146,7 @@
         ? String(urls.annual_199 || pCfg.POLAR_TOM_ANNUAL_URL || "").trim()
         : String(urls.monthly_29 || pCfg.POLAR_TOM_MONTHLY_URL || "").trim();
     if (raw && /^https:\/\/(buy\.)?polar\.sh\//i.test(raw)) {
-      return raw;
+      return ensurePolarLocaleUrl(raw, "en");
     }
     return "";
   }
@@ -116,12 +155,16 @@
     var url = String(checkoutUrl || "").trim();
     if (!url) return "";
     var memberEmail = String(emailOverride || getKnownTomMemberEmail() || "").trim().toLowerCase();
+    if (/^https:\/\/(buy\.)?polar\.sh\//i.test(url)) {
+      return ensurePolarLocaleUrl(url, "en", memberEmail);
+    }
     if (memberEmail && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(memberEmail) && url.indexOf("customer_email=") === -1) {
       return url + (url.indexOf("?") !== -1 ? "&" : "?") + "customer_email=" + encodeURIComponent(memberEmail);
     }
     return url;
   }
 
+  window.ensurePolarLocaleUrl = ensurePolarLocaleUrl;
   window.resolveTomPolarCheckoutUrl = resolvePolarCheckoutUrl;
   window.appendTomPolarCustomerEmail = appendPolarCustomerEmail;
 
@@ -853,9 +896,18 @@ function getVipTelegramUrl(isPro = false) {
 const CANONICAL_TOM_MONTHLY_URL = "#tom-vip-monthly";
 const CANONICAL_TOM_ANNUAL_URL = "#tom-vip-annual";
 function formatCheckoutUrl(rawUrl, fallbackUrl = "#tom-vip-monthly") {
+  const withEnLocale = (uStr) => {
+    try {
+      const u = new URL(uStr);
+      u.searchParams.set("locale", "en");
+      return u.toString();
+    } catch (_) {
+      return uStr.includes("locale=") ? uStr : uStr + (uStr.includes("?") ? "&" : "?") + "locale=en";
+    }
+  };
   const candidate = String(rawUrl || "").trim();
   if (candidate && /^https:\/\/(buy\.)?polar\.sh\//i.test(candidate)) {
-    return candidate;
+    return withEnLocale(candidate);
   }
   if (typeof window !== "undefined" && window.PAYMENT_CONFIG) {
     const pCfg = window.PAYMENT_CONFIG;
@@ -865,12 +917,12 @@ function formatCheckoutUrl(rawUrl, fallbackUrl = "#tom-vip-monthly") {
       ? String(urls.annual_199 || pCfg.POLAR_TOM_ANNUAL_URL || "").trim()
       : String(urls.monthly_29 || pCfg.POLAR_TOM_MONTHLY_URL || "").trim();
     if (pCfg.STORE_LIVE_READY === true && fromCfg && /^https:\/\/(buy\.)?polar\.sh\//i.test(fromCfg)) {
-      return fromCfg;
+      return withEnLocale(fromCfg);
     }
   }
   const fb = String(fallbackUrl || "#tom-vip-monthly").trim();
   if (fb && /^https:\/\/(buy\.)?polar\.sh\//i.test(fb)) {
-    return fb;
+    return withEnLocale(fb);
   }
   return fb.startsWith("#") ? fb : "#tom-vip-monthly";
 }
