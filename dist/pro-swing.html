@@ -30,11 +30,11 @@
     STORE_SLOT: 'FINANCE_STORE_SLOT',
     STORE_LIVE_READY: false,
     POLAR_CHECKOUT_URLS: {
-      monthly_29: '',
-      annual_199: ''
+      monthly_29: 'https://buy.polar.sh/polar_cl_ifEzJdkptSMdHoPJ8MriuYleze1To288pYefu3QvaLc',
+      annual_199: 'https://buy.polar.sh/polar_cl_IPZpLD1EeUXCrNMxo1Yji8oT8RPgD9jhdassj38WMyf'
     },
-    POLAR_TOM_MONTHLY_URL: '',
-    POLAR_TOM_ANNUAL_URL: '',
+    POLAR_TOM_MONTHLY_URL: 'https://buy.polar.sh/polar_cl_ifEzJdkptSMdHoPJ8MriuYleze1To288pYefu3QvaLc',
+    POLAR_TOM_ANNUAL_URL: 'https://buy.polar.sh/polar_cl_IPZpLD1EeUXCrNMxo1Yji8oT8RPgD9jhdassj38WMyf',
     SUPPORT_EMAIL: 'beable9489@gmail.com'
   };
   </script>
@@ -88,7 +88,7 @@
         document.querySelectorAll('.tom-lead-status').forEach(function(el) {
           el.style.display = 'block';
           el.style.color = '#86efac';
-          el.innerHTML = '✅ <strong>Welcome aboard!</strong> Free 8:30 AM ET 3-Color Market Weather &amp; Calm 2–4x/Year Rebalancing Briefs are now active for <strong>' + email.replace(/[<>&"]/g, '') + '</strong>' + (topicLabel ? ' (' + topicLabel.replace(/[<>&"]/g, '') + ')' : '') + '.';
+          el.innerHTML = '✅ <strong>Welcome aboard!</strong> Free 8:30 AM ET 3-Color Market Weather &amp; Calm 2–4x/Year Budget Review Briefs are now active for <strong>' + email.replace(/[<>&"]/g, '') + '</strong>' + (topicLabel ? ' (' + topicLabel.replace(/[<>&"]/g, '') + ')' : '') + '.';
         });
         document.querySelectorAll('.tom-lead-form input[type="email"]').forEach(function(inp) { inp.value = email; });
         return false;

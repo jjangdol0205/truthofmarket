@@ -6,17 +6,20 @@
 (function initTomUnifiedPaymentAndBeacon() {
   if (typeof window === "undefined") return;
 
+  var PRE_SEEDED_TOM_MONTHLY_URL = "https://buy.polar.sh/polar_cl_ifEzJdkptSMdHoPJ8MriuYleze1To288pYefu3QvaLc";
+  var PRE_SEEDED_TOM_ANNUAL_URL = "https://buy.polar.sh/polar_cl_IPZpLD1EeUXCrNMxo1Yji8oT8RPgD9jhdassj38WMyf";
+
   var DEFAULT_PAYMENT_CONFIG = {
     PROVIDER: "polar_sh",
     DIVISION: "TOM",
     STORE_SLOT: "FINANCE_STORE_SLOT",
     STORE_LIVE_READY: false,
     POLAR_CHECKOUT_URLS: {
-      monthly_29: "",
-      annual_199: "",
+      monthly_29: PRE_SEEDED_TOM_MONTHLY_URL,
+      annual_199: PRE_SEEDED_TOM_ANNUAL_URL,
     },
-    POLAR_TOM_MONTHLY_URL: "",
-    POLAR_TOM_ANNUAL_URL: "",
+    POLAR_TOM_MONTHLY_URL: PRE_SEEDED_TOM_MONTHLY_URL,
+    POLAR_TOM_ANNUAL_URL: PRE_SEEDED_TOM_ANNUAL_URL,
     SUPPORT_EMAIL: "beable9489@gmail.com",
   };
 
@@ -34,22 +37,22 @@
       typeof window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS !== "object"
     ) {
       window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS = {
-        monthly_29: "",
-        annual_199: "",
+        monthly_29: PRE_SEEDED_TOM_MONTHLY_URL,
+        annual_199: PRE_SEEDED_TOM_ANNUAL_URL,
       };
     } else {
-      if (typeof window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29 !== "string") {
-        window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29 = "";
+      if (!window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29) {
+        window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29 = PRE_SEEDED_TOM_MONTHLY_URL;
       }
-      if (typeof window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199 !== "string") {
-        window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199 = "";
+      if (!window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199) {
+        window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199 = PRE_SEEDED_TOM_ANNUAL_URL;
       }
     }
-    if (typeof window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL !== "string") {
-      window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL = "";
+    if (!window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL) {
+      window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL = PRE_SEEDED_TOM_MONTHLY_URL;
     }
-    if (typeof window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL !== "string") {
-      window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL = "";
+    if (!window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL) {
+      window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL = PRE_SEEDED_TOM_ANNUAL_URL;
     }
     if (!window.PAYMENT_CONFIG.SUPPORT_EMAIL) {
       window.PAYMENT_CONFIG.SUPPORT_EMAIL = "beable9489@gmail.com";
@@ -685,7 +688,7 @@ const enCopy = {
   heroTag: "US RETIREMENT CASHFLOW & BUDGET CALCULATOR SOFTWARE",
   heroTitle: "Turn Your 401(k) & Savings Into Calm, Reliable Monthly Retirement Income.",
   heroDesc:
-    "Simulate your monthly retirement paycheck in 30 seconds, cushion your nest egg from -35% sequence-of-returns crashes, and rebalance $VOO, $SCHD, $JEPI & $SGOV calmly 2–4 times a year with our US Retirement Market Weather indicator.",
+    "Simulate your monthly retirement paycheck in 30 seconds, cushion your nest egg from -35% sequence-of-returns crashes, and adjust budget $VOO, $SCHD, $JEPI & $SGOV calmly 2–4 times a year with our US Retirement Market Weather indicator.",
   pwRsiExplainerBtn: "How 2–4x/Yr Budget Review Works",
   pwRsiModalTitle: "Calm 2–4x/Year 3-Bucket Household Budget & Cashflow Methodology",
   kpi1_label: "Core S&P 500 Pillar",
@@ -1620,7 +1623,7 @@ async function evaluatePortfolioDoctor(payload) {
               verdict: "Neutral",
             },
           ],
-          rebalance_recommendations: [
+          adjust budget_recommendations: [
             {
               action: "MAINTAIN",
               ticker: null,
@@ -1796,14 +1799,14 @@ async function evaluatePortfolioDoctor(payload) {
         });
       }
 
-      // Automated Rebalancing Recommendations
-      const rebalanceRecommendations = [];
+      // Automated Budget Review Recommendations
+      const adjust budgetRecommendations = [];
       const stoppedPositions = diagnostics.filter((d) => d.status_code === "HARD_STOP" || d.status_code === "TIME_STOP");
       let totalHarvested = 0.0;
 
       for (const sp of stoppedPositions) {
         const reason = sp.status_code === "HARD_STOP" ? "Hard stop exit capital recovery" : "Time stop dead money capital recovery";
-        rebalanceRecommendations.push({
+        adjust budgetRecommendations.push({
           action: "HARVEST",
           ticker: sp.ticker,
           target_ticker: null,
@@ -1829,7 +1832,7 @@ async function evaluatePortfolioDoctor(payload) {
           const perTargetPct = Math.round((100.0 / reallocCount) * 10) / 10;
           for (let i = 0; i < reallocCount; i++) {
             const cand = ignitionCandidates[i];
-            rebalanceRecommendations.push({
+            adjust budgetRecommendations.push({
               action: "REALLOCATE",
               ticker: null,
               target_ticker: cand.ticker,
@@ -1840,7 +1843,7 @@ async function evaluatePortfolioDoctor(payload) {
             });
           }
         } else {
-          rebalanceRecommendations.push({
+          adjust budgetRecommendations.push({
             action: "REALLOCATE",
             ticker: null,
             target_ticker: "CASH_RESERVE",
@@ -1852,7 +1855,7 @@ async function evaluatePortfolioDoctor(payload) {
         }
       } else {
         if (!stoppedPositions.length && diagnostics.length > 0) {
-          rebalanceRecommendations.push({
+          adjust budgetRecommendations.push({
             action: "MAINTAIN",
             ticker: null,
             target_ticker: null,
@@ -1872,7 +1875,7 @@ async function evaluatePortfolioDoctor(payload) {
         capital_at_risk: capitalAtRisk,
         items: diagnostics,
         stress_scenarios: stressScenarios,
-        rebalance_recommendations: rebalanceRecommendations,
+        adjust budget_recommendations: adjust budgetRecommendations,
       };
     }
   );
@@ -1926,9 +1929,9 @@ async function fetchSemiHistory(rangeCode = "1Y") {
     }
   );
 }
-async function calculateSemiRebalance(data) {
+async function calculateSemiAdjust Budget(data) {
   return fetchJsonWithFallback(
-    "/api/semi/rebalance",
+    "/api/semi/adjust budget",
     {
       method: "POST",
       headers: {
@@ -1962,7 +1965,7 @@ async function calculateSemiRebalance(data) {
       } else if (mode === "CONTRARIAN_80_20") {
         smhW = 0.8;
         xlvW = 0.2;
-        ruleEn = "80% $SMH : 20% $XLV Drawdown Rebalance Model";
+        ruleEn = "80% $SMH : 20% $XLV Drawdown Adjust Budget Model";
         ruleJp = ruleEn;
         ruleKr = ruleEn;
       } else if (mode === "AGGRESSIVE_90_10") {
@@ -2007,7 +2010,7 @@ async function calculateSemiRebalance(data) {
       const deltaSmhShares = Math.round(deltaSmhUsd / smhPrice);
       const deltaXlvShares = Math.round(deltaXlvUsd / xlvPrice);
 
-      const freq = String(data.rebalance_frequency || "ANNUAL").trim().toUpperCase();
+      const freq = String(data.adjust budget_frequency || "ANNUAL").trim().toUpperCase();
       const dragMap = { ANNUAL: 0.19, QUARTERLY: 0.42, MONTHLY: 0.78, WEEKLY: 1.32 };
       const taxDrag = dragMap[freq] ?? 0.19;
       const expectedNetCagr = Number((22.98 - taxDrag).toFixed(2));
@@ -2019,7 +2022,7 @@ async function calculateSemiRebalance(data) {
 
       const taxEn =
         gainKrw <= dedLimit
-          ? `Modeled annual rebalancing drag (${taxDrag}%) remains low under a 2-4x/year schedule, preserving compounding efficiency inside tax-advantaged 401(k)/IRA accounts.`
+          ? `Modeled annual budget review drag (${taxDrag}%) remains low under a 2-4x/year schedule, preserving compounding efficiency inside tax-advantaged 401(k)/IRA accounts.`
           : `For taxable accounts, spacing portfolio weight adjustments to 2-4x/year reduces turnover drag (${taxDrag}%) compared with high-frequency trading.`;
       const taxJp = taxEn;
       const taxKr = taxEn;
@@ -2048,7 +2051,7 @@ async function calculateSemiRebalance(data) {
         delta_xlv_usd: deltaXlvUsd,
         delta_smh_shares: deltaSmhShares,
         delta_xlv_shares: deltaXlvShares,
-        rebalance_frequency: freq,
+        adjust budget_frequency: freq,
         estimated_tax_drag_pct: taxDrag,
         expected_net_cagr_pct: expectedNetCagr,
         kr_tax_deduction_limit_krw: dedLimit,
@@ -2100,11 +2103,11 @@ async function calculateSemiLumpSum(data) {
           case_title_jp: "Case 1 (Score 0–40 · Fear Regime): 100% Immediate Lump-Sum Model",
           case_title_kr: "Case 1 (Score 0–40 · Fear Regime): 100% Immediate Lump-Sum Model",
           summary_en:
-            "Simulated fear regime: historical model deploys 100% into target weights and rebalances 2–4x/year back to 70:30 as drawdown narrows.",
+            "Simulated fear regime: historical model deploys 100% into target weights and adjust budgets 2–4x/year back to 70:30 as drawdown narrows.",
           summary_jp:
-            "Simulated fear regime: historical model deploys 100% into target weights and rebalances 2–4x/year back to 70:30 as drawdown narrows.",
+            "Simulated fear regime: historical model deploys 100% into target weights and adjust budgets 2–4x/year back to 70:30 as drawdown narrows.",
           summary_kr:
-            "Simulated fear regime: historical model deploys 100% into target weights and rebalances 2–4x/year back to 70:30 as drawdown narrows.",
+            "Simulated fear regime: historical model deploys 100% into target weights and adjust budgets 2–4x/year back to 70:30 as drawdown narrows.",
           immediate_deploy_pct: 100.0,
           parked_cash_rp_pct: 0.0,
           tranches: [
@@ -2257,9 +2260,9 @@ async function calculateSemiLumpSum(data) {
               title_en: "Tranche 2 (70% Reserve Parked in USD T-Bill / MMF)",
               title_jp: "Tranche 2 (70% Reserve Parked in USD T-Bill / MMF)",
               title_kr: "Tranche 2 (70% Reserve Parked in USD T-Bill / MMF)",
-              timing_en: "Modeled 4-Month Staged Rebalance",
-              timing_jp: "Modeled 4-Month Staged Rebalance",
-              timing_kr: "Modeled 4-Month Staged Rebalance",
+              timing_en: "Modeled 4-Month Staged Adjust Budget",
+              timing_jp: "Modeled 4-Month Staged Adjust Budget",
+              timing_kr: "Modeled 4-Month Staged Adjust Budget",
               allocation_pct: 70.0,
               amount_usd: pSmh,
               smh_usd: pSmh,
@@ -2291,10 +2294,10 @@ async function buildClientTelegramPreview({
   const lg = String(lang || "en").toLowerCase() === "jp" ? "jp" : "en";
 
   const ov = await getStaticSemiOverview();
-  const reb = await calculateSemiRebalance({
+  const reb = await calculateSemiAdjust Budget({
     total_capital_usd: 100000,
     strategy_mode: "AUTO_REGIME",
-    rebalance_frequency: "ANNUAL",
+    adjust budget_frequency: "ANNUAL",
     unrealized_gain_krw: 3800000,
   });
   const allStocks = (await getStaticStocksForCurrentUser()).filter((s) => !String(s.ticker).includes("."));
@@ -3071,7 +3074,7 @@ function formatPortfolioDoctorResult(result, state) {
 
   const items = Array.isArray(result.items) ? result.items : [];
   const scenarios = Array.isArray(result.stress_scenarios) ? result.stress_scenarios : [];
-  const rebalance = Array.isArray(result.rebalance_recommendations) ? result.rebalance_recommendations : [];
+  const adjust budget = Array.isArray(result.adjust budget_recommendations) ? result.adjust budget_recommendations : [];
 
   return `
     <div style="background:#05080f; border:1px solid var(--border); border-radius:4px; padding:16px;">
@@ -3224,16 +3227,16 @@ function formatPortfolioDoctorResult(result, state) {
         </div>
       </div>
 
-      <!-- Section 4: Automated Rebalancing Allocation Breakdown -->
+      <!-- Section 4: Automated Budget Review Allocation Breakdown -->
       <div>
         <div class="mono" style="font-size:0.7rem; color:#34d399; font-weight:800; letter-spacing:0.04em; margin-bottom:8px; text-transform:uppercase;">
-          🔄 AUTOMATED 1.35% RISK PARITY REBALANCING DIRECTIVES
+          🔄 AUTOMATED 1.35% RISK PARITY BUDGET REVIEW DIRECTIVES
         </div>
         <div style="background:#090d16; border:1px solid var(--border); border-radius:4px; padding:12px;">
           ${
-            rebalance.length === 0
-              ? `<div style="color:var(--muted); font-size:0.75rem;">No rebalancing required at this time.</div>`
-              : rebalance
+            adjust budget.length === 0
+              ? `<div style="color:var(--muted); font-size:0.75rem;">No budget review required at this time.</div>`
+              : adjust budget
                   .map((r) => {
                     const isHarvest = r.action === "HARVEST";
                     const isRealloc = r.action === "REALLOCATE";
@@ -3296,7 +3299,7 @@ const BLIND_TEST_I18N = {
     revealTickerLabel: "REVEALED LIVE TICKER",
     battleTitle: "📊 $10,000 HISTORICAL BACKTEST COMPARISON: SUB-MA60 DIP-BUYING VS. PW-RSI MODEL",
     retailSideTitle: "❌ Sub-MA60 Dip-Buying (-18% Below MA60)",
-    retailSideDesc: "Averages into sub-MA60 downtrends ($NVDA / $SMCI / $INTC) without calm rebalancing discipline. Unhedged tail drawdowns erode retirement principal.",
+    retailSideDesc: "Averages into sub-MA60 downtrends ($NVDA / $SMCI / $INTC) without calm budget review discipline. Unhedged tail drawdowns erode retirement principal.",
     quantSideTitle: "🟢 RightSideAlpha PW-RSI + Volume Model",
     quantSideDesc: "Filters for MA60 reclaim + ≥1.4x institutional volume surge with a modeled -9.0% risk boundary (-1.35% portfolio allocation cap).",
     vipUnlockBannerTitle: "🔥 ROUND 3 FEATURED A 3.41x VOLUME ANOMALY — UNLOCK ALL 72 QUANT FACTOR DATASETS & PINE SCRIPT",
@@ -4375,7 +4378,7 @@ function computeTomRetirementPlan({ nestEgg, years, monthlyAdd, weatherMode }) {
         )
       : Math.round(egg);
 
-  // Guarded 3-Bucket Calm 2-4x/Year Rebalance Path (4.5% blended safe withdrawal + dividend yield)
+  // Guarded 3-Bucket Calm 2-4x/Year Adjust Budget Path (4.5% blended safe withdrawal + dividend yield)
   const guardedAnnual = Math.round(projectedNestEgg * 0.045);
   const guardedMonthly = Math.round(guardedAnnual / 12);
 
@@ -4461,7 +4464,7 @@ function renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRed }) {
         30-Second Comfortable Retirement &amp; Monthly Cashflow Simulator
       </h2>
       <p class="tom-retire-lead">
-        Tap 3 buttons below to see your <b>calm monthly retirement paycheck</b> (on top of Social Security), how much monthly income you protect by avoiding a <b>-35% retirement-eve crash</b>, and how to rebalance <b>$VOO &middot; $SCHD &middot; $JEPI &middot; $SGOV</b> calmly just <b>2–4 times a year</b>.
+        Tap 3 buttons below to see your <b>calm monthly retirement paycheck</b> (on top of Social Security), how much monthly income you protect by avoiding a <b>-35% retirement-eve crash</b>, and how to adjust budget <b>$VOO &middot; $SCHD &middot; $JEPI &middot; $SGOV</b> calmly just <b>2–4 times a year</b>.
       </p>
 
       <div class="tom-retire-presets-wrap">
@@ -5437,7 +5440,7 @@ function renderProofCard(state) {
               ${t.auditedCardTitle || "SMH/XLV Contrarian Barbell (+28.4%) vs. S&P 500 (+14.2%) Benchmark"}
             </h2>
             <p style="font-size:0.78rem; color:var(--muted); margin:0; line-height:1.45;">
-              ${t.auditedCardDesc || "Audited institutional point-in-time backtest across 6,625 trading days with zero look-ahead bias. Rebalanced annually with dynamic 80:20 contrarian tilt during semiconductor drawdowns ≥ -20%."}
+              ${t.auditedCardDesc || "Audited institutional point-in-time backtest across 6,625 trading days with zero look-ahead bias. Adjust Budgetd annually with dynamic 80:20 contrarian tilt during semiconductor drawdowns ≥ -20%."}
             </p>
           </div>
           <div style="display:inline-flex; align-items:center; gap:6px; padding:5px 10px; background:rgba(14,203,129,0.12); border:1px solid rgba(14,203,129,0.35); border-radius:20px; font-size:0.75rem; font-family:var(--font-mono); font-weight:800; color:#34d399; box-shadow:0 0 12px rgba(14,203,129,0.25);">
@@ -6389,7 +6392,7 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
         <div style="background:#090d16; border:1px solid var(--border); border-top:2px solid #10b981; border-radius:4px; padding:18px; display:flex; flex-direction:column; justify-content:space-between;">
           <div>
             <div style="font-size:0.7rem; font-family:var(--font-mono); font-weight:700; color:#34d399; letter-spacing:0.05em; text-transform:uppercase;">
-              👑 PRO VIP EXCLUSIVE · BARBELL REBALANCER & EXPORT KIT
+              👑 PRO VIP EXCLUSIVE · BARBELL CALCULATOR & EXPORT KIT
             </div>
             <h3 style="font-size:1rem; font-weight:800; margin:6px 0; color:#ffffff;">
               80:20 ($SMH : $XLV) Custom Portfolio Blueprint & 1-Click TradingView / CSV Kit
@@ -6994,7 +6997,7 @@ function renderModals(state) {
       </div>
     </div>
 
-    <!-- CALM 2-4X/YEAR REBALANCING METHODOLOGY MODAL -->
+    <!-- CALM 2-4X/YEAR BUDGET REVIEW METHODOLOGY MODAL -->
     <div class="modal-backdrop" id="pwRsiModal">
       <div class="modal" style="max-width:680px;">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:10px;">
@@ -7066,7 +7069,7 @@ function renderModals(state) {
       </div>
     </div>
 
-    <!-- $0 FREE PUBLIC PRODUCT: US BROKERAGE APP & CALM 2-4X/YEAR REBALANCING MANUAL MODAL -->
+    <!-- $0 FREE PUBLIC PRODUCT: US BROKERAGE APP & CALM 2-4X/YEAR BUDGET REVIEW MANUAL MODAL -->
     <div class="modal-backdrop" id="tomStarterManualModal" role="dialog" aria-modal="true" aria-labelledby="tomStarterManualModalTitle">
       <div class="modal tom-manual-modal-dialog">
         <div class="tom-manual-modal-header">
@@ -7157,7 +7160,7 @@ function renderModals(state) {
           </article>
 
           <article class="tom-manual-chapter" id="tomManualStep2">
-            <div class="tom-manual-chapter-tag tag-amber">STEP 2 OF 3 · CALM 2–4X/YEAR PORTFOLIO WEIGHT REBALANCING</div>
+            <div class="tom-manual-chapter-tag tag-amber">STEP 2 OF 3 · CALM 2–4X/YEAR PORTFOLIO WEIGHT BUDGET REVIEW</div>
             <h4>Aligning Your 3 Retirement Buckets 2–4 Times a Year with the 3-Color Market Weather Indicator</h4>
             <p>
               <b>No Daily Stress or Frequent Trading:</b> Instead of reacting to noisy daily headlines, self-directed retirement investors review portfolio weights calmly just <b>2 to 4 times per year</b> across four liquid, low-fee core ETFs (<b>SGOV · SCHD · JEPI · VOO</b>) aligned with our 3-Color Market Weather indicator:
@@ -7546,7 +7549,7 @@ function renderSemiFearGreedView(state) {
   const actionDetail = lang === "jp" ? ov.action_detail_jp : ov.action_detail_en;
   const gaugeTab = state.semiGaugeTab || "overview";
   const activeRange = state.semiRange || "1Y";
-  const rebal = state.semiRebalanceResult;
+  const rebal = state.semiAdjust BudgetResult;
   const lump = state.semiLumpSumResult;
   const eras = (state.semiHistory && state.semiHistory.era_summary) || [];
 
@@ -7756,9 +7759,9 @@ function renderSemiFearGreedView(state) {
         .join("")}
     </section>
 
-    <!-- SECTION 3: INTERACTIVE SMH + XLV REBALANCING & 2.5M KRW TAX HARVESTING ENGINE + 3-STAGE LUMP-SUM PLANNER -->
+    <!-- SECTION 3: INTERACTIVE SMH + XLV BUDGET REVIEW & 2.5M KRW TAX HARVESTING ENGINE + 3-STAGE LUMP-SUM PLANNER -->
     <section class="semi-calc-grid">
-      <!-- Calculator 1: SMH + XLV Rebalancing & Tax Optimizer -->
+      <!-- Calculator 1: SMH + XLV Budget Review & Tax Optimizer -->
       <div class="proof-card" style="margin-bottom:0; border-top:2px solid var(--fin-up);">
         <div style="font-size:0.7rem; font-family:var(--font-mono); font-weight:700; color:var(--fin-up); letter-spacing:0.05em;">
           ${t.rebalSectionTag}
@@ -7782,18 +7785,18 @@ function renderSemiFearGreedView(state) {
             </select>
           </div>
           <div>
-            <label style="font-size:0.68rem; font-family:var(--font-mono); color:var(--muted);">REBALANCING CADENCE</label>
+            <label style="font-size:0.68rem; font-family:var(--font-mono); color:var(--muted);">BUDGET REVIEW CADENCE</label>
             <select id="semiFreqInput" style="width:100%; padding:8px 10px; background:#060911; border:1px solid var(--border); color:#fff; border-radius:4px; font-family:var(--font-sans); font-weight:600; margin-top:3px;">
               <option value="ANNUAL" ${state.semiFreq === "ANNUAL" ? "selected" : ""}>Annual + Band Trigger (Min Tax Drag)</option>
-              <option value="QUARTERLY" ${state.semiFreq === "QUARTERLY" ? "selected" : ""}>Quarterly Rebalance</option>
-              <option value="MONTHLY" ${state.semiFreq === "MONTHLY" ? "selected" : ""}>Monthly Rebalance</option>
-              <option value="WEEKLY" ${state.semiFreq === "WEEKLY" ? "selected" : ""}>Weekly Rebalance (High Tax Drag)</option>
+              <option value="QUARTERLY" ${state.semiFreq === "QUARTERLY" ? "selected" : ""}>Quarterly Adjust Budget</option>
+              <option value="MONTHLY" ${state.semiFreq === "MONTHLY" ? "selected" : ""}>Monthly Adjust Budget</option>
+              <option value="WEEKLY" ${state.semiFreq === "WEEKLY" ? "selected" : ""}>Weekly Adjust Budget (High Tax Drag)</option>
             </select>
           </div>
         </div>
 
-        <button type="button" class="btn btn-emerald" id="btnRunSemiRebalance" style="min-height:42px; width:100%; justify-content:center; padding:9px;">
-          Calculate Exact $SMH / $XLV Rebalancing Orders
+        <button type="button" class="btn btn-emerald" id="btnRunSemiAdjust Budget" style="min-height:42px; width:100%; justify-content:center; padding:9px;">
+          Calculate Exact $SMH / $XLV Budget Review Orders
         </button>
 
         ${
@@ -7828,7 +7831,7 @@ function renderSemiFearGreedView(state) {
             </div>
             <div style="font-size:0.75rem; color:var(--text-secondary); line-height:1.45; border-top:1px solid var(--border); padding-top:8px;">
               <div class="mono" style="color:var(--muted);">
-                Residual Cash: $${Number(rebal.residual_cash_usd ?? 0).toFixed(2)} · Est. Annual Tax &amp; Turnover Drag (${rebal.rebalance_frequency}): -${rebal.estimated_tax_drag_pct}%/yr · Expected Net 15Y Rate: +${rebal.expected_net_cagr_pct}%/yr
+                Residual Cash: $${Number(rebal.residual_cash_usd ?? 0).toFixed(2)} · Est. Annual Tax &amp; Turnover Drag (${rebal.adjust budget_frequency}): -${rebal.estimated_tax_drag_pct}%/yr · Expected Net 15Y Rate: +${rebal.expected_net_cagr_pct}%/yr
               </div>
             </div>
           </div>
@@ -8137,7 +8140,7 @@ const state = {
   semiMode: "AUTO_REGIME",
   semiFreq: "ANNUAL",
   semiGainKrw: 3800000,
-  semiRebalanceResult: null,
+  semiAdjust BudgetResult: null,
   semiLumpCapUsd: 50000,
   semiLumpScore: null,
   semiLumpSumResult: null,
@@ -8685,7 +8688,7 @@ function bindEvents() {
     btn.addEventListener("click", jumpToTomMorningBox);
   });
 
-  // $0 Free US Brokerage App & Calm 2-4x/Year Rebalancing Manual Modal + WebView Branching
+  // $0 Free US Brokerage App & Calm 2-4x/Year Budget Review Manual Modal + WebView Branching
   const tomStarterManualModal = document.getElementById("tomStarterManualModal");
   const isWebViewEnv = () =>
     typeof window !== "undefined" &&
@@ -10334,9 +10337,9 @@ function bindEvents() {
     });
   });
 
-  const btnRunSemiRebalance = document.getElementById("btnRunSemiRebalance");
-  if (btnRunSemiRebalance) {
-    btnRunSemiRebalance.addEventListener("click", async () => {
+  const btnRunSemiAdjust Budget = document.getElementById("btnRunSemiAdjust Budget");
+  if (btnRunSemiAdjust Budget) {
+    btnRunSemiAdjust Budget.addEventListener("click", async () => {
       const rawCap = parseFloat(document.getElementById("semiCapInput")?.value ?? "");
       const mode = document.getElementById("semiModeInput")?.value || "AUTO_REGIME";
       const freq = document.getElementById("semiFreqInput")?.value || "ANNUAL";
@@ -10355,14 +10358,14 @@ function bindEvents() {
       state.semiGainKrw = gainKrw;
 
       try {
-        state.semiRebalanceResult = await calculateSemiRebalance({
+        state.semiAdjust BudgetResult = await calculateSemiAdjust Budget({
           total_capital_usd: cap,
           strategy_mode: mode,
-          rebalance_frequency: freq,
+          adjust budget_frequency: freq,
           unrealized_gain_krw: gainKrw,
         });
         renderApp();
-        showToast("Updated $SMH / $XLV Rebalancing Orders");
+        showToast("Updated $SMH / $XLV Budget Review Orders");
       } catch (e) {
         showToast("Please enter a valid positive capital amount");
       }
@@ -10981,12 +10984,12 @@ async function loadAllData() {
     const celhStock = state.stocks.find((s) => s.ticker === "CELH");
     const defaultCelhClose = celhStock ? Number(celhStock.close) : 27.93;
 
-    // Pre-compute initial Rebalance, Lump-Sum, and Telegram Status/Preview for instant rendering
+    // Pre-compute initial Adjust Budget, Lump-Sum, and Telegram Status/Preview for instant rendering
     const [rebalRes, lumpRes, tgStat, tgPrev] = await Promise.all([
-      calculateSemiRebalance({
+      calculateSemiAdjust Budget({
         total_capital_usd: state.semiCapUsd,
         strategy_mode: state.semiMode,
-        rebalance_frequency: state.semiFreq,
+        adjust budget_frequency: state.semiFreq,
         unrealized_gain_krw: state.semiGainKrw,
       }).catch(() => null),
       calculateSemiLumpSum({
@@ -11000,7 +11003,7 @@ async function loadAllData() {
         dry_run: true,
       }).catch(() => null),
     ]);
-    if (rebalRes) state.semiRebalanceResult = rebalRes;
+    if (rebalRes) state.semiAdjust BudgetResult = rebalRes;
     if (lumpRes) state.semiLumpSumResult = lumpRes;
     if (tgStat) {
       state.telegramConfigured = Boolean(tgStat.configured || (state.telegramBotToken && state.telegramChatId));

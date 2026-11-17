@@ -24,7 +24,7 @@ const BLIND_TEST_I18N = {
     revealTickerLabel: "REVEALED LIVE TICKER",
     battleTitle: "📊 $10,000 HISTORICAL BACKTEST COMPARISON: SUB-MA60 DIP-BUYING VS. PW-RSI MODEL",
     retailSideTitle: "❌ Sub-MA60 Dip-Buying (-18% Below MA60)",
-    retailSideDesc: "Averages into sub-MA60 downtrends ($NVDA / $SMCI / $INTC) without calm rebalancing discipline. Unhedged tail drawdowns erode retirement principal.",
+    retailSideDesc: "Averages into sub-MA60 downtrends ($NVDA / $SMCI / $INTC) without calm budget review discipline. Unhedged tail drawdowns erode retirement principal.",
     quantSideTitle: "🟢 RightSideAlpha PW-RSI + Volume Model",
     quantSideDesc: "Filters for MA60 reclaim + ≥1.4x institutional volume surge with a modeled -9.0% risk boundary (-1.35% portfolio allocation cap).",
     vipUnlockBannerTitle: "🔥 ROUND 3 FEATURED A 3.41x VOLUME ANOMALY — UNLOCK ALL 72 QUANT FACTOR DATASETS & PINE SCRIPT",

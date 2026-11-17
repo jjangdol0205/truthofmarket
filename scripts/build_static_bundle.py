@@ -104,7 +104,7 @@ def refresh_health_and_rss() -> tuple[str, str]:
 
     insight_items_xml = f"""
     <item>
-      <title><![CDATA[Morning Bell Market Weather Note ({as_of_date}): Sentiment Gauge at {fg_score:.1f}/100 ({regime_code}) & Calm 2-4x/Year Rebalancing]]></title>
+      <title><![CDATA[Morning Bell Market Weather Note ({as_of_date}): Sentiment Gauge at {fg_score:.1f}/100 ({regime_code}) & Calm 2-4x/Year Budget Review]]></title>
       <link>https://truthofmarket.com/insights/daily-us-quant-regime-brief.html</link>
       <guid isPermaLink="true">https://truthofmarket.com/insights/daily-us-quant-regime-brief.html</guid>
       <pubDate>{rfc_now}</pubDate>
@@ -118,11 +118,11 @@ def refresh_health_and_rss() -> tuple[str, str]:
       <description><![CDATA[Educational quantitative study examining 52-week drawdown recovery, 20-day and 60-day moving average alignment, and 10-day relative volume across liquid US equities.]]></description>
     </item>
     <item>
-      <title><![CDATA[Sector Correlation & Rebalancing Math: Studying the $SMH and $XLV Barbell (2000-2026)]]></title>
+      <title><![CDATA[Sector Correlation & Budget Review Math: Studying the $SMH and $XLV Barbell (2000-2026)]]></title>
       <link>https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html</link>
       <guid isPermaLink="true">https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html</guid>
       <pubDate>{rfc_now}</pubDate>
-      <description><![CDATA[Empirical educational study of combining Semiconductors ($SMH) with Healthcare ($XLV) under calm 2-4x/year weight rebalancing.]]></description>
+      <description><![CDATA[Empirical educational study of combining Semiconductors ($SMH) with Healthcare ($XLV) under calm 2-4x/year weight budget review.]]></description>
     </item>
     <item>
       <title><![CDATA[The Mathematics of Drawdown Asymmetry: Why Portfolio Cushions Preserve Long-Term Compounding]]></title>
@@ -139,7 +139,7 @@ def refresh_health_and_rss() -> tuple[str, str]:
     <link>https://truthofmarket.com/</link>
     <atom:link href="https://truthofmarket.com/rss.xml" rel="self" type="application/rss+xml" />
     <atom:link href="https://pubsubhubbub.appspot.com/" rel="hub" />
-    <description>Self-directed educational calculator software for US 401(k)/IRA retirement cashflow simulation, 3-color market weather visualization, and calm 2-4x/year SGOV · SCHD · JEPI · VOO portfolio rebalancing.</description>
+    <description>Self-directed educational calculator software for US 401(k)/IRA retirement cashflow simulation, 3-color market weather visualization, and calm 2-4x/year SGOV · SCHD · JEPI · VOO portfolio budget review.</description>
     <language>en-US</language>
     <lastBuildDate>{rfc_now}</lastBuildDate>{insight_items_xml}
     <item>
@@ -147,7 +147,7 @@ def refresh_health_and_rss() -> tuple[str, str]:
       <link>https://truthofmarket.com/</link>
       <guid isPermaLink="true">https://truthofmarket.com/</guid>
       <pubDate>{rfc_now}</pubDate>
-      <description><![CDATA[Self-directed educational retirement income calculator modeling SGOV (US T-Bill Cushion), SCHD (Dividend Growth), JEPI (Monthly Paycheck), and VOO (S&P 500 Core) with calm 2-4x/year weight rebalancing.]]></description>
+      <description><![CDATA[Self-directed educational retirement income calculator modeling SGOV (US T-Bill Cushion), SCHD (Dividend Growth), JEPI (Monthly Paycheck), and VOO (S&P 500 Core) with calm 2-4x/year weight budget review.]]></description>
     </item>
     <item>
       <title><![CDATA[Public Market Weather & Sector Sentiment Gauge ({fg_score:.1f} {regime_code}) — $SMH/$XLV Barbell Calculator]]></title>
@@ -200,11 +200,11 @@ def main() -> None:
     STORE_SLOT: 'FINANCE_STORE_SLOT',
     STORE_LIVE_READY: false,
     POLAR_CHECKOUT_URLS: {{
-      monthly_29: '',
-      annual_199: ''
+      monthly_29: 'https://buy.polar.sh/polar_cl_ifEzJdkptSMdHoPJ8MriuYleze1To288pYefu3QvaLc',
+      annual_199: 'https://buy.polar.sh/polar_cl_IPZpLD1EeUXCrNMxo1Yji8oT8RPgD9jhdassj38WMyf'
     }},
-    POLAR_TOM_MONTHLY_URL: '',
-    POLAR_TOM_ANNUAL_URL: '',
+    POLAR_TOM_MONTHLY_URL: 'https://buy.polar.sh/polar_cl_ifEzJdkptSMdHoPJ8MriuYleze1To288pYefu3QvaLc',
+    POLAR_TOM_ANNUAL_URL: 'https://buy.polar.sh/polar_cl_IPZpLD1EeUXCrNMxo1Yji8oT8RPgD9jhdassj38WMyf',
     SUPPORT_EMAIL: 'beable9489@gmail.com'
   }};
   try {{
@@ -220,7 +220,7 @@ def main() -> None:
   <meta name="google-site-verification" content="G99bl17UU6iKgNm5ndGcSWp0dHFpJ0MjJqBBp0Exfx0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income | TruthOfMarket</title>
-  <meta name="description" content="Self-directed US 401k/IRA Retirement Cashflow &amp; Household Budget Calculator Software. Simulate monthly income with $VOO (S&amp;P 500 Core), $SCHD (Dividend Growth ~3.5%), $JEPI (Monthly Income ~7.4%) &amp; $SGOV (US T-Bill Cash ~4.7%) via calm 2-4x/year rebalancing." />
+  <meta name="description" content="Self-directed US 401k/IRA Retirement Cashflow &amp; Household Budget Calculator Software. Simulate monthly income with $VOO (S&amp;P 500 Core), $SCHD (Dividend Growth ~3.5%), $JEPI (Monthly Income ~7.4%) &amp; $SGOV (US T-Bill Cash ~4.7%) via calm 2-4x/year budget review." />
   <link rel="canonical" href="https://truthofmarket.com/" />
   <link rel="alternate" type="application/rss+xml" title="TruthOfMarket US 401k/IRA Retirement Cashflow RSS Feed" href="https://truthofmarket.com/rss.xml" />
   <meta property="og:type" content="website" />
@@ -274,7 +274,7 @@ def main() -> None:
         "publisher": {{
           "@id": "https://truthofmarket.com/#organization"
         }},
-        "description": "Self-directed educational market data visualization and mathematical portfolio calculator software for US 401k/IRA retirement cashflow and 2-4x/year weight rebalancing.",
+        "description": "Self-directed educational market data visualization and mathematical portfolio calculator software for US 401k/IRA retirement cashflow and 2-4x/year weight budget review.",
         "offers": [
           {{
             "@type": "Offer",
@@ -344,7 +344,7 @@ def main() -> None:
         <b>$VOO</b> (S&amp;P 500 Core) &middot; <b>$SCHD</b> (Dividend Growth ~3.5%) &middot; <b>$JEPI</b> (Monthly Income ~7.4%) &middot; <b>$SGOV</b> (US T-Bill Cash ~4.7%) &nbsp;|&nbsp; <b>US Retirement Market Weather (S&amp;P 500 Breadth &amp; Drawdown Guard)</b> &nbsp;|&nbsp; <span>2026-11-16 US Market Close</span>
       </div>
       <h1 style="font-size:1.85rem;font-weight:900;margin:0 0 10px;color:#0f172a;line-height:1.3;">Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income.</h1>
-      <p style="margin:0;color:#1e293b;font-size:1.125rem;line-height:1.7;">30-Second Comfortable Retirement &amp; Monthly Cashflow Simulator — Simulate your monthly retirement paycheck ($150k / $400k / $800k / $1.5M presets), cushion your nest egg from sequence-of-returns drawdowns, and rebalance calmly 2–4 times per year across <b>$VOO</b> (S&amp;P 500 Core), <b>$SCHD</b> (Dividend Growth ~3.5%), <b>$JEPI</b> (Monthly Income ~7.4%), and <b>$SGOV</b> (US T-Bill Cash ~4.7%) aligned with our US Retirement Market Weather indicator.</p>
+      <p style="margin:0;color:#1e293b;font-size:1.125rem;line-height:1.7;">30-Second Comfortable Retirement &amp; Monthly Cashflow Simulator — Simulate your monthly retirement paycheck ($150k / $400k / $800k / $1.5M presets), cushion your nest egg from sequence-of-returns drawdowns, and adjust budget calmly 2–4 times per year across <b>$VOO</b> (S&amp;P 500 Core), <b>$SCHD</b> (Dividend Growth ~3.5%), <b>$JEPI</b> (Monthly Income ~7.4%), and <b>$SGOV</b> (US T-Bill Cash ~4.7%) aligned with our US Retirement Market Weather indicator.</p>
       <p id="tomMorningBellClub" style="margin:14px 0 0;padding-top:12px;border-top:1px solid #cbd5e1;color:#92400e;font-size:1.06rem;font-weight:800;line-height:1.65;"><span id="tom-passwordless-club-signup">☕ Morning Bell Retirement &amp; Macro Club — Protecting Your Nest Egg &amp; Monthly Income Together · Free 3-Second Passwordless Membership</span></p>
       <p id="tomFreeStarterManual" style="margin:8px 0 0;color:#0369a1;font-size:1.06rem;font-weight:800;line-height:1.65;">📘 $0 Free Public Product: US Brokerage App &amp; Calm 2–4x/Year Household Cashflow & Budget Worksheet Manual (Fidelity · Charles Schwab · Vanguard — SGOV/SPAXX Cash Cushion &amp; Limit Order Guide)</p>
       <div style="margin:14px 0 0;padding:14px 16px;border-radius:12px;background:#ecfdf5;border:1.5px solid #059669;color:#064e3b;font-size:1rem;line-height:1.6;">

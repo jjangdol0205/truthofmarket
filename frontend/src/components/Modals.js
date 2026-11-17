@@ -348,7 +348,7 @@ export function renderModals(state) {
       </div>
     </div>
 
-    <!-- CALM 2-4X/YEAR REBALANCING METHODOLOGY MODAL -->
+    <!-- CALM 2-4X/YEAR BUDGET REVIEW METHODOLOGY MODAL -->
     <div class="modal-backdrop" id="pwRsiModal">
       <div class="modal" style="max-width:680px;">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:10px;">
@@ -420,7 +420,7 @@ export function renderModals(state) {
       </div>
     </div>
 
-    <!-- $0 FREE PUBLIC PRODUCT: US BROKERAGE APP & CALM 2-4X/YEAR REBALANCING MANUAL MODAL -->
+    <!-- $0 FREE PUBLIC PRODUCT: US BROKERAGE APP & CALM 2-4X/YEAR BUDGET REVIEW MANUAL MODAL -->
     <div class="modal-backdrop" id="tomStarterManualModal" role="dialog" aria-modal="true" aria-labelledby="tomStarterManualModalTitle">
       <div class="modal tom-manual-modal-dialog">
         <div class="tom-manual-modal-header">
@@ -511,7 +511,7 @@ export function renderModals(state) {
           </article>
 
           <article class="tom-manual-chapter" id="tomManualStep2">
-            <div class="tom-manual-chapter-tag tag-amber">STEP 2 OF 3 · CALM 2–4X/YEAR PORTFOLIO WEIGHT REBALANCING</div>
+            <div class="tom-manual-chapter-tag tag-amber">STEP 2 OF 3 · CALM 2–4X/YEAR PORTFOLIO WEIGHT BUDGET REVIEW</div>
             <h4>Aligning Your 3 Retirement Buckets 2–4 Times a Year with the 3-Color Market Weather Indicator</h4>
             <p>
               <b>No Daily Stress or Frequent Trading:</b> Instead of reacting to noisy daily headlines, self-directed retirement investors review portfolio weights calmly just <b>2 to 4 times per year</b> across four liquid, low-fee core ETFs (<b>SGOV · SCHD · JEPI · VOO</b>) aligned with our 3-Color Market Weather indicator:

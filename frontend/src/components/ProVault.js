@@ -335,7 +335,7 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
         <div style="background:#090d16; border:1px solid var(--border); border-top:2px solid #10b981; border-radius:4px; padding:18px; display:flex; flex-direction:column; justify-content:space-between;">
           <div>
             <div style="font-size:0.7rem; font-family:var(--font-mono); font-weight:700; color:#34d399; letter-spacing:0.05em; text-transform:uppercase;">
-              👑 PRO VIP EXCLUSIVE · BARBELL REBALANCER & EXPORT KIT
+              👑 PRO VIP EXCLUSIVE · BARBELL CALCULATOR & EXPORT KIT
             </div>
             <h3 style="font-size:1rem; font-weight:800; margin:6px 0; color:#ffffff;">
               80:20 ($SMH : $XLV) Custom Portfolio Blueprint & 1-Click TradingView / CSV Kit

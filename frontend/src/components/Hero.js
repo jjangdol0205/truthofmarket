@@ -449,7 +449,7 @@ export function computeTomRetirementPlan({ nestEgg, years, monthlyAdd, weatherMo
         )
       : Math.round(egg);
 
-  // Guarded 3-Bucket Calm 2-4x/Year Rebalance Path (4.5% blended safe withdrawal + dividend yield)
+  // Guarded 3-Bucket Calm 2-4x/Year Adjust Budget Path (4.5% blended safe withdrawal + dividend yield)
   const guardedAnnual = Math.round(projectedNestEgg * 0.045);
   const guardedMonthly = Math.round(guardedAnnual / 12);
 
@@ -536,7 +536,7 @@ export function renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRe
         30-Second Comfortable Retirement &amp; Monthly Cashflow Simulator
       </h2>
       <p class="tom-retire-lead">
-        Tap 3 buttons below to see your <b>calm monthly retirement paycheck</b> (on top of Social Security), how much monthly income you protect by avoiding a <b>-35% retirement-eve crash</b>, and how to rebalance <b>$VOO &middot; $SCHD &middot; $JEPI &middot; $SGOV</b> calmly just <b>2–4 times a year</b>.
+        Tap 3 buttons below to see your <b>calm monthly retirement paycheck</b> (on top of Social Security), how much monthly income you protect by avoiding a <b>-35% retirement-eve crash</b>, and how to adjust budget <b>$VOO &middot; $SCHD &middot; $JEPI &middot; $SGOV</b> calmly just <b>2–4 times a year</b>.
       </p>
 
       <div class="tom-retire-presets-wrap">

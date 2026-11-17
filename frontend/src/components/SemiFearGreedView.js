@@ -306,7 +306,7 @@ export function renderSemiFearGreedView(state) {
   const actionDetail = lang === "jp" ? ov.action_detail_jp : ov.action_detail_en;
   const gaugeTab = state.semiGaugeTab || "overview";
   const activeRange = state.semiRange || "1Y";
-  const rebal = state.semiRebalanceResult;
+  const rebal = state.semiAdjust BudgetResult;
   const lump = state.semiLumpSumResult;
   const eras = (state.semiHistory && state.semiHistory.era_summary) || [];
 
@@ -516,9 +516,9 @@ export function renderSemiFearGreedView(state) {
         .join("")}
     </section>
 
-    <!-- SECTION 3: INTERACTIVE SMH + XLV REBALANCING & 2.5M KRW TAX HARVESTING ENGINE + 3-STAGE LUMP-SUM PLANNER -->
+    <!-- SECTION 3: INTERACTIVE SMH + XLV BUDGET REVIEW & 2.5M KRW TAX HARVESTING ENGINE + 3-STAGE LUMP-SUM PLANNER -->
     <section class="semi-calc-grid">
-      <!-- Calculator 1: SMH + XLV Rebalancing & Tax Optimizer -->
+      <!-- Calculator 1: SMH + XLV Budget Review & Tax Optimizer -->
       <div class="proof-card" style="margin-bottom:0; border-top:2px solid var(--fin-up);">
         <div style="font-size:0.7rem; font-family:var(--font-mono); font-weight:700; color:var(--fin-up); letter-spacing:0.05em;">
           ${t.rebalSectionTag}
@@ -542,18 +542,18 @@ export function renderSemiFearGreedView(state) {
             </select>
           </div>
           <div>
-            <label style="font-size:0.68rem; font-family:var(--font-mono); color:var(--muted);">REBALANCING CADENCE</label>
+            <label style="font-size:0.68rem; font-family:var(--font-mono); color:var(--muted);">BUDGET REVIEW CADENCE</label>
             <select id="semiFreqInput" style="width:100%; padding:8px 10px; background:#060911; border:1px solid var(--border); color:#fff; border-radius:4px; font-family:var(--font-sans); font-weight:600; margin-top:3px;">
               <option value="ANNUAL" ${state.semiFreq === "ANNUAL" ? "selected" : ""}>Annual + Band Trigger (Min Tax Drag)</option>
-              <option value="QUARTERLY" ${state.semiFreq === "QUARTERLY" ? "selected" : ""}>Quarterly Rebalance</option>
-              <option value="MONTHLY" ${state.semiFreq === "MONTHLY" ? "selected" : ""}>Monthly Rebalance</option>
-              <option value="WEEKLY" ${state.semiFreq === "WEEKLY" ? "selected" : ""}>Weekly Rebalance (High Tax Drag)</option>
+              <option value="QUARTERLY" ${state.semiFreq === "QUARTERLY" ? "selected" : ""}>Quarterly Adjust Budget</option>
+              <option value="MONTHLY" ${state.semiFreq === "MONTHLY" ? "selected" : ""}>Monthly Adjust Budget</option>
+              <option value="WEEKLY" ${state.semiFreq === "WEEKLY" ? "selected" : ""}>Weekly Adjust Budget (High Tax Drag)</option>
             </select>
           </div>
         </div>
 
-        <button type="button" class="btn btn-emerald" id="btnRunSemiRebalance" style="min-height:42px; width:100%; justify-content:center; padding:9px;">
-          Calculate Exact $SMH / $XLV Rebalancing Orders
+        <button type="button" class="btn btn-emerald" id="btnRunSemiAdjust Budget" style="min-height:42px; width:100%; justify-content:center; padding:9px;">
+          Calculate Exact $SMH / $XLV Budget Review Orders
         </button>
 
         ${
@@ -588,7 +588,7 @@ export function renderSemiFearGreedView(state) {
             </div>
             <div style="font-size:0.75rem; color:var(--text-secondary); line-height:1.45; border-top:1px solid var(--border); padding-top:8px;">
               <div class="mono" style="color:var(--muted);">
-                Residual Cash: $${Number(rebal.residual_cash_usd ?? 0).toFixed(2)} · Est. Annual Tax &amp; Turnover Drag (${rebal.rebalance_frequency}): -${rebal.estimated_tax_drag_pct}%/yr · Expected Net 15Y Rate: +${rebal.expected_net_cagr_pct}%/yr
+                Residual Cash: $${Number(rebal.residual_cash_usd ?? 0).toFixed(2)} · Est. Annual Tax &amp; Turnover Drag (${rebal.adjust budget_frequency}): -${rebal.estimated_tax_drag_pct}%/yr · Expected Net 15Y Rate: +${rebal.expected_net_cagr_pct}%/yr
               </div>
             </div>
           </div>

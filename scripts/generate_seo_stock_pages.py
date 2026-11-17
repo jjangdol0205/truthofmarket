@@ -136,11 +136,11 @@ HEAD_BEACON_SCRIPT = """  <script>
     STORE_SLOT: 'FINANCE_STORE_SLOT',
     STORE_LIVE_READY: false,
     POLAR_CHECKOUT_URLS: {
-      monthly_29: '',
-      annual_199: ''
+      monthly_29: 'https://buy.polar.sh/polar_cl_ifEzJdkptSMdHoPJ8MriuYleze1To288pYefu3QvaLc',
+      annual_199: 'https://buy.polar.sh/polar_cl_IPZpLD1EeUXCrNMxo1Yji8oT8RPgD9jhdassj38WMyf'
     },
-    POLAR_TOM_MONTHLY_URL: '',
-    POLAR_TOM_ANNUAL_URL: '',
+    POLAR_TOM_MONTHLY_URL: 'https://buy.polar.sh/polar_cl_ifEzJdkptSMdHoPJ8MriuYleze1To288pYefu3QvaLc',
+    POLAR_TOM_ANNUAL_URL: 'https://buy.polar.sh/polar_cl_IPZpLD1EeUXCrNMxo1Yji8oT8RPgD9jhdassj38WMyf',
     SUPPORT_EMAIL: 'beable9489@gmail.com'
   };
   </script>
@@ -194,7 +194,7 @@ HEAD_BEACON_SCRIPT = """  <script>
         document.querySelectorAll('.tom-lead-status').forEach(function(el) {
           el.style.display = 'block';
           el.style.color = '#86efac';
-          el.innerHTML = '✅ <strong>Welcome aboard!</strong> Free 8:30 AM ET 3-Color Market Weather &amp; Calm 2–4x/Year Rebalancing Briefs are now active for <strong>' + email.replace(/[<>&"]/g, '') + '</strong>' + (topicLabel ? ' (' + topicLabel.replace(/[<>&"]/g, '') + ')' : '') + '.';
+          el.innerHTML = '✅ <strong>Welcome aboard!</strong> Free 8:30 AM ET 3-Color Market Weather &amp; Calm 2–4x/Year Budget Review Briefs are now active for <strong>' + email.replace(/[<>&"]/g, '') + '</strong>' + (topicLabel ? ' (' + topicLabel.replace(/[<>&"]/g, '') + ')' : '') + '.';
         });
         document.querySelectorAll('.tom-lead-form input[type="email"]').forEach(function(inp) { inp.value = email; });
         return false;
@@ -551,7 +551,7 @@ def generate_semi_fear_greed_page(semi: Dict[str, Any], stocks: List[Dict[str, A
                 "name": "How does the educational $SMH and $XLV Barbell weight calculator work?",
                 "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": f"The self-directed calculator models baseline 70% $SMH and 30% $XLV weights under standard conditions, and illustrates an {smh_w}% $SMH : {xlv_w}% $XLV rebalance simulation during deep sentiment compression.",
+                    "text": f"The self-directed calculator models baseline 70% $SMH and 30% $XLV weights under standard conditions, and illustrates an {smh_w}% $SMH : {xlv_w}% $XLV adjust budget simulation during deep sentiment compression.",
                 },
             },
         ],
@@ -561,7 +561,7 @@ def generate_semi_fear_greed_page(semi: Dict[str, Any], stocks: List[Dict[str, A
     lead_top = build_senior_lead_magnet_html(
         "$SMH:$XLV Barbell",
         "Protect Your Retirement Nest Egg — Free Daily 8:30 AM 3-Color Market Weather Brief",
-        f"Plain-English market weather notes for $SMH (${smh_close:.2f}), defensive $XLV (${xlv_close:.2f}), and calm 2–4x/year 401(k)/IRA rebalancing.",
+        f"Plain-English market weather notes for $SMH (${smh_close:.2f}), defensive $XLV (${xlv_close:.2f}), and calm 2–4x/year 401(k)/IRA budget review.",
         signal_badge=f"🧭 Market Weather Gauge: {fg_score:.1f}/100 ({regime_en})",
         position="top",
     )
@@ -960,7 +960,7 @@ def generate_comparison_page(
     cmp_lead_bottom = build_senior_lead_magnet_html(
         f"${ta} vs ${tb}",
         f"Follow ${ta}, ${tb} & Retirement ETFs Without Daily Noise",
-        "Receive free 8:30 AM ET 3-color market weather notes and calm 2–4x/year portfolio rebalancing guides.",
+        "Receive free 8:30 AM ET 3-color market weather notes and calm 2–4x/year portfolio budget review guides.",
         signal_badge="🟢 Green Steady · 🟡 Yellow Watch · 🔴 Red Cash Cushion",
         position="bottom",
     )

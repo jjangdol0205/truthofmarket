@@ -5,17 +5,20 @@
 (function initTomUnifiedPaymentAndBeacon() {
   if (typeof window === "undefined") return;
 
+  var PRE_SEEDED_TOM_MONTHLY_URL = "https://buy.polar.sh/polar_cl_ifEzJdkptSMdHoPJ8MriuYleze1To288pYefu3QvaLc";
+  var PRE_SEEDED_TOM_ANNUAL_URL = "https://buy.polar.sh/polar_cl_IPZpLD1EeUXCrNMxo1Yji8oT8RPgD9jhdassj38WMyf";
+
   var DEFAULT_PAYMENT_CONFIG = {
     PROVIDER: "polar_sh",
     DIVISION: "TOM",
     STORE_SLOT: "FINANCE_STORE_SLOT",
     STORE_LIVE_READY: false,
     POLAR_CHECKOUT_URLS: {
-      monthly_29: "",
-      annual_199: "",
+      monthly_29: PRE_SEEDED_TOM_MONTHLY_URL,
+      annual_199: PRE_SEEDED_TOM_ANNUAL_URL,
     },
-    POLAR_TOM_MONTHLY_URL: "",
-    POLAR_TOM_ANNUAL_URL: "",
+    POLAR_TOM_MONTHLY_URL: PRE_SEEDED_TOM_MONTHLY_URL,
+    POLAR_TOM_ANNUAL_URL: PRE_SEEDED_TOM_ANNUAL_URL,
     SUPPORT_EMAIL: "beable9489@gmail.com",
   };
 
@@ -33,22 +36,22 @@
       typeof window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS !== "object"
     ) {
       window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS = {
-        monthly_29: "",
-        annual_199: "",
+        monthly_29: PRE_SEEDED_TOM_MONTHLY_URL,
+        annual_199: PRE_SEEDED_TOM_ANNUAL_URL,
       };
     } else {
-      if (typeof window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29 !== "string") {
-        window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29 = "";
+      if (!window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29) {
+        window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29 = PRE_SEEDED_TOM_MONTHLY_URL;
       }
-      if (typeof window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199 !== "string") {
-        window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199 = "";
+      if (!window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199) {
+        window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199 = PRE_SEEDED_TOM_ANNUAL_URL;
       }
     }
-    if (typeof window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL !== "string") {
-      window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL = "";
+    if (!window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL) {
+      window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL = PRE_SEEDED_TOM_MONTHLY_URL;
     }
-    if (typeof window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL !== "string") {
-      window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL = "";
+    if (!window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL) {
+      window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL = PRE_SEEDED_TOM_ANNUAL_URL;
     }
     if (!window.PAYMENT_CONFIG.SUPPORT_EMAIL) {
       window.PAYMENT_CONFIG.SUPPORT_EMAIL = "beable9489@gmail.com";

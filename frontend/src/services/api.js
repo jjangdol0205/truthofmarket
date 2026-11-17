@@ -825,7 +825,7 @@ export async function evaluatePortfolioDoctor(payload) {
               verdict: "Neutral",
             },
           ],
-          rebalance_recommendations: [
+          adjust budget_recommendations: [
             {
               action: "MAINTAIN",
               ticker: null,
@@ -1001,14 +1001,14 @@ export async function evaluatePortfolioDoctor(payload) {
         });
       }
 
-      // Automated Rebalancing Recommendations
-      const rebalanceRecommendations = [];
+      // Automated Budget Review Recommendations
+      const adjust budgetRecommendations = [];
       const stoppedPositions = diagnostics.filter((d) => d.status_code === "HARD_STOP" || d.status_code === "TIME_STOP");
       let totalHarvested = 0.0;
 
       for (const sp of stoppedPositions) {
         const reason = sp.status_code === "HARD_STOP" ? "Hard stop exit capital recovery" : "Time stop dead money capital recovery";
-        rebalanceRecommendations.push({
+        adjust budgetRecommendations.push({
           action: "HARVEST",
           ticker: sp.ticker,
           target_ticker: null,
@@ -1034,7 +1034,7 @@ export async function evaluatePortfolioDoctor(payload) {
           const perTargetPct = Math.round((100.0 / reallocCount) * 10) / 10;
           for (let i = 0; i < reallocCount; i++) {
             const cand = ignitionCandidates[i];
-            rebalanceRecommendations.push({
+            adjust budgetRecommendations.push({
               action: "REALLOCATE",
               ticker: null,
               target_ticker: cand.ticker,
@@ -1045,7 +1045,7 @@ export async function evaluatePortfolioDoctor(payload) {
             });
           }
         } else {
-          rebalanceRecommendations.push({
+          adjust budgetRecommendations.push({
             action: "REALLOCATE",
             ticker: null,
             target_ticker: "CASH_RESERVE",
@@ -1057,7 +1057,7 @@ export async function evaluatePortfolioDoctor(payload) {
         }
       } else {
         if (!stoppedPositions.length && diagnostics.length > 0) {
-          rebalanceRecommendations.push({
+          adjust budgetRecommendations.push({
             action: "MAINTAIN",
             ticker: null,
             target_ticker: null,
@@ -1077,7 +1077,7 @@ export async function evaluatePortfolioDoctor(payload) {
         capital_at_risk: capitalAtRisk,
         items: diagnostics,
         stress_scenarios: stressScenarios,
-        rebalance_recommendations: rebalanceRecommendations,
+        adjust budget_recommendations: adjust budgetRecommendations,
       };
     }
   );
@@ -1137,9 +1137,9 @@ export async function fetchSemiHistory(rangeCode = "1Y") {
   );
 }
 
-export async function calculateSemiRebalance(data) {
+export async function calculateSemiAdjust Budget(data) {
   return fetchJsonWithFallback(
-    "/api/semi/rebalance",
+    "/api/semi/adjust budget",
     {
       method: "POST",
       headers: {
@@ -1173,7 +1173,7 @@ export async function calculateSemiRebalance(data) {
       } else if (mode === "CONTRARIAN_80_20") {
         smhW = 0.8;
         xlvW = 0.2;
-        ruleEn = "80% $SMH : 20% $XLV Drawdown Rebalance Model";
+        ruleEn = "80% $SMH : 20% $XLV Drawdown Adjust Budget Model";
         ruleJp = ruleEn;
         ruleKr = ruleEn;
       } else if (mode === "AGGRESSIVE_90_10") {
@@ -1218,7 +1218,7 @@ export async function calculateSemiRebalance(data) {
       const deltaSmhShares = Math.round(deltaSmhUsd / smhPrice);
       const deltaXlvShares = Math.round(deltaXlvUsd / xlvPrice);
 
-      const freq = String(data.rebalance_frequency || "ANNUAL").trim().toUpperCase();
+      const freq = String(data.adjust budget_frequency || "ANNUAL").trim().toUpperCase();
       const dragMap = { ANNUAL: 0.19, QUARTERLY: 0.42, MONTHLY: 0.78, WEEKLY: 1.32 };
       const taxDrag = dragMap[freq] ?? 0.19;
       const expectedNetCagr = Number((22.98 - taxDrag).toFixed(2));
@@ -1230,7 +1230,7 @@ export async function calculateSemiRebalance(data) {
 
       const taxEn =
         gainKrw <= dedLimit
-          ? `Modeled annual rebalancing drag (${taxDrag}%) remains low under a 2-4x/year schedule, preserving compounding efficiency inside tax-advantaged 401(k)/IRA accounts.`
+          ? `Modeled annual budget review drag (${taxDrag}%) remains low under a 2-4x/year schedule, preserving compounding efficiency inside tax-advantaged 401(k)/IRA accounts.`
           : `For taxable accounts, spacing portfolio weight adjustments to 2-4x/year reduces turnover drag (${taxDrag}%) compared with high-frequency trading.`;
       const taxJp = taxEn;
       const taxKr = taxEn;
@@ -1259,7 +1259,7 @@ export async function calculateSemiRebalance(data) {
         delta_xlv_usd: deltaXlvUsd,
         delta_smh_shares: deltaSmhShares,
         delta_xlv_shares: deltaXlvShares,
-        rebalance_frequency: freq,
+        adjust budget_frequency: freq,
         estimated_tax_drag_pct: taxDrag,
         expected_net_cagr_pct: expectedNetCagr,
         kr_tax_deduction_limit_krw: dedLimit,
@@ -1312,11 +1312,11 @@ export async function calculateSemiLumpSum(data) {
           case_title_jp: "Case 1 (Score 0–40 · Fear Regime): 100% Immediate Lump-Sum Model",
           case_title_kr: "Case 1 (Score 0–40 · Fear Regime): 100% Immediate Lump-Sum Model",
           summary_en:
-            "Simulated fear regime: historical model deploys 100% into target weights and rebalances 2–4x/year back to 70:30 as drawdown narrows.",
+            "Simulated fear regime: historical model deploys 100% into target weights and adjust budgets 2–4x/year back to 70:30 as drawdown narrows.",
           summary_jp:
-            "Simulated fear regime: historical model deploys 100% into target weights and rebalances 2–4x/year back to 70:30 as drawdown narrows.",
+            "Simulated fear regime: historical model deploys 100% into target weights and adjust budgets 2–4x/year back to 70:30 as drawdown narrows.",
           summary_kr:
-            "Simulated fear regime: historical model deploys 100% into target weights and rebalances 2–4x/year back to 70:30 as drawdown narrows.",
+            "Simulated fear regime: historical model deploys 100% into target weights and adjust budgets 2–4x/year back to 70:30 as drawdown narrows.",
           immediate_deploy_pct: 100.0,
           parked_cash_rp_pct: 0.0,
           tranches: [
@@ -1469,9 +1469,9 @@ export async function calculateSemiLumpSum(data) {
               title_en: "Tranche 2 (70% Reserve Parked in USD T-Bill / MMF)",
               title_jp: "Tranche 2 (70% Reserve Parked in USD T-Bill / MMF)",
               title_kr: "Tranche 2 (70% Reserve Parked in USD T-Bill / MMF)",
-              timing_en: "Modeled 4-Month Staged Rebalance",
-              timing_jp: "Modeled 4-Month Staged Rebalance",
-              timing_kr: "Modeled 4-Month Staged Rebalance",
+              timing_en: "Modeled 4-Month Staged Adjust Budget",
+              timing_jp: "Modeled 4-Month Staged Adjust Budget",
+              timing_kr: "Modeled 4-Month Staged Adjust Budget",
               allocation_pct: 70.0,
               amount_usd: pSmh,
               smh_usd: pSmh,
@@ -1504,10 +1504,10 @@ export async function buildClientTelegramPreview({
   const lg = String(lang || "en").toLowerCase() === "jp" ? "jp" : "en";
 
   const ov = await getStaticSemiOverview();
-  const reb = await calculateSemiRebalance({
+  const reb = await calculateSemiAdjust Budget({
     total_capital_usd: 100000,
     strategy_mode: "AUTO_REGIME",
-    rebalance_frequency: "ANNUAL",
+    adjust budget_frequency: "ANNUAL",
     unrealized_gain_krw: 3800000,
   });
   const allStocks = (await getStaticStocksForCurrentUser()).filter((s) => !String(s.ticker).includes("."));
