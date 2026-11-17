@@ -21,7 +21,7 @@ import {
   updateReferralConfig,
   fetchSemiOverview,
   fetchSemiHistory,
-  calculateSemiAdjust Budget,
+  calculateSemiAdjust,
   calculateSemiLumpSum,
   fetchTelegramStatus,
   saveTelegramConfig,
@@ -188,7 +188,7 @@ const state = {
   semiMode: "AUTO_REGIME",
   semiFreq: "ANNUAL",
   semiGainKrw: 3800000,
-  semiAdjust BudgetResult: null,
+  semiAdjustResult: null,
   semiLumpCapUsd: 50000,
   semiLumpScore: null,
   semiLumpSumResult: null,
@@ -736,7 +736,7 @@ function bindEvents() {
     btn.addEventListener("click", jumpToTomMorningBox);
   });
 
-  // $0 Free US Brokerage App & Calm 2-4x/Year Budget Review Manual Modal + WebView Branching
+  // $0 Free US Brokerage App & Calm 2-4x/Year Allocation Manual Modal + WebView Branching
   const tomStarterManualModal = document.getElementById("tomStarterManualModal");
   const isWebViewEnv = () =>
     typeof window !== "undefined" &&
@@ -2385,9 +2385,9 @@ function bindEvents() {
     });
   });
 
-  const btnRunSemiAdjust Budget = document.getElementById("btnRunSemiAdjust Budget");
-  if (btnRunSemiAdjust Budget) {
-    btnRunSemiAdjust Budget.addEventListener("click", async () => {
+  const btnRunSemiAdjust = document.getElementById("btnRunSemiAdjust");
+  if (btnRunSemiAdjust) {
+    btnRunSemiAdjust.addEventListener("click", async () => {
       const rawCap = parseFloat(document.getElementById("semiCapInput")?.value ?? "");
       const mode = document.getElementById("semiModeInput")?.value || "AUTO_REGIME";
       const freq = document.getElementById("semiFreqInput")?.value || "ANNUAL";
@@ -2406,14 +2406,14 @@ function bindEvents() {
       state.semiGainKrw = gainKrw;
 
       try {
-        state.semiAdjust BudgetResult = await calculateSemiAdjust Budget({
+        state.semiAdjustResult = await calculateSemiAdjust({
           total_capital_usd: cap,
           strategy_mode: mode,
-          adjust budget_frequency: freq,
+          adjust_frequency: freq,
           unrealized_gain_krw: gainKrw,
         });
         renderApp();
-        showToast("Updated $SMH / $XLV Budget Review Orders");
+        showToast("Updated $SMH / $XLV Allocation Orders");
       } catch (e) {
         showToast("Please enter a valid positive capital amount");
       }
@@ -3032,12 +3032,12 @@ async function loadAllData() {
     const celhStock = state.stocks.find((s) => s.ticker === "CELH");
     const defaultCelhClose = celhStock ? Number(celhStock.close) : 27.93;
 
-    // Pre-compute initial Adjust Budget, Lump-Sum, and Telegram Status/Preview for instant rendering
+    // Pre-compute initial Adjust, Lump-Sum, and Telegram Status/Preview for instant rendering
     const [rebalRes, lumpRes, tgStat, tgPrev] = await Promise.all([
-      calculateSemiAdjust Budget({
+      calculateSemiAdjust({
         total_capital_usd: state.semiCapUsd,
         strategy_mode: state.semiMode,
-        adjust budget_frequency: state.semiFreq,
+        adjust_frequency: state.semiFreq,
         unrealized_gain_krw: state.semiGainKrw,
       }).catch(() => null),
       calculateSemiLumpSum({
@@ -3051,7 +3051,7 @@ async function loadAllData() {
         dry_run: true,
       }).catch(() => null),
     ]);
-    if (rebalRes) state.semiAdjust BudgetResult = rebalRes;
+    if (rebalRes) state.semiAdjustResult = rebalRes;
     if (lumpRes) state.semiLumpSumResult = lumpRes;
     if (tgStat) {
       state.telegramConfigured = Boolean(tgStat.configured || (state.telegramBotToken && state.telegramChatId));

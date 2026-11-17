@@ -485,7 +485,7 @@ export function formatPortfolioDoctorResult(result, state) {
 
   const items = Array.isArray(result.items) ? result.items : [];
   const scenarios = Array.isArray(result.stress_scenarios) ? result.stress_scenarios : [];
-  const adjust budget = Array.isArray(result.adjust budget_recommendations) ? result.adjust budget_recommendations : [];
+  const adjust = Array.isArray(result.adjust_recommendations) ? result.adjust_recommendations : [];
 
   return `
     <div style="background:#05080f; border:1px solid var(--border); border-radius:4px; padding:16px;">
@@ -638,16 +638,16 @@ export function formatPortfolioDoctorResult(result, state) {
         </div>
       </div>
 
-      <!-- Section 4: Automated Budget Review Allocation Breakdown -->
+      <!-- Section 4: Automated Allocation Allocation Breakdown -->
       <div>
         <div class="mono" style="font-size:0.7rem; color:#34d399; font-weight:800; letter-spacing:0.04em; margin-bottom:8px; text-transform:uppercase;">
           🔄 AUTOMATED 1.35% RISK PARITY BUDGET REVIEW DIRECTIVES
         </div>
         <div style="background:#090d16; border:1px solid var(--border); border-radius:4px; padding:12px;">
           ${
-            adjust budget.length === 0
-              ? `<div style="color:var(--muted); font-size:0.75rem;">No budget review required at this time.</div>`
-              : adjust budget
+            adjust.length === 0
+              ? `<div style="color:var(--muted); font-size:0.75rem;">No allocation required at this time.</div>`
+              : adjust
                   .map((r) => {
                     const isHarvest = r.action === "HARVEST";
                     const isRealloc = r.action === "REALLOCATE";
