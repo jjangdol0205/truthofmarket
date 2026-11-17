@@ -31,7 +31,7 @@ const enCopy = {
   auditedCardTag: "HISTORICAL ALLOCATION RESEARCH · 1998–2026",
   auditedCardTitle: "SMH/XLV Barbell Allocation (+28.4%) vs. S&P 500 (+14.2%) Historical Study",
   auditedCardDesc:
-    "Point-in-time educational historical study across 6,625 trading days. Rebalanced calmly with an 80:20 educational weight shift during deep sector pulldowns.",
+    "Point-in-time educational historical study across 6,625 trading days. Reviewed calmly with an 80:20 educational weight shift during deep sector pulldowns.",
   auditedBarbellLabel: "SMH 70% : XLV 30% Barbell Model",
   auditedSpyLabel: "S&P 500 (SPY) Benchmark",
   auditedMetricCagr: "Historical Annualized Rate",

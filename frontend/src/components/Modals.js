@@ -366,7 +366,7 @@ export function renderModals(state) {
         <div style="max-height:70vh; overflow-y:auto; padding-right:4px; font-size:0.92rem; line-height:1.65; color:#cbd5e1;">
           <div style="background:#0b1322; border:1px solid rgba(56,189,248,0.25); border-radius:8px; padding:14px 16px; margin-bottom:12px;">
             <div style="font-weight:800; color:#ffffff; margin-bottom:4px; font-size:0.98rem;">
-              Why Calm 2–4x/Year Weight Rebalancing Protects Retirement Longevity
+              Why Calm 2–4x/Year Budget Discipline Protects Retirement Longevity
             </div>
             <p style="margin:0; color:var(--muted); font-size:0.88rem;">
               Sequence-of-returns shocks occur when retirees are forced to sell depressed equity holdings to pay monthly living bills during a market downturn. Separating your nest egg into 3 clear buckets keeps 2–3 years of living expenses insulated in short-term US Treasuries while dividends and S&amp;P 500 compounding replenish cash calmly.
@@ -389,7 +389,7 @@ export function renderModals(state) {
             <div style="background:#090d16; border:1px solid #1e293b; border-radius:8px; padding:12px 14px;">
               <div style="font-weight:800; color:#fbbf24; margin-bottom:4px;">Bucket 3: S&amp;P 500 Core Compounding ($VOO)</div>
               <p style="margin:0; font-size:0.86rem; color:var(--muted);">
-                Holds 20% to 45% in ultra-low-cost broad US equities, rebalanced calmly just 2–4 times per year when 3-Color Market Weather shifts.
+                Holds 20% to 45% in ultra-low-cost broad US equities, reviewed calmly just 2–4 times per year when 3-Color Market Weather shifts.
               </p>
             </div>
           </div>
@@ -442,7 +442,7 @@ export function renderModals(state) {
 
         <div class="tom-manual-jump-nav" role="navigation" aria-label="Manual Chapters">
           <button type="button" class="tom-manual-jump-pill" data-manual-target="tomManualStep1">Step 1: Safe Limit Order</button>
-          <button type="button" class="tom-manual-jump-pill" data-manual-target="tomManualStep2">Step 2: Calm 2–4x/Yr Rebalancing</button>
+          <button type="button" class="tom-manual-jump-pill" data-manual-target="tomManualStep2">Step 2: Calm 2–4x/Yr Budget Check</button>
           <button type="button" class="tom-manual-jump-pill" data-manual-target="tomManualStep3">Step 3: 401(k)/IRA Cash MMF</button>
         </div>
 
@@ -460,7 +460,7 @@ export function renderModals(state) {
               Email Me This PDF Guide Now (Instant Free Club Access)
             </h4>
             <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.55;color:#e2e8f0;">
-              Enter your email below and we will send this complete 3-Step Brokerage &amp; Calm 2–4x/Year Rebalancing Guide straight to your inbox along with free Morning Bell Retirement &amp; Macro Club membership ($0).
+              Enter your email below and we will send this complete 3-Step Brokerage &amp; Calm 2–4x/Year Cashflow Budget Guide straight to your inbox along with free Morning Bell Retirement &amp; Macro Club membership ($0).
             </p>
             <form id="tomWebviewPdfEmailForm" novalidate style="display:flex;flex-wrap:wrap;gap:10px;">
               <input
@@ -527,7 +527,7 @@ export function renderModals(state) {
               </div>
               <div class="tom-manual-broker-item">
                 <strong>🔴 Crash Defense Weather (40% SGOV · 40% JEPI+SCHD · 20% VOO):</strong>
-                <span>During elevated market volatility, gently rebalance up to 40% into <b>SGOV</b> / government money-market reserves so 2–3 years of retirement living expenses are insulated from sequence-of-returns drawdowns.</span>
+                <span>During elevated market volatility, gently allocate up to 40% into <b>SGOV</b> / government money-market reserves so 2–3 years of retirement living expenses are insulated from sequence-of-returns drawdowns.</span>
               </div>
             </div>
           </article>
@@ -549,7 +549,7 @@ export function renderModals(state) {
               </div>
               <div class="tom-manual-broker-item">
                 <strong>🏦 Vanguard — VMFXX (Vanguard Federal Money Market Fund):</strong>
-                <span>Default Vanguard settlement fund — sidelined cash automatically earns federal money-market yield while you wait calmly between quarterly rebalancing checks.</span>
+                <span>Default Vanguard settlement fund — sidelined cash automatically earns federal money-market yield while you wait calmly between quarterly budget checks.</span>
               </div>
             </div>
           </article>

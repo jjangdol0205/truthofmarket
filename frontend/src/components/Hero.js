@@ -13,7 +13,7 @@ const TOM_MORNING_CLUB_NOTES = [
 
 export const TOM_MORNING_CLUB_COMPANION_MSG = {
   steady:
-    "🤝 Right beside you — staying calm in quality dividend & index compounders while rebalancing 2–4 times a year is how retirement wealth endures.",
+    "🤝 Right beside you — staying calm in quality dividend & index compounders while reviewing weights 2–4 times a year is how retirement wealth endures.",
   watch:
     "👀 Wise patience — waiting calmly on the sidelines while collecting steady dividend income protects both your sleep and your savings.",
   cash:
@@ -605,7 +605,7 @@ export function renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRe
 
           <div class="tom-retire-compare-boxes">
             <div class="tom-retire-pay-box is-guarded">
-              <span class="tom-retire-pay-tag">🛡️ Calm 2–4x/Yr Rebalance Path (SGOV · SCHD · JEPI · VOO)</span>
+              <span class="tom-retire-pay-tag">🛡️ Calm 2–4x/Yr Budget Path (SGOV · SCHD · JEPI · VOO)</span>
               <div class="tom-retire-pay-amount" id="tomRetireGuardedMo">${fmtUsdInt(plan.guardedMonthly)}<span>/mo</span></div>
               <div class="tom-retire-pay-sub" id="tomRetireGuardedSub">
                 ${fmtUsdInt(plan.guardedAnnual)}/yr calm cashflow (4.5% safe withdrawal + dividend yield) · <b>32+ Yr Horizon</b>
@@ -684,7 +684,7 @@ export function renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRe
                 <span id="tomBucket3Stat">${plan.buckets[2].pct}% · ${fmtUsdInt(plan.buckets[2].dollars)}</span>
               </div>
               <div class="tom-retire-bucket-bar"><span id="tomBucket3Bar" style="width:${plan.buckets[2].pct}%;"></span></div>
-              <div class="tom-retire-bucket-note">$VOO (Vanguard S&amp;P 500) &amp; quality US leaders — rebalanced calmly 2–4 times a year when our 3-color weather shifts.</div>
+              <div class="tom-retire-bucket-note">$VOO (Vanguard S&amp;P 500) &amp; quality US leaders — reviewed calmly 2–4 times a year when our 3-color weather shifts.</div>
             </div>
           </div>
         </div>
@@ -693,7 +693,7 @@ export function renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRe
       <!-- US 50-70s RETIREMENT 4-CORE STANDARD STRIP (ZERO LEVERAGED / ZERO CRYPTO) -->
       <div class="tom-senior-core-strip" id="tomSeniorCoreStrip" aria-label="US 50-70s 4-Core Retirement Standard">
         <div class="tom-senior-core-title">
-          🏛️ <strong>US 50–70s Retirement 4-Core Standard</strong> — No leveraged ETFs, no day-trading stress. Just calm <b>2–4x/year rebalancing</b> across 4 liquid, low-fee pillars:
+          🏛️ <strong>US 50–70s Retirement 4-Core Standard</strong> — No leveraged ETFs, no day-trading stress. Just calm <b>2–4x/year budget review</b> across 4 liquid, low-fee pillars:
         </div>
         <div class="tom-senior-core-grid">
           <div class="tom-senior-core-card">
@@ -947,7 +947,7 @@ export function renderHero(state) {
         <button type="button" class="tom-traffic-card t-red" data-traffic-zone="MANUAL">
           <span class="tom-traffic-kicker is-red">🔴 DRAWDOWN GUARD WEATHER</span>
           <strong class="tom-traffic-weights">40% $SGOV &middot; 40% $JEPI+$SCHD &middot; 20% $VOO</strong>
-          <span class="tom-traffic-sub">Calm 2–4x/yr weight rebalance &middot; Open the $0 Safe Broker Guide &rarr;</span>
+          <span class="tom-traffic-sub">Calm 2–4x/yr budget check &middot; Open the $0 Safe Broker Guide &rarr;</span>
         </button>
       </div>
 
@@ -1047,7 +1047,7 @@ export function renderHero(state) {
             Join the Morning Bell Club — Get Daily 3-Color US Retirement Market Weather in Your Inbox.
           </h3>
           <p class="tom-crm-subcopy">
-            One simple 3-second signup unlocks <b>Today&rsquo;s 4-Core Retirement Posture ($VOO &middot; $SCHD &middot; $JEPI &middot; $SGOV)</b> right on this screen plus calm 8:30 AM ET rebalancing notes before the opening bell.
+            One simple 3-second signup unlocks <b>Today&rsquo;s 4-Core Retirement Posture ($VOO &middot; $SCHD &middot; $JEPI &middot; $SGOV)</b> right on this screen plus calm 8:30 AM ET market data notes before the opening bell.
           </p>
 
           <div
@@ -1140,7 +1140,7 @@ export function renderHero(state) {
             <div class="tom-member-bonus-title">🎁 CLUB MEMBER POSTURE UNLOCKED — Today&rsquo;s 4-Core Retirement Weights (Calm 2–4x/Yr Review):</div>
             <div>&bull; <b>🛡️ Bucket 1 ($SGOV US T-Bill Cash ~4.7%):</b> Hold <b>30–40%</b> in state-tax-advantaged short-term Treasury cash so 2–3 years of monthly living bills stay 100% insulated.</div>
             <div>&bull; <b>💵 Bucket 2 ($JEPI ~7.4% + $SCHD ~3.5%):</b> Hold <b>35–40%</b> across monthly income &amp; rising quality dividend payers.</div>
-            <div>&bull; <b>🌱 Bucket 3 ($VOO S&amp;P 500 Core):</b> Hold <b>20–35%</b> aligned with our <b>US Retirement Market Weather (S&amp;P 500 Breadth &amp; Drawdown Guard)</b> — rebalance calmly 2–4 times per year, never panic-sell.</div>
+            <div>&bull; <b>🌱 Bucket 3 ($VOO S&amp;P 500 Core):</b> Hold <b>20–35%</b> aligned with our <b>US Retirement Market Weather (S&amp;P 500 Breadth &amp; Drawdown Guard)</b> — review weights calmly 2–4 times per year, never panic-sell.</div>
           </div>
         </div>
       </div>
@@ -1210,7 +1210,7 @@ export function renderFreeStarterManual(state) {
         US Brokerage App &amp; Calm 2–4x/Year Household Budget & Cashflow Manual ($0 Free Edition)
       </h2>
       <p class="tom-manual-lead">
-        Managing a lifelong <b>401(k) or IRA</b> nest egg does not require stressful daily trading. Learn the 3 calm self-directed brokerage habits: placing safe Limit Orders, rebalancing <b>SGOV · SCHD · JEPI · VOO</b> weights 2–4 times a year with our 3-Color Market Weather indicator, and earning steady government money-market yield on cash cushions.
+        Managing a lifelong <b>401(k) or IRA</b> nest egg does not require stressful daily trading. Learn the 3 calm self-directed brokerage habits: placing safe Limit Orders, reviewing <b>SGOV · SCHD · JEPI · VOO</b> budget weights 2–4 times a year with our 3-Color Market Weather indicator, and earning steady government money-market yield on cash cushions.
       </p>
 
       <div class="tom-manual-steps-grid">

@@ -701,7 +701,7 @@ const enCopy = {
   auditedCardTag: "HISTORICAL ALLOCATION RESEARCH · 1998–2026",
   auditedCardTitle: "SMH/XLV Barbell Allocation (+28.4%) vs. S&P 500 (+14.2%) Historical Study",
   auditedCardDesc:
-    "Point-in-time educational historical study across 6,625 trading days. Rebalanced calmly with an 80:20 educational weight shift during deep sector pulldowns.",
+    "Point-in-time educational historical study across 6,625 trading days. Reviewed calmly with an 80:20 educational weight shift during deep sector pulldowns.",
   auditedBarbellLabel: "SMH 70% : XLV 30% Barbell Model",
   auditedSpyLabel: "S&P 500 (SPY) Benchmark",
   auditedMetricCagr: "Historical Annualized Rate",
@@ -3955,7 +3955,7 @@ const TOM_MORNING_CLUB_NOTES = [
 ];
 const TOM_MORNING_CLUB_COMPANION_MSG = {
   steady:
-    "🤝 Right beside you — staying calm in quality dividend & index compounders while rebalancing 2–4 times a year is how retirement wealth endures.",
+    "🤝 Right beside you — staying calm in quality dividend & index compounders while reviewing weights 2–4 times a year is how retirement wealth endures.",
   watch:
     "👀 Wise patience — waiting calmly on the sidelines while collecting steady dividend income protects both your sleep and your savings.",
   cash:
@@ -4530,7 +4530,7 @@ function renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRed }) {
 
           <div class="tom-retire-compare-boxes">
             <div class="tom-retire-pay-box is-guarded">
-              <span class="tom-retire-pay-tag">🛡️ Calm 2–4x/Yr Rebalance Path (SGOV · SCHD · JEPI · VOO)</span>
+              <span class="tom-retire-pay-tag">🛡️ Calm 2–4x/Yr Budget Path (SGOV · SCHD · JEPI · VOO)</span>
               <div class="tom-retire-pay-amount" id="tomRetireGuardedMo">${fmtUsdInt(plan.guardedMonthly)}<span>/mo</span></div>
               <div class="tom-retire-pay-sub" id="tomRetireGuardedSub">
                 ${fmtUsdInt(plan.guardedAnnual)}/yr calm cashflow (4.5% safe withdrawal + dividend yield) · <b>32+ Yr Horizon</b>
@@ -4609,7 +4609,7 @@ function renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRed }) {
                 <span id="tomBucket3Stat">${plan.buckets[2].pct}% · ${fmtUsdInt(plan.buckets[2].dollars)}</span>
               </div>
               <div class="tom-retire-bucket-bar"><span id="tomBucket3Bar" style="width:${plan.buckets[2].pct}%;"></span></div>
-              <div class="tom-retire-bucket-note">$VOO (Vanguard S&amp;P 500) &amp; quality US leaders — rebalanced calmly 2–4 times a year when our 3-color weather shifts.</div>
+              <div class="tom-retire-bucket-note">$VOO (Vanguard S&amp;P 500) &amp; quality US leaders — reviewed calmly 2–4 times a year when our 3-color weather shifts.</div>
             </div>
           </div>
         </div>
@@ -4618,7 +4618,7 @@ function renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRed }) {
       <!-- US 50-70s RETIREMENT 4-CORE STANDARD STRIP (ZERO LEVERAGED / ZERO CRYPTO) -->
       <div class="tom-senior-core-strip" id="tomSeniorCoreStrip" aria-label="US 50-70s 4-Core Retirement Standard">
         <div class="tom-senior-core-title">
-          🏛️ <strong>US 50–70s Retirement 4-Core Standard</strong> — No leveraged ETFs, no day-trading stress. Just calm <b>2–4x/year rebalancing</b> across 4 liquid, low-fee pillars:
+          🏛️ <strong>US 50–70s Retirement 4-Core Standard</strong> — No leveraged ETFs, no day-trading stress. Just calm <b>2–4x/year budget review</b> across 4 liquid, low-fee pillars:
         </div>
         <div class="tom-senior-core-grid">
           <div class="tom-senior-core-card">
@@ -4870,7 +4870,7 @@ function renderHero(state) {
         <button type="button" class="tom-traffic-card t-red" data-traffic-zone="MANUAL">
           <span class="tom-traffic-kicker is-red">🔴 DRAWDOWN GUARD WEATHER</span>
           <strong class="tom-traffic-weights">40% $SGOV &middot; 40% $JEPI+$SCHD &middot; 20% $VOO</strong>
-          <span class="tom-traffic-sub">Calm 2–4x/yr weight rebalance &middot; Open the $0 Safe Broker Guide &rarr;</span>
+          <span class="tom-traffic-sub">Calm 2–4x/yr budget check &middot; Open the $0 Safe Broker Guide &rarr;</span>
         </button>
       </div>
 
@@ -4970,7 +4970,7 @@ function renderHero(state) {
             Join the Morning Bell Club — Get Daily 3-Color US Retirement Market Weather in Your Inbox.
           </h3>
           <p class="tom-crm-subcopy">
-            One simple 3-second signup unlocks <b>Today&rsquo;s 4-Core Retirement Posture ($VOO &middot; $SCHD &middot; $JEPI &middot; $SGOV)</b> right on this screen plus calm 8:30 AM ET rebalancing notes before the opening bell.
+            One simple 3-second signup unlocks <b>Today&rsquo;s 4-Core Retirement Posture ($VOO &middot; $SCHD &middot; $JEPI &middot; $SGOV)</b> right on this screen plus calm 8:30 AM ET market data notes before the opening bell.
           </p>
 
           <div
@@ -5063,7 +5063,7 @@ function renderHero(state) {
             <div class="tom-member-bonus-title">🎁 CLUB MEMBER POSTURE UNLOCKED — Today&rsquo;s 4-Core Retirement Weights (Calm 2–4x/Yr Review):</div>
             <div>&bull; <b>🛡️ Bucket 1 ($SGOV US T-Bill Cash ~4.7%):</b> Hold <b>30–40%</b> in state-tax-advantaged short-term Treasury cash so 2–3 years of monthly living bills stay 100% insulated.</div>
             <div>&bull; <b>💵 Bucket 2 ($JEPI ~7.4% + $SCHD ~3.5%):</b> Hold <b>35–40%</b> across monthly income &amp; rising quality dividend payers.</div>
-            <div>&bull; <b>🌱 Bucket 3 ($VOO S&amp;P 500 Core):</b> Hold <b>20–35%</b> aligned with our <b>US Retirement Market Weather (S&amp;P 500 Breadth &amp; Drawdown Guard)</b> — rebalance calmly 2–4 times per year, never panic-sell.</div>
+            <div>&bull; <b>🌱 Bucket 3 ($VOO S&amp;P 500 Core):</b> Hold <b>20–35%</b> aligned with our <b>US Retirement Market Weather (S&amp;P 500 Breadth &amp; Drawdown Guard)</b> — review weights calmly 2–4 times per year, never panic-sell.</div>
           </div>
         </div>
       </div>
@@ -5132,7 +5132,7 @@ function renderFreeStarterManual(state) {
         US Brokerage App &amp; Calm 2–4x/Year Household Budget & Cashflow Manual ($0 Free Edition)
       </h2>
       <p class="tom-manual-lead">
-        Managing a lifelong <b>401(k) or IRA</b> nest egg does not require stressful daily trading. Learn the 3 calm self-directed brokerage habits: placing safe Limit Orders, rebalancing <b>SGOV · SCHD · JEPI · VOO</b> weights 2–4 times a year with our 3-Color Market Weather indicator, and earning steady government money-market yield on cash cushions.
+        Managing a lifelong <b>401(k) or IRA</b> nest egg does not require stressful daily trading. Learn the 3 calm self-directed brokerage habits: placing safe Limit Orders, reviewing <b>SGOV · SCHD · JEPI · VOO</b> budget weights 2–4 times a year with our 3-Color Market Weather indicator, and earning steady government money-market yield on cash cushions.
       </p>
 
       <div class="tom-manual-steps-grid">
@@ -7012,7 +7012,7 @@ function renderModals(state) {
         <div style="max-height:70vh; overflow-y:auto; padding-right:4px; font-size:0.92rem; line-height:1.65; color:#cbd5e1;">
           <div style="background:#0b1322; border:1px solid rgba(56,189,248,0.25); border-radius:8px; padding:14px 16px; margin-bottom:12px;">
             <div style="font-weight:800; color:#ffffff; margin-bottom:4px; font-size:0.98rem;">
-              Why Calm 2–4x/Year Weight Rebalancing Protects Retirement Longevity
+              Why Calm 2–4x/Year Budget Discipline Protects Retirement Longevity
             </div>
             <p style="margin:0; color:var(--muted); font-size:0.88rem;">
               Sequence-of-returns shocks occur when retirees are forced to sell depressed equity holdings to pay monthly living bills during a market downturn. Separating your nest egg into 3 clear buckets keeps 2–3 years of living expenses insulated in short-term US Treasuries while dividends and S&amp;P 500 compounding replenish cash calmly.
@@ -7035,7 +7035,7 @@ function renderModals(state) {
             <div style="background:#090d16; border:1px solid #1e293b; border-radius:8px; padding:12px 14px;">
               <div style="font-weight:800; color:#fbbf24; margin-bottom:4px;">Bucket 3: S&amp;P 500 Core Compounding ($VOO)</div>
               <p style="margin:0; font-size:0.86rem; color:var(--muted);">
-                Holds 20% to 45% in ultra-low-cost broad US equities, rebalanced calmly just 2–4 times per year when 3-Color Market Weather shifts.
+                Holds 20% to 45% in ultra-low-cost broad US equities, reviewed calmly just 2–4 times per year when 3-Color Market Weather shifts.
               </p>
             </div>
           </div>
@@ -7088,7 +7088,7 @@ function renderModals(state) {
 
         <div class="tom-manual-jump-nav" role="navigation" aria-label="Manual Chapters">
           <button type="button" class="tom-manual-jump-pill" data-manual-target="tomManualStep1">Step 1: Safe Limit Order</button>
-          <button type="button" class="tom-manual-jump-pill" data-manual-target="tomManualStep2">Step 2: Calm 2–4x/Yr Rebalancing</button>
+          <button type="button" class="tom-manual-jump-pill" data-manual-target="tomManualStep2">Step 2: Calm 2–4x/Yr Budget Check</button>
           <button type="button" class="tom-manual-jump-pill" data-manual-target="tomManualStep3">Step 3: 401(k)/IRA Cash MMF</button>
         </div>
 
@@ -7106,7 +7106,7 @@ function renderModals(state) {
               Email Me This PDF Guide Now (Instant Free Club Access)
             </h4>
             <p style="margin:0 0 10px;font-size:0.96rem;line-height:1.55;color:#e2e8f0;">
-              Enter your email below and we will send this complete 3-Step Brokerage &amp; Calm 2–4x/Year Rebalancing Guide straight to your inbox along with free Morning Bell Retirement &amp; Macro Club membership ($0).
+              Enter your email below and we will send this complete 3-Step Brokerage &amp; Calm 2–4x/Year Cashflow Budget Guide straight to your inbox along with free Morning Bell Retirement &amp; Macro Club membership ($0).
             </p>
             <form id="tomWebviewPdfEmailForm" novalidate style="display:flex;flex-wrap:wrap;gap:10px;">
               <input
@@ -7173,7 +7173,7 @@ function renderModals(state) {
               </div>
               <div class="tom-manual-broker-item">
                 <strong>🔴 Crash Defense Weather (40% SGOV · 40% JEPI+SCHD · 20% VOO):</strong>
-                <span>During elevated market volatility, gently rebalance up to 40% into <b>SGOV</b> / government money-market reserves so 2–3 years of retirement living expenses are insulated from sequence-of-returns drawdowns.</span>
+                <span>During elevated market volatility, gently allocate up to 40% into <b>SGOV</b> / government money-market reserves so 2–3 years of retirement living expenses are insulated from sequence-of-returns drawdowns.</span>
               </div>
             </div>
           </article>
@@ -7195,7 +7195,7 @@ function renderModals(state) {
               </div>
               <div class="tom-manual-broker-item">
                 <strong>🏦 Vanguard — VMFXX (Vanguard Federal Money Market Fund):</strong>
-                <span>Default Vanguard settlement fund — sidelined cash automatically earns federal money-market yield while you wait calmly between quarterly rebalancing checks.</span>
+                <span>Default Vanguard settlement fund — sidelined cash automatically earns federal money-market yield while you wait calmly between quarterly budget checks.</span>
               </div>
             </div>
           </article>
