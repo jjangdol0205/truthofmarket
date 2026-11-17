@@ -52,7 +52,7 @@ export function renderModals(state) {
         </div>
         <h3 style="font-size:1.18rem; font-weight:800; margin-top:4px; color:var(--text);">Unlock Full VIP Retiree Worksheets &amp; Tax-Bucket Reference</h3>
         <p style="color:var(--text-secondary); font-size:0.95rem; margin-top:6px; line-height:1.55;">
-          Includes Custom Nest-Egg Dollar ($) Rebalancing Worksheet, 12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Reference, and Large-Print 1-Page Weather Action Sheet. Backed by our 14-Day Refund Policy.
+          Includes Custom Nest-Egg Dollar ($) Budget Worksheet, 12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Reference, and Large-Print 1-Page Weather Action Sheet. Backed by our 14-Day Refund Policy.
         </p>
         <div style="display:grid; grid-template-columns:1fr; gap:10px; margin:14px 0 10px;">
           <a class="btn btn-primary polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthly}" style="justify-content:center; min-height:62px; padding:12px 16px; font-size:1.02rem; font-weight:800; border-radius:12px;">
@@ -357,7 +357,7 @@ export function renderModals(state) {
               SELF-DIRECTED EDUCATIONAL CALCULATOR METHODOLOGY
             </div>
             <h3 style="font-size:1.15rem; font-weight:800; color:#ffffff; margin:3px 0 0;">
-              ${t.pwRsiModalTitle || "Calm 2–4x/Year 3-Bucket Portfolio Rebalancing Methodology"}
+              ${t.pwRsiModalTitle || "Calm 2–4x/Year 3-Bucket Household Budget & Cashflow Methodology"}
             </h3>
           </div>
           <button class="btn btn-sm" id="btnClosePwRsiModal" style="padding:4px 8px;">✕ Close</button>
@@ -427,7 +427,7 @@ export function renderModals(state) {
           <div style="min-width:0;">
             <div class="tom-manual-modal-kicker">📘 $0 FREE PUBLIC PRODUCT · FIDELITY · CHARLES SCHWAB · VANGUARD</div>
             <h3 id="tomStarterManualModalTitle" class="tom-manual-modal-title">
-              US Brokerage App &amp; Calm 2–4x/Year Rebalancing Starter Manual
+              US Brokerage App &amp; Calm 2–4x/Year Brokerage Limit-Order & Budget Starter Manual
             </h3>
           </div>
           <div class="tom-manual-modal-actions">

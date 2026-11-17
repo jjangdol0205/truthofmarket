@@ -376,7 +376,7 @@ export function bindTomPasswordlessClubEvents(state, showToastFn) {
             <span>${nickname ? `Welcome, ${escapeTomCrmHtml(nickname)} — ` : ""}Focus: <b>${escapeTomCrmHtml(segLabel)}</b> · Daily US Rates, Liquidity, S&amp;P/ETF &amp; 3-Color Market Weather Educational Briefings will arrive in your inbox before the opening bell.</span>
           </div>
           <a href="#tomFreeStarterManual" class="tom-crm-manual-jump-btn" id="tom-club-jump-manual-btn">
-            📘 Open Your Free $0 Calm Rebalancing Manual ->
+            📘 Open Your Free $0 Calm Cashflow Budget Manual ->
           </a>
         `;
       }
@@ -722,7 +722,7 @@ export function renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRe
       <!-- 3-STEP RETIREMENT VALUE LADDER BAR -->
       <div class="tom-retire-ladder-bar">
         <button type="button" class="tom-retire-cta-btn step-manual" id="btnTomRetireStepManual">
-          📘 Step 1 ($0 Free): Safe Brokerage &amp; Calm Rebalance Manual
+          📘 Step 1 ($0 Free): Safe Brokerage &amp; Cashflow Budget Manual
         </button>
         <button type="button" class="tom-retire-cta-btn step-club" id="btnTomRetireStepClub">
           ☕ Step 2 (Free 3-Sec Club): Daily Retirement Cashflow Brief
@@ -1151,7 +1151,7 @@ export function renderHero(state) {
           <span>🧭 30-Sec Income Simulator</span>
         </button>
         <button type="button" class="hero-cta-card emerald" id="btnHeroActionManual">
-          <span>📘 $0 Safe Brokerage &amp; Rebalance Guide</span>
+          <span>📘 $0 Safe Brokerage &amp; Budget Guide</span>
         </button>
         <a href="#pricing" class="hero-cta-card vip-jump" id="btnHeroActionVip">
           <span>💎 VIP Dollar Worksheet &amp; Tax-Bucket Guide</span>
@@ -1200,14 +1200,14 @@ export function renderFreeStarterManual(state) {
     window.isTomInAppWebView();
 
   return `
-    <section class="tom-starter-manual-section" id="tomFreeStarterManual" aria-label="$0 Free Public Product: US Brokerage App & Calm 2-4x/Year Rebalancing Starter Manual">
+    <section class="tom-starter-manual-section" id="tomFreeStarterManual" aria-label="$0 Free Public Product: US Brokerage App & Calm 2-4x/Year Brokerage Limit-Order & Budget Starter Manual">
       <div class="tom-manual-top-row">
         <span class="tom-manual-free-pill">📘 $0 FREE PUBLIC PRODUCT · SELF-DIRECTED EDUCATIONAL GUIDE</span>
         <span class="tom-manual-broker-pill">🏦 Fidelity · Charles Schwab · Vanguard Ready</span>
       </div>
 
       <h2 class="tom-manual-heading">
-        US Brokerage App &amp; Calm 2–4x/Year Portfolio Rebalancing Manual ($0 Free Edition)
+        US Brokerage App &amp; Calm 2–4x/Year Household Budget & Cashflow Manual ($0 Free Edition)
       </h2>
       <p class="tom-manual-lead">
         Managing a lifelong <b>401(k) or IRA</b> nest egg does not require stressful daily trading. Learn the 3 calm self-directed brokerage habits: placing safe Limit Orders, rebalancing <b>SGOV · SCHD · JEPI · VOO</b> weights 2–4 times a year with our 3-Color Market Weather indicator, and earning steady government money-market yield on cash cushions.
@@ -1224,8 +1224,8 @@ export function renderFreeStarterManual(state) {
         </button>
 
         <button type="button" class="tom-manual-step-card btn-open-tom-manual-step" data-manual-step="tomManualStep2">
-          <span class="tom-manual-step-badge step-b2">STEP 2 · CALM WEIGHT REBALANCING</span>
-          <strong class="tom-manual-step-title">2–4x/Year Portfolio Weight Rebalancing</strong>
+          <span class="tom-manual-step-badge step-b2">STEP 2 · CALM BUDGET WORKSHEET</span>
+          <strong class="tom-manual-step-title">2–4x/Year Household Cashflow & Budget Worksheet</strong>
           <span class="tom-manual-step-desc">
             How to review and gently adjust your <b>SGOV · SCHD · JEPI · VOO</b> bucket percentages just <b>2–4 times per year</b> aligned with our 3-Color Market Weather indicator.
           </span>

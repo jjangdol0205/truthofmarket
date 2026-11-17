@@ -135,7 +135,7 @@ def refresh_health_and_rss() -> tuple[str, str]:
     rss_xml = f"""<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>TruthOfMarket | US 401k/IRA Retirement Cashflow &amp; Safe Rebalancing Calculator</title>
+    <title>TruthOfMarket | US 401k/IRA Retirement Cashflow &amp; Household Budget Calculator</title>
     <link>https://truthofmarket.com/</link>
     <atom:link href="https://truthofmarket.com/rss.xml" rel="self" type="application/rss+xml" />
     <atom:link href="https://pubsubhubbub.appspot.com/" rel="hub" />
@@ -143,7 +143,7 @@ def refresh_health_and_rss() -> tuple[str, str]:
     <language>en-US</language>
     <lastBuildDate>{rfc_now}</lastBuildDate>{insight_items_xml}
     <item>
-      <title><![CDATA[TruthOfMarket — 30-Second US 401(k)/IRA Retirement Cashflow & Safe Rebalancing Calculator (As of {as_of_date})]]></title>
+      <title><![CDATA[TruthOfMarket — 30-Second US 401(k)/IRA Retirement Cashflow & Household Budget Calculator (As of {as_of_date})]]></title>
       <link>https://truthofmarket.com/</link>
       <guid isPermaLink="true">https://truthofmarket.com/</guid>
       <pubDate>{rfc_now}</pubDate>
@@ -220,18 +220,18 @@ def main() -> None:
   <meta name="google-site-verification" content="G99bl17UU6iKgNm5ndGcSWp0dHFpJ0MjJqBBp0Exfx0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income | TruthOfMarket</title>
-  <meta name="description" content="Self-directed US 401k/IRA Retirement Cashflow &amp; Safe Rebalancing Calculator Software. Simulate monthly income with $VOO (S&amp;P 500 Core), $SCHD (Dividend Growth ~3.5%), $JEPI (Monthly Income ~7.4%) &amp; $SGOV (US T-Bill Cash ~4.7%) via calm 2-4x/year rebalancing." />
+  <meta name="description" content="Self-directed US 401k/IRA Retirement Cashflow &amp; Household Budget Calculator Software. Simulate monthly income with $VOO (S&amp;P 500 Core), $SCHD (Dividend Growth ~3.5%), $JEPI (Monthly Income ~7.4%) &amp; $SGOV (US T-Bill Cash ~4.7%) via calm 2-4x/year rebalancing." />
   <link rel="canonical" href="https://truthofmarket.com/" />
   <link rel="alternate" type="application/rss+xml" title="TruthOfMarket US 401k/IRA Retirement Cashflow RSS Feed" href="https://truthofmarket.com/rss.xml" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="TruthOfMarket — US 401k/IRA Retirement Cashflow &amp; Safe Rebalancing Calculator" />
+  <meta property="og:site_name" content="TruthOfMarket — US 401k/IRA Retirement Cashflow &amp; Household Budget Calculator" />
   <meta property="og:title" content="Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income | TruthOfMarket" />
-  <meta property="og:description" content="Self-directed educational calculator software to simulate monthly retirement cashflow and calm 2-4x/year $VOO, $SCHD, $JEPI &amp; $SGOV portfolio weight rebalancing." />
+  <meta property="og:description" content="Self-directed educational calculator software to simulate monthly retirement cashflow and calm 2-4x/year $VOO, $SCHD, $JEPI &amp; $SGOV household budget & cashflow planning." />
   <meta property="og:url" content="https://truthofmarket.com/" />
   <meta property="og:image" content="https://truthofmarket.com/og-preview.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income | TruthOfMarket" />
-  <meta name="twitter:description" content="30-Second US 401k/IRA Retirement Cashflow &amp; Safe Rebalancing Calculator ($VOO · $SCHD · $JEPI · $SGOV)." />
+  <meta name="twitter:description" content="30-Second US 401k/IRA Retirement Cashflow &amp; Household Budget Calculator ($VOO · $SCHD · $JEPI · $SGOV)." />
   <meta name="twitter:image" content="https://truthofmarket.com/og-preview.png" />
   <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -262,12 +262,12 @@ def main() -> None:
         "publisher": {{
           "@id": "https://truthofmarket.com/#organization"
         }},
-        "description": "Self-directed educational calculator software for US 401k/IRA Retirement Cashflow & Safe Rebalancing across VOO, SCHD, JEPI, and SGOV."
+        "description": "Self-directed educational calculator software for US 401k/IRA Retirement Cashflow & Household Budget across VOO, SCHD, JEPI, and SGOV."
       }},
       {{
         "@type": "SoftwareApplication",
         "@id": "https://truthofmarket.com/#software",
-        "name": "TruthOfMarket US 401k/IRA Retirement Cashflow & Safe Rebalancing Calculator",
+        "name": "TruthOfMarket US 401k/IRA Retirement Cashflow & Household Budget Calculator",
         "applicationCategory": "FinanceApplication",
         "operatingSystem": "Web",
         "url": "https://truthofmarket.com/",
@@ -278,7 +278,7 @@ def main() -> None:
         "offers": [
           {{
             "@type": "Offer",
-            "name": "Monthly VIP Retirement Income & Rebalancing Suite ($29/mo)",
+            "name": "Monthly VIP Retirement Income & Budget Calculator Suite ($29/mo)",
             "price": "29.00",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
@@ -286,7 +286,7 @@ def main() -> None:
           }},
           {{
             "@type": "Offer",
-            "name": "Annual VIP Retirement Income & Rebalancing Pass ($199/yr)",
+            "name": "Annual VIP Retirement Income & Budget Calculator Pass ($199/yr)",
             "price": "199.00",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
@@ -346,12 +346,12 @@ def main() -> None:
       <h1 style="font-size:1.85rem;font-weight:900;margin:0 0 10px;color:#0f172a;line-height:1.3;">Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income.</h1>
       <p style="margin:0;color:#1e293b;font-size:1.125rem;line-height:1.7;">30-Second Comfortable Retirement &amp; Monthly Cashflow Simulator — Simulate your monthly retirement paycheck ($150k / $400k / $800k / $1.5M presets), cushion your nest egg from sequence-of-returns drawdowns, and rebalance calmly 2–4 times per year across <b>$VOO</b> (S&amp;P 500 Core), <b>$SCHD</b> (Dividend Growth ~3.5%), <b>$JEPI</b> (Monthly Income ~7.4%), and <b>$SGOV</b> (US T-Bill Cash ~4.7%) aligned with our US Retirement Market Weather indicator.</p>
       <p id="tomMorningBellClub" style="margin:14px 0 0;padding-top:12px;border-top:1px solid #cbd5e1;color:#92400e;font-size:1.06rem;font-weight:800;line-height:1.65;"><span id="tom-passwordless-club-signup">☕ Morning Bell Retirement &amp; Macro Club — Protecting Your Nest Egg &amp; Monthly Income Together · Free 3-Second Passwordless Membership</span></p>
-      <p id="tomFreeStarterManual" style="margin:8px 0 0;color:#0369a1;font-size:1.06rem;font-weight:800;line-height:1.65;">📘 $0 Free Public Product: US Brokerage App &amp; Calm 2–4x/Year Portfolio Weight Rebalancing Manual (Fidelity · Charles Schwab · Vanguard — SGOV/SPAXX Cash Cushion &amp; Limit Order Guide)</p>
+      <p id="tomFreeStarterManual" style="margin:8px 0 0;color:#0369a1;font-size:1.06rem;font-weight:800;line-height:1.65;">📘 $0 Free Public Product: US Brokerage App &amp; Calm 2–4x/Year Household Cashflow & Budget Worksheet Manual (Fidelity · Charles Schwab · Vanguard — SGOV/SPAXX Cash Cushion &amp; Limit Order Guide)</p>
       <div style="margin:14px 0 0;padding:14px 16px;border-radius:12px;background:#ecfdf5;border:1.5px solid #059669;color:#064e3b;font-size:1rem;line-height:1.6;">
         <div style="font-weight:900;margin-bottom:6px;">📦 VIP Retiree Software Suite ($29/mo Monthly VIP &amp; $199/yr Annual VIP):</div>
-        <div>1. <b>Custom Nest-Egg Dollar ($) Rebalancing Worksheet:</b> Enter your exact portfolio size (e.g., $500,000) to calculate exact dollar amounts across $SGOV, $SCHD, $JEPI, and $VOO whenever the 3-Color Weather changes.</div>
+        <div>1. <b>Custom Nest-Egg Dollar ($) Budget Worksheet:</b> Enter your exact portfolio size (e.g., $500,000) to calculate exact dollar amounts across $SGOV, $SCHD, $JEPI, and $VOO whenever the 3-Color Weather changes.</div>
         <div>2. <b>12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Placement Reference:</b> Educational tax-location guide across Traditional IRA, Roth IRA, and Taxable accounts ($JEPI ordinary income vs. $SCHD qualified dividends vs. $SGOV state-tax-exempt T-Bills) to help protect after-tax monthly income.</div>
-        <div>3. <b>Large-Print 1-Page Weather Change Action Sheet (2–4x/Year):</b> Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator.</div>
+        <div>3. <b>Large-Print 1-Page Weather Change Action Sheet (2–4x/Year):</b> Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Retirement Budget Calculator.</div>
       </div>
       <div style="margin-top:14px;display:flex;gap:12px;flex-wrap:wrap;">
         <a href="#tom-vip-monthly" class="polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="display:inline-flex;align-items:center;min-height:52px;padding:10px 20px;border-radius:10px;background:#1d4ed8;color:#ffffff;font-weight:800;font-size:1.02rem;text-decoration:none;">⚡ Start Monthly VIP — $29/mo</a>

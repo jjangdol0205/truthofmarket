@@ -2,37 +2,37 @@ import { formatCheckoutUrl } from "../services/api.js";
 
 const PRICING_COPY = {
   en: {
-    heading: "VIP Retirement Cashflow & Rebalancing Software — Built for US Retirees",
+    heading: "VIP Retirement Cashflow & Budget Calculator Software — Built for US Retirees",
     subheading:
       "Self-directed educational calculators, tax-bucket reference guides, and large-print action sheets to protect your 401(k), IRA & monthly income. Backed by our 14-Day No-Questions-Asked Refund Policy.",
     t1Badge: "MONTHLY VIP",
-    t1Title: "Monthly VIP Retirement Income & Rebalancing Suite",
+    t1Title: "Monthly VIP Retirement Income & Budget Calculator Suite",
     t1Period: "/ month",
     t1Bundle:
-      "Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator",
+      "Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Retirement Budget Calculator",
     t1Items: [
-      "<b>Custom Nest-Egg Dollar ($) Rebalancing Worksheet:</b> Enter your exact portfolio size (e.g., $500,000) to calculate exact dollar amounts across $SGOV, $SCHD, $JEPI, and $VOO whenever the 3-Color Weather changes.",
+      "<b>Custom Nest-Egg Dollar ($) Budget Worksheet:</b> Enter your exact portfolio size (e.g., $500,000) to calculate exact dollar amounts across $SGOV, $SCHD, $JEPI, and $VOO whenever the 3-Color Weather changes.",
       "<b>12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Placement Reference:</b> Educational tax-location guide across Traditional IRA, Roth IRA, and Taxable accounts ($JEPI ordinary income vs. $SCHD qualified dividends vs. $SGOV state-tax-exempt T-Bills) to help protect after-tax monthly income.",
-      "<b>Large-Print 1-Page Weather Change Action Sheet (2–4x/Year):</b> Printable step-by-step Fidelity / Schwab / Vanguard checklist — Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator.",
+      "<b>Large-Print 1-Page Weather Change Action Sheet (2–4x/Year):</b> Printable step-by-step Fidelity / Schwab / Vanguard checklist — Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Retirement Budget Calculator.",
     ],
     t1Btn: "Start Monthly VIP — $29/mo",
     t1PayNote:
       "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · 1-Click Cancel · 14-Day Refund Policy",
     t2Badge: "ANNUAL VIP",
-    t2Title: "Annual VIP Retirement Income & Rebalancing Pass",
+    t2Title: "Annual VIP Retirement Income & Budget Calculator Pass",
     t2Period: "/ year",
     t2Bundle:
-      "Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator",
+      "Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Retirement Budget Calculator",
     t2Items: [
-      "<b>Custom Nest-Egg Dollar ($) Rebalancing Worksheet (Full 12-Month Pass):</b> Enter your exact portfolio size (e.g., $500,000) to calculate exact dollar amounts across $SGOV, $SCHD, $JEPI, and $VOO whenever the 3-Color Weather changes.",
+      "<b>Custom Nest-Egg Dollar ($) Budget Worksheet (Full 12-Month Pass):</b> Enter your exact portfolio size (e.g., $500,000) to calculate exact dollar amounts across $SGOV, $SCHD, $JEPI, and $VOO whenever the 3-Color Weather changes.",
       "<b>12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Placement Reference:</b> Educational tax-location guide across Traditional IRA, Roth IRA, and Taxable accounts ($JEPI ordinary income vs. $SCHD qualified dividends vs. $SGOV state-tax-exempt T-Bills) to help protect after-tax monthly income.",
-      "<b>Large-Print 1-Page Weather Change Action Sheet (2–4x/Year):</b> Save 43% ($149/yr saved vs. monthly) — Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator.",
+      "<b>Large-Print 1-Page Weather Change Action Sheet (2–4x/Year):</b> Save 43% ($149/yr saved vs. monthly) — Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Retirement Budget Calculator.",
     ],
     t2Btn: "Start Annual VIP — $199/yr",
     t2PayNote:
       "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · Billed Annually · 14-Day Refund Policy",
     autoUnlockNote:
-      "✨ Instant Software Activation: Your Custom Dollar ($) Rebalancing Worksheet, Tax-Bucket Reference, and Printable PDF Action Sheets unlock on screen automatically after checkout.",
+      "✨ Instant Software Activation: Your Custom Dollar ($) Budget Worksheet, Tax-Bucket Reference, and Printable PDF Action Sheets unlock on screen automatically after checkout.",
     restoreSummary: "🔑 Switching computers or already subscribed? Restore your VIP License Key here",
     restoreBtn: "Open License Key Restore Box",
   },
@@ -81,7 +81,7 @@ export function renderPricing(state) {
       <div class="vip-efficacy-preview-grid" aria-label="3 Core VIP Retiree Software Tools">
         <div class="vip-efficacy-card">
           <span class="vip-eff-step">TOOL 1 &bull; EXACT DOLLAR ($) MATH</span>
-          <strong>Custom Nest-Egg Dollar ($) Rebalancing Worksheet</strong>
+          <strong>Custom Nest-Egg Dollar ($) Budget Worksheet</strong>
           <p>Type any exact portfolio balance (such as <b>$500,000</b> or <b>$725,000</b>) to see exact target dollar amounts across <b>$SGOV</b>, <b>$SCHD</b>, <b>$JEPI</b>, and <b>$VOO</b> whenever our 3-Color Market Weather shifts.</p>
         </div>
         <div class="vip-efficacy-card">
@@ -92,7 +92,7 @@ export function renderPricing(state) {
         <div class="vip-efficacy-card">
           <span class="vip-eff-step">TOOL 3 &bull; CALM PRINTABLE SHEET</span>
           <strong>Large-Print 1-Page Weather Change Action Sheet (2–4x/Yr)</strong>
-          <p>Clean, senior-readable 1-page printable summary sheet plus our <b>Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator</b>.</p>
+          <p>Clean, senior-readable 1-page printable summary sheet plus our <b>Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Retirement Budget Calculator</b>.</p>
         </div>
       </div>
 

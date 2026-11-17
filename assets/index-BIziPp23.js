@@ -261,9 +261,9 @@
       "  </p>" +
       '  <div class="tom-wl-benefits-box">' +
       '    <div style="font-weight:800;color:#047857;margin-bottom:6px;">📦 3 Retiree VIP Software Tools Included ($29/mo or $199/yr):</div>' +
-      '    <div style="margin-bottom:4px;">&bull; <b>Custom Nest-Egg Dollar ($) Rebalancing Worksheet:</b> Exact dollar amounts across <b>$SGOV, $SCHD, $JEPI &amp; $VOO</b> for your exact portfolio size (e.g., $500,000).</div>' +
+      '    <div style="margin-bottom:4px;">&bull; <b>Custom Nest-Egg Dollar ($) Budget Worksheet:</b> Exact dollar amounts across <b>$SGOV, $SCHD, $JEPI &amp; $VOO</b> for your exact portfolio size (e.g., $500,000).</div>' +
       '    <div style="margin-bottom:4px;">&bull; <b>12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Placement Reference:</b> Educational tax-location guide across <b>Traditional IRA, Roth IRA &amp; Taxable</b> accounts.</div>' +
-      '    <div>&bull; <b>Large-Print 1-Page Weather Change Action Sheet (2–4x/Year):</b> Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator.</div>' +
+      '    <div>&bull; <b>Large-Print 1-Page Weather Change Action Sheet (2–4x/Year):</b> Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Retirement Budget Calculator.</div>' +
       "  </div>" +
       '  <div class="tom-wl-plan-grid" role="radiogroup" aria-label="Select VIP Plan to Reserve">' +
       '    <button type="button" class="tom-wl-plan-btn is-selected" data-wl-plan="Monthly VIP ($29/mo)">' +
@@ -682,12 +682,12 @@ const enCopy = {
   btnUnlockPro: "VIP Benefits",
 
   // Hero & Calm Educational Metrics (B2C 3-Second Hook)
-  heroTag: "US RETIREMENT CASHFLOW & REBALANCING SOFTWARE",
+  heroTag: "US RETIREMENT CASHFLOW & BUDGET CALCULATOR SOFTWARE",
   heroTitle: "Turn Your 401(k) & Savings Into Calm, Reliable Monthly Retirement Income.",
   heroDesc:
     "Simulate your monthly retirement paycheck in 30 seconds, cushion your nest egg from -35% sequence-of-returns crashes, and rebalance $VOO, $SCHD, $JEPI & $SGOV calmly 2–4 times a year with our US Retirement Market Weather indicator.",
-  pwRsiExplainerBtn: "How 2–4x/Yr Rebalancing Works",
-  pwRsiModalTitle: "Calm 2–4x/Year 3-Bucket Portfolio Rebalancing Methodology",
+  pwRsiExplainerBtn: "How 2–4x/Yr Budget Review Works",
+  pwRsiModalTitle: "Calm 2–4x/Year 3-Bucket Household Budget & Cashflow Methodology",
   kpi1_label: "Core S&P 500 Pillar",
   kpi1_sub: "$VOO broad US compounding core",
   kpi2_label: "Dividend Growth & Income",
@@ -712,9 +712,9 @@ const enCopy = {
 
   // Soft Paywall Call to Action (Used in /pro-swing.html Quantitative Archive)
   softPaywallUnlockCta: "Start Monthly VIP — $29/mo",
-  softPaywallTitle: "🔒 Full Quantitative Factor Dataset & Retiree Rebalancing Worksheets",
+  softPaywallTitle: "🔒 Full Quantitative Factor Dataset & Retiree Cashflow & Budget Worksheets",
   softPaywallDesc:
-    "$CELH is displayed as an open educational factor example. Upgrade to Monthly VIP ($29/mo) or Annual VIP ($199/yr) to unlock the Custom Nest-Egg Dollar ($) Rebalancing Worksheet, 12-Month Dividend Paycheck Calendar & Tax-Bucket Reference, and Large-Print Weather Action Sheet.",
+    "$CELH is displayed as an open educational factor example. Upgrade to Monthly VIP ($29/mo) or Annual VIP ($199/yr) to unlock the Custom Nest-Egg Dollar ($) Budget Worksheet, 12-Month Dividend Paycheck Calendar & Tax-Bucket Reference, and Large-Print Weather Action Sheet.",
 
   // Empirical Factor Table (/pro-swing.html)
   proofHeading: "Historical Factor Study · Moving-Average Trend Filter vs. Unfiltered Lows",
@@ -767,9 +767,9 @@ const enCopy = {
 
   // Cross-Platform Banner (Home Retirement Focus)
   crossTitle: "US RETIREMENT MARKET WEATHER · S&P 500 BREADTH & DRAWDOWN GUARD",
-  crossHeading: "Want to Review Your Exact Dollar Rebalancing Across $SGOV, $SCHD, $JEPI & $VOO?",
+  crossHeading: "Want to Review Your Exact Dollar Budget Allocation Across $SGOV, $SCHD, $JEPI & $VOO?",
   crossDesc:
-    "Check today's 3-Color US Retirement Market Weather above or explore our $0 Safe Brokerage Limit-Order & Rebalancing Manual for Fidelity, Charles Schwab, and Vanguard.",
+    "Check today's 3-Color US Retirement Market Weather above or explore our $0 Safe Brokerage Limit-Order & Cashflow Budget Manual for Fidelity, Charles Schwab, and Vanguard.",
   crossBtn: "Review 3-Color Market Weather",
 
   // SemiFearGreed Standalone Page Copy (/semi-fear-greed.html)
@@ -4308,7 +4308,7 @@ function bindTomPasswordlessClubEvents(state, showToastFn) {
             <span>${nickname ? `Welcome, ${escapeTomCrmHtml(nickname)} — ` : ""}Focus: <b>${escapeTomCrmHtml(segLabel)}</b> · Daily US Rates, Liquidity, S&amp;P/ETF &amp; 3-Color Market Weather Educational Briefings will arrive in your inbox before the opening bell.</span>
           </div>
           <a href="#tomFreeStarterManual" class="tom-crm-manual-jump-btn" id="tom-club-jump-manual-btn">
-            📘 Open Your Free $0 Calm Rebalancing Manual ->
+            📘 Open Your Free $0 Calm Cashflow Budget Manual ->
           </a>
         `;
       }
@@ -4647,7 +4647,7 @@ function renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRed }) {
       <!-- 3-STEP RETIREMENT VALUE LADDER BAR -->
       <div class="tom-retire-ladder-bar">
         <button type="button" class="tom-retire-cta-btn step-manual" id="btnTomRetireStepManual">
-          📘 Step 1 ($0 Free): Safe Brokerage &amp; Calm Rebalance Manual
+          📘 Step 1 ($0 Free): Safe Brokerage &amp; Cashflow Budget Manual
         </button>
         <button type="button" class="tom-retire-cta-btn step-club" id="btnTomRetireStepClub">
           ☕ Step 2 (Free 3-Sec Club): Daily Retirement Cashflow Brief
@@ -5074,7 +5074,7 @@ function renderHero(state) {
           <span>🧭 30-Sec Income Simulator</span>
         </button>
         <button type="button" class="hero-cta-card emerald" id="btnHeroActionManual">
-          <span>📘 $0 Safe Brokerage &amp; Rebalance Guide</span>
+          <span>📘 $0 Safe Brokerage &amp; Budget Guide</span>
         </button>
         <a href="#pricing" class="hero-cta-card vip-jump" id="btnHeroActionVip">
           <span>💎 VIP Dollar Worksheet &amp; Tax-Bucket Guide</span>
@@ -5122,14 +5122,14 @@ function renderFreeStarterManual(state) {
     window.isTomInAppWebView();
 
   return `
-    <section class="tom-starter-manual-section" id="tomFreeStarterManual" aria-label="$0 Free Public Product: US Brokerage App & Calm 2-4x/Year Rebalancing Starter Manual">
+    <section class="tom-starter-manual-section" id="tomFreeStarterManual" aria-label="$0 Free Public Product: US Brokerage App & Calm 2-4x/Year Brokerage Limit-Order & Budget Starter Manual">
       <div class="tom-manual-top-row">
         <span class="tom-manual-free-pill">📘 $0 FREE PUBLIC PRODUCT · SELF-DIRECTED EDUCATIONAL GUIDE</span>
         <span class="tom-manual-broker-pill">🏦 Fidelity · Charles Schwab · Vanguard Ready</span>
       </div>
 
       <h2 class="tom-manual-heading">
-        US Brokerage App &amp; Calm 2–4x/Year Portfolio Rebalancing Manual ($0 Free Edition)
+        US Brokerage App &amp; Calm 2–4x/Year Household Budget & Cashflow Manual ($0 Free Edition)
       </h2>
       <p class="tom-manual-lead">
         Managing a lifelong <b>401(k) or IRA</b> nest egg does not require stressful daily trading. Learn the 3 calm self-directed brokerage habits: placing safe Limit Orders, rebalancing <b>SGOV · SCHD · JEPI · VOO</b> weights 2–4 times a year with our 3-Color Market Weather indicator, and earning steady government money-market yield on cash cushions.
@@ -5146,8 +5146,8 @@ function renderFreeStarterManual(state) {
         </button>
 
         <button type="button" class="tom-manual-step-card btn-open-tom-manual-step" data-manual-step="tomManualStep2">
-          <span class="tom-manual-step-badge step-b2">STEP 2 · CALM WEIGHT REBALANCING</span>
-          <strong class="tom-manual-step-title">2–4x/Year Portfolio Weight Rebalancing</strong>
+          <span class="tom-manual-step-badge step-b2">STEP 2 · CALM BUDGET WORKSHEET</span>
+          <strong class="tom-manual-step-title">2–4x/Year Household Cashflow & Budget Worksheet</strong>
           <span class="tom-manual-step-desc">
             How to review and gently adjust your <b>SGOV · SCHD · JEPI · VOO</b> bucket percentages just <b>2–4 times per year</b> aligned with our 3-Color Market Weather indicator.
           </span>
@@ -6439,37 +6439,37 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
 
 const PRICING_COPY = {
   en: {
-    heading: "VIP Retirement Cashflow & Rebalancing Software — Built for US Retirees",
+    heading: "VIP Retirement Cashflow & Budget Calculator Software — Built for US Retirees",
     subheading:
       "Self-directed educational calculators, tax-bucket reference guides, and large-print action sheets to protect your 401(k), IRA & monthly income. Backed by our 14-Day No-Questions-Asked Refund Policy.",
     t1Badge: "MONTHLY VIP",
-    t1Title: "Monthly VIP Retirement Income & Rebalancing Suite",
+    t1Title: "Monthly VIP Retirement Income & Budget Calculator Suite",
     t1Period: "/ month",
     t1Bundle:
-      "Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator",
+      "Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Retirement Budget Calculator",
     t1Items: [
-      "<b>Custom Nest-Egg Dollar ($) Rebalancing Worksheet:</b> Enter your exact portfolio size (e.g., $500,000) to calculate exact dollar amounts across $SGOV, $SCHD, $JEPI, and $VOO whenever the 3-Color Weather changes.",
+      "<b>Custom Nest-Egg Dollar ($) Budget Worksheet:</b> Enter your exact portfolio size (e.g., $500,000) to calculate exact dollar amounts across $SGOV, $SCHD, $JEPI, and $VOO whenever the 3-Color Weather changes.",
       "<b>12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Placement Reference:</b> Educational tax-location guide across Traditional IRA, Roth IRA, and Taxable accounts ($JEPI ordinary income vs. $SCHD qualified dividends vs. $SGOV state-tax-exempt T-Bills) to help protect after-tax monthly income.",
-      "<b>Large-Print 1-Page Weather Change Action Sheet (2–4x/Year):</b> Printable step-by-step Fidelity / Schwab / Vanguard checklist — Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator.",
+      "<b>Large-Print 1-Page Weather Change Action Sheet (2–4x/Year):</b> Printable step-by-step Fidelity / Schwab / Vanguard checklist — Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Retirement Budget Calculator.",
     ],
     t1Btn: "Start Monthly VIP — $29/mo",
     t1PayNote:
       "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · 1-Click Cancel · 14-Day Refund Policy",
     t2Badge: "ANNUAL VIP",
-    t2Title: "Annual VIP Retirement Income & Rebalancing Pass",
+    t2Title: "Annual VIP Retirement Income & Budget Calculator Pass",
     t2Period: "/ year",
     t2Bundle:
-      "Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator",
+      "Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Retirement Budget Calculator",
     t2Items: [
-      "<b>Custom Nest-Egg Dollar ($) Rebalancing Worksheet (Full 12-Month Pass):</b> Enter your exact portfolio size (e.g., $500,000) to calculate exact dollar amounts across $SGOV, $SCHD, $JEPI, and $VOO whenever the 3-Color Weather changes.",
+      "<b>Custom Nest-Egg Dollar ($) Budget Worksheet (Full 12-Month Pass):</b> Enter your exact portfolio size (e.g., $500,000) to calculate exact dollar amounts across $SGOV, $SCHD, $JEPI, and $VOO whenever the 3-Color Weather changes.",
       "<b>12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Placement Reference:</b> Educational tax-location guide across Traditional IRA, Roth IRA, and Taxable accounts ($JEPI ordinary income vs. $SCHD qualified dividends vs. $SGOV state-tax-exempt T-Bills) to help protect after-tax monthly income.",
-      "<b>Large-Print 1-Page Weather Change Action Sheet (2–4x/Year):</b> Save 43% ($149/yr saved vs. monthly) — Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator.",
+      "<b>Large-Print 1-Page Weather Change Action Sheet (2–4x/Year):</b> Save 43% ($149/yr saved vs. monthly) — Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Retirement Budget Calculator.",
     ],
     t2Btn: "Start Annual VIP — $199/yr",
     t2PayNote:
       "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · Billed Annually · 14-Day Refund Policy",
     autoUnlockNote:
-      "✨ Instant Software Activation: Your Custom Dollar ($) Rebalancing Worksheet, Tax-Bucket Reference, and Printable PDF Action Sheets unlock on screen automatically after checkout.",
+      "✨ Instant Software Activation: Your Custom Dollar ($) Budget Worksheet, Tax-Bucket Reference, and Printable PDF Action Sheets unlock on screen automatically after checkout.",
     restoreSummary: "🔑 Switching computers or already subscribed? Restore your VIP License Key here",
     restoreBtn: "Open License Key Restore Box",
   },
@@ -6517,7 +6517,7 @@ function renderPricing(state) {
       <div class="vip-efficacy-preview-grid" aria-label="3 Core VIP Retiree Software Tools">
         <div class="vip-efficacy-card">
           <span class="vip-eff-step">TOOL 1 &bull; EXACT DOLLAR ($) MATH</span>
-          <strong>Custom Nest-Egg Dollar ($) Rebalancing Worksheet</strong>
+          <strong>Custom Nest-Egg Dollar ($) Budget Worksheet</strong>
           <p>Type any exact portfolio balance (such as <b>$500,000</b> or <b>$725,000</b>) to see exact target dollar amounts across <b>$SGOV</b>, <b>$SCHD</b>, <b>$JEPI</b>, and <b>$VOO</b> whenever our 3-Color Market Weather shifts.</p>
         </div>
         <div class="vip-efficacy-card">
@@ -6528,7 +6528,7 @@ function renderPricing(state) {
         <div class="vip-efficacy-card">
           <span class="vip-eff-step">TOOL 3 &bull; CALM PRINTABLE SHEET</span>
           <strong>Large-Print 1-Page Weather Change Action Sheet (2–4x/Yr)</strong>
-          <p>Clean, senior-readable 1-page printable summary sheet plus our <b>Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator</b>.</p>
+          <p>Clean, senior-readable 1-page printable summary sheet plus our <b>Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Retirement Budget Calculator</b>.</p>
         </div>
       </div>
 
@@ -6698,7 +6698,7 @@ function renderModals(state) {
         </div>
         <h3 style="font-size:1.18rem; font-weight:800; margin-top:4px; color:var(--text);">Unlock Full VIP Retiree Worksheets &amp; Tax-Bucket Reference</h3>
         <p style="color:var(--text-secondary); font-size:0.95rem; margin-top:6px; line-height:1.55;">
-          Includes Custom Nest-Egg Dollar ($) Rebalancing Worksheet, 12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Reference, and Large-Print 1-Page Weather Action Sheet. Backed by our 14-Day Refund Policy.
+          Includes Custom Nest-Egg Dollar ($) Budget Worksheet, 12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Reference, and Large-Print 1-Page Weather Action Sheet. Backed by our 14-Day Refund Policy.
         </p>
         <div style="display:grid; grid-template-columns:1fr; gap:10px; margin:14px 0 10px;">
           <a class="btn btn-primary polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthly}" style="justify-content:center; min-height:62px; padding:12px 16px; font-size:1.02rem; font-weight:800; border-radius:12px;">
@@ -7003,7 +7003,7 @@ function renderModals(state) {
               SELF-DIRECTED EDUCATIONAL CALCULATOR METHODOLOGY
             </div>
             <h3 style="font-size:1.15rem; font-weight:800; color:#ffffff; margin:3px 0 0;">
-              ${t.pwRsiModalTitle || "Calm 2–4x/Year 3-Bucket Portfolio Rebalancing Methodology"}
+              ${t.pwRsiModalTitle || "Calm 2–4x/Year 3-Bucket Household Budget & Cashflow Methodology"}
             </h3>
           </div>
           <button class="btn btn-sm" id="btnClosePwRsiModal" style="padding:4px 8px;">✕ Close</button>
@@ -7073,7 +7073,7 @@ function renderModals(state) {
           <div style="min-width:0;">
             <div class="tom-manual-modal-kicker">📘 $0 FREE PUBLIC PRODUCT · FIDELITY · CHARLES SCHWAB · VANGUARD</div>
             <h3 id="tomStarterManualModalTitle" class="tom-manual-modal-title">
-              US Brokerage App &amp; Calm 2–4x/Year Rebalancing Starter Manual
+              US Brokerage App &amp; Calm 2–4x/Year Brokerage Limit-Order & Budget Starter Manual
             </h3>
           </div>
           <div class="tom-manual-modal-actions">

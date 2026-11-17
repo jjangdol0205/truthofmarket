@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>TruthOfMarket | US 401k/IRA Retirement Cashflow &amp; Safe Rebalancing Calculator</title>
+    <title>TruthOfMarket | US 401k/IRA Retirement Cashflow &amp; Household Budget Calculator</title>
     <link>https://truthofmarket.com/</link>
     <atom:link href="https://truthofmarket.com/feed.xml" rel="self" type="application/rss+xml" />
     <atom:link href="https://pubsubhubbub.appspot.com/" rel="hub" />
@@ -37,7 +37,7 @@
       <description><![CDATA[Educational compounding math showing how deep drawdowns require nonlinear recovery gains, and how short-term US Treasury cushions reduce sequence-of-returns risk.]]></description>
     </item>
     <item>
-      <title><![CDATA[TruthOfMarket — 30-Second US 401(k)/IRA Retirement Cashflow & Safe Rebalancing Calculator (As of 2026-11-16)]]></title>
+      <title><![CDATA[TruthOfMarket — 30-Second US 401(k)/IRA Retirement Cashflow & Household Budget Calculator (As of 2026-11-16)]]></title>
       <link>https://truthofmarket.com/</link>
       <guid isPermaLink="true">https://truthofmarket.com/</guid>
       <pubDate>Mon, 16 Nov 2026 21:00:00 +0000</pubDate>

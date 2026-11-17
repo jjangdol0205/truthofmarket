@@ -12,12 +12,12 @@ const enCopy = {
   btnUnlockPro: "VIP Benefits",
 
   // Hero & Calm Educational Metrics (B2C 3-Second Hook)
-  heroTag: "US RETIREMENT CASHFLOW & REBALANCING SOFTWARE",
+  heroTag: "US RETIREMENT CASHFLOW & BUDGET CALCULATOR SOFTWARE",
   heroTitle: "Turn Your 401(k) & Savings Into Calm, Reliable Monthly Retirement Income.",
   heroDesc:
     "Simulate your monthly retirement paycheck in 30 seconds, cushion your nest egg from -35% sequence-of-returns crashes, and rebalance $VOO, $SCHD, $JEPI & $SGOV calmly 2–4 times a year with our US Retirement Market Weather indicator.",
-  pwRsiExplainerBtn: "How 2–4x/Yr Rebalancing Works",
-  pwRsiModalTitle: "Calm 2–4x/Year 3-Bucket Portfolio Rebalancing Methodology",
+  pwRsiExplainerBtn: "How 2–4x/Yr Budget Review Works",
+  pwRsiModalTitle: "Calm 2–4x/Year 3-Bucket Household Budget & Cashflow Methodology",
   kpi1_label: "Core S&P 500 Pillar",
   kpi1_sub: "$VOO broad US compounding core",
   kpi2_label: "Dividend Growth & Income",
@@ -42,9 +42,9 @@ const enCopy = {
 
   // Soft Paywall Call to Action (Used in /pro-swing.html Quantitative Archive)
   softPaywallUnlockCta: "Start Monthly VIP — $29/mo",
-  softPaywallTitle: "🔒 Full Quantitative Factor Dataset & Retiree Rebalancing Worksheets",
+  softPaywallTitle: "🔒 Full Quantitative Factor Dataset & Retiree Cashflow & Budget Worksheets",
   softPaywallDesc:
-    "$CELH is displayed as an open educational factor example. Upgrade to Monthly VIP ($29/mo) or Annual VIP ($199/yr) to unlock the Custom Nest-Egg Dollar ($) Rebalancing Worksheet, 12-Month Dividend Paycheck Calendar & Tax-Bucket Reference, and Large-Print Weather Action Sheet.",
+    "$CELH is displayed as an open educational factor example. Upgrade to Monthly VIP ($29/mo) or Annual VIP ($199/yr) to unlock the Custom Nest-Egg Dollar ($) Budget Worksheet, 12-Month Dividend Paycheck Calendar & Tax-Bucket Reference, and Large-Print Weather Action Sheet.",
 
   // Empirical Factor Table (/pro-swing.html)
   proofHeading: "Historical Factor Study · Moving-Average Trend Filter vs. Unfiltered Lows",
@@ -97,9 +97,9 @@ const enCopy = {
 
   // Cross-Platform Banner (Home Retirement Focus)
   crossTitle: "US RETIREMENT MARKET WEATHER · S&P 500 BREADTH & DRAWDOWN GUARD",
-  crossHeading: "Want to Review Your Exact Dollar Rebalancing Across $SGOV, $SCHD, $JEPI & $VOO?",
+  crossHeading: "Want to Review Your Exact Dollar Budget Allocation Across $SGOV, $SCHD, $JEPI & $VOO?",
   crossDesc:
-    "Check today's 3-Color US Retirement Market Weather above or explore our $0 Safe Brokerage Limit-Order & Rebalancing Manual for Fidelity, Charles Schwab, and Vanguard.",
+    "Check today's 3-Color US Retirement Market Weather above or explore our $0 Safe Brokerage Limit-Order & Cashflow Budget Manual for Fidelity, Charles Schwab, and Vanguard.",
   crossBtn: "Review 3-Color Market Weather",
 
   // SemiFearGreed Standalone Page Copy (/semi-fear-greed.html)
