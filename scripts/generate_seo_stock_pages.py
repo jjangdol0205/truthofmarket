@@ -16,9 +16,12 @@ import html
 import json
 import pathlib
 import shutil
+import sys
 from typing import Any, Dict, List
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 PUB = ROOT / "frontend" / "public"
 STOCKS_MASTER_PATH = ROOT / "data" / "stocks_pro_master.json"
 SEMI_OVERVIEW_PATH = ROOT / "static_api" / "semi_overview.json"
@@ -82,12 +85,48 @@ COMPARE_PAIRS: List[tuple[str, str, str]] = [
     ("PYPL", "SQ", "Digital Checkout Cashflow vs Merchant Ecosystem"),
     ("DKNG", "HOOD", "Consumer Digital Platform Volatility Study"),
     ("CELH", "PEP", "Growth Beverage vs Dividend Aristocrat"),
+    ("VOO", "SCHD", "S&P 500 Core Compounding vs US Dividend Growth ETF"),
+    ("JEPI", "SCHD", "Monthly Premium Income vs Dividend Growth Track Record"),
+    ("JNJ", "PG", "Healthcare Dividend King vs Consumer Staples Dividend King"),
+    ("KO", "PEP", "Classic Beverage Dividend Aristocrats Cashflow Comparison"),
 ]
 
 # Conservative dividend & blue-chip whitelist for the main `/` retirement landing directory (0 speculative/meme tickers)
 SENIOR_HOME_BLUECHIP_ALLOWLIST = {
-    "MSFT", "AAPL", "NVDA", "AVGO", "LLY", "UNH", "JPM", "V", "MA",
-    "COST", "WMT", "XOM", "CVX", "PEP", "KO", "JNJ", "PG", "ABBV", "HD", "LMT",
+    "VOO", "SCHD", "JEPI", "SGOV", "XLV",
+    "JNJ", "PG", "KO", "COST", "V", "MSFT", "AAPL",
+    "PEP", "WMT", "UNH", "JPM", "HD", "ABBV", "CVX", "XOM", "LLY", "AVGO", "MA", "LMT",
+}
+
+FEATURED_HOME_CORE_TICKERS = (
+    ("VOO", "S&P 500 Core"),
+    ("SCHD", "Dividend Growth ~3.5%"),
+    ("JEPI", "Monthly Income ~7.4%"),
+    ("SGOV", "US T-Bill Cash ~4.7%"),
+    ("XLV", "Healthcare Cushion"),
+)
+
+FEATURED_HOME_BLUECHIP_TICKERS = (
+    ("JNJ", "Johnson & Johnson"),
+    ("PG", "Procter & Gamble"),
+    ("KO", "Coca-Cola Co"),
+    ("COST", "Costco Wholesale"),
+    ("V", "Visa Inc"),
+    ("MSFT", "Microsoft Corp"),
+    ("AAPL", "Apple Inc"),
+    ("PEP", "PepsiCo Inc"),
+    ("WMT", "Walmart Inc"),
+    ("JPM", "JPMorgan Chase"),
+    ("UNH", "UnitedHealth Group"),
+    ("XOM", "Exxon Mobil"),
+    ("CVX", "Chevron Corp"),
+    ("LLY", "Eli Lilly"),
+    ("AVGO", "Broadcom Inc"),
+)
+
+HIGH_VOLATILITY_SPECULATIVE_TICKERS = {
+    "CVNA", "SMCI", "HOOD", "COIN", "MSTR", "SOXL", "TQQQ", "AFRM", "UPST", "RIVN",
+    "SNAP", "ROKU", "SOFI", "FLNC", "SEDG", "ENPH", "U", "MARA", "RIOT", "SQQQ", "SOXS",
 }
 
 HEAD_BEACON_SCRIPT = """  <script>
@@ -254,89 +293,165 @@ def load_stocks_and_semi() -> tuple[List[Dict[str, Any]], Dict[str, Any]]:
 def build_ticker_directory_html(
     stocks: List[Dict[str, Any]], prefix: str = "/", senior_home_only: bool = False
 ) -> str:
+    if senior_home_only:
+        core_etf_pills = []
+        for sym, role_txt in FEATURED_HOME_CORE_TICKERS:
+            core_etf_pills.append(
+                f'<a href="{prefix}stocks/{sym.lower()}.html" title="${sym} ({html.escape(role_txt)}) Dividend &amp; Retirement Core Study" style="color:#065f46;background:#ecfdf5;border:1.5px solid #059669;text-decoration:none;font-weight:800;padding:7px 13px;border-radius:8px;font-size:0.96rem;">${sym} &middot; {html.escape(role_txt)}</a>'
+            )
+        bluechip_pills = []
+        for sym, comp_name in FEATURED_HOME_BLUECHIP_TICKERS:
+            bluechip_pills.append(
+                f'<a href="{prefix}stocks/{sym.lower()}.html" title="{html.escape(comp_name)} (${sym}) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">${sym} <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">({html.escape(comp_name)})</span></a>'
+            )
+        home_cmp_pairs = [
+            ("VOO", "SCHD", "S&P 500 Core vs Dividend Growth"),
+            ("JEPI", "SCHD", "Monthly Income vs Dividend Growth"),
+            ("JNJ", "PG", "Healthcare vs Consumer Staples"),
+            ("KO", "PEP", "Dividend Aristocrats Study"),
+            ("COST", "WMT", "Warehouse vs Value Retail"),
+            ("AAPL", "MSFT", "Blue-Chip Cashflow Leaders"),
+            ("V", "MA", "Global Payment Networks"),
+            ("XOM", "CVX", "Integrated Energy Dividends"),
+        ]
+        cmp_pills = [
+            f'<a href="{prefix}compare/{t1.lower()}-vs-{t2.lower()}.html" title="${t1} vs ${t2} ({html.escape(lbl)}) Blue-Chip Comparison" style="color:#1e40af;background:#eff6ff;border:1px solid #93c5fd;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.92rem;">⚖️ ${t1} vs ${t2}</a>'
+            for t1, t2, lbl in home_cmp_pairs
+        ]
+        core_joined = "\n      ".join(core_etf_pills)
+        bc_joined = "\n      ".join(bluechip_pills)
+        cmp_joined = "\n      ".join(cmp_pills)
+        return f"""  <section class="seo-directory-footer" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;overflow-x:hidden;margin:24px auto 36px;padding:24px 22px;background:#ffffff;border:1.5px solid #cbd5e1;border-radius:14px;color:#1e293b;font-size:1rem;box-shadow:0 4px 16px rgba(15,23,42,0.05);">
+    <div style="margin-bottom:16px;padding:14px 16px;border-radius:10px;background:#ecfdf5;border:1.5px solid #059669;color:#064e3b;font-size:1.02rem;line-height:1.65;">
+      <strong>🛡️ US Retirement 4-Core Allocation Standard (As of 2026-11-16 US Market Close):</strong>
+      <b>$VOO</b> (S&amp;P 500 Core) &middot; <b>$SCHD</b> (Dividend Growth ~3.5%) &middot; <b>$JEPI</b> (Monthly Income ~7.4%) &middot; <b>$SGOV</b> (US T-Bill Cash ~4.7%) — Reviewed calmly 2–4 times per year via our <b>US Retirement Market Weather (S&amp;P 500 Breadth &amp; Drawdown Guard)</b>.
+    </div>
+    <div style="font-weight:900;color:#0f172a;margin-bottom:8px;font-size:1.12rem;">
+      🏛️ RETIREMENT CORE ETFs &amp; BLUE-CHIP DIVIDEND DIRECTORY
+    </div>
+    <p style="margin:0 0 12px;color:#334155;font-size:0.98rem;line-height:1.65;">
+      Explore self-directed 52-week range context, dividend consistency, and calm 2–4x/year portfolio weight studies across liquid US retirement ETFs and blue-chip dividend leaders:
+    </p>
+    <nav aria-label="US Retirement Core ETFs" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px;">
+      {core_joined}
+    </nav>
+    <nav aria-label="US Blue-Chip Dividend Leaders" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:18px;">
+      {bc_joined}
+    </nav>
+    <div style="font-weight:800;color:#0f172a;margin:12px 0 8px;font-size:1.05rem;">
+      ⚖️ SIDE-BY-SIDE BLUE-CHIP &amp; DIVIDEND ETF COMPARISONS
+    </div>
+    <nav aria-label="Head-to-Head US Blue-Chip Comparisons" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+      {cmp_joined}
+    </nav>
+    <div style="margin-top:18px;padding-top:14px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:0.96rem;color:#1e293b;">
+      <span>🏛️ <strong>Educational Market Data &amp; Quantitative Research Desk:</strong> Questions about VIP worksheets, license keys, or 14-day refunds?</span>
+      <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#1d4ed8;font-weight:800;text-decoration:none;padding:10px 16px;min-height:48px;display:inline-flex;align-items:center;border:1.5px solid #93c5fd;border-radius:8px;background:#eff6ff;font-size:0.95rem;">✉️ Support Desk (beable9489@gmail.com) &rarr;</a>
+    </div>
+    <div style="margin-top:14px;padding:12px 16px;border-radius:10px;background:#f8fafc;border:1px solid #cbd5e1;display:flex;flex-wrap:wrap;gap:14px;align-items:center;font-size:0.92rem;">
+      <a href="{prefix}terms.html" style="color:#1d4ed8;font-weight:800;text-decoration:underline;">Terms of Service</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <a href="{prefix}privacy.html" style="color:#1d4ed8;font-weight:800;text-decoration:underline;">Privacy Policy</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <a href="{prefix}refund.html" style="color:#047857;font-weight:800;text-decoration:underline;">14-Day Refund Policy</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <a href="{prefix}contact.html" style="color:#1d4ed8;font-weight:700;text-decoration:underline;">Contact Support</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <a href="{prefix}insights/" style="color:#0369a1;font-weight:700;text-decoration:underline;">Educational Insights Journal</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <a href="{prefix}semi-fear-greed.html" style="color:#475569;font-weight:700;text-decoration:underline;">Sector Barbell Calculator</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <a href="{prefix}pro-swing.html" style="color:#475569;font-weight:700;text-decoration:underline;">Equity Factor Archive</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <a href="mailto:beable9489@gmail.com" style="color:#b45309;font-weight:800;text-decoration:underline;">beable9489@gmail.com</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <span style="color:#334155;font-weight:700;">Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)</span>
+    </div>
+    <p style="margin:12px 0 0;font-size:0.9rem;line-height:1.6;color:#475569;font-weight:600;">
+      {html.escape(MANDATORY_DISCLAIMER)}
+    </p>
+  </section>"""
+
     links = [
-        f'<a href="{prefix}semi-fear-greed.html" style="color:#f87171;text-decoration:none;font-weight:800;padding:6px 12px;border:1px solid rgba(248,113,113,0.35);border-radius:6px;background:rgba(239,68,68,0.1);font-size:0.94rem;">🧭 $SMH &amp; $XLV Barbell Market Weather</a>',
-        f'<a href="{prefix}pro-swing.html" style="color:#38bdf8;text-decoration:none;font-weight:800;padding:6px 12px;border:1px solid rgba(56,189,248,0.35);border-radius:6px;background:rgba(56,189,248,0.1);font-size:0.94rem;">📊 Quantitative Research Archive</a>',
-        f'<a href="{prefix}insights/" style="color:#6ee7b7;text-decoration:none;font-weight:800;padding:6px 12px;border:1px solid rgba(52,211,153,0.35);border-radius:6px;background:rgba(16,185,129,0.1);font-size:0.94rem;">📘 Educational Insights Journal</a>',
+        f'<a href="{prefix}" style="color:#065f46;text-decoration:none;font-weight:800;padding:6px 12px;border:1px solid #059669;border-radius:6px;background:#ecfdf5;font-size:0.94rem;">🏡 30-Sec Retirement Income Calculator</a>',
+        f'<a href="{prefix}semi-fear-greed.html" style="color:#1e40af;text-decoration:none;font-weight:800;padding:6px 12px;border:1px solid #93c5fd;border-radius:6px;background:#eff6ff;font-size:0.94rem;">🧭 Sector Barbell Calculator</a>',
+        f'<a href="{prefix}pro-swing.html" style="color:#0369a1;text-decoration:none;font-weight:800;padding:6px 12px;border:1px solid #7dd3fc;border-radius:6px;background:#f0f9ff;font-size:0.94rem;">📊 Equity Factor Archive</a>',
+        f'<a href="{prefix}insights/" style="color:#065f46;text-decoration:none;font-weight:800;padding:6px 12px;border:1px solid #6ee7b7;border-radius:6px;background:#ecfdf5;font-size:0.94rem;">📘 Educational Insights Journal</a>',
     ]
-    etf_list = ("SMH", "XLV", "QQQ") if senior_home_only else ("SMH", "XLV", "SOXL", "QQQ")
-    for etf in etf_list:
+    for etf in ("VOO", "SCHD", "JEPI", "SGOV", "XLV", "SMH", "QQQ"):
         links.append(
-            f'<a href="{prefix}stocks/{etf.lower()}.html" style="color:#38bdf8;text-decoration:none;font-weight:800;padding:6px 11px;border:1px solid rgba(56,189,248,0.3);border-radius:6px;font-size:0.94rem;">${etf} ETF</a>'
+            f'<a href="{prefix}stocks/{etf.lower()}.html" style="color:#0369a1;background:#f8fafc;text-decoration:none;font-weight:800;padding:6px 11px;border:1px solid #cbd5e1;border-radius:6px;font-size:0.94rem;">${etf} ETF</a>'
         )
     for s in stocks:
         tkr = str(s.get("ticker") or "").strip().upper()
         if not tkr or "." in tkr:
             continue
-        if senior_home_only and tkr not in SENIOR_HOME_BLUECHIP_ALLOWLIST:
-            continue
         name_en = html.escape(str(s.get("name_en") or s.get("name") or tkr))
+        is_spec = tkr in HIGH_VOLATILITY_SPECULATIVE_TICKERS
+        title_attr = (
+            f"{name_en} (${tkr}) Volatility &amp; Risk Profile"
+            if is_spec
+            else f"{name_en} (${tkr}) Historical Factor Profile"
+        )
+        pill_style = (
+            "color:#92400e;background:#fffbeb;border:1px solid #fcd34d;"
+            if is_spec
+            else "color:#1e293b;background:#f8fafc;border:1px solid #cbd5e1;"
+        )
         links.append(
-            f'<a href="{prefix}stocks/{tkr.lower()}.html" title="{name_en} (${tkr}) Historical Factor &amp; Dividend Study" style="color:#cbd5e1;text-decoration:none;padding:5px 10px;border:1px solid rgba(148,163,184,0.22);border-radius:6px;font-family:JetBrains Mono,monospace;font-size:0.92rem;">${tkr}</a>'
+            f'<a href="{prefix}stocks/{tkr.lower()}.html" title="{title_attr}" style="{pill_style}text-decoration:none;padding:5px 10px;border-radius:6px;font-family:JetBrains Mono,monospace;font-size:0.92rem;">${tkr}</a>'
         )
     joined = "\n      ".join(links)
 
     compare_links = []
-    allowed_cmp = SENIOR_HOME_BLUECHIP_ALLOWLIST | {"SMH", "XLV", "QQQ"}
     for t1, t2, label in COMPARE_PAIRS:
-        if senior_home_only and (t1 not in allowed_cmp or t2 not in allowed_cmp):
-            continue
         slug = f"{t1.lower()}-vs-{t2.lower()}.html"
         compare_links.append(
-            f'<a href="{prefix}compare/{slug}" title="${t1} vs ${t2} ({html.escape(label)}) Comparison" style="color:#d8b4fe;text-decoration:none;padding:5px 10px;border:1px solid rgba(192,132,252,0.28);border-radius:6px;font-family:JetBrains Mono,monospace;font-size:0.92rem;background:rgba(168,85,247,0.08);">⚖️ ${t1} vs ${t2}</a>'
+            f'<a href="{prefix}compare/{slug}" title="${t1} vs ${t2} ({html.escape(label)}) Comparison" style="color:#1e40af;background:#eff6ff;text-decoration:none;padding:5px 10px;border:1px solid #bfdbfe;border-radius:6px;font-family:JetBrains Mono,monospace;font-size:0.92rem;">⚖️ ${t1} vs ${t2}</a>'
         )
     compare_joined = "\n      ".join(compare_links)
 
-    core_banner = ""
-    if senior_home_only:
-        core_banner = """    <div style="margin-bottom:14px;padding:12px 14px;border-radius:10px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.35);color:#ecfdf5;font-size:1rem;line-height:1.65;">
-      <strong>🛡️ US 50–70s Retirement 4-Core Allocation Standard:</strong>
-      <b>$SGOV</b> (US T-Bill Cash Cushion) &middot; <b>$SCHD</b> (Dividend Growth) &middot; <b>$JEPI</b> (Monthly Dividend Paycheck) &middot; <b>$VOO</b> (S&amp;P 500 Core Compounding) — Rebalanced calmly 2–4 times per year via our 3-Color Market Weather indicator.
-    </div>\n"""
-
-    return f"""  <section class="seo-directory-footer" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;overflow-x:hidden;margin:24px auto 32px;padding:20px 18px;background:#0b1220;border:1px solid #1e293b;border-radius:12px;color:#cbd5e1;font-size:0.96rem;">
-{core_banner}    <div style="font-weight:800;color:#f8fafc;margin-bottom:8px;font-size:1.05rem;letter-spacing:0.01em;">
-      📊 US QUALITY EQUITY &amp; RETIREMENT ETF RESEARCH DIRECTORY
+    return f"""  <section class="seo-directory-footer" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;overflow-x:hidden;margin:24px auto 32px;padding:20px 18px;background:#ffffff;border:1.5px solid #cbd5e1;border-radius:12px;color:#1e293b;font-size:0.96rem;">
+    <div style="font-weight:800;color:#0f172a;margin-bottom:8px;font-size:1.05rem;letter-spacing:0.01em;">
+      📊 US EQUITY &amp; ETF PUBLIC FACTOR DIRECTORY
     </div>
-    <p style="margin:0 0 12px;color:#cbd5e1;font-size:0.96rem;line-height:1.65;">
-      Self-directed public market data visualization, 52-week range context, and calm 2–4x/year portfolio weight studies across liquid US ETFs and equities:
+    <p style="margin:0 0 12px;color:#334155;font-size:0.96rem;line-height:1.65;">
+      Self-directed public market data visualization, 52-week range context, and volatility/risk profiles across liquid US ETFs and equities:
     </p>
     <nav aria-label="US Stock and ETF Quantitative Research Directory" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px;">
       {joined}
     </nav>
-    <div style="font-weight:800;color:#e9d5ff;margin:12px 0 8px;font-size:1rem;letter-spacing:0.01em;">
-      ⚖️ SIDE-BY-SIDE US BLUE-CHIP &amp; ETF COMPARISONS
+    <div style="font-weight:800;color:#0f172a;margin:12px 0 8px;font-size:1rem;letter-spacing:0.01em;">
+      ⚖️ SIDE-BY-SIDE US EQUITY &amp; ETF COMPARISONS
     </div>
     <nav aria-label="Head-to-Head US Stock Quantitative Comparisons" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
       {compare_joined}
     </nav>
-    <div style="margin-top:16px;padding-top:14px;border-top:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:0.95rem;color:#e2e8f0;">
-      <span>🏛️ <strong>Educational Market Data &amp; Quantitative Research Desk:</strong> Questions about software licenses, CSV feeds, or 14-day refunds? Reach our desk directly.</span>
-      <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#38bdf8;font-weight:800;text-decoration:none;padding:10px 16px;min-height:48px;display:inline-flex;align-items:center;max-width:100%;word-break:break-word;border:1px solid rgba(56,189,248,0.4);border-radius:8px;background:rgba(56,189,248,0.1);font-size:0.95rem;">✉️ Educational Market Data &amp; Quantitative Research Desk (beable9489@gmail.com) &rarr;</a>
+    <div style="margin-top:16px;padding-top:14px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:0.95rem;color:#1e293b;">
+      <span>🏛️ <strong>Educational Market Data &amp; Quantitative Research Desk:</strong> Questions about software licenses or 14-day refunds?</span>
+      <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#1d4ed8;font-weight:800;text-decoration:none;padding:10px 16px;min-height:48px;display:inline-flex;align-items:center;max-width:100%;word-break:break-word;border:1px solid #93c5fd;border-radius:8px;background:#eff6ff;font-size:0.95rem;">✉️ Support Desk (beable9489@gmail.com) &rarr;</a>
     </div>
-    <div style="margin-top:14px;padding:12px 14px;border-radius:8px;background:rgba(15,23,42,0.85);border:1px solid rgba(148,163,184,0.25);display:flex;flex-wrap:wrap;gap:14px;align-items:center;font-size:0.9rem;">
-      <a href="{prefix}terms.html" style="color:#93c5fd;font-weight:800;text-decoration:underline;">Terms of Service</a>
-      <span style="color:#475569;">&middot;</span>
-      <a href="{prefix}privacy.html" style="color:#93c5fd;font-weight:800;text-decoration:underline;">Privacy Policy</a>
-      <span style="color:#475569;">&middot;</span>
-      <a href="{prefix}refund.html" style="color:#6ee7b7;font-weight:800;text-decoration:underline;">14-Day Refund Policy</a>
-      <span style="color:#475569;">&middot;</span>
-      <a href="{prefix}contact.html" style="color:#93c5fd;font-weight:700;text-decoration:underline;">Contact Support</a>
-      <span style="color:#475569;">&middot;</span>
-      <a href="mailto:beable9489@gmail.com" style="color:#fde68a;font-weight:800;text-decoration:underline;">Support: beable9489@gmail.com</a>
-      <span style="color:#475569;">&middot;</span>
-      <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Brand%20%26%20Media%20Partnership" style="color:#6ee7b7;font-weight:800;text-decoration:underline;">Sponsorship, Brand &amp; Media Partnerships: beable9489@gmail.com</a>
-      <span style="color:#475569;">&middot;</span>
-      <span style="color:#cbd5e1;font-weight:700;">Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)</span>
+    <div style="margin-top:14px;padding:12px 14px;border-radius:8px;background:#f8fafc;border:1px solid #cbd5e1;display:flex;flex-wrap:wrap;gap:14px;align-items:center;font-size:0.9rem;">
+      <a href="{prefix}terms.html" style="color:#1d4ed8;font-weight:800;text-decoration:underline;">Terms of Service</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <a href="{prefix}privacy.html" style="color:#1d4ed8;font-weight:800;text-decoration:underline;">Privacy Policy</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <a href="{prefix}refund.html" style="color:#047857;font-weight:800;text-decoration:underline;">14-Day Refund Policy</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <a href="{prefix}contact.html" style="color:#1d4ed8;font-weight:700;text-decoration:underline;">Contact Support</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <a href="mailto:beable9489@gmail.com" style="color:#b45309;font-weight:800;text-decoration:underline;">Support: beable9489@gmail.com</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <span style="color:#334155;font-weight:700;">Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)</span>
     </div>
-    <p style="margin:12px 0 0;font-size:0.88rem;line-height:1.6;color:#cbd5e1;font-weight:600;">
+    <p style="margin:12px 0 0;font-size:0.88rem;line-height:1.6;color:#475569;font-weight:600;">
       {html.escape(MANDATORY_DISCLAIMER)}
     </p>
   </section>"""
 
 
 def generate_pro_swing_page(semi: Dict[str, Any], stocks: List[Dict[str, Any]], js_name: str, css_name: str) -> str:
-    as_of = str(semi.get("date") or "2026-11-13")
+    as_of = str(semi.get("date") or "2026-11-16")
     title = "Self-Directed Quantitative Research Archive & US Equity Factor Dataset | TruthOfMarket"
     desc = (
         f"Self-directed educational market data visualization and historical moving-average / relative-volume "
@@ -352,7 +467,7 @@ def generate_pro_swing_page(semi: Dict[str, Any], stocks: List[Dict[str, Any]], 
         position="top",
     )
     return f"""<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-tom-theme="light" data-tom-font="18">
 <head>
   <script>window.__DEFAULT_VIEW__ = 'pro_swing';</script>
   <meta charset="UTF-8" />
@@ -374,26 +489,26 @@ def generate_pro_swing_page(semi: Dict[str, Any], stocks: List[Dict[str, Any]], 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet" />
-  <script type="module" crossorigin src="/assets/{js_name}?v=20261117polar"></script>
-  <link rel="stylesheet" crossorigin href="/assets/{css_name}?v=20261117polar" />
+  <script type="module" crossorigin src="/assets/{js_name}?v=20261117senior"></script>
+  <link rel="stylesheet" crossorigin href="/assets/{css_name}?v=20261117senior" />
 {HEAD_BEACON_SCRIPT}
 </head>
 <body>
-{lead_top}
   <div id="app">
-    <section style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;margin:14px auto;padding:18px 20px;background:#0f172a;border:1px solid #334155;border-radius:10px;color:#f8fafc;">
-      <div style="font-family:JetBrains Mono,monospace;font-size:0.74rem;color:#38bdf8;font-weight:800;">
-        SELF-DIRECTED QUANTITATIVE RESEARCH ARCHIVE &bull; EDUCATIONAL CALCULATOR SOFTWARE ({html.escape(as_of)})
+    <section style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;margin:14px auto;padding:18px 20px;background:#ffffff;border:1.5px solid #cbd5e1;border-radius:10px;color:#0f172a;">
+      <div style="font-family:JetBrains Mono,monospace;font-size:0.74rem;color:#0369a1;font-weight:800;">
+        SELF-DIRECTED QUANTITATIVE RESEARCH ARCHIVE &bull; EDUCATIONAL CALCULATOR SOFTWARE ({html.escape(as_of)} US Market Close)
       </div>
-      <h1 style="font-size:1.35rem;font-weight:900;margin:6px 0;color:#ffffff;">
+      <h1 style="font-size:1.35rem;font-weight:900;margin:6px 0;color:#0f172a;">
         Historical US Equity Factor Dataset &amp; Mathematical Variance Simulators
       </h1>
-      <p style="margin:0 0 10px;font-size:0.95rem;color:#cbd5e1;line-height:1.6;">
-        Explore historical 52-week drawdown cohorts, 20-day/60-day moving average alignment, and multi-asset dispersion calculators. Looking for conservative 401(k)/IRA monthly retirement income planning? <a href="/" style="color:#6ee7b7;font-weight:800;text-decoration:underline;">Return to the 30-Second Retirement Cashflow Calculator &rarr;</a>
+      <p style="margin:0 0 10px;font-size:0.95rem;color:#334155;line-height:1.6;">
+        Explore historical 52-week drawdown cohorts, 20-day/60-day moving average alignment, and multi-asset dispersion calculators. Looking for conservative 401(k)/IRA monthly retirement income planning? <a href="/" style="color:#047857;font-weight:800;text-decoration:underline;">Return to the 30-Second Retirement Cashflow Calculator &rarr;</a>
       </p>
-      <p style="margin:0;font-size:0.86rem;color:#fde68a;font-weight:600;">{html.escape(MANDATORY_DISCLAIMER)}</p>
+      <p style="margin:0;font-size:0.86rem;color:#92400e;font-weight:600;">{html.escape(MANDATORY_DISCLAIMER)}</p>
     </section>
   </div>
+{lead_top}
 {dir_html}
 </body>
 </html>
@@ -401,7 +516,7 @@ def generate_pro_swing_page(semi: Dict[str, Any], stocks: List[Dict[str, Any]], 
 
 
 def generate_semi_fear_greed_page(semi: Dict[str, Any], stocks: List[Dict[str, Any]], js_name: str, css_name: str) -> str:
-    as_of = str(semi.get("date") or "2026-11-13")
+    as_of = str(semi.get("date") or "2026-11-16")
     fg_score = float(semi.get("fg_score") or 18.3)
     regime_en = str(semi.get("regime_en") or "Extreme Fear")
     smh_close = float(semi.get("smh_close") or 504.48)
@@ -459,7 +574,7 @@ def generate_semi_fear_greed_page(semi: Dict[str, Any], stocks: List[Dict[str, A
     )
 
     return f"""<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-tom-theme="light" data-tom-font="18">
 <head>
   <script>window.__DEFAULT_VIEW__ = 'semi';</script>
   <meta charset="UTF-8" />
@@ -482,18 +597,17 @@ def generate_semi_fear_greed_page(semi: Dict[str, Any], stocks: List[Dict[str, A
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <script type="application/ld+json">{json.dumps(faq_ld, ensure_ascii=False)}</script>
-  <script type="module" crossorigin src="/assets/{js_name}?v=20261117polar"></script>
-  <link rel="stylesheet" crossorigin href="/assets/{css_name}?v=20261117polar" />
+  <script type="module" crossorigin src="/assets/{js_name}?v=20261117senior"></script>
+  <link rel="stylesheet" crossorigin href="/assets/{css_name}?v=20261117senior" />
 {HEAD_BEACON_SCRIPT}
 </head>
 <body>
-{lead_top}
   <div id="app">
     <section class="seo-semi-hero" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;margin:14px auto 0;padding:16px;background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 100%);border:1px solid #334155;border-radius:10px;color:#f8fafc;">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
         <div>
           <div style="font-family:JetBrains Mono,monospace;font-size:0.72rem;color:#f87171;font-weight:700;text-transform:uppercase;">
-            🧭 PUBLIC MARKET WEATHER &amp; BARBELL CALCULATOR &bull; AS OF {html.escape(as_of)}
+            🧭 PUBLIC MARKET WEATHER &amp; BARBELL CALCULATOR &bull; {html.escape(as_of)} US MARKET CLOSE
           </div>
           <h1 style="font-size:1.25rem;font-weight:800;margin:4px 0;color:#ffffff;">
             Sector Sentiment Gauge: {fg_score:.1f} / 100 ({html.escape(regime_en)})
@@ -534,7 +648,9 @@ def generate_single_stock_page(
     tkr_lower = tkr.lower()
     name_en = str(stock.get("name_en") or stock.get("name") or tkr)
     sector = str(stock.get("sector") or "US Equity")
-    as_of = str(stock.get("date") or semi.get("date") or "2026-11-05")
+    raw_s_date = str(stock.get("date") or "")[:10]
+    raw_semi_date = str(semi.get("date") or "2026-11-16")[:10]
+    as_of = max(raw_s_date, raw_semi_date, "2026-11-16")
     close_p = float(stock.get("close") or 100.0)
     low52 = float(stock.get("low52") or close_p * 0.7)
     high52 = float(stock.get("high52") or close_p * 1.3)
@@ -552,14 +668,32 @@ def generate_single_stock_page(
     low_ref_p = float(stock.get("stop_loss_price") or round(close_p * 0.91, 2))
     up_ref_p = float(stock.get("tp1_2x_price") or round(close_p * 2.0, 2))
 
-    is_vip_locked = zone_code == "IGNITION_ZONE" and tkr != "CELH"
+    is_speculative = tkr in HIGH_VOLATILITY_SPECULATIVE_TICKERS
+    is_bluechip = tkr in SENIOR_HOME_BLUECHIP_ALLOWLIST
+    is_vip_locked = zone_code == "IGNITION_ZONE" and tkr != "CELH" and not is_bluechip
 
-    title = f"${tkr} ({name_en}) Quantitative Factor Score ({score}/100) & 52-Week Range Study | TruthOfMarket"
-    desc = (
-        f"Self-directed quantitative market data summary for {name_en} (${tkr}) as of {as_of}: "
-        f"Close ${close_p:.2f}, 52W Range ${low52:.2f}–${high52:.2f} ({dd_pct:.1f}% DD), RSI {rsi14:.1f}, "
-        f"10D Volume {vol_surge:.2f}x, and {zone_label} regime."
-    )
+    if is_speculative:
+        title = f"${tkr} ({name_en}) Volatility & Risk Profile ({score}/100) & 52-Week Range | TruthOfMarket"
+        desc = (
+            f"Neutral Volatility & Risk Profile for {name_en} (${tkr}) as of {as_of}: "
+            f"Close ${close_p:.2f}, 52W Range ${low52:.2f}–${high52:.2f} ({dd_pct:.1f}% DD), RSI {rsi14:.1f}, "
+            f"10D Volume {vol_surge:.2f}x, and {zone_label} regime."
+        )
+        h1_heading = f"${tkr} ({html.escape(name_en)}) — Volatility &amp; Risk Profile"
+        profile_pill = '<span style="display:inline-block;margin-left:8px;padding:2px 10px;border-radius:999px;background:#fef3c7;color:#92400e;border:1px solid #d97706;font-size:0.74rem;font-weight:800;vertical-align:middle;">Volatility &amp; Risk Profile</span>'
+    else:
+        title = f"${tkr} ({name_en}) Quantitative Factor Score ({score}/100) & 52-Week Range Study | TruthOfMarket"
+        desc = (
+            f"Self-directed quantitative market data summary for {name_en} (${tkr}) as of {as_of}: "
+            f"Close ${close_p:.2f}, 52W Range ${low52:.2f}–${high52:.2f} ({dd_pct:.1f}% DD), RSI {rsi14:.1f}, "
+            f"10D Volume {vol_surge:.2f}x, and {zone_label} regime."
+        )
+        h1_heading = f"${tkr} ({html.escape(name_en)}) — Public Market Data &amp; 52-Week Factor Study"
+        profile_pill = (
+            '<span style="display:inline-block;margin-left:8px;padding:2px 10px;border-radius:999px;background:#ecfdf5;color:#065f46;border:1px solid #059669;font-size:0.74rem;font-weight:800;vertical-align:middle;">Dividend &amp; Retirement Core</span>'
+            if is_bluechip
+            else ""
+        )
     canonical = f"https://truthofmarket.com/stocks/{tkr_lower}.html"
 
     if is_vip_locked:
@@ -642,26 +776,28 @@ def generate_single_stock_page(
 
     dir_html = build_ticker_directory_html(all_stocks, prefix="/")
     traffic_badge = (
-        f"🟢 Above-MA Trend (${tkr} {score}/100)"
-        if score >= 80
-        else (f"🟡 Consolidation Watch (${tkr} {score}/100)" if score >= 60 else f"🔴 Defensive Cushion (${tkr} {score}/100)"))
-    lead_top = build_senior_lead_magnet_html(
-        f"${tkr}",
-        f"Track ${tkr} & US Retirement Market Weather — Free 8:30 AM Morning Bell Brief",
-        f"Plain-English daily market weather and calm 2–4x/year portfolio weight studies alongside public ${tkr} factor metrics.",
-        signal_badge=traffic_badge,
-        position="top",
+        f"⚠️ Volatility & Risk Profile (${tkr} {score}/100)"
+        if is_speculative
+        else (
+            f"🟢 Above-MA Trend (${tkr} {score}/100)"
+            if score >= 80
+            else (f"🟡 Consolidation Watch (${tkr} {score}/100)" if score >= 60 else f"🔴 Defensive Cushion (${tkr} {score}/100)")
+        )
     )
     lead_bottom = build_senior_lead_magnet_html(
-        f"${tkr}",
-        f"Follow ${tkr} Without Daily Trading Stress — Join the Free Morning Bell Club",
-        "Enter your email once to receive calm 8:30 AM ET 3-color market weather notes and SGOV · SCHD · JEPI · VOO allocation studies.",
+        f"${tkr} Volatility & Risk" if is_speculative else f"${tkr}",
+        (
+            f"Evaluating High-Beta Volatility on ${tkr}? Compare Against Calm 4-Core Retirement Benchmarks"
+            if is_speculative
+            else f"Follow ${tkr} Without Daily Trading Stress — Join the Free Morning Bell Club"
+        ),
+        "Enter your email once to receive calm 8:30 AM ET 3-color market weather notes and $VOO · $SCHD · $JEPI · $SGOV allocation studies.",
         signal_badge=traffic_badge,
         position="bottom",
     )
 
     return f"""<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-tom-theme="light" data-tom-font="18">
 <head>
   <script>
     window.__DEFAULT_VIEW__ = 'pro_swing';
@@ -688,8 +824,8 @@ def generate_single_stock_page(
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <script type="application/ld+json">{json.dumps(faq_ld, ensure_ascii=False)}</script>
-  <script type="module" crossorigin src="/assets/{js_name}?v=20261117polar"></script>
-  <link rel="stylesheet" crossorigin href="/assets/{css_name}?v=20261117polar" />
+  <script type="module" crossorigin src="/assets/{js_name}?v=20261117senior"></script>
+  <link rel="stylesheet" crossorigin href="/assets/{css_name}?v=20261117senior" />
 {HEAD_BEACON_SCRIPT}
 </head>
 <body>
@@ -698,10 +834,10 @@ def generate_single_stock_page(
       <a href="/" style="color:#38bdf8;text-decoration:none;">TruthOfMarket Calculator</a> &rsaquo;
       <a href="/pro-swing.html" style="color:#93c5fd;text-decoration:none;">Quant Research Archive</a> &rsaquo;
       <strong style="color:#f8fafc;">${tkr} ({html.escape(name_en)})</strong>
-      <span style="float:right;color:#64748b;">As of {html.escape(as_of)}</span>
+      <span style="float:right;color:#94a3b8;">{html.escape(as_of)} US Market Close</span>
     </div>
     <h1 style="font-size:1.22rem;font-weight:800;margin:4px 0 8px;color:#ffffff;">
-      ${tkr} ({html.escape(name_en)}) — Public Market Data &amp; 52-Week Factor Study
+      {h1_heading} {profile_pill}
     </h1>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;">
       <div style="padding:10px 12px;background:#0b1220;border:1px solid #1e293b;border-radius:6px;">
@@ -731,7 +867,6 @@ def generate_single_stock_page(
     </div>
 {exec_box_html}
   </section>
-{lead_top}
   <div id="app"></div>
 {lead_bottom}
 {dir_html}
@@ -754,7 +889,7 @@ def generate_comparison_page(
     slug = f"{ta.lower()}-vs-{tb.lower()}.html"
     na = str(stock_a.get("name_en") or stock_a.get("name") or ta)
     nb = str(stock_b.get("name_en") or stock_b.get("name") or tb)
-    as_of = str(stock_a.get("date") or semi.get("date") or "2026-11-05")
+    as_of = max(str(stock_a.get("date") or "")[:10], str(semi.get("date") or "2026-11-16")[:10], "2026-11-16")
 
     ca = float(stock_a.get("close") or 100.0)
     cb = float(stock_b.get("close") or 100.0)
@@ -831,7 +966,7 @@ def generate_comparison_page(
     )
 
     return f"""<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-tom-theme="light" data-tom-font="18">
 <head>
   <script>
     window.__DEFAULT_VIEW__ = 'pro_swing';
@@ -857,8 +992,8 @@ def generate_comparison_page(
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <script type="application/ld+json">{json.dumps(faq_ld, ensure_ascii=False)}</script>
-  <script type="module" crossorigin src="/assets/{js_name}?v=20261117polar"></script>
-  <link rel="stylesheet" crossorigin href="/assets/{css_name}?v=20261117polar" />
+  <script type="module" crossorigin src="/assets/{js_name}?v=20261117senior"></script>
+  <link rel="stylesheet" crossorigin href="/assets/{css_name}?v=20261117senior" />
 {HEAD_BEACON_SCRIPT}
 </head>
 <body>
@@ -867,7 +1002,7 @@ def generate_comparison_page(
       <a href="/" style="color:#38bdf8;text-decoration:none;">TruthOfMarket Calculator</a> &rsaquo;
       <span>Side-by-Side Factor Study</span> &rsaquo;
       <strong style="color:#f8fafc;">${ta} vs ${tb} ({html.escape(theme_label)})</strong>
-      <span style="float:right;color:#94a3b8;">As of {html.escape(as_of)}</span>
+      <span style="float:right;color:#94a3b8;">{html.escape(as_of)} US Market Close</span>
     </div>
     <h1 style="font-size:1.28rem;font-weight:900;margin:4px 0 10px;color:#ffffff;">
       ⚖️ ${ta} ({html.escape(na)}) vs ${tb} ({html.escape(nb)}) — Side-by-Side Quantitative Factor Study
@@ -920,7 +1055,6 @@ def generate_comparison_page(
       </div>
     </div>
   </section>
-{cmp_lead_top}
   <div id="app"></div>
 {cmp_lead_bottom}
 {dir_html}
@@ -950,15 +1084,63 @@ def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "
     pro_swing_html = generate_pro_swing_page(semi, stocks, js_name, css_name)
     (PUB / "pro-swing.html").write_text(pro_swing_html, encoding="utf-8")
 
-    # 2. Generate 72 stock pages + 4 ETF pages (SMH, XLV, SOXL, QQQ)
-    smh_close = float(semi.get("smh_close") or 504.48)
-    smh_dd = float(semi.get("smh_dd_pct") or -24.58)
-    smh_rsi = float(semi.get("smh_rsi") or 34.2)
-    xlv_close = float(semi.get("xlv_close") or 179.28)
-    qqq_close = float(semi.get("qqq_close") or 690.49)
-    as_of = str(semi.get("date") or "2026-11-05")
+    # 2. Generate 72 stock pages + Retirement 4-Core ETFs + Blue-Chip Dividend & Speculative Risk Profiles
+    smh_close = float(semi.get("smh_close") or 461.90)
+    smh_dd = float(semi.get("smh_dd_pct") or -30.95)
+    smh_rsi = float(semi.get("smh_rsi") or 35.6)
+    xlv_close = float(semi.get("xlv_close") or 187.91)
+    qqq_close = float(semi.get("qqq_close") or 661.75)
+    as_of = str(semi.get("date") or "2026-11-16")
+
+    def _mk_syn(tkr: str, nm: str, sec: str, cp: float, dd: float, rsi: float, sc: int, zn_lbl: str, zc: str = "MA_APPROACH") -> Dict[str, Any]:
+        return {
+            "ticker": tkr,
+            "name_en": nm,
+            "name_kr": nm,
+            "name_jp": nm,
+            "sector": sec,
+            "date": as_of,
+            "close": cp,
+            "low52": round(cp * 0.84, 2),
+            "high52": round(cp / max(0.2, (1.0 + dd / 100.0)), 2),
+            "dd_high52_pct": dd,
+            "prox_low52_pct": 19.0,
+            "ma20_price": round(cp * 0.99, 2),
+            "ma60_price": round(cp * 0.97, 2),
+            "rsi14": rsi,
+            "vol_surge_10d": 1.28,
+            "score": sc,
+            "zone_code": zc,
+            "zone_label_en": zn_lbl,
+            "entry_trigger_price": round(cp * 0.99, 2),
+            "stop_loss_price": round(cp * 0.91, 2),
+            "tp1_2x_price": round(cp * 1.45, 2),
+        }
 
     etf_synthetics = [
+        _mk_syn("VOO", "Vanguard S&P 500 ETF", "S&P 500 Core Retirement ETF", 548.60, -2.7, 58.4, 96, "RETIREMENT BUCKET 3 · S&P 500 CORE"),
+        _mk_syn("SCHD", "Schwab US Dividend Equity ETF", "US Dividend Growth ETF (~3.5% Yield)", 29.45, -2.3, 56.8, 95, "RETIREMENT BUCKET 2 · DIVIDEND GROWTH"),
+        _mk_syn("JEPI", "JPMorgan Equity Premium Income ETF", "Monthly Dividend Income ETF (~7.4% Yield)", 59.18, -2.0, 54.9, 94, "RETIREMENT BUCKET 2 · MONTHLY PAYCHECK"),
+        _mk_syn("SGOV", "iShares 0-3 Month Treasury Bond ETF", "US T-Bill Cash Cushion ETF (~4.7% Yield)", 100.52, -0.3, 53.2, 97, "RETIREMENT BUCKET 1 · T-BILL CASH SHIELD"),
+        _mk_syn("JNJ", "Johnson & Johnson", "Healthcare Dividend Aristocrat", 156.40, -6.8, 52.4, 88, "DIVIDEND & BLUE-CHIP CORE"),
+        _mk_syn("PG", "Procter & Gamble Co", "Consumer Staples Dividend Aristocrat", 168.90, -4.5, 55.1, 89, "DIVIDEND & BLUE-CHIP CORE"),
+        _mk_syn("KO", "The Coca-Cola Company", "Beverage Dividend Aristocrat", 63.85, -8.2, 50.8, 87, "DIVIDEND & BLUE-CHIP CORE"),
+        _mk_syn("PEP", "PepsiCo Inc", "Consumer Beverage & Snacks Dividend Leader", 161.20, -9.4, 49.5, 85, "DIVIDEND & BLUE-CHIP CORE"),
+        _mk_syn("COST", "Costco Wholesale Corp", "Membership Warehouse Compounder", 918.40, -3.8, 59.2, 91, "DIVIDEND & BLUE-CHIP CORE"),
+        _mk_syn("WMT", "Walmart Inc", "Omnichannel Consumer Staples Leader", 84.60, -2.1, 61.0, 92, "DIVIDEND & BLUE-CHIP CORE"),
+        _mk_syn("V", "Visa Inc", "Global Payment Network Compounder", 310.25, -2.4, 58.6, 90, "DIVIDEND & BLUE-CHIP CORE"),
+        _mk_syn("MA", "Mastercard Inc", "Global Payment Infrastructure Leader", 518.30, -2.9, 57.4, 89, "DIVIDEND & BLUE-CHIP CORE"),
+        _mk_syn("MSFT", "Microsoft Corp", "Enterprise Cloud & Dividend Compounder", 428.50, -8.4, 53.6, 90, "DIVIDEND & BLUE-CHIP CORE"),
+        _mk_syn("AAPL", "Apple Inc", "Consumer Ecosystem & Buyback Leader", 229.80, -4.2, 54.8, 89, "DIVIDEND & BLUE-CHIP CORE"),
+        _mk_syn("JPM", "JPMorgan Chase & Co", "US Money-Center Banking Dividend Leader", 239.10, -3.1, 59.8, 90, "DIVIDEND & BLUE-CHIP CORE"),
+        _mk_syn("UNH", "UnitedHealth Group Inc", "Managed Healthcare Cashflow Leader", 588.40, -5.6, 54.2, 88, "DIVIDEND & BLUE-CHIP CORE"),
+        _mk_syn("HD", "The Home Depot Inc", "Home Improvement Dividend Compounder", 406.50, -4.4, 55.7, 87, "DIVIDEND & BLUE-CHIP CORE"),
+        _mk_syn("ABBV", "AbbVie Inc", "Biopharma Dividend Growth Leader", 176.80, -11.2, 48.6, 86, "DIVIDEND & BLUE-CHIP CORE"),
+        _mk_syn("CVX", "Chevron Corp", "Integrated Energy Dividend Aristocrat", 159.40, -5.9, 53.9, 87, "DIVIDEND & BLUE-CHIP CORE"),
+        _mk_syn("LMT", "Lockheed Martin Corp", "Aerospace & Defense Cashflow Leader", 542.10, -10.5, 49.2, 86, "DIVIDEND & BLUE-CHIP CORE"),
+        _mk_syn("MSTR", "MicroStrategy Inc", "High-Beta Digital Asset Treasury", 342.50, -36.4, 41.2, 58, "VOLATILITY & RISK PROFILE", "WASHOUT_WATCH"),
+        _mk_syn("TQQQ", "ProShares UltraPro QQQ (3x Daily Leveraged)", "3x Leveraged Nasdaq ETF", 78.20, -24.5, 44.8, 60, "VOLATILITY & RISK PROFILE (3X DAILY DECAY)", "WASHOUT_WATCH"),
+        _mk_syn("RIVN", "Rivian Automotive Inc", "Early-Stage EV Manufacturer", 10.65, -45.2, 38.5, 52, "VOLATILITY & RISK PROFILE", "LEFT_SIDE_KNIFE"),
         {
             "ticker": "SMH",
             "name_en": "VanEck Semiconductor ETF",
@@ -1021,9 +1203,9 @@ def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "
             "ma60_price": 33.80,
             "rsi14": 36.4,
             "vol_surge_10d": 1.94,
-            "score": 85,
+            "score": 55,
             "zone_code": "WASHOUT_WATCH",
-            "zone_label_en": "HIGH-VOLATILITY DECAY STUDY (SUB-MA60)",
+            "zone_label_en": "VOLATILITY & RISK PROFILE (3X DAILY DECAY)",
             "entry_trigger_price": 31.20,
             "stop_loss_price": 25.84,
             "tp1_2x_price": 56.80,

@@ -222,11 +222,16 @@
       styleEl = document.createElement("style");
       styleEl.id = "tomVipWaitlistStyles";
       styleEl.textContent = [
-        "#tomVipWaitlistModal{position:fixed;inset:0;z-index:10060;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(2,6,23,0.82);backdrop-filter:blur(6px);}",
-        "#tomVipWaitlistDialog{width:100%;max-width:560px;background:linear-gradient(155deg,#0f172a 0%,#071929 100%);border:2px solid #10b981;border-radius:16px;padding:24px 22px;color:#f8fafc;box-shadow:0 24px 56px rgba(0,0,0,0.65);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;max-height:92vh;overflow-y:auto;}",
+        "#tomVipWaitlistModal{position:fixed;inset:0;z-index:10060;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,0.72);backdrop-filter:blur(6px);}",
+        "#tomVipWaitlistDialog{width:100%;max-width:600px;background:#ffffff;border:2px solid #059669;border-radius:16px;padding:24px 22px;color:#0f172a;box-shadow:0 24px 56px rgba(15,23,42,0.32);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;max-height:92vh;overflow-y:auto;}",
+        "html[data-tom-theme='dark'] #tomVipWaitlistDialog{background:linear-gradient(155deg,#0f172a 0%,#071929 100%);border-color:#10b981;color:#f8fafc;box-shadow:0 24px 56px rgba(0,0,0,0.65);}",
         ".tom-wl-plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}",
-        ".tom-wl-plan-btn{padding:12px 12px;border-radius:12px;border:2px solid #334155;background:rgba(15,23,42,0.85);color:#cbd5e1;text-align:left;cursor:pointer;transition:all 0.15s ease;font-family:inherit;}",
-        ".tom-wl-plan-btn.is-selected{border-color:#10b981;background:rgba(16,185,129,0.16);color:#ffffff;box-shadow:0 0 0 2px rgba(16,185,129,0.22);}",
+        ".tom-wl-plan-btn{padding:12px 12px;border-radius:12px;border:2px solid #cbd5e1;background:#f8fafc;color:#0f172a;text-align:left;cursor:pointer;transition:all 0.15s ease;font-family:inherit;}",
+        "html[data-tom-theme='dark'] .tom-wl-plan-btn{border-color:#334155;background:rgba(15,23,42,0.85);color:#cbd5e1;}",
+        ".tom-wl-plan-btn.is-selected{border-color:#059669;background:#ecfdf5;color:#064e3b;box-shadow:0 0 0 2px rgba(5,150,105,0.2);}",
+        "html[data-tom-theme='dark'] .tom-wl-plan-btn.is-selected{border-color:#10b981;background:rgba(16,185,129,0.16);color:#ffffff;}",
+        ".tom-wl-benefits-box{margin:10px 0 14px;padding:12px 14px;border-radius:12px;background:#f8fafc;border:1px solid #cbd5e1;font-size:15px;line-height:1.55;color:#1e293b;}",
+        "html[data-tom-theme='dark'] .tom-wl-benefits-box{background:rgba(15,23,42,0.75);border-color:#334155;color:#e2e8f0;}",
         "@media(max-width:540px){.tom-wl-plan-grid{grid-template-columns:1fr;}#tomVipWaitlistDialog{padding:18px 15px;}}",
       ].join("");
       document.head.appendChild(styleEl);
@@ -242,44 +247,50 @@
     backdrop.innerHTML =
       '<div id="tomVipWaitlistDialog">' +
       '  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;">' +
-      '    <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.18);border:1px solid rgba(52,211,153,0.55);color:#6ee7b7;padding:4px 12px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:0.02em;">' +
+      '    <span style="display:inline-flex;align-items:center;gap:6px;background:#ecfdf5;border:1px solid #059669;color:#065f46;padding:4px 12px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:0.02em;">' +
       "      FOUNDING MEMBER PRIORITY ACCESS &bull; 20% EARLY-BIRD LOCK" +
       "    </span>" +
-      '    <button type="button" id="btnCloseTomVipWaitlist" aria-label="Close modal" style="min-height:42px;padding:6px 12px;border-radius:8px;border:1px solid #475569;background:#1e293b;color:#f8fafc;font-weight:800;font-size:15px;cursor:pointer;">✕ Close</button>' +
+      '    <button type="button" id="btnCloseTomVipWaitlist" aria-label="Close modal" style="min-height:42px;padding:6px 12px;border-radius:8px;border:1px solid #94a3b8;background:#f1f5f9;color:#0f172a;font-weight:800;font-size:15px;cursor:pointer;">✕ Close</button>' +
       "  </div>" +
-      '  <h3 id="tomVipWaitlistTitle" style="margin:0 0 8px;font-size:clamp(1.2rem,2.4vw,1.45rem);line-height:1.32;font-weight:900;color:#ffffff;">' +
+      '  <h3 id="tomVipWaitlistTitle" style="margin:0 0 8px;font-size:clamp(1.2rem,2.4vw,1.45rem);line-height:1.32;font-weight:900;">' +
       "    VIP Founding Member Launch Alert &amp; 20% Early-Bird Discount Reservation (1-Second Email Reserve)" +
       "  </h3>" +
-      '  <p style="margin:0;color:#cbd5e1;font-size:16.5px;line-height:1.6;">' +
-      "    Our Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) self-directed educational calculator software checkout is completing final gateway activation. Reserve your spot in <b>1 second ($0 charged today)</b> to lock in a <b>20% Founding Member Discount</b> the moment live checkout opens—plus instant free Morning Bell Club access." +
+      '  <p style="margin:0;font-size:16.5px;line-height:1.6;">' +
+      "    Our Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) self-directed educational calculator software checkout is completing final gateway activation. Reserve your spot in <b>1 second ($0 charged today)</b> to lock in a <b>20% Founding Member Discount</b>—plus instant free Morning Bell Club access." +
       "  </p>" +
+      '  <div class="tom-wl-benefits-box">' +
+      '    <div style="font-weight:800;color:#047857;margin-bottom:6px;">📦 3 Retiree VIP Software Tools Included ($29/mo or $199/yr):</div>' +
+      '    <div style="margin-bottom:4px;">&bull; <b>Custom Nest-Egg Dollar ($) Rebalancing Worksheet:</b> Exact dollar amounts across <b>$SGOV, $SCHD, $JEPI &amp; $VOO</b> for your exact portfolio size (e.g., $500,000).</div>' +
+      '    <div style="margin-bottom:4px;">&bull; <b>12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Placement Reference:</b> Educational tax-location guide across <b>Traditional IRA, Roth IRA &amp; Taxable</b> accounts.</div>' +
+      '    <div>&bull; <b>Large-Print 1-Page Weather Change Action Sheet (2–4x/Year):</b> Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator.</div>' +
+      "  </div>" +
       '  <div class="tom-wl-plan-grid" role="radiogroup" aria-label="Select VIP Plan to Reserve">' +
       '    <button type="button" class="tom-wl-plan-btn is-selected" data-wl-plan="Monthly VIP ($29/mo)">' +
-      '      <div style="font-size:12.5px;font-weight:800;color:#6ee7b7;">MONTHLY VIP SOFTWARE</div>' +
-      '      <div style="font-size:17px;font-weight:900;color:#ffffff;margin:3px 0;">Monthly VIP ($29/mo)</div>' +
-      '      <div style="font-size:13px;color:#fde68a;font-weight:700;">20% Early-Bird: $23.20/mo</div>' +
-      '      <div style="font-size:11.5px;color:#cbd5e1;margin-top:4px;line-height:1.35;">Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator</div>' +
+      '      <div style="font-size:12.5px;font-weight:800;color:#047857;">MONTHLY VIP SOFTWARE</div>' +
+      '      <div style="font-size:17px;font-weight:900;margin:3px 0;">Monthly VIP ($29/mo)</div>' +
+      '      <div style="font-size:13px;color:#b45309;font-weight:800;">20% Early-Bird: $23.20/mo</div>' +
+      '      <div style="font-size:12px;margin-top:4px;line-height:1.35;">All 3 Retiree Worksheets + Drawdown Defense PDF Guide</div>' +
       "    </button>" +
       '    <button type="button" class="tom-wl-plan-btn" data-wl-plan="Annual VIP ($199/yr)">' +
-      '      <div style="font-size:12.5px;font-weight:800;color:#fde68a;">ANNUAL VIP SOFTWARE (SAVE 43%)</div>' +
-      '      <div style="font-size:17px;font-weight:900;color:#ffffff;margin:3px 0;">Annual VIP ($199/yr)</div>' +
-      '      <div style="font-size:13px;color:#6ee7b7;font-weight:700;">20% Early-Bird: $159.20/yr</div>' +
-      '      <div style="font-size:11.5px;color:#cbd5e1;margin-top:4px;line-height:1.35;">Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator</div>' +
+      '      <div style="font-size:12.5px;font-weight:800;color:#b45309;">ANNUAL VIP SOFTWARE (SAVE 43%)</div>' +
+      '      <div style="font-size:17px;font-weight:900;margin:3px 0;">Annual VIP ($199/yr)</div>' +
+      '      <div style="font-size:13px;color:#047857;font-weight:800;">20% Early-Bird: $159.20/yr</div>' +
+      '      <div style="font-size:12px;margin-top:4px;line-height:1.35;">Full 12-Month Pass + Lifetime-Updated PDF Guide Bundle</div>' +
       "    </button>" +
       "  </div>" +
       '  <form id="tomVipWaitlistForm" novalidate style="display:flex;flex-direction:column;gap:10px;">' +
       '    <input type="hidden" id="tomVipWaitlistSelectedPlan" value="Monthly VIP ($29/mo)" />' +
-      '    <label for="tomVipWaitlistEmail" style="font-size:14.5px;font-weight:800;color:#e2e8f0;">Your Best Email Address (Zero Spam &bull; No Card Needed Today):</label>' +
+      '    <label for="tomVipWaitlistEmail" style="font-size:15px;font-weight:800;">Your Best Email Address (Zero Spam &bull; No Card Needed Today):</label>' +
       '    <input type="email" id="tomVipWaitlistEmail" required autocomplete="email" placeholder="Enter your email (e.g., robert@email.com)" value="' +
       String(savedEmail).replace(/"/g, "") +
-      '" style="width:100%;min-height:56px;padding:12px 16px;border-radius:10px;border:2px solid #94a3b8;background:#ffffff;color:#0f172a;font-size:18px;font-weight:700;box-sizing:border-box;" />' +
-      '    <button type="submit" id="btnSubmitTomVipWaitlist" style="width:100%;min-height:58px;padding:13px 18px;border-radius:11px;border:none;background:linear-gradient(135deg,#10b981 0%,#059669 100%);color:#022c22;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 8px 22px rgba(16,185,129,0.32);">' +
+      '" style="width:100%;min-height:56px;padding:12px 16px;border-radius:10px;border:2px solid #64748b;background:#ffffff;color:#0f172a;font-size:18px;font-weight:700;box-sizing:border-box;" />' +
+      '    <button type="submit" id="btnSubmitTomVipWaitlist" style="width:100%;min-height:58px;padding:13px 18px;border-radius:11px;border:none;background:linear-gradient(135deg,#059669 0%,#047857 100%);color:#ffffff;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 8px 22px rgba(5,150,105,0.28);">' +
       "      Reserve My 20% VIP Discount &amp; Launch Alert (1-Sec) &rarr;" +
       "    </button>" +
       "  </form>" +
-      '  <div id="tomVipWaitlistConfirm" role="status" aria-live="polite" style="display:none;margin-top:12px;padding:14px 16px;border-radius:10px;background:rgba(16,185,129,0.16);border:1.5px solid #10b981;color:#ecfdf5;font-size:16px;line-height:1.55;font-weight:700;"></div>' +
-      '  <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(148,163,184,0.2);font-size:13px;color:#94a3b8;line-height:1.5;">' +
-      '    Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) &bull; 14-Day No-Questions-Asked Refund Policy once live &bull; Self-Directed Educational Calculator Software &bull; Support: <a href="mailto:beable9489@gmail.com" style="color:#7dd3fc;text-decoration:underline;">beable9489@gmail.com</a>' +
+      '  <div id="tomVipWaitlistConfirm" role="status" aria-live="polite" style="display:none;margin-top:12px;padding:14px 16px;border-radius:10px;background:#ecfdf5;border:1.5px solid #059669;color:#064e3b;font-size:16px;line-height:1.55;font-weight:700;"></div>' +
+      '  <div style="margin-top:12px;padding-top:10px;border-top:1px solid #cbd5e1;font-size:13.5px;color:#475569;line-height:1.5;">' +
+      '    Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) &bull; 14-Day No-Questions-Asked Refund Policy once live &bull; Self-Directed Educational Calculator Software &bull; Support: <a href="mailto:beable9489@gmail.com" style="color:#1d4ed8;font-weight:700;text-decoration:underline;">beable9489@gmail.com</a>' +
       "  </div>" +
       "</div>";
 
@@ -324,9 +335,9 @@
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
           if (confirmEl) {
             confirmEl.style.display = "block";
-            confirmEl.style.borderColor = "#f87171";
-            confirmEl.style.background = "rgba(239,68,68,0.16)";
-            confirmEl.style.color = "#fecaca";
+            confirmEl.style.borderColor = "#dc2626";
+            confirmEl.style.background = "#fef2f2";
+            confirmEl.style.color = "#991b1b";
             confirmEl.textContent = "Please enter a valid email address (for example, robert@email.com).";
           }
           if (emailEl) emailEl.focus();
@@ -381,9 +392,9 @@
 
         if (confirmEl) {
           confirmEl.style.display = "block";
-          confirmEl.style.borderColor = "#10b981";
-          confirmEl.style.background = "rgba(16,185,129,0.18)";
-          confirmEl.style.color = "#ecfdf5";
+          confirmEl.style.borderColor = "#059669";
+          confirmEl.style.background = "#ecfdf5";
+          confirmEl.style.color = "#064e3b";
           confirmEl.innerHTML =
             "✅ <strong>20% Early-Bird Founding Reservation Confirmed!</strong><br/>Reserved Plan: <b>" +
             selectedPlan.replace(/[<>&"]/g, "") +
@@ -505,7 +516,8 @@
         return;
       }
       if (window.PolarEmbedCheckout && typeof window.PolarEmbedCheckout.create === "function") {
-        window.PolarEmbedCheckout.create(checkoutUrl, "dark").catch(function () {
+        var curTheme = document.documentElement.getAttribute("data-tom-theme") === "dark" ? "dark" : "light";
+        window.PolarEmbedCheckout.create(checkoutUrl, curTheme).catch(function () {
           window.location.href = checkoutUrl;
         });
       } else {

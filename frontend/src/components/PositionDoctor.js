@@ -5,7 +5,7 @@ export function renderPositionDoctorForm(state) {
   const stocks = state.stocks || [];
   const celh = stocks.find((s) => s.ticker === "CELH");
   const defaultClose = celh && celh.close ? Number(celh.close).toFixed(2) : "32.42";
-  const defaultDate = celh && celh.date ? celh.date : "2026-11-13";
+  const defaultDate = celh && celh.date ? celh.date : "2026-11-16";
   const initialDoc = state.docLastResult
     ? formatDoctorResult(state.docLastResult, state)
     : `<div style="color:var(--muted); font-size:0.76rem; line-height:1.4;">Type any US ticker (e.g. <b>NVDA</b>, <b>CELH</b>, <b>TSLA</b>) and click <b>Calculate Variance</b> for instant historical dispersion &amp; 55-day duration bands.</div>`;

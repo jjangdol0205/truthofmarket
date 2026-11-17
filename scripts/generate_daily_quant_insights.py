@@ -185,14 +185,14 @@ def _lead_box_html(position: str = "top") -> str:
 def _footer_legal_html() -> str:
     return f"""
     <footer>
-      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:12px;padding:10px 14px;background:#0b1120;border:1px solid #1f2937;border-radius:8px;font-size:0.88rem;font-weight:700;">
+      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:12px;padding:10px 14px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;font-size:0.9rem;font-weight:700;">
         <a href="/terms.html">Terms of Service</a> &middot;
         <a href="/privacy.html">Privacy Policy</a> &middot;
-        <a href="/refund.html" style="color:#6ee7b7;">14-Day Refund Policy</a> &middot;
+        <a href="/refund.html" style="color:#047857;">14-Day Refund Policy</a> &middot;
         <a href="/contact.html">Contact Desk</a> &middot;
-        <a href="mailto:beable9489@gmail.com" style="color:#fde68a;">beable9489@gmail.com</a>
+        <a href="mailto:beable9489@gmail.com" style="color:#b45309;">beable9489@gmail.com</a>
       </div>
-      <p style="color:#e2e8f0;font-weight:600;margin-bottom:8px;">{html.escape(MANDATORY_DISCLAIMER)}</p>
+      <p style="color:#334155;font-weight:600;margin-bottom:8px;">{html.escape(MANDATORY_DISCLAIMER)}</p>
       <p style="margin:0;">&copy; 2026 TruthOfMarket &middot; Educational Market Data &amp; Quantitative Research Desk &middot; Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay).</p>
     </footer>"""
 
@@ -259,7 +259,7 @@ def _render_article_shell(
     )
 
     return f"""<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-tom-theme="light" data-tom-font="18">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -279,52 +279,51 @@ def _render_article_shell(
   <script type="application/ld+json">{ld_json}</script>
   {_beacon_script()}
   <style>
-    :root {{ --bg:#090d16; --panel:#111827; --border:#1f2937; --text:#e5e7eb; --muted:#9ca3af; --accent:#10b981; --amber:#f59e0b; --blue:#38bdf8; }}
+    :root {{ --bg:#f8fafc; --panel:#ffffff; --border:#cbd5e1; --text:#0f172a; --muted:#475569; --accent:#059669; --amber:#d97706; --blue:#1d4ed8; }}
     * {{ box-sizing:border-box; }}
-    body {{ margin:0; font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; background:var(--bg); color:var(--text); line-height:1.72; }}
+    body {{ margin:0; font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; font-size:18px; background:var(--bg); color:var(--text); line-height:1.7; }}
     a {{ color:var(--blue); text-decoration:none; }}
     a:hover {{ text-decoration:underline; }}
-    .topbar {{ border-bottom:1px solid var(--border); background:#0b1120; padding:0.9rem 1.25rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; }}
-    .brand {{ font-weight:800; color:#f8fafc; font-size:1.05rem; letter-spacing:-0.02em; }}
-    .nav-links a {{ margin-left:1rem; font-size:0.9rem; color:#cbd5e1; font-weight:600; }}
+    .topbar {{ border-bottom:1.5px solid var(--border); background:#ffffff; padding:0.95rem 1.25rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; }}
+    .brand {{ font-weight:800; color:#0f172a; font-size:1.08rem; letter-spacing:-0.02em; }}
+    .nav-links a {{ margin-left:1rem; font-size:0.95rem; color:#1e293b; font-weight:700; }}
     .wrap {{ max-width:860px; margin:0 auto; padding:2.2rem 1.25rem 4rem; }}
-    .badge {{ display:inline-block; background:rgba(16,185,129,0.14); color:#34d399; border:1px solid rgba(16,185,129,0.35); border-radius:999px; padding:0.2rem 0.75rem; font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; }}
-    h1 {{ font-size:clamp(1.75rem,3.6vw,2.45rem); line-height:1.22; color:#f8fafc; margin:0.8rem 0 0.6rem; letter-spacing:-0.025em; }}
-    .meta {{ color:var(--muted); font-size:0.88rem; margin-bottom:1.8rem; border-bottom:1px solid var(--border); padding-bottom:1rem; }}
-    article h2 {{ color:#f8fafc; font-size:1.38rem; margin-top:2.1rem; margin-bottom:0.65rem; }}
-    article p {{ margin:0.9rem 0; color:#d1d5db; font-size:1.03rem; }}
-    .callout {{ background:var(--panel); border-left:4px solid var(--accent); padding:1.1rem 1.25rem; border-radius:8px; margin:1.4rem 0; }}
-    .data-table {{ width:100%; border-collapse:collapse; margin:1.25rem 0; font-size:0.92rem; background:var(--panel); border-radius:8px; overflow:hidden; }}
+    .badge {{ display:inline-block; background:#ecfdf5; color:#065f46; border:1px solid #059669; border-radius:999px; padding:0.25rem 0.85rem; font-size:0.82rem; font-weight:800; text-transform:uppercase; letter-spacing:0.04em; }}
+    h1 {{ font-size:clamp(1.75rem,3.6vw,2.4rem); line-height:1.25; color:#0f172a; margin:0.8rem 0 0.6rem; letter-spacing:-0.02em; }}
+    .meta {{ color:var(--muted); font-size:0.92rem; margin-bottom:1.8rem; border-bottom:1px solid var(--border); padding-bottom:1rem; }}
+    article h2 {{ color:#0f172a; font-size:1.38rem; margin-top:2.1rem; margin-bottom:0.65rem; }}
+    article p {{ margin:0.9rem 0; color:#1e293b; font-size:1.05rem; }}
+    .callout {{ background:var(--panel); border:1px solid var(--border); border-left:4px solid var(--accent); padding:1.1rem 1.25rem; border-radius:8px; margin:1.4rem 0; }}
+    .data-table {{ width:100%; border-collapse:collapse; margin:1.25rem 0; font-size:0.95rem; background:var(--panel); border:1px solid var(--border); border-radius:8px; overflow:hidden; }}
     .data-table th, .data-table td {{ padding:0.7rem 0.85rem; border-bottom:1px solid var(--border); text-align:left; }}
-    .data-table th {{ background:#0f172a; color:#94a3b8; font-weight:700; text-transform:uppercase; font-size:0.76rem; }}
-    .cta-box {{ background:linear-gradient(135deg,#0f172a 0%,#06281e 100%); border:1px solid rgba(16,185,129,0.45); border-radius:14px; padding:1.6rem; margin:2.4rem 0; }}
-    .cta-box h3 {{ margin:0 0 0.5rem; color:#ecfdf5; font-size:1.25rem; }}
+    .data-table th {{ background:#f1f5f9; color:#334155; font-weight:800; text-transform:uppercase; font-size:0.78rem; }}
+    .cta-box {{ background:linear-gradient(135deg,#ecfdf5 0%,#ffffff 100%); border:1.5px solid #059669; border-radius:14px; padding:1.6rem; margin:2.4rem 0; }}
+    .cta-box h3 {{ margin:0 0 0.5rem; color:#064e3b; font-size:1.25rem; }}
     .btn-row {{ display:flex; flex-wrap:wrap; gap:0.75rem; margin-top:1.1rem; }}
-    .btn {{ display:inline-block; padding:0.75rem 1.25rem; border-radius:8px; font-weight:700; font-size:0.93rem; text-decoration:none !important; }}
-    .btn-free {{ background:#1e293b; color:#f8fafc; border:1px solid #475569; }}
-    .btn-vip {{ background:#10b981; color:#042f2e; }}
-    .btn-life {{ background:#f59e0b; color:#1f1300; }}
+    .btn {{ display:inline-block; padding:0.75rem 1.25rem; border-radius:8px; font-weight:800; font-size:0.96rem; text-decoration:none !important; }}
+    .btn-free {{ background:#ffffff; color:#0f172a; border:1.5px solid #94a3b8; }}
+    .btn-vip {{ background:#1d4ed8; color:#ffffff; }}
+    .btn-life {{ background:#059669; color:#ffffff; }}
     .faq-card {{ background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.1rem 1.25rem; margin-bottom:0.85rem; }}
-    .faq-card h3 {{ margin:0 0 0.4rem; font-size:1.02rem; color:#f8fafc; }}
-    .faq-card p {{ margin:0; color:#cbd5e1; font-size:0.95rem; }}
-    footer {{ margin-top:3rem; padding-top:1.4rem; border-top:1px solid var(--border); color:var(--muted); font-size:0.84rem; }}
+    .faq-card h3 {{ margin:0 0 0.4rem; font-size:1.05rem; color:#0f172a; }}
+    .faq-card p {{ margin:0; color:#334155; font-size:0.98rem; }}
+    footer {{ margin-top:3rem; padding-top:1.4rem; border-top:1px solid var(--border); color:var(--muted); font-size:0.9rem; }}
   </style>
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="/">TruthOfMarket &bull; Retirement Cashflow Calculator</a>
     <nav class="nav-links">
-      <a href="/">Retirement Calculator</a>
-      <a href="/semi-fear-greed.html">Market Weather</a>
-      <a href="/pro-swing.html">Quant Archive</a>
-      <a href="/insights/">Educational Insights</a>
+      <a href="/#tom-retirement-architect">30-Sec Income Simulator</a>
+      <a href="/#tomTrafficLightStrip">3-Color Market Weather</a>
+      <a href="/#tomFreeStarterManual">$0 Broker Guide</a>
+      <a href="/#pricing">VIP Benefits</a>
     </nav>
   </header>
   <main class="wrap">
     <span class="badge">{html.escape(category)}</span>
     <h1>{html.escape(title)}</h1>
     <div class="meta">Published {html.escape(pub_date)} &middot; {read_mins} min read &middot; Educational Market Data &amp; Quantitative Research Desk</div>
-    {_lead_box_html("top")}
     <article>
       {body_html}
     </article>
@@ -332,13 +331,13 @@ def _render_article_shell(
 
     <section class="cta-box">
       <h3>Simulate Your 401(k)/IRA Monthly Cashflow &amp; 2–4x/Year Bucket Weights in 30 Seconds</h3>
-      <p style="margin:0;color:#cbd5e1;">Model conservative retirement income across SGOV (T-Bill Cushion), SCHD (Dividend Growth), JEPI (Monthly Income), and VOO (S&amp;P 500 Core) with our free self-directed calculator software.</p>
+      <p style="margin:0;color:#1e293b;">Model conservative retirement income across $VOO (S&amp;P 500 Core), $SCHD (Dividend Growth ~3.5%), $JEPI (Monthly Income ~7.4%), and $SGOV (US T-Bill Cash ~4.7%) with our free self-directed calculator software.</p>
       <div class="btn-row">
         <a class="btn btn-free" href="/">Open Free 30-Second Retirement Calculator &rarr;</a>
         <a class="btn btn-vip polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="{POLAR_MONTHLY_HREF}">Start Monthly VIP — $29/mo</a>
         <a class="btn btn-life polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" href="{POLAR_ANNUAL_HREF}">Start Annual VIP — $199/yr</a>
       </div>
-      <p style="margin:0.95rem 0 0;font-size:0.84rem;color:#94a3b8;">
+      <p style="margin:0.95rem 0 0;font-size:0.88rem;color:#475569;">
         🏛️ <strong>Educational Market Data &amp; Quantitative Research Desk:</strong> <a href="mailto:beable9489@gmail.com">beable9489@gmail.com</a>
       </p>
     </section>
@@ -598,12 +597,12 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
       </article>"""
 
     hub_html = f"""<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-tom-theme="light" data-tom-font="18">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>US Retirement Cashflow &amp; Quantitative Market Weather Insights | TruthOfMarket</title>
-  <meta name="description" content="Self-directed educational market data studies, 401(k)/IRA retirement cashflow allocation math, and $SMH:$XLV sector correlation notes." />
+  <meta name="description" content="Self-directed educational market data studies, 401(k)/IRA retirement cashflow allocation math, and $VOO · $SCHD · $JEPI · $SGOV rebalancing notes." />
   <link rel="canonical" href="https://truthofmarket.com/insights/" />
   <link rel="alternate" type="application/rss+xml" title="TruthOfMarket RSS Feed" href="https://truthofmarket.com/rss.xml" />
   <meta property="og:type" content="website" />
@@ -613,38 +612,37 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   {_beacon_script()}
   <style>
-    body {{ margin:0; font-family:'Inter',-apple-system,sans-serif; background:#090d16; color:#e5e7eb; line-height:1.65; }}
-    a {{ color:#38bdf8; text-decoration:none; }}
+    body {{ margin:0; font-family:'Inter',-apple-system,sans-serif; font-size:18px; background:#f8fafc; color:#0f172a; line-height:1.7; }}
+    a {{ color:#1d4ed8; text-decoration:none; }}
     a:hover {{ text-decoration:underline; }}
-    .topbar {{ border-bottom:1px solid #1f2937; background:#0b1120; padding:0.9rem 1.25rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; }}
-    .brand {{ font-weight:800; color:#f8fafc; }}
-    .nav-links a {{ margin-left:1rem; color:#cbd5e1; font-size:0.9rem; font-weight:600; }}
+    .topbar {{ border-bottom:1.5px solid #cbd5e1; background:#ffffff; padding:0.95rem 1.25rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; }}
+    .brand {{ font-weight:800; color:#0f172a; }}
+    .nav-links a {{ margin-left:1rem; color:#1e293b; font-size:0.95rem; font-weight:700; }}
     .wrap {{ max-width:920px; margin:0 auto; padding:2.5rem 1.25rem 4rem; }}
-    h1 {{ color:#f8fafc; font-size:clamp(1.8rem,3.5vw,2.4rem); margin-bottom:0.5rem; }}
-    .sub {{ color:#9ca3af; font-size:1.05rem; margin-bottom:2rem; }}
-    .card {{ background:#111827; border:1px solid #1f2937; border-radius:12px; padding:1.5rem; margin-bottom:1.15rem; }}
-    .cat {{ color:#34d399; font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; }}
+    h1 {{ color:#0f172a; font-size:clamp(1.8rem,3.5vw,2.4rem); margin-bottom:0.5rem; }}
+    .sub {{ color:#334155; font-size:1.06rem; margin-bottom:2rem; }}
+    .card {{ background:#ffffff; border:1.5px solid #cbd5e1; border-radius:12px; padding:1.5rem; margin-bottom:1.15rem; }}
+    .cat {{ color:#047857; font-size:0.82rem; font-weight:800; text-transform:uppercase; letter-spacing:0.04em; }}
     .card h2 {{ margin:0.45rem 0 0.55rem; font-size:1.28rem; }}
-    .card h2 a {{ color:#f8fafc; }}
-    .card p {{ margin:0 0 0.85rem; color:#cbd5e1; font-size:0.96rem; }}
-    .read-more {{ font-weight:700; font-size:0.9rem; color:#38bdf8; }}
-    footer {{ margin-top:3rem; padding-top:1.4rem; border-top:1px solid #1f2937; color:#9ca3af; font-size:0.84rem; }}
+    .card h2 a {{ color:#0f172a; }}
+    .card p {{ margin:0 0 0.85rem; color:#334155; font-size:1rem; }}
+    .read-more {{ font-weight:800; font-size:0.95rem; color:#1d4ed8; }}
+    footer {{ margin-top:3rem; padding-top:1.4rem; border-top:1px solid #cbd5e1; color:#475569; font-size:0.9rem; }}
   </style>
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="/">TruthOfMarket &bull; Retirement Cashflow Calculator</a>
     <nav class="nav-links">
-      <a href="/">Retirement Calculator</a>
-      <a href="/semi-fear-greed.html">Market Weather</a>
-      <a href="/pro-swing.html">Quant Archive</a>
-      <a href="/insights/">Educational Insights</a>
+      <a href="/#tom-retirement-architect">30-Sec Income Simulator</a>
+      <a href="/#tomTrafficLightStrip">3-Color Market Weather</a>
+      <a href="/#tomFreeStarterManual">$0 Broker Guide</a>
+      <a href="/#pricing">VIP Benefits</a>
     </nav>
   </header>
   <main class="wrap">
     <h1>Educational Market Weather &amp; Retirement Allocation Journal</h1>
-    <p class="sub">Self-directed mathematical studies on US 401(k)/IRA sequence-of-returns cushioning, calm 2–4x/year rebalancing, and 26.8 years of empirical market data.</p>
-    {_lead_box_html("top")}
+    <p class="sub">Self-directed mathematical studies on US 401(k)/IRA sequence-of-returns cushioning, calm 2–4x/year rebalancing, and empirical market data.</p>
     {cards_html}
     {_lead_box_html("bottom")}
     {_footer_legal_html()}

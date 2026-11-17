@@ -1,259 +1,163 @@
-import { formatCheckoutUrl } from "../services/api.js";
+export function getLatestUsMarketCloseDate(serverDateStr = "") {
+  const baseline = "2026-11-16";
+  let candidate = String(serverDateStr || "").slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(candidate) || candidate < baseline) {
+    candidate = baseline;
+  }
+  try {
+    if (typeof Intl !== "undefined") {
+      const now = new Date();
+      const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "America/New_York",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        weekday: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }).formatToParts(now);
+      const getP = (t) => parts.find((p) => p.type === t)?.value || "";
+      const y = Number(getP("year"));
+      const m = Number(getP("month"));
+      const d = Number(getP("day"));
+      const wk = getP("weekday");
+      const hr = Number(getP("hour"));
+      const mn = Number(getP("minute"));
+      if (y && m && d) {
+        const utcRef = new Date(Date.UTC(y, m - 1, d));
+        const afterClose = hr > 16 || (hr === 16 && mn >= 15);
+        let backDays = 0;
+        if (wk === "Sat") backDays = 1;
+        else if (wk === "Sun") backDays = 2;
+        else if (!afterClose) {
+          backDays = wk === "Mon" ? 3 : 1;
+        }
+        utcRef.setUTCDate(utcRef.getUTCDate() - backDays);
+        const nyCloseIso = utcRef.toISOString().slice(0, 10);
+        if (nyCloseIso > candidate) {
+          candidate = nyCloseIso;
+        }
+      }
+    }
+  } catch (_) {}
+  return candidate;
+}
 
 export function renderHeader(state) {
-  const t = state.t;
-  const lang = state.lang || "en";
-  const isPro = state.isProUnlocked;
-  const activeView = state.activeView || "rightside";
   const ov = state.semiOverview;
-  const semiScore =
+  const fgNum =
     ov && ov.fg_score !== undefined && ov.fg_score !== null
-      ? Number(ov.fg_score).toFixed(1)
-      : "18.3";
-  const rawRegime = ov
-    ? lang === "jp"
-      ? ov.regime_jp
-      : ov.regime_en
-    : "EXTREME FEAR";
-  const semiRegime = String(rawRegime || "EXTREME FEAR").toUpperCase();
-  const semiDate = ov && ov.date ? ov.date : "2026-11-13";
-  const smhPrice = ov && ov.smh_close !== undefined ? Number(ov.smh_close).toFixed(2) : "486.75";
-  const xlvPrice = ov && ov.xlv_close !== undefined ? Number(ov.xlv_close).toFixed(2) : "188.85";
-  const qqqPrice = ov && ov.qqq_close !== undefined ? Number(ov.qqq_close).toFixed(2) : "679.89";
+      ? Number(ov.fg_score)
+      : 28.0;
+  const closeDate = getLatestUsMarketCloseDate(ov && ov.date ? ov.date : "2026-11-16");
 
-  const etfs = ov && Array.isArray(ov.etfs) ? ov.etfs : [];
-  const qqqEtf = etfs.find((e) => e.ticker === "QQQ");
-  const smhEtf = etfs.find((e) => e.ticker === "SMH");
-  const xlvEtf = etfs.find((e) => e.ticker === "XLV");
+  const weatherStatus =
+    fgNum <= 32
+      ? { pill: "🔴 Drawdown Guard Active", cls: "tape-down" }
+      : fgNum >= 58
+      ? { pill: "🟢 Calm Uptrend", cls: "tape-up" }
+      : { pill: "🟡 Cautious Breadth", cls: "tape-caution" };
 
-  const qqq1d = qqqEtf && qqqEtf.ret_1d_pct !== undefined ? Number(qqqEtf.ret_1d_pct) : 0.25;
-  const smhDd =
-    smhEtf && smhEtf.dd_52w_pct !== undefined
-      ? Number(smhEtf.dd_52w_pct)
-      : ov && ov.smh_dd_pct !== undefined
-      ? Number(ov.smh_dd_pct)
-      : -29.02;
-  const xlv1d = xlvEtf && xlvEtf.ret_1d_pct !== undefined ? Number(xlvEtf.ret_1d_pct) : 0.22;
-  const polarMonthlyHref = formatCheckoutUrl(
-    state.config?.polar_tom_monthly_url || state.config?.ls_site1_monthly_url,
-    "#tom-vip-monthly"
-  );
-  const ytUrl = state.config?.youtube_url || "https://www.youtube.com/@RightSideAlpha";
-  const igUrl = state.config?.instagram_url || "https://www.instagram.com/rightsidealpha";
-  const xUrl = state.config?.x_url || "https://x.com/rightsidealpha";
-  const tgUrl = isPro
-    ? state.config?.telegram_vip_channel_url || state.config?.telegram_channel_url || "https://t.me/truthofmarketss"
-    : "#pro-vip-telegram";
-  const isAdminMode =
-    (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("admin") === "1") ||
-    Boolean(state.isAdminAuthenticated);
-  const isProSwing =
+  const allStocks = Array.isArray(state.stocks) ? state.stocks : [];
+  const findClose = (tkr, fallback) => {
+    const found = allStocks.find((s) => String(s.ticker || "").toUpperCase() === tkr);
+    return found && found.close ? Number(found.close).toFixed(2) : fallback;
+  };
+  const vooPrice = findClose("VOO", "548.60");
+  const schdPrice = findClose("SCHD", "29.45");
+  const jepiPrice = findClose("JEPI", "59.18");
+  const sgovPrice = findClose("SGOV", "100.52");
+
+  const isSubpage =
     typeof window !== "undefined" &&
-    (window.__DEFAULT_VIEW__ === "pro_swing" || window.location.pathname.toLowerCase().includes("pro-swing"));
+    (window.__DEFAULT_VIEW__ === "pro_swing" ||
+      window.__DEFAULT_VIEW__ === "semi" ||
+      (window.location.pathname &&
+        window.location.pathname !== "/" &&
+        !window.location.pathname.endsWith("/index.html")));
+
+  const homePrefix = isSubpage ? "/" : "";
+  const fontPx = Number(state.fontSizePx || 18);
 
   return `
-    <span id="pro-vip-telegram" style="display:none;" aria-hidden="true"></span>
-    <!-- MARKET DATA RIBBON -->
-    <div class="market-ribbon">
+    <!-- RETIREMENT 4-CORE ETFs & US MARKET WEATHER RIBBON -->
+    <div class="market-ribbon" role="region" aria-label="US Retirement 4-Core ETFs and Market Weather">
       <div class="market-ribbon-inner">
         <div class="market-tape">
-          <span class="universe-pill">
-            <span class="universe-dot"></span>
-            ${t.marketUniverseTag}
-          </span>
           <span class="tape-item">
-            <span class="tape-sym">QQQ</span>
-            <span>$${qqqPrice}</span>
-            <span class="${qqq1d >= 0 ? "tape-up" : "tape-down"}">${qqq1d >= 0 ? "+" : ""}${qqq1d.toFixed(2)}%</span>
+            <span class="tape-sym">$VOO</span>
+            <span class="tape-role">(S&amp;P 500 Core)</span>
+            <strong class="tape-price">$${vooPrice}</strong>
           </span>
+          <span class="tape-sep" aria-hidden="true">&middot;</span>
           <span class="tape-item">
-            <span class="tape-sym">SMH</span>
-            <span>$${smhPrice}</span>
-            <span class="tape-down">${smhDd.toFixed(2)}% DD</span>
+            <span class="tape-sym">$SCHD</span>
+            <span class="tape-role">(Dividend Growth ~3.5%)</span>
+            <strong class="tape-price">$${schdPrice}</strong>
           </span>
+          <span class="tape-sep" aria-hidden="true">&middot;</span>
           <span class="tape-item">
-            <span class="tape-sym">XLV</span>
-            <span>$${xlvPrice}</span>
-            <span class="${xlv1d >= 0 ? "tape-up" : "tape-down"}">${xlv1d >= 0 ? "+" : ""}${xlv1d.toFixed(2)}%</span>
+            <span class="tape-sym">$JEPI</span>
+            <span class="tape-role">(Monthly Income ~7.4%)</span>
+            <strong class="tape-price">$${jepiPrice}</strong>
           </span>
-          <span class="tape-item" style="cursor:pointer;" id="ribbonSwitchSemi">
-            <span class="tape-sym">MARKET WEATHER</span>
-            <span class="${Number(semiScore) >= 55 ? "tape-up" : "tape-down"}" style="font-weight:700;">${semiScore} / 100 (${semiRegime})</span>
+          <span class="tape-sep" aria-hidden="true">&middot;</span>
+          <span class="tape-item">
+            <span class="tape-sym">$SGOV</span>
+            <span class="tape-role">(US T-Bill Cash ~4.7%)</span>
+            <strong class="tape-price">$${sgovPrice}</strong>
+          </span>
+          <span class="tape-sep" aria-hidden="true">|</span>
+          <span class="tape-item" id="ribbonWeatherStatus">
+            <span class="tape-sym">US Retirement Market Weather (S&amp;P 500 Breadth &amp; Drawdown Guard):</span>
+            <span class="${weatherStatus.cls}" style="font-weight:800;">${weatherStatus.pill}</span>
           </span>
         </div>
-        <div class="mono ribbon-date-note" style="font-size:0.68rem; color:var(--muted);">
-          LATEST CLOSE (${semiDate}) · PUBLIC MARKET DATA
+        <div class="mono ribbon-date-note" id="latestMarketCloseNote">
+          ${closeDate} US Market Close
         </div>
       </div>
     </div>
 
-    <!-- MAIN TOPBAR -->
+    <!-- CLEAN SENIOR-FRIENDLY TOPBAR (<= 5 CORE NAVIGATION ITEMS) -->
     <header class="topbar">
       <div class="topbar-inner">
-        <div class="brand-cluster">
-          <a href="/" class="brand" id="brandHomeBtn" style="text-decoration:none;">
-            <span class="brand-mark">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
-                <polyline points="16 7 22 7 22 13"></polyline>
-              </svg>
-            </span>
-            <span>TruthOfMarket</span>
-            <span class="brand-badge" id="brandSubtitle">${t.brandSubtitle}</span>
-          </a>
-
-          <!-- PLATFORM SWITCHER -->
-          <div class="platform-switcher" role="tablist" aria-label="Calculator Navigation">
-            <a
-              href="/"
-              class="platform-tab ${!isProSwing && activeView === "rightside" ? "active-rsa" : ""}"
-              id="navTabRightSide"
-              data-view="rightside"
-              style="text-decoration:none;"
-            >
-              <span>${t.navRightSide}</span>
-              <span class="platform-tab-tag">4-Core</span>
-            </a>
-            <button
-              type="button"
-              class="platform-tab ${activeView === "semi" ? "active-semi" : ""}"
-              id="navTabSemiFg"
-              data-view="semi"
-            >
-              <span>${t.navSemiFg}</span>
-              <span class="platform-tab-tag" id="headerSemiScoreTag" style="color:#fca5a5; background:rgba(220,38,38,0.2);">${semiScore}</span>
-            </button>
-            <a
-              href="/pro-swing.html"
-              class="platform-tab ${isProSwing ? "active-rsa" : ""}"
-              style="text-decoration:none;"
-              title="Self-Directed Quantitative Factor Research Archive"
-            >
-              <span>Quant Archive</span>
-            </a>
-          </div>
-        </div>
-
-        <div class="nav-actions">
-          <button
-            type="button"
-            class="btn btn-sm"
-            id="btnToggleTomFont"
-            title="Toggle Large Senior Text Size (18px-20px)"
-            style="min-height:38px; padding:4px 9px; font-weight:800; border-color:rgba(16,185,129,0.5); color:#34d399;"
-          >
-            🔍 ${state.fontSizeMode === "large" ? "Text: Large" : "Text: A+"}
-          </button>
-
-          <button
-            type="button"
-            class="btn btn-sm"
-            id="btnToggleTomTheme"
-            title="Switch between Daylight Light Mode and Dark Mode"
-            style="min-height:38px; padding:4px 9px; font-weight:800; border-color:rgba(251,191,36,0.5); color:#fbbf24;"
-          >
-            ${state.uiTheme === "light" ? "🌙 Dark" : "☀️ Daylight"}
-          </button>
-
-          <div class="lang-switch" aria-label="Language Selector">
-            <button type="button" class="lang-btn ${lang !== "jp" ? "active" : ""}" data-lang="en">EN</button>
-            <button type="button" class="lang-btn ${lang === "jp" ? "active" : ""}" data-lang="jp">JP</button>
-          </div>
-
-          <span class="badge ${isPro ? "badge-ignition" : "badge-watch"}" id="proStatusBadge">
-            ${isPro ? t.statusPro : t.statusFree}
+        <a href="/" class="brand" id="brandHomeBtn" aria-label="TruthOfMarket Home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+              <polyline points="16 7 22 7 22 13"></polyline>
+            </svg>
           </span>
+          <span class="brand-name-wrap">
+            <span class="brand-title">TruthOfMarket</span>
+            <span class="brand-badge" id="brandSubtitle">401(k) &amp; IRA Income Architect</span>
+          </span>
+        </a>
 
-          <button type="button" class="btn" id="btnOpenLicense">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-            </svg>
-            <span id="btnLicense">${t.btnLicense}</span>
+        <nav class="senior-top-nav" aria-label="Main Retirement Tools Navigation">
+          <a href="${homePrefix}#tom-retirement-architect" class="senior-nav-item" id="navIncomeSim">
+            30-Sec Income Simulator
+          </a>
+          <a href="${homePrefix}#tomTrafficLightStrip" class="senior-nav-item" id="navMarketWeather">
+            3-Color Market Weather
+          </a>
+          <a href="${homePrefix}#tomFreeStarterManual" class="senior-nav-item" id="navBrokerGuide">
+            $0 Broker Guide
+          </a>
+          <a href="#pricing" class="senior-nav-item is-vip-link" id="navVipBenefits">
+            VIP Benefits
+          </a>
+          <button
+            type="button"
+            class="senior-nav-item is-font-btn"
+            id="btnToggleTomFont"
+            title="Cycle Senior Large-Print Text Size: 18px -> 20px -> 22px"
+          >
+            Text Size A+${fontPx > 18 ? ` (${fontPx}px)` : ""}
           </button>
-
-          <div class="social-icon-cluster" aria-label="Official Social Channels">
-            <a
-              class="btn social-btn yt"
-              id="headerYoutubeLink"
-              href="${ytUrl}"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Official YouTube (@RightSideAlpha)"
-              aria-label="Official YouTube"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/>
-              </svg>
-            </a>
-
-            <a
-              class="btn social-btn ig"
-              id="headerInstagramLink"
-              href="${igUrl}"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Official Instagram (@rightsidealpha)"
-              aria-label="Official Instagram"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-              </svg>
-            </a>
-
-            <a
-              class="btn social-btn x"
-              id="headerXLink"
-              href="${xUrl}"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Official X (@rightsidealpha)"
-              aria-label="Official X"
-            >
-              <span style="font-weight:700; font-size:0.85rem;">𝕏</span>
-            </a>
-          </div>
-
-          <a
-            class="btn ${isPro ? "" : "btn-gated-vip-tg"}"
-            id="headerTelegramLink"
-            href="${tgUrl}"
-            ${isPro ? 'target="_blank" rel="noopener noreferrer"' : ""}
-            title="${isPro ? "Open VIP Telegram Educational Research Channel" : "VIP Subscribers — Educational Research Channel"}"
-            style="border-color:rgba(56,189,248,0.45); color:#38bdf8;"
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="22" y1="2" x2="11" y2="13"></line>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-            </svg>
-            <span>${isPro ? "👑 VIP TG" : "🔒 VIP TG"}</span>
-          </a>
-
-          ${
-            isAdminMode
-              ? `<button type="button" class="btn" id="btnOpenConfig">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="3"></circle>
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-            </svg>
-            <span id="btnAdmin">${t.btnAdmin}</span>
-          </button>`
-              : ""
-          }
-
-          <a
-            class="btn btn-primary polar-checkout-button"
-            id="topSubscribeBtn"
-            data-polar-checkout
-            data-polar-plan="monthly_29"
-            data-tom-paid-plan="monthly"
-            href="${polarMonthlyHref}"
-          >
-            <span id="btnUnlockPro">${t.btnUnlockPro}</span>
-          </a>
-        </div>
+        </nav>
       </div>
     </header>
   `;

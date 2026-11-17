@@ -1,4 +1,5 @@
 import { formatCheckoutUrl } from "../services/api.js";
+import { getLatestUsMarketCloseDate } from "./Header.js";
 
 const TOM_MORNING_CLUB_NOTES = [
   "Good morning, Club Member — you never have to chase every rally. Protecting your principal comes first.",
@@ -123,9 +124,9 @@ export function getTomMorningClubPollData(todayKey) {
 }
 
 export const TOM_CRM_SEGMENTS = [
-  { id: "retirement_401k_ira", label: "401(k) / IRA Retirement Cashflow & Defense" },
-  { id: "us_macro_sp500", label: "Daily US Macro & S&P 500" },
-  { id: "ai_semis_momentum", label: "Semiconductors & AI Leaders" },
+  { id: "retirement_401k_ira", label: "401(k) / IRA Monthly Cashflow & Defense" },
+  { id: "dividend_income_core", label: "Dividend Growth & T-Bill Yield ($SCHD · $JEPI · $SGOV)" },
+  { id: "us_macro_sp500", label: "Daily US S&P 500 Market Weather ($VOO)" },
 ];
 
 export function escapeTomCrmHtml(raw) {
@@ -527,7 +528,7 @@ export function renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRe
       <div class="tom-retire-top-bar">
         <span class="tom-retire-badge">🧭 FREE 30-SECOND RETIREMENT ARCHITECT · ZERO LOGIN</span>
         <span class="tom-retire-live-tag" id="tomRetireLiveSignalBadge">
-          Live Market Weather: ${plan.weatherPill} (Semi F&amp;G ${semiScore}/100)
+          US Retirement Market Weather (S&amp;P 500 Breadth &amp; Drawdown Guard): ${plan.weatherPill}
         </span>
       </div>
 
@@ -535,7 +536,7 @@ export function renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRe
         30-Second Comfortable Retirement &amp; Monthly Cashflow Simulator
       </h2>
       <p class="tom-retire-lead">
-        Tap 3 buttons below to see your <b>calm monthly retirement paycheck</b> (on top of Social Security), how much monthly income you protect by avoiding a <b>-35% retirement-eve crash</b>, and how to rebalance <b>$SGOV &middot; $SCHD &middot; $JEPI &middot; $VOO</b> calmly just <b>2–4 times a year</b>.
+        Tap 3 buttons below to see your <b>calm monthly retirement paycheck</b> (on top of Social Security), how much monthly income you protect by avoiding a <b>-35% retirement-eve crash</b>, and how to rebalance <b>$VOO &middot; $SCHD &middot; $JEPI &middot; $SGOV</b> calmly just <b>2–4 times a year</b>.
       </p>
 
       <div class="tom-retire-presets-wrap">
@@ -881,17 +882,12 @@ export function renderHero(state) {
   const semiScore =
     ov && ov.fg_score !== undefined && ov.fg_score !== null
       ? Number(ov.fg_score).toFixed(1)
-      : "18.3";
-  const latestStockDate =
-    state.stocks && state.stocks.length > 0 && state.stocks[0].date
-      ? state.stocks[0].date
-      : ov && ov.date
-      ? ov.date
-      : "2026-11-13";
+      : "28.0";
+  const closeDateStr = getLatestUsMarketCloseDate(ov && ov.date ? ov.date : "2026-11-16");
+  const latestStockDate = `${closeDateStr} US Market Close`;
 
   const allStocks = (state.stocks || []).filter((s) => s.ticker && !String(s.ticker).includes("."));
   const cntGreen = allStocks.filter((s) => s.zone_code === "IGNITION_ZONE").length || 8;
-  const cntYellow = allStocks.filter((s) => s.zone_code === "WASHOUT_WATCH").length || 19;
   const cntRed = allStocks.filter((s) => s.zone_code === "LEFT_SIDE_KNIFE" || s.zone_code === "VALUE_TRAP_FILTERED").length || 45;
   const savedFreeEmail =
     state.freeMemberEmail ||
@@ -906,12 +902,12 @@ export function renderHero(state) {
     ? TOM_MORNING_CLUB_COMPANION_MSG[clubPoll.choice]
     : "Tap your morning stance above to compare notes with fellow 401(k) & IRA members — zero login required.";
   const existingClubMember = getStoredTomClubMember();
-  const hasActiveClubMember = Boolean(existingClubMember && existingClubMember.email);
+  const hasActiveClubMember = Boolean((existingClubMember && existingClubMember.email) || savedFreeEmail);
+  const activeEmailDisplay = (existingClubMember && existingClubMember.email) || savedFreeEmail || "";
   const initialClubSeg =
     (existingClubMember && existingClubMember.segment) || "retirement_401k_ira";
   const initialClubSegLabel = getTomCrmSegmentLabel(initialClubSeg);
-  const initialClubEmail =
-    (existingClubMember && existingClubMember.email) || savedFreeEmail || "";
+  const initialClubEmail = activeEmailDisplay;
   const initialClubNick =
     (existingClubMember && existingClubMember.nickname) || "";
 
@@ -920,88 +916,45 @@ export function renderHero(state) {
       <div class="hero-top-row">
         <div style="min-width:0; flex:1 1 320px;">
           <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
-            <div class="hero-tag" id="heroTag" style="margin-bottom:0; font-size:0.95rem;">${t.heroTag} · ${latestStockDate}</div>
+            <div class="hero-tag" id="heroTag" style="margin-bottom:0; font-size:0.95rem;">${t.heroTag} &middot; ${latestStockDate}</div>
             <button
               type="button"
-              class="btn btn-sm"
+              class="btn btn-sm hero-explainer-btn"
               id="btnOpenPwRsiExplainer"
-              style="min-height:48px; padding:8px 16px; font-size:0.95rem; font-family:var(--font-mono); font-weight:800; border-color:rgba(56,189,248,0.5); color:#38bdf8; background:rgba(56,189,248,0.12); display:inline-flex; align-items:center; gap:6px; cursor:pointer;"
-              title="Click to view full methodology"
+              title="Click to view full 3-Bucket methodology"
             >
               <span>💡</span>
               <span>${t.pwRsiExplainerBtn || "How It Works"}</span>
             </button>
           </div>
           <h1 id="heroTitle">${t.heroTitle}</h1>
-          <p id="heroDesc" style="font-size:1.125rem; line-height:1.72;">${t.heroDesc}</p>
+          <p id="heroDesc">${t.heroDesc}</p>
         </div>
       </div>
 
-      <!-- 🚦 JARGON-FREE 3-COLOR MARKET WEATHER SUMMARY (50-70s US INVESTORS · CALM 2-4X/YR REBALANCING) -->
-      <div class="tom-traffic-strip" id="tomTrafficLightStrip" role="group" aria-label="Today's 3-Color Market Weather Indicators">
+      <!-- 🚦 JARGON-FREE 3-COLOR US RETIREMENT MARKET WEATHER (S&P 500 BREADTH & DRAWDOWN GUARD) -->
+      <div class="tom-traffic-strip" id="tomTrafficLightStrip" role="group" aria-label="US Retirement Market Weather (S&P 500 Breadth & Drawdown Guard)">
         <button type="button" class="tom-traffic-card t-green" data-traffic-zone="RETIRE_SIM">
-          <span style="font-size:0.96rem; font-weight:800; color:#34d399;">🟢 CALM UPTREND WEATHER</span>
-          <strong style="font-size:1.1rem; color:var(--text);">20% $SGOV · 35% $JEPI+$SCHD · 45% $VOO</strong>
-          <span style="font-size:1rem; line-height:1.55; color:var(--text-secondary);">Healthy broad trend · Let dividends &amp; S&amp;P 500 core compound calmly →</span>
+          <span class="tom-traffic-kicker is-green">🟢 CALM UPTREND WEATHER</span>
+          <strong class="tom-traffic-weights">20% $SGOV &middot; 35% $JEPI+$SCHD &middot; 45% $VOO</strong>
+          <span class="tom-traffic-sub">Healthy S&amp;P 500 breadth &middot; Let dividends &amp; core index compound calmly &rarr;</span>
         </button>
         <button type="button" class="tom-traffic-card t-yellow" data-traffic-zone="RETIRE_SIM">
-          <span style="font-size:0.96rem; font-weight:800; color:#fbbf24;">🟡 CAUTIOUS BASE WEATHER</span>
-          <strong style="font-size:1.1rem; color:var(--text);">30% $SGOV · 40% $JEPI+$SCHD · 30% $VOO</strong>
-          <span style="font-size:1rem; line-height:1.55; color:var(--text-secondary);">Mixed breadth · Collect steady monthly dividends while bases form →</span>
+          <span class="tom-traffic-kicker is-yellow">🟡 CAUTIOUS BASE WEATHER</span>
+          <strong class="tom-traffic-weights">30% $SGOV &middot; 40% $JEPI+$SCHD &middot; 30% $VOO</strong>
+          <span class="tom-traffic-sub">Mixed market breadth &middot; Collect steady monthly dividends while bases form &rarr;</span>
         </button>
         <button type="button" class="tom-traffic-card t-red" data-traffic-zone="MANUAL">
-          <span style="font-size:0.96rem; font-weight:800; color:#f87171;">🔴 CRASH DEFENSE WEATHER</span>
-          <strong style="font-size:1.1rem; color:var(--text);">40% $SGOV · 40% $JEPI+$SCHD · 20% $VOO</strong>
-          <span style="font-size:1rem; line-height:1.55; color:var(--text-secondary);">Calm 2–4x/yr weight rebalance · Open the $0 Safe Rebalancing Manual →</span>
+          <span class="tom-traffic-kicker is-red">🔴 DRAWDOWN GUARD WEATHER</span>
+          <strong class="tom-traffic-weights">40% $SGOV &middot; 40% $JEPI+$SCHD &middot; 20% $VOO</strong>
+          <span class="tom-traffic-sub">Calm 2–4x/yr weight rebalance &middot; Open the $0 Safe Broker Guide &rarr;</span>
         </button>
       </div>
 
       <!-- 🧭 30-SECOND COMFORTABLE RETIREMENT & MONTHLY CASHFLOW SIMULATOR (#tom-retirement-architect) -->
       ${renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRed })}
 
-      <!-- 📧 ABOVE-THE-FOLD 60PX 1-FIELD FREE MORNING SIGNAL EMAIL SIGNUP -->
-      <div class="tom-morning-box" id="tomMorningSignalBox">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-          <span style="background:rgba(16,185,129,0.2); color:#34d399; border:1px solid rgba(16,185,129,0.45); font-size:0.94rem; font-weight:800; padding:5px 12px; border-radius:999px;">
-            📧 FREE DAILY 8:30 AM ET RETIREMENT BRIEF · NO CREDIT CARD REQUIRED
-          </span>
-          <span style="font-size:0.95rem; color:var(--text-secondary); font-weight:700;">
-            100% Free Forever · Unsubscribe in 1 Click
-          </span>
-        </div>
-        <h2 style="font-size:1.3rem; font-weight:900; color:var(--text); margin:10px 0 6px; line-height:1.38;">
-          Get Today&rsquo;s 3-Color Retirement Weather &amp; Calm Rebalancing Guide Every Morning
-        </h2>
-        <p style="font-size:1.08rem; color:var(--text-secondary); margin:0; line-height:1.68;">
-          Enter your email once to instantly unlock <b>Today&rsquo;s 4-Core Retirement Model Weights ($SGOV &middot; $SCHD &middot; $JEPI &middot; $VOO)</b> right on this screen plus calm morning guidance.
-        </p>
-        <form class="tom-morning-form" id="tomMorningSignalForm">
-          <label for="tomMorningEmailInput" style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0);">Email Address</label>
-          <input
-            type="email"
-            id="tomMorningEmailInput"
-            class="tom-morning-input"
-            required
-            autocomplete="email"
-            value="${savedFreeEmail.replace(/"/g, "")}"
-            placeholder="Enter your email address (e.g., robert@email.com)"
-          />
-          <button type="submit" id="btnTomMorningSubmit" class="tom-morning-btn">
-            📧 Get My Free Daily Retirement Brief →
-          </button>
-        </form>
-        <div id="tomMorningSignalStatus" role="status" aria-live="polite" style="display:${savedFreeEmail ? "block" : "none"}; margin-top:10px; font-size:1.05rem; font-weight:800; color:#34d399;">
-          ${savedFreeEmail ? `✅ Free Morning Retirement Brief Active (${savedFreeEmail.replace(/[<>&"]/g, "")}) — Your 4-Core Allocation Guide below is unlocked!` : ""}
-        </div>
-        <div id="tomFreeMemberBonusCard" style="display:${savedFreeEmail ? "block" : "none"}; margin-top:12px; background:rgba(15,23,42,0.9); border:1.5px solid #10b981; border-radius:12px; padding:14px 16px; font-size:1.06rem; line-height:1.72; color:#f8fafc;">
-          <div style="font-weight:800; color:#34d399; margin-bottom:6px;">🎁 FREE MEMBER BONUS UNLOCKED — Today&rsquo;s 4-Core Retirement Posture (2–4x/Yr Calm Rebalance):</div>
-          <div>• <b>🛡️ Bucket 1 ($SGOV US T-Bill Cushion):</b> Hold <b>30–40%</b> in short-term Treasury cash (~4.7% yield) so monthly bills are 100% insulated.</div>
-          <div>• <b>💵 Bucket 2 ($JEPI + $SCHD Dividend Income):</b> Hold <b>35–40%</b> across monthly income &amp; rising dividend aristocrats.</div>
-          <div>• <b>🌱 Bucket 3 ($VOO S&amp;P 500 + $XLV Healthcare):</b> Semi Fear &amp; Greed at <b>${semiScore}/100</b> — Rebalance calmly 2–4 times a year, never panic-sell.</div>
-        </div>
-      </div>
-
-      <!-- ☕ MORNING BELL CLUB — ZERO-SIGNUP DAILY HABIT & BELONGING HUB -->
+      <!-- ☕ UNIFIED MORNING BELL CLUB — SINGLE PASSWORDLESS 3-SEC SIGNUP & DAILY HABIT HUB -->
       <div class="tom-club-box" id="tomMorningBellClub" role="region" aria-label="Morning Bell Retirement & Macro Club — Protecting Your Nest Egg Together">
         <div class="tom-club-header">
           <div class="tom-club-title-wrap">
@@ -1019,7 +972,7 @@ export function renderHero(state) {
         </div>
 
         <div class="tom-club-poll-head">
-          <span class="tom-club-poll-title">🗳️ Today&rsquo;s Member Sentiment Poll (1-Click):</span>
+          <span class="tom-club-poll-title">🗳️ Today&rsquo;s Retiree Sentiment Poll (1-Click):</span>
           <span class="tom-club-poll-count" id="tomClubPollTotalCount">${clubPoll.total.toLocaleString()} members checked in today</span>
         </div>
 
@@ -1083,18 +1036,18 @@ export function renderHero(state) {
           class="tom-crm-signup-panel"
           id="tom-passwordless-club-signup"
           role="region"
-          aria-label="Passwordless 3-Second Morning Bell Macro Club Membership"
+          aria-label="Passwordless 3-Second Morning Bell Club Membership"
         >
           <div class="tom-crm-top-row">
-            <span class="tom-crm-badge">FREE MEMBER BRIEFING · NO PASSWORD NEEDED</span>
-            <span class="tom-crm-trust-note">100% Free · 1-Click Unsubscribe Anytime</span>
+            <span class="tom-crm-badge">📧 FREE DAILY 8:30 AM ET BRIEF &bull; NO PASSWORD NEEDED</span>
+            <span class="tom-crm-trust-note">100% Free Forever &middot; 1-Click Unsubscribe Anytime</span>
           </div>
 
           <h3 class="tom-crm-heading">
-            Get Daily Retirement Cashflow &amp; 3-Color US Macro Briefings in Your Inbox.
+            Join the Morning Bell Club — Get Daily 3-Color US Retirement Market Weather in Your Inbox.
           </h3>
           <p class="tom-crm-subcopy">
-            3-second passwordless club access. Choose your #1 focus to protect your 401(k)/IRA principal and calm monthly income before the 9:30 AM opening bell.
+            One simple 3-second signup unlocks <b>Today&rsquo;s 4-Core Retirement Posture ($VOO &middot; $SCHD &middot; $JEPI &middot; $SGOV)</b> right on this screen plus calm 8:30 AM ET rebalancing notes before the opening bell.
           </p>
 
           <div
@@ -1105,7 +1058,7 @@ export function renderHero(state) {
             <span class="tom-crm-active-text" id="tom-club-active-member-text">
               ${
                 hasActiveClubMember
-                  ? `Morning Bell Member Active: ${escapeTomCrmHtml(existingClubMember.email)} · Focus: ${escapeTomCrmHtml(initialClubSegLabel)}`
+                  ? `Morning Bell Member Active: ${escapeTomCrmHtml(activeEmailDisplay)} · Focus: ${escapeTomCrmHtml(initialClubSegLabel)}`
                   : ""
               }
             </span>
@@ -1131,7 +1084,7 @@ export function renderHero(state) {
               style="display:none;"
             />
 
-            <div class="tom-crm-seg-label">Tap Your #1 Morning Focus (1-Click):</div>
+            <div class="tom-crm-seg-label">Tap Your #1 Retirement Focus (1-Click):</div>
             <div class="tom-crm-seg-grid" role="group" aria-label="Choose your #1 Morning Bell focus">
               ${TOM_CRM_SEGMENTS.map(
                 (seg) => `
@@ -1166,11 +1119,11 @@ export function renderHero(state) {
                 required
                 autocomplete="email"
                 value="${escapeTomCrmHtml(initialClubEmail)}"
-                placeholder="Enter your best email for Morning Bell alerts"
+                placeholder="Enter your email address (e.g., robert@email.com)"
                 aria-label="Email address"
               />
               <button type="submit" id="tom-club-signup-btn" class="tom-crm-submit-btn">
-                Join Free Morning Bell Club (3-Sec Access) ->
+                Join Free Morning Bell Club (3-Sec Access) -&gt;
               </button>
             </div>
           </form>
@@ -1182,41 +1135,48 @@ export function renderHero(state) {
             aria-live="polite"
             style="display:none;"
           ></div>
+
+          <div id="tomFreeMemberBonusCard" class="tom-member-bonus-card" style="display:${hasActiveClubMember ? "block" : "none"};">
+            <div class="tom-member-bonus-title">🎁 CLUB MEMBER POSTURE UNLOCKED — Today&rsquo;s 4-Core Retirement Weights (Calm 2–4x/Yr Review):</div>
+            <div>&bull; <b>🛡️ Bucket 1 ($SGOV US T-Bill Cash ~4.7%):</b> Hold <b>30–40%</b> in state-tax-advantaged short-term Treasury cash so 2–3 years of monthly living bills stay 100% insulated.</div>
+            <div>&bull; <b>💵 Bucket 2 ($JEPI ~7.4% + $SCHD ~3.5%):</b> Hold <b>35–40%</b> across monthly income &amp; rising quality dividend payers.</div>
+            <div>&bull; <b>🌱 Bucket 3 ($VOO S&amp;P 500 Core):</b> Hold <b>20–35%</b> aligned with our <b>US Retirement Market Weather (S&amp;P 500 Breadth &amp; Drawdown Guard)</b> — rebalance calmly 2–4 times per year, never panic-sell.</div>
+          </div>
         </div>
       </div>
 
-      <!-- 3 BIG INTUITIVE EDUCATIONAL CALCULATOR SHORTCUTS -->
+      <!-- 3 BIG INTUITIVE RETIREE SHORTCUTS -->
       <div class="hero-action-grid" role="group" aria-label="Educational Calculator Shortcuts">
         <button type="button" class="hero-cta-card primary" id="btnHeroActionRetireSim">
-          <span>🧭 30-Sec Retirement Cashflow Calculator</span>
+          <span>🧭 30-Sec Income Simulator</span>
         </button>
         <button type="button" class="hero-cta-card emerald" id="btnHeroActionManual">
-          <span>📘 $0 Brokerage &amp; 2–4x/Yr Rebalance Guide</span>
+          <span>📘 $0 Safe Brokerage &amp; Rebalance Guide</span>
         </button>
-        <a href="/semi-fear-greed.html" class="hero-cta-card semi" id="btnHeroActionSemiFg">
-          <span>🌡️ Market Weather &amp; Barbell Calculator (${semiScore})</span>
+        <a href="#pricing" class="hero-cta-card vip-jump" id="btnHeroActionVip">
+          <span>💎 VIP Dollar Worksheet &amp; Tax-Bucket Guide</span>
         </a>
       </div>
 
       <div class="kpi-grid">
         <div class="kpi-card kpi-emerald">
           <div class="kpi-label" id="kpi1_label">${t.kpi1_label}</div>
-          <div class="kpi-val">26.8 Yrs</div>
+          <div class="kpi-val">$VOO</div>
           <div class="kpi-sub" id="kpi1_sub">${t.kpi1_sub}</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label" id="kpi2_label">${t.kpi2_label}</div>
-          <div class="kpi-val">4 ETFs</div>
+          <div class="kpi-val">$SCHD+$JEPI</div>
           <div class="kpi-sub" id="kpi2_sub">${t.kpi2_sub}</div>
         </div>
         <div class="kpi-card kpi-emerald">
           <div class="kpi-label" id="kpi3_label">${t.kpi3_label}</div>
-          <div class="kpi-val">2–4x/Yr</div>
+          <div class="kpi-val">$SGOV</div>
           <div class="kpi-sub" id="kpi3_sub">${t.kpi3_sub}</div>
         </div>
         <div class="kpi-card kpi-amber">
           <div class="kpi-label" id="kpi4_label">${t.kpi4_label}</div>
-          <div class="kpi-val">100% Local</div>
+          <div class="kpi-val">2–4x/Yr</div>
           <div class="kpi-sub" id="kpi4_sub">${t.kpi4_sub}</div>
         </div>
       </div>

@@ -1,5 +1,15 @@
 import { formatCheckoutUrl, SECTOR_REGIME_MAP } from "../services/api.js";
 
+const HIGH_VOLATILITY_TICKERS = new Set([
+  "CVNA", "SMCI", "HOOD", "COIN", "MSTR", "SOXL", "TQQQ", "AFRM", "UPST", "RIVN",
+  "SNAP", "ROKU", "SOFI", "FLNC", "SEDG", "ENPH", "U", "MARA", "RIOT", "SQQQ", "SOXS",
+]);
+
+const RETIREMENT_INCOME_BLUECHIPS = new Set([
+  "VOO", "SCHD", "JEPI", "SGOV", "XLV", "JNJ", "PG", "KO", "COST", "V", "MSFT", "AAPL",
+  "PEP", "WMT", "JPM", "UNH", "HD", "ABBV", "CVX", "XOM", "LLY", "AVGO", "MA", "LMT",
+]);
+
 export function renderScreenerControls(state) {
   const t = state.t || {};
   const f = state.zoneFilter || "ALL";
@@ -311,6 +321,14 @@ export function renderStockRows(state) {
 
       const vipWatchlist = state.vipWatchlist || [];
       const isStarred = vipWatchlist.includes(s.ticker);
+      const tkrUpper = String(s.ticker || "").toUpperCase();
+      const isSpeculative = HIGH_VOLATILITY_TICKERS.has(tkrUpper);
+      const isBlueChip = RETIREMENT_INCOME_BLUECHIPS.has(tkrUpper);
+      const profileTagHtml = isSpeculative
+        ? `<span style="font-size:0.65rem; font-family:var(--font-sans); padding:1px 6px; background:rgba(245,158,11,0.16); border:1px solid rgba(217,119,6,0.45); color:var(--fin-amber); border-radius:4px; font-weight:800;">Volatility &amp; Risk Profile</span>`
+        : isBlueChip
+        ? `<span style="font-size:0.65rem; font-family:var(--font-sans); padding:1px 6px; background:rgba(16,185,129,0.15); border:1px solid rgba(5,150,105,0.45); color:var(--fin-up); border-radius:4px; font-weight:800;">Dividend &amp; Blue-Chip Core</span>`
+        : `<span style="font-size:0.62rem; font-family:var(--font-mono); padding:1px 5px; background:var(--card2); border:1px solid var(--border); color:var(--muted); border-radius:3px;">US Factor Study</span>`;
 
       return `
       <tr data-ticker="${s.ticker}" class="stock-row-clickable" style="cursor:pointer;">
@@ -323,12 +341,12 @@ export function renderStockRows(state) {
                   class="btn-watchlist-star"
                   data-ticker="${s.ticker}"
                   title="${isStarred ? "Remove from VIP Watchlist" : "Add to VIP Watchlist"}"
-                  style="background:none; border:none; cursor:pointer; font-size:0.95rem; padding:2px 4px; line-height:1; color:${isStarred ? "#fbbf24" : "var(--muted)"}; display:inline-flex; align-items:center;"
+                  style="background:none; border:none; cursor:pointer; font-size:0.95rem; padding:2px 4px; line-height:1; color:${isStarred ? "#d97706" : "var(--muted)"}; display:inline-flex; align-items:center;"
                 >
                   ${isStarred ? "⭐" : "☆"}
                 </button>
-                <span class="mono" style="font-weight:800; font-size:0.92rem; color:#ffffff;">${s.ticker}</span>
-                <span style="font-size:0.62rem; font-family:var(--font-mono); padding:1px 4px; background:#141d2f; border:1px solid #24324d; color:#93c5fd; border-radius:2px;">US</span>
+                <span class="mono" style="font-weight:800; font-size:0.92rem; color:var(--text);">${s.ticker}</span>
+                ${profileTagHtml}
                 ${
                   !isPro && s.ticker === "CELH"
                     ? `<span style="font-size:0.6rem; padding:1px 4px; background:rgba(14,203,129,0.18); color:var(--fin-up); border-radius:2px; font-weight:700;">FREE SHOWCASE</span>`
@@ -336,8 +354,8 @@ export function renderStockRows(state) {
                 }
               </div>
               <div class="mobile-stock-card-summary mono" style="align-items:center; gap:8px;">
-                <span style="font-weight:800; font-size:0.92rem; color:#ffffff;">$${closeVal.toFixed(2)}</span>
-                <span style="font-size:0.74rem; font-weight:800; padding:2px 6px; border-radius:4px; background:rgba(15,23,42,0.9); border:1px solid rgba(148,163,184,0.28); color:${s.score >= 80 ? "var(--fin-up)" : s.score >= 55 ? "var(--fin-amber)" : "var(--fin-down)"};">Score ${Number(s.score ?? 0)}</span>
+                <span style="font-weight:800; font-size:0.92rem; color:var(--text);">$${closeVal.toFixed(2)}</span>
+                <span style="font-size:0.74rem; font-weight:800; padding:2px 6px; border-radius:4px; background:var(--card2); border:1px solid var(--border); color:${s.score >= 80 ? "var(--fin-up)" : s.score >= 55 ? "var(--fin-amber)" : "var(--fin-down)"};">Score ${Number(s.score ?? 0)}</span>
               </div>
             </div>
             <div style="font-size:0.73rem; font-family:var(--font-sans); color:var(--muted); margin-top:2px;">
@@ -378,7 +396,7 @@ export function renderStockRows(state) {
           </div>
         </td>
         <td class="col-num">
-          <div class="mono" style="font-weight:700; color:#ffffff;" title="Latest Close Date: ${s.date || "2026-11-13"}">$${closeVal.toFixed(2)}</div>
+          <div class="mono" style="font-weight:700; color:var(--text);" title="Latest Close Date: ${s.date || "2026-11-16"}">$${closeVal.toFixed(2)}</div>
           <div class="range-52w-wrap" title="52W Range: $${low52.toFixed(2)} – $${high52.toFixed(2)} | Current: $${closeVal.toFixed(2)}">
             <div class="range-52w-track">
               <div class="range-52w-pin" style="left:${rangePct}%;"></div>

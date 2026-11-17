@@ -85,14 +85,37 @@
 | $PFE | Pfizer Inc | $28.86 | 15/100 | 47.5 | 1.65x | $26.26 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/pfe.html |
 | $BA | Boeing Co | $165.22 | 15/100 | 31.9 | 1.12x | $150.35 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/ba.html |
 | $INTC | Intel Corp | $55.47 | 15/100 | 29.9 | 1.94x | $50.48 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/intc.html |
+| $VOO | Vanguard S&P 500 ETF | $548.60 | 96/100 | 58.4 | 1.28x | $499.23 | RETIREMENT BUCKET 3 · S&P 500 CORE | https://truthofmarket.com/stocks/voo.html |
+| $SCHD | Schwab US Dividend Equity ETF | $29.45 | 95/100 | 56.8 | 1.28x | $26.80 | RETIREMENT BUCKET 2 · DIVIDEND GROWTH | https://truthofmarket.com/stocks/schd.html |
+| $JEPI | JPMorgan Equity Premium Income ETF | $59.18 | 94/100 | 54.9 | 1.28x | $53.85 | RETIREMENT BUCKET 2 · MONTHLY PAYCHECK | https://truthofmarket.com/stocks/jepi.html |
+| $SGOV | iShares 0-3 Month Treasury Bond ETF | $100.52 | 97/100 | 53.2 | 1.28x | $91.47 | RETIREMENT BUCKET 1 · T-BILL CASH SHIELD | https://truthofmarket.com/stocks/sgov.html |
+| $JNJ | Johnson & Johnson | $156.40 | 88/100 | 52.4 | 1.28x | $142.32 | DIVIDEND & BLUE-CHIP CORE | https://truthofmarket.com/stocks/jnj.html |
+| $PG | Procter & Gamble Co | $168.90 | 89/100 | 55.1 | 1.28x | $153.70 | DIVIDEND & BLUE-CHIP CORE | https://truthofmarket.com/stocks/pg.html |
+| $KO | The Coca-Cola Company | $63.85 | 87/100 | 50.8 | 1.28x | $58.10 | DIVIDEND & BLUE-CHIP CORE | https://truthofmarket.com/stocks/ko.html |
+| $PEP | PepsiCo Inc | $161.20 | 85/100 | 49.5 | 1.28x | $146.69 | DIVIDEND & BLUE-CHIP CORE | https://truthofmarket.com/stocks/pep.html |
+| $COST | Costco Wholesale Corp | $918.40 | 91/100 | 59.2 | 1.28x | $835.74 | DIVIDEND & BLUE-CHIP CORE | https://truthofmarket.com/stocks/cost.html |
+| $WMT | Walmart Inc | $84.60 | 92/100 | 61.0 | 1.28x | $76.99 | DIVIDEND & BLUE-CHIP CORE | https://truthofmarket.com/stocks/wmt.html |
+| $V | Visa Inc | $310.25 | 90/100 | 58.6 | 1.28x | $282.33 | DIVIDEND & BLUE-CHIP CORE | https://truthofmarket.com/stocks/v.html |
+| $MA | Mastercard Inc | $518.30 | 89/100 | 57.4 | 1.28x | $471.65 | DIVIDEND & BLUE-CHIP CORE | https://truthofmarket.com/stocks/ma.html |
+| $MSFT | Microsoft Corp | $428.50 | 90/100 | 53.6 | 1.28x | $389.94 | DIVIDEND & BLUE-CHIP CORE | https://truthofmarket.com/stocks/msft.html |
+| $AAPL | Apple Inc | $229.80 | 89/100 | 54.8 | 1.28x | $209.12 | DIVIDEND & BLUE-CHIP CORE | https://truthofmarket.com/stocks/aapl.html |
+| $JPM | JPMorgan Chase & Co | $239.10 | 90/100 | 59.8 | 1.28x | $217.58 | DIVIDEND & BLUE-CHIP CORE | https://truthofmarket.com/stocks/jpm.html |
+| $UNH | UnitedHealth Group Inc | $588.40 | 88/100 | 54.2 | 1.28x | $535.44 | DIVIDEND & BLUE-CHIP CORE | https://truthofmarket.com/stocks/unh.html |
+| $HD | The Home Depot Inc | $406.50 | 87/100 | 55.7 | 1.28x | $369.92 | DIVIDEND & BLUE-CHIP CORE | https://truthofmarket.com/stocks/hd.html |
+| $ABBV | AbbVie Inc | $176.80 | 86/100 | 48.6 | 1.28x | $160.89 | DIVIDEND & BLUE-CHIP CORE | https://truthofmarket.com/stocks/abbv.html |
+| $CVX | Chevron Corp | $159.40 | 87/100 | 53.9 | 1.28x | $145.05 | DIVIDEND & BLUE-CHIP CORE | https://truthofmarket.com/stocks/cvx.html |
+| $LMT | Lockheed Martin Corp | $542.10 | 86/100 | 49.2 | 1.28x | $493.31 | DIVIDEND & BLUE-CHIP CORE | https://truthofmarket.com/stocks/lmt.html |
+| $MSTR | MicroStrategy Inc | $342.50 | 58/100 | 41.2 | 1.28x | $311.68 | VOLATILITY & RISK PROFILE | https://truthofmarket.com/stocks/mstr.html |
+| $TQQQ | ProShares UltraPro QQQ (3x Daily Leveraged) | $78.20 | 60/100 | 44.8 | 1.28x | $71.16 | VOLATILITY & RISK PROFILE (3X DAILY DECAY) | https://truthofmarket.com/stocks/tqqq.html |
+| $RIVN | Rivian Automotive Inc | $10.65 | 52/100 | 38.5 | 1.28x | $9.69 | VOLATILITY & RISK PROFILE | https://truthofmarket.com/stocks/rivn.html |
 | $SMH | VanEck Semiconductor ETF | $461.90 | 88/100 | 35.6 | 1.68x | $420.33 | BARBELL GROWTH SLEEVE (70%-80% MODEL) | https://truthofmarket.com/stocks/smh.html |
 | $XLV | Health Care Select Sector SPDR ETF | $187.91 | 82/100 | 54.5 | 1.12x | $171.00 | DEFENSIVE HEALTHCARE SLEEVE (20%-30% MODEL) | https://truthofmarket.com/stocks/xlv.html |
-| $SOXL | Direxion Daily Semiconductor Bull 3X Shares | $28.40 | 85/100 | 36.4 | 1.94x | $25.84 | HIGH-VOLATILITY DECAY STUDY (SUB-MA60) | https://truthofmarket.com/stocks/soxl.html |
+| $SOXL | Direxion Daily Semiconductor Bull 3X Shares | $28.40 | 55/100 | 36.4 | 1.94x | $25.84 | VOLATILITY & RISK PROFILE (3X DAILY DECAY) | https://truthofmarket.com/stocks/soxl.html |
 | $QQQ | Invesco QQQ Trust (Nasdaq-100 ETF) | $661.75 | 80/100 | 51.8 | 1.18x | $602.19 | CORE BENCHMARK TREND | https://truthofmarket.com/stocks/qqq.html |
 
 ## 3. 50 Side-by-Side Quantitative Factor Comparisons (/compare/)
 - $NVDA vs $AMD (AI GPU Leader vs Data Center Challenger): Higher Factor Score=$NVDA | $NVDA=55/100 (3.80x Vol) vs $AMD=45/100 (2.74x Vol) -> https://truthofmarket.com/compare/nvda-vs-amd.html
-- $SOXL vs $SMH (3x Leveraged Decay vs Spot Semiconductor ETF): Higher Factor Score=$SMH | $SOXL=85/100 (1.94x Vol) vs $SMH=88/100 (1.68x Vol) -> https://truthofmarket.com/compare/soxl-vs-smh.html
+- $SOXL vs $SMH (3x Leveraged Decay vs Spot Semiconductor ETF): Higher Factor Score=$SMH | $SOXL=55/100 (1.94x Vol) vs $SMH=88/100 (1.68x Vol) -> https://truthofmarket.com/compare/soxl-vs-smh.html
 - $TSLA vs $NVDA (Megacap Volatility vs AI Compute Scale): Higher Factor Score=$TSLA | $TSLA=70/100 (1.99x Vol) vs $NVDA=55/100 (3.80x Vol) -> https://truthofmarket.com/compare/tsla-vs-nvda.html
 - $PLTR vs $NVDA (Enterprise AI Software vs AI Silicon): Higher Factor Score=$NVDA | $PLTR=35/100 (2.06x Vol) vs $NVDA=55/100 (3.80x Vol) -> https://truthofmarket.com/compare/pltr-vs-nvda.html
 - $AVGO vs $NVDA (Custom AI Networking vs GPU Architecture): Higher Factor Score=$AVGO | $AVGO=84/100 (2.33x Vol) vs $NVDA=55/100 (3.80x Vol) -> https://truthofmarket.com/compare/avgo-vs-nvda.html
@@ -106,41 +129,45 @@
 - $ASML vs $TSM (EUV Lithography vs Foundry Scale): Higher Factor Score=$TSM | $ASML=35/100 (2.36x Vol) vs $TSM=35/100 (3.08x Vol) -> https://truthofmarket.com/compare/asml-vs-tsm.html
 - $LRCX vs $AMAT (Wafer Fabrication Equipment Comparison): Higher Factor Score=$LRCX | $LRCX=45/100 (2.48x Vol) vs $AMAT=45/100 (2.10x Vol) -> https://truthofmarket.com/compare/lrcx-vs-amat.html
 - $KLAC vs $ASML (Semiconductor Process Control vs EUV): Higher Factor Score=$KLAC | $KLAC=70/100 (2.49x Vol) vs $ASML=35/100 (2.36x Vol) -> https://truthofmarket.com/compare/klac-vs-asml.html
-- $MSFT vs $GOOGL (Hyperscaler Cloud & Search Cashflow): Higher Factor Score=$MSFT | $MSFT=78/100 (1.30x Vol) vs $GOOGL=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/msft-vs-googl.html
+- $MSFT vs $GOOGL (Hyperscaler Cloud & Search Cashflow): Higher Factor Score=$MSFT | $MSFT=90/100 (1.28x Vol) vs $GOOGL=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/msft-vs-googl.html
 - $META vs $GOOGL (Digital Platform Operating Margin Study): Higher Factor Score=$GOOGL | $META=57/100 (1.33x Vol) vs $GOOGL=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/meta-vs-googl.html
-- $AMZN vs $MSFT (AWS vs Azure Cloud Infrastructure): Higher Factor Score=$AMZN | $AMZN=75/100 (2.04x Vol) vs $MSFT=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/amzn-vs-msft.html
-- $AAPL vs $MSFT (Consumer Hardware Ecosystem vs Enterprise Cloud): Higher Factor Score=$AAPL | $AAPL=78/100 (1.30x Vol) vs $MSFT=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/aapl-vs-msft.html
+- $AMZN vs $MSFT (AWS vs Azure Cloud Infrastructure): Higher Factor Score=$MSFT | $AMZN=75/100 (2.04x Vol) vs $MSFT=90/100 (1.28x Vol) -> https://truthofmarket.com/compare/amzn-vs-msft.html
+- $AAPL vs $MSFT (Consumer Hardware Ecosystem vs Enterprise Cloud): Higher Factor Score=$MSFT | $AAPL=89/100 (1.28x Vol) vs $MSFT=90/100 (1.28x Vol) -> https://truthofmarket.com/compare/aapl-vs-msft.html
 - $CRWD vs $PANW (Enterprise Cybersecurity Platform Study): Higher Factor Score=$PANW | $CRWD=35/100 (1.86x Vol) vs $PANW=35/100 (2.19x Vol) -> https://truthofmarket.com/compare/crwd-vs-panw.html
 - $SNOW vs $PLTR (Enterprise Data Cloud vs Analytics Platform): Higher Factor Score=$PLTR | $SNOW=35/100 (1.64x Vol) vs $PLTR=35/100 (2.06x Vol) -> https://truthofmarket.com/compare/snow-vs-pltr.html
-- $COIN vs $MSTR (Digital Asset Exchange vs Treasury Volatility): Higher Factor Score=$MSTR | $COIN=55/100 (1.43x Vol) vs $MSTR=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/coin-vs-mstr.html
+- $COIN vs $MSTR (Digital Asset Exchange vs Treasury Volatility): Higher Factor Score=$MSTR | $COIN=55/100 (1.43x Vol) vs $MSTR=58/100 (1.28x Vol) -> https://truthofmarket.com/compare/coin-vs-mstr.html
 - $HOOD vs $COIN (Retail Brokerage Platform vs Digital Exchange): Higher Factor Score=$HOOD | $HOOD=70/100 (1.63x Vol) vs $COIN=55/100 (1.43x Vol) -> https://truthofmarket.com/compare/hood-vs-coin.html
 - $LLY vs $NVO (Metabolic & Biopharma Cashflow Study): Higher Factor Score=$NVO | $LLY=50/100 (1.73x Vol) vs $NVO=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/lly-vs-nvo.html
-- $UNH vs $LLY (Managed Care Cashflow vs Biopharma Growth): Higher Factor Score=$UNH | $UNH=78/100 (1.30x Vol) vs $LLY=50/100 (1.73x Vol) -> https://truthofmarket.com/compare/unh-vs-lly.html
+- $UNH vs $LLY (Managed Care Cashflow vs Biopharma Growth): Higher Factor Score=$UNH | $UNH=88/100 (1.28x Vol) vs $LLY=50/100 (1.73x Vol) -> https://truthofmarket.com/compare/unh-vs-lly.html
 - $CELH vs $MNST (Beverage Distribution & Margin Study): Higher Factor Score=$CELH | $CELH=98/100 (2.46x Vol) vs $MNST=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/celh-vs-mnst.html
 - $NFLX vs $DIS (Streaming Operating Margin vs Media Assets): Higher Factor Score=$DIS | $NFLX=45/100 (1.08x Vol) vs $DIS=75/100 (1.62x Vol) -> https://truthofmarket.com/compare/nflx-vs-dis.html
 - $UBER vs $TSLA (Global Mobility Network vs Autonomous Fleet): Higher Factor Score=$TSLA | $UBER=65/100 (2.07x Vol) vs $TSLA=70/100 (1.99x Vol) -> https://truthofmarket.com/compare/uber-vs-tsla.html
 - $SHOP vs $AMZN (Merchant E-Commerce Software vs Global Retail): Higher Factor Score=$AMZN | $SHOP=20/100 (2.76x Vol) vs $AMZN=75/100 (2.04x Vol) -> https://truthofmarket.com/compare/shop-vs-amzn.html
 - $SMCI vs $DELL (Data Center Server Infrastructure Study): Higher Factor Score=$DELL | $SMCI=70/100 (2.40x Vol) vs $DELL=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/smci-vs-dell.html
-- $QQQ vs $TQQQ (Nasdaq-100 Spot vs 3x Daily Reset Volatility Decay): Higher Factor Score=$QQQ | $QQQ=80/100 (1.18x Vol) vs $TQQQ=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/qqq-vs-tqqq.html
-- $SOXL vs $NVDA (3x Leveraged ETF Decay vs Single-Stock Trend): Higher Factor Score=$SOXL | $SOXL=85/100 (1.94x Vol) vs $NVDA=55/100 (3.80x Vol) -> https://truthofmarket.com/compare/soxl-vs-nvda.html
+- $QQQ vs $TQQQ (Nasdaq-100 Spot vs 3x Daily Reset Volatility Decay): Higher Factor Score=$QQQ | $QQQ=80/100 (1.18x Vol) vs $TQQQ=60/100 (1.28x Vol) -> https://truthofmarket.com/compare/qqq-vs-tqqq.html
+- $SOXL vs $NVDA (3x Leveraged ETF Decay vs Single-Stock Trend): Higher Factor Score=$NVDA | $SOXL=55/100 (1.94x Vol) vs $NVDA=55/100 (3.80x Vol) -> https://truthofmarket.com/compare/soxl-vs-nvda.html
 - $NVDA vs $TSM (Fabless Silicon Design vs Foundry Manufacturing): Higher Factor Score=$NVDA | $NVDA=55/100 (3.80x Vol) vs $TSM=35/100 (3.08x Vol) -> https://truthofmarket.com/compare/nvda-vs-tsm.html
 - $PLTR vs $CRWD (Enterprise AI Software vs Endpoint Security): Higher Factor Score=$PLTR | $PLTR=35/100 (2.06x Vol) vs $CRWD=35/100 (1.86x Vol) -> https://truthofmarket.com/compare/pltr-vs-crwd.html
-- $SMH vs $SOXL (Spot Semiconductor ETF vs 3x Daily Reset ETF): Higher Factor Score=$SMH | $SMH=88/100 (1.68x Vol) vs $SOXL=85/100 (1.94x Vol) -> https://truthofmarket.com/compare/smh-vs-soxl.html
-- $TSLA vs $RIVN (EV Scale Profitability vs Early-Stage EV): Higher Factor Score=$RIVN | $TSLA=70/100 (1.99x Vol) vs $RIVN=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/tsla-vs-rivn.html
+- $SMH vs $SOXL (Spot Semiconductor ETF vs 3x Daily Reset ETF): Higher Factor Score=$SMH | $SMH=88/100 (1.68x Vol) vs $SOXL=55/100 (1.94x Vol) -> https://truthofmarket.com/compare/smh-vs-soxl.html
+- $TSLA vs $RIVN (EV Scale Profitability vs Early-Stage EV): Higher Factor Score=$TSLA | $TSLA=70/100 (1.99x Vol) vs $RIVN=52/100 (1.28x Vol) -> https://truthofmarket.com/compare/tsla-vs-rivn.html
 - $META vs $NFLX (Digital Media Free Cash Flow Comparison): Higher Factor Score=$META | $META=57/100 (1.33x Vol) vs $NFLX=45/100 (1.08x Vol) -> https://truthofmarket.com/compare/meta-vs-nflx.html
-- $AMZN vs $WMT (Cloud Retail vs Omnichannel Consumer Staple): Higher Factor Score=$AMZN | $AMZN=75/100 (2.04x Vol) vs $WMT=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/amzn-vs-wmt.html
-- $JPM vs $GS (Money-Center Banking vs Capital Markets): Higher Factor Score=$JPM | $JPM=78/100 (1.30x Vol) vs $GS=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/jpm-vs-gs.html
-- $V vs $MA (Global Payment Network Margin Comparison): Higher Factor Score=$V | $V=78/100 (1.30x Vol) vs $MA=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/v-vs-ma.html
-- $COST vs $WMT (Membership Warehouse vs Value Retail Dividend): Higher Factor Score=$COST | $COST=78/100 (1.30x Vol) vs $WMT=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/cost-vs-wmt.html
-- $BA vs $LMT (Commercial Aerospace vs Defense Cashflow): Higher Factor Score=$LMT | $BA=15/100 (1.12x Vol) vs $LMT=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/ba-vs-lmt.html
-- $XOM vs $CVX (Integrated Energy Dividend & Cashflow Study): Higher Factor Score=$CVX | $XOM=30/100 (1.95x Vol) vs $CVX=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/xom-vs-cvx.html
+- $AMZN vs $WMT (Cloud Retail vs Omnichannel Consumer Staple): Higher Factor Score=$WMT | $AMZN=75/100 (2.04x Vol) vs $WMT=92/100 (1.28x Vol) -> https://truthofmarket.com/compare/amzn-vs-wmt.html
+- $JPM vs $GS (Money-Center Banking vs Capital Markets): Higher Factor Score=$JPM | $JPM=90/100 (1.28x Vol) vs $GS=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/jpm-vs-gs.html
+- $V vs $MA (Global Payment Network Margin Comparison): Higher Factor Score=$V | $V=90/100 (1.28x Vol) vs $MA=89/100 (1.28x Vol) -> https://truthofmarket.com/compare/v-vs-ma.html
+- $COST vs $WMT (Membership Warehouse vs Value Retail Dividend): Higher Factor Score=$WMT | $COST=91/100 (1.28x Vol) vs $WMT=92/100 (1.28x Vol) -> https://truthofmarket.com/compare/cost-vs-wmt.html
+- $BA vs $LMT (Commercial Aerospace vs Defense Cashflow): Higher Factor Score=$LMT | $BA=15/100 (1.12x Vol) vs $LMT=86/100 (1.28x Vol) -> https://truthofmarket.com/compare/ba-vs-lmt.html
+- $XOM vs $CVX (Integrated Energy Dividend & Cashflow Study): Higher Factor Score=$CVX | $XOM=30/100 (1.95x Vol) vs $CVX=87/100 (1.28x Vol) -> https://truthofmarket.com/compare/xom-vs-cvx.html
 - $ENPH vs $FSLR (Residential Solar Inverter vs Utility Solar): Higher Factor Score=$FSLR | $ENPH=55/100 (2.16x Vol) vs $FSLR=55/100 (3.41x Vol) -> https://truthofmarket.com/compare/enph-vs-fslr.html
 - $ABNB vs $BKNG (Alternative Lodging Platform vs Global Travel): Higher Factor Score=$ABNB | $ABNB=78/100 (1.30x Vol) vs $BKNG=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/abnb-vs-bkng.html
 - $INTC vs $QCOM (Foundry Restructuring vs Mobile/Edge Silicon): Higher Factor Score=$QCOM | $INTC=15/100 (1.94x Vol) vs $QCOM=70/100 (3.12x Vol) -> https://truthofmarket.com/compare/intc-vs-qcom.html
 - $ORCL vs $CRM (Enterprise Cloud Database vs Enterprise SaaS): Higher Factor Score=$ORCL | $ORCL=78/100 (1.30x Vol) vs $CRM=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/orcl-vs-crm.html
 - $PYPL vs $SQ (Digital Checkout Cashflow vs Merchant Ecosystem): Higher Factor Score=$SQ | $PYPL=42/100 (1.18x Vol) vs $SQ=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/pypl-vs-sq.html
 - $DKNG vs $HOOD (Consumer Digital Platform Volatility Study): Higher Factor Score=$DKNG | $DKNG=78/100 (1.30x Vol) vs $HOOD=70/100 (1.63x Vol) -> https://truthofmarket.com/compare/dkng-vs-hood.html
-- $CELH vs $PEP (Growth Beverage vs Dividend Aristocrat): Higher Factor Score=$CELH | $CELH=98/100 (2.46x Vol) vs $PEP=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/celh-vs-pep.html
+- $CELH vs $PEP (Growth Beverage vs Dividend Aristocrat): Higher Factor Score=$CELH | $CELH=98/100 (2.46x Vol) vs $PEP=85/100 (1.28x Vol) -> https://truthofmarket.com/compare/celh-vs-pep.html
+- $VOO vs $SCHD (S&P 500 Core Compounding vs US Dividend Growth ETF): Higher Factor Score=$VOO | $VOO=96/100 (1.28x Vol) vs $SCHD=95/100 (1.28x Vol) -> https://truthofmarket.com/compare/voo-vs-schd.html
+- $JEPI vs $SCHD (Monthly Premium Income vs Dividend Growth Track Record): Higher Factor Score=$SCHD | $JEPI=94/100 (1.28x Vol) vs $SCHD=95/100 (1.28x Vol) -> https://truthofmarket.com/compare/jepi-vs-schd.html
+- $JNJ vs $PG (Healthcare Dividend King vs Consumer Staples Dividend King): Higher Factor Score=$PG | $JNJ=88/100 (1.28x Vol) vs $PG=89/100 (1.28x Vol) -> https://truthofmarket.com/compare/jnj-vs-pg.html
+- $KO vs $PEP (Classic Beverage Dividend Aristocrats Cashflow Comparison): Higher Factor Score=$KO | $KO=87/100 (1.28x Vol) vs $PEP=85/100 (1.28x Vol) -> https://truthofmarket.com/compare/ko-vs-pep.html
 
 ## 4. Educational Market Weather & Allocation Journal (/insights/)
 - Morning Bell Retirement & Market Weather Note (2026-11-16): Sentiment Gauge at 12.5/100 (Extreme Fear) & Calm Allocation Study -> https://truthofmarket.com/insights/daily-us-quant-regime-brief.html

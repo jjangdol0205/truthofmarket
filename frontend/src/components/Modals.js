@@ -18,7 +18,7 @@ export function renderModals(state) {
   const tgToken = state.telegramBotToken || "DEMO-BOT-TOKEN";
   const tgType = state.telegramAlertType || "SEMI_BRIEFING";
   const ov = state.semiOverview || {};
-  const ovDate = ov.date || "2026-10-30";
+  const ovDate = ov.date || "2026-11-16";
   const ovScore = Number(ov.fg_score ?? 18.0).toFixed(1);
   const ovRegime = String(ov.regime_en || "EXTREME FEAR").toUpperCase();
   const ovSmh = Number(ov.smh_close ?? 522.49).toFixed(2);
@@ -50,9 +50,9 @@ export function renderModals(state) {
           </div>
           <button type="button" class="btn btn-sm" id="btnCancelLicense" style="padding:4px 10px;">✕ Close</button>
         </div>
-        <h3 style="font-size:1.18rem; font-weight:800; margin-top:4px; color:#ffffff;">Unlock Full VIP Educational Calculators &amp; Datasets</h3>
-        <p style="color:#cbd5e1; font-size:0.86rem; margin-top:6px; line-height:1.5;">
-          Choose Monthly VIP ($29/mo) or Annual VIP ($199/yr) below. Backed by our 14-Day No-Questions-Asked Refund Policy.
+        <h3 style="font-size:1.18rem; font-weight:800; margin-top:4px; color:var(--text);">Unlock Full VIP Retiree Worksheets &amp; Tax-Bucket Reference</h3>
+        <p style="color:var(--text-secondary); font-size:0.95rem; margin-top:6px; line-height:1.55;">
+          Includes Custom Nest-Egg Dollar ($) Rebalancing Worksheet, 12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Reference, and Large-Print 1-Page Weather Action Sheet. Backed by our 14-Day Refund Policy.
         </p>
         <div style="display:grid; grid-template-columns:1fr; gap:10px; margin:14px 0 10px;">
           <a class="btn btn-primary polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthly}" style="justify-content:center; min-height:62px; padding:12px 16px; font-size:1.02rem; font-weight:800; border-radius:12px;">

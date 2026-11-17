@@ -53,14 +53,14 @@ def strip_imports_and_exports(code: str) -> str:
 def refresh_health_and_rss() -> tuple[str, str]:
     semi_path = ROOT / "static_api" / "semi_overview.json"
     stocks_path = ROOT / "static_api" / "stocks_free.json"
-    as_of_date = "2026-11-13"
-    fg_score = 18.3
+    as_of_date = "2026-11-16"
+    fg_score = 12.5
     regime_code = "EXTREME_FEAR"
-    smh_close = 504.48
-    smh_dd_pct = -24.58
-    celh_close = 30.04
-    celh_low_ref = 27.34
-    celh_up_ref = 60.08
+    smh_close = 461.90
+    smh_dd_pct = -30.95
+    celh_close = 31.57
+    celh_low_ref = 28.73
+    celh_up_ref = 63.14
 
     if semi_path.exists():
         try:
@@ -190,7 +190,7 @@ def main() -> None:
     seo_dir_html = generate_all_seo_pages(js_name=js_name, css_name=css_name)
 
     index_html = f"""<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-tom-theme="light" data-tom-font="18">
 <head>
   <script>
   window.__DEFAULT_VIEW__ = 'rightside';
@@ -207,24 +207,31 @@ def main() -> None:
     POLAR_TOM_ANNUAL_URL: '',
     SUPPORT_EMAIL: 'beable9489@gmail.com'
   }};
+  try {{
+    var _th = localStorage.getItem('tom_ui_theme_v2') === 'dark' ? 'dark' : 'light';
+    var _px = Number(localStorage.getItem('tom_font_px')) || 18;
+    if ([18, 20, 22].indexOf(_px) === -1) _px = 18;
+    document.documentElement.setAttribute('data-tom-theme', _th);
+    document.documentElement.setAttribute('data-tom-font', String(_px));
+  }} catch (_e) {{}}
   </script>
   <meta charset="UTF-8" />
   <meta name="google-site-verification" content="nAGlJMEUUPifbzSd8X4PCaBIyr3DtTwaa1a-q9zkbBc" />
   <meta name="google-site-verification" content="G99bl17UU6iKgNm5ndGcSWp0dHFpJ0MjJqBBp0Exfx0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income | TruthOfMarket</title>
-  <meta name="description" content="Self-directed US 401k/IRA Retirement Cashflow &amp; Safe Rebalancing Calculator Software. Simulate monthly income with SGOV (T-Bill Cushion), SCHD (Dividend Growth), JEPI (Monthly Paycheck) &amp; VOO (S&amp;P 500 Core) via calm 2-4x/year rebalancing." />
+  <meta name="description" content="Self-directed US 401k/IRA Retirement Cashflow &amp; Safe Rebalancing Calculator Software. Simulate monthly income with $VOO (S&amp;P 500 Core), $SCHD (Dividend Growth ~3.5%), $JEPI (Monthly Income ~7.4%) &amp; $SGOV (US T-Bill Cash ~4.7%) via calm 2-4x/year rebalancing." />
   <link rel="canonical" href="https://truthofmarket.com/" />
   <link rel="alternate" type="application/rss+xml" title="TruthOfMarket US 401k/IRA Retirement Cashflow RSS Feed" href="https://truthofmarket.com/rss.xml" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="TruthOfMarket — US 401k/IRA Retirement Cashflow &amp; Safe Rebalancing Calculator" />
   <meta property="og:title" content="Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income | TruthOfMarket" />
-  <meta property="og:description" content="Self-directed educational calculator software to simulate monthly retirement cashflow and calm 2-4x/year SGOV, SCHD, JEPI &amp; VOO portfolio weight rebalancing." />
+  <meta property="og:description" content="Self-directed educational calculator software to simulate monthly retirement cashflow and calm 2-4x/year $VOO, $SCHD, $JEPI &amp; $SGOV portfolio weight rebalancing." />
   <meta property="og:url" content="https://truthofmarket.com/" />
   <meta property="og:image" content="https://truthofmarket.com/og-preview.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income | TruthOfMarket" />
-  <meta name="twitter:description" content="30-Second US 401k/IRA Retirement Cashflow &amp; Safe Rebalancing Calculator (SGOV · SCHD · JEPI · VOO)." />
+  <meta name="twitter:description" content="30-Second US 401k/IRA Retirement Cashflow &amp; Safe Rebalancing Calculator ($VOO · $SCHD · $JEPI · $SGOV)." />
   <meta name="twitter:image" content="https://truthofmarket.com/og-preview.png" />
   <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -255,7 +262,7 @@ def main() -> None:
         "publisher": {{
           "@id": "https://truthofmarket.com/#organization"
         }},
-        "description": "Self-directed educational calculator software for US 401k/IRA Retirement Cashflow & Safe Rebalancing across SGOV, SCHD, JEPI, and VOO."
+        "description": "Self-directed educational calculator software for US 401k/IRA Retirement Cashflow & Safe Rebalancing across VOO, SCHD, JEPI, and SGOV."
       }},
       {{
         "@type": "SoftwareApplication",
@@ -271,7 +278,7 @@ def main() -> None:
         "offers": [
           {{
             "@type": "Offer",
-            "name": "Monthly VIP Educational Calculator Software ($29/mo)",
+            "name": "Monthly VIP Retirement Income & Rebalancing Suite ($29/mo)",
             "price": "29.00",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
@@ -279,7 +286,7 @@ def main() -> None:
           }},
           {{
             "@type": "Offer",
-            "name": "Annual VIP Educational Calculator Software ($199/yr)",
+            "name": "Annual VIP Retirement Income & Rebalancing Pass ($199/yr)",
             "price": "199.00",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
@@ -292,8 +299,8 @@ def main() -> None:
   </script>
   <script src="/hq_member_crm_client.js" defer></script>
   <script src="/tom_payment_waitlist.js" defer></script>
-  <script type="module" crossorigin src="./assets/{js_name}?v=20261117polar"></script>
-  <link rel="stylesheet" crossorigin href="./assets/{css_name}?v=20261117polar" />
+  <script type="module" crossorigin src="./assets/{js_name}?v=20261117senior"></script>
+  <link rel="stylesheet" crossorigin href="./assets/{css_name}?v=20261117senior" />
   <script>
   /* === HQ Edge Real-Human Visitor & Signup Helper (tom_truthofmarket) === */
   (function(){{
@@ -330,20 +337,28 @@ def main() -> None:
   }})();
   </script>
 </head>
-<body>
+<body style="background:#f8fafc;color:#0f172a;font-size:18px;line-height:1.7;">
   <div id="app">
-    <section class="seo-home-fallback" id="tom-retirement-architect" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;margin:16px auto;padding:24px;background:#0f172a;border:1px solid #10b981;border-radius:14px;color:#f8fafc;">
-      <h1 style="font-size:1.75rem;font-weight:900;margin:0 0 10px;color:#ffffff;line-height:1.3;">Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income.</h1>
-      <p style="margin:0;color:#e2e8f0;font-size:1.125rem;line-height:1.72;">30-Second Comfortable Retirement &amp; Monthly Cashflow Calculator — Simulate your monthly retirement paycheck ($150k / $400k / $800k / $1.5M presets), cushion your nest egg from sequence-of-returns drawdowns, and rebalance calmly 2–4 times per year across <b>SGOV</b> (US T-Bill Cash Cushion), <b>SCHD</b> (Dividend Growth), <b>JEPI</b> (Monthly Dividend Paycheck), and <b>VOO</b> (S&amp;P 500 Core Compounding) aligned with our 3-Color Market Weather indicator.</p>
-      <p id="tomMorningBellClub" style="margin:12px 0 0;padding-top:12px;border-top:1px solid #1e293b;color:#fbbf24;font-size:1.06rem;font-weight:700;line-height:1.65;"><span id="tom-passwordless-club-signup">☕ Morning Bell Retirement &amp; Macro Club — Protecting Your Nest Egg &amp; Monthly Income Together · Free 3-Second Passwordless Membership</span></p>
-      <p id="tomFreeStarterManual" style="margin:8px 0 0;color:#38bdf8;font-size:1.06rem;font-weight:700;line-height:1.65;">📘 $0 Free Public Product: US Brokerage App &amp; Calm 2–4x/Year Portfolio Weight Rebalancing Manual (Fidelity · Charles Schwab · Vanguard — SGOV/SPAXX Cash Cushion &amp; Limit Order Guide)</p>
-      <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;">
-        <a href="#tom-vip-monthly" class="polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="color:#6ee7b7;font-weight:800;font-size:1rem;">⚡ Start Monthly VIP — $29/mo</a>
-        <a href="#tom-vip-annual" class="polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="color:#fde68a;font-weight:800;font-size:1rem;">💎 Start Annual VIP — $199/yr</a>
+    <section class="seo-home-fallback" id="tom-retirement-architect" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;margin:16px auto;padding:26px;background:#ffffff;border:2px solid #059669;border-radius:16px;color:#0f172a;box-shadow:0 8px 24px rgba(15,23,42,0.06);">
+      <div style="margin-bottom:12px;padding:8px 14px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:10px;font-size:0.94rem;font-weight:700;color:#1e293b;">
+        <b>$VOO</b> (S&amp;P 500 Core) &middot; <b>$SCHD</b> (Dividend Growth ~3.5%) &middot; <b>$JEPI</b> (Monthly Income ~7.4%) &middot; <b>$SGOV</b> (US T-Bill Cash ~4.7%) &nbsp;|&nbsp; <b>US Retirement Market Weather (S&amp;P 500 Breadth &amp; Drawdown Guard)</b> &nbsp;|&nbsp; <span>2026-11-16 US Market Close</span>
       </div>
-      <p style="margin:10px 0 0;padding:8px 12px;border-radius:8px;background:rgba(16,185,129,0.12);border:1px solid rgba(52,211,153,0.35);color:#a7f3d0;font-size:0.96rem;font-weight:800;line-height:1.55;">📦 VIP Software Bundle ($29/mo &amp; $199/yr Annual VIP): Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator</p>
-      <p style="margin:8px 0 0;font-size:0.88rem;color:#93c5fd;font-weight:700;">💳 Checkout &amp; Billing: Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · 14-Day Refund Policy</p>
-      <p style="margin:12px 0 0;padding-top:10px;border-top:1px solid rgba(148,163,184,0.2);font-size:0.9rem;color:#cbd5e1;font-weight:600;">Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.</p>
+      <h1 style="font-size:1.85rem;font-weight:900;margin:0 0 10px;color:#0f172a;line-height:1.3;">Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income.</h1>
+      <p style="margin:0;color:#1e293b;font-size:1.125rem;line-height:1.7;">30-Second Comfortable Retirement &amp; Monthly Cashflow Simulator — Simulate your monthly retirement paycheck ($150k / $400k / $800k / $1.5M presets), cushion your nest egg from sequence-of-returns drawdowns, and rebalance calmly 2–4 times per year across <b>$VOO</b> (S&amp;P 500 Core), <b>$SCHD</b> (Dividend Growth ~3.5%), <b>$JEPI</b> (Monthly Income ~7.4%), and <b>$SGOV</b> (US T-Bill Cash ~4.7%) aligned with our US Retirement Market Weather indicator.</p>
+      <p id="tomMorningBellClub" style="margin:14px 0 0;padding-top:12px;border-top:1px solid #cbd5e1;color:#92400e;font-size:1.06rem;font-weight:800;line-height:1.65;"><span id="tom-passwordless-club-signup">☕ Morning Bell Retirement &amp; Macro Club — Protecting Your Nest Egg &amp; Monthly Income Together · Free 3-Second Passwordless Membership</span></p>
+      <p id="tomFreeStarterManual" style="margin:8px 0 0;color:#0369a1;font-size:1.06rem;font-weight:800;line-height:1.65;">📘 $0 Free Public Product: US Brokerage App &amp; Calm 2–4x/Year Portfolio Weight Rebalancing Manual (Fidelity · Charles Schwab · Vanguard — SGOV/SPAXX Cash Cushion &amp; Limit Order Guide)</p>
+      <div style="margin:14px 0 0;padding:14px 16px;border-radius:12px;background:#ecfdf5;border:1.5px solid #059669;color:#064e3b;font-size:1rem;line-height:1.6;">
+        <div style="font-weight:900;margin-bottom:6px;">📦 VIP Retiree Software Suite ($29/mo Monthly VIP &amp; $199/yr Annual VIP):</div>
+        <div>1. <b>Custom Nest-Egg Dollar ($) Rebalancing Worksheet:</b> Enter your exact portfolio size (e.g., $500,000) to calculate exact dollar amounts across $SGOV, $SCHD, $JEPI, and $VOO whenever the 3-Color Weather changes.</div>
+        <div>2. <b>12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Placement Reference:</b> Educational tax-location guide across Traditional IRA, Roth IRA, and Taxable accounts ($JEPI ordinary income vs. $SCHD qualified dividends vs. $SGOV state-tax-exempt T-Bills) to help protect after-tax monthly income.</div>
+        <div>3. <b>Large-Print 1-Page Weather Change Action Sheet (2–4x/Year):</b> Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator.</div>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:12px;flex-wrap:wrap;">
+        <a href="#tom-vip-monthly" class="polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="display:inline-flex;align-items:center;min-height:52px;padding:10px 20px;border-radius:10px;background:#1d4ed8;color:#ffffff;font-weight:800;font-size:1.02rem;text-decoration:none;">⚡ Start Monthly VIP — $29/mo</a>
+        <a href="#tom-vip-annual" class="polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="display:inline-flex;align-items:center;min-height:52px;padding:10px 20px;border-radius:10px;background:#059669;color:#ffffff;font-weight:800;font-size:1.02rem;text-decoration:none;">💎 Start Annual VIP — $199/yr</a>
+      </div>
+      <p style="margin:10px 0 0;font-size:0.92rem;color:#334155;font-weight:700;">💳 Checkout &amp; Billing: Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · 14-Day Refund Policy</p>
+      <p style="margin:12px 0 0;padding-top:10px;border-top:1px solid #e2e8f0;font-size:0.92rem;color:#475569;font-weight:600;">Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.</p>
     </section>
   </div>
 {seo_dir_html}
@@ -398,6 +413,10 @@ def main() -> None:
     for target_dir in [DIST, ROOT_DIST, ROOT]:
         assets_d = target_dir / "assets"
         assets_d.mkdir(parents=True, exist_ok=True)
+        if target_dir == DIST:
+            for orphan in list(assets_d.glob("index-*")):
+                if orphan.name not in (js_name, css_name):
+                    orphan.unlink()
         (assets_d / js_name).write_text(bundled_js, encoding="utf-8")
         (assets_d / css_name).write_text(css_raw, encoding="utf-8")
         for item in PUB.iterdir():

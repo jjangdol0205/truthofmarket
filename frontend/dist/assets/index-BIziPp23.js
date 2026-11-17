@@ -223,11 +223,16 @@
       styleEl = document.createElement("style");
       styleEl.id = "tomVipWaitlistStyles";
       styleEl.textContent = [
-        "#tomVipWaitlistModal{position:fixed;inset:0;z-index:10060;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(2,6,23,0.82);backdrop-filter:blur(6px);}",
-        "#tomVipWaitlistDialog{width:100%;max-width:560px;background:linear-gradient(155deg,#0f172a 0%,#071929 100%);border:2px solid #10b981;border-radius:16px;padding:24px 22px;color:#f8fafc;box-shadow:0 24px 56px rgba(0,0,0,0.65);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;max-height:92vh;overflow-y:auto;}",
+        "#tomVipWaitlistModal{position:fixed;inset:0;z-index:10060;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,0.72);backdrop-filter:blur(6px);}",
+        "#tomVipWaitlistDialog{width:100%;max-width:600px;background:#ffffff;border:2px solid #059669;border-radius:16px;padding:24px 22px;color:#0f172a;box-shadow:0 24px 56px rgba(15,23,42,0.32);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;max-height:92vh;overflow-y:auto;}",
+        "html[data-tom-theme='dark'] #tomVipWaitlistDialog{background:linear-gradient(155deg,#0f172a 0%,#071929 100%);border-color:#10b981;color:#f8fafc;box-shadow:0 24px 56px rgba(0,0,0,0.65);}",
         ".tom-wl-plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}",
-        ".tom-wl-plan-btn{padding:12px 12px;border-radius:12px;border:2px solid #334155;background:rgba(15,23,42,0.85);color:#cbd5e1;text-align:left;cursor:pointer;transition:all 0.15s ease;font-family:inherit;}",
-        ".tom-wl-plan-btn.is-selected{border-color:#10b981;background:rgba(16,185,129,0.16);color:#ffffff;box-shadow:0 0 0 2px rgba(16,185,129,0.22);}",
+        ".tom-wl-plan-btn{padding:12px 12px;border-radius:12px;border:2px solid #cbd5e1;background:#f8fafc;color:#0f172a;text-align:left;cursor:pointer;transition:all 0.15s ease;font-family:inherit;}",
+        "html[data-tom-theme='dark'] .tom-wl-plan-btn{border-color:#334155;background:rgba(15,23,42,0.85);color:#cbd5e1;}",
+        ".tom-wl-plan-btn.is-selected{border-color:#059669;background:#ecfdf5;color:#064e3b;box-shadow:0 0 0 2px rgba(5,150,105,0.2);}",
+        "html[data-tom-theme='dark'] .tom-wl-plan-btn.is-selected{border-color:#10b981;background:rgba(16,185,129,0.16);color:#ffffff;}",
+        ".tom-wl-benefits-box{margin:10px 0 14px;padding:12px 14px;border-radius:12px;background:#f8fafc;border:1px solid #cbd5e1;font-size:15px;line-height:1.55;color:#1e293b;}",
+        "html[data-tom-theme='dark'] .tom-wl-benefits-box{background:rgba(15,23,42,0.75);border-color:#334155;color:#e2e8f0;}",
         "@media(max-width:540px){.tom-wl-plan-grid{grid-template-columns:1fr;}#tomVipWaitlistDialog{padding:18px 15px;}}",
       ].join("");
       document.head.appendChild(styleEl);
@@ -243,44 +248,50 @@
     backdrop.innerHTML =
       '<div id="tomVipWaitlistDialog">' +
       '  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;">' +
-      '    <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.18);border:1px solid rgba(52,211,153,0.55);color:#6ee7b7;padding:4px 12px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:0.02em;">' +
+      '    <span style="display:inline-flex;align-items:center;gap:6px;background:#ecfdf5;border:1px solid #059669;color:#065f46;padding:4px 12px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:0.02em;">' +
       "      FOUNDING MEMBER PRIORITY ACCESS &bull; 20% EARLY-BIRD LOCK" +
       "    </span>" +
-      '    <button type="button" id="btnCloseTomVipWaitlist" aria-label="Close modal" style="min-height:42px;padding:6px 12px;border-radius:8px;border:1px solid #475569;background:#1e293b;color:#f8fafc;font-weight:800;font-size:15px;cursor:pointer;">✕ Close</button>' +
+      '    <button type="button" id="btnCloseTomVipWaitlist" aria-label="Close modal" style="min-height:42px;padding:6px 12px;border-radius:8px;border:1px solid #94a3b8;background:#f1f5f9;color:#0f172a;font-weight:800;font-size:15px;cursor:pointer;">✕ Close</button>' +
       "  </div>" +
-      '  <h3 id="tomVipWaitlistTitle" style="margin:0 0 8px;font-size:clamp(1.2rem,2.4vw,1.45rem);line-height:1.32;font-weight:900;color:#ffffff;">' +
+      '  <h3 id="tomVipWaitlistTitle" style="margin:0 0 8px;font-size:clamp(1.2rem,2.4vw,1.45rem);line-height:1.32;font-weight:900;">' +
       "    VIP Founding Member Launch Alert &amp; 20% Early-Bird Discount Reservation (1-Second Email Reserve)" +
       "  </h3>" +
-      '  <p style="margin:0;color:#cbd5e1;font-size:16.5px;line-height:1.6;">' +
-      "    Our Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) self-directed educational calculator software checkout is completing final gateway activation. Reserve your spot in <b>1 second ($0 charged today)</b> to lock in a <b>20% Founding Member Discount</b> the moment live checkout opens—plus instant free Morning Bell Club access." +
+      '  <p style="margin:0;font-size:16.5px;line-height:1.6;">' +
+      "    Our Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) self-directed educational calculator software checkout is completing final gateway activation. Reserve your spot in <b>1 second ($0 charged today)</b> to lock in a <b>20% Founding Member Discount</b>—plus instant free Morning Bell Club access." +
       "  </p>" +
+      '  <div class="tom-wl-benefits-box">' +
+      '    <div style="font-weight:800;color:#047857;margin-bottom:6px;">📦 3 Retiree VIP Software Tools Included ($29/mo or $199/yr):</div>' +
+      '    <div style="margin-bottom:4px;">&bull; <b>Custom Nest-Egg Dollar ($) Rebalancing Worksheet:</b> Exact dollar amounts across <b>$SGOV, $SCHD, $JEPI &amp; $VOO</b> for your exact portfolio size (e.g., $500,000).</div>' +
+      '    <div style="margin-bottom:4px;">&bull; <b>12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Placement Reference:</b> Educational tax-location guide across <b>Traditional IRA, Roth IRA &amp; Taxable</b> accounts.</div>' +
+      '    <div>&bull; <b>Large-Print 1-Page Weather Change Action Sheet (2–4x/Year):</b> Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator.</div>' +
+      "  </div>" +
       '  <div class="tom-wl-plan-grid" role="radiogroup" aria-label="Select VIP Plan to Reserve">' +
       '    <button type="button" class="tom-wl-plan-btn is-selected" data-wl-plan="Monthly VIP ($29/mo)">' +
-      '      <div style="font-size:12.5px;font-weight:800;color:#6ee7b7;">MONTHLY VIP SOFTWARE</div>' +
-      '      <div style="font-size:17px;font-weight:900;color:#ffffff;margin:3px 0;">Monthly VIP ($29/mo)</div>' +
-      '      <div style="font-size:13px;color:#fde68a;font-weight:700;">20% Early-Bird: $23.20/mo</div>' +
-      '      <div style="font-size:11.5px;color:#cbd5e1;margin-top:4px;line-height:1.35;">Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator</div>' +
+      '      <div style="font-size:12.5px;font-weight:800;color:#047857;">MONTHLY VIP SOFTWARE</div>' +
+      '      <div style="font-size:17px;font-weight:900;margin:3px 0;">Monthly VIP ($29/mo)</div>' +
+      '      <div style="font-size:13px;color:#b45309;font-weight:800;">20% Early-Bird: $23.20/mo</div>' +
+      '      <div style="font-size:12px;margin-top:4px;line-height:1.35;">All 3 Retiree Worksheets + Drawdown Defense PDF Guide</div>' +
       "    </button>" +
       '    <button type="button" class="tom-wl-plan-btn" data-wl-plan="Annual VIP ($199/yr)">' +
-      '      <div style="font-size:12.5px;font-weight:800;color:#fde68a;">ANNUAL VIP SOFTWARE (SAVE 43%)</div>' +
-      '      <div style="font-size:17px;font-weight:900;color:#ffffff;margin:3px 0;">Annual VIP ($199/yr)</div>' +
-      '      <div style="font-size:13px;color:#6ee7b7;font-weight:700;">20% Early-Bird: $159.20/yr</div>' +
-      '      <div style="font-size:11.5px;color:#cbd5e1;margin-top:4px;line-height:1.35;">Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator</div>' +
+      '      <div style="font-size:12.5px;font-weight:800;color:#b45309;">ANNUAL VIP SOFTWARE (SAVE 43%)</div>' +
+      '      <div style="font-size:17px;font-weight:900;margin:3px 0;">Annual VIP ($199/yr)</div>' +
+      '      <div style="font-size:13px;color:#047857;font-weight:800;">20% Early-Bird: $159.20/yr</div>' +
+      '      <div style="font-size:12px;margin-top:4px;line-height:1.35;">Full 12-Month Pass + Lifetime-Updated PDF Guide Bundle</div>' +
       "    </button>" +
       "  </div>" +
       '  <form id="tomVipWaitlistForm" novalidate style="display:flex;flex-direction:column;gap:10px;">' +
       '    <input type="hidden" id="tomVipWaitlistSelectedPlan" value="Monthly VIP ($29/mo)" />' +
-      '    <label for="tomVipWaitlistEmail" style="font-size:14.5px;font-weight:800;color:#e2e8f0;">Your Best Email Address (Zero Spam &bull; No Card Needed Today):</label>' +
+      '    <label for="tomVipWaitlistEmail" style="font-size:15px;font-weight:800;">Your Best Email Address (Zero Spam &bull; No Card Needed Today):</label>' +
       '    <input type="email" id="tomVipWaitlistEmail" required autocomplete="email" placeholder="Enter your email (e.g., robert@email.com)" value="' +
       String(savedEmail).replace(/"/g, "") +
-      '" style="width:100%;min-height:56px;padding:12px 16px;border-radius:10px;border:2px solid #94a3b8;background:#ffffff;color:#0f172a;font-size:18px;font-weight:700;box-sizing:border-box;" />' +
-      '    <button type="submit" id="btnSubmitTomVipWaitlist" style="width:100%;min-height:58px;padding:13px 18px;border-radius:11px;border:none;background:linear-gradient(135deg,#10b981 0%,#059669 100%);color:#022c22;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 8px 22px rgba(16,185,129,0.32);">' +
+      '" style="width:100%;min-height:56px;padding:12px 16px;border-radius:10px;border:2px solid #64748b;background:#ffffff;color:#0f172a;font-size:18px;font-weight:700;box-sizing:border-box;" />' +
+      '    <button type="submit" id="btnSubmitTomVipWaitlist" style="width:100%;min-height:58px;padding:13px 18px;border-radius:11px;border:none;background:linear-gradient(135deg,#059669 0%,#047857 100%);color:#ffffff;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 8px 22px rgba(5,150,105,0.28);">' +
       "      Reserve My 20% VIP Discount &amp; Launch Alert (1-Sec) &rarr;" +
       "    </button>" +
       "  </form>" +
-      '  <div id="tomVipWaitlistConfirm" role="status" aria-live="polite" style="display:none;margin-top:12px;padding:14px 16px;border-radius:10px;background:rgba(16,185,129,0.16);border:1.5px solid #10b981;color:#ecfdf5;font-size:16px;line-height:1.55;font-weight:700;"></div>' +
-      '  <div style="margin-top:12px;padding-top:10px;border-top:1px solid rgba(148,163,184,0.2);font-size:13px;color:#94a3b8;line-height:1.5;">' +
-      '    Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) &bull; 14-Day No-Questions-Asked Refund Policy once live &bull; Self-Directed Educational Calculator Software &bull; Support: <a href="mailto:beable9489@gmail.com" style="color:#7dd3fc;text-decoration:underline;">beable9489@gmail.com</a>' +
+      '  <div id="tomVipWaitlistConfirm" role="status" aria-live="polite" style="display:none;margin-top:12px;padding:14px 16px;border-radius:10px;background:#ecfdf5;border:1.5px solid #059669;color:#064e3b;font-size:16px;line-height:1.55;font-weight:700;"></div>' +
+      '  <div style="margin-top:12px;padding-top:10px;border-top:1px solid #cbd5e1;font-size:13.5px;color:#475569;line-height:1.5;">' +
+      '    Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) &bull; 14-Day No-Questions-Asked Refund Policy once live &bull; Self-Directed Educational Calculator Software &bull; Support: <a href="mailto:beable9489@gmail.com" style="color:#1d4ed8;font-weight:700;text-decoration:underline;">beable9489@gmail.com</a>' +
       "  </div>" +
       "</div>";
 
@@ -325,9 +336,9 @@
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
           if (confirmEl) {
             confirmEl.style.display = "block";
-            confirmEl.style.borderColor = "#f87171";
-            confirmEl.style.background = "rgba(239,68,68,0.16)";
-            confirmEl.style.color = "#fecaca";
+            confirmEl.style.borderColor = "#dc2626";
+            confirmEl.style.background = "#fef2f2";
+            confirmEl.style.color = "#991b1b";
             confirmEl.textContent = "Please enter a valid email address (for example, robert@email.com).";
           }
           if (emailEl) emailEl.focus();
@@ -382,9 +393,9 @@
 
         if (confirmEl) {
           confirmEl.style.display = "block";
-          confirmEl.style.borderColor = "#10b981";
-          confirmEl.style.background = "rgba(16,185,129,0.18)";
-          confirmEl.style.color = "#ecfdf5";
+          confirmEl.style.borderColor = "#059669";
+          confirmEl.style.background = "#ecfdf5";
+          confirmEl.style.color = "#064e3b";
           confirmEl.innerHTML =
             "✅ <strong>20% Early-Bird Founding Reservation Confirmed!</strong><br/>Reserved Plan: <b>" +
             selectedPlan.replace(/[<>&"]/g, "") +
@@ -506,7 +517,8 @@
         return;
       }
       if (window.PolarEmbedCheckout && typeof window.PolarEmbedCheckout.create === "function") {
-        window.PolarEmbedCheckout.create(checkoutUrl, "dark").catch(function () {
+        var curTheme = document.documentElement.getAttribute("data-tom-theme") === "dark" ? "dark" : "light";
+        window.PolarEmbedCheckout.create(checkoutUrl, curTheme).catch(function () {
           window.location.href = checkoutUrl;
         });
       } else {
@@ -658,38 +670,38 @@
 // --- src/locales/i18n.js ---
 const enCopy = {
   // Global Navigation & Header
-  brandSubtitle: "SELF-DIRECTED EDUCATIONAL CALCULATOR SOFTWARE",
-  navRightSide: "Retirement Calculator",
-  navSemiFg: "Market Weather & Barbell",
-  marketUniverseTag: "US 401(k) / IRA · 4-CORE RETIREMENT & ETF CALCULATOR",
+  brandSubtitle: "US 401(k) & IRA INCOME ARCHITECT",
+  navRightSide: "30-Sec Income Simulator",
+  navSemiFg: "3-Color Market Weather",
+  marketUniverseTag: "RETIREMENT 4-CORE ETFs",
   statusFree: "FREE ACCESS",
   statusPro: "VIP SOFTWARE ACTIVE",
   btnLicense: "License Key",
   btnAdmin: "Config",
   btnTelegram: "Telegram",
-  btnUnlockPro: "Start Monthly VIP — $29/mo",
+  btnUnlockPro: "VIP Benefits",
 
   // Hero & Calm Educational Metrics (B2C 3-Second Hook)
-  heroTag: "SELF-DIRECTED EDUCATIONAL CALCULATOR SOFTWARE · 26.8-YR HISTORICAL DATA",
+  heroTag: "US RETIREMENT CASHFLOW & REBALANCING SOFTWARE",
   heroTitle: "Turn Your 401(k) & Savings Into Calm, Reliable Monthly Retirement Income.",
   heroDesc:
-    "Design your monthly retirement paycheck in 30 seconds, protect your nest egg from -35% sequence-of-returns crashes, and rebalance SGOV, SCHD, JEPI & VOO calmly 2–4 times a year with our 3-Color Market Weather indicator.",
+    "Simulate your monthly retirement paycheck in 30 seconds, cushion your nest egg from -35% sequence-of-returns crashes, and rebalance $VOO, $SCHD, $JEPI & $SGOV calmly 2–4 times a year with our US Retirement Market Weather indicator.",
   pwRsiExplainerBtn: "How 2–4x/Yr Rebalancing Works",
   pwRsiModalTitle: "Calm 2–4x/Year 3-Bucket Portfolio Rebalancing Methodology",
-  kpi1_label: "Historical Data Span",
-  kpi1_sub: "1998–2026 public US market datasets",
-  kpi2_label: "Core Retirement Pillars",
-  kpi2_sub: "SGOV · SCHD · JEPI · VOO allocation math",
-  kpi3_label: "Calm Rebalancing Cadence",
-  kpi3_sub: "2–4x/year 3-Color Market Weather review",
-  kpi4_label: "Privacy & Calculation Mode",
-  kpi4_sub: "100% browser-local educational software",
+  kpi1_label: "Core S&P 500 Pillar",
+  kpi1_sub: "$VOO broad US compounding core",
+  kpi2_label: "Dividend Growth & Income",
+  kpi2_sub: "$SCHD (~3.5%) + $JEPI (~7.4% mo.)",
+  kpi3_label: "US T-Bill Cash Shield",
+  kpi3_sub: "$SGOV (~4.7% state-tax-advantaged)",
+  kpi4_label: "Calm Review Cadence",
+  kpi4_sub: "2–4x/year · 100% browser-local privacy",
 
   // Historical Comparative Allocation Card
-  auditedCardTag: "HISTORICAL ALLOCATION RESEARCH · 1998–2026 (26.8 YEARS)",
+  auditedCardTag: "HISTORICAL ALLOCATION RESEARCH · 1998–2026",
   auditedCardTitle: "SMH/XLV Barbell Allocation (+28.4%) vs. S&P 500 (+14.2%) Historical Study",
   auditedCardDesc:
-    "Point-in-time educational historical study across 6,625 trading days. Rebalanced calmly with an 80:20 educational weight shift during deep semiconductor pulldowns.",
+    "Point-in-time educational historical study across 6,625 trading days. Rebalanced calmly with an 80:20 educational weight shift during deep sector pulldowns.",
   auditedBarbellLabel: "SMH 70% : XLV 30% Barbell Model",
   auditedSpyLabel: "S&P 500 (SPY) Benchmark",
   auditedMetricCagr: "Historical Annualized Rate",
@@ -700,12 +712,12 @@ const enCopy = {
 
   // Soft Paywall Call to Action (Used in /pro-swing.html Quantitative Archive)
   softPaywallUnlockCta: "Start Monthly VIP — $29/mo",
-  softPaywallTitle: "🔒 Full Quantitative Factor Dataset & Historical CSV Suite",
+  softPaywallTitle: "🔒 Full Quantitative Factor Dataset & Retiree Rebalancing Worksheets",
   softPaywallDesc:
-    "$CELH is displayed as an open educational factor example. Upgrade to Monthly VIP ($29/mo) or Annual VIP ($199/yr) to access the full self-directed quantitative factor dataset, Pine Script v5 overlay, and 26.8-year CSV archive.",
+    "$CELH is displayed as an open educational factor example. Upgrade to Monthly VIP ($29/mo) or Annual VIP ($199/yr) to unlock the Custom Nest-Egg Dollar ($) Rebalancing Worksheet, 12-Month Dividend Paycheck Calendar & Tax-Bucket Reference, and Large-Print Weather Action Sheet.",
 
   // Empirical Factor Table (/pro-swing.html)
-  proofHeading: "26.8-Year Historical Factor Study · Moving-Average Trend Filter vs. Unfiltered Lows",
+  proofHeading: "Historical Factor Study · Moving-Average Trend Filter vs. Unfiltered Lows",
   proofCopyScorecardBtn: "Export Study Card (PNG)",
   th_arch: "Historical Factor Cohort (N = 394,371 US Stock-Days)",
   th_2x: "Historical Upper Band",
@@ -715,13 +727,13 @@ const enCopy = {
   th_trap: "1Y Deep Drawdown (≤ -20%)",
 
   // Screener Controls & Table Columns (/pro-swing.html)
-  searchPlaceholder: "Search Ticker, Company, or Sector (e.g. MSFT, NVDA, Semiconductors)...",
+  searchPlaceholder: "Search Ticker, Company, or Sector (e.g. VOO, SCHD, JNJ, MSFT)...",
   filterAll: "All Universe",
   filterIgnition: "MA20/60 Reclaimed",
   filterWatch: "Base Consolidation",
   filterKnife: "Sub-MA60 Trend",
   filterTrap: "Fundamental Lag",
-  colTicker: "Ticker / Sector",
+  colTicker: "Ticker / Profile",
   colZone: "3-Color Trend State",
   colScore: "Factor Score",
   colClose: "Last Close & 52W Range",
@@ -747,24 +759,24 @@ const enCopy = {
   tool2Sub: "10-K / 10-Q Cashflow & Dividend Coverage Summaries",
   tool2Desc: "Updated daily at 08:10 EST from public SEC filings, dividend payout ratios, and balance-sheet metrics:",
   tool2ViewBtn: "Open Educational Filing Summaries",
-  tool3Title: "MODULE 03 · TRADINGVIEW PINE SCRIPT v5 EDUCATIONAL OVERLAY",
+  tool3Title: "MODULE 03 · MOVING-AVERAGE & VOLUME VISUALIZATION",
   tool3Sub: "Moving-Average & Relative-Volume Visualization Script",
   tool3Desc:
-    "Paste into TradingView Pine Editor to visualize 20-day/60-day moving averages and 1.4x relative volume bars:",
-  tool3CopyBtn: "Copy Pine Script v5 Source",
+    "Optional technical script to visualize 20-day/60-day moving averages and 1.4x relative volume bars:",
+  tool3CopyBtn: "Copy Script Source",
 
-  // Cross-Platform Banner
-  crossTitle: "COMPANION MARKET WEATHER CALCULATOR · SEMIFEARGREED",
-  crossHeading: "Tracking US Semiconductor & Healthcare ETFs ($SMH / $XLV)?",
+  // Cross-Platform Banner (Home Retirement Focus)
+  crossTitle: "US RETIREMENT MARKET WEATHER · S&P 500 BREADTH & DRAWDOWN GUARD",
+  crossHeading: "Want to Review Your Exact Dollar Rebalancing Across $SGOV, $SCHD, $JEPI & $VOO?",
   crossDesc:
-    "Explore the 7-Factor Semiconductor Fear & Greed Index and 26.8-year $SMH 70% : $XLV 30% educational barbell rebalancing calculator.",
-  crossBtn: "Open Market Weather & Barbell Calculator",
+    "Check today's 3-Color US Retirement Market Weather above or explore our $0 Safe Brokerage Limit-Order & Rebalancing Manual for Fidelity, Charles Schwab, and Vanguard.",
+  crossBtn: "Review 3-Color Market Weather",
 
-  // SemiFearGreed (CNN-Style UI/UX)
+  // SemiFearGreed Standalone Page Copy (/semi-fear-greed.html)
   cnnBadge: "PUBLIC MARKET SENTIMENT DATA · UPDATED DAILY",
-  cnnTitle: "Semiconductor Fear & Greed Index (Educational Data Gauge)",
+  cnnTitle: "US Sector Sentiment & Barbell Allocation Gauge (Educational Data)",
   cnnSubtitle:
-    "Visualize public semiconductor sector sentiment (0–100) and explore historical 70:30 vs. 80:20 $SMH:$XLV portfolio weight math.",
+    "Visualize public sector breadth & drawdown indicators (0–100) and explore historical 70:30 vs. 80:20 $SMH:$XLV portfolio weight math.",
   cnnTabOverview: "Overview",
   cnnTabTimeline: "Timeline",
   cnnLastUpdated: "Last updated",
@@ -772,7 +784,7 @@ const enCopy = {
   cnnTelegramBtn: "Telegram Briefing",
   cnnHistoryTitle: "Historical Sentiment Comparison",
   cnnActiveRuleLabel: "EDUCATIONAL BARBELL WEIGHT MODEL",
-  cnnIndicatorsHeading: "7 Semiconductor Fear & Greed Data Factors",
+  cnnIndicatorsHeading: "7 Sector Breadth & Drawdown Data Factors",
   cnnIndicatorsSub:
     "Computed daily from public $SMH, $XLV, and $QQQ momentum, 52-week drawdown, defensive spread, RSI-14, realized volatility, relative spread, and weight drift.",
   rebalSectionTag: "SELF-DIRECTED BARBELL ALLOCATION CALCULATOR",
@@ -783,7 +795,7 @@ const enCopy = {
   lumpSectionTitle: "3-Stage Cash Deployment Math Calculator",
   lumpSectionDesc:
     "Model splitting new capital across staged tranches and short-term Treasury cash reserves based on current sentiment readings.",
-  eraSectionTag: "26.8-YEAR HISTORICAL DATA ARCHIVE (2000–2026)",
+  eraSectionTag: "HISTORICAL DATA ARCHIVE (2000–2026)",
   eraSectionTitle: "$SMH 70% : $XLV 30% Barbell Model vs. 100% $QQQ Historical Comparison",
   eraSectionDesc:
     "Historical point-in-time public market series across 6,625 trading days (2000–2026).",
@@ -795,39 +807,7 @@ const enCopy = {
 };
 const translations = {
   en: enCopy,
-  jp: {
-    ...enCopy,
-    brandSubtitle: "自己判断型・教育用ポートフォリオ計算ソフトウェア",
-    navRightSide: "老後キャッシュフロー計算機",
-    navSemiFg: "市場天気＆バーベル計算機",
-    marketUniverseTag: "米国ETF（SGOV・SCHD・JEPI・VOO）教育用シミュレーター",
-    statusFree: "無料アクセス",
-    statusPro: "VIP有効",
-    btnLicense: "ライセンス認証",
-    btnAdmin: "設定",
-    btnTelegram: "Telegram",
-    btnUnlockPro: "Start Monthly VIP — $29/mo",
-
-    heroTag: "教育用ポートフォリオ計算ソフトウェア · 26.8年間公開市場データ",
-    heroTitle: "401(k)・退職資産を、穏やかで安定した毎月キャッシュフローへ設計",
-    heroDesc:
-      "30秒で毎月の取り崩し・配当キャッシュフローを試算し、SGOV・SCHD・JEPI・VOOの4コア資産を3色マーケット天気と連動して年2〜4回穏やかにリバランスする教育用シミュレーターです。",
-    pwRsiExplainerBtn: "年2〜4回リバランスの仕組み",
-    pwRsiModalTitle: "3色マーケット天気連動・年2〜4回穏やかリバランスの計算原理",
-    kpi1_label: "検証データ期間",
-    kpi1_sub: "1998–2026年 米国市場公開データ",
-    kpi2_label: "老後4コアETF",
-    kpi2_sub: "SGOV · SCHD · JEPI · VOO 配分計算",
-    kpi3_label: "穏やかな見直し頻度",
-    kpi3_sub: "年2〜4回の比率リバランス設計",
-    kpi4_label: "プライバシー保護設計",
-    kpi4_sub: "100%ブラウザ内ローカル計算ソフト",
-
-    softPaywallUnlockCta: "Start Monthly VIP — $29/mo",
-    softPaywallTitle: "🔒 教育用クオンツデータセット＆過去26.8年CSVアーカイブ",
-    softPaywallDesc:
-      "Monthly VIP ($29/mo) または Annual VIP ($199/yr) で全ファクターデータ・TradingViewスクリプト・26.8年CSVデータを解除できます。",
-  },
+  jp: { ...enCopy },
   kr: { ...enCopy },
 };
 
@@ -2615,7 +2595,7 @@ function renderPositionDoctorForm(state) {
   const stocks = state.stocks || [];
   const celh = stocks.find((s) => s.ticker === "CELH");
   const defaultClose = celh && celh.close ? Number(celh.close).toFixed(2) : "32.42";
-  const defaultDate = celh && celh.date ? celh.date : "2026-11-13";
+  const defaultDate = celh && celh.date ? celh.date : "2026-11-16";
   const initialDoc = state.docLastResult
     ? formatDoctorResult(state.docLastResult, state)
     : `<div style="color:var(--muted); font-size:0.76rem; line-height:1.4;">Type any US ticker (e.g. <b>NVDA</b>, <b>CELH</b>, <b>TSLA</b>) and click <b>Calculate Variance</b> for instant historical dispersion &amp; 55-day duration bands.</div>`;
@@ -3796,260 +3776,165 @@ function renderChartBlindTest(state) {
 
 
 // --- src/components/Header.js ---
+function getLatestUsMarketCloseDate(serverDateStr = "") {
+  const baseline = "2026-11-16";
+  let candidate = String(serverDateStr || "").slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(candidate) || candidate < baseline) {
+    candidate = baseline;
+  }
+  try {
+    if (typeof Intl !== "undefined") {
+      const now = new Date();
+      const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "America/New_York",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        weekday: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }).formatToParts(now);
+      const getP = (t) => parts.find((p) => p.type === t)?.value || "";
+      const y = Number(getP("year"));
+      const m = Number(getP("month"));
+      const d = Number(getP("day"));
+      const wk = getP("weekday");
+      const hr = Number(getP("hour"));
+      const mn = Number(getP("minute"));
+      if (y && m && d) {
+        const utcRef = new Date(Date.UTC(y, m - 1, d));
+        const afterClose = hr > 16 || (hr === 16 && mn >= 15);
+        let backDays = 0;
+        if (wk === "Sat") backDays = 1;
+        else if (wk === "Sun") backDays = 2;
+        else if (!afterClose) {
+          backDays = wk === "Mon" ? 3 : 1;
+        }
+        utcRef.setUTCDate(utcRef.getUTCDate() - backDays);
+        const nyCloseIso = utcRef.toISOString().slice(0, 10);
+        if (nyCloseIso > candidate) {
+          candidate = nyCloseIso;
+        }
+      }
+    }
+  } catch (_) {}
+  return candidate;
+}
 function renderHeader(state) {
-  const t = state.t;
-  const lang = state.lang || "en";
-  const isPro = state.isProUnlocked;
-  const activeView = state.activeView || "rightside";
   const ov = state.semiOverview;
-  const semiScore =
+  const fgNum =
     ov && ov.fg_score !== undefined && ov.fg_score !== null
-      ? Number(ov.fg_score).toFixed(1)
-      : "18.3";
-  const rawRegime = ov
-    ? lang === "jp"
-      ? ov.regime_jp
-      : ov.regime_en
-    : "EXTREME FEAR";
-  const semiRegime = String(rawRegime || "EXTREME FEAR").toUpperCase();
-  const semiDate = ov && ov.date ? ov.date : "2026-11-13";
-  const smhPrice = ov && ov.smh_close !== undefined ? Number(ov.smh_close).toFixed(2) : "486.75";
-  const xlvPrice = ov && ov.xlv_close !== undefined ? Number(ov.xlv_close).toFixed(2) : "188.85";
-  const qqqPrice = ov && ov.qqq_close !== undefined ? Number(ov.qqq_close).toFixed(2) : "679.89";
+      ? Number(ov.fg_score)
+      : 28.0;
+  const closeDate = getLatestUsMarketCloseDate(ov && ov.date ? ov.date : "2026-11-16");
 
-  const etfs = ov && Array.isArray(ov.etfs) ? ov.etfs : [];
-  const qqqEtf = etfs.find((e) => e.ticker === "QQQ");
-  const smhEtf = etfs.find((e) => e.ticker === "SMH");
-  const xlvEtf = etfs.find((e) => e.ticker === "XLV");
+  const weatherStatus =
+    fgNum <= 32
+      ? { pill: "🔴 Drawdown Guard Active", cls: "tape-down" }
+      : fgNum >= 58
+      ? { pill: "🟢 Calm Uptrend", cls: "tape-up" }
+      : { pill: "🟡 Cautious Breadth", cls: "tape-caution" };
 
-  const qqq1d = qqqEtf && qqqEtf.ret_1d_pct !== undefined ? Number(qqqEtf.ret_1d_pct) : 0.25;
-  const smhDd =
-    smhEtf && smhEtf.dd_52w_pct !== undefined
-      ? Number(smhEtf.dd_52w_pct)
-      : ov && ov.smh_dd_pct !== undefined
-      ? Number(ov.smh_dd_pct)
-      : -29.02;
-  const xlv1d = xlvEtf && xlvEtf.ret_1d_pct !== undefined ? Number(xlvEtf.ret_1d_pct) : 0.22;
-  const polarMonthlyHref = formatCheckoutUrl(
-    state.config?.polar_tom_monthly_url || state.config?.ls_site1_monthly_url,
-    "#tom-vip-monthly"
-  );
-  const ytUrl = state.config?.youtube_url || "https://www.youtube.com/@RightSideAlpha";
-  const igUrl = state.config?.instagram_url || "https://www.instagram.com/rightsidealpha";
-  const xUrl = state.config?.x_url || "https://x.com/rightsidealpha";
-  const tgUrl = isPro
-    ? state.config?.telegram_vip_channel_url || state.config?.telegram_channel_url || "https://t.me/truthofmarketss"
-    : "#pro-vip-telegram";
-  const isAdminMode =
-    (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("admin") === "1") ||
-    Boolean(state.isAdminAuthenticated);
-  const isProSwing =
+  const allStocks = Array.isArray(state.stocks) ? state.stocks : [];
+  const findClose = (tkr, fallback) => {
+    const found = allStocks.find((s) => String(s.ticker || "").toUpperCase() === tkr);
+    return found && found.close ? Number(found.close).toFixed(2) : fallback;
+  };
+  const vooPrice = findClose("VOO", "548.60");
+  const schdPrice = findClose("SCHD", "29.45");
+  const jepiPrice = findClose("JEPI", "59.18");
+  const sgovPrice = findClose("SGOV", "100.52");
+
+  const isSubpage =
     typeof window !== "undefined" &&
-    (window.__DEFAULT_VIEW__ === "pro_swing" || window.location.pathname.toLowerCase().includes("pro-swing"));
+    (window.__DEFAULT_VIEW__ === "pro_swing" ||
+      window.__DEFAULT_VIEW__ === "semi" ||
+      (window.location.pathname &&
+        window.location.pathname !== "/" &&
+        !window.location.pathname.endsWith("/index.html")));
+
+  const homePrefix = isSubpage ? "/" : "";
+  const fontPx = Number(state.fontSizePx || 18);
 
   return `
-    <span id="pro-vip-telegram" style="display:none;" aria-hidden="true"></span>
-    <!-- MARKET DATA RIBBON -->
-    <div class="market-ribbon">
+    <!-- RETIREMENT 4-CORE ETFs & US MARKET WEATHER RIBBON -->
+    <div class="market-ribbon" role="region" aria-label="US Retirement 4-Core ETFs and Market Weather">
       <div class="market-ribbon-inner">
         <div class="market-tape">
-          <span class="universe-pill">
-            <span class="universe-dot"></span>
-            ${t.marketUniverseTag}
-          </span>
           <span class="tape-item">
-            <span class="tape-sym">QQQ</span>
-            <span>$${qqqPrice}</span>
-            <span class="${qqq1d >= 0 ? "tape-up" : "tape-down"}">${qqq1d >= 0 ? "+" : ""}${qqq1d.toFixed(2)}%</span>
+            <span class="tape-sym">$VOO</span>
+            <span class="tape-role">(S&amp;P 500 Core)</span>
+            <strong class="tape-price">$${vooPrice}</strong>
           </span>
+          <span class="tape-sep" aria-hidden="true">&middot;</span>
           <span class="tape-item">
-            <span class="tape-sym">SMH</span>
-            <span>$${smhPrice}</span>
-            <span class="tape-down">${smhDd.toFixed(2)}% DD</span>
+            <span class="tape-sym">$SCHD</span>
+            <span class="tape-role">(Dividend Growth ~3.5%)</span>
+            <strong class="tape-price">$${schdPrice}</strong>
           </span>
+          <span class="tape-sep" aria-hidden="true">&middot;</span>
           <span class="tape-item">
-            <span class="tape-sym">XLV</span>
-            <span>$${xlvPrice}</span>
-            <span class="${xlv1d >= 0 ? "tape-up" : "tape-down"}">${xlv1d >= 0 ? "+" : ""}${xlv1d.toFixed(2)}%</span>
+            <span class="tape-sym">$JEPI</span>
+            <span class="tape-role">(Monthly Income ~7.4%)</span>
+            <strong class="tape-price">$${jepiPrice}</strong>
           </span>
-          <span class="tape-item" style="cursor:pointer;" id="ribbonSwitchSemi">
-            <span class="tape-sym">MARKET WEATHER</span>
-            <span class="${Number(semiScore) >= 55 ? "tape-up" : "tape-down"}" style="font-weight:700;">${semiScore} / 100 (${semiRegime})</span>
+          <span class="tape-sep" aria-hidden="true">&middot;</span>
+          <span class="tape-item">
+            <span class="tape-sym">$SGOV</span>
+            <span class="tape-role">(US T-Bill Cash ~4.7%)</span>
+            <strong class="tape-price">$${sgovPrice}</strong>
+          </span>
+          <span class="tape-sep" aria-hidden="true">|</span>
+          <span class="tape-item" id="ribbonWeatherStatus">
+            <span class="tape-sym">US Retirement Market Weather (S&amp;P 500 Breadth &amp; Drawdown Guard):</span>
+            <span class="${weatherStatus.cls}" style="font-weight:800;">${weatherStatus.pill}</span>
           </span>
         </div>
-        <div class="mono ribbon-date-note" style="font-size:0.68rem; color:var(--muted);">
-          LATEST CLOSE (${semiDate}) · PUBLIC MARKET DATA
+        <div class="mono ribbon-date-note" id="latestMarketCloseNote">
+          ${closeDate} US Market Close
         </div>
       </div>
     </div>
 
-    <!-- MAIN TOPBAR -->
+    <!-- CLEAN SENIOR-FRIENDLY TOPBAR (<= 5 CORE NAVIGATION ITEMS) -->
     <header class="topbar">
       <div class="topbar-inner">
-        <div class="brand-cluster">
-          <a href="/" class="brand" id="brandHomeBtn" style="text-decoration:none;">
-            <span class="brand-mark">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
-                <polyline points="16 7 22 7 22 13"></polyline>
-              </svg>
-            </span>
-            <span>TruthOfMarket</span>
-            <span class="brand-badge" id="brandSubtitle">${t.brandSubtitle}</span>
-          </a>
-
-          <!-- PLATFORM SWITCHER -->
-          <div class="platform-switcher" role="tablist" aria-label="Calculator Navigation">
-            <a
-              href="/"
-              class="platform-tab ${!isProSwing && activeView === "rightside" ? "active-rsa" : ""}"
-              id="navTabRightSide"
-              data-view="rightside"
-              style="text-decoration:none;"
-            >
-              <span>${t.navRightSide}</span>
-              <span class="platform-tab-tag">4-Core</span>
-            </a>
-            <button
-              type="button"
-              class="platform-tab ${activeView === "semi" ? "active-semi" : ""}"
-              id="navTabSemiFg"
-              data-view="semi"
-            >
-              <span>${t.navSemiFg}</span>
-              <span class="platform-tab-tag" id="headerSemiScoreTag" style="color:#fca5a5; background:rgba(220,38,38,0.2);">${semiScore}</span>
-            </button>
-            <a
-              href="/pro-swing.html"
-              class="platform-tab ${isProSwing ? "active-rsa" : ""}"
-              style="text-decoration:none;"
-              title="Self-Directed Quantitative Factor Research Archive"
-            >
-              <span>Quant Archive</span>
-            </a>
-          </div>
-        </div>
-
-        <div class="nav-actions">
-          <button
-            type="button"
-            class="btn btn-sm"
-            id="btnToggleTomFont"
-            title="Toggle Large Senior Text Size (18px-20px)"
-            style="min-height:38px; padding:4px 9px; font-weight:800; border-color:rgba(16,185,129,0.5); color:#34d399;"
-          >
-            🔍 ${state.fontSizeMode === "large" ? "Text: Large" : "Text: A+"}
-          </button>
-
-          <button
-            type="button"
-            class="btn btn-sm"
-            id="btnToggleTomTheme"
-            title="Switch between Daylight Light Mode and Dark Mode"
-            style="min-height:38px; padding:4px 9px; font-weight:800; border-color:rgba(251,191,36,0.5); color:#fbbf24;"
-          >
-            ${state.uiTheme === "light" ? "🌙 Dark" : "☀️ Daylight"}
-          </button>
-
-          <div class="lang-switch" aria-label="Language Selector">
-            <button type="button" class="lang-btn ${lang !== "jp" ? "active" : ""}" data-lang="en">EN</button>
-            <button type="button" class="lang-btn ${lang === "jp" ? "active" : ""}" data-lang="jp">JP</button>
-          </div>
-
-          <span class="badge ${isPro ? "badge-ignition" : "badge-watch"}" id="proStatusBadge">
-            ${isPro ? t.statusPro : t.statusFree}
+        <a href="/" class="brand" id="brandHomeBtn" aria-label="TruthOfMarket Home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+              <polyline points="16 7 22 7 22 13"></polyline>
+            </svg>
           </span>
+          <span class="brand-name-wrap">
+            <span class="brand-title">TruthOfMarket</span>
+            <span class="brand-badge" id="brandSubtitle">401(k) &amp; IRA Income Architect</span>
+          </span>
+        </a>
 
-          <button type="button" class="btn" id="btnOpenLicense">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-            </svg>
-            <span id="btnLicense">${t.btnLicense}</span>
+        <nav class="senior-top-nav" aria-label="Main Retirement Tools Navigation">
+          <a href="${homePrefix}#tom-retirement-architect" class="senior-nav-item" id="navIncomeSim">
+            30-Sec Income Simulator
+          </a>
+          <a href="${homePrefix}#tomTrafficLightStrip" class="senior-nav-item" id="navMarketWeather">
+            3-Color Market Weather
+          </a>
+          <a href="${homePrefix}#tomFreeStarterManual" class="senior-nav-item" id="navBrokerGuide">
+            $0 Broker Guide
+          </a>
+          <a href="#pricing" class="senior-nav-item is-vip-link" id="navVipBenefits">
+            VIP Benefits
+          </a>
+          <button
+            type="button"
+            class="senior-nav-item is-font-btn"
+            id="btnToggleTomFont"
+            title="Cycle Senior Large-Print Text Size: 18px -> 20px -> 22px"
+          >
+            Text Size A+${fontPx > 18 ? ` (${fontPx}px)` : ""}
           </button>
-
-          <div class="social-icon-cluster" aria-label="Official Social Channels">
-            <a
-              class="btn social-btn yt"
-              id="headerYoutubeLink"
-              href="${ytUrl}"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Official YouTube (@RightSideAlpha)"
-              aria-label="Official YouTube"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/>
-              </svg>
-            </a>
-
-            <a
-              class="btn social-btn ig"
-              id="headerInstagramLink"
-              href="${igUrl}"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Official Instagram (@rightsidealpha)"
-              aria-label="Official Instagram"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-              </svg>
-            </a>
-
-            <a
-              class="btn social-btn x"
-              id="headerXLink"
-              href="${xUrl}"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Official X (@rightsidealpha)"
-              aria-label="Official X"
-            >
-              <span style="font-weight:700; font-size:0.85rem;">𝕏</span>
-            </a>
-          </div>
-
-          <a
-            class="btn ${isPro ? "" : "btn-gated-vip-tg"}"
-            id="headerTelegramLink"
-            href="${tgUrl}"
-            ${isPro ? 'target="_blank" rel="noopener noreferrer"' : ""}
-            title="${isPro ? "Open VIP Telegram Educational Research Channel" : "VIP Subscribers — Educational Research Channel"}"
-            style="border-color:rgba(56,189,248,0.45); color:#38bdf8;"
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="22" y1="2" x2="11" y2="13"></line>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-            </svg>
-            <span>${isPro ? "👑 VIP TG" : "🔒 VIP TG"}</span>
-          </a>
-
-          ${
-            isAdminMode
-              ? `<button type="button" class="btn" id="btnOpenConfig">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="3"></circle>
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-            </svg>
-            <span id="btnAdmin">${t.btnAdmin}</span>
-          </button>`
-              : ""
-          }
-
-          <a
-            class="btn btn-primary polar-checkout-button"
-            id="topSubscribeBtn"
-            data-polar-checkout
-            data-polar-plan="monthly_29"
-            data-tom-paid-plan="monthly"
-            href="${polarMonthlyHref}"
-          >
-            <span id="btnUnlockPro">${t.btnUnlockPro}</span>
-          </a>
-        </div>
+        </nav>
       </div>
     </header>
   `;
@@ -4057,6 +3942,7 @@ function renderHeader(state) {
 
 
 // --- src/components/Hero.js ---
+
 
 const TOM_MORNING_CLUB_NOTES = [
   "Good morning, Club Member — you never have to chase every rally. Protecting your principal comes first.",
@@ -4175,9 +4061,9 @@ function getTomMorningClubPollData(todayKey) {
   };
 }
 const TOM_CRM_SEGMENTS = [
-  { id: "retirement_401k_ira", label: "401(k) / IRA Retirement Cashflow & Defense" },
-  { id: "us_macro_sp500", label: "Daily US Macro & S&P 500" },
-  { id: "ai_semis_momentum", label: "Semiconductors & AI Leaders" },
+  { id: "retirement_401k_ira", label: "401(k) / IRA Monthly Cashflow & Defense" },
+  { id: "dividend_income_core", label: "Dividend Growth & T-Bill Yield ($SCHD · $JEPI · $SGOV)" },
+  { id: "us_macro_sp500", label: "Daily US S&P 500 Market Weather ($VOO)" },
 ];
 function escapeTomCrmHtml(raw) {
   return String(raw || "")
@@ -4567,7 +4453,7 @@ function renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRed }) {
       <div class="tom-retire-top-bar">
         <span class="tom-retire-badge">🧭 FREE 30-SECOND RETIREMENT ARCHITECT · ZERO LOGIN</span>
         <span class="tom-retire-live-tag" id="tomRetireLiveSignalBadge">
-          Live Market Weather: ${plan.weatherPill} (Semi F&amp;G ${semiScore}/100)
+          US Retirement Market Weather (S&amp;P 500 Breadth &amp; Drawdown Guard): ${plan.weatherPill}
         </span>
       </div>
 
@@ -4575,7 +4461,7 @@ function renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRed }) {
         30-Second Comfortable Retirement &amp; Monthly Cashflow Simulator
       </h2>
       <p class="tom-retire-lead">
-        Tap 3 buttons below to see your <b>calm monthly retirement paycheck</b> (on top of Social Security), how much monthly income you protect by avoiding a <b>-35% retirement-eve crash</b>, and how to rebalance <b>$SGOV &middot; $SCHD &middot; $JEPI &middot; $VOO</b> calmly just <b>2–4 times a year</b>.
+        Tap 3 buttons below to see your <b>calm monthly retirement paycheck</b> (on top of Social Security), how much monthly income you protect by avoiding a <b>-35% retirement-eve crash</b>, and how to rebalance <b>$VOO &middot; $SCHD &middot; $JEPI &middot; $SGOV</b> calmly just <b>2–4 times a year</b>.
       </p>
 
       <div class="tom-retire-presets-wrap">
@@ -4919,17 +4805,12 @@ function renderHero(state) {
   const semiScore =
     ov && ov.fg_score !== undefined && ov.fg_score !== null
       ? Number(ov.fg_score).toFixed(1)
-      : "18.3";
-  const latestStockDate =
-    state.stocks && state.stocks.length > 0 && state.stocks[0].date
-      ? state.stocks[0].date
-      : ov && ov.date
-      ? ov.date
-      : "2026-11-13";
+      : "28.0";
+  const closeDateStr = getLatestUsMarketCloseDate(ov && ov.date ? ov.date : "2026-11-16");
+  const latestStockDate = `${closeDateStr} US Market Close`;
 
   const allStocks = (state.stocks || []).filter((s) => s.ticker && !String(s.ticker).includes("."));
   const cntGreen = allStocks.filter((s) => s.zone_code === "IGNITION_ZONE").length || 8;
-  const cntYellow = allStocks.filter((s) => s.zone_code === "WASHOUT_WATCH").length || 19;
   const cntRed = allStocks.filter((s) => s.zone_code === "LEFT_SIDE_KNIFE" || s.zone_code === "VALUE_TRAP_FILTERED").length || 45;
   const savedFreeEmail =
     state.freeMemberEmail ||
@@ -4944,12 +4825,12 @@ function renderHero(state) {
     ? TOM_MORNING_CLUB_COMPANION_MSG[clubPoll.choice]
     : "Tap your morning stance above to compare notes with fellow 401(k) & IRA members — zero login required.";
   const existingClubMember = getStoredTomClubMember();
-  const hasActiveClubMember = Boolean(existingClubMember && existingClubMember.email);
+  const hasActiveClubMember = Boolean((existingClubMember && existingClubMember.email) || savedFreeEmail);
+  const activeEmailDisplay = (existingClubMember && existingClubMember.email) || savedFreeEmail || "";
   const initialClubSeg =
     (existingClubMember && existingClubMember.segment) || "retirement_401k_ira";
   const initialClubSegLabel = getTomCrmSegmentLabel(initialClubSeg);
-  const initialClubEmail =
-    (existingClubMember && existingClubMember.email) || savedFreeEmail || "";
+  const initialClubEmail = activeEmailDisplay;
   const initialClubNick =
     (existingClubMember && existingClubMember.nickname) || "";
 
@@ -4958,88 +4839,45 @@ function renderHero(state) {
       <div class="hero-top-row">
         <div style="min-width:0; flex:1 1 320px;">
           <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
-            <div class="hero-tag" id="heroTag" style="margin-bottom:0; font-size:0.95rem;">${t.heroTag} · ${latestStockDate}</div>
+            <div class="hero-tag" id="heroTag" style="margin-bottom:0; font-size:0.95rem;">${t.heroTag} &middot; ${latestStockDate}</div>
             <button
               type="button"
-              class="btn btn-sm"
+              class="btn btn-sm hero-explainer-btn"
               id="btnOpenPwRsiExplainer"
-              style="min-height:48px; padding:8px 16px; font-size:0.95rem; font-family:var(--font-mono); font-weight:800; border-color:rgba(56,189,248,0.5); color:#38bdf8; background:rgba(56,189,248,0.12); display:inline-flex; align-items:center; gap:6px; cursor:pointer;"
-              title="Click to view full methodology"
+              title="Click to view full 3-Bucket methodology"
             >
               <span>💡</span>
               <span>${t.pwRsiExplainerBtn || "How It Works"}</span>
             </button>
           </div>
           <h1 id="heroTitle">${t.heroTitle}</h1>
-          <p id="heroDesc" style="font-size:1.125rem; line-height:1.72;">${t.heroDesc}</p>
+          <p id="heroDesc">${t.heroDesc}</p>
         </div>
       </div>
 
-      <!-- 🚦 JARGON-FREE 3-COLOR MARKET WEATHER SUMMARY (50-70s US INVESTORS · CALM 2-4X/YR REBALANCING) -->
-      <div class="tom-traffic-strip" id="tomTrafficLightStrip" role="group" aria-label="Today's 3-Color Market Weather Indicators">
+      <!-- 🚦 JARGON-FREE 3-COLOR US RETIREMENT MARKET WEATHER (S&P 500 BREADTH & DRAWDOWN GUARD) -->
+      <div class="tom-traffic-strip" id="tomTrafficLightStrip" role="group" aria-label="US Retirement Market Weather (S&P 500 Breadth & Drawdown Guard)">
         <button type="button" class="tom-traffic-card t-green" data-traffic-zone="RETIRE_SIM">
-          <span style="font-size:0.96rem; font-weight:800; color:#34d399;">🟢 CALM UPTREND WEATHER</span>
-          <strong style="font-size:1.1rem; color:var(--text);">20% $SGOV · 35% $JEPI+$SCHD · 45% $VOO</strong>
-          <span style="font-size:1rem; line-height:1.55; color:var(--text-secondary);">Healthy broad trend · Let dividends &amp; S&amp;P 500 core compound calmly →</span>
+          <span class="tom-traffic-kicker is-green">🟢 CALM UPTREND WEATHER</span>
+          <strong class="tom-traffic-weights">20% $SGOV &middot; 35% $JEPI+$SCHD &middot; 45% $VOO</strong>
+          <span class="tom-traffic-sub">Healthy S&amp;P 500 breadth &middot; Let dividends &amp; core index compound calmly &rarr;</span>
         </button>
         <button type="button" class="tom-traffic-card t-yellow" data-traffic-zone="RETIRE_SIM">
-          <span style="font-size:0.96rem; font-weight:800; color:#fbbf24;">🟡 CAUTIOUS BASE WEATHER</span>
-          <strong style="font-size:1.1rem; color:var(--text);">30% $SGOV · 40% $JEPI+$SCHD · 30% $VOO</strong>
-          <span style="font-size:1rem; line-height:1.55; color:var(--text-secondary);">Mixed breadth · Collect steady monthly dividends while bases form →</span>
+          <span class="tom-traffic-kicker is-yellow">🟡 CAUTIOUS BASE WEATHER</span>
+          <strong class="tom-traffic-weights">30% $SGOV &middot; 40% $JEPI+$SCHD &middot; 30% $VOO</strong>
+          <span class="tom-traffic-sub">Mixed market breadth &middot; Collect steady monthly dividends while bases form &rarr;</span>
         </button>
         <button type="button" class="tom-traffic-card t-red" data-traffic-zone="MANUAL">
-          <span style="font-size:0.96rem; font-weight:800; color:#f87171;">🔴 CRASH DEFENSE WEATHER</span>
-          <strong style="font-size:1.1rem; color:var(--text);">40% $SGOV · 40% $JEPI+$SCHD · 20% $VOO</strong>
-          <span style="font-size:1rem; line-height:1.55; color:var(--text-secondary);">Calm 2–4x/yr weight rebalance · Open the $0 Safe Rebalancing Manual →</span>
+          <span class="tom-traffic-kicker is-red">🔴 DRAWDOWN GUARD WEATHER</span>
+          <strong class="tom-traffic-weights">40% $SGOV &middot; 40% $JEPI+$SCHD &middot; 20% $VOO</strong>
+          <span class="tom-traffic-sub">Calm 2–4x/yr weight rebalance &middot; Open the $0 Safe Broker Guide &rarr;</span>
         </button>
       </div>
 
       <!-- 🧭 30-SECOND COMFORTABLE RETIREMENT & MONTHLY CASHFLOW SIMULATOR (#tom-retirement-architect) -->
       ${renderTomRetirementArchitect(state, { semiScore, cntGreen, cntRed })}
 
-      <!-- 📧 ABOVE-THE-FOLD 60PX 1-FIELD FREE MORNING SIGNAL EMAIL SIGNUP -->
-      <div class="tom-morning-box" id="tomMorningSignalBox">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-          <span style="background:rgba(16,185,129,0.2); color:#34d399; border:1px solid rgba(16,185,129,0.45); font-size:0.94rem; font-weight:800; padding:5px 12px; border-radius:999px;">
-            📧 FREE DAILY 8:30 AM ET RETIREMENT BRIEF · NO CREDIT CARD REQUIRED
-          </span>
-          <span style="font-size:0.95rem; color:var(--text-secondary); font-weight:700;">
-            100% Free Forever · Unsubscribe in 1 Click
-          </span>
-        </div>
-        <h2 style="font-size:1.3rem; font-weight:900; color:var(--text); margin:10px 0 6px; line-height:1.38;">
-          Get Today&rsquo;s 3-Color Retirement Weather &amp; Calm Rebalancing Guide Every Morning
-        </h2>
-        <p style="font-size:1.08rem; color:var(--text-secondary); margin:0; line-height:1.68;">
-          Enter your email once to instantly unlock <b>Today&rsquo;s 4-Core Retirement Model Weights ($SGOV &middot; $SCHD &middot; $JEPI &middot; $VOO)</b> right on this screen plus calm morning guidance.
-        </p>
-        <form class="tom-morning-form" id="tomMorningSignalForm">
-          <label for="tomMorningEmailInput" style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0);">Email Address</label>
-          <input
-            type="email"
-            id="tomMorningEmailInput"
-            class="tom-morning-input"
-            required
-            autocomplete="email"
-            value="${savedFreeEmail.replace(/"/g, "")}"
-            placeholder="Enter your email address (e.g., robert@email.com)"
-          />
-          <button type="submit" id="btnTomMorningSubmit" class="tom-morning-btn">
-            📧 Get My Free Daily Retirement Brief →
-          </button>
-        </form>
-        <div id="tomMorningSignalStatus" role="status" aria-live="polite" style="display:${savedFreeEmail ? "block" : "none"}; margin-top:10px; font-size:1.05rem; font-weight:800; color:#34d399;">
-          ${savedFreeEmail ? `✅ Free Morning Retirement Brief Active (${savedFreeEmail.replace(/[<>&"]/g, "")}) — Your 4-Core Allocation Guide below is unlocked!` : ""}
-        </div>
-        <div id="tomFreeMemberBonusCard" style="display:${savedFreeEmail ? "block" : "none"}; margin-top:12px; background:rgba(15,23,42,0.9); border:1.5px solid #10b981; border-radius:12px; padding:14px 16px; font-size:1.06rem; line-height:1.72; color:#f8fafc;">
-          <div style="font-weight:800; color:#34d399; margin-bottom:6px;">🎁 FREE MEMBER BONUS UNLOCKED — Today&rsquo;s 4-Core Retirement Posture (2–4x/Yr Calm Rebalance):</div>
-          <div>• <b>🛡️ Bucket 1 ($SGOV US T-Bill Cushion):</b> Hold <b>30–40%</b> in short-term Treasury cash (~4.7% yield) so monthly bills are 100% insulated.</div>
-          <div>• <b>💵 Bucket 2 ($JEPI + $SCHD Dividend Income):</b> Hold <b>35–40%</b> across monthly income &amp; rising dividend aristocrats.</div>
-          <div>• <b>🌱 Bucket 3 ($VOO S&amp;P 500 + $XLV Healthcare):</b> Semi Fear &amp; Greed at <b>${semiScore}/100</b> — Rebalance calmly 2–4 times a year, never panic-sell.</div>
-        </div>
-      </div>
-
-      <!-- ☕ MORNING BELL CLUB — ZERO-SIGNUP DAILY HABIT & BELONGING HUB -->
+      <!-- ☕ UNIFIED MORNING BELL CLUB — SINGLE PASSWORDLESS 3-SEC SIGNUP & DAILY HABIT HUB -->
       <div class="tom-club-box" id="tomMorningBellClub" role="region" aria-label="Morning Bell Retirement & Macro Club — Protecting Your Nest Egg Together">
         <div class="tom-club-header">
           <div class="tom-club-title-wrap">
@@ -5057,7 +4895,7 @@ function renderHero(state) {
         </div>
 
         <div class="tom-club-poll-head">
-          <span class="tom-club-poll-title">🗳️ Today&rsquo;s Member Sentiment Poll (1-Click):</span>
+          <span class="tom-club-poll-title">🗳️ Today&rsquo;s Retiree Sentiment Poll (1-Click):</span>
           <span class="tom-club-poll-count" id="tomClubPollTotalCount">${clubPoll.total.toLocaleString()} members checked in today</span>
         </div>
 
@@ -5121,18 +4959,18 @@ function renderHero(state) {
           class="tom-crm-signup-panel"
           id="tom-passwordless-club-signup"
           role="region"
-          aria-label="Passwordless 3-Second Morning Bell Macro Club Membership"
+          aria-label="Passwordless 3-Second Morning Bell Club Membership"
         >
           <div class="tom-crm-top-row">
-            <span class="tom-crm-badge">FREE MEMBER BRIEFING · NO PASSWORD NEEDED</span>
-            <span class="tom-crm-trust-note">100% Free · 1-Click Unsubscribe Anytime</span>
+            <span class="tom-crm-badge">📧 FREE DAILY 8:30 AM ET BRIEF &bull; NO PASSWORD NEEDED</span>
+            <span class="tom-crm-trust-note">100% Free Forever &middot; 1-Click Unsubscribe Anytime</span>
           </div>
 
           <h3 class="tom-crm-heading">
-            Get Daily Retirement Cashflow &amp; 3-Color US Macro Briefings in Your Inbox.
+            Join the Morning Bell Club — Get Daily 3-Color US Retirement Market Weather in Your Inbox.
           </h3>
           <p class="tom-crm-subcopy">
-            3-second passwordless club access. Choose your #1 focus to protect your 401(k)/IRA principal and calm monthly income before the 9:30 AM opening bell.
+            One simple 3-second signup unlocks <b>Today&rsquo;s 4-Core Retirement Posture ($VOO &middot; $SCHD &middot; $JEPI &middot; $SGOV)</b> right on this screen plus calm 8:30 AM ET rebalancing notes before the opening bell.
           </p>
 
           <div
@@ -5143,7 +4981,7 @@ function renderHero(state) {
             <span class="tom-crm-active-text" id="tom-club-active-member-text">
               ${
                 hasActiveClubMember
-                  ? `Morning Bell Member Active: ${escapeTomCrmHtml(existingClubMember.email)} · Focus: ${escapeTomCrmHtml(initialClubSegLabel)}`
+                  ? `Morning Bell Member Active: ${escapeTomCrmHtml(activeEmailDisplay)} · Focus: ${escapeTomCrmHtml(initialClubSegLabel)}`
                   : ""
               }
             </span>
@@ -5169,7 +5007,7 @@ function renderHero(state) {
               style="display:none;"
             />
 
-            <div class="tom-crm-seg-label">Tap Your #1 Morning Focus (1-Click):</div>
+            <div class="tom-crm-seg-label">Tap Your #1 Retirement Focus (1-Click):</div>
             <div class="tom-crm-seg-grid" role="group" aria-label="Choose your #1 Morning Bell focus">
               ${TOM_CRM_SEGMENTS.map(
                 (seg) => `
@@ -5204,11 +5042,11 @@ function renderHero(state) {
                 required
                 autocomplete="email"
                 value="${escapeTomCrmHtml(initialClubEmail)}"
-                placeholder="Enter your best email for Morning Bell alerts"
+                placeholder="Enter your email address (e.g., robert@email.com)"
                 aria-label="Email address"
               />
               <button type="submit" id="tom-club-signup-btn" class="tom-crm-submit-btn">
-                Join Free Morning Bell Club (3-Sec Access) ->
+                Join Free Morning Bell Club (3-Sec Access) -&gt;
               </button>
             </div>
           </form>
@@ -5220,41 +5058,48 @@ function renderHero(state) {
             aria-live="polite"
             style="display:none;"
           ></div>
+
+          <div id="tomFreeMemberBonusCard" class="tom-member-bonus-card" style="display:${hasActiveClubMember ? "block" : "none"};">
+            <div class="tom-member-bonus-title">🎁 CLUB MEMBER POSTURE UNLOCKED — Today&rsquo;s 4-Core Retirement Weights (Calm 2–4x/Yr Review):</div>
+            <div>&bull; <b>🛡️ Bucket 1 ($SGOV US T-Bill Cash ~4.7%):</b> Hold <b>30–40%</b> in state-tax-advantaged short-term Treasury cash so 2–3 years of monthly living bills stay 100% insulated.</div>
+            <div>&bull; <b>💵 Bucket 2 ($JEPI ~7.4% + $SCHD ~3.5%):</b> Hold <b>35–40%</b> across monthly income &amp; rising quality dividend payers.</div>
+            <div>&bull; <b>🌱 Bucket 3 ($VOO S&amp;P 500 Core):</b> Hold <b>20–35%</b> aligned with our <b>US Retirement Market Weather (S&amp;P 500 Breadth &amp; Drawdown Guard)</b> — rebalance calmly 2–4 times per year, never panic-sell.</div>
+          </div>
         </div>
       </div>
 
-      <!-- 3 BIG INTUITIVE EDUCATIONAL CALCULATOR SHORTCUTS -->
+      <!-- 3 BIG INTUITIVE RETIREE SHORTCUTS -->
       <div class="hero-action-grid" role="group" aria-label="Educational Calculator Shortcuts">
         <button type="button" class="hero-cta-card primary" id="btnHeroActionRetireSim">
-          <span>🧭 30-Sec Retirement Cashflow Calculator</span>
+          <span>🧭 30-Sec Income Simulator</span>
         </button>
         <button type="button" class="hero-cta-card emerald" id="btnHeroActionManual">
-          <span>📘 $0 Brokerage &amp; 2–4x/Yr Rebalance Guide</span>
+          <span>📘 $0 Safe Brokerage &amp; Rebalance Guide</span>
         </button>
-        <a href="/semi-fear-greed.html" class="hero-cta-card semi" id="btnHeroActionSemiFg">
-          <span>🌡️ Market Weather &amp; Barbell Calculator (${semiScore})</span>
+        <a href="#pricing" class="hero-cta-card vip-jump" id="btnHeroActionVip">
+          <span>💎 VIP Dollar Worksheet &amp; Tax-Bucket Guide</span>
         </a>
       </div>
 
       <div class="kpi-grid">
         <div class="kpi-card kpi-emerald">
           <div class="kpi-label" id="kpi1_label">${t.kpi1_label}</div>
-          <div class="kpi-val">26.8 Yrs</div>
+          <div class="kpi-val">$VOO</div>
           <div class="kpi-sub" id="kpi1_sub">${t.kpi1_sub}</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label" id="kpi2_label">${t.kpi2_label}</div>
-          <div class="kpi-val">4 ETFs</div>
+          <div class="kpi-val">$SCHD+$JEPI</div>
           <div class="kpi-sub" id="kpi2_sub">${t.kpi2_sub}</div>
         </div>
         <div class="kpi-card kpi-emerald">
           <div class="kpi-label" id="kpi3_label">${t.kpi3_label}</div>
-          <div class="kpi-val">2–4x/Yr</div>
+          <div class="kpi-val">$SGOV</div>
           <div class="kpi-sub" id="kpi3_sub">${t.kpi3_sub}</div>
         </div>
         <div class="kpi-card kpi-amber">
           <div class="kpi-label" id="kpi4_label">${t.kpi4_label}</div>
-          <div class="kpi-val">100% Local</div>
+          <div class="kpi-val">2–4x/Yr</div>
           <div class="kpi-sub" id="kpi4_sub">${t.kpi4_sub}</div>
         </div>
       </div>
@@ -5759,6 +5604,16 @@ function renderProofCard(state) {
 
 
 // --- src/components/StockTable.js ---
+
+const HIGH_VOLATILITY_TICKERS = new Set([
+  "CVNA", "SMCI", "HOOD", "COIN", "MSTR", "SOXL", "TQQQ", "AFRM", "UPST", "RIVN",
+  "SNAP", "ROKU", "SOFI", "FLNC", "SEDG", "ENPH", "U", "MARA", "RIOT", "SQQQ", "SOXS",
+]);
+
+const RETIREMENT_INCOME_BLUECHIPS = new Set([
+  "VOO", "SCHD", "JEPI", "SGOV", "XLV", "JNJ", "PG", "KO", "COST", "V", "MSFT", "AAPL",
+  "PEP", "WMT", "JPM", "UNH", "HD", "ABBV", "CVX", "XOM", "LLY", "AVGO", "MA", "LMT",
+]);
 function renderScreenerControls(state) {
   const t = state.t || {};
   const f = state.zoneFilter || "ALL";
@@ -6068,6 +5923,14 @@ function renderStockRows(state) {
 
       const vipWatchlist = state.vipWatchlist || [];
       const isStarred = vipWatchlist.includes(s.ticker);
+      const tkrUpper = String(s.ticker || "").toUpperCase();
+      const isSpeculative = HIGH_VOLATILITY_TICKERS.has(tkrUpper);
+      const isBlueChip = RETIREMENT_INCOME_BLUECHIPS.has(tkrUpper);
+      const profileTagHtml = isSpeculative
+        ? `<span style="font-size:0.65rem; font-family:var(--font-sans); padding:1px 6px; background:rgba(245,158,11,0.16); border:1px solid rgba(217,119,6,0.45); color:var(--fin-amber); border-radius:4px; font-weight:800;">Volatility &amp; Risk Profile</span>`
+        : isBlueChip
+        ? `<span style="font-size:0.65rem; font-family:var(--font-sans); padding:1px 6px; background:rgba(16,185,129,0.15); border:1px solid rgba(5,150,105,0.45); color:var(--fin-up); border-radius:4px; font-weight:800;">Dividend &amp; Blue-Chip Core</span>`
+        : `<span style="font-size:0.62rem; font-family:var(--font-mono); padding:1px 5px; background:var(--card2); border:1px solid var(--border); color:var(--muted); border-radius:3px;">US Factor Study</span>`;
 
       return `
       <tr data-ticker="${s.ticker}" class="stock-row-clickable" style="cursor:pointer;">
@@ -6080,12 +5943,12 @@ function renderStockRows(state) {
                   class="btn-watchlist-star"
                   data-ticker="${s.ticker}"
                   title="${isStarred ? "Remove from VIP Watchlist" : "Add to VIP Watchlist"}"
-                  style="background:none; border:none; cursor:pointer; font-size:0.95rem; padding:2px 4px; line-height:1; color:${isStarred ? "#fbbf24" : "var(--muted)"}; display:inline-flex; align-items:center;"
+                  style="background:none; border:none; cursor:pointer; font-size:0.95rem; padding:2px 4px; line-height:1; color:${isStarred ? "#d97706" : "var(--muted)"}; display:inline-flex; align-items:center;"
                 >
                   ${isStarred ? "⭐" : "☆"}
                 </button>
-                <span class="mono" style="font-weight:800; font-size:0.92rem; color:#ffffff;">${s.ticker}</span>
-                <span style="font-size:0.62rem; font-family:var(--font-mono); padding:1px 4px; background:#141d2f; border:1px solid #24324d; color:#93c5fd; border-radius:2px;">US</span>
+                <span class="mono" style="font-weight:800; font-size:0.92rem; color:var(--text);">${s.ticker}</span>
+                ${profileTagHtml}
                 ${
                   !isPro && s.ticker === "CELH"
                     ? `<span style="font-size:0.6rem; padding:1px 4px; background:rgba(14,203,129,0.18); color:var(--fin-up); border-radius:2px; font-weight:700;">FREE SHOWCASE</span>`
@@ -6093,8 +5956,8 @@ function renderStockRows(state) {
                 }
               </div>
               <div class="mobile-stock-card-summary mono" style="align-items:center; gap:8px;">
-                <span style="font-weight:800; font-size:0.92rem; color:#ffffff;">$${closeVal.toFixed(2)}</span>
-                <span style="font-size:0.74rem; font-weight:800; padding:2px 6px; border-radius:4px; background:rgba(15,23,42,0.9); border:1px solid rgba(148,163,184,0.28); color:${s.score >= 80 ? "var(--fin-up)" : s.score >= 55 ? "var(--fin-amber)" : "var(--fin-down)"};">Score ${Number(s.score ?? 0)}</span>
+                <span style="font-weight:800; font-size:0.92rem; color:var(--text);">$${closeVal.toFixed(2)}</span>
+                <span style="font-size:0.74rem; font-weight:800; padding:2px 6px; border-radius:4px; background:var(--card2); border:1px solid var(--border); color:${s.score >= 80 ? "var(--fin-up)" : s.score >= 55 ? "var(--fin-amber)" : "var(--fin-down)"};">Score ${Number(s.score ?? 0)}</span>
               </div>
             </div>
             <div style="font-size:0.73rem; font-family:var(--font-sans); color:var(--muted); margin-top:2px;">
@@ -6135,7 +5998,7 @@ function renderStockRows(state) {
           </div>
         </td>
         <td class="col-num">
-          <div class="mono" style="font-weight:700; color:#ffffff;" title="Latest Close Date: ${s.date || "2026-11-13"}">$${closeVal.toFixed(2)}</div>
+          <div class="mono" style="font-weight:700; color:var(--text);" title="Latest Close Date: ${s.date || "2026-11-16"}">$${closeVal.toFixed(2)}</div>
           <div class="range-52w-wrap" title="52W Range: $${low52.toFixed(2)} – $${high52.toFixed(2)} | Current: $${closeVal.toFixed(2)}">
             <div class="range-52w-track">
               <div class="range-52w-pin" style="left:${rangePct}%;"></div>
@@ -6576,95 +6439,42 @@ plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, locati
 
 const PRICING_COPY = {
   en: {
-    heading: "Self-Directed Educational Calculator Software — Simple VIP Access",
+    heading: "VIP Retirement Cashflow & Rebalancing Software — Built for US Retirees",
     subheading:
-      "Public market data visualization & dividend/allocation calculator software for self-directed learners. Backed by our 14-Day No-Questions-Asked Refund Policy.",
+      "Self-directed educational calculators, tax-bucket reference guides, and large-print action sheets to protect your 401(k), IRA & monthly income. Backed by our 14-Day No-Questions-Asked Refund Policy.",
     t1Badge: "MONTHLY VIP",
-    t1Title: "Monthly VIP Educational Calculator Suite",
+    t1Title: "Monthly VIP Retirement Income & Rebalancing Suite",
     t1Period: "/ month",
-    t1Bundle: "Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator",
-    t1Items: [
+    t1Bundle:
       "Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator",
-      "Self-Directed Educational Calculator Software across SGOV, SCHD, JEPI, VOO & US Blue-Chip Datasets",
-      "Daily 08:10 EST Public Balance-Sheet & Dividend Coverage Educational Summaries",
-      "Calm 2–4x/Year Portfolio Weight Rebalancing & Drawdown Math Calculators",
-      "TradingView Educational Trend Overlay Script + 26.8-Year US Market Weather CSV",
+    t1Items: [
+      "<b>Custom Nest-Egg Dollar ($) Rebalancing Worksheet:</b> Enter your exact portfolio size (e.g., $500,000) to calculate exact dollar amounts across $SGOV, $SCHD, $JEPI, and $VOO whenever the 3-Color Weather changes.",
+      "<b>12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Placement Reference:</b> Educational tax-location guide across Traditional IRA, Roth IRA, and Taxable accounts ($JEPI ordinary income vs. $SCHD qualified dividends vs. $SGOV state-tax-exempt T-Bills) to help protect after-tax monthly income.",
+      "<b>Large-Print 1-Page Weather Change Action Sheet (2–4x/Year):</b> Printable step-by-step Fidelity / Schwab / Vanguard checklist — Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator.",
     ],
     t1Btn: "Start Monthly VIP — $29/mo",
-    t1PayNote: "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · 1-Click Cancel · 14-Day Refund Policy",
+    t1PayNote:
+      "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · 1-Click Cancel · 14-Day Refund Policy",
     t2Badge: "ANNUAL VIP",
-    t2Title: "Annual VIP Educational Calculator Pass",
+    t2Title: "Annual VIP Retirement Income & Rebalancing Pass",
     t2Period: "/ year",
-    t2Bundle: "Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator",
-    t2Items: [
+    t2Bundle:
       "Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator",
-      "Full 12-Month Access to All Self-Directed Educational Calculators & Visualizations",
-      "Complete 26.8-Year (1998–2026) US Equity & ETF Historical CSV Datasets",
-      "English & Japanese Educational Macro Research Archive + VIP Dispatch Desk",
-      "Unified Access Across TruthOfMarket Retirement & Market Weather Calculators",
-    ],
-    t2Btn: "Start Annual VIP — $199/yr",
-    t2PayNote: "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · Billed Annually · 14-Day Refund Policy",
-    autoUnlockNote:
-      "✨ Instant Software Activation: Your self-directed educational calculators and CSV datasets unlock on screen automatically after checkout.",
-    restoreSummary: "🔑 Switching devices or already subscribed? Restore your VIP License Key here",
-    restoreBtn: "Open License Key Restore Box",
-    t3Badge: "OPTIONAL EXTERNAL CHARTING & COMMUNITY LINKS",
-    t3Title: "External Charting Platforms & Free Public Channels",
-    t3Desc: "Optional third-party charting tools and official public channels (separate from your TruthOfMarket VIP software pass):",
-    t3Items: [
-      "<b>TradingView Pro (ID: 1173809)</b> — Multi-timeframe moving-average & Pine Script v5 visualization",
-      "<b>Seeking Alpha Premium (better_life333)</b> — Public dividend grades & consensus EPS data",
-      "<b>TrendSpider Charting Software (rightside)</b> — Multi-factor technical charting workspace",
-    ],
-    tvBtn: "📈 Launch TradingView Charting ↗",
-    saBtn: "📊 Open Seeking Alpha Dividend Data ↗",
-    tsBtn: "⚡ Launch TrendSpider Workspace ↗",
-    tgBtn: "🔒 VIP Telegram Educational Research Desk",
-  },
-  jp: {
-    heading: "自己判断型・教育用ポートフォリオ計算ソフトウェア — VIPプラン",
-    subheading:
-      "公開市場データの可視化および配当・資産配分シミュレーションを行う教育用計算ソフトウェアです（14日間返金保証付き）。",
-    t1Badge: "MONTHLY VIP",
-    t1Title: "Monthly VIP 教育用計算ソフト＆財務データ",
-    t1Period: "/ 月額",
-    t1Items: [
-      "SGOV・SCHD・JEPI・VOOおよび米国主要ETFの3色リバランス比率計算ソフト",
-      "毎朝08:10 EST更新・公開財務データ＆配当カバレッジ教育サマリー",
-      "年2〜4回の穏やかな資産配分チェック＆ドローダウン数学シミュレーター",
-      "TradingView 教育用トレンド表示スクリプト＋米国市場26.8年CSVデータ",
-    ],
-    t1Btn: "Start Monthly VIP — $29/mo",
-    t1PayNote: "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · いつでも1クリック解約 · 14日間返金保証",
-    t2Badge: "ANNUAL VIP",
-    t2Title: "Annual VIP 年間オールアクセスパス",
-    t2Period: "/ 年額",
     t2Items: [
-      "月額比43%割引 — 全教育用シミュレーター＆データ可視化ツールの年間利用権",
-      "26.8年間(1998–2026)の米国株＆ETFヒストリカルCSVデータセット完全収録",
-      "英語・日本語対応の教育用マクロリサーチアーカイブ閲覧",
-      "TruthOfMarket 老後キャッシュフロー＆市場天気ツールの全機能アクセス",
+      "<b>Custom Nest-Egg Dollar ($) Rebalancing Worksheet (Full 12-Month Pass):</b> Enter your exact portfolio size (e.g., $500,000) to calculate exact dollar amounts across $SGOV, $SCHD, $JEPI, and $VOO whenever the 3-Color Weather changes.",
+      "<b>12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Placement Reference:</b> Educational tax-location guide across Traditional IRA, Roth IRA, and Taxable accounts ($JEPI ordinary income vs. $SCHD qualified dividends vs. $SGOV state-tax-exempt T-Bills) to help protect after-tax monthly income.",
+      "<b>Large-Print 1-Page Weather Change Action Sheet (2–4x/Year):</b> Save 43% ($149/yr saved vs. monthly) — Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator.",
     ],
     t2Btn: "Start Annual VIP — $199/yr",
-    t2PayNote: "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · 年額プラン · 14日間返金保証",
-    autoUnlockNote: "✨ 決済完了と同時にブラウザ上で教育用計算ツールとCSVデータが自動解放されます。",
-    restoreSummary: "🔑 機種変更・別ブラウザでのVIPライセンスキー復元はこちら",
-    restoreBtn: "ライセンスキー復元ウィンドウを開く",
-    t3Badge: "OPTIONAL EXTERNAL CHARTING & COMMUNITY LINKS",
-    t3Title: "外部チャート検証ツール＆公式SNSチャンネル（任意）",
-    t3Desc: "チャート確認や公開財務データ参照に便利な外部提携ツール＆公式チャンネル：",
-    t3Items: [
-      "<b>TradingView Pro (1173809)</b> — マルチタイムフレーム移動平均線＆Pine Script v5表示",
-      "<b>Seeking Alpha Premium (better_life333)</b> — 配当データ＆コンセンサスEPS推移",
-      "<b>TrendSpider Charting (rightside)</b> — チャート分析ワークスペース",
-    ],
-    tvBtn: "📈 TradingView チャートを開く ↗",
-    saBtn: "📊 Seeking Alpha 財務データ ↗",
-    tsBtn: "⚡ TrendSpider チャートを開く ↗",
-    tgBtn: "🔒 VIP専用 Telegram 教育リサーチデスク",
+    t2PayNote:
+      "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · Billed Annually · 14-Day Refund Policy",
+    autoUnlockNote:
+      "✨ Instant Software Activation: Your Custom Dollar ($) Rebalancing Worksheet, Tax-Bucket Reference, and Printable PDF Action Sheets unlock on screen automatically after checkout.",
+    restoreSummary: "🔑 Switching computers or already subscribed? Restore your VIP License Key here",
+    restoreBtn: "Open License Key Restore Box",
   },
 };
+PRICING_COPY.jp = PRICING_COPY.en;
 PRICING_COPY.kr = PRICING_COPY.en;
 function renderPricing(state) {
   const cfg = state.config || {};
@@ -6677,62 +6487,76 @@ function renderPricing(state) {
     cfg.polar_tom_annual_url || cfg.ls_site1_ltd_url,
     "#tom-vip-annual"
   );
-  const tvAffId = encodeURIComponent(cfg.tradingview_aff_id || "1173809");
-  const saSource = encodeURIComponent(cfg.seekingalpha_source || "better_life333");
-  const tsAffId = encodeURIComponent(cfg.trendspider_aff_id || "rightside");
-  const directTvUrl = `https://www.tradingview.com/?aff_id=${tvAffId}`;
-  const directSaUrl = `https://seekingalpha.com/symbol/SPY/earnings?source=${saSource}`;
-  const directTsUrl = `https://trendspider.com/?_go=${tsAffId}`;
 
   const checkoutFallbackHtml = `
-    <div style="margin-top:8px; font-size:0.74rem; color:#94a3b8; text-align:center; line-height:1.45;">
-      Questions, software licenses, or Sponsorship / Brand &amp; Media Partnerships? Email <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Support%20%26%20Partnership" style="color:#93c5fd; font-weight:700; text-decoration:underline;">beable9489@gmail.com</a>.
+    <div class="pricing-support-note">
+      Questions, software licenses, or 14-day refunds? Email <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Support%20%26%20VIP%20Software" class="pricing-support-link">beable9489@gmail.com</a>.
     </div>
   `;
 
   const checkSvg = `
-    <span class="price-check">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <span class="price-check" aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="20 6 9 17 4 12"></polyline>
       </svg>
     </span>
   `;
 
   return `
-    <div id="pricing" style="scroll-margin-top:80px;">
+    <section id="pricing" class="tom-pricing-section" aria-label="VIP Retirement Software Benefits and Pricing">
       <span id="pricingSection" style="display:block; height:0; overflow:hidden;"></span>
-      <div style="max-width:980px; margin:0 auto 14px; text-align:center;">
-        <div style="display:inline-block; margin-bottom:8px; padding:4px 12px; border-radius:999px; background:rgba(56,189,248,0.14); border:1px solid rgba(56,189,248,0.4); color:#7dd3fc; font-size:0.8rem; font-weight:800; letter-spacing:0.02em;">
-          SELF-DIRECTED EDUCATIONAL CALCULATOR SOFTWARE &bull; PUBLIC MARKET DATA VISUALIZATION
+      <div class="pricing-head-wrap">
+        <div class="pricing-kicker-pill">
+          SELF-DIRECTED EDUCATIONAL CALCULATOR SOFTWARE &bull; ZERO PERSONALIZED ADVICE
         </div>
-        <h2 style="font-size:1.35rem; font-weight:900; color:#ffffff; margin:0 0 6px;">${c.heading}</h2>
-        <p style="font-size:0.95rem; color:#cbd5e1; margin:0; line-height:1.55;">${c.subheading}</p>
+        <h2 class="pricing-main-heading">${c.heading}</h2>
+        <p class="pricing-main-sub">${c.subheading}</p>
       </div>
+
+      <!-- 3 TANGIBLE RETIREE SOFTWARE TOOLS OVERVIEW -->
+      <div class="vip-efficacy-preview-grid" aria-label="3 Core VIP Retiree Software Tools">
+        <div class="vip-efficacy-card">
+          <span class="vip-eff-step">TOOL 1 &bull; EXACT DOLLAR ($) MATH</span>
+          <strong>Custom Nest-Egg Dollar ($) Rebalancing Worksheet</strong>
+          <p>Type any exact portfolio balance (such as <b>$500,000</b> or <b>$725,000</b>) to see exact target dollar amounts across <b>$SGOV</b>, <b>$SCHD</b>, <b>$JEPI</b>, and <b>$VOO</b> whenever our 3-Color Market Weather shifts.</p>
+        </div>
+        <div class="vip-efficacy-card">
+          <span class="vip-eff-step">TOOL 2 &bull; AFTER-TAX INCOME</span>
+          <strong>12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Reference</strong>
+          <p>Educational account-location reference across <b>Traditional IRA</b>, <b>Roth IRA</b>, and <b>Taxable</b> brokerage accounts (<b>$JEPI</b> ordinary distributions vs. <b>$SCHD</b> qualified dividends vs. <b>$SGOV</b> state-tax-exempt T-Bills).</p>
+        </div>
+        <div class="vip-efficacy-card">
+          <span class="vip-eff-step">TOOL 3 &bull; CALM PRINTABLE SHEET</span>
+          <strong>Large-Print 1-Page Weather Change Action Sheet (2–4x/Yr)</strong>
+          <p>Clean, senior-readable 1-page printable summary sheet plus our <b>Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator</b>.</p>
+        </div>
+      </div>
+
       <div class="pricing-grid">
         <!-- Tier 1: Monthly VIP ($29/mo) -->
         <div class="price-card featured">
           <div>
             <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
               <span class="badge badge-ignition">${c.t1Badge}</span>
-              <span class="badge price-badge-popular">POPULAR</span>
+              <span class="badge price-badge-popular">FLEXIBLE MONTHLY</span>
             </div>
-            <h3 style="font-size:1.18rem; font-weight:800; margin-top:10px; color:#ffffff;">
+            <h3 class="price-card-title">
               ${c.t1Title}
             </h3>
-            <div class="price-num">$29 <span style="font-size:0.86rem; color:var(--muted); font-family:var(--font-sans); font-weight:600;">${c.t1Period}</span></div>
-            <div class="price-subtext">Billed monthly · Cancel anytime with 1 click · 14-Day Refund Policy</div>
-            <div style="margin:10px 0 8px; padding:9px 12px; border-radius:9px; background:rgba(16,185,129,0.14); border:1px solid rgba(52,211,153,0.45); color:#a7f3d0; font-size:0.84rem; font-weight:800; line-height:1.45;">
-              📘 ${c.t1Bundle || "Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator"}
+            <div class="price-num">$29 <span class="price-period">${c.t1Period}</span></div>
+            <div class="price-subtext">Billed monthly &middot; Cancel anytime with 1 click &middot; 14-Day Refund Policy</div>
+            <div class="price-bundle-box is-monthly">
+              📘 ${c.t1Bundle}
             </div>
             <ul class="price-list">
               ${c.t1Items.map((item) => `<li>${checkSvg}<span>${item}</span></li>`).join("")}
             </ul>
           </div>
           <div>
-            <a class="btn btn-primary polar-checkout-button" id="cardMonthlyBtn" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthly}" style="justify-content:center; min-height:64px; padding:14px 18px; width:100%; font-size:1.06rem; font-weight:800; border-radius:12px;">
+            <a class="btn btn-primary polar-checkout-button price-cta-btn" id="cardMonthlyBtn" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthly}">
               ${c.t1Btn}
             </a>
-            <div style="margin-top:9px; font-size:0.82rem; color:#e2e8f0; font-weight:700; text-align:center; line-height:1.4;">
+            <div class="price-pay-note">
               ${c.t1PayNote}
             </div>
             ${checkoutFallbackHtml}
@@ -6744,26 +6568,26 @@ function renderPricing(state) {
           <div>
             <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
               <span class="badge badge-watch">${c.t2Badge}</span>
-              <span class="badge price-badge-lifetime">BEST VALUE · SAVE 43%</span>
+              <span class="badge price-badge-lifetime">BEST VALUE &middot; SAVE 43%</span>
             </div>
-            <h3 style="font-size:1.18rem; font-weight:800; margin-top:10px; color:#ffffff;">
+            <h3 class="price-card-title">
               ${c.t2Title}
             </h3>
-            <div class="price-num">$199 <span style="font-size:0.86rem; color:var(--muted); font-family:var(--font-sans); font-weight:600;">${c.t2Period}</span></div>
-            <div class="price-subtext">Annual recurring license ($199/yr) · Cancel anytime · 14-Day Refund Policy</div>
-            <div class="price-savings-pill">⚡ Save $149/Yr vs $29/mo Monthly Billing ($199/yr vs $348/yr)</div>
-            <div style="margin:10px 0 8px; padding:9px 12px; border-radius:9px; background:rgba(251,191,36,0.12); border:1px solid rgba(251,191,36,0.45); color:#fde68a; font-size:0.84rem; font-weight:800; line-height:1.45;">
-              📘 ${c.t2Bundle || "Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator"}
+            <div class="price-num">$199 <span class="price-period">${c.t2Period}</span></div>
+            <div class="price-subtext">Annual recurring pass ($199/yr) &middot; Cancel anytime &middot; 14-Day Refund Policy</div>
+            <div class="price-savings-pill">⚡ Save $149/Yr vs. $29/mo Monthly Billing ($199/yr vs. $348/yr)</div>
+            <div class="price-bundle-box is-annual">
+              📘 ${c.t2Bundle}
             </div>
             <ul class="price-list">
               ${c.t2Items.map((item) => `<li>${checkSvg}<span>${item}</span></li>`).join("")}
             </ul>
           </div>
           <div>
-            <a class="btn btn-emerald polar-checkout-button" id="cardLtdBtn" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" href="${polarAnnual}" style="justify-content:center; min-height:64px; padding:14px 18px; width:100%; font-size:1.06rem; font-weight:800; border-radius:12px;">
+            <a class="btn btn-emerald polar-checkout-button price-cta-btn" id="cardLtdBtn" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" href="${polarAnnual}">
               ${c.t2Btn}
             </a>
-            <div style="margin-top:9px; font-size:0.82rem; color:#a7f3d0; font-weight:700; text-align:center; line-height:1.4;">
+            <div class="price-pay-note is-emerald">
               ${c.t2PayNote}
             </div>
             ${checkoutFallbackHtml}
@@ -6772,87 +6596,51 @@ function renderPricing(state) {
       </div>
 
       <!-- MANDATORY PERMANENT EDUCATIONAL SOFTWARE DISCLAIMER -->
-      <div id="tomPricingDisclaimerBox" role="note" style="max-width:980px; margin:16px auto 0; padding:14px 18px; border-radius:10px; background:rgba(15,23,42,0.9); border:1.5px solid rgba(251,191,36,0.45); color:#f8fafc; font-size:0.94rem; line-height:1.62; text-align:left;">
+      <div id="tomPricingDisclaimerBox" class="tom-pricing-disclaimer" role="note">
         Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.
       </div>
 
       <!-- Instant Auto-Unlock Note & Collapsible Device License Restore -->
-      <div style="max-width:980px; margin:12px auto 0; text-align:center;">
-        <div style="font-size:0.84rem; color:#34d399; font-weight:700; margin-bottom:10px;">
+      <div class="pricing-restore-wrap">
+        <div class="pricing-autounlock-note">
           ${c.autoUnlockNote}
         </div>
-        <details style="background:#0b1120; border:1px solid rgba(148,163,184,0.22); border-radius:10px; padding:10px 16px; text-align:left;">
-          <summary style="cursor:pointer; font-size:0.84rem; font-weight:700; color:#93c5fd; list-style:none;">
+        <details class="pricing-restore-details">
+          <summary class="pricing-restore-summary">
             ${c.restoreSummary} ▾
           </summary>
-          <div style="margin-top:10px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; font-size:0.82rem; color:#cbd5e1;">
-            <span>Already have a Polar.sh VIP receipt key on another computer or phone? Restore your VIP session with 1 click:</span>
-            <button type="button" class="btn btn-sm" onclick="var b=document.getElementById('btnOpenLicense');if(b){b.click();}else{var m=document.getElementById('licenseModal');if(m)m.style.display='flex';}" style="font-weight:700; border-color:rgba(147,197,253,0.45); color:#93c5fd;">
-              ${c.restoreBtn} →
+          <div class="pricing-restore-body">
+            <span>Already have a Polar.sh VIP receipt key on another computer or tablet? Restore your VIP session in 1 click:</span>
+            <button type="button" class="btn btn-sm" onclick="var b=document.getElementById('btnOpenLicense');if(b){b.click();}else{var m=document.getElementById('licenseModal');if(m)m.style.display='flex';}">
+              ${c.restoreBtn} &rarr;
             </button>
           </div>
         </details>
       </div>
 
       <!-- Trust & Security Micro-Ribbon -->
-      <div class="pricing-trust-ribbon" style="max-width:980px; margin:16px auto 0;">
+      <div class="pricing-trust-ribbon">
         <div class="trust-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
           </svg>
           <span><b>Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)</b></span>
         </div>
         <div class="trust-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
           </svg>
           <span>14-Day No-Questions-Asked Refund Policy</span>
         </div>
         <div class="trust-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
           <span>Self-Directed Educational Calculator Software</span>
         </div>
       </div>
-
-      <!-- Separated Lower Footer Section: Tier 3 Partner Tools & Public Channels -->
-      <details style="max-width:980px; margin:18px auto 0; background:rgba(15,23,42,0.55); border:1px solid var(--border-card); border-radius:10px; padding:12px 18px;">
-        <summary style="cursor:pointer; font-size:0.82rem; font-weight:700; color:#94a3b8; display:flex; align-items:center; justify-content:space-between; gap:8px;">
-          <span>🔗 ${c.t3Title}</span>
-          <span style="font-size:0.74rem; color:#64748b;">Expand Charting Tools &amp; Community ▾</span>
-        </summary>
-        <div style="margin-top:14px; padding-top:12px; border-top:1px solid rgba(148,163,184,0.14);">
-          <p style="color:var(--muted); font-size:0.82rem; margin:0 0 10px; line-height:1.5;">
-            ${c.t3Desc}
-          </p>
-          <ul class="price-list" style="margin-bottom:12px;">
-            ${c.t3Items.map((item) => `<li>${checkSvg}<span>${item}</span></li>`).join("")}
-          </ul>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:8px;">
-            <a class="btn" id="affTvBtn" href="${directTvUrl}" target="_blank" rel="noopener noreferrer" style="justify-content:center;">
-              ${c.tvBtn}
-            </a>
-            <a class="btn" id="affSaBtn" href="${directSaUrl}" target="_blank" rel="noopener noreferrer" style="justify-content:center;">
-              ${c.saBtn}
-            </a>
-            <a class="btn" id="affBrokerBtn" href="${directTsUrl}" target="_blank" rel="noopener noreferrer" style="justify-content:center; border-color:rgba(16,185,129,0.45); color:#34d399; font-weight:700;">
-              ${c.tsBtn}
-            </a>
-            <a class="btn ${state.isProUnlocked ? "" : "btn-gated-vip-tg"}" id="pricingTelegramChannelBtn" href="${getVipTelegramUrl(state.isProUnlocked)}" ${state.isProUnlocked ? 'target="_blank" rel="noopener noreferrer"' : ""} style="justify-content:center; border-color:rgba(56,189,248,0.45); color:#38bdf8; font-weight:700;">
-              ${state.isProUnlocked ? "👑 Open VIP Educational Research Desk ↗" : c.tgBtn}
-            </a>
-            <a class="btn" id="pricingYoutubeBtn" href="${cfg.youtube_url || "https://www.youtube.com/@RightSideAlpha"}" target="_blank" rel="noopener noreferrer" style="justify-content:center; border-color:rgba(239,68,68,0.4); color:#fca5a5;">
-              📺 YouTube (@RightSideAlpha) ↗
-            </a>
-            <a class="btn" id="pricingInstagramBtn" href="${cfg.instagram_url || "https://www.instagram.com/rightsidealpha"}" target="_blank" rel="noopener noreferrer" style="justify-content:center; border-color:rgba(236,72,153,0.4); color:#f9a8d4;">
-              📸 Instagram (@rightsidealpha) ↗
-            </a>
-          </div>
-        </div>
-      </details>
-    </div>
+    </section>
   `;
 }
 
@@ -6876,7 +6664,7 @@ function renderModals(state) {
   const tgToken = state.telegramBotToken || "DEMO-BOT-TOKEN";
   const tgType = state.telegramAlertType || "SEMI_BRIEFING";
   const ov = state.semiOverview || {};
-  const ovDate = ov.date || "2026-10-30";
+  const ovDate = ov.date || "2026-11-16";
   const ovScore = Number(ov.fg_score ?? 18.0).toFixed(1);
   const ovRegime = String(ov.regime_en || "EXTREME FEAR").toUpperCase();
   const ovSmh = Number(ov.smh_close ?? 522.49).toFixed(2);
@@ -6908,9 +6696,9 @@ function renderModals(state) {
           </div>
           <button type="button" class="btn btn-sm" id="btnCancelLicense" style="padding:4px 10px;">✕ Close</button>
         </div>
-        <h3 style="font-size:1.18rem; font-weight:800; margin-top:4px; color:#ffffff;">Unlock Full VIP Educational Calculators &amp; Datasets</h3>
-        <p style="color:#cbd5e1; font-size:0.86rem; margin-top:6px; line-height:1.5;">
-          Choose Monthly VIP ($29/mo) or Annual VIP ($199/yr) below. Backed by our 14-Day No-Questions-Asked Refund Policy.
+        <h3 style="font-size:1.18rem; font-weight:800; margin-top:4px; color:var(--text);">Unlock Full VIP Retiree Worksheets &amp; Tax-Bucket Reference</h3>
+        <p style="color:var(--text-secondary); font-size:0.95rem; margin-top:6px; line-height:1.55;">
+          Includes Custom Nest-Egg Dollar ($) Rebalancing Worksheet, 12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Reference, and Large-Print 1-Page Weather Action Sheet. Backed by our 14-Day Refund Policy.
         </p>
         <div style="display:grid; grid-template-columns:1fr; gap:10px; margin:14px 0 10px;">
           <a class="btn btn-primary polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthly}" style="justify-content:center; min-height:62px; padding:12px 16px; font-size:1.02rem; font-weight:800; border-radius:12px;">
@@ -8303,11 +8091,19 @@ function detectInitialLang() {
   return "en";
 }
 
+const initialFontPxRaw = Number(typeof localStorage !== "undefined" ? localStorage.getItem("tom_font_px") : 18);
+const initialFontPx = [18, 20, 22].includes(initialFontPxRaw) ? initialFontPxRaw : 18;
+const initialUiTheme =
+  typeof localStorage !== "undefined" && localStorage.getItem("tom_ui_theme_v2") === "dark"
+    ? "dark"
+    : "light";
+
 const state = {
   lang: detectInitialLang(),
   activeView: defaultView,
-  uiTheme: localStorage.getItem("tom_ui_theme") || "dark",
-  fontSizeMode: localStorage.getItem("tom_font_size") || "normal",
+  uiTheme: initialUiTheme,
+  fontSizePx: initialFontPx,
+  fontSizeMode: initialFontPx > 18 ? "large" : "normal",
   freeMemberEmail: localStorage.getItem("tom_free_member_email") || "",
   isAdminAuthenticated: sessionStorage.getItem("rsa_admin_auth") === "true",
   isProUnlocked: isProActive(),
@@ -8454,25 +8250,25 @@ function renderHomeRetirementView() {
     ${renderFreeStarterManual(state)}
     ${renderPricing(state)}
 
-    <!-- COMPANION EDUCATIONAL TOOLS & ARCHIVE LINKS -->
+    <!-- COMPANION EDUCATIONAL SUMMARY BANNER -->
     <section class="cross-banner">
       <div>
-        <div style="font-size:0.74rem; font-family:var(--font-mono); font-weight:800; color:#38bdf8; text-transform:uppercase; letter-spacing:0.05em;" id="crossTitle">
+        <div class="cross-kicker" id="crossTitle">
           ${t.crossTitle}
         </div>
-        <h3 style="font-size:1.15rem; font-weight:800; margin:4px 0; color:#ffffff;" id="crossHeading">
+        <h3 class="cross-heading" id="crossHeading">
           ${t.crossHeading}
         </h3>
-        <p style="font-size:0.92rem; color:var(--muted);" id="crossDesc">
+        <p class="cross-desc" id="crossDesc">
           ${t.crossDesc}
         </p>
       </div>
       <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <button type="button" class="btn btn-primary" id="crossFunnelSwitchBtn" style="min-height:46px; background:#0284c7; border-color:#38bdf8;">
-          <span id="crossBtn">${t.crossBtn} →</span>
-        </button>
-        <a href="/pro-swing.html" class="btn" style="min-height:46px; border-color:rgba(148,163,184,0.4); color:#cbd5e1; font-weight:700;">
-          Self-Directed Quantitative Research Archive →
+        <a href="#tomTrafficLightStrip" class="btn btn-primary" id="crossFunnelSwitchBtn" style="min-height:48px;">
+          <span id="crossBtn">${t.crossBtn} &rarr;</span>
+        </a>
+        <a href="#tomFreeStarterManual" class="btn" style="min-height:48px; font-weight:700;">
+          Open $0 Safe Broker Guide &rarr;
         </a>
       </div>
     </section>
@@ -8549,38 +8345,51 @@ function renderApp() {
     <main class="container">
       ${mainBodyHtml}
 
-      <footer class="tom-fixed-legal-footer" style="border-top:1px solid var(--border); padding-top:20px; margin-top:28px; color:var(--muted); font-size:0.82rem; line-height:1.65;">
-        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
-          <span class="mono" style="font-size:0.74rem; color:var(--text); font-weight:800;">EDUCATIONAL MARKET DATA &amp; QUANTITATIVE RESEARCH DESK:</span>
-          <a href="mailto:beable9489@gmail.com" style="color:#38bdf8; text-decoration:underline; font-weight:800;">
+      <footer class="tom-fixed-legal-footer">
+        <div class="tom-footer-top-row">
+          <span class="mono tom-footer-desk-label">EDUCATIONAL MARKET DATA &amp; QUANTITATIVE RESEARCH DESK:</span>
+          <a href="mailto:beable9489@gmail.com" class="tom-footer-email-link">
             ✉️ beable9489@gmail.com
           </a>
           <span style="color:var(--border);">|</span>
-          <a href="${state.config.youtube_url || DEFAULT_YOUTUBE_URL}" target="_blank" rel="noopener noreferrer" style="color:#fca5a5; text-decoration:none; font-weight:600;">
+          <a href="${state.config.youtube_url || DEFAULT_YOUTUBE_URL}" target="_blank" rel="noopener noreferrer" class="tom-footer-social">
             📺 YouTube (@RightSideAlpha) ↗
           </a>
           <span style="color:var(--border);">|</span>
-          <a href="${state.config.instagram_url || DEFAULT_INSTAGRAM_URL}" target="_blank" rel="noopener noreferrer" style="color:#f9a8d4; text-decoration:none; font-weight:600;">
+          <a href="${state.config.instagram_url || DEFAULT_INSTAGRAM_URL}" target="_blank" rel="noopener noreferrer" class="tom-footer-social">
             📸 Instagram (@rightsidealpha) ↗
           </a>
           <span style="color:var(--border);">|</span>
-          <a href="${state.config.x_url || "https://x.com/rightsidealpha"}" target="_blank" rel="noopener noreferrer" style="color:#e2e8f0; text-decoration:none; font-weight:600;">
+          <a href="${state.config.x_url || "https://x.com/rightsidealpha"}" target="_blank" rel="noopener noreferrer" class="tom-footer-social">
             𝕏 (@rightsidealpha) ↗
           </a>
+          <span style="color:var(--border);">|</span>
+          <button type="button" class="btn btn-sm" id="btnToggleTomTheme" title="Switch between Daylight Mode and Optional Dark Mode">
+            ${state.uiTheme === "dark" ? "☀️ Daylight Mode" : "🌙 Dark Mode"}
+          </button>
+          <button type="button" class="btn btn-sm" id="btnOpenLicense" title="Restore VIP License Key">
+            🔑 Restore License Key
+          </button>
         </div>
-        <div style="display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin-bottom:12px; padding:10px 14px; background:rgba(15,23,42,0.75); border:1px solid rgba(148,163,184,0.22); border-radius:8px; font-size:0.84rem;">
-          <a href="/terms.html" style="color:#93c5fd; text-decoration:underline; font-weight:800;">Terms of Service</a>
-          <span style="color:var(--border);">·</span>
-          <a href="/privacy.html" style="color:#93c5fd; text-decoration:underline; font-weight:800;">Privacy Policy</a>
-          <span style="color:var(--border);">·</span>
-          <a href="/refund.html" style="color:#6ee7b7; text-decoration:underline; font-weight:800;">14-Day Refund Policy</a>
-          <span style="color:var(--border);">·</span>
-          <a href="/contact.html" style="color:#93c5fd; text-decoration:underline; font-weight:700;">Contact Desk</a>
-          <span style="color:var(--border);">·</span>
-          <a href="mailto:beable9489@gmail.com" style="color:#fde68a; text-decoration:underline; font-weight:800;">Support: beable9489@gmail.com</a>
+        <div class="tom-footer-legal-bar">
+          <a href="/terms.html">Terms of Service</a>
+          <span style="color:var(--border);">&middot;</span>
+          <a href="/privacy.html">Privacy Policy</a>
+          <span style="color:var(--border);">&middot;</span>
+          <a href="/refund.html" class="is-refund">14-Day Refund Policy</a>
+          <span style="color:var(--border);">&middot;</span>
+          <a href="/contact.html">Contact Desk</a>
+          <span style="color:var(--border);">&middot;</span>
+          <a href="/insights/">Educational Insights</a>
+          <span style="color:var(--border);">&middot;</span>
+          <a href="/semi-fear-greed.html">Sector Barbell Calculator</a>
+          <span style="color:var(--border);">&middot;</span>
+          <a href="/pro-swing.html">Equity Factor Archive</a>
+          <span style="color:var(--border);">&middot;</span>
+          <a href="mailto:beable9489@gmail.com" class="is-support">Support: beable9489@gmail.com</a>
         </div>
-        <p id="disclaimerText" style="color:#cbd5e1; font-weight:600;">${t.disclaimer}</p>
-        <p style="margin-top:8px; font-family:var(--font-mono); font-size:0.74rem;" id="copyrightText">${t.copyright}</p>
+        <p id="disclaimerText" class="tom-footer-disclaimer">${t.disclaimer}</p>
+        <p class="tom-footer-copyright" id="copyrightText">${t.copyright}</p>
       </footer>
     </main>
     <canvas id="scoreCanvas" width="900" height="500" style="display:none;"></canvas>
@@ -8662,10 +8471,14 @@ if (typeof window !== "undefined") {
   window.__bindRsaPolarCheckoutEvents = bindRsaPolarCheckoutEvents;
   window.addEventListener("load", bindRsaPolarCheckoutEvents);
   try {
-    const initTheme = localStorage.getItem("tom_ui_theme") || "dark";
-    const initFont = localStorage.getItem("tom_font_size") || "normal";
+    const initTheme = localStorage.getItem("tom_ui_theme_v2") === "dark" ? "dark" : "light";
+    const rawPx = Number(localStorage.getItem("tom_font_px"));
+    const initPx = [18, 20, 22].includes(rawPx) ? rawPx : 18;
     document.documentElement.setAttribute("data-tom-theme", initTheme);
-    document.documentElement.setAttribute("data-tom-font", initFont);
+    document.documentElement.setAttribute("data-tom-font", String(initPx));
+    if (document.body) {
+      document.body.style.fontSize = `${initPx}px`;
+    }
   } catch (_) {}
 }
 
@@ -8673,16 +8486,24 @@ function bindEvents() {
   // Initialize Polar.sh checkout postMessage & auto-unlock handler
   bindRsaPolarCheckoutEvents();
 
-  // Senior Font Size & Daylight Theme Toggles
+  // Senior Font Size A+ 3-Step Cycle (18px -> 20px -> 22px -> 18px) & Daylight/Dark Toggle
   const btnToggleTomFont = document.getElementById("btnToggleTomFont");
   if (btnToggleTomFont) {
     btnToggleTomFont.addEventListener("click", () => {
-      state.fontSizeMode = state.fontSizeMode === "large" ? "normal" : "large";
+      const cur = Number(state.fontSizePx || 18);
+      const next = cur === 18 ? 20 : cur === 20 ? 22 : 18;
+      state.fontSizePx = next;
+      state.fontSizeMode = next > 18 ? "large" : "normal";
       try {
+        localStorage.setItem("tom_font_px", String(next));
         localStorage.setItem("tom_font_size", state.fontSizeMode);
-        document.documentElement.setAttribute("data-tom-font", state.fontSizeMode);
+        document.documentElement.setAttribute("data-tom-font", String(next));
+        if (document.body) {
+          document.body.style.fontSize = `${next}px`;
+        }
       } catch (_) {}
       renderApp();
+      showToast(`🔍 Senior Readability Text Size: ${next}px Active`);
     });
   }
 
@@ -8691,12 +8512,31 @@ function bindEvents() {
     btnToggleTomTheme.addEventListener("click", () => {
       state.uiTheme = state.uiTheme === "light" ? "dark" : "light";
       try {
+        localStorage.setItem("tom_ui_theme_v2", state.uiTheme);
         localStorage.setItem("tom_ui_theme", state.uiTheme);
         document.documentElement.setAttribute("data-tom-theme", state.uiTheme);
       } catch (_) {}
       renderApp();
     });
   }
+
+  // Smooth scroll for 4 Senior Header Navigation Links when on Home
+  [
+    ["navIncomeSim", "tom-retirement-architect"],
+    ["navMarketWeather", "tomTrafficLightStrip"],
+    ["navBrokerGuide", "tomFreeStarterManual"],
+    ["navVipBenefits", "pricing"],
+  ].forEach(([navId, targetId]) => {
+    const navEl = document.getElementById(navId);
+    if (!navEl) return;
+    navEl.addEventListener("click", (e) => {
+      const targetEl = document.getElementById(targetId);
+      if (targetEl && typeof targetEl.scrollIntoView === "function") {
+        e.preventDefault();
+        targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  });
 
   // 3-Color Market Weather Strip Actions
   document.querySelectorAll(".tom-traffic-card").forEach((card) => {
@@ -8826,8 +8666,10 @@ function bindEvents() {
   bindTomPasswordlessClubEvents(state, showToast);
 
   const jumpToTomMorningBox = () => {
-    const box = document.getElementById("tomMorningSignalBox");
-    const inp = document.getElementById("tomMorningEmailInput");
+    const box = document.getElementById("tom-passwordless-club-signup") || document.getElementById("tomMorningBellClub");
+    const form = document.getElementById("tom-club-signup-form");
+    const inp = document.getElementById("tom-club-email-input");
+    if (form) form.style.display = "block";
     if (box && box.scrollIntoView) box.scrollIntoView({ behavior: "smooth", block: "center" });
     setTimeout(() => {
       if (inp) inp.focus();
@@ -9020,7 +8862,15 @@ function bindEvents() {
   }
   const crossFunnelSwitchBtn = document.getElementById("crossFunnelSwitchBtn");
   if (crossFunnelSwitchBtn) {
-    crossFunnelSwitchBtn.addEventListener("click", () => switchView("semi"));
+    crossFunnelSwitchBtn.addEventListener("click", (e) => {
+      const stripEl = document.getElementById("tomTrafficLightStrip");
+      if (stripEl && stripEl.scrollIntoView) {
+        e.preventDefault();
+        stripEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        switchView("semi");
+      }
+    });
   }
   const btnSwitchToRightSide = document.getElementById("btnSwitchToRightSide");
   if (btnSwitchToRightSide) {
@@ -10974,26 +10824,27 @@ async function loadAllData() {
     ]);
     const SENIOR_CORE_RETIREMENT_ETFS = [
       {
-        ticker: "SGOV",
-        name_en: "iShares 0-3 Month US Treasury Bond ETF (Cash Cushion)",
-        sector: "Fintech & Digital Finance",
-        close: 100.52,
-        low52: 100.04,
-        high52: 100.78,
-        dd_high52_pct: -0.26,
-        prox_low52_pct: 0.48,
-        vs_ma20_pct: 0.08,
-        vs_ma60_pct: 0.14,
-        ma20_price: 100.44,
-        ma60_price: 100.38,
-        rsi14: 53.2,
-        vol_surge_10d: 1.42,
+        ticker: "VOO",
+        name_en: "Vanguard S&P 500 ETF (S&P 500 Core)",
+        sector: "Cloud & Enterprise Software",
+        date: "2026-11-16",
+        close: 548.6,
+        low52: 452.1,
+        high52: 563.8,
+        dd_high52_pct: -2.7,
+        prox_low52_pct: 21.34,
+        vs_ma20_pct: 1.68,
+        vs_ma60_pct: 4.12,
+        ma20_price: 539.5,
+        ma60_price: 526.9,
+        rsi14: 58.4,
+        vol_surge_10d: 1.41,
         score: 99,
         zone_code: "IGNITION_ZONE",
-        zone_label_en: "🟢 Bucket 1 T-Bill Cushion",
-        entry_trigger_price: 100.4,
-        stop_loss_price: 99.8,
-        tp1_2x_price: 105.2,
+        zone_label_en: "🟢 Bucket 3 S&P 500 Core",
+        entry_trigger_price: 539.5,
+        stop_loss_price: 499.2,
+        tp1_2x_price: 720.0,
         c1_deep_dd: true,
         c2_off_low: true,
         c3_above_mas: true,
@@ -11003,8 +10854,9 @@ async function loadAllData() {
       },
       {
         ticker: "SCHD",
-        name_en: "Schwab US Dividend Equity ETF (Dividend Growth)",
+        name_en: "Schwab US Dividend Equity ETF (Dividend Growth ~3.5%)",
         sector: "Consumer & Retail",
+        date: "2026-11-16",
         close: 29.45,
         low52: 24.8,
         high52: 30.15,
@@ -11031,8 +10883,9 @@ async function loadAllData() {
       },
       {
         ticker: "JEPI",
-        name_en: "JPMorgan Equity Premium Income ETF (Monthly Paycheck)",
+        name_en: "JPMorgan Equity Premium Income ETF (Monthly Income ~7.4%)",
         sector: "Fintech & Digital Finance",
+        date: "2026-11-16",
         close: 59.18,
         low52: 53.4,
         high52: 60.4,
@@ -11058,26 +10911,27 @@ async function loadAllData() {
         is_pro_locked: false,
       },
       {
-        ticker: "VOO",
-        name_en: "Vanguard S&P 500 ETF (Core Compounding)",
-        sector: "Cloud & Enterprise Software",
-        close: 548.6,
-        low52: 452.1,
-        high52: 563.8,
-        dd_high52_pct: -2.7,
-        prox_low52_pct: 21.34,
-        vs_ma20_pct: 1.68,
-        vs_ma60_pct: 4.12,
-        ma20_price: 539.5,
-        ma60_price: 526.9,
-        rsi14: 58.4,
-        vol_surge_10d: 1.41,
+        ticker: "SGOV",
+        name_en: "iShares 0-3 Month US Treasury Bond ETF (US T-Bill Cash ~4.7%)",
+        sector: "Fintech & Digital Finance",
+        date: "2026-11-16",
+        close: 100.52,
+        low52: 100.04,
+        high52: 100.78,
+        dd_high52_pct: -0.26,
+        prox_low52_pct: 0.48,
+        vs_ma20_pct: 0.08,
+        vs_ma60_pct: 0.14,
+        ma20_price: 100.44,
+        ma60_price: 100.38,
+        rsi14: 53.2,
+        vol_surge_10d: 1.42,
         score: 96,
         zone_code: "IGNITION_ZONE",
-        zone_label_en: "🟢 Bucket 3 S&P 500 Core",
-        entry_trigger_price: 539.5,
-        stop_loss_price: 499.2,
-        tp1_2x_price: 720.0,
+        zone_label_en: "🟢 Bucket 1 T-Bill Cushion",
+        entry_trigger_price: 100.4,
+        stop_loss_price: 99.8,
+        tp1_2x_price: 105.2,
         c1_deep_dd: true,
         c2_off_low: true,
         c3_above_mas: true,

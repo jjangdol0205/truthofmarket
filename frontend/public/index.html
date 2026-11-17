@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-tom-theme="light" data-tom-font="18">
 <head>
   <script>
   window.__DEFAULT_VIEW__ = 'rightside';
@@ -16,24 +16,31 @@
     POLAR_TOM_ANNUAL_URL: '',
     SUPPORT_EMAIL: 'beable9489@gmail.com'
   };
+  try {
+    var _th = localStorage.getItem('tom_ui_theme_v2') === 'dark' ? 'dark' : 'light';
+    var _px = Number(localStorage.getItem('tom_font_px')) || 18;
+    if ([18, 20, 22].indexOf(_px) === -1) _px = 18;
+    document.documentElement.setAttribute('data-tom-theme', _th);
+    document.documentElement.setAttribute('data-tom-font', String(_px));
+  } catch (_e) {}
   </script>
   <meta charset="UTF-8" />
   <meta name="google-site-verification" content="nAGlJMEUUPifbzSd8X4PCaBIyr3DtTwaa1a-q9zkbBc" />
   <meta name="google-site-verification" content="G99bl17UU6iKgNm5ndGcSWp0dHFpJ0MjJqBBp0Exfx0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income | TruthOfMarket</title>
-  <meta name="description" content="Self-directed US 401k/IRA Retirement Cashflow &amp; Safe Rebalancing Calculator Software. Simulate monthly income with SGOV (T-Bill Cushion), SCHD (Dividend Growth), JEPI (Monthly Paycheck) &amp; VOO (S&amp;P 500 Core) via calm 2-4x/year rebalancing." />
+  <meta name="description" content="Self-directed US 401k/IRA Retirement Cashflow &amp; Safe Rebalancing Calculator Software. Simulate monthly income with $VOO (S&amp;P 500 Core), $SCHD (Dividend Growth ~3.5%), $JEPI (Monthly Income ~7.4%) &amp; $SGOV (US T-Bill Cash ~4.7%) via calm 2-4x/year rebalancing." />
   <link rel="canonical" href="https://truthofmarket.com/" />
   <link rel="alternate" type="application/rss+xml" title="TruthOfMarket US 401k/IRA Retirement Cashflow RSS Feed" href="https://truthofmarket.com/rss.xml" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="TruthOfMarket — US 401k/IRA Retirement Cashflow &amp; Safe Rebalancing Calculator" />
   <meta property="og:title" content="Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income | TruthOfMarket" />
-  <meta property="og:description" content="Self-directed educational calculator software to simulate monthly retirement cashflow and calm 2-4x/year SGOV, SCHD, JEPI &amp; VOO portfolio weight rebalancing." />
+  <meta property="og:description" content="Self-directed educational calculator software to simulate monthly retirement cashflow and calm 2-4x/year $VOO, $SCHD, $JEPI &amp; $SGOV portfolio weight rebalancing." />
   <meta property="og:url" content="https://truthofmarket.com/" />
   <meta property="og:image" content="https://truthofmarket.com/og-preview.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income | TruthOfMarket" />
-  <meta name="twitter:description" content="30-Second US 401k/IRA Retirement Cashflow &amp; Safe Rebalancing Calculator (SGOV · SCHD · JEPI · VOO)." />
+  <meta name="twitter:description" content="30-Second US 401k/IRA Retirement Cashflow &amp; Safe Rebalancing Calculator ($VOO · $SCHD · $JEPI · $SGOV)." />
   <meta name="twitter:image" content="https://truthofmarket.com/og-preview.png" />
   <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -64,7 +71,7 @@
         "publisher": {
           "@id": "https://truthofmarket.com/#organization"
         },
-        "description": "Self-directed educational calculator software for US 401k/IRA Retirement Cashflow & Safe Rebalancing across SGOV, SCHD, JEPI, and VOO."
+        "description": "Self-directed educational calculator software for US 401k/IRA Retirement Cashflow & Safe Rebalancing across VOO, SCHD, JEPI, and SGOV."
       },
       {
         "@type": "SoftwareApplication",
@@ -80,7 +87,7 @@
         "offers": [
           {
             "@type": "Offer",
-            "name": "Monthly VIP Educational Calculator Software ($29/mo)",
+            "name": "Monthly VIP Retirement Income & Rebalancing Suite ($29/mo)",
             "price": "29.00",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
@@ -88,7 +95,7 @@
           },
           {
             "@type": "Offer",
-            "name": "Annual VIP Educational Calculator Software ($199/yr)",
+            "name": "Annual VIP Retirement Income & Rebalancing Pass ($199/yr)",
             "price": "199.00",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
@@ -101,8 +108,8 @@
   </script>
   <script src="/hq_member_crm_client.js" defer></script>
   <script src="/tom_payment_waitlist.js" defer></script>
-  <script type="module" crossorigin src="./assets/index-BIziPp23.js?v=20261117polar"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-CaOpdap3.css?v=20261117polar" />
+  <script type="module" crossorigin src="./assets/index-BIziPp23.js?v=20261117senior"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CaOpdap3.css?v=20261117senior" />
   <script>
   /* === HQ Edge Real-Human Visitor & Signup Helper (tom_truthofmarket) === */
   (function(){
@@ -139,78 +146,102 @@
   })();
   </script>
 </head>
-<body>
+<body style="background:#f8fafc;color:#0f172a;font-size:18px;line-height:1.7;">
   <div id="app">
-    <section class="seo-home-fallback" id="tom-retirement-architect" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;margin:16px auto;padding:24px;background:#0f172a;border:1px solid #10b981;border-radius:14px;color:#f8fafc;">
-      <h1 style="font-size:1.75rem;font-weight:900;margin:0 0 10px;color:#ffffff;line-height:1.3;">Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income.</h1>
-      <p style="margin:0;color:#e2e8f0;font-size:1.125rem;line-height:1.72;">30-Second Comfortable Retirement &amp; Monthly Cashflow Calculator — Simulate your monthly retirement paycheck ($150k / $400k / $800k / $1.5M presets), cushion your nest egg from sequence-of-returns drawdowns, and rebalance calmly 2–4 times per year across <b>SGOV</b> (US T-Bill Cash Cushion), <b>SCHD</b> (Dividend Growth), <b>JEPI</b> (Monthly Dividend Paycheck), and <b>VOO</b> (S&amp;P 500 Core Compounding) aligned with our 3-Color Market Weather indicator.</p>
-      <p id="tomMorningBellClub" style="margin:12px 0 0;padding-top:12px;border-top:1px solid #1e293b;color:#fbbf24;font-size:1.06rem;font-weight:700;line-height:1.65;"><span id="tom-passwordless-club-signup">☕ Morning Bell Retirement &amp; Macro Club — Protecting Your Nest Egg &amp; Monthly Income Together · Free 3-Second Passwordless Membership</span></p>
-      <p id="tomFreeStarterManual" style="margin:8px 0 0;color:#38bdf8;font-size:1.06rem;font-weight:700;line-height:1.65;">📘 $0 Free Public Product: US Brokerage App &amp; Calm 2–4x/Year Portfolio Weight Rebalancing Manual (Fidelity · Charles Schwab · Vanguard — SGOV/SPAXX Cash Cushion &amp; Limit Order Guide)</p>
-      <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;">
-        <a href="#tom-vip-monthly" class="polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="color:#6ee7b7;font-weight:800;font-size:1rem;">⚡ Start Monthly VIP — $29/mo</a>
-        <a href="#tom-vip-annual" class="polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="color:#fde68a;font-weight:800;font-size:1rem;">💎 Start Annual VIP — $199/yr</a>
+    <section class="seo-home-fallback" id="tom-retirement-architect" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;margin:16px auto;padding:26px;background:#ffffff;border:2px solid #059669;border-radius:16px;color:#0f172a;box-shadow:0 8px 24px rgba(15,23,42,0.06);">
+      <div style="margin-bottom:12px;padding:8px 14px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:10px;font-size:0.94rem;font-weight:700;color:#1e293b;">
+        <b>$VOO</b> (S&amp;P 500 Core) &middot; <b>$SCHD</b> (Dividend Growth ~3.5%) &middot; <b>$JEPI</b> (Monthly Income ~7.4%) &middot; <b>$SGOV</b> (US T-Bill Cash ~4.7%) &nbsp;|&nbsp; <b>US Retirement Market Weather (S&amp;P 500 Breadth &amp; Drawdown Guard)</b> &nbsp;|&nbsp; <span>2026-11-16 US Market Close</span>
       </div>
-      <p style="margin:10px 0 0;padding:8px 12px;border-radius:8px;background:rgba(16,185,129,0.12);border:1px solid rgba(52,211,153,0.35);color:#a7f3d0;font-size:0.96rem;font-weight:800;line-height:1.55;">📦 VIP Software Bundle ($29/mo &amp; $199/yr Annual VIP): Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator</p>
-      <p style="margin:8px 0 0;font-size:0.88rem;color:#93c5fd;font-weight:700;">💳 Checkout &amp; Billing: Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · 14-Day Refund Policy</p>
-      <p style="margin:12px 0 0;padding-top:10px;border-top:1px solid rgba(148,163,184,0.2);font-size:0.9rem;color:#cbd5e1;font-weight:600;">Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.</p>
+      <h1 style="font-size:1.85rem;font-weight:900;margin:0 0 10px;color:#0f172a;line-height:1.3;">Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income.</h1>
+      <p style="margin:0;color:#1e293b;font-size:1.125rem;line-height:1.7;">30-Second Comfortable Retirement &amp; Monthly Cashflow Simulator — Simulate your monthly retirement paycheck ($150k / $400k / $800k / $1.5M presets), cushion your nest egg from sequence-of-returns drawdowns, and rebalance calmly 2–4 times per year across <b>$VOO</b> (S&amp;P 500 Core), <b>$SCHD</b> (Dividend Growth ~3.5%), <b>$JEPI</b> (Monthly Income ~7.4%), and <b>$SGOV</b> (US T-Bill Cash ~4.7%) aligned with our US Retirement Market Weather indicator.</p>
+      <p id="tomMorningBellClub" style="margin:14px 0 0;padding-top:12px;border-top:1px solid #cbd5e1;color:#92400e;font-size:1.06rem;font-weight:800;line-height:1.65;"><span id="tom-passwordless-club-signup">☕ Morning Bell Retirement &amp; Macro Club — Protecting Your Nest Egg &amp; Monthly Income Together · Free 3-Second Passwordless Membership</span></p>
+      <p id="tomFreeStarterManual" style="margin:8px 0 0;color:#0369a1;font-size:1.06rem;font-weight:800;line-height:1.65;">📘 $0 Free Public Product: US Brokerage App &amp; Calm 2–4x/Year Portfolio Weight Rebalancing Manual (Fidelity · Charles Schwab · Vanguard — SGOV/SPAXX Cash Cushion &amp; Limit Order Guide)</p>
+      <div style="margin:14px 0 0;padding:14px 16px;border-radius:12px;background:#ecfdf5;border:1.5px solid #059669;color:#064e3b;font-size:1rem;line-height:1.6;">
+        <div style="font-weight:900;margin-bottom:6px;">📦 VIP Retiree Software Suite ($29/mo Monthly VIP &amp; $199/yr Annual VIP):</div>
+        <div>1. <b>Custom Nest-Egg Dollar ($) Rebalancing Worksheet:</b> Enter your exact portfolio size (e.g., $500,000) to calculate exact dollar amounts across $SGOV, $SCHD, $JEPI, and $VOO whenever the 3-Color Weather changes.</div>
+        <div>2. <b>12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Placement Reference:</b> Educational tax-location guide across Traditional IRA, Roth IRA, and Taxable accounts ($JEPI ordinary income vs. $SCHD qualified dividends vs. $SGOV state-tax-exempt T-Bills) to help protect after-tax monthly income.</div>
+        <div>3. <b>Large-Print 1-Page Weather Change Action Sheet (2–4x/Year):</b> Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Rebalancing Calculator.</div>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:12px;flex-wrap:wrap;">
+        <a href="#tom-vip-monthly" class="polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="display:inline-flex;align-items:center;min-height:52px;padding:10px 20px;border-radius:10px;background:#1d4ed8;color:#ffffff;font-weight:800;font-size:1.02rem;text-decoration:none;">⚡ Start Monthly VIP — $29/mo</a>
+        <a href="#tom-vip-annual" class="polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="display:inline-flex;align-items:center;min-height:52px;padding:10px 20px;border-radius:10px;background:#059669;color:#ffffff;font-weight:800;font-size:1.02rem;text-decoration:none;">💎 Start Annual VIP — $199/yr</a>
+      </div>
+      <p style="margin:10px 0 0;font-size:0.92rem;color:#334155;font-weight:700;">💳 Checkout &amp; Billing: Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · 14-Day Refund Policy</p>
+      <p style="margin:12px 0 0;padding-top:10px;border-top:1px solid #e2e8f0;font-size:0.92rem;color:#475569;font-weight:600;">Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.</p>
     </section>
   </div>
-  <section class="seo-directory-footer" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;overflow-x:hidden;margin:24px auto 32px;padding:20px 18px;background:#0b1220;border:1px solid #1e293b;border-radius:12px;color:#cbd5e1;font-size:0.96rem;">
-    <div style="margin-bottom:14px;padding:12px 14px;border-radius:10px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.35);color:#ecfdf5;font-size:1rem;line-height:1.65;">
-      <strong>🛡️ US 50–70s Retirement 4-Core Allocation Standard:</strong>
-      <b>$SGOV</b> (US T-Bill Cash Cushion) &middot; <b>$SCHD</b> (Dividend Growth) &middot; <b>$JEPI</b> (Monthly Dividend Paycheck) &middot; <b>$VOO</b> (S&amp;P 500 Core Compounding) — Rebalanced calmly 2–4 times per year via our 3-Color Market Weather indicator.
+  <section class="seo-directory-footer" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;overflow-x:hidden;margin:24px auto 36px;padding:24px 22px;background:#ffffff;border:1.5px solid #cbd5e1;border-radius:14px;color:#1e293b;font-size:1rem;box-shadow:0 4px 16px rgba(15,23,42,0.05);">
+    <div style="margin-bottom:16px;padding:14px 16px;border-radius:10px;background:#ecfdf5;border:1.5px solid #059669;color:#064e3b;font-size:1.02rem;line-height:1.65;">
+      <strong>🛡️ US Retirement 4-Core Allocation Standard (As of 2026-11-16 US Market Close):</strong>
+      <b>$VOO</b> (S&amp;P 500 Core) &middot; <b>$SCHD</b> (Dividend Growth ~3.5%) &middot; <b>$JEPI</b> (Monthly Income ~7.4%) &middot; <b>$SGOV</b> (US T-Bill Cash ~4.7%) — Reviewed calmly 2–4 times per year via our <b>US Retirement Market Weather (S&amp;P 500 Breadth &amp; Drawdown Guard)</b>.
     </div>
-    <div style="font-weight:800;color:#f8fafc;margin-bottom:8px;font-size:1.05rem;letter-spacing:0.01em;">
-      📊 US QUALITY EQUITY &amp; RETIREMENT ETF RESEARCH DIRECTORY
+    <div style="font-weight:900;color:#0f172a;margin-bottom:8px;font-size:1.12rem;">
+      🏛️ RETIREMENT CORE ETFs &amp; BLUE-CHIP DIVIDEND DIRECTORY
     </div>
-    <p style="margin:0 0 12px;color:#cbd5e1;font-size:0.96rem;line-height:1.65;">
-      Self-directed public market data visualization, 52-week range context, and calm 2–4x/year portfolio weight studies across liquid US ETFs and equities:
+    <p style="margin:0 0 12px;color:#334155;font-size:0.98rem;line-height:1.65;">
+      Explore self-directed 52-week range context, dividend consistency, and calm 2–4x/year portfolio weight studies across liquid US retirement ETFs and blue-chip dividend leaders:
     </p>
-    <nav aria-label="US Stock and ETF Quantitative Research Directory" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px;">
-      <a href="/semi-fear-greed.html" style="color:#f87171;text-decoration:none;font-weight:800;padding:6px 12px;border:1px solid rgba(248,113,113,0.35);border-radius:6px;background:rgba(239,68,68,0.1);font-size:0.94rem;">🧭 $SMH &amp; $XLV Barbell Market Weather</a>
-      <a href="/pro-swing.html" style="color:#38bdf8;text-decoration:none;font-weight:800;padding:6px 12px;border:1px solid rgba(56,189,248,0.35);border-radius:6px;background:rgba(56,189,248,0.1);font-size:0.94rem;">📊 Quantitative Research Archive</a>
-      <a href="/insights/" style="color:#6ee7b7;text-decoration:none;font-weight:800;padding:6px 12px;border:1px solid rgba(52,211,153,0.35);border-radius:6px;background:rgba(16,185,129,0.1);font-size:0.94rem;">📘 Educational Insights Journal</a>
-      <a href="/stocks/smh.html" style="color:#38bdf8;text-decoration:none;font-weight:800;padding:6px 11px;border:1px solid rgba(56,189,248,0.3);border-radius:6px;font-size:0.94rem;">$SMH ETF</a>
-      <a href="/stocks/xlv.html" style="color:#38bdf8;text-decoration:none;font-weight:800;padding:6px 11px;border:1px solid rgba(56,189,248,0.3);border-radius:6px;font-size:0.94rem;">$XLV ETF</a>
-      <a href="/stocks/qqq.html" style="color:#38bdf8;text-decoration:none;font-weight:800;padding:6px 11px;border:1px solid rgba(56,189,248,0.3);border-radius:6px;font-size:0.94rem;">$QQQ ETF</a>
-      <a href="/stocks/avgo.html" title="Broadcom Inc ($AVGO) Historical Factor &amp; Dividend Study" style="color:#cbd5e1;text-decoration:none;padding:5px 10px;border:1px solid rgba(148,163,184,0.22);border-radius:6px;font-family:JetBrains Mono,monospace;font-size:0.92rem;">$AVGO</a>
-      <a href="/stocks/nvda.html" title="NVIDIA Corp ($NVDA) Historical Factor &amp; Dividend Study" style="color:#cbd5e1;text-decoration:none;padding:5px 10px;border:1px solid rgba(148,163,184,0.22);border-radius:6px;font-family:JetBrains Mono,monospace;font-size:0.92rem;">$NVDA</a>
-      <a href="/stocks/lly.html" title="Eli Lilly &amp; Co ($LLY) Historical Factor &amp; Dividend Study" style="color:#cbd5e1;text-decoration:none;padding:5px 10px;border:1px solid rgba(148,163,184,0.22);border-radius:6px;font-family:JetBrains Mono,monospace;font-size:0.92rem;">$LLY</a>
-      <a href="/stocks/xom.html" title="Exxon Mobil Corp ($XOM) Historical Factor &amp; Dividend Study" style="color:#cbd5e1;text-decoration:none;padding:5px 10px;border:1px solid rgba(148,163,184,0.22);border-radius:6px;font-family:JetBrains Mono,monospace;font-size:0.92rem;">$XOM</a>
+    <nav aria-label="US Retirement Core ETFs" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px;">
+      <a href="/stocks/voo.html" title="$VOO (S&amp;P 500 Core) Dividend &amp; Retirement Core Study" style="color:#065f46;background:#ecfdf5;border:1.5px solid #059669;text-decoration:none;font-weight:800;padding:7px 13px;border-radius:8px;font-size:0.96rem;">$VOO &middot; S&amp;P 500 Core</a>
+      <a href="/stocks/schd.html" title="$SCHD (Dividend Growth ~3.5%) Dividend &amp; Retirement Core Study" style="color:#065f46;background:#ecfdf5;border:1.5px solid #059669;text-decoration:none;font-weight:800;padding:7px 13px;border-radius:8px;font-size:0.96rem;">$SCHD &middot; Dividend Growth ~3.5%</a>
+      <a href="/stocks/jepi.html" title="$JEPI (Monthly Income ~7.4%) Dividend &amp; Retirement Core Study" style="color:#065f46;background:#ecfdf5;border:1.5px solid #059669;text-decoration:none;font-weight:800;padding:7px 13px;border-radius:8px;font-size:0.96rem;">$JEPI &middot; Monthly Income ~7.4%</a>
+      <a href="/stocks/sgov.html" title="$SGOV (US T-Bill Cash ~4.7%) Dividend &amp; Retirement Core Study" style="color:#065f46;background:#ecfdf5;border:1.5px solid #059669;text-decoration:none;font-weight:800;padding:7px 13px;border-radius:8px;font-size:0.96rem;">$SGOV &middot; US T-Bill Cash ~4.7%</a>
+      <a href="/stocks/xlv.html" title="$XLV (Healthcare Cushion) Dividend &amp; Retirement Core Study" style="color:#065f46;background:#ecfdf5;border:1.5px solid #059669;text-decoration:none;font-weight:800;padding:7px 13px;border-radius:8px;font-size:0.96rem;">$XLV &middot; Healthcare Cushion</a>
     </nav>
-    <div style="font-weight:800;color:#e9d5ff;margin:12px 0 8px;font-size:1rem;letter-spacing:0.01em;">
-      ⚖️ SIDE-BY-SIDE US BLUE-CHIP &amp; ETF COMPARISONS
-    </div>
-    <nav aria-label="Head-to-Head US Stock Quantitative Comparisons" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
-      <a href="/compare/avgo-vs-nvda.html" title="$AVGO vs $NVDA (Custom AI Networking vs GPU Architecture) Comparison" style="color:#d8b4fe;text-decoration:none;padding:5px 10px;border:1px solid rgba(192,132,252,0.28);border-radius:6px;font-family:JetBrains Mono,monospace;font-size:0.92rem;background:rgba(168,85,247,0.08);">⚖️ $AVGO vs $NVDA</a>
-      <a href="/compare/smh-vs-xlv.html" title="$SMH vs $XLV (Barbell Core ETF Correlation Study) Comparison" style="color:#d8b4fe;text-decoration:none;padding:5px 10px;border:1px solid rgba(192,132,252,0.28);border-radius:6px;font-family:JetBrains Mono,monospace;font-size:0.92rem;background:rgba(168,85,247,0.08);">⚖️ $SMH vs $XLV</a>
-      <a href="/compare/qqq-vs-smh.html" title="$QQQ vs $SMH (Nasdaq-100 Benchmark vs Semiconductor ETF) Comparison" style="color:#d8b4fe;text-decoration:none;padding:5px 10px;border:1px solid rgba(192,132,252,0.28);border-radius:6px;font-family:JetBrains Mono,monospace;font-size:0.92rem;background:rgba(168,85,247,0.08);">⚖️ $QQQ vs $SMH</a>
-      <a href="/compare/aapl-vs-msft.html" title="$AAPL vs $MSFT (Consumer Hardware Ecosystem vs Enterprise Cloud) Comparison" style="color:#d8b4fe;text-decoration:none;padding:5px 10px;border:1px solid rgba(192,132,252,0.28);border-radius:6px;font-family:JetBrains Mono,monospace;font-size:0.92rem;background:rgba(168,85,247,0.08);">⚖️ $AAPL vs $MSFT</a>
-      <a href="/compare/unh-vs-lly.html" title="$UNH vs $LLY (Managed Care Cashflow vs Biopharma Growth) Comparison" style="color:#d8b4fe;text-decoration:none;padding:5px 10px;border:1px solid rgba(192,132,252,0.28);border-radius:6px;font-family:JetBrains Mono,monospace;font-size:0.92rem;background:rgba(168,85,247,0.08);">⚖️ $UNH vs $LLY</a>
-      <a href="/compare/v-vs-ma.html" title="$V vs $MA (Global Payment Network Margin Comparison) Comparison" style="color:#d8b4fe;text-decoration:none;padding:5px 10px;border:1px solid rgba(192,132,252,0.28);border-radius:6px;font-family:JetBrains Mono,monospace;font-size:0.92rem;background:rgba(168,85,247,0.08);">⚖️ $V vs $MA</a>
-      <a href="/compare/cost-vs-wmt.html" title="$COST vs $WMT (Membership Warehouse vs Value Retail Dividend) Comparison" style="color:#d8b4fe;text-decoration:none;padding:5px 10px;border:1px solid rgba(192,132,252,0.28);border-radius:6px;font-family:JetBrains Mono,monospace;font-size:0.92rem;background:rgba(168,85,247,0.08);">⚖️ $COST vs $WMT</a>
-      <a href="/compare/xom-vs-cvx.html" title="$XOM vs $CVX (Integrated Energy Dividend &amp; Cashflow Study) Comparison" style="color:#d8b4fe;text-decoration:none;padding:5px 10px;border:1px solid rgba(192,132,252,0.28);border-radius:6px;font-family:JetBrains Mono,monospace;font-size:0.92rem;background:rgba(168,85,247,0.08);">⚖️ $XOM vs $CVX</a>
+    <nav aria-label="US Blue-Chip Dividend Leaders" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:18px;">
+      <a href="/stocks/jnj.html" title="Johnson &amp; Johnson ($JNJ) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$JNJ <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Johnson &amp; Johnson)</span></a>
+      <a href="/stocks/pg.html" title="Procter &amp; Gamble ($PG) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$PG <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Procter &amp; Gamble)</span></a>
+      <a href="/stocks/ko.html" title="Coca-Cola Co ($KO) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$KO <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Coca-Cola Co)</span></a>
+      <a href="/stocks/cost.html" title="Costco Wholesale ($COST) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$COST <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Costco Wholesale)</span></a>
+      <a href="/stocks/v.html" title="Visa Inc ($V) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$V <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Visa Inc)</span></a>
+      <a href="/stocks/msft.html" title="Microsoft Corp ($MSFT) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$MSFT <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Microsoft Corp)</span></a>
+      <a href="/stocks/aapl.html" title="Apple Inc ($AAPL) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$AAPL <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Apple Inc)</span></a>
+      <a href="/stocks/pep.html" title="PepsiCo Inc ($PEP) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$PEP <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(PepsiCo Inc)</span></a>
+      <a href="/stocks/wmt.html" title="Walmart Inc ($WMT) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$WMT <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Walmart Inc)</span></a>
+      <a href="/stocks/jpm.html" title="JPMorgan Chase ($JPM) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$JPM <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(JPMorgan Chase)</span></a>
+      <a href="/stocks/unh.html" title="UnitedHealth Group ($UNH) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$UNH <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(UnitedHealth Group)</span></a>
+      <a href="/stocks/xom.html" title="Exxon Mobil ($XOM) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$XOM <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Exxon Mobil)</span></a>
+      <a href="/stocks/cvx.html" title="Chevron Corp ($CVX) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$CVX <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Chevron Corp)</span></a>
+      <a href="/stocks/lly.html" title="Eli Lilly ($LLY) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$LLY <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Eli Lilly)</span></a>
+      <a href="/stocks/avgo.html" title="Broadcom Inc ($AVGO) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$AVGO <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Broadcom Inc)</span></a>
     </nav>
-    <div style="margin-top:16px;padding-top:14px;border-top:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:0.95rem;color:#e2e8f0;">
-      <span>🏛️ <strong>Educational Market Data &amp; Quantitative Research Desk:</strong> Questions about software licenses, CSV feeds, or 14-day refunds? Reach our desk directly.</span>
-      <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#38bdf8;font-weight:800;text-decoration:none;padding:10px 16px;min-height:48px;display:inline-flex;align-items:center;max-width:100%;word-break:break-word;border:1px solid rgba(56,189,248,0.4);border-radius:8px;background:rgba(56,189,248,0.1);font-size:0.95rem;">✉️ Educational Market Data &amp; Quantitative Research Desk (beable9489@gmail.com) &rarr;</a>
+    <div style="font-weight:800;color:#0f172a;margin:12px 0 8px;font-size:1.05rem;">
+      ⚖️ SIDE-BY-SIDE BLUE-CHIP &amp; DIVIDEND ETF COMPARISONS
     </div>
-    <div style="margin-top:14px;padding:12px 14px;border-radius:8px;background:rgba(15,23,42,0.85);border:1px solid rgba(148,163,184,0.25);display:flex;flex-wrap:wrap;gap:14px;align-items:center;font-size:0.9rem;">
-      <a href="/terms.html" style="color:#93c5fd;font-weight:800;text-decoration:underline;">Terms of Service</a>
-      <span style="color:#475569;">&middot;</span>
-      <a href="/privacy.html" style="color:#93c5fd;font-weight:800;text-decoration:underline;">Privacy Policy</a>
-      <span style="color:#475569;">&middot;</span>
-      <a href="/refund.html" style="color:#6ee7b7;font-weight:800;text-decoration:underline;">14-Day Refund Policy</a>
-      <span style="color:#475569;">&middot;</span>
-      <a href="/contact.html" style="color:#93c5fd;font-weight:700;text-decoration:underline;">Contact Support</a>
-      <span style="color:#475569;">&middot;</span>
-      <a href="mailto:beable9489@gmail.com" style="color:#fde68a;font-weight:800;text-decoration:underline;">Support: beable9489@gmail.com</a>
-      <span style="color:#475569;">&middot;</span>
-      <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Brand%20%26%20Media%20Partnership" style="color:#6ee7b7;font-weight:800;text-decoration:underline;">Sponsorship, Brand &amp; Media Partnerships: beable9489@gmail.com</a>
-      <span style="color:#475569;">&middot;</span>
-      <span style="color:#cbd5e1;font-weight:700;">Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)</span>
+    <nav aria-label="Head-to-Head US Blue-Chip Comparisons" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+      <a href="/compare/voo-vs-schd.html" title="$VOO vs $SCHD (S&amp;P 500 Core vs Dividend Growth) Blue-Chip Comparison" style="color:#1e40af;background:#eff6ff;border:1px solid #93c5fd;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.92rem;">⚖️ $VOO vs $SCHD</a>
+      <a href="/compare/jepi-vs-schd.html" title="$JEPI vs $SCHD (Monthly Income vs Dividend Growth) Blue-Chip Comparison" style="color:#1e40af;background:#eff6ff;border:1px solid #93c5fd;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.92rem;">⚖️ $JEPI vs $SCHD</a>
+      <a href="/compare/jnj-vs-pg.html" title="$JNJ vs $PG (Healthcare vs Consumer Staples) Blue-Chip Comparison" style="color:#1e40af;background:#eff6ff;border:1px solid #93c5fd;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.92rem;">⚖️ $JNJ vs $PG</a>
+      <a href="/compare/ko-vs-pep.html" title="$KO vs $PEP (Dividend Aristocrats Study) Blue-Chip Comparison" style="color:#1e40af;background:#eff6ff;border:1px solid #93c5fd;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.92rem;">⚖️ $KO vs $PEP</a>
+      <a href="/compare/cost-vs-wmt.html" title="$COST vs $WMT (Warehouse vs Value Retail) Blue-Chip Comparison" style="color:#1e40af;background:#eff6ff;border:1px solid #93c5fd;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.92rem;">⚖️ $COST vs $WMT</a>
+      <a href="/compare/aapl-vs-msft.html" title="$AAPL vs $MSFT (Blue-Chip Cashflow Leaders) Blue-Chip Comparison" style="color:#1e40af;background:#eff6ff;border:1px solid #93c5fd;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.92rem;">⚖️ $AAPL vs $MSFT</a>
+      <a href="/compare/v-vs-ma.html" title="$V vs $MA (Global Payment Networks) Blue-Chip Comparison" style="color:#1e40af;background:#eff6ff;border:1px solid #93c5fd;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.92rem;">⚖️ $V vs $MA</a>
+      <a href="/compare/xom-vs-cvx.html" title="$XOM vs $CVX (Integrated Energy Dividends) Blue-Chip Comparison" style="color:#1e40af;background:#eff6ff;border:1px solid #93c5fd;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.92rem;">⚖️ $XOM vs $CVX</a>
+    </nav>
+    <div style="margin-top:18px;padding-top:14px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:0.96rem;color:#1e293b;">
+      <span>🏛️ <strong>Educational Market Data &amp; Quantitative Research Desk:</strong> Questions about VIP worksheets, license keys, or 14-day refunds?</span>
+      <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#1d4ed8;font-weight:800;text-decoration:none;padding:10px 16px;min-height:48px;display:inline-flex;align-items:center;border:1.5px solid #93c5fd;border-radius:8px;background:#eff6ff;font-size:0.95rem;">✉️ Support Desk (beable9489@gmail.com) &rarr;</a>
     </div>
-    <p style="margin:12px 0 0;font-size:0.88rem;line-height:1.6;color:#cbd5e1;font-weight:600;">
+    <div style="margin-top:14px;padding:12px 16px;border-radius:10px;background:#f8fafc;border:1px solid #cbd5e1;display:flex;flex-wrap:wrap;gap:14px;align-items:center;font-size:0.92rem;">
+      <a href="/terms.html" style="color:#1d4ed8;font-weight:800;text-decoration:underline;">Terms of Service</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <a href="/privacy.html" style="color:#1d4ed8;font-weight:800;text-decoration:underline;">Privacy Policy</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <a href="/refund.html" style="color:#047857;font-weight:800;text-decoration:underline;">14-Day Refund Policy</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <a href="/contact.html" style="color:#1d4ed8;font-weight:700;text-decoration:underline;">Contact Support</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <a href="/insights/" style="color:#0369a1;font-weight:700;text-decoration:underline;">Educational Insights Journal</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <a href="/semi-fear-greed.html" style="color:#475569;font-weight:700;text-decoration:underline;">Sector Barbell Calculator</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <a href="/pro-swing.html" style="color:#475569;font-weight:700;text-decoration:underline;">Equity Factor Archive</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <a href="mailto:beable9489@gmail.com" style="color:#b45309;font-weight:800;text-decoration:underline;">beable9489@gmail.com</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <span style="color:#334155;font-weight:700;">Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)</span>
+    </div>
+    <p style="margin:12px 0 0;font-size:0.9rem;line-height:1.6;color:#475569;font-weight:600;">
       Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.
     </p>
   </section>

@@ -142,11 +142,19 @@ function detectInitialLang() {
   return "en";
 }
 
+const initialFontPxRaw = Number(typeof localStorage !== "undefined" ? localStorage.getItem("tom_font_px") : 18);
+const initialFontPx = [18, 20, 22].includes(initialFontPxRaw) ? initialFontPxRaw : 18;
+const initialUiTheme =
+  typeof localStorage !== "undefined" && localStorage.getItem("tom_ui_theme_v2") === "dark"
+    ? "dark"
+    : "light";
+
 const state = {
   lang: detectInitialLang(),
   activeView: defaultView,
-  uiTheme: localStorage.getItem("tom_ui_theme") || "dark",
-  fontSizeMode: localStorage.getItem("tom_font_size") || "normal",
+  uiTheme: initialUiTheme,
+  fontSizePx: initialFontPx,
+  fontSizeMode: initialFontPx > 18 ? "large" : "normal",
   freeMemberEmail: localStorage.getItem("tom_free_member_email") || "",
   isAdminAuthenticated: sessionStorage.getItem("rsa_admin_auth") === "true",
   isProUnlocked: isProActive(),
@@ -293,25 +301,25 @@ function renderHomeRetirementView() {
     ${renderFreeStarterManual(state)}
     ${renderPricing(state)}
 
-    <!-- COMPANION EDUCATIONAL TOOLS & ARCHIVE LINKS -->
+    <!-- COMPANION EDUCATIONAL SUMMARY BANNER -->
     <section class="cross-banner">
       <div>
-        <div style="font-size:0.74rem; font-family:var(--font-mono); font-weight:800; color:#38bdf8; text-transform:uppercase; letter-spacing:0.05em;" id="crossTitle">
+        <div class="cross-kicker" id="crossTitle">
           ${t.crossTitle}
         </div>
-        <h3 style="font-size:1.15rem; font-weight:800; margin:4px 0; color:#ffffff;" id="crossHeading">
+        <h3 class="cross-heading" id="crossHeading">
           ${t.crossHeading}
         </h3>
-        <p style="font-size:0.92rem; color:var(--muted);" id="crossDesc">
+        <p class="cross-desc" id="crossDesc">
           ${t.crossDesc}
         </p>
       </div>
       <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <button type="button" class="btn btn-primary" id="crossFunnelSwitchBtn" style="min-height:46px; background:#0284c7; border-color:#38bdf8;">
-          <span id="crossBtn">${t.crossBtn} →</span>
-        </button>
-        <a href="/pro-swing.html" class="btn" style="min-height:46px; border-color:rgba(148,163,184,0.4); color:#cbd5e1; font-weight:700;">
-          Self-Directed Quantitative Research Archive →
+        <a href="#tomTrafficLightStrip" class="btn btn-primary" id="crossFunnelSwitchBtn" style="min-height:48px;">
+          <span id="crossBtn">${t.crossBtn} &rarr;</span>
+        </a>
+        <a href="#tomFreeStarterManual" class="btn" style="min-height:48px; font-weight:700;">
+          Open $0 Safe Broker Guide &rarr;
         </a>
       </div>
     </section>
@@ -388,38 +396,51 @@ function renderApp() {
     <main class="container">
       ${mainBodyHtml}
 
-      <footer class="tom-fixed-legal-footer" style="border-top:1px solid var(--border); padding-top:20px; margin-top:28px; color:var(--muted); font-size:0.82rem; line-height:1.65;">
-        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
-          <span class="mono" style="font-size:0.74rem; color:var(--text); font-weight:800;">EDUCATIONAL MARKET DATA &amp; QUANTITATIVE RESEARCH DESK:</span>
-          <a href="mailto:beable9489@gmail.com" style="color:#38bdf8; text-decoration:underline; font-weight:800;">
+      <footer class="tom-fixed-legal-footer">
+        <div class="tom-footer-top-row">
+          <span class="mono tom-footer-desk-label">EDUCATIONAL MARKET DATA &amp; QUANTITATIVE RESEARCH DESK:</span>
+          <a href="mailto:beable9489@gmail.com" class="tom-footer-email-link">
             ✉️ beable9489@gmail.com
           </a>
           <span style="color:var(--border);">|</span>
-          <a href="${state.config.youtube_url || DEFAULT_YOUTUBE_URL}" target="_blank" rel="noopener noreferrer" style="color:#fca5a5; text-decoration:none; font-weight:600;">
+          <a href="${state.config.youtube_url || DEFAULT_YOUTUBE_URL}" target="_blank" rel="noopener noreferrer" class="tom-footer-social">
             📺 YouTube (@RightSideAlpha) ↗
           </a>
           <span style="color:var(--border);">|</span>
-          <a href="${state.config.instagram_url || DEFAULT_INSTAGRAM_URL}" target="_blank" rel="noopener noreferrer" style="color:#f9a8d4; text-decoration:none; font-weight:600;">
+          <a href="${state.config.instagram_url || DEFAULT_INSTAGRAM_URL}" target="_blank" rel="noopener noreferrer" class="tom-footer-social">
             📸 Instagram (@rightsidealpha) ↗
           </a>
           <span style="color:var(--border);">|</span>
-          <a href="${state.config.x_url || "https://x.com/rightsidealpha"}" target="_blank" rel="noopener noreferrer" style="color:#e2e8f0; text-decoration:none; font-weight:600;">
+          <a href="${state.config.x_url || "https://x.com/rightsidealpha"}" target="_blank" rel="noopener noreferrer" class="tom-footer-social">
             𝕏 (@rightsidealpha) ↗
           </a>
+          <span style="color:var(--border);">|</span>
+          <button type="button" class="btn btn-sm" id="btnToggleTomTheme" title="Switch between Daylight Mode and Optional Dark Mode">
+            ${state.uiTheme === "dark" ? "☀️ Daylight Mode" : "🌙 Dark Mode"}
+          </button>
+          <button type="button" class="btn btn-sm" id="btnOpenLicense" title="Restore VIP License Key">
+            🔑 Restore License Key
+          </button>
         </div>
-        <div style="display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin-bottom:12px; padding:10px 14px; background:rgba(15,23,42,0.75); border:1px solid rgba(148,163,184,0.22); border-radius:8px; font-size:0.84rem;">
-          <a href="/terms.html" style="color:#93c5fd; text-decoration:underline; font-weight:800;">Terms of Service</a>
-          <span style="color:var(--border);">·</span>
-          <a href="/privacy.html" style="color:#93c5fd; text-decoration:underline; font-weight:800;">Privacy Policy</a>
-          <span style="color:var(--border);">·</span>
-          <a href="/refund.html" style="color:#6ee7b7; text-decoration:underline; font-weight:800;">14-Day Refund Policy</a>
-          <span style="color:var(--border);">·</span>
-          <a href="/contact.html" style="color:#93c5fd; text-decoration:underline; font-weight:700;">Contact Desk</a>
-          <span style="color:var(--border);">·</span>
-          <a href="mailto:beable9489@gmail.com" style="color:#fde68a; text-decoration:underline; font-weight:800;">Support: beable9489@gmail.com</a>
+        <div class="tom-footer-legal-bar">
+          <a href="/terms.html">Terms of Service</a>
+          <span style="color:var(--border);">&middot;</span>
+          <a href="/privacy.html">Privacy Policy</a>
+          <span style="color:var(--border);">&middot;</span>
+          <a href="/refund.html" class="is-refund">14-Day Refund Policy</a>
+          <span style="color:var(--border);">&middot;</span>
+          <a href="/contact.html">Contact Desk</a>
+          <span style="color:var(--border);">&middot;</span>
+          <a href="/insights/">Educational Insights</a>
+          <span style="color:var(--border);">&middot;</span>
+          <a href="/semi-fear-greed.html">Sector Barbell Calculator</a>
+          <span style="color:var(--border);">&middot;</span>
+          <a href="/pro-swing.html">Equity Factor Archive</a>
+          <span style="color:var(--border);">&middot;</span>
+          <a href="mailto:beable9489@gmail.com" class="is-support">Support: beable9489@gmail.com</a>
         </div>
-        <p id="disclaimerText" style="color:#cbd5e1; font-weight:600;">${t.disclaimer}</p>
-        <p style="margin-top:8px; font-family:var(--font-mono); font-size:0.74rem;" id="copyrightText">${t.copyright}</p>
+        <p id="disclaimerText" class="tom-footer-disclaimer">${t.disclaimer}</p>
+        <p class="tom-footer-copyright" id="copyrightText">${t.copyright}</p>
       </footer>
     </main>
     <canvas id="scoreCanvas" width="900" height="500" style="display:none;"></canvas>
@@ -501,10 +522,14 @@ if (typeof window !== "undefined") {
   window.__bindRsaPolarCheckoutEvents = bindRsaPolarCheckoutEvents;
   window.addEventListener("load", bindRsaPolarCheckoutEvents);
   try {
-    const initTheme = localStorage.getItem("tom_ui_theme") || "dark";
-    const initFont = localStorage.getItem("tom_font_size") || "normal";
+    const initTheme = localStorage.getItem("tom_ui_theme_v2") === "dark" ? "dark" : "light";
+    const rawPx = Number(localStorage.getItem("tom_font_px"));
+    const initPx = [18, 20, 22].includes(rawPx) ? rawPx : 18;
     document.documentElement.setAttribute("data-tom-theme", initTheme);
-    document.documentElement.setAttribute("data-tom-font", initFont);
+    document.documentElement.setAttribute("data-tom-font", String(initPx));
+    if (document.body) {
+      document.body.style.fontSize = `${initPx}px`;
+    }
   } catch (_) {}
 }
 
@@ -512,16 +537,24 @@ function bindEvents() {
   // Initialize Polar.sh checkout postMessage & auto-unlock handler
   bindRsaPolarCheckoutEvents();
 
-  // Senior Font Size & Daylight Theme Toggles
+  // Senior Font Size A+ 3-Step Cycle (18px -> 20px -> 22px -> 18px) & Daylight/Dark Toggle
   const btnToggleTomFont = document.getElementById("btnToggleTomFont");
   if (btnToggleTomFont) {
     btnToggleTomFont.addEventListener("click", () => {
-      state.fontSizeMode = state.fontSizeMode === "large" ? "normal" : "large";
+      const cur = Number(state.fontSizePx || 18);
+      const next = cur === 18 ? 20 : cur === 20 ? 22 : 18;
+      state.fontSizePx = next;
+      state.fontSizeMode = next > 18 ? "large" : "normal";
       try {
+        localStorage.setItem("tom_font_px", String(next));
         localStorage.setItem("tom_font_size", state.fontSizeMode);
-        document.documentElement.setAttribute("data-tom-font", state.fontSizeMode);
+        document.documentElement.setAttribute("data-tom-font", String(next));
+        if (document.body) {
+          document.body.style.fontSize = `${next}px`;
+        }
       } catch (_) {}
       renderApp();
+      showToast(`🔍 Senior Readability Text Size: ${next}px Active`);
     });
   }
 
@@ -530,12 +563,31 @@ function bindEvents() {
     btnToggleTomTheme.addEventListener("click", () => {
       state.uiTheme = state.uiTheme === "light" ? "dark" : "light";
       try {
+        localStorage.setItem("tom_ui_theme_v2", state.uiTheme);
         localStorage.setItem("tom_ui_theme", state.uiTheme);
         document.documentElement.setAttribute("data-tom-theme", state.uiTheme);
       } catch (_) {}
       renderApp();
     });
   }
+
+  // Smooth scroll for 4 Senior Header Navigation Links when on Home
+  [
+    ["navIncomeSim", "tom-retirement-architect"],
+    ["navMarketWeather", "tomTrafficLightStrip"],
+    ["navBrokerGuide", "tomFreeStarterManual"],
+    ["navVipBenefits", "pricing"],
+  ].forEach(([navId, targetId]) => {
+    const navEl = document.getElementById(navId);
+    if (!navEl) return;
+    navEl.addEventListener("click", (e) => {
+      const targetEl = document.getElementById(targetId);
+      if (targetEl && typeof targetEl.scrollIntoView === "function") {
+        e.preventDefault();
+        targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  });
 
   // 3-Color Market Weather Strip Actions
   document.querySelectorAll(".tom-traffic-card").forEach((card) => {
@@ -665,8 +717,10 @@ function bindEvents() {
   bindTomPasswordlessClubEvents(state, showToast);
 
   const jumpToTomMorningBox = () => {
-    const box = document.getElementById("tomMorningSignalBox");
-    const inp = document.getElementById("tomMorningEmailInput");
+    const box = document.getElementById("tom-passwordless-club-signup") || document.getElementById("tomMorningBellClub");
+    const form = document.getElementById("tom-club-signup-form");
+    const inp = document.getElementById("tom-club-email-input");
+    if (form) form.style.display = "block";
     if (box && box.scrollIntoView) box.scrollIntoView({ behavior: "smooth", block: "center" });
     setTimeout(() => {
       if (inp) inp.focus();
@@ -859,7 +913,15 @@ function bindEvents() {
   }
   const crossFunnelSwitchBtn = document.getElementById("crossFunnelSwitchBtn");
   if (crossFunnelSwitchBtn) {
-    crossFunnelSwitchBtn.addEventListener("click", () => switchView("semi"));
+    crossFunnelSwitchBtn.addEventListener("click", (e) => {
+      const stripEl = document.getElementById("tomTrafficLightStrip");
+      if (stripEl && stripEl.scrollIntoView) {
+        e.preventDefault();
+        stripEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        switchView("semi");
+      }
+    });
   }
   const btnSwitchToRightSide = document.getElementById("btnSwitchToRightSide");
   if (btnSwitchToRightSide) {
@@ -2813,26 +2875,27 @@ async function loadAllData() {
     ]);
     const SENIOR_CORE_RETIREMENT_ETFS = [
       {
-        ticker: "SGOV",
-        name_en: "iShares 0-3 Month US Treasury Bond ETF (Cash Cushion)",
-        sector: "Fintech & Digital Finance",
-        close: 100.52,
-        low52: 100.04,
-        high52: 100.78,
-        dd_high52_pct: -0.26,
-        prox_low52_pct: 0.48,
-        vs_ma20_pct: 0.08,
-        vs_ma60_pct: 0.14,
-        ma20_price: 100.44,
-        ma60_price: 100.38,
-        rsi14: 53.2,
-        vol_surge_10d: 1.42,
+        ticker: "VOO",
+        name_en: "Vanguard S&P 500 ETF (S&P 500 Core)",
+        sector: "Cloud & Enterprise Software",
+        date: "2026-11-16",
+        close: 548.6,
+        low52: 452.1,
+        high52: 563.8,
+        dd_high52_pct: -2.7,
+        prox_low52_pct: 21.34,
+        vs_ma20_pct: 1.68,
+        vs_ma60_pct: 4.12,
+        ma20_price: 539.5,
+        ma60_price: 526.9,
+        rsi14: 58.4,
+        vol_surge_10d: 1.41,
         score: 99,
         zone_code: "IGNITION_ZONE",
-        zone_label_en: "🟢 Bucket 1 T-Bill Cushion",
-        entry_trigger_price: 100.4,
-        stop_loss_price: 99.8,
-        tp1_2x_price: 105.2,
+        zone_label_en: "🟢 Bucket 3 S&P 500 Core",
+        entry_trigger_price: 539.5,
+        stop_loss_price: 499.2,
+        tp1_2x_price: 720.0,
         c1_deep_dd: true,
         c2_off_low: true,
         c3_above_mas: true,
@@ -2842,8 +2905,9 @@ async function loadAllData() {
       },
       {
         ticker: "SCHD",
-        name_en: "Schwab US Dividend Equity ETF (Dividend Growth)",
+        name_en: "Schwab US Dividend Equity ETF (Dividend Growth ~3.5%)",
         sector: "Consumer & Retail",
+        date: "2026-11-16",
         close: 29.45,
         low52: 24.8,
         high52: 30.15,
@@ -2870,8 +2934,9 @@ async function loadAllData() {
       },
       {
         ticker: "JEPI",
-        name_en: "JPMorgan Equity Premium Income ETF (Monthly Paycheck)",
+        name_en: "JPMorgan Equity Premium Income ETF (Monthly Income ~7.4%)",
         sector: "Fintech & Digital Finance",
+        date: "2026-11-16",
         close: 59.18,
         low52: 53.4,
         high52: 60.4,
@@ -2897,26 +2962,27 @@ async function loadAllData() {
         is_pro_locked: false,
       },
       {
-        ticker: "VOO",
-        name_en: "Vanguard S&P 500 ETF (Core Compounding)",
-        sector: "Cloud & Enterprise Software",
-        close: 548.6,
-        low52: 452.1,
-        high52: 563.8,
-        dd_high52_pct: -2.7,
-        prox_low52_pct: 21.34,
-        vs_ma20_pct: 1.68,
-        vs_ma60_pct: 4.12,
-        ma20_price: 539.5,
-        ma60_price: 526.9,
-        rsi14: 58.4,
-        vol_surge_10d: 1.41,
+        ticker: "SGOV",
+        name_en: "iShares 0-3 Month US Treasury Bond ETF (US T-Bill Cash ~4.7%)",
+        sector: "Fintech & Digital Finance",
+        date: "2026-11-16",
+        close: 100.52,
+        low52: 100.04,
+        high52: 100.78,
+        dd_high52_pct: -0.26,
+        prox_low52_pct: 0.48,
+        vs_ma20_pct: 0.08,
+        vs_ma60_pct: 0.14,
+        ma20_price: 100.44,
+        ma60_price: 100.38,
+        rsi14: 53.2,
+        vol_surge_10d: 1.42,
         score: 96,
         zone_code: "IGNITION_ZONE",
-        zone_label_en: "🟢 Bucket 3 S&P 500 Core",
-        entry_trigger_price: 539.5,
-        stop_loss_price: 499.2,
-        tp1_2x_price: 720.0,
+        zone_label_en: "🟢 Bucket 1 T-Bill Cushion",
+        entry_trigger_price: 100.4,
+        stop_loss_price: 99.8,
+        tp1_2x_price: 105.2,
         c1_deep_dd: true,
         c2_off_low: true,
         c3_above_mas: true,
