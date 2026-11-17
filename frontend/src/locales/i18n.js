@@ -1,9 +1,9 @@
 const enCopy = {
   // Global Navigation & Header
-  brandSubtitle: "US 401(k) & IRA INCOME ARCHITECT",
-  navRightSide: "30-Sec Income Simulator",
-  navSemiFg: "3-Color Market Weather",
-  marketUniverseTag: "RETIREMENT 4-CORE ETFs",
+  brandSubtitle: "SMH × XLV SECTOR BALANCE SIMULATOR",
+  navRightSide: "4-Step Balance Survey",
+  navSemiFg: "Sector Sentiment Gauge",
+  marketUniverseTag: "SMH × XLV BARBELL ETFs",
   statusFree: "FREE ACCESS",
   statusPro: "VIP SOFTWARE ACTIVE",
   btnLicense: "License Key",
@@ -12,10 +12,10 @@ const enCopy = {
   btnUnlockPro: "VIP Benefits",
 
   // Hero & Calm Educational Metrics (B2C 3-Second Hook)
-  heroTag: "US RETIREMENT CASHFLOW & BUDGET CALCULATOR SOFTWARE",
-  heroTitle: "Turn Your 401(k) & Savings Into Calm, Reliable Monthly Retirement Income.",
+  heroTag: "HISTORICAL SMH × XLV SECTOR BALANCE SIMULATOR & DAILY AUTOMATED MARKET INDICATOR DATA DIGEST",
+  heroTitle: "Balance AI Semiconductor Growth ($SMH) With Healthcare Defense ($XLV) — Sleep Calmly.",
   heroDesc:
-    "Simulate your monthly retirement paycheck in 30 seconds, cushion your nest egg from -35% sequence-of-returns crashes, and adjust $VOO, $SCHD, $JEPI & $SGOV calmly 2–4 times a year with our US Retirement Market Weather indicator.",
+    "Answer 4 quick taps to calculate your historical $SMH × $XLV baseline sector mix across 26 years of Dot-Com, 2008, and 2022 market cycles.",
   pwRsiExplainerBtn: "How 2–4x/Yr Budget Review Works",
   pwRsiModalTitle: "Calm 2–4x/Year 3-Bucket Household Budget & Cashflow Methodology",
   kpi1_label: "Core S&P 500 Pillar",

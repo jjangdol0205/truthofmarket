@@ -64,9 +64,8 @@ export function renderHeader(state) {
     const found = allStocks.find((s) => String(s.ticker || "").toUpperCase() === tkr);
     return found && found.close ? Number(found.close).toFixed(2) : fallback;
   };
-  const vooPrice = findClose("VOO", "548.60");
-  const schdPrice = findClose("SCHD", "29.45");
-  const jepiPrice = findClose("JEPI", "59.18");
+  const smhPrice = ov && ov.smh_close ? Number(ov.smh_close).toFixed(2) : findClose("SMH", "258.40");
+  const xlvPrice = ov && ov.xlv_close ? Number(ov.xlv_close).toFixed(2) : findClose("XLV", "148.90");
   const sgovPrice = findClose("SGOV", "100.52");
 
   const isSubpage =
@@ -81,36 +80,30 @@ export function renderHeader(state) {
   const fontPx = Number(state.fontSizePx || 18);
 
   return `
-    <!-- RETIREMENT 4-CORE ETFs & US MARKET WEATHER RIBBON -->
-    <div class="market-ribbon" role="region" aria-label="US Retirement 4-Core ETFs and Market Weather">
+    <!-- SMH x XLV SECTOR BALANCE & MARKET INDICATOR RIBBON -->
+    <div class="market-ribbon" role="region" aria-label="SMH and XLV Sector ETFs and Market Sentiment Gauge">
       <div class="market-ribbon-inner">
         <div class="market-tape">
           <span class="tape-item">
-            <span class="tape-sym">$VOO</span>
-            <span class="tape-role">(S&amp;P 500 Core)</span>
-            <strong class="tape-price">$${vooPrice}</strong>
+            <span class="tape-sym">$SMH</span>
+            <span class="tape-role">(Semiconductor Growth)</span>
+            <strong class="tape-price">$${smhPrice}</strong>
           </span>
-          <span class="tape-sep" aria-hidden="true">&middot;</span>
+          <span class="tape-sep" aria-hidden="true">&times;</span>
           <span class="tape-item">
-            <span class="tape-sym">$SCHD</span>
-            <span class="tape-role">(Dividend Growth ~3.5%)</span>
-            <strong class="tape-price">$${schdPrice}</strong>
-          </span>
-          <span class="tape-sep" aria-hidden="true">&middot;</span>
-          <span class="tape-item">
-            <span class="tape-sym">$JEPI</span>
-            <span class="tape-role">(Monthly Income ~7.4%)</span>
-            <strong class="tape-price">$${jepiPrice}</strong>
+            <span class="tape-sym">$XLV</span>
+            <span class="tape-role">(Healthcare Defense)</span>
+            <strong class="tape-price">$${xlvPrice}</strong>
           </span>
           <span class="tape-sep" aria-hidden="true">&middot;</span>
           <span class="tape-item">
             <span class="tape-sym">$SGOV</span>
-            <span class="tape-role">(US T-Bill Cash ~4.7%)</span>
+            <span class="tape-role">(US T-Bill Cushion)</span>
             <strong class="tape-price">$${sgovPrice}</strong>
           </span>
           <span class="tape-sep" aria-hidden="true">|</span>
           <span class="tape-item" id="ribbonWeatherStatus">
-            <span class="tape-sym">US Retirement Market Weather (S&amp;P 500 Breadth &amp; Drawdown Guard):</span>
+            <span class="tape-sym">Sector Sentiment Gauge (${fgNum.toFixed(1)}/100):</span>
             <span class="${weatherStatus.cls}" style="font-weight:800;">${weatherStatus.pill}</span>
           </span>
         </div>
@@ -120,7 +113,7 @@ export function renderHeader(state) {
       </div>
     </div>
 
-    <!-- CLEAN SENIOR-FRIENDLY TOPBAR (<= 5 CORE NAVIGATION ITEMS) -->
+    <!-- CLEAN 3-STAGE TOPBAR -->
     <header class="topbar">
       <div class="topbar-inner">
         <a href="/" class="brand" id="brandHomeBtn" aria-label="TruthOfMarket Home">
@@ -132,28 +125,28 @@ export function renderHeader(state) {
           </span>
           <span class="brand-name-wrap">
             <span class="brand-title">TruthOfMarket</span>
-            <span class="brand-badge" id="brandSubtitle">401(k) &amp; IRA Income Architect</span>
+            <span class="brand-badge" id="brandSubtitle">SMH &times; XLV Balance Simulator</span>
           </span>
         </a>
 
-        <nav class="senior-top-nav" aria-label="Main Retirement Tools Navigation">
+        <nav class="senior-top-nav" aria-label="3-Stage SMH x XLV Navigation">
           <a href="${homePrefix}#tom-retirement-architect" class="senior-nav-item" id="navIncomeSim">
-            30-Sec Income Simulator
+            1. 4-Step Balance Survey
           </a>
-          <a href="${homePrefix}#tomTrafficLightStrip" class="senior-nav-item" id="navMarketWeather">
-            3-Color Market Weather
+          <a href="${homePrefix}#tomMorningBellClub" class="senior-nav-item" id="navMarketWeather">
+            2. Free Ratio Unlock
           </a>
           <a href="${homePrefix}#tomFreeStarterManual" class="senior-nav-item" id="navBrokerGuide">
-            $0 Broker Guide
+            $0 Broker Manual
           </a>
           <a href="#pricing" class="senior-nav-item is-vip-link" id="navVipBenefits">
-            VIP Benefits
+            3. Daily Tracking VIP
           </a>
           <button
             type="button"
             class="senior-nav-item is-font-btn"
             id="btnToggleTomFont"
-            title="Cycle Senior Large-Print Text Size: 18px -> 20px -> 22px"
+            title="Cycle Large-Print Text Size: 18px -> 20px -> 22px"
           >
             Text Size A+${fontPx > 18 ? ` (${fontPx}px)` : ""}
           </button>

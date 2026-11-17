@@ -295,34 +295,10 @@ function isProSwingOrEquitySubpage() {
 }
 
 function renderHomeRetirementView() {
-  const t = state.t;
   return `
     ${renderHero(state)}
     ${renderFreeStarterManual(state)}
     ${renderPricing(state)}
-
-    <!-- COMPANION EDUCATIONAL SUMMARY BANNER -->
-    <section class="cross-banner">
-      <div>
-        <div class="cross-kicker" id="crossTitle">
-          ${t.crossTitle}
-        </div>
-        <h3 class="cross-heading" id="crossHeading">
-          ${t.crossHeading}
-        </h3>
-        <p class="cross-desc" id="crossDesc">
-          ${t.crossDesc}
-        </p>
-      </div>
-      <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <a href="#tomTrafficLightStrip" class="btn btn-primary" id="crossFunnelSwitchBtn" style="min-height:48px;">
-          <span id="crossBtn">${t.crossBtn} &rarr;</span>
-        </a>
-        <a href="#tomFreeStarterManual" class="btn" style="min-height:48px; font-weight:700;">
-          Open $0 Safe Broker Guide &rarr;
-        </a>
-      </div>
-    </section>
   `;
 }
 
@@ -574,7 +550,7 @@ function bindEvents() {
   // Smooth scroll for 4 Senior Header Navigation Links when on Home
   [
     ["navIncomeSim", "tom-retirement-architect"],
-    ["navMarketWeather", "tomTrafficLightStrip"],
+    ["navMarketWeather", "tomMorningBellClub"],
     ["navBrokerGuide", "tomFreeStarterManual"],
     ["navVipBenefits", "pricing"],
   ].forEach(([navId, targetId]) => {

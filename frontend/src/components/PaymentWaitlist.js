@@ -97,6 +97,17 @@
     }
   }
 
+  var COPY_MODE =
+    window.PAYMENT_CONFIG && window.PAYMENT_CONFIG.STORE_LIVE_READY === true
+      ? "LIVE_SHARP"
+      : "UNDERWRITING_SAFE";
+  window.TOM_COPY_MODE = COPY_MODE;
+  window.getTomCopyMode = function () {
+    return window.PAYMENT_CONFIG && window.PAYMENT_CONFIG.STORE_LIVE_READY === true
+      ? "LIVE_SHARP"
+      : "UNDERWRITING_SAFE";
+  };
+
   function getKstDateString() {
     try {
       return new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
@@ -305,10 +316,10 @@
       "    Our Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) self-directed educational calculator software checkout is completing final gateway activation. Reserve your spot in <b>1 second ($0 charged today)</b> to lock in a <b>20% Founding Member Discount</b>—plus instant free Morning Bell Club access." +
       "  </p>" +
       '  <div class="tom-wl-benefits-box">' +
-      '    <div style="font-weight:800;color:#047857;margin-bottom:6px;">📦 3 Retiree VIP Software Tools Included ($29/mo or $199/yr):</div>' +
-      '    <div style="margin-bottom:4px;">&bull; <b>Custom Nest-Egg Dollar ($) Budget Worksheet:</b> Exact dollar amounts across <b>$SGOV, $SCHD, $JEPI &amp; $VOO</b> for your exact portfolio size (e.g., $500,000).</div>' +
-      '    <div style="margin-bottom:4px;">&bull; <b>12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Placement Reference:</b> Educational tax-location guide across <b>Traditional IRA, Roth IRA &amp; Taxable</b> accounts.</div>' +
-      '    <div>&bull; <b>Large-Print 1-Page Weather Change Action Sheet (2–4x/Year):</b> Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Retirement Budget Calculator.</div>' +
+      '    <div style="font-weight:800;color:#047857;margin-bottom:6px;">📦 3 Core SMH &times; XLV VIP Software Deliverables ($29/mo or $199/yr):</div>' +
+      '    <div style="margin-bottom:4px;">&bull; <b>Daily Automated SMH &times; XLV Market Indicator &amp; Ratio Digest:</b> Morning email tracking public semiconductor overheating / fear data (0&ndash;100) and historical <b>$SMH : $XLV</b> sector mix shifts across regimes.</div>' +
+      '    <div style="margin-bottom:4px;">&bull; <b>Account-Size Dollar ($) Allocation Worksheet:</b> Exact dollar amounts across <b>$SMH</b> (Semiconductors), <b>$XLV</b> (Healthcare Defense) &amp; optional <b>$SGOV</b> T-Bill cushion for your exact account scale.</div>' +
+      '    <div>&bull; <b>Lifetime-Updated 14-Page SMH &times; XLV Master PDF Guide:</b> Complete 26-year (2000&ndash;2026) Dot-Com / 2008 / 2022 drawdown study + printable self-directed execution checklist.</div>' +
       "  </div>" +
       '  <div class="tom-wl-plan-grid" role="radiogroup" aria-label="Select VIP Plan to Reserve">' +
       '    <button type="button" class="tom-wl-plan-btn is-selected" data-wl-plan="Monthly VIP ($29/mo)">' +

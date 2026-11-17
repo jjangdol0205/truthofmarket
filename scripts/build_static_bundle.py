@@ -207,6 +207,8 @@ def main() -> None:
     POLAR_TOM_ANNUAL_URL: 'https://buy.polar.sh/polar_cl_IPZpLD1EeUXCrNMxo1Yji8oT8RPgD9jhdassj38WMyf?locale=en',
     SUPPORT_EMAIL: 'beable9489@gmail.com'
   }};
+  var COPY_MODE = (window.PAYMENT_CONFIG && window.PAYMENT_CONFIG.STORE_LIVE_READY) ? 'LIVE_SHARP' : 'UNDERWRITING_SAFE';
+  window.TOM_COPY_MODE = COPY_MODE;
   try {{
     var _th = localStorage.getItem('tom_ui_theme_v2') === 'dark' ? 'dark' : 'light';
     var _px = Number(localStorage.getItem('tom_font_px')) || 18;
@@ -219,19 +221,19 @@ def main() -> None:
   <meta name="google-site-verification" content="nAGlJMEUUPifbzSd8X4PCaBIyr3DtTwaa1a-q9zkbBc" />
   <meta name="google-site-verification" content="G99bl17UU6iKgNm5ndGcSWp0dHFpJ0MjJqBBp0Exfx0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income | TruthOfMarket</title>
-  <meta name="description" content="Self-directed US 401k/IRA Retirement Cashflow &amp; Household Budget Calculator Software. Simulate monthly income with $VOO (S&amp;P 500 Core), $SCHD (Dividend Growth ~3.5%), $JEPI (Monthly Income ~7.4%) &amp; $SGOV (US T-Bill Cash ~4.7%) via calm 2-4x/year budget review." />
+  <title>Historical SMH × XLV Sector Balance Simulator &amp; Daily Market Indicator Digest | TruthOfMarket</title>
+  <meta name="description" content="Balance AI Semiconductor Growth ($SMH) With Healthcare Defense ($XLV) — Self-directed 4-step historical sector balance simulator, 26-year drawdown study, $0 safe-order manual, and daily automated market indicator data digest." />
   <link rel="canonical" href="https://truthofmarket.com/" />
-  <link rel="alternate" type="application/rss+xml" title="TruthOfMarket US 401k/IRA Retirement Cashflow RSS Feed" href="https://truthofmarket.com/rss.xml" />
+  <link rel="alternate" type="application/rss+xml" title="TruthOfMarket SMH × XLV Sector Balance RSS Feed" href="https://truthofmarket.com/rss.xml" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="TruthOfMarket — US 401k/IRA Retirement Cashflow &amp; Household Budget Calculator" />
-  <meta property="og:title" content="Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income | TruthOfMarket" />
-  <meta property="og:description" content="Self-directed educational calculator software to simulate monthly retirement cashflow and calm 2-4x/year $VOO, $SCHD, $JEPI &amp; $SGOV household budget & cashflow planning." />
+  <meta property="og:site_name" content="TruthOfMarket — Historical SMH × XLV Sector Balance Simulator" />
+  <meta property="og:title" content="Balance AI Semiconductor Growth ($SMH) With Healthcare Defense ($XLV) | TruthOfMarket" />
+  <meta property="og:description" content="4-Step Historical SMH × XLV Sector Balance Simulator, 26-Year Dot-Com / 2008 / 2022 Drawdown Study &amp; Daily Automated Market Indicator Data Digest." />
   <meta property="og:url" content="https://truthofmarket.com/" />
   <meta property="og:image" content="https://truthofmarket.com/og-preview.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income | TruthOfMarket" />
-  <meta name="twitter:description" content="30-Second US 401k/IRA Retirement Cashflow &amp; Household Budget Calculator ($VOO · $SCHD · $JEPI · $SGOV)." />
+  <meta name="twitter:title" content="Balance AI Semiconductor Growth ($SMH) With Healthcare Defense ($XLV) | TruthOfMarket" />
+  <meta name="twitter:description" content="4-Step Historical SMH × XLV Sector Balance Simulator &amp; Daily Automated Market Indicator Data Digest." />
   <meta name="twitter:image" content="https://truthofmarket.com/og-preview.png" />
   <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -262,23 +264,23 @@ def main() -> None:
         "publisher": {{
           "@id": "https://truthofmarket.com/#organization"
         }},
-        "description": "Self-directed educational calculator software for US 401k/IRA Retirement Cashflow & Household Budget across VOO, SCHD, JEPI, and SGOV."
+        "description": "Self-directed educational calculator software for Historical SMH × XLV Sector Balance simulation and daily market indicator data digests."
       }},
       {{
         "@type": "SoftwareApplication",
         "@id": "https://truthofmarket.com/#software",
-        "name": "TruthOfMarket US 401k/IRA Retirement Cashflow & Household Budget Calculator",
+        "name": "TruthOfMarket Historical SMH × XLV Sector Balance Simulator",
         "applicationCategory": "FinanceApplication",
         "operatingSystem": "Web",
         "url": "https://truthofmarket.com/",
         "publisher": {{
           "@id": "https://truthofmarket.com/#organization"
         }},
-        "description": "Self-directed educational market data visualization and mathematical portfolio calculator software for US 401k/IRA retirement cashflow and 2-4x/year weight budget review.",
+        "description": "Self-directed educational market data visualization and mathematical sector balance simulator for $SMH (Semiconductors), $XLV (Healthcare), and $SGOV Treasury reserves.",
         "offers": [
           {{
             "@type": "Offer",
-            "name": "Monthly VIP Retirement Income & Budget Calculator Suite ($29/mo)",
+            "name": "Monthly VIP Sector Balance Worksheet & Daily Indicator Digest ($29/mo)",
             "price": "29.00",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
@@ -286,7 +288,7 @@ def main() -> None:
           }},
           {{
             "@type": "Offer",
-            "name": "Annual VIP Retirement Income & Budget Calculator Pass ($199/yr)",
+            "name": "Annual VIP Sector Balance Worksheet & Daily Indicator Pass ($199/yr)",
             "price": "199.00",
             "priceCurrency": "USD",
             "availability": "https://schema.org/InStock",
@@ -299,8 +301,8 @@ def main() -> None:
   </script>
   <script src="/hq_member_crm_client.js" defer></script>
   <script src="/tom_payment_waitlist.js" defer></script>
-  <script type="module" crossorigin src="./assets/{js_name}?v=20261117senior"></script>
-  <link rel="stylesheet" crossorigin href="./assets/{css_name}?v=20261117senior" />
+  <script type="module" crossorigin src="./assets/{js_name}?v=20261118smhxlv"></script>
+  <link rel="stylesheet" crossorigin href="./assets/{css_name}?v=20261118smhxlv" />
   <script>
   /* === HQ Edge Real-Human Visitor & Signup Helper (tom_truthofmarket) === */
   (function(){{
@@ -339,23 +341,23 @@ def main() -> None:
 </head>
 <body style="background:#f8fafc;color:#0f172a;font-size:18px;line-height:1.7;">
   <div id="app">
-    <section class="seo-home-fallback" id="tom-retirement-architect" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;margin:16px auto;padding:26px;background:#ffffff;border:2px solid #059669;border-radius:16px;color:#0f172a;box-shadow:0 8px 24px rgba(15,23,42,0.06);">
-      <div style="margin-bottom:12px;padding:8px 14px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:10px;font-size:0.94rem;font-weight:700;color:#1e293b;">
-        <b>$VOO</b> (S&amp;P 500 Core) &middot; <b>$SCHD</b> (Dividend Growth ~3.5%) &middot; <b>$JEPI</b> (Monthly Income ~7.4%) &middot; <b>$SGOV</b> (US T-Bill Cash ~4.7%) &nbsp;|&nbsp; <b>US Retirement Market Weather (S&amp;P 500 Breadth &amp; Drawdown Guard)</b> &nbsp;|&nbsp; <span>2026-11-16 US Market Close</span>
+    <section class="seo-home-fallback" id="tom-retirement-architect" style="max-width:1020px;width:calc(100% - 24px);box-sizing:border-box;margin:16px auto;padding:26px;background:#ffffff;border:2px solid #059669;border-radius:16px;color:#0f172a;box-shadow:0 8px 24px rgba(15,23,42,0.06);">
+      <div style="margin-bottom:12px;padding:8px 14px;background:#ecfdf5;border:1px solid #059669;border-radius:999px;display:inline-block;font-size:0.88rem;font-weight:800;color:#065f46;">
+        HISTORICAL SMH &times; XLV SECTOR BALANCE SIMULATOR &amp; DAILY AUTOMATED MARKET INDICATOR DATA DIGEST
       </div>
-      <h1 style="font-size:1.85rem;font-weight:900;margin:0 0 10px;color:#0f172a;line-height:1.3;">Turn Your 401(k) &amp; Savings Into Calm, Reliable Monthly Retirement Income.</h1>
-      <p style="margin:0;color:#1e293b;font-size:1.125rem;line-height:1.7;">30-Second Comfortable Retirement &amp; Monthly Cashflow Simulator — Simulate your monthly retirement paycheck ($150k / $400k / $800k / $1.5M presets), cushion your nest egg from sequence-of-returns drawdowns, and adjust budget calmly 2–4 times per year across <b>$VOO</b> (S&amp;P 500 Core), <b>$SCHD</b> (Dividend Growth ~3.5%), <b>$JEPI</b> (Monthly Income ~7.4%), and <b>$SGOV</b> (US T-Bill Cash ~4.7%) aligned with our US Retirement Market Weather indicator.</p>
-      <p id="tomMorningBellClub" style="margin:14px 0 0;padding-top:12px;border-top:1px solid #cbd5e1;color:#92400e;font-size:1.06rem;font-weight:800;line-height:1.65;"><span id="tom-passwordless-club-signup">☕ Morning Bell Retirement &amp; Macro Club — Protecting Your Nest Egg &amp; Monthly Income Together · Free 3-Second Passwordless Membership</span></p>
-      <p id="tomFreeStarterManual" style="margin:8px 0 0;color:#0369a1;font-size:1.06rem;font-weight:800;line-height:1.65;">📘 $0 Free Public Product: US Brokerage App &amp; Calm 2–4x/Year Household Cashflow & Budget Worksheet Manual (Fidelity · Charles Schwab · Vanguard — SGOV/SPAXX Cash Cushion &amp; Limit Order Guide)</p>
+      <h1 style="font-size:1.85rem;font-weight:900;margin:0 0 10px;color:#0f172a;line-height:1.3;">Balance AI Semiconductor Growth ($SMH) With Healthcare Defense ($XLV) &mdash; Sleep Calmly.</h1>
+      <p style="margin:0;color:#1e293b;font-size:1.08rem;line-height:1.7;"><b>Stage 1 &middot; 4-Step Guided Balance Survey (Step 1/4 &rarr; 4/4):</b> Select your objective (AI &amp; Growth Acceleration / Balanced Retirement &amp; Steady Growth / Drawdown Protection First), portfolio scale ($50k / $150k / $300k / $500k / $1M+), drawdown comfort (-10% / -18% / -25%), and current tech mix to calculate your historical <b>$SMH &times; $XLV</b> (+ optional <b>$SGOV</b> T-Bill cushion) baseline ratio.</p>
+      <p id="tomMorningBellClub" style="margin:14px 0 0;padding-top:12px;border-top:1px solid #cbd5e1;color:#1e3a8a;font-size:1.04rem;font-weight:800;line-height:1.65;"><span id="tom-passwordless-club-signup">🔓 Stage 2 &middot; Free 3-Second Passwordless Member Unlock: Instant Personalized $SMH : $XLV Ratio Table + 26-Year Dot-Com / 2008 / 2022 Drawdown Study</span></p>
+      <p id="tomFreeStarterManual" style="margin:8px 0 0;color:#047857;font-size:1.04rem;font-weight:800;line-height:1.65;">📘 $0 Free US Brokerage Safe-Order Starter Manual (Fidelity &middot; Charles Schwab &middot; Vanguard &mdash; Limit Orders &amp; $SMH / $XLV / $SGOV Self-Directed Execution Guide)</p>
       <div style="margin:14px 0 0;padding:14px 16px;border-radius:12px;background:#ecfdf5;border:1.5px solid #059669;color:#064e3b;font-size:1rem;line-height:1.6;">
-        <div style="font-weight:900;margin-bottom:6px;">📦 VIP Retiree Software Suite ($29/mo Monthly VIP &amp; $199/yr Annual VIP):</div>
-        <div>1. <b>Custom Nest-Egg Dollar ($) Budget Worksheet:</b> Enter your exact portfolio size (e.g., $500,000) to calculate exact dollar amounts across $SGOV, $SCHD, $JEPI, and $VOO whenever the 3-Color Weather changes.</div>
-        <div>2. <b>12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Placement Reference:</b> Educational tax-location guide across Traditional IRA, Roth IRA, and Taxable accounts ($JEPI ordinary income vs. $SCHD qualified dividends vs. $SGOV state-tax-exempt T-Bills) to help protect after-tax monthly income.</div>
-        <div>3. <b>Large-Print 1-Page Weather Change Action Sheet (2–4x/Year):</b> Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Retirement Budget Calculator.</div>
+        <div style="font-weight:900;margin-bottom:6px;">📦 Stage 3 &middot; Paid VIP Upgrade ($29/mo Monthly VIP &amp; $199/yr Annual VIP):</div>
+        <div>1. <b>Daily Automated SMH &times; XLV Regime &amp; Ratio Tracking Email Digest:</b> Morning public overheating / fear indicator data and historical $SMH : $XLV sector mix tracking across regimes.</div>
+        <div>2. <b>Account-Size Dollar ($) Allocation Worksheet:</b> Exact dollar amounts across $SMH, $XLV, and optional $SGOV US Treasury cushion for your exact account balance.</div>
+        <div>3. <b>Lifetime-Updated 14-Page SMH &times; XLV Master PDF Guide:</b> Complete 26-year (2000&ndash;2026) empirical crash study &amp; printable 1-page worksheet.</div>
       </div>
       <div style="margin-top:14px;display:flex;gap:12px;flex-wrap:wrap;">
-        <a href="#tom-vip-monthly" class="polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="display:inline-flex;align-items:center;min-height:52px;padding:10px 20px;border-radius:10px;background:#1d4ed8;color:#ffffff;font-weight:800;font-size:1.02rem;text-decoration:none;">⚡ Start Monthly VIP — $29/mo</a>
-        <a href="#tom-vip-annual" class="polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="display:inline-flex;align-items:center;min-height:52px;padding:10px 20px;border-radius:10px;background:#059669;color:#ffffff;font-weight:800;font-size:1.02rem;text-decoration:none;">💎 Start Annual VIP — $199/yr</a>
+        <a href="#tom-vip-monthly" class="polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="display:inline-flex;align-items:center;min-height:52px;padding:10px 20px;border-radius:10px;background:#1d4ed8;color:#ffffff;font-weight:800;font-size:1.02rem;text-decoration:none;">⚡ Start Monthly VIP &mdash; $29/mo</a>
+        <a href="#tom-vip-annual" class="polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="display:inline-flex;align-items:center;min-height:52px;padding:10px 20px;border-radius:10px;background:#059669;color:#ffffff;font-weight:800;font-size:1.02rem;text-decoration:none;">💎 Start Annual VIP &mdash; $199/yr (Save 43%)</a>
       </div>
       <p style="margin:10px 0 0;font-size:0.92rem;color:#334155;font-weight:700;">💳 Checkout &amp; Billing: Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · 14-Day Refund Policy</p>
       <p style="margin:12px 0 0;padding-top:10px;border-top:1px solid #e2e8f0;font-size:0.92rem;color:#475569;font-weight:600;">Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.</p>
