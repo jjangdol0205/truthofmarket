@@ -5182,7 +5182,34 @@ html[data-tom-theme="dark"] .tom-unlocked-manual-btn {
     line-height: 1.12;
     letter-spacing: -0.02em;
     color: #0F172A;
-    margin: 0 0 26px;
+    margin: 0 0 22px;
+  }
+  .pw-editorial-figure {
+    margin: 0 0 30px;
+    padding: 0;
+  }
+  .pw-editorial-plate {
+    width: 100%;
+    background: #FBFBF9;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .pw-editorial-plate img {
+    display: block;
+    width: 100%;
+    max-height: 390px;
+    height: auto;
+    object-fit: contain;
+    margin: 0 auto;
+  }
+  .pw-editorial-caption {
+    margin: 8px 0 0;
+    font-family: 'Instrument Serif', 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    color: #64748B;
+    text-align: center;
   }
   .pw-serif-h2 {
     font-family: 'Instrument Serif', 'Playfair Display', Georgia, 'Times New Roman', serif;

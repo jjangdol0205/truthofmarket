@@ -302,8 +302,8 @@ def main() -> None:
   </script>
   <script src="/hq_member_crm_client.js" defer></script>
   <script src="/tom_payment_waitlist.js" defer></script>
-  <script type="module" crossorigin src="./assets/{js_name}?v=20261118smhxlv"></script>
-  <link rel="stylesheet" crossorigin href="./assets/{css_name}?v=20261118smhxlv" />
+  <script type="module" crossorigin src="./assets/{js_name}?v=20261118study"></script>
+  <link rel="stylesheet" crossorigin href="./assets/{css_name}?v=20261118study" />
   <script>
   /* === HQ Edge Real-Human Visitor & Signup Helper (tom_truthofmarket) === */
   (function(){{
@@ -355,6 +355,13 @@ def main() -> None:
       <section id="pwScreen0" data-pw-screen="0">
         <div class="pw-kicker">FOUNDING CHARTER &middot; QUANTITATIVE SECTOR ARCHITECTURE</div>
         <h1 class="pw-serif-h1">Why quiet two-pillar discipline outlasts loud stock picking.</h1>
+
+        <figure class="pw-editorial-figure">
+          <div class="pw-editorial-plate">
+            <img src="/images/tom-private-wealth-study.jpg" alt="Sunlit coastal study desk overlooking quiet morning harbor water" width="1200" height="675" loading="eager" decoding="async" />
+          </div>
+          <figcaption class="pw-editorial-caption">Quiet discipline over daily market noise &mdash; designing a household portfolio calm enough to hold through every cycle.</figcaption>
+        </figure>
 
         <div class="pw-manifesto">
           <p>

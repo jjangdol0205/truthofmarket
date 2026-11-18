@@ -1,5 +1,5 @@
 {
-  "lastUpdatedKst": "2026-11-15 08:34:01 KST",
+  "lastUpdatedKst": "2026-11-17 13:50:28 KST",
   "lastTelegramSentMs": 1794626680706,
   "divisions": {
     "tom_truthofmarket": {
@@ -86,6 +86,22 @@
         "2026-11-15": {
           "uv": 3,
           "pv": 4,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-17": {
+          "uv": 3,
+          "pv": 7,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-16": {
+          "uv": 3,
+          "pv": 3,
           "signup": 0,
           "paidClick": 0,
           "paidMember": 0,
@@ -196,6 +212,22 @@
           "paidClick": 0,
           "paidMember": 0,
           "refClick": 0
+        },
+        "2026-11-17": {
+          "uv": 3,
+          "pv": 7,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-16": {
+          "uv": 5,
+          "pv": 6,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
         }
       },
       "backfilledCounterV2": true
@@ -294,6 +326,22 @@
           "paidClick": 0,
           "paidMember": 0,
           "refClick": 0
+        },
+        "2026-11-17": {
+          "uv": 3,
+          "pv": 6,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-16": {
+          "uv": 5,
+          "pv": 6,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
         }
       },
       "backfilledCounterV2": true
@@ -378,6 +426,22 @@
         "2026-11-15": {
           "uv": 0,
           "pv": 0,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-17": {
+          "uv": 2,
+          "pv": 7,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-16": {
+          "uv": 1,
+          "pv": 1,
           "signup": 0,
           "paidClick": 0,
           "paidMember": 0,
@@ -516,6 +580,22 @@
         },
         "2026-11-15": {
           "uv": 5,
+          "pv": 5,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-17": {
+          "uv": 2,
+          "pv": 11,
+          "signup": 0,
+          "paidClick": 0,
+          "paidMember": 0,
+          "refClick": 0
+        },
+        "2026-11-16": {
+          "uv": 3,
           "pv": 5,
           "signup": 0,
           "paidClick": 0,
