@@ -61,7 +61,7 @@
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://truthofmarket.com/stocks/qcom.html</loc>
+    <loc>https://truthofmarket.com/stocks/lulu.html</loc>
     <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
@@ -71,6 +71,12 @@
     <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://truthofmarket.com/stocks/tsla.html</loc>
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.90</priority>
   </url>
   <url>
     <loc>https://truthofmarket.com/stocks/app.html</loc>
@@ -97,22 +103,10 @@
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://truthofmarket.com/stocks/lulu.html</loc>
+    <loc>https://truthofmarket.com/stocks/qcom.html</loc>
     <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>https://truthofmarket.com/stocks/ual.html</loc>
-    <lastmod>2026-11-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>https://truthofmarket.com/stocks/tsla.html</loc>
-    <lastmod>2026-11-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.90</priority>
   </url>
   <url>
     <loc>https://truthofmarket.com/stocks/smci.html</loc>
@@ -151,25 +145,25 @@
     <priority>0.80</priority>
   </url>
   <url>
+    <loc>https://truthofmarket.com/stocks/snap.html</loc>
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://truthofmarket.com/stocks/ual.html</loc>
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
     <loc>https://truthofmarket.com/stocks/meta.html</loc>
     <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://truthofmarket.com/stocks/mdb.html</loc>
-    <lastmod>2026-11-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
     <loc>https://truthofmarket.com/stocks/tsm.html</loc>
-    <lastmod>2026-11-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>https://truthofmarket.com/stocks/gm.html</loc>
     <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
@@ -182,12 +176,6 @@
   </url>
   <url>
     <loc>https://truthofmarket.com/stocks/hood.html</loc>
-    <lastmod>2026-11-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>https://truthofmarket.com/stocks/snap.html</loc>
     <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
@@ -247,16 +235,16 @@
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://truthofmarket.com/stocks/on.html</loc>
+    <loc>https://truthofmarket.com/stocks/net.html</loc>
     <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://truthofmarket.com/stocks/spot.html</loc>
+    <loc>https://truthofmarket.com/stocks/amd.html</loc>
     <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.80</priority>
+    <priority>0.90</priority>
   </url>
   <url>
     <loc>https://truthofmarket.com/stocks/regn.html</loc>
@@ -277,12 +265,6 @@
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://truthofmarket.com/stocks/dal.html</loc>
-    <lastmod>2026-11-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
     <loc>https://truthofmarket.com/stocks/u.html</loc>
     <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
@@ -295,13 +277,25 @@
     <priority>0.80</priority>
   </url>
   <url>
+    <loc>https://truthofmarket.com/stocks/gm.html</loc>
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
     <loc>https://truthofmarket.com/stocks/sofi.html</loc>
     <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://truthofmarket.com/stocks/net.html</loc>
+    <loc>https://truthofmarket.com/stocks/f.html</loc>
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://truthofmarket.com/stocks/on.html</loc>
     <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
@@ -343,25 +337,7 @@
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://truthofmarket.com/stocks/amd.html</loc>
-    <lastmod>2026-11-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.90</priority>
-  </url>
-  <url>
-    <loc>https://truthofmarket.com/stocks/crox.html</loc>
-    <lastmod>2026-11-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>https://truthofmarket.com/stocks/pypl.html</loc>
-    <lastmod>2026-11-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>https://truthofmarket.com/stocks/f.html</loc>
+    <loc>https://truthofmarket.com/stocks/mdb.html</loc>
     <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
@@ -397,19 +373,31 @@
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://truthofmarket.com/stocks/crwd.html</loc>
-    <lastmod>2026-11-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
     <loc>https://truthofmarket.com/stocks/pltr.html</loc>
     <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://truthofmarket.com/stocks/shop.html</loc>
+    <loc>https://truthofmarket.com/stocks/spot.html</loc>
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://truthofmarket.com/stocks/dal.html</loc>
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://truthofmarket.com/stocks/crox.html</loc>
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://truthofmarket.com/stocks/crwd.html</loc>
     <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
@@ -421,13 +409,7 @@
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://truthofmarket.com/stocks/xom.html</loc>
-    <lastmod>2026-11-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>https://truthofmarket.com/stocks/para.html</loc>
+    <loc>https://truthofmarket.com/stocks/shop.html</loc>
     <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
@@ -439,7 +421,25 @@
     <priority>0.80</priority>
   </url>
   <url>
+    <loc>https://truthofmarket.com/stocks/pypl.html</loc>
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://truthofmarket.com/stocks/xom.html</loc>
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
     <loc>https://truthofmarket.com/stocks/oxy.html</loc>
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://truthofmarket.com/stocks/para.html</loc>
     <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
@@ -985,7 +985,7 @@
     <priority>0.88</priority>
   </url>
   <url>
-    <loc>https://truthofmarket.com/insights/2026-11-17-us-quant-regime-brief.html</loc>
+    <loc>https://truthofmarket.com/insights/2026-11-18-us-quant-regime-brief.html</loc>
     <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.88</priority>
@@ -1010,6 +1010,12 @@
   </url>
   <url>
     <loc>https://truthofmarket.com/insights/2026-11-16-us-quant-regime-brief.html</loc>
+    <lastmod>2026-11-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.88</priority>
+  </url>
+  <url>
+    <loc>https://truthofmarket.com/insights/2026-11-17-us-quant-regime-brief.html</loc>
     <lastmod>2026-11-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.88</priority>

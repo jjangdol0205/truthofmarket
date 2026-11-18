@@ -1,11 +1,11 @@
 # TruthOfMarket (https://truthofmarket.com) — Educational Market Data & Retirement Cashflow Corpus
 > Operated by: Educational Market Data & Quantitative Research Desk (beable9489@gmail.com)
-> Updated: 2026-11-17 | US 401(k)/IRA Retirement Cashflow Calculator + Market Weather + 76 US Equity Factor Studies
+> Updated: 2026-11-18 | US 401(k)/IRA Retirement Cashflow Calculator + Market Weather + 76 US Equity Factor Studies
 > Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.
 
 ## 1. Core Retirement Cashflow & Market Weather Tools
 - 30-Second US 401(k)/IRA Retirement Cashflow Calculator (SGOV · SCHD · JEPI · VOO): https://truthofmarket.com/
-- Market Weather & $SMH:$XLV Barbell Calculator (11.4/100): https://truthofmarket.com/semi-fear-greed.html
+- Market Weather & $SMH:$XLV Barbell Calculator (10.6/100): https://truthofmarket.com/semi-fear-greed.html
 - Self-Directed Quantitative Research Archive: https://truthofmarket.com/pro-swing.html
 - Educational Insights Journal: https://truthofmarket.com/insights/
 - Legal Policies: https://truthofmarket.com/terms.html | https://truthofmarket.com/privacy.html | https://truthofmarket.com/refund.html
@@ -13,78 +13,78 @@
 ## 2. 76 US Equity & ETF Public Factor Dataset
 | Ticker | Company | Close | Factor Score | 14D RSI | 10D Vol Ratio | Lower Variance Ref | Regime | Study URL |
 |---|---|---|---|---|---|---|---|---|
-| $CELH | Celsius Holdings | $31.18 | 98/100 | 54.9 | 2.46x | $28.37 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/celh.html |
-| $CVNA | Carvana Co | $71.10 | 90/100 | 54.8 | 1.89x | $64.70 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/cvna.html |
-| $AVGO | Broadcom Inc | $341.60 | 84/100 | 51.4 | 2.33x | $310.86 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/avgo.html |
-| $QCOM | Qualcomm Inc | $166.67 | 80/100 | 44.7 | 3.12x | $151.67 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/qcom.html |
-| $KLAC | KLA Corp | $144.56 | 80/100 | 41.2 | 2.49x | $131.55 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/klac.html |
-| $APP | AppLovin Corp | $398.94 | 75/100 | 67.5 | 4.32x | $363.04 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/app.html |
-| $DIS | Walt Disney Co | $116.94 | 75/100 | 59.0 | 2.31x | $106.42 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/dis.html |
-| $AMZN | Amazon.com Inc | $257.89 | 75/100 | 49.7 | 2.04x | $234.68 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/amzn.html |
-| $SBUX | Starbucks Corp | $107.49 | 75/100 | 59.6 | 1.45x | $97.82 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/sbux.html |
-| $LULU | Lululemon Athletica | $104.14 | 72/100 | 48.1 | 1.21x | $94.77 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/lulu.html |
-| $UAL | United Airlines | $106.35 | 70/100 | 46.4 | 1.46x | $96.78 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/ual.html |
-| $TSLA | Tesla Inc | $380.11 | 70/100 | 49.6 | 1.99x | $345.90 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/tsla.html |
-| $SMCI | Super Micro Computer | $24.14 | 70/100 | 31.7 | 2.40x | $21.97 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/smci.html |
-| $GE | GE Aerospace | $326.40 | 67/100 | 54.0 | 1.20x | $297.02 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/ge.html |
-| $VRTX | Vertex Pharmaceuticals | $534.20 | 65/100 | 50.4 | 1.47x | $486.12 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/vrtx.html |
-| $UBER | Uber Technologies | $68.81 | 65/100 | 49.1 | 2.07x | $62.62 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/uber.html |
-| $DUOL | Duolingo Inc | $160.08 | 65/100 | 55.9 | 6.90x | $145.67 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/duol.html |
-| $MPWR | Monolithic Power Systems | $1317.37 | 65/100 | 51.1 | 2.52x | $1198.81 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mpwr.html |
-| $META | Meta Platforms Inc | $618.87 | 62/100 | 42.0 | 1.33x | $563.17 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/meta.html |
-| $MDB | MongoDB Inc | $298.63 | 62/100 | 35.6 | 1.29x | $271.75 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mdb.html |
-| $TSM | TSMC (ADR) | $359.69 | 60/100 | 35.7 | 3.08x | $327.32 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/tsm.html |
-| $GM | General Motors Co | $84.05 | 57/100 | 48.0 | 1.28x | $76.49 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/gm.html |
-| $CCL | Carnival Corp | $28.16 | 55/100 | 49.4 | 1.47x | $25.63 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/ccl.html |
-| $HOOD | Robinhood Markets | $69.19 | 55/100 | 27.2 | 1.63x | $62.96 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/hood.html |
-| $SNAP | Snap Inc | $5.50 | 55/100 | 49.1 | 1.86x | $5.00 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/snap.html |
-| $DECK | Deckers Outdoor | $81.48 | 55/100 | 43.3 | 1.41x | $74.15 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/deck.html |
-| $MBLY | Mobileye Global | $5.19 | 55/100 | 32.0 | 2.36x | $4.72 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/mbly.html |
-| $FSLR | First Solar Inc | $152.97 | 55/100 | 30.7 | 3.41x | $139.20 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/fslr.html |
-| $ENPH | Enphase Energy | $23.06 | 55/100 | 31.5 | 2.16x | $20.98 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/enph.html |
-| $UPST | Upstart Holdings | $18.13 | 55/100 | 30.9 | 1.72x | $16.50 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/upst.html |
-| $FLNC | Fluence Energy | $4.08 | 55/100 | 29.4 | 2.77x | $3.71 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/flnc.html |
-| $COIN | Coinbase Global | $115.02 | 55/100 | 27.4 | 1.43x | $104.67 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/coin.html |
-| $SEDG | SolarEdge Tech | $21.72 | 55/100 | 29.3 | 2.92x | $19.77 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/sedg.html |
-| $NVDA | NVIDIA Corp | $155.46 | 55/100 | 22.5 | 3.80x | $141.47 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/nvda.html |
-| $ON | ON Semiconductor | $67.93 | 55/100 | 43.3 | 2.34x | $61.82 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/on.html |
-| $SPOT | Spotify Tech | $602.01 | 50/100 | 58.2 | 1.47x | $547.83 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/spot.html |
-| $REGN | Regeneron Pharma | $957.76 | 50/100 | 68.3 | 1.62x | $871.56 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/regn.html |
-| $LLY | Eli Lilly & Co | $1415.55 | 50/100 | 63.2 | 1.73x | $1288.15 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/lly.html |
+| $CELH | Celsius Holdings | $32.23 | 98/100 | 59.9 | 2.46x | $29.33 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/celh.html |
+| $CVNA | Carvana Co | $71.86 | 90/100 | 56.0 | 1.37x | $65.39 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/cvna.html |
+| $AVGO | Broadcom Inc | $351.60 | 90/100 | 54.4 | 2.33x | $319.96 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/avgo.html |
+| $LULU | Lululemon Athletica | $109.36 | 84/100 | 56.7 | 0.95x | $99.52 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/lulu.html |
+| $KLAC | KLA Corp | $143.96 | 80/100 | 40.9 | 2.49x | $131.00 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/klac.html |
+| $TSLA | Tesla Inc | $380.06 | 80/100 | 49.6 | 1.99x | $345.85 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/tsla.html |
+| $APP | AppLovin Corp | $395.27 | 75/100 | 66.2 | 4.32x | $359.70 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/app.html |
+| $DIS | Walt Disney Co | $119.50 | 75/100 | 64.8 | 2.33x | $108.75 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/dis.html |
+| $AMZN | Amazon.com Inc | $262.63 | 75/100 | 53.6 | 1.79x | $238.99 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/amzn.html |
+| $SBUX | Starbucks Corp | $107.78 | 75/100 | 60.2 | 1.45x | $98.08 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/sbux.html |
+| $QCOM | Qualcomm Inc | $162.37 | 70/100 | 41.7 | 3.12x | $147.76 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/qcom.html |
+| $SMCI | Super Micro Computer | $24.31 | 70/100 | 32.3 | 2.40x | $22.12 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/smci.html |
+| $GE | GE Aerospace | $326.11 | 67/100 | 53.8 | 1.20x | $296.76 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/ge.html |
+| $VRTX | Vertex Pharmaceuticals | $531.88 | 65/100 | 49.1 | 1.47x | $484.01 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/vrtx.html |
+| $UBER | Uber Technologies | $68.60 | 65/100 | 48.4 | 1.62x | $62.43 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/uber.html |
+| $DUOL | Duolingo Inc | $160.71 | 65/100 | 56.2 | 1.62x | $146.25 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/duol.html |
+| $MPWR | Monolithic Power Systems | $1306.92 | 65/100 | 50.3 | 2.52x | $1189.30 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mpwr.html |
+| $SNAP | Snap Inc | $5.51 | 65/100 | 49.4 | 1.78x | $5.01 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/snap.html |
+| $UAL | United Airlines | $107.10 | 62/100 | 47.3 | 1.21x | $97.46 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/ual.html |
+| $META | Meta Platforms Inc | $611.79 | 62/100 | 40.3 | 1.15x | $556.73 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/meta.html |
+| $TSM | TSMC (ADR) | $361.07 | 60/100 | 36.2 | 3.08x | $328.57 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/tsm.html |
+| $CCL | Carnival Corp | $28.68 | 57/100 | 52.3 | 1.24x | $26.10 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/ccl.html |
+| $HOOD | Robinhood Markets | $68.29 | 55/100 | 26.6 | 1.63x | $62.14 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/hood.html |
+| $DECK | Deckers Outdoor | $82.28 | 55/100 | 45.1 | 1.41x | $74.87 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/deck.html |
+| $MBLY | Mobileye Global | $5.15 | 55/100 | 31.6 | 2.36x | $4.69 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/mbly.html |
+| $FSLR | First Solar Inc | $153.88 | 55/100 | 31.6 | 2.36x | $140.03 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/fslr.html |
+| $ENPH | Enphase Energy | $22.99 | 55/100 | 31.4 | 1.38x | $20.92 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/enph.html |
+| $UPST | Upstart Holdings | $18.08 | 55/100 | 30.7 | 1.69x | $16.45 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/upst.html |
+| $FLNC | Fluence Energy | $4.16 | 55/100 | 30.8 | 1.52x | $3.79 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/flnc.html |
+| $COIN | Coinbase Global | $111.88 | 55/100 | 26.3 | 1.43x | $101.81 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/coin.html |
+| $SEDG | SolarEdge Tech | $21.22 | 55/100 | 28.5 | 2.27x | $19.31 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/sedg.html |
+| $NVDA | NVIDIA Corp | $152.82 | 55/100 | 21.7 | 3.80x | $139.07 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/nvda.html |
+| $NET | Cloudflare Inc | $295.17 | 55/100 | 47.8 | 2.39x | $268.60 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/net.html |
+| $AMD | Advanced Micro Devices | $506.94 | 55/100 | 47.1 | 2.74x | $461.32 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/amd.html |
+| $REGN | Regeneron Pharma | $955.30 | 50/100 | 67.4 | 1.55x | $869.32 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/regn.html |
+| $LLY | Eli Lilly & Co | $1389.00 | 50/100 | 57.4 | 1.73x | $1263.99 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/lly.html |
 | $ROKU | Roku Inc | $160.52 | 50/100 | 61.0 | 3.44x | $146.07 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/roku.html |
-| $DAL | Delta Air Lines | $84.30 | 50/100 | 50.0 | 1.57x | $76.71 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/dal.html |
-| $U | Unity Software Inc | $50.36 | 50/100 | 62.3 | 4.39x | $45.83 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/u.html |
-| $PINS | Pinterest Inc | $18.07 | 50/100 | 35.2 | 0.99x | $16.44 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/pins.html |
-| $SOFI | SoFi Technologies | $14.28 | 47/100 | 36.9 | 1.34x | $12.99 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/sofi.html |
-| $NET | Cloudflare Inc | $284.80 | 45/100 | 44.4 | 2.39x | $259.17 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/net.html |
-| $AMAT | Applied Materials | $349.23 | 45/100 | 38.6 | 2.10x | $317.80 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/amat.html |
-| $LRCX | Lam Research Corp | $210.69 | 45/100 | 37.6 | 2.48x | $191.73 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/lrcx.html |
-| $ARM | Arm Holdings plc | $183.39 | 45/100 | 40.0 | 2.68x | $166.88 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/arm.html |
-| $MU | Micron Technology | $712.42 | 45/100 | 37.5 | 2.66x | $648.30 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mu.html |
-| $MRVL | Marvell Technology | $148.74 | 45/100 | 34.2 | 2.39x | $135.35 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mrvl.html |
-| $DDOG | Datadog Inc | $165.18 | 45/100 | 26.6 | 3.41x | $150.31 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/ddog.html |
-| $AMD | Advanced Micro Devices | $503.41 | 45/100 | 46.6 | 2.74x | $458.10 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/amd.html |
-| $CROX | Crocs Inc | $158.79 | 42/100 | 66.1 | 1.27x | $144.50 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/crox.html |
-| $PYPL | PayPal Holdings | $58.11 | 42/100 | 51.9 | 1.18x | $52.88 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/pypl.html |
-| $F | Ford Motor Co | $11.34 | 37/100 | 34.6 | 1.27x | $10.32 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/f.html |
-| $NFLX | Netflix Inc | $59.68 | 35/100 | 33.0 | 1.08x | $54.31 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/nflx.html |
-| $ASML | ASML Holding N.V. | $1383.11 | 35/100 | 34.9 | 2.36x | $1258.63 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/asml.html |
-| $SNOW | Snowflake Inc | $272.94 | 35/100 | 35.7 | 1.64x | $248.38 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/snow.html |
-| $PANW | Palo Alto Networks | $309.29 | 35/100 | 35.1 | 2.19x | $281.45 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/panw.html |
-| $AFRM | Affirm Holdings | $59.44 | 35/100 | 30.8 | 2.33x | $54.09 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/afrm.html |
-| $CRWD | CrowdStrike Holdings | $219.58 | 35/100 | 38.7 | 1.86x | $199.82 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/crwd.html |
-| $PLTR | Palantir Technologies | $156.56 | 35/100 | 32.8 | 1.84x | $142.47 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/pltr.html |
-| $SHOP | Shopify Inc | $141.90 | 35/100 | 39.0 | 1.41x | $129.13 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/shop.html |
-| $NKE | Nike Inc | $35.85 | 30/100 | 40.3 | 2.75x | $32.62 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/nke.html |
-| $XOM | Exxon Mobil Corp | $167.21 | 30/100 | 45.0 | 1.95x | $152.16 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/xom.html |
-| $PARA | Paramount Global | $0.07 | 30/100 | 42.4 | 12.94x | $0.06 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/para.html |
-| $ZS | Zscaler Inc | $185.19 | 25/100 | 32.2 | 1.13x | $168.52 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/zs.html |
-| $OXY | Occidental Petroleum | $56.52 | 20/100 | 38.8 | 1.75x | $51.43 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/oxy.html |
-| $ALB | Albemarle Corp | $87.67 | 15/100 | 33.3 | 2.27x | $79.78 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/alb.html |
-| $MRNA | Moderna Inc | $206.80 | 15/100 | 44.4 | 0.98x | $188.19 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mrna.html |
-| $PFE | Pfizer Inc | $28.47 | 15/100 | 43.2 | 1.58x | $25.91 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/pfe.html |
-| $BA | Boeing Co | $163.91 | 15/100 | 30.8 | 1.12x | $149.16 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/ba.html |
-| $INTC | Intel Corp | $55.17 | 15/100 | 29.7 | 1.94x | $50.20 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/intc.html |
+| $U | Unity Software Inc | $50.07 | 50/100 | 61.3 | 4.39x | $45.56 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/u.html |
+| $PINS | Pinterest Inc | $17.87 | 50/100 | 34.1 | 0.92x | $16.26 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/pins.html |
+| $GM | General Motors Co | $83.55 | 47/100 | 47.0 | 1.28x | $76.03 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/gm.html |
+| $SOFI | SoFi Technologies | $14.21 | 47/100 | 36.4 | 1.34x | $12.93 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/sofi.html |
+| $F | Ford Motor Co | $11.27 | 47/100 | 33.6 | 1.27x | $10.26 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/f.html |
+| $ON | ON Semiconductor | $67.39 | 45/100 | 42.6 | 2.34x | $61.32 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/on.html |
+| $AMAT | Applied Materials | $349.77 | 45/100 | 38.8 | 2.10x | $318.29 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/amat.html |
+| $LRCX | Lam Research Corp | $209.70 | 45/100 | 37.3 | 2.48x | $190.83 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/lrcx.html |
+| $ARM | Arm Holdings plc | $185.76 | 45/100 | 41.0 | 2.68x | $169.04 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/arm.html |
+| $MU | Micron Technology | $699.00 | 45/100 | 36.5 | 2.66x | $636.09 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mu.html |
+| $MRVL | Marvell Technology | $144.93 | 45/100 | 33.2 | 2.39x | $131.89 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mrvl.html |
+| $DDOG | Datadog Inc | $167.07 | 45/100 | 27.9 | 2.40x | $152.03 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/ddog.html |
+| $MDB | MongoDB Inc | $304.34 | 37/100 | 37.8 | 1.29x | $276.95 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mdb.html |
+| $NFLX | Netflix Inc | $59.67 | 35/100 | 33.0 | 1.08x | $54.30 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/nflx.html |
+| $ASML | ASML Holding N.V. | $1383.00 | 35/100 | 34.9 | 2.36x | $1258.53 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/asml.html |
+| $SNOW | Snowflake Inc | $275.53 | 35/100 | 37.2 | 1.64x | $250.73 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/snow.html |
+| $PANW | Palo Alto Networks | $327.40 | 35/100 | 43.2 | 2.19x | $297.93 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/panw.html |
+| $AFRM | Affirm Holdings | $59.01 | 35/100 | 30.3 | 2.33x | $53.70 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/afrm.html |
+| $PLTR | Palantir Technologies | $155.00 | 35/100 | 32.0 | 1.84x | $141.05 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/pltr.html |
+| $SPOT | Spotify Tech | $609.04 | 30/100 | 60.2 | 0.95x | $554.23 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/spot.html |
+| $DAL | Delta Air Lines | $84.81 | 30/100 | 51.0 | 1.11x | $77.18 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/dal.html |
+| $CROX | Crocs Inc | $161.79 | 30/100 | 68.2 | 1.01x | $147.23 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/crox.html |
+| $CRWD | CrowdStrike Holdings | $231.26 | 30/100 | 46.8 | 1.86x | $210.45 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/crwd.html |
+| $NKE | Nike Inc | $36.10 | 30/100 | 41.7 | 2.82x | $32.85 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/nke.html |
+| $SHOP | Shopify Inc | $140.42 | 27/100 | 38.0 | 1.28x | $127.78 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/shop.html |
+| $ZS | Zscaler Inc | $192.95 | 25/100 | 39.1 | 1.13x | $175.58 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/zs.html |
+| $PYPL | PayPal Holdings | $57.80 | 20/100 | 50.4 | 1.04x | $52.60 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/pypl.html |
+| $XOM | Exxon Mobil Corp | $163.41 | 20/100 | 39.9 | 1.40x | $148.70 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/xom.html |
+| $OXY | Occidental Petroleum | $54.66 | 20/100 | 33.4 | 1.75x | $49.74 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/oxy.html |
+| $PARA | Paramount Global | $0.06 | 15/100 | 42.3 | 12.94x | $0.05 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/para.html |
+| $ALB | Albemarle Corp | $87.04 | 15/100 | 32.5 | 1.67x | $79.21 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/alb.html |
+| $MRNA | Moderna Inc | $201.50 | 15/100 | 42.8 | 0.98x | $183.37 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/mrna.html |
+| $PFE | Pfizer Inc | $28.10 | 15/100 | 39.6 | 1.58x | $25.57 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/pfe.html |
+| $BA | Boeing Co | $161.81 | 15/100 | 29.1 | 1.12x | $147.25 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/ba.html |
+| $INTC | Intel Corp | $53.91 | 15/100 | 28.9 | 1.94x | $49.06 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/intc.html |
 | $VOO | Vanguard S&P 500 ETF | $548.60 | 96/100 | 58.4 | 1.28x | $499.23 | RETIREMENT BUCKET 3 · S&P 500 CORE | https://truthofmarket.com/stocks/voo.html |
 | $SCHD | Schwab US Dividend Equity ETF | $29.45 | 95/100 | 56.8 | 1.28x | $26.80 | RETIREMENT BUCKET 2 · DIVIDEND GROWTH | https://truthofmarket.com/stocks/schd.html |
 | $JEPI | JPMorgan Equity Premium Income ETF | $59.18 | 94/100 | 54.9 | 1.28x | $53.85 | RETIREMENT BUCKET 2 · MONTHLY PAYCHECK | https://truthofmarket.com/stocks/jepi.html |
@@ -108,60 +108,60 @@
 | $MSTR | MicroStrategy Inc | $342.50 | 58/100 | 41.2 | 1.28x | $311.68 | VOLATILITY & RISK PROFILE | https://truthofmarket.com/stocks/mstr.html |
 | $TQQQ | ProShares UltraPro QQQ (3x Daily Leveraged) | $78.20 | 60/100 | 44.8 | 1.28x | $71.16 | VOLATILITY & RISK PROFILE (3X DAILY DECAY) | https://truthofmarket.com/stocks/tqqq.html |
 | $RIVN | Rivian Automotive Inc | $10.65 | 52/100 | 38.5 | 1.28x | $9.69 | VOLATILITY & RISK PROFILE | https://truthofmarket.com/stocks/rivn.html |
-| $SMH | VanEck Semiconductor ETF | $460.10 | 88/100 | 35.3 | 1.68x | $418.69 | BARBELL GROWTH SLEEVE (70%-80% MODEL) | https://truthofmarket.com/stocks/smh.html |
-| $XLV | Health Care Select Sector SPDR ETF | $185.24 | 82/100 | 54.5 | 1.12x | $168.57 | DEFENSIVE HEALTHCARE SLEEVE (20%-30% MODEL) | https://truthofmarket.com/stocks/xlv.html |
+| $SMH | VanEck Semiconductor ETF | $457.91 | 88/100 | 34.9 | 1.68x | $416.70 | BARBELL GROWTH SLEEVE (70%-80% MODEL) | https://truthofmarket.com/stocks/smh.html |
+| $XLV | Health Care Select Sector SPDR ETF | $182.14 | 82/100 | 54.5 | 1.12x | $165.75 | DEFENSIVE HEALTHCARE SLEEVE (20%-30% MODEL) | https://truthofmarket.com/stocks/xlv.html |
 | $SOXL | Direxion Daily Semiconductor Bull 3X Shares | $28.40 | 55/100 | 36.4 | 1.94x | $25.84 | VOLATILITY & RISK PROFILE (3X DAILY DECAY) | https://truthofmarket.com/stocks/soxl.html |
-| $QQQ | Invesco QQQ Trust (Nasdaq-100 ETF) | $656.95 | 80/100 | 51.8 | 1.18x | $597.82 | CORE BENCHMARK TREND | https://truthofmarket.com/stocks/qqq.html |
+| $QQQ | Invesco QQQ Trust (Nasdaq-100 ETF) | $655.94 | 80/100 | 51.8 | 1.18x | $596.91 | CORE BENCHMARK TREND | https://truthofmarket.com/stocks/qqq.html |
 
 ## 3. 50 Side-by-Side Quantitative Factor Comparisons (/compare/)
-- $NVDA vs $AMD (AI GPU Leader vs Data Center Challenger): Higher Factor Score=$NVDA | $NVDA=55/100 (3.80x Vol) vs $AMD=45/100 (2.74x Vol) -> https://truthofmarket.com/compare/nvda-vs-amd.html
+- $NVDA vs $AMD (AI GPU Leader vs Data Center Challenger): Higher Factor Score=$NVDA | $NVDA=55/100 (3.80x Vol) vs $AMD=55/100 (2.74x Vol) -> https://truthofmarket.com/compare/nvda-vs-amd.html
 - $SOXL vs $SMH (3x Leveraged Decay vs Spot Semiconductor ETF): Higher Factor Score=$SMH | $SOXL=55/100 (1.94x Vol) vs $SMH=88/100 (1.68x Vol) -> https://truthofmarket.com/compare/soxl-vs-smh.html
-- $TSLA vs $NVDA (Megacap Volatility vs AI Compute Scale): Higher Factor Score=$TSLA | $TSLA=70/100 (1.99x Vol) vs $NVDA=55/100 (3.80x Vol) -> https://truthofmarket.com/compare/tsla-vs-nvda.html
+- $TSLA vs $NVDA (Megacap Volatility vs AI Compute Scale): Higher Factor Score=$TSLA | $TSLA=80/100 (1.99x Vol) vs $NVDA=55/100 (3.80x Vol) -> https://truthofmarket.com/compare/tsla-vs-nvda.html
 - $PLTR vs $NVDA (Enterprise AI Software vs AI Silicon): Higher Factor Score=$NVDA | $PLTR=35/100 (1.84x Vol) vs $NVDA=55/100 (3.80x Vol) -> https://truthofmarket.com/compare/pltr-vs-nvda.html
-- $AVGO vs $NVDA (Custom AI Networking vs GPU Architecture): Higher Factor Score=$AVGO | $AVGO=84/100 (2.33x Vol) vs $NVDA=55/100 (3.80x Vol) -> https://truthofmarket.com/compare/avgo-vs-nvda.html
+- $AVGO vs $NVDA (Custom AI Networking vs GPU Architecture): Higher Factor Score=$AVGO | $AVGO=90/100 (2.33x Vol) vs $NVDA=55/100 (3.80x Vol) -> https://truthofmarket.com/compare/avgo-vs-nvda.html
 - $SMH vs $XLV (Barbell Core ETF Correlation Study): Higher Factor Score=$SMH | $SMH=88/100 (1.68x Vol) vs $XLV=82/100 (1.12x Vol) -> https://truthofmarket.com/compare/smh-vs-xlv.html
 - $QQQ vs $SMH (Nasdaq-100 Benchmark vs Semiconductor ETF): Higher Factor Score=$SMH | $QQQ=80/100 (1.18x Vol) vs $SMH=88/100 (1.68x Vol) -> https://truthofmarket.com/compare/qqq-vs-smh.html
-- $TSLA vs $PLTR (High-Beta Large-Cap Dispersion Study): Higher Factor Score=$TSLA | $TSLA=70/100 (1.99x Vol) vs $PLTR=35/100 (1.84x Vol) -> https://truthofmarket.com/compare/tsla-vs-pltr.html
-- $AMD vs $INTC (Data Center x86 & Accelerator Comparison): Higher Factor Score=$AMD | $AMD=45/100 (2.74x Vol) vs $INTC=15/100 (1.94x Vol) -> https://truthofmarket.com/compare/amd-vs-intc.html
-- $AVGO vs $MRVL (Custom Silicon & Optical Networking): Higher Factor Score=$AVGO | $AVGO=84/100 (2.33x Vol) vs $MRVL=45/100 (2.39x Vol) -> https://truthofmarket.com/compare/avgo-vs-mrvl.html
+- $TSLA vs $PLTR (High-Beta Large-Cap Dispersion Study): Higher Factor Score=$TSLA | $TSLA=80/100 (1.99x Vol) vs $PLTR=35/100 (1.84x Vol) -> https://truthofmarket.com/compare/tsla-vs-pltr.html
+- $AMD vs $INTC (Data Center x86 & Accelerator Comparison): Higher Factor Score=$AMD | $AMD=55/100 (2.74x Vol) vs $INTC=15/100 (1.94x Vol) -> https://truthofmarket.com/compare/amd-vs-intc.html
+- $AVGO vs $MRVL (Custom Silicon & Optical Networking): Higher Factor Score=$AVGO | $AVGO=90/100 (2.33x Vol) vs $MRVL=45/100 (2.39x Vol) -> https://truthofmarket.com/compare/avgo-vs-mrvl.html
 - $MU vs $NVDA (HBM Memory vs GPU Compute): Higher Factor Score=$NVDA | $MU=45/100 (2.66x Vol) vs $NVDA=55/100 (3.80x Vol) -> https://truthofmarket.com/compare/mu-vs-nvda.html
 - $ARM vs $NVDA (CPU Architecture Licensing vs Data Center GPU): Higher Factor Score=$NVDA | $ARM=45/100 (2.68x Vol) vs $NVDA=55/100 (3.80x Vol) -> https://truthofmarket.com/compare/arm-vs-nvda.html
 - $ASML vs $TSM (EUV Lithography vs Foundry Scale): Higher Factor Score=$TSM | $ASML=35/100 (2.36x Vol) vs $TSM=60/100 (3.08x Vol) -> https://truthofmarket.com/compare/asml-vs-tsm.html
 - $LRCX vs $AMAT (Wafer Fabrication Equipment Comparison): Higher Factor Score=$LRCX | $LRCX=45/100 (2.48x Vol) vs $AMAT=45/100 (2.10x Vol) -> https://truthofmarket.com/compare/lrcx-vs-amat.html
 - $KLAC vs $ASML (Semiconductor Process Control vs EUV): Higher Factor Score=$KLAC | $KLAC=80/100 (2.49x Vol) vs $ASML=35/100 (2.36x Vol) -> https://truthofmarket.com/compare/klac-vs-asml.html
 - $MSFT vs $GOOGL (Hyperscaler Cloud & Search Cashflow): Higher Factor Score=$MSFT | $MSFT=90/100 (1.28x Vol) vs $GOOGL=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/msft-vs-googl.html
-- $META vs $GOOGL (Digital Platform Operating Margin Study): Higher Factor Score=$GOOGL | $META=62/100 (1.33x Vol) vs $GOOGL=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/meta-vs-googl.html
-- $AMZN vs $MSFT (AWS vs Azure Cloud Infrastructure): Higher Factor Score=$MSFT | $AMZN=75/100 (2.04x Vol) vs $MSFT=90/100 (1.28x Vol) -> https://truthofmarket.com/compare/amzn-vs-msft.html
+- $META vs $GOOGL (Digital Platform Operating Margin Study): Higher Factor Score=$GOOGL | $META=62/100 (1.15x Vol) vs $GOOGL=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/meta-vs-googl.html
+- $AMZN vs $MSFT (AWS vs Azure Cloud Infrastructure): Higher Factor Score=$MSFT | $AMZN=75/100 (1.79x Vol) vs $MSFT=90/100 (1.28x Vol) -> https://truthofmarket.com/compare/amzn-vs-msft.html
 - $AAPL vs $MSFT (Consumer Hardware Ecosystem vs Enterprise Cloud): Higher Factor Score=$MSFT | $AAPL=89/100 (1.28x Vol) vs $MSFT=90/100 (1.28x Vol) -> https://truthofmarket.com/compare/aapl-vs-msft.html
-- $CRWD vs $PANW (Enterprise Cybersecurity Platform Study): Higher Factor Score=$PANW | $CRWD=35/100 (1.86x Vol) vs $PANW=35/100 (2.19x Vol) -> https://truthofmarket.com/compare/crwd-vs-panw.html
+- $CRWD vs $PANW (Enterprise Cybersecurity Platform Study): Higher Factor Score=$PANW | $CRWD=30/100 (1.86x Vol) vs $PANW=35/100 (2.19x Vol) -> https://truthofmarket.com/compare/crwd-vs-panw.html
 - $SNOW vs $PLTR (Enterprise Data Cloud vs Analytics Platform): Higher Factor Score=$PLTR | $SNOW=35/100 (1.64x Vol) vs $PLTR=35/100 (1.84x Vol) -> https://truthofmarket.com/compare/snow-vs-pltr.html
 - $COIN vs $MSTR (Digital Asset Exchange vs Treasury Volatility): Higher Factor Score=$MSTR | $COIN=55/100 (1.43x Vol) vs $MSTR=58/100 (1.28x Vol) -> https://truthofmarket.com/compare/coin-vs-mstr.html
 - $HOOD vs $COIN (Retail Brokerage Platform vs Digital Exchange): Higher Factor Score=$HOOD | $HOOD=55/100 (1.63x Vol) vs $COIN=55/100 (1.43x Vol) -> https://truthofmarket.com/compare/hood-vs-coin.html
 - $LLY vs $NVO (Metabolic & Biopharma Cashflow Study): Higher Factor Score=$NVO | $LLY=50/100 (1.73x Vol) vs $NVO=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/lly-vs-nvo.html
 - $UNH vs $LLY (Managed Care Cashflow vs Biopharma Growth): Higher Factor Score=$UNH | $UNH=88/100 (1.28x Vol) vs $LLY=50/100 (1.73x Vol) -> https://truthofmarket.com/compare/unh-vs-lly.html
 - $CELH vs $MNST (Beverage Distribution & Margin Study): Higher Factor Score=$CELH | $CELH=98/100 (2.46x Vol) vs $MNST=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/celh-vs-mnst.html
-- $NFLX vs $DIS (Streaming Operating Margin vs Media Assets): Higher Factor Score=$DIS | $NFLX=35/100 (1.08x Vol) vs $DIS=75/100 (2.31x Vol) -> https://truthofmarket.com/compare/nflx-vs-dis.html
-- $UBER vs $TSLA (Global Mobility Network vs Autonomous Fleet): Higher Factor Score=$TSLA | $UBER=65/100 (2.07x Vol) vs $TSLA=70/100 (1.99x Vol) -> https://truthofmarket.com/compare/uber-vs-tsla.html
-- $SHOP vs $AMZN (Merchant E-Commerce Software vs Global Retail): Higher Factor Score=$AMZN | $SHOP=35/100 (1.41x Vol) vs $AMZN=75/100 (2.04x Vol) -> https://truthofmarket.com/compare/shop-vs-amzn.html
+- $NFLX vs $DIS (Streaming Operating Margin vs Media Assets): Higher Factor Score=$DIS | $NFLX=35/100 (1.08x Vol) vs $DIS=75/100 (2.33x Vol) -> https://truthofmarket.com/compare/nflx-vs-dis.html
+- $UBER vs $TSLA (Global Mobility Network vs Autonomous Fleet): Higher Factor Score=$TSLA | $UBER=65/100 (1.62x Vol) vs $TSLA=80/100 (1.99x Vol) -> https://truthofmarket.com/compare/uber-vs-tsla.html
+- $SHOP vs $AMZN (Merchant E-Commerce Software vs Global Retail): Higher Factor Score=$AMZN | $SHOP=27/100 (1.28x Vol) vs $AMZN=75/100 (1.79x Vol) -> https://truthofmarket.com/compare/shop-vs-amzn.html
 - $SMCI vs $DELL (Data Center Server Infrastructure Study): Higher Factor Score=$DELL | $SMCI=70/100 (2.40x Vol) vs $DELL=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/smci-vs-dell.html
 - $QQQ vs $TQQQ (Nasdaq-100 Spot vs 3x Daily Reset Volatility Decay): Higher Factor Score=$QQQ | $QQQ=80/100 (1.18x Vol) vs $TQQQ=60/100 (1.28x Vol) -> https://truthofmarket.com/compare/qqq-vs-tqqq.html
 - $SOXL vs $NVDA (3x Leveraged ETF Decay vs Single-Stock Trend): Higher Factor Score=$NVDA | $SOXL=55/100 (1.94x Vol) vs $NVDA=55/100 (3.80x Vol) -> https://truthofmarket.com/compare/soxl-vs-nvda.html
 - $NVDA vs $TSM (Fabless Silicon Design vs Foundry Manufacturing): Higher Factor Score=$TSM | $NVDA=55/100 (3.80x Vol) vs $TSM=60/100 (3.08x Vol) -> https://truthofmarket.com/compare/nvda-vs-tsm.html
-- $PLTR vs $CRWD (Enterprise AI Software vs Endpoint Security): Higher Factor Score=$CRWD | $PLTR=35/100 (1.84x Vol) vs $CRWD=35/100 (1.86x Vol) -> https://truthofmarket.com/compare/pltr-vs-crwd.html
+- $PLTR vs $CRWD (Enterprise AI Software vs Endpoint Security): Higher Factor Score=$PLTR | $PLTR=35/100 (1.84x Vol) vs $CRWD=30/100 (1.86x Vol) -> https://truthofmarket.com/compare/pltr-vs-crwd.html
 - $SMH vs $SOXL (Spot Semiconductor ETF vs 3x Daily Reset ETF): Higher Factor Score=$SMH | $SMH=88/100 (1.68x Vol) vs $SOXL=55/100 (1.94x Vol) -> https://truthofmarket.com/compare/smh-vs-soxl.html
-- $TSLA vs $RIVN (EV Scale Profitability vs Early-Stage EV): Higher Factor Score=$TSLA | $TSLA=70/100 (1.99x Vol) vs $RIVN=52/100 (1.28x Vol) -> https://truthofmarket.com/compare/tsla-vs-rivn.html
-- $META vs $NFLX (Digital Media Free Cash Flow Comparison): Higher Factor Score=$META | $META=62/100 (1.33x Vol) vs $NFLX=35/100 (1.08x Vol) -> https://truthofmarket.com/compare/meta-vs-nflx.html
-- $AMZN vs $WMT (Cloud Retail vs Omnichannel Consumer Staple): Higher Factor Score=$WMT | $AMZN=75/100 (2.04x Vol) vs $WMT=92/100 (1.28x Vol) -> https://truthofmarket.com/compare/amzn-vs-wmt.html
+- $TSLA vs $RIVN (EV Scale Profitability vs Early-Stage EV): Higher Factor Score=$TSLA | $TSLA=80/100 (1.99x Vol) vs $RIVN=52/100 (1.28x Vol) -> https://truthofmarket.com/compare/tsla-vs-rivn.html
+- $META vs $NFLX (Digital Media Free Cash Flow Comparison): Higher Factor Score=$META | $META=62/100 (1.15x Vol) vs $NFLX=35/100 (1.08x Vol) -> https://truthofmarket.com/compare/meta-vs-nflx.html
+- $AMZN vs $WMT (Cloud Retail vs Omnichannel Consumer Staple): Higher Factor Score=$WMT | $AMZN=75/100 (1.79x Vol) vs $WMT=92/100 (1.28x Vol) -> https://truthofmarket.com/compare/amzn-vs-wmt.html
 - $JPM vs $GS (Money-Center Banking vs Capital Markets): Higher Factor Score=$JPM | $JPM=90/100 (1.28x Vol) vs $GS=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/jpm-vs-gs.html
 - $V vs $MA (Global Payment Network Margin Comparison): Higher Factor Score=$V | $V=90/100 (1.28x Vol) vs $MA=89/100 (1.28x Vol) -> https://truthofmarket.com/compare/v-vs-ma.html
 - $COST vs $WMT (Membership Warehouse vs Value Retail Dividend): Higher Factor Score=$WMT | $COST=91/100 (1.28x Vol) vs $WMT=92/100 (1.28x Vol) -> https://truthofmarket.com/compare/cost-vs-wmt.html
 - $BA vs $LMT (Commercial Aerospace vs Defense Cashflow): Higher Factor Score=$LMT | $BA=15/100 (1.12x Vol) vs $LMT=86/100 (1.28x Vol) -> https://truthofmarket.com/compare/ba-vs-lmt.html
-- $XOM vs $CVX (Integrated Energy Dividend & Cashflow Study): Higher Factor Score=$CVX | $XOM=30/100 (1.95x Vol) vs $CVX=87/100 (1.28x Vol) -> https://truthofmarket.com/compare/xom-vs-cvx.html
-- $ENPH vs $FSLR (Residential Solar Inverter vs Utility Solar): Higher Factor Score=$FSLR | $ENPH=55/100 (2.16x Vol) vs $FSLR=55/100 (3.41x Vol) -> https://truthofmarket.com/compare/enph-vs-fslr.html
+- $XOM vs $CVX (Integrated Energy Dividend & Cashflow Study): Higher Factor Score=$CVX | $XOM=20/100 (1.40x Vol) vs $CVX=87/100 (1.28x Vol) -> https://truthofmarket.com/compare/xom-vs-cvx.html
+- $ENPH vs $FSLR (Residential Solar Inverter vs Utility Solar): Higher Factor Score=$FSLR | $ENPH=55/100 (1.38x Vol) vs $FSLR=55/100 (2.36x Vol) -> https://truthofmarket.com/compare/enph-vs-fslr.html
 - $ABNB vs $BKNG (Alternative Lodging Platform vs Global Travel): Higher Factor Score=$ABNB | $ABNB=78/100 (1.30x Vol) vs $BKNG=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/abnb-vs-bkng.html
-- $INTC vs $QCOM (Foundry Restructuring vs Mobile/Edge Silicon): Higher Factor Score=$QCOM | $INTC=15/100 (1.94x Vol) vs $QCOM=80/100 (3.12x Vol) -> https://truthofmarket.com/compare/intc-vs-qcom.html
+- $INTC vs $QCOM (Foundry Restructuring vs Mobile/Edge Silicon): Higher Factor Score=$QCOM | $INTC=15/100 (1.94x Vol) vs $QCOM=70/100 (3.12x Vol) -> https://truthofmarket.com/compare/intc-vs-qcom.html
 - $ORCL vs $CRM (Enterprise Cloud Database vs Enterprise SaaS): Higher Factor Score=$ORCL | $ORCL=78/100 (1.30x Vol) vs $CRM=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/orcl-vs-crm.html
-- $PYPL vs $SQ (Digital Checkout Cashflow vs Merchant Ecosystem): Higher Factor Score=$SQ | $PYPL=42/100 (1.18x Vol) vs $SQ=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/pypl-vs-sq.html
+- $PYPL vs $SQ (Digital Checkout Cashflow vs Merchant Ecosystem): Higher Factor Score=$SQ | $PYPL=20/100 (1.04x Vol) vs $SQ=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/pypl-vs-sq.html
 - $DKNG vs $HOOD (Consumer Digital Platform Volatility Study): Higher Factor Score=$DKNG | $DKNG=78/100 (1.30x Vol) vs $HOOD=55/100 (1.63x Vol) -> https://truthofmarket.com/compare/dkng-vs-hood.html
 - $CELH vs $PEP (Growth Beverage vs Dividend Aristocrat): Higher Factor Score=$CELH | $CELH=98/100 (2.46x Vol) vs $PEP=85/100 (1.28x Vol) -> https://truthofmarket.com/compare/celh-vs-pep.html
 - $VOO vs $SCHD (S&P 500 Core Compounding vs US Dividend Growth ETF): Higher Factor Score=$VOO | $VOO=96/100 (1.28x Vol) vs $SCHD=95/100 (1.28x Vol) -> https://truthofmarket.com/compare/voo-vs-schd.html
@@ -172,6 +172,6 @@
 ## 4. Educational Market Weather & Allocation Journal (/insights/)
 - Why Quiet Barbells Outlast Loud Bull Markets -> https://truthofmarket.com/insights/why-quiet-barbells-outlast-loud-bull-markets.html
 - Two Clocks in One Portfolio: Twenty-Six Years of $SMH and $XLV -> https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html
-- Morning Note (2026-11-17): Sector Sentiment at 11.4/100 (Extreme Fear) -> https://truthofmarket.com/insights/daily-us-quant-regime-brief.html
+- Morning Note (2026-11-18): Sector Sentiment at 10.6/100 (Extreme Fear) -> https://truthofmarket.com/insights/daily-us-quant-regime-brief.html
 - Why Cheap-Looking Charts Keep Falling: Notes on Moving-Average Discipline -> https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html
 - The Quiet Arithmetic of Drawdowns and Treasury Cushions -> https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html
