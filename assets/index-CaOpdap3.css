@@ -5182,7 +5182,34 @@ html[data-tom-theme="dark"] .tom-unlocked-manual-btn {
     line-height: 1.12;
     letter-spacing: -0.02em;
     color: #0F172A;
-    margin: 0 0 26px;
+    margin: 0 0 22px;
+  }
+  .pw-editorial-figure {
+    margin: 0 0 30px;
+    padding: 0;
+  }
+  .pw-editorial-plate {
+    width: 100%;
+    background: #FBFBF9;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .pw-editorial-plate img {
+    display: block;
+    width: 100%;
+    max-height: 390px;
+    height: auto;
+    object-fit: contain;
+    margin: 0 auto;
+  }
+  .pw-editorial-caption {
+    margin: 8px 0 0;
+    font-family: 'Instrument Serif', 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-size: 1.02rem;
+    line-height: 1.5;
+    color: #64748B;
+    text-align: center;
   }
   .pw-serif-h2 {
     font-family: 'Instrument Serif', 'Playfair Display', Georgia, 'Times New Roman', serif;
@@ -5213,7 +5240,7 @@ html[data-tom-theme="dark"] .tom-unlocked-manual-btn {
     background: #FFFFFF;
     border: 1px solid #E2E8F0;
     border-radius: 6px;
-    padding: 24px 24px 18px;
+    padding: 22px 16px 18px;
     margin: 0 0 34px;
   }
   .pw-table-header {
@@ -5243,27 +5270,27 @@ html[data-tom-theme="dark"] .tom-unlocked-manual-btn {
     width: 100%;
     border-collapse: collapse;
     font-variant-numeric: tabular-nums;
-    font-size: 0.94rem;
+    font-size: 0.85rem;
   }
   .pw-sim-table th {
     text-align: right;
-    font-size: 0.74rem;
+    font-size: 0.68rem;
     font-weight: 600;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.03em;
     text-transform: uppercase;
     color: #64748B;
-    padding: 10px 12px;
+    padding: 10px 6px;
     border-top: 1px solid #E2E8F0;
     border-bottom: 1px solid #CBD5E1;
     white-space: nowrap;
   }
   .pw-sim-table th:first-child {
     text-align: left;
-    padding-left: 10px;
+    padding-left: 6px;
   }
   .pw-sim-table td {
     text-align: right;
-    padding: 13px 12px;
+    padding: 12px 6px;
     border-bottom: 1px solid #E2E8F0;
     color: #334155;
     white-space: nowrap;
