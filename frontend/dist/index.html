@@ -47,7 +47,7 @@
   <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -148,105 +148,368 @@
   })();
   </script>
 </head>
-<body style="background:#f8fafc;color:#0f172a;font-size:18px;line-height:1.7;">
+<body class="pw-body-reset" style="background:#FBFBF9;color:#0F172A;font-size:18px;line-height:1.75;">
   <div id="app">
-    <section class="seo-home-fallback" id="tom-retirement-architect" style="max-width:1020px;width:calc(100% - 24px);box-sizing:border-box;margin:16px auto;padding:26px;background:#ffffff;border:2px solid #059669;border-radius:16px;color:#0f172a;box-shadow:0 8px 24px rgba(15,23,42,0.06);">
-      <div style="margin-bottom:12px;padding:8px 14px;background:#ecfdf5;border:1px solid #059669;border-radius:999px;display:inline-block;font-size:0.88rem;font-weight:800;color:#065f46;">
-        HISTORICAL SMH &times; XLV SECTOR BALANCE SIMULATOR &amp; DAILY AUTOMATED MARKET INDICATOR DATA DIGEST
+    <main id="tom-retirement-architect" class="pw-shell">
+      <header class="pw-masthead">
+        <button type="button" class="pw-brand-btn" data-pw-go-home="1">
+          <span class="pw-wordmark">TRUTH OF MARKET</span>
+          <span class="pw-submark">Private Wealth Quantitative Desk</span>
+        </button>
+        <button type="button" class="pw-signin-link" id="btnOpenPwRestoreModal">Member Sign-In / Restore</button>
+      </header>
+
+      <!-- Screen 0: Founding Manifesto & 2000-2025 Institutional Simulation Table -->
+      <section id="pwScreen0" data-pw-screen="0">
+        <div class="pw-kicker">FOUNDING CHARTER &middot; QUANTITATIVE SECTOR ARCHITECTURE</div>
+        <h1 class="pw-serif-h1">Why quiet two-pillar discipline outlasts loud stock picking.</h1>
+
+        <div class="pw-manifesto">
+          <p>
+            Most households approaching or living in retirement do not lose sleep&mdash;or hard-earned capital&mdash;because they ignored the market. They lose both because financial media pushes investors to chase dozens of noisy stock tips at once, quietly drifting into pure technology concentration right before a multi-year downturn.
+          </p>
+          <p>
+            We built <strong>Truth of Market</strong> for a calmer purpose. Rather than sending speculative trade alerts, our quantitative research desk focuses on one enduring discipline: participating in structural semiconductor innovation (<strong>SMH</strong>) while anchoring household composure with non-cyclical healthcare cash flows (<strong>XLV</strong>) and short-term US Treasury reserves (<strong>SGOV</strong>).
+          </p>
+          <p>
+            Through a brief four-question assessment below, this platform maps your initial sector baseline, tracks daily public market temperature so you know when historical risk has stretched to extremes, and provides structured retirement withdrawal and tax-account planning tools.
+          </p>
+        </div>
+
+        <div class="pw-table-card" role="region" aria-label="2000-2025 Historical Simulation Comparison">
+          <div class="pw-table-header">
+            <span class="pw-table-title">TABLE I &mdash; HISTORICAL SECTOR SIMULATION (2000&ndash;2025)</span>
+            <span class="pw-table-meta">Non-Leveraged 1x Spot Index / ETF Series</span>
+          </div>
+          <div class="pw-table-scroll">
+            <table class="pw-sim-table">
+              <thead>
+                <tr>
+                  <th>Architecture</th>
+                  <th>Annualized (CAGR)</th>
+                  <th>Worst Crisis DD</th>
+                  <th>Recovery Period</th>
+                  <th>Return / DD Ratio</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>S&amp;P 500 Index Alone</td>
+                  <td>~7.9%</td>
+                  <td class="pw-dd-neg">-50.9%</td>
+                  <td>56 mos</td>
+                  <td>0.16x</td>
+                </tr>
+                <tr>
+                  <td>Traditional 60 / 40 Mix</td>
+                  <td>~6.4%</td>
+                  <td class="pw-dd-neg">-32.3%</td>
+                  <td>31 mos</td>
+                  <td>0.20x</td>
+                </tr>
+                <tr>
+                  <td>100% Semiconductor (SMH Alone)</td>
+                  <td>~11.8%</td>
+                  <td class="pw-dd-neg">-74.6%</td>
+                  <td>89 mos</td>
+                  <td>0.16x</td>
+                </tr>
+                <tr class="is-featured">
+                  <td>SMH &times; XLV Disciplined Balance</td>
+                  <td>~11.4%</td>
+                  <td class="pw-dd-neg">-27.8%</td>
+                  <td>19 mos</td>
+                  <td class="pw-eff-pos">0.41x</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="pw-table-note">
+            Historical index/ETF simulation (2000&ndash;2025, semi-annual systematic ratio reset) for self-directed educational data visualization only; past results do not guarantee future performance.
+          </p>
+        </div>
+
+        <div class="pw-primary-cta-wrap">
+          <button type="button" class="pw-btn-primary pw-btn-emerald" id="btnStartPwStepUp">
+            Design My Personal Balance &rarr;
+          </button>
+          <span class="pw-cta-caption">Four brief inputs &middot; Instant baseline computation &middot; No brokerage login required</span>
+        </div>
+      </section>
+
+      <!-- Screen 1: Focused 1-Question-at-a-Time Step-Up Assessment (Step 1 of 4 -> 4 of 4) -->
+      <section id="pwScreen1" data-pw-screen="1" style="display:none;">
+        <div class="pw-step-card">
+          <div class="pw-step-top">
+            <button type="button" class="pw-back-btn" id="btnPwStepBack">&larr; Back</button>
+            <span class="pw-step-counter" id="pwStepCounterLabel">STEP 01 OF 04</span>
+          </div>
+          <div class="pw-progress-line" aria-hidden="true">
+            <span class="pw-progress-fill" id="pwStepProgressFill" style="width:25%;"></span>
+          </div>
+
+          <div data-pw-qpane="1">
+            <h2 class="pw-q-title">What is your primary objective for this capital?</h2>
+            <p class="pw-q-sub">Select the mandate that best reflects how this account serves your household.</p>
+            <div class="pw-option-list" role="radiogroup" aria-label="Primary Capital Goal">
+              <button type="button" class="pw-opt-btn" data-pw-field="objective" data-pw-val="growth">
+                <div class="pw-opt-head"><span><span class="pw-opt-num">I</span><span class="pw-opt-title">Capital Growth &amp; AI Participation</span></span><span>&rarr;</span></div>
+                <span class="pw-opt-desc">Emphasize structural semiconductor compounding (SMH) while tempering severe cycle drawdowns with XLV.</span>
+              </button>
+              <button type="button" class="pw-opt-btn is-selected" data-pw-field="objective" data-pw-val="balanced">
+                <div class="pw-opt-head"><span><span class="pw-opt-num">II</span><span class="pw-opt-title">Balanced Retirement Income &amp; Stability</span></span><span>&rarr;</span></div>
+                <span class="pw-opt-desc">Pair secular growth (SMH) with resilient healthcare cash flows (XLV) for steady multi-cycle compounding.</span>
+              </button>
+              <button type="button" class="pw-opt-btn" data-pw-field="objective" data-pw-val="preservation">
+                <div class="pw-opt-head"><span><span class="pw-opt-num">III</span><span class="pw-opt-title">Capital Preservation First</span></span><span>&rarr;</span></div>
+                <span class="pw-opt-desc">Prioritize defensive healthcare (XLV) and short-term US Treasury liquidity (SGOV) to protect principal.</span>
+              </button>
+            </div>
+          </div>
+
+          <div data-pw-qpane="2" style="display:none;">
+            <h2 class="pw-q-title">What is the approximate scale of your portfolio?</h2>
+            <p class="pw-q-sub">Used strictly in your browser to calibrate defensive reserve thresholds across 401(k), IRA, and taxable accounts.</p>
+            <div class="pw-scale-grid" role="radiogroup" aria-label="Portfolio Scale">
+              <button type="button" class="pw-scale-btn" data-pw-field="scale" data-pw-val="50000">$50,000</button>
+              <button type="button" class="pw-scale-btn" data-pw-field="scale" data-pw-val="150000">$150,000</button>
+              <button type="button" class="pw-scale-btn is-selected" data-pw-field="scale" data-pw-val="300000">$300,000</button>
+              <button type="button" class="pw-scale-btn" data-pw-field="scale" data-pw-val="500000">$500,000</button>
+              <button type="button" class="pw-scale-btn" data-pw-field="scale" data-pw-val="1000000">$1,000,000+</button>
+            </div>
+          </div>
+
+          <div data-pw-qpane="3" style="display:none;">
+            <h2 class="pw-q-title">During a severe market downturn, what drawdown can you hold through calmly?</h2>
+            <p class="pw-q-sub">The best allocation is the one quiet enough that you never liquidate shares at the bottom of a cycle.</p>
+            <div class="pw-option-list" role="radiogroup" aria-label="Maximum Drawdown Tolerance">
+              <button type="button" class="pw-opt-btn" data-pw-field="comfort" data-pw-val="dd10">
+                <div class="pw-opt-head"><span><span class="pw-opt-num">I</span><span class="pw-opt-title">-10% Calm Priority</span></span><span>&rarr;</span></div>
+                <span class="pw-opt-desc">Include a dedicated short-term US Treasury reserve (SGOV) alongside XLV to keep volatility muted.</span>
+              </button>
+              <button type="button" class="pw-opt-btn is-selected" data-pw-field="comfort" data-pw-val="dd18">
+                <div class="pw-opt-head"><span><span class="pw-opt-num">II</span><span class="pw-opt-title">-18% Balanced</span></span><span>&rarr;</span></div>
+                <span class="pw-opt-desc">Accept moderate cyclical fluctuations in exchange for balanced SMH &times; XLV long-term participation.</span>
+              </button>
+              <button type="button" class="pw-opt-btn" data-pw-field="comfort" data-pw-val="dd25">
+                <div class="pw-opt-head"><span><span class="pw-opt-num">III</span><span class="pw-opt-title">-25% Long-Term Compounding</span></span><span>&rarr;</span></div>
+                <span class="pw-opt-desc">Focus on multi-year compounding with higher semiconductor equity weighting.</span>
+              </button>
+            </div>
+          </div>
+
+          <div data-pw-qpane="4" style="display:none;">
+            <h2 class="pw-q-title">How much of your equity portfolio currently sits in technology or semiconductors?</h2>
+            <p class="pw-q-sub">Helps highlight concentration exposure relative to your target historical baseline.</p>
+            <div class="pw-option-list" role="radiogroup" aria-label="Current Tech Exposure">
+              <button type="button" class="pw-opt-btn is-selected" data-pw-field="techMix" data-pw-val="tech_high">
+                <div class="pw-opt-head"><span><span class="pw-opt-num">I</span><span class="pw-opt-title">Over 70% Concentrated in Tech &amp; Semiconductors</span></span></div>
+                <span class="pw-opt-desc">Heavily exposed to a single capital-spending cycle; evaluating healthcare defensive ballast.</span>
+              </button>
+              <button type="button" class="pw-opt-btn" data-pw-field="techMix" data-pw-val="tech_mid">
+                <div class="pw-opt-head"><span><span class="pw-opt-num">II</span><span class="pw-opt-title">30% to 70% Balanced Exposure</span></span></div>
+                <span class="pw-opt-desc">Moderately diversified across sectors; refining into a clean two-pillar architecture.</span>
+              </button>
+              <button type="button" class="pw-opt-btn" data-pw-field="techMix" data-pw-val="tech_low">
+                <div class="pw-opt-head"><span><span class="pw-opt-num">III</span><span class="pw-opt-title">Under 30% Tech or Primarily Cash</span></span></div>
+                <span class="pw-opt-desc">Holding cash or broad index funds; establishing a disciplined entry baseline.</span>
+              </button>
+            </div>
+            <div style="margin-top:24px;">
+              <button type="button" class="pw-btn-primary pw-btn-emerald" id="btnSubmitPwAssessment" style="width:100%;">
+                Generate My Baseline Allocation &rarr;
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Screen 2: Free Email Gate (#tomMorningBellClub + #tom-passwordless-club-signup) -> Opens Partial Baseline -->
+      <section id="tomMorningBellClub" data-pw-screen="2" style="display:none;">
+        <div class="pw-gate-card">
+          <div class="pw-profile-strip">
+            <span id="pwProfileSummaryLine">Selected Mandate: Balanced Retirement &middot; $300,000 &middot; -18% Tolerance</span>
+            <button type="button" class="pw-inline-link" id="btnEditPwInputs">Edit Inputs</button>
+          </div>
+
+          <div id="tom-passwordless-club-signup">
+            <!-- Locked Email Gate -->
+            <div id="pwEmailGateLockedView">
+              <div class="pw-kicker">STEP-UP STAGE I &middot; COMPLIMENTARY BASELINE SUMMARY</div>
+              <h2 class="pw-serif-h2">Open your initial SMH &times; XLV baseline ratio.</h2>
+              <p style="margin:0;color:#475569;font-size:0.96rem;">
+                Enter your email below (passwordless, 1-click unsubscribe anytime) to view your initial historical baseline percentages and receive our morning research note.
+              </p>
+              <form class="pw-email-form" id="pwFreeGateForm" novalidate>
+                <input type="text" name="website_hp" id="pwGateHp" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none;" />
+                <input type="email" id="pwGateEmailInput" class="pw-email-input" required autocomplete="email" placeholder="Enter your email address" aria-label="Email address" />
+                <button type="submit" class="pw-btn-primary pw-btn-emerald" id="btnPwGateSubmit">
+                  Open My Baseline Allocation &rarr;
+                </button>
+              </form>
+              <div id="pwGateStatusMsg" role="status" aria-live="polite" style="display:none;margin-top:10px;font-size:0.88rem;color:#991B1B;"></div>
+            </div>
+
+            <!-- Partial Unlocked View (Initial Percentage Ratio ONLY; Tracking & PDF Gated in Paid Tiers) -->
+            <div id="pwEmailGateUnlockedView" style="display:none;">
+              <div class="pw-kicker">INITIAL HISTORICAL BASELINE &middot; PARTIAL SUMMARY OPEN</div>
+              <h2 class="pw-serif-h2" id="pwUnlockedRatioHeadline">55% SMH &middot; 35% XLV &middot; 10% SGOV Reserve</h2>
+              <p style="margin:0;color:#475569;font-size:0.94rem;" id="pwUnlockedRationaleText">
+                Calibrated from 2000&ndash;2025 non-leveraged ETF series for your selected mandate. Need brokerage execution basics? <button type="button" class="pw-inline-link" id="tomFreeStarterManual">Open the complimentary $0 US Brokerage Limit-Order Guide</button>.
+              </p>
+
+              <div class="pw-ratio-bar" id="pwRatioVisualBar" aria-hidden="true">
+                <span style="width:55%;background:#0F172A;"></span>
+                <span style="width:35%;background:#065F46;"></span>
+                <span style="width:10%;background:#94A3B8;"></span>
+              </div>
+
+              <div class="pw-ratio-grid" id="pwRatioCellsGrid">
+                <div class="pw-ratio-cell">
+                  <div class="pw-ratio-ticker">SMH &middot; GROWTH</div>
+                  <div class="pw-ratio-pct" id="pwPctSmh">55%</div>
+                  <div class="pw-ratio-name">Semiconductor Pillar</div>
+                </div>
+                <div class="pw-ratio-cell">
+                  <div class="pw-ratio-ticker">XLV &middot; DEFENSE</div>
+                  <div class="pw-ratio-pct" id="pwPctXlv">35%</div>
+                  <div class="pw-ratio-name">Healthcare Cash Flow</div>
+                </div>
+                <div class="pw-ratio-cell">
+                  <div class="pw-ratio-ticker">SGOV &middot; LIQUIDITY</div>
+                  <div class="pw-ratio-pct" id="pwPctSgov">10%</div>
+                  <div class="pw-ratio-name">0&ndash;3 Mo US T-Bill</div>
+                </div>
+              </div>
+
+              <div class="pw-gated-preview-list">
+                <div class="pw-gated-row">
+                  <span>Daily Morning SMH &times; XLV Market Temperature (0&ndash;100) &amp; Weight Tracking Mail</span>
+                  <span class="pw-gated-badge">UNLOCKS IN TIER I &amp; II BELOW</span>
+                </div>
+                <div class="pw-gated-row">
+                  <span>Retirement Safe-Withdrawal &amp; Tax-Account Masterbook PDF + Annual Cash-Flow Sheet</span>
+                  <span class="pw-gated-badge">UNLOCKS IN TIER II BELOW</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Screen 3: 2-Tier Differentiated Paid Membership (Polar.sh ?locale=en + COPY_MODE) -->
+      <section id="pricing" class="pw-tiers-section" data-pw-screen="3" style="display:none;">
+        <div class="pw-kicker">STEP-UP STAGE II &middot; PRIVATE WEALTH MEMBERSHIP</div>
+        <h2 class="pw-serif-h2" id="pwPricingHeadline">Complete daily regime tracking and retirement withdrawal architecture.</h2>
+        <p style="margin:0;color:#475569;font-size:0.95rem;" id="pwPricingSubcopy">
+          Know every morning where semiconductor overheating or fear sits on our 25-year scale, and access the complete safe-withdrawal and tax-account planning suite.
+        </p>
+
+        <div class="pw-tier-grid">
+          <div class="pw-tier-card">
+            <div>
+              <div class="pw-tier-kicker">TIER I &middot; MONTHLY EDITION</div>
+              <h3 class="pw-tier-name">Monthly Tracking Edition</h3>
+              <div class="pw-tier-price">$29 <span>/ month</span></div>
+              <div class="pw-tier-saving">Flexible month-to-month access</div>
+              <ul class="pw-tier-list">
+                <li><strong>Daily Morning SMH &times; XLV Temperature &amp; Weight Tracking Briefings</strong> delivered before the US market open</li>
+                <li><strong>Historical Regime Ratio Reference Sheet</strong> mapping 0&ndash;100 sentiment bands to model sector weights</li>
+                <li><strong>Account-Scale Dollar Allocation Calculator</strong> across SMH, XLV, and SGOV reserves</li>
+              </ul>
+            </div>
+            <a href="#tom-vip-monthly" class="pw-btn-primary polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="width:100%;">
+              Select Monthly Tracking &mdash; $29/mo &rarr;
+            </a>
+          </div>
+
+          <div class="pw-tier-card is-annual">
+            <div>
+              <div class="pw-tier-kicker">TIER II &middot; ANNUAL PRIVATE WEALTH &middot; SAVE 43%</div>
+              <h3 class="pw-tier-name">Annual Private Wealth Edition</h3>
+              <div class="pw-tier-price">$199 <span>/ year</span></div>
+              <div class="pw-tier-saving">Equivalent to $16.58/mo (Save 43% vs. monthly)</div>
+              <ul class="pw-tier-list">
+                <li><strong>Everything in Tier I</strong> &mdash; full 12 months of Daily Morning SMH &times; XLV Temperature &amp; Weight Tracking Briefings</li>
+                <li><strong>Lifetime-Updated Retirement Safe-Withdrawal &amp; Tax-Account Masterbook PDF</strong> (401(k), IRA &amp; taxable sequencing)</li>
+                <li><strong>Annual Cash-Flow &amp; Systematic Ratio Planning Sheet</strong> for multi-decade household budgeting</li>
+              </ul>
+            </div>
+            <a href="#tom-vip-annual" class="pw-btn-primary pw-btn-emerald polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="width:100%;">
+              Select Annual Private Wealth &mdash; $199/yr &rarr;
+            </a>
+          </div>
+        </div>
+
+        <p class="pw-mor-note">
+          Merchant of Record: Polar.sh (Global Card / Apple Pay / Google Pay) &middot; 14-Day Refund Policy &middot; Cancel anytime in one click.
+        </p>
+      </section>
+    </main>
+
+    <footer class="pw-legal-footer">
+      <div class="pw-legal-links">
+        <span>TruthOfMarket</span>
+        <span>&middot;</span>
+        <a href="/terms.html">Terms</a>
+        <span>&middot;</span>
+        <a href="/privacy.html">Privacy</a>
+        <span>&middot;</span>
+        <a href="/refund.html">Refund</a>
+        <span>&middot;</span>
+        <a href="/contact.html">Contact</a>
+        <span>&middot;</span>
+        <a href="mailto:beable9489@gmail.com">beable9489@gmail.com</a>
       </div>
-      <h1 style="font-size:1.85rem;font-weight:900;margin:0 0 10px;color:#0f172a;line-height:1.3;">Balance AI Semiconductor Growth ($SMH) With Healthcare Defense ($XLV) &mdash; Sleep Calmly.</h1>
-      <p style="margin:0;color:#1e293b;font-size:1.08rem;line-height:1.7;"><b>Stage 1 &middot; 4-Step Guided Balance Survey (Step 1/4 &rarr; 4/4):</b> Select your objective (AI &amp; Growth Acceleration / Balanced Retirement &amp; Steady Growth / Drawdown Protection First), portfolio scale ($50k / $150k / $300k / $500k / $1M+), drawdown comfort (-10% / -18% / -25%), and current tech mix to calculate your historical <b>$SMH &times; $XLV</b> (+ optional <b>$SGOV</b> T-Bill cushion) baseline ratio.</p>
-      <p id="tomMorningBellClub" style="margin:14px 0 0;padding-top:12px;border-top:1px solid #cbd5e1;color:#1e3a8a;font-size:1.04rem;font-weight:800;line-height:1.65;"><span id="tom-passwordless-club-signup">🔓 Stage 2 &middot; Free 3-Second Passwordless Member Unlock: Instant Personalized $SMH : $XLV Ratio Table + 26-Year Dot-Com / 2008 / 2022 Drawdown Study</span></p>
-      <p id="tomFreeStarterManual" style="margin:8px 0 0;color:#047857;font-size:1.04rem;font-weight:800;line-height:1.65;">📘 $0 Free US Brokerage Safe-Order Starter Manual (Fidelity &middot; Charles Schwab &middot; Vanguard &mdash; Limit Orders &amp; $SMH / $XLV / $SGOV Self-Directed Execution Guide)</p>
-      <div style="margin:14px 0 0;padding:14px 16px;border-radius:12px;background:#ecfdf5;border:1.5px solid #059669;color:#064e3b;font-size:1rem;line-height:1.6;">
-        <div style="font-weight:900;margin-bottom:6px;">📦 Stage 3 &middot; Paid VIP Upgrade ($29/mo Monthly VIP &amp; $199/yr Annual VIP):</div>
-        <div>1. <b>Daily Automated SMH &times; XLV Regime &amp; Ratio Tracking Email Digest:</b> Morning public overheating / fear indicator data and historical $SMH : $XLV sector mix tracking across regimes.</div>
-        <div>2. <b>Account-Size Dollar ($) Allocation Worksheet:</b> Exact dollar amounts across $SMH, $XLV, and optional $SGOV US Treasury cushion for your exact account balance.</div>
-        <div>3. <b>Lifetime-Updated 14-Page SMH &times; XLV Master PDF Guide:</b> Complete 26-year (2000&ndash;2026) empirical crash study &amp; printable 1-page worksheet.</div>
+      <p class="pw-legal-disclaimer">
+        TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.
+      </p>
+    </footer>
+
+    <!-- Member Sign-In / Restore Modal (0 Emojis) -->
+    <div class="pw-modal-backdrop" id="pwRestoreModal" role="dialog" aria-modal="true" aria-labelledby="pwRestoreTitle">
+      <div class="pw-modal-dialog">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;">
+          <span class="pw-kicker" style="margin:0;">MEMBER ACCESS &amp; RESTORE</span>
+          <button type="button" class="pw-back-btn" id="btnClosePwRestoreModal">Close</button>
+        </div>
+        <h3 class="pw-serif-h2" id="pwRestoreTitle" style="font-size:1.65rem;">Restore Your Baseline or Paid License</h3>
+        <p style="margin:0 0 16px;font-size:0.92rem;color:#475569;">
+          Enter the email address used during registration to reopen your saved SMH &times; XLV baseline, or enter a Polar.sh license key if applicable.
+        </p>
+        <form id="pwRestoreForm" novalidate style="display:flex;flex-direction:column;gap:12px;">
+          <input type="email" id="pwRestoreEmailInput" class="pw-email-input" placeholder="Registered email address" autocomplete="email" />
+          <input type="text" id="pwRestoreLicenseInput" class="pw-email-input" placeholder="Optional: Polar.sh license key" autocomplete="off" />
+          <button type="submit" class="pw-btn-primary pw-btn-emerald" style="width:100%;">Restore Session &rarr;</button>
+        </form>
+        <div id="pwRestoreStatus" role="status" aria-live="polite" style="display:none;margin-top:12px;font-size:0.88rem;color:#065F46;"></div>
       </div>
-      <div style="margin-top:14px;display:flex;gap:12px;flex-wrap:wrap;">
-        <a href="#tom-vip-monthly" class="polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="display:inline-flex;align-items:center;min-height:52px;padding:10px 20px;border-radius:10px;background:#1d4ed8;color:#ffffff;font-weight:800;font-size:1.02rem;text-decoration:none;">⚡ Start Monthly VIP &mdash; $29/mo</a>
-        <a href="#tom-vip-annual" class="polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="display:inline-flex;align-items:center;min-height:52px;padding:10px 20px;border-radius:10px;background:#059669;color:#ffffff;font-weight:800;font-size:1.02rem;text-decoration:none;">💎 Start Annual VIP &mdash; $199/yr (Save 43%)</a>
+    </div>
+
+    <!-- Complimentary $0 Brokerage Safe-Order Guide Modal (0 Emojis) -->
+    <div class="pw-modal-backdrop" id="pwStarterGuideModal" role="dialog" aria-modal="true" aria-labelledby="pwStarterGuideTitle">
+      <div class="pw-modal-dialog">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;">
+          <span class="pw-kicker" style="margin:0;">COMPLIMENTARY EXECUTION REFERENCE ($0)</span>
+          <button type="button" class="pw-back-btn" id="btnClosePwStarterGuideModal">Close</button>
+        </div>
+        <h3 class="pw-serif-h2" id="pwStarterGuideTitle" style="font-size:1.65rem;">US Brokerage Limit-Order &amp; ETF Reference</h3>
+        <div style="font-size:0.92rem;line-height:1.7;color:#334155;display:flex;flex-direction:column;gap:12px;">
+          <div>
+            <strong style="color:#0F172A;">I. Place Limit Orders Rather Than Market Orders</strong><br/>
+            On Fidelity, Charles Schwab, or Vanguard, select <em>Limit Order</em> rather than <em>Market Order</em> during the first 15 minutes after the 9:30 AM ET open to avoid temporary bid-ask spread widening on ETFs.
+          </div>
+          <div>
+            <strong style="color:#0F172A;">II. Non-Leveraged 1x Spot Sector ETFs Only</strong><br/>
+            Both <strong>SMH</strong> (Semiconductors) and <strong>XLV</strong> (US Healthcare) are unleveraged 1x spot ETFs free from daily 3x leveraged volatility-reset decay.
+          </div>
+          <div>
+            <strong style="color:#0F172A;">III. Short-Term US Treasury Liquidity Cushion</strong><br/>
+            Near-term household cash reserves can be insulated in 0&ndash;3 month US Treasury bills (<strong>SGOV</strong>) or government money-market funds (SPAXX / SWVXX / VMFXX).
+          </div>
+        </div>
       </div>
-            <div style="margin:14px 0 4px;padding:14px 16px;background:#fcfcfa;border:1px solid #e6e4dd;border-left:4px solid #059669;border-radius:10px;"><div style="font-size:0.78rem;font-weight:800;color:#059669;text-transform:uppercase;letter-spacing:0.05em;">Editorial Essay &middot; Arthur Vance</div><a href="/insights/why-quiet-barbells-outlast-loud-bull-markets.html" style="font-size:1.06rem;font-weight:800;color:#1d4ed8;text-decoration:underline;">Read Today&rsquo;s Editorial Note: Why Quiet Barbells Outlast Loud Bull Markets &rarr;</a></div>
-      <p style="margin:10px 0 0;font-size:0.92rem;color:#334155;font-weight:700;">💳 Checkout &amp; Billing: Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · 14-Day Refund Policy</p>
-      <p style="margin:12px 0 0;padding-top:10px;border-top:1px solid #e2e8f0;font-size:0.92rem;color:#475569;font-weight:600;">Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.</p>
-    </section>
+    </div>
   </div>
-  <section class="seo-directory-footer" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;overflow-x:hidden;margin:24px auto 36px;padding:24px 22px;background:#ffffff;border:1.5px solid #cbd5e1;border-radius:14px;color:#1e293b;font-size:1rem;box-shadow:0 4px 16px rgba(15,23,42,0.05);">
-    <div style="margin-bottom:16px;padding:14px 16px;border-radius:10px;background:#ecfdf5;border:1.5px solid #059669;color:#064e3b;font-size:1.02rem;line-height:1.65;">
-      <strong>🛡️ US Retirement 4-Core Allocation Standard (As of 2026-11-16 US Market Close):</strong>
-      <b>$VOO</b> (S&amp;P 500 Core) &middot; <b>$SCHD</b> (Dividend Growth ~3.5%) &middot; <b>$JEPI</b> (Monthly Income ~7.4%) &middot; <b>$SGOV</b> (US T-Bill Cash ~4.7%) — Reviewed calmly 2–4 times per year via our <b>US Retirement Market Weather (S&amp;P 500 Breadth &amp; Drawdown Guard)</b>.
-    </div>
-    <div style="font-weight:900;color:#0f172a;margin-bottom:8px;font-size:1.12rem;">
-      🏛️ RETIREMENT CORE ETFs &amp; BLUE-CHIP DIVIDEND DIRECTORY
-    </div>
-    <p style="margin:0 0 12px;color:#334155;font-size:0.98rem;line-height:1.65;">
-      Explore self-directed 52-week range context, dividend consistency, and calm 2–4x/year portfolio weight studies across liquid US retirement ETFs and blue-chip dividend leaders:
-    </p>
-    <nav aria-label="US Retirement Core ETFs" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px;">
-      <a href="/stocks/voo.html" title="$VOO (S&amp;P 500 Core) Dividend &amp; Retirement Core Study" style="color:#065f46;background:#ecfdf5;border:1.5px solid #059669;text-decoration:none;font-weight:800;padding:7px 13px;border-radius:8px;font-size:0.96rem;">$VOO &middot; S&amp;P 500 Core</a>
-      <a href="/stocks/schd.html" title="$SCHD (Dividend Growth ~3.5%) Dividend &amp; Retirement Core Study" style="color:#065f46;background:#ecfdf5;border:1.5px solid #059669;text-decoration:none;font-weight:800;padding:7px 13px;border-radius:8px;font-size:0.96rem;">$SCHD &middot; Dividend Growth ~3.5%</a>
-      <a href="/stocks/jepi.html" title="$JEPI (Monthly Income ~7.4%) Dividend &amp; Retirement Core Study" style="color:#065f46;background:#ecfdf5;border:1.5px solid #059669;text-decoration:none;font-weight:800;padding:7px 13px;border-radius:8px;font-size:0.96rem;">$JEPI &middot; Monthly Income ~7.4%</a>
-      <a href="/stocks/sgov.html" title="$SGOV (US T-Bill Cash ~4.7%) Dividend &amp; Retirement Core Study" style="color:#065f46;background:#ecfdf5;border:1.5px solid #059669;text-decoration:none;font-weight:800;padding:7px 13px;border-radius:8px;font-size:0.96rem;">$SGOV &middot; US T-Bill Cash ~4.7%</a>
-      <a href="/stocks/xlv.html" title="$XLV (Healthcare Cushion) Dividend &amp; Retirement Core Study" style="color:#065f46;background:#ecfdf5;border:1.5px solid #059669;text-decoration:none;font-weight:800;padding:7px 13px;border-radius:8px;font-size:0.96rem;">$XLV &middot; Healthcare Cushion</a>
-    </nav>
-    <nav aria-label="US Blue-Chip Dividend Leaders" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:18px;">
-      <a href="/stocks/jnj.html" title="Johnson &amp; Johnson ($JNJ) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$JNJ <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Johnson &amp; Johnson)</span></a>
-      <a href="/stocks/pg.html" title="Procter &amp; Gamble ($PG) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$PG <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Procter &amp; Gamble)</span></a>
-      <a href="/stocks/ko.html" title="Coca-Cola Co ($KO) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$KO <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Coca-Cola Co)</span></a>
-      <a href="/stocks/cost.html" title="Costco Wholesale ($COST) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$COST <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Costco Wholesale)</span></a>
-      <a href="/stocks/v.html" title="Visa Inc ($V) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$V <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Visa Inc)</span></a>
-      <a href="/stocks/msft.html" title="Microsoft Corp ($MSFT) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$MSFT <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Microsoft Corp)</span></a>
-      <a href="/stocks/aapl.html" title="Apple Inc ($AAPL) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$AAPL <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Apple Inc)</span></a>
-      <a href="/stocks/pep.html" title="PepsiCo Inc ($PEP) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$PEP <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(PepsiCo Inc)</span></a>
-      <a href="/stocks/wmt.html" title="Walmart Inc ($WMT) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$WMT <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Walmart Inc)</span></a>
-      <a href="/stocks/jpm.html" title="JPMorgan Chase ($JPM) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$JPM <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(JPMorgan Chase)</span></a>
-      <a href="/stocks/unh.html" title="UnitedHealth Group ($UNH) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$UNH <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(UnitedHealth Group)</span></a>
-      <a href="/stocks/xom.html" title="Exxon Mobil ($XOM) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$XOM <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Exxon Mobil)</span></a>
-      <a href="/stocks/cvx.html" title="Chevron Corp ($CVX) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$CVX <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Chevron Corp)</span></a>
-      <a href="/stocks/lly.html" title="Eli Lilly ($LLY) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$LLY <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Eli Lilly)</span></a>
-      <a href="/stocks/avgo.html" title="Broadcom Inc ($AVGO) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">$AVGO <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">(Broadcom Inc)</span></a>
-    </nav>
-    <div style="font-weight:800;color:#0f172a;margin:12px 0 8px;font-size:1.05rem;">
-      ⚖️ SIDE-BY-SIDE BLUE-CHIP &amp; DIVIDEND ETF COMPARISONS
-    </div>
-    <nav aria-label="Head-to-Head US Blue-Chip Comparisons" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
-      <a href="/compare/voo-vs-schd.html" title="$VOO vs $SCHD (S&amp;P 500 Core vs Dividend Growth) Blue-Chip Comparison" style="color:#1e40af;background:#eff6ff;border:1px solid #93c5fd;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.92rem;">⚖️ $VOO vs $SCHD</a>
-      <a href="/compare/jepi-vs-schd.html" title="$JEPI vs $SCHD (Monthly Income vs Dividend Growth) Blue-Chip Comparison" style="color:#1e40af;background:#eff6ff;border:1px solid #93c5fd;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.92rem;">⚖️ $JEPI vs $SCHD</a>
-      <a href="/compare/jnj-vs-pg.html" title="$JNJ vs $PG (Healthcare vs Consumer Staples) Blue-Chip Comparison" style="color:#1e40af;background:#eff6ff;border:1px solid #93c5fd;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.92rem;">⚖️ $JNJ vs $PG</a>
-      <a href="/compare/ko-vs-pep.html" title="$KO vs $PEP (Dividend Aristocrats Study) Blue-Chip Comparison" style="color:#1e40af;background:#eff6ff;border:1px solid #93c5fd;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.92rem;">⚖️ $KO vs $PEP</a>
-      <a href="/compare/cost-vs-wmt.html" title="$COST vs $WMT (Warehouse vs Value Retail) Blue-Chip Comparison" style="color:#1e40af;background:#eff6ff;border:1px solid #93c5fd;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.92rem;">⚖️ $COST vs $WMT</a>
-      <a href="/compare/aapl-vs-msft.html" title="$AAPL vs $MSFT (Blue-Chip Cashflow Leaders) Blue-Chip Comparison" style="color:#1e40af;background:#eff6ff;border:1px solid #93c5fd;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.92rem;">⚖️ $AAPL vs $MSFT</a>
-      <a href="/compare/v-vs-ma.html" title="$V vs $MA (Global Payment Networks) Blue-Chip Comparison" style="color:#1e40af;background:#eff6ff;border:1px solid #93c5fd;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.92rem;">⚖️ $V vs $MA</a>
-      <a href="/compare/xom-vs-cvx.html" title="$XOM vs $CVX (Integrated Energy Dividends) Blue-Chip Comparison" style="color:#1e40af;background:#eff6ff;border:1px solid #93c5fd;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.92rem;">⚖️ $XOM vs $CVX</a>
-    </nav>
-    <div style="margin-top:18px;padding-top:14px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:0.96rem;color:#1e293b;">
-      <span>🏛️ <strong>Educational Market Data &amp; Quantitative Research Desk:</strong> Questions about VIP worksheets, license keys, or 14-day refunds?</span>
-      <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#1d4ed8;font-weight:800;text-decoration:none;padding:10px 16px;min-height:48px;display:inline-flex;align-items:center;border:1.5px solid #93c5fd;border-radius:8px;background:#eff6ff;font-size:0.95rem;">✉️ Support Desk (beable9489@gmail.com) &rarr;</a>
-    </div>
-    <div style="margin-top:14px;padding:12px 16px;border-radius:10px;background:#f8fafc;border:1px solid #cbd5e1;display:flex;flex-wrap:wrap;gap:14px;align-items:center;font-size:0.92rem;">
-      <a href="/terms.html" style="color:#1d4ed8;font-weight:800;text-decoration:underline;">Terms of Service</a>
-      <span style="color:#94a3b8;">&middot;</span>
-      <a href="/privacy.html" style="color:#1d4ed8;font-weight:800;text-decoration:underline;">Privacy Policy</a>
-      <span style="color:#94a3b8;">&middot;</span>
-      <a href="/refund.html" style="color:#047857;font-weight:800;text-decoration:underline;">14-Day Refund Policy</a>
-      <span style="color:#94a3b8;">&middot;</span>
-      <a href="/contact.html" style="color:#1d4ed8;font-weight:700;text-decoration:underline;">Contact Support</a>
-      <span style="color:#94a3b8;">&middot;</span>
-      <a href="/insights/" style="color:#0369a1;font-weight:700;text-decoration:underline;">Educational Insights Journal</a>
-      <span style="color:#94a3b8;">&middot;</span>
-      <a href="/semi-fear-greed.html" style="color:#475569;font-weight:700;text-decoration:underline;">Sector Barbell Calculator</a>
-      <span style="color:#94a3b8;">&middot;</span>
-      <a href="/pro-swing.html" style="color:#475569;font-weight:700;text-decoration:underline;">Equity Factor Archive</a>
-      <span style="color:#94a3b8;">&middot;</span>
-      <a href="mailto:beable9489@gmail.com" style="color:#b45309;font-weight:800;text-decoration:underline;">beable9489@gmail.com</a>
-      <span style="color:#94a3b8;">&middot;</span>
-      <span style="color:#334155;font-weight:700;">Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)</span>
-    </div>
-    <p style="margin:12px 0 0;font-size:0.9rem;line-height:1.6;color:#475569;font-weight:600;">
-      Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.
-    </p>
-  </section>
 </body>
 </html>

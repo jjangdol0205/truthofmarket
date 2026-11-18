@@ -59,6 +59,7 @@ import { renderPricing } from "./components/Pricing.js";
 import { renderModals } from "./components/Modals.js";
 import "./components/PaymentWaitlist.js";
 import { renderSemiFearGreedView } from "./components/SemiFearGreedView.js";
+import { renderPrivateWealthSingleBreathHome, bindPrivateWealthSingleBreathEvents } from "./components/PrivateWealthHome.js";
 
 const initialPath = window.location.pathname.toLowerCase();
 const initialHash = window.location.hash.toLowerCase();
@@ -359,6 +360,13 @@ function renderApp() {
   const appEl = document.getElementById("app");
   if (!appEl) return;
 
+  if (!isProSwingOrEquitySubpage() && state.activeView !== "semi" && !initialTickerParam && !initialFilterParam) {
+    appEl.innerHTML = renderPrivateWealthSingleBreathHome(state);
+    bindPrivateWealthSingleBreathEvents(state);
+    bindRsaPolarCheckoutEvents();
+    return;
+  }
+
   const t = state.t;
   const mainBodyHtml =
     state.activeView === "semi"
@@ -463,7 +471,7 @@ async function handlePolarCheckoutSuccess(orderRef) {
   if (licModal) licModal.style.display = "none";
   renderApp();
   showToast(
-    "🎉 Polar.sh Payment Confirmed! All 72 Pro Setups Unlocked (Check your email for your permanent License Key)."
+    "Polar.sh Payment Confirmed! All 72 Pro Setups Unlocked (Check your email for your permanent License Key)."
   );
 }
 
@@ -630,7 +638,7 @@ function bindEvents() {
       if (statusEl) {
         statusEl.style.display = "block";
         statusEl.style.color = "#34d399";
-        statusEl.textContent = `🎉 Welcome aboard (${email})! Your 8:30 AM ET Retirement Weather Brief & 4-Core Allocation Guide are now unlocked.`;
+        statusEl.textContent = `Welcome aboard (${email})! Your 8:30 AM ET Retirement Weather Brief & 4-Core Allocation Guide are now unlocked.`;
       }
       if (bonusEl) bonusEl.style.display = "block";
       showToast("✅ Free Daily Morning Retirement Brief Activated!");
@@ -1261,7 +1269,7 @@ function bindEvents() {
     setTimeout(() => {
       closeLicenseModal();
       renderApp();
-      showToast("🎉 Pro Terminal Unlocked — All 72 US Equity Targets & 26Y CSV Active!");
+      showToast("Pro Terminal Unlocked — All 72 US Equity Targets & 26Y CSV Active!");
     }, 350);
   };
 
@@ -3137,7 +3145,7 @@ async function init() {
         localStorage.setItem("rsa_token", urlLicenseKey);
         await loadAllData();
         renderApp();
-        showToast("🎉 Polar.sh VIP License Verified — All 72 US Equity Targets Unlocked!");
+        showToast("Polar.sh VIP License Verified — All 72 US Equity Targets Unlocked!");
       }
     } catch (_) {}
   }

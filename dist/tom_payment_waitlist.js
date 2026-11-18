@@ -307,7 +307,7 @@
       '    <span style="display:inline-flex;align-items:center;gap:6px;background:#ecfdf5;border:1px solid #059669;color:#065f46;padding:4px 12px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:0.02em;">' +
       "      FOUNDING MEMBER PRIORITY ACCESS &bull; 20% EARLY-BIRD LOCK" +
       "    </span>" +
-      '    <button type="button" id="btnCloseTomVipWaitlist" aria-label="Close modal" style="min-height:42px;padding:6px 12px;border-radius:8px;border:1px solid #94a3b8;background:#f1f5f9;color:#0f172a;font-weight:800;font-size:15px;cursor:pointer;">✕ Close</button>' +
+      '    <button type="button" id="btnCloseTomVipWaitlist" aria-label="Close modal" style="min-height:42px;padding:6px 12px;border-radius:8px;border:1px solid #94a3b8;background:#f1f5f9;color:#0f172a;font-weight:800;font-size:15px;cursor:pointer;">Close</button>' +
       "  </div>" +
       '  <h3 id="tomVipWaitlistTitle" style="margin:0 0 8px;font-size:clamp(1.2rem,2.4vw,1.45rem);line-height:1.32;font-weight:900;">' +
       "    VIP Founding Member Launch Alert &amp; 20% Early-Bird Discount Reservation (1-Second Email Reserve)" +
@@ -316,7 +316,7 @@
       "    Our Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) self-directed educational calculator software checkout is completing final gateway activation. Reserve your spot in <b>1 second ($0 charged today)</b> to lock in a <b>20% Founding Member Discount</b>—plus instant free Morning Bell Club access." +
       "  </p>" +
       '  <div class="tom-wl-benefits-box">' +
-      '    <div style="font-weight:800;color:#047857;margin-bottom:6px;">📦 3 Core SMH &times; XLV VIP Software Deliverables ($29/mo or $199/yr):</div>' +
+      '    <div style="font-weight:800;color:#047857;margin-bottom:6px;">Included in Private Wealth Membership ($29/mo or $199/yr):</div>' +
       '    <div style="margin-bottom:4px;">&bull; <b>Daily Automated SMH &times; XLV Market Indicator &amp; Ratio Digest:</b> Morning email tracking public semiconductor overheating / fear data (0&ndash;100) and historical <b>$SMH : $XLV</b> sector mix shifts across regimes.</div>' +
       '    <div style="margin-bottom:4px;">&bull; <b>Account-Size Dollar ($) Allocation Worksheet:</b> Exact dollar amounts across <b>$SMH</b> (Semiconductors), <b>$XLV</b> (Healthcare Defense) &amp; optional <b>$SGOV</b> T-Bill cushion for your exact account scale.</div>' +
       '    <div>&bull; <b>Lifetime-Updated 14-Page SMH &times; XLV Master PDF Guide:</b> Complete 26-year (2000&ndash;2026) Dot-Com / 2008 / 2022 drawdown study + printable self-directed execution checklist.</div>' +
@@ -453,7 +453,7 @@
           confirmEl.style.background = "#ecfdf5";
           confirmEl.style.color = "#064e3b";
           confirmEl.innerHTML =
-            "✅ <strong>20% Early-Bird Founding Reservation Confirmed!</strong><br/>Reserved Plan: <b>" +
+            "<strong>20% Founding Member Reservation Confirmed.</strong><br/>Reserved Plan: <b>" +
             selectedPlan.replace(/[<>&"]/g, "") +
             "</b> for <b>" +
             email.replace(/[<>&"]/g, "") +
