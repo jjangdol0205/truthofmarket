@@ -22,10 +22,10 @@ const BLIND_TEST_I18N = {
     correctTag: "✅ QUANT REGIME MATCHED!",
     wrongTag: "❌ LEFT-SIDE DRAWDOWN ZONE:",
     revealTickerLabel: "REVEALED LIVE TICKER",
-    battleTitle: "📊 $10,000 HISTORICAL BACKTEST COMPARISON: SUB-MA60 DIP-BUYING VS. PW-RSI MODEL",
+    battleTitle: "📊 $10,000 HISTORICAL BACKTEST COMPARISON: SUB-MA60 DIP-BUYING VS. MA20/60 RECLAIM MODEL",
     retailSideTitle: "❌ Sub-MA60 Dip-Buying (-18% Below MA60)",
-    retailSideDesc: "Averages into sub-MA60 downtrends ($NVDA / $SMCI / $INTC) without calm allocation discipline. Unhedged tail drawdowns erode retirement principal.",
-    quantSideTitle: "🟢 RightSideAlpha PW-RSI + Volume Model",
+    retailSideDesc: "Averages into sub-MA60 downtrends ($SMCI / $INTC) without calm allocation discipline. Unhedged tail drawdowns erode retirement principal.",
+    quantSideTitle: "🟢 TruthOfMarket MA20/60 + Volume Model",
     quantSideDesc: "Filters for MA60 reclaim + ≥1.4x institutional volume surge with a modeled -9.0% risk boundary (-1.35% portfolio allocation cap).",
     vipUnlockBannerTitle: "🔥 ROUND 3 FEATURED A 3.41x VOLUME ANOMALY — UNLOCK ALL 72 QUANT FACTOR DATASETS & PINE SCRIPT",
     vipUnlockBannerSub:

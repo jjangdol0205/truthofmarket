@@ -221,6 +221,8 @@ def _footer_legal_html() -> str:
         <a href="/privacy.html">Privacy</a> &middot;
         <a href="/refund.html">14-Day Refund Policy</a> &middot;
         <a href="/contact.html">Contact</a> &middot;
+        <a href="https://www.youtube.com/@TruthOfMarketUS" target="_blank" rel="noopener">YouTube @TruthOfMarketUS</a> &middot;
+        <a href="https://www.instagram.com/truthofmarket/" target="_blank" rel="noopener">Instagram @truthofmarket</a> &middot;
         <a href="mailto:beable9489@gmail.com">beable9489@gmail.com</a>
       </div>
       <p class="essay-disclaimer">{html.escape(MANDATORY_DISCLAIMER)}</p>
@@ -271,6 +273,10 @@ def _render_article_shell(
                         "name": "TruthOfMarket",
                         "url": "https://truthofmarket.com/",
                         "logo": {"@type": "ImageObject", "url": "https://truthofmarket.com/favicon.svg"},
+                        "sameAs": [
+                            "https://www.youtube.com/@TruthOfMarketUS",
+                            "https://www.instagram.com/truthofmarket/",
+                        ],
                     },
                 },
                 {"@type": "FAQPage", "mainEntity": faq_entities},
@@ -708,6 +714,82 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
             f"<td>${c:.2f}</td><td>{sc}/100</td><td>{dd:+.1f}%</td><td>{vol:.2f}x</td></tr>\n"
         )
 
+    def _build_morning_note_spec(slug_name: str, note_date: str, is_archived: bool = False) -> Dict[str, Any]:
+        if is_archived:
+            note_title = f"Morning Note ({note_date}): Sector Sentiment & Calm SMH × XLV Allocation Study"
+            note_sub = (
+                f"Archived morning research note ({note_date}) reviewing the two-pillar $SMH × $XLV sector balance "
+                f"and short-term US Treasury ($SGOV) liquidity discipline."
+            )
+            note_desc = (
+                f"Archived educational morning market note ({note_date}): historical $SMH × $XLV sector balance study, "
+                f"breadth discipline, and $SGOV US Treasury cushion context."
+            )
+            note_body = f"""
+      <p>In our morning research note recorded on <strong>{html.escape(note_date)}</strong>, attention remains anchored on household portfolio structure rather than short-term headline noise: pairing secular semiconductor innovation (<a href="/stocks/smh.html">$SMH</a>) with non-cyclical US healthcare cash flows (<a href="/stocks/xlv.html">$XLV</a>) and a dedicated short-term US Treasury cushion (<a href="/stocks/sgov.html">$SGOV</a>).</p>
+
+      <p>Numbers on any single session are most useful when they lower the temperature in the room. When technology sentiment compresses into fear, headlines grow urgent even as multi-year valuation dispersion cools; when optimism stretches toward cycle highs, concentration risk quietly builds. Observing <a href="/compare/smh-vs-xlv.html">$SMH and $XLV</a> side by side keeps attention focused on full-portfolio balance (modeled around <strong>{rec_smh}% $SMH : {rec_xlv}% $XLV</strong> in historical deep-compression regimes) rather than intraday fluctuations.</p>
+
+      <h2>Two-Pillar Discipline &amp; Execution Checklist ({html.escape(note_date)} Archive)</h2>
+      <p>Whether reviewing a lifelong 401(k), an IRA, or a taxable brokerage account, three quiet habits protect long-term compounding across market seasons:</p>
+      <p>First, hold unleveraged 1x spot ETFs (<a href="/stocks/smh.html">$SMH</a> and <a href="/stocks/xlv.html">$XLV</a>) free from daily 3x leveraged volatility decay. Second, insulate near-term household spending reserves in 0–3 month US Treasury bills (<a href="/stocks/sgov.html">$SGOV</a>) so equity shares are never sold in a downturn. Third, place limit orders rather than market orders during the opening minutes after 9:30 AM ET. For the latest live session figures, see our <a href="/insights/daily-us-quant-regime-brief.html">current Daily Morning Note</a> or run the <a href="/#tom-retirement-architect">4-Step SMH &times; XLV Sector Balance Survey</a>.</p>
+"""
+            note_faqs = [
+                (
+                    f"What does this {note_date} archived morning note cover?",
+                    f"This {note_date} archived note summarizes TruthOfMarket's non-leveraged $SMH × $XLV + $SGOV two-pillar sector balance framework for self-directed educational study.",
+                ),
+                (
+                    "Does this archived note recommend buying or selling securities?",
+                    "No. All TruthOfMarket notes summarize public market data and historical mathematical frameworks for self-directed educational study only.",
+                ),
+            ]
+        else:
+            note_title = f"Morning Note ({note_date}): Sector Sentiment at {fg:.1f}/100 ({regime})"
+            note_sub = f"A calm pre-bell look at $SMH (${smh_c:.2f}), $XLV (${xlv_c:.2f}), and where public breadth indicators sit on {note_date}."
+            note_desc = f"Educational morning market note ({note_date}): sector sentiment gauge at {fg:.1f}/100 ({regime}), $SMH ${smh_c:.2f}, $XLV ${xlv_c:.2f}, and historical {rec_smh}:{rec_xlv} SMH × XLV study context."
+            note_body = f"""
+      <p>Before the opening bell on {html.escape(note_date)}, our public sector sentiment gauge reads <strong>{fg:.1f} out of 100 ({html.escape(regime)})</strong>. <a href="/stocks/smh.html">$SMH</a> closed the prior session at <strong>${smh_c:.2f}</strong> ({smh_dd:+.2f}% from its trailing 52-week high, with a 14-day RSI of {smh_rsi:.1f}), while <a href="/stocks/xlv.html">$XLV</a> closed at <strong>${xlv_c:.2f}</strong> and <a href="/stocks/qqq.html">$QQQ</a> settled at <strong>${qqq_c:.2f}</strong>.</p>
+
+      <p>Numbers like these are most useful when they lower the temperature in the room. When sentiment compresses into deep fear, headlines grow urgent even though valuation dispersion has already cooled substantially. Conversely, when sentiment stretches above seventy-five or eighty, crowds treat extrapolations as certainties. Observing both <a href="/compare/smh-vs-xlv.html">$SMH and $XLV</a> side by side keeps attention anchored on full-portfolio balance (currently modeled at <strong>{rec_smh}% $SMH : {rec_xlv}% $XLV</strong> in our historical series) rather than intraday noise.</p>
+
+      <h2>Public US Equity Factor Snapshot ({html.escape(note_date)})</h2>
+      <p>For readers studying individual US companies alongside core sector ETFs, the table below records the top publicly unlocked tickers in our historical moving-average and volume dataset as of {html.escape(note_date)}:</p>
+      <table class="data-table">
+        <thead>
+          <tr><th>Ticker</th><th>Last Close</th><th>Factor Score</th><th>vs. 52W High</th><th>10D Rel Volume</th></tr>
+        </thead>
+        <tbody>
+          {rows_html}
+        </tbody>
+      </table>
+
+      <p>Whether you are reviewing a lifelong 401(k) or building a taxable brokerage account, patience remains an underrated edge. Place limit orders rather than market orders at the 9:30 AM open, keep near-term cash needs insulated in short-term Treasuries (<a href="/stocks/sgov.html">$SGOV</a>), and let clear arithmetic replace guesswork.</p>
+"""
+            note_faqs = [
+                (
+                    f"What is the public sector sentiment reading for {note_date}?",
+                    f"For {note_date}, the public gauge reads {fg:.1f}/100 ({regime}), with $SMH at ${smh_c:.2f} and $XLV at ${xlv_c:.2f}.",
+                ),
+                (
+                    "Does this daily note recommend buying or selling securities?",
+                    "No. All figures summarize public closing prices and historical mathematical formulas for self-directed educational study.",
+                ),
+            ]
+        return {
+            "slug": slug_name,
+            "title": note_title,
+            "subtitle": note_sub,
+            "desc": note_desc,
+            "cat": "Daily Morning Note",
+            "author": "Arthur Vance",
+            "role": "Senior Portfolio Research Note",
+            "date": note_date,
+            "mins": 5,
+            "body": note_body,
+            "faqs": note_faqs,
+        }
+
     articles_spec: List[Dict[str, Any]] = [
         {
             "slug": "why-quiet-barbells-outlast-loud-bull-markets.html",
@@ -772,45 +854,7 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
                 ),
             ],
         },
-        {
-            "slug": "daily-us-quant-regime-brief.html",
-            "title": f"Morning Note ({as_of}): Sector Sentiment at {fg:.1f}/100 ({regime})",
-            "subtitle": f"A calm pre-bell look at $SMH (${smh_c:.2f}), $XLV (${xlv_c:.2f}), and where public breadth indicators sit today.",
-            "desc": f"Educational morning market note as of {as_of}: sector sentiment gauge at {fg:.1f}/100 ({regime}), $SMH ${smh_c:.2f}, $XLV ${xlv_c:.2f}, and historical {rec_smh}:{rec_xlv} sector study context.",
-            "cat": "Daily Morning Note",
-            "author": "Arthur Vance",
-            "role": "Senior Portfolio Research Note",
-            "date": as_of,
-            "mins": 5,
-            "body": f"""
-      <p>Before the opening bell on {html.escape(as_of)}, our public sector sentiment gauge reads <strong>{fg:.1f} out of 100 ({html.escape(regime)})</strong>. <a href="/stocks/smh.html">$SMH</a> closed the prior session at <strong>${smh_c:.2f}</strong> ({smh_dd:+.2f}% from its trailing 52-week high, with a 14-day RSI of {smh_rsi:.1f}), while <a href="/stocks/xlv.html">$XLV</a> closed at <strong>${xlv_c:.2f}</strong> and <a href="/stocks/qqq.html">$QQQ</a> settled at <strong>${qqq_c:.2f}</strong>.</p>
-
-      <p>Numbers like these are most useful when they lower the temperature in the room. When sentiment compresses into deep fear, headlines grow urgent even though valuation dispersion has already cooled substantially. Conversely, when sentiment stretches above seventy-five or eighty, crowds treat extrapolations as certainties. Observing both <a href="/compare/smh-vs-xlv.html">$SMH and $XLV</a> side by side keeps attention anchored on full-portfolio balance (currently modeled at <strong>{rec_smh}% $SMH : {rec_xlv}% $XLV</strong> in our historical series) rather than intraday noise.</p>
-
-      <h2>Public US Equity Factor Snapshot ({html.escape(as_of)})</h2>
-      <p>For readers studying individual US companies alongside core sector ETFs, the table below records the top publicly unlocked tickers in our historical moving-average and volume dataset as of the latest close:</p>
-      <table class="data-table">
-        <thead>
-          <tr><th>Ticker</th><th>Last Close</th><th>Factor Score</th><th>vs. 52W High</th><th>10D Rel Volume</th></tr>
-        </thead>
-        <tbody>
-          {rows_html}
-        </tbody>
-      </table>
-
-      <p>Whether you are reviewing a lifelong 401(k) or building a taxable brokerage account, patience remains an underrated edge. Place limit orders rather than market orders at the 9:30 AM open, keep near-term cash needs insulated in short-term Treasuries (<a href="/stocks/sgov.html">$SGOV</a>), and let clear arithmetic replace guesswork.</p>
-""",
-            "faqs": [
-                (
-                    f"What is the public sector sentiment reading as of {as_of}?",
-                    f"As of {as_of}, the public gauge reads {fg:.1f}/100 ({regime}), with $SMH at ${smh_c:.2f} and $XLV at ${xlv_c:.2f}.",
-                ),
-                (
-                    "Does this daily note recommend buying or selling securities?",
-                    "No. All figures summarize public closing prices and historical mathematical formulas for self-directed educational study.",
-                ),
-            ],
-        },
+        _build_morning_note_spec("daily-us-quant-regime-brief.html", as_of, is_archived=False),
         {
             "slug": "pw-rsi-right-side-breakout-methodology.html",
             "title": "Why Cheap-Looking Charts Keep Falling: Notes on Moving-Average Discipline",
@@ -826,7 +870,7 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
 
       <p>Across our 26.8-year historical archive of liquid US equities (2000–2026), stocks trading beneath declining twenty-day and sixty-day moving averages exhibited noticeably wider downside variance than cohorts that had first stabilized above their medium-term averages on expanding volume.</p>
 
-      <p>Rather than guessing bottoms in falling trends, our public factor archive records four plain measurements on tickers such as <a href="/stocks/nvda.html">$NVDA</a>, <a href="/stocks/msft.html">$MSFT</a>, and <a href="/stocks/celh.html">$CELH</a>: distance from the trailing 52-week high, stabilization distance above the 52-week low, daily close relative to the 20-day and 60-day moving averages, and 10-day relative volume compared against baseline turnover.</p>
+      <p>Rather than guessing bottoms in falling single-stock trends, most retirement households anchor core wealth in broad non-leveraged sector pillars (<a href="/stocks/smh.html">$SMH</a> and <a href="/stocks/xlv.html">$XLV</a>) plus short-term US Treasury reserves (<a href="/stocks/sgov.html">$SGOV</a>). For readers who also study individual companies such as <a href="/stocks/msft.html">$MSFT</a> or <a href="/stocks/celh.html">$CELH</a>, our public factor archive records four plain measurements: distance from the trailing 52-week high, stabilization distance above the 52-week low, daily close relative to the 20-day and 60-day moving averages, and 10-day relative volume.</p>
 
       <p>None of those four numbers predicts the future, and past cohort behavior never guarantees tomorrow's return. What they offer is a calm, repeatable checklist—a way to verify whether a price trend has actually stabilized before committing hard-earned capital.</p>
 """,
@@ -872,8 +916,7 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
     ]
 
     dated_slug = f"{as_of}-us-quant-regime-brief.html"
-    daily_spec = dict(articles_spec[2])
-    daily_spec["slug"] = dated_slug
+    daily_spec = _build_morning_note_spec(dated_slug, as_of, is_archived=False)
 
     archived_specs: List[Dict[str, Any]] = []
     seen_arch_slugs = {dated_slug}
@@ -885,16 +928,12 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
                 continue
             seen_arch_slugs.add(old_f.name)
             arch_date = old_f.name[:10]
-            arch_spec = dict(articles_spec[2])
-            arch_spec["slug"] = old_f.name
-            arch_spec["date"] = arch_date
-            arch_spec["title"] = f"Morning Note ({arch_date}): Sector Sentiment & Calm Allocation Study"
-            archived_specs.append(arch_spec)
+            archived_specs.append(_build_morning_note_spec(old_f.name, arch_date, is_archived=True))
 
     all_specs = [articles_spec[0], articles_spec[1], articles_spec[2], daily_spec] + archived_specs + articles_spec[3:]
 
-    sitemap_entries: List[Tuple[str, str, str]] = [
-        ("https://truthofmarket.com/insights/", "0.94", "daily")
+    sitemap_entries: List[Tuple[str, ...]] = [
+        ("https://truthofmarket.com/insights/", "0.94", "daily", as_of)
     ]
     rss_items: List[Dict[str, str]] = []
     cards_html = ""
@@ -915,7 +954,7 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
         )
         (insights_dir / sp["slug"]).write_text(html_out, encoding="utf-8")
         full_url = f"https://truthofmarket.com/insights/{sp['slug']}"
-        sitemap_entries.append((full_url, "0.93" if idx == 0 else "0.88", "daily"))
+        sitemap_entries.append((full_url, "0.93" if idx == 0 else "0.88", "daily", sp["date"]))
 
         if sp["slug"] not in seen_arch_slugs:
             rss_items.append(
@@ -951,6 +990,7 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700&display=swap" rel="stylesheet" />
+  <script type="application/ld+json">{{"@context":"https://schema.org","@type":"CollectionPage","name":"TruthOfMarket Editorial Notes","url":"https://truthofmarket.com/insights/","dateModified":"{as_of}","publisher":{{"@type":"Organization","name":"TruthOfMarket","url":"https://truthofmarket.com/","sameAs":["https://www.youtube.com/@TruthOfMarketUS","https://www.instagram.com/truthofmarket/"]}}}}</script>
   {_beacon_script("index.html")}
   <style>
     body {{ margin:0; background:#fcfcfa; color:#1a1a1a; font-family:'Newsreader',Georgia,serif; font-size:19px; line-height:1.8; }}

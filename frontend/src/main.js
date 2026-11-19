@@ -102,7 +102,7 @@ const defaultView =
       localStorage.removeItem("rsa_cfg_ls_ltd");
     }
     const oldTv = localStorage.getItem("rsa_cfg_aff_tv") || "";
-    if (oldTv === "rightsidealpha") {
+    if (oldTv && oldTv.toLowerCase().includes("rightside")) {
       localStorage.setItem("rsa_cfg_aff_tv", "1173809");
     }
     const oldSa = localStorage.getItem("rsa_cfg_aff_sa") || "";
@@ -112,7 +112,8 @@ const defaultView =
     if (!localStorage.getItem("rsa_aff_v6_us_tools")) {
       localStorage.setItem("rsa_cfg_broker_url", "https://trendspider.com/?_go=rightside");
       localStorage.setItem("rsa_cfg_broker_name", "TrendSpider (rightside)");
-      localStorage.setItem("rsa_cfg_youtube_url", "https://www.youtube.com/@RightSideAlpha");
+      localStorage.setItem("rsa_cfg_youtube_url", "https://www.youtube.com/@TruthOfMarketUS");
+      localStorage.setItem("rsa_cfg_instagram_url", "https://www.instagram.com/truthofmarket/");
       localStorage.setItem("rsa_tg_channel_url", "https://t.me/truthofmarketss");
       localStorage.setItem("rsa_tg_chat_id", "@truthofmarketss");
       localStorage.setItem("rsa_aff_v6_us_tools", "1");
@@ -126,12 +127,12 @@ const defaultView =
       localStorage.setItem("rsa_tg_chat_id", "@truthofmarketss");
     }
     const oldYt = localStorage.getItem("rsa_cfg_youtube_url") || "";
-    if (!oldYt || oldYt.includes("youtube.com/@rightsidealpha")) {
-      localStorage.setItem("rsa_cfg_youtube_url", "https://www.youtube.com/@RightSideAlpha");
+    if (!oldYt || !oldYt.toLowerCase().includes("@truthofmarketus")) {
+      localStorage.setItem("rsa_cfg_youtube_url", "https://www.youtube.com/@TruthOfMarketUS");
     }
     const oldIg = localStorage.getItem("rsa_cfg_instagram_url") || "";
-    if (oldIg.includes("semifeargreed")) {
-      localStorage.setItem("rsa_cfg_instagram_url", "https://www.instagram.com/rightsidealpha");
+    if (!oldIg || !oldIg.toLowerCase().includes("instagram.com/truthofmarket")) {
+      localStorage.setItem("rsa_cfg_instagram_url", "https://www.instagram.com/truthofmarket/");
     }
   } catch (_) {}
 })();
@@ -200,7 +201,7 @@ const state = {
   telegramAlertType: "SEMI_BRIEFING",
   telegramPreviewText: "",
   config: {
-    site1_name: "RightSideAlpha",
+    site1_name: "TruthOfMarket",
     site1_url: localStorage.getItem("rsa_cfg_site1_url") || "https://truthofmarket.com",
     site2_url: "https://truthofmarket.com",
     polar_tom_monthly_url:
@@ -387,16 +388,12 @@ function renderApp() {
             ✉️ beable9489@gmail.com
           </a>
           <span style="color:var(--border);">|</span>
-          <a href="${state.config.youtube_url || DEFAULT_YOUTUBE_URL}" target="_blank" rel="noopener noreferrer" class="tom-footer-social">
-            📺 YouTube (@RightSideAlpha) ↗
+          <a href="${state.config.youtube_url || DEFAULT_YOUTUBE_URL}" target="_blank" rel="noopener" class="tom-footer-social">
+            YouTube @TruthOfMarketUS
           </a>
           <span style="color:var(--border);">|</span>
-          <a href="${state.config.instagram_url || DEFAULT_INSTAGRAM_URL}" target="_blank" rel="noopener noreferrer" class="tom-footer-social">
-            📸 Instagram (@rightsidealpha) ↗
-          </a>
-          <span style="color:var(--border);">|</span>
-          <a href="${state.config.x_url || "https://x.com/rightsidealpha"}" target="_blank" rel="noopener noreferrer" class="tom-footer-social">
-            𝕏 (@rightsidealpha) ↗
+          <a href="${state.config.instagram_url || DEFAULT_INSTAGRAM_URL}" target="_blank" rel="noopener" class="tom-footer-social">
+            Instagram @truthofmarket
           </a>
           <span style="color:var(--border);">|</span>
           <button type="button" class="btn btn-sm" id="btnToggleTomTheme" title="Switch between Daylight Mode and Optional Dark Mode">
@@ -997,7 +994,7 @@ function bindEvents() {
     });
   });
 
-  // Search Input (RightSideAlpha)
+  // Search Input (TruthOfMarket)
   const searchInput = document.getElementById("searchInput");
   if (searchInput) {
     searchInput.addEventListener("input", (e) => {
@@ -1889,7 +1886,7 @@ function bindEvents() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `RightSideAlpha_VIP_Watchlist_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.download = `TruthOfMarket_VIP_Watchlist_${new Date().toISOString().slice(0, 10)}.csv`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -2108,7 +2105,7 @@ function bindEvents() {
     });
   });
 
-  // PW-RSI Explainer Modal wiring (Feature F4)
+  // Factor Explainer Modal wiring (Feature F4)
   const pwRsiModal = document.getElementById("pwRsiModal");
   const btnOpenPwRsiExplainer = document.getElementById("btnOpenPwRsiExplainer");
   const btnClosePwRsiModal = document.getElementById("btnClosePwRsiModal");
@@ -2540,7 +2537,7 @@ function openStockDetailModal(ticker) {
   bodyEl.innerHTML = `
     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 130px), 1fr)); gap:8px; margin-bottom:12px;">
       <div style="background:#05080f; border:1px solid var(--border); border-radius:4px; padding:8px 10px;">
-        <div class="mono" style="font-size:0.66rem; color:var(--muted);">PW-RSI SCORE</div>
+        <div class="mono" style="font-size:0.66rem; color:var(--muted);">FACTOR SCORE</div>
         <div class="mono" style="font-size:1.05rem; font-weight:800; color:#34d399;">${Number(s.score ?? 0)} / 100</div>
       </div>
       <div style="background:#05080f; border:1px solid var(--border); border-radius:4px; padding:8px 10px;">
@@ -2731,7 +2728,7 @@ function generateScorecardPng(stock) {
 
   ctx.fillStyle = "#0ecb81";
   ctx.font = "bold 20px Inter, sans-serif";
-  ctx.fillText("RIGHTSIDEALPHA · US EQUITY TURNAROUND TERMINAL", 45, 62);
+  ctx.fillText("TRUTHOFMARKET · US EQUITY FACTOR ARCHIVE", 45, 62);
 
   if (stock) {
     ctx.fillStyle = "#ffffff";
@@ -2758,7 +2755,7 @@ function generateScorecardPng(stock) {
   } else {
     ctx.fillStyle = "#ffffff";
     ctx.font = "bold 34px Inter, sans-serif";
-    ctx.fillText("20-Year US Equity Backtest: Left-Side vs PW-RSI Right-Side", 45, 125);
+    ctx.fillText("20-Year US Equity Study: Sub-MA60 vs MA20/MA60 Reclaimed", 45, 125);
 
     ctx.fillStyle = "#f6465d";
     ctx.font = "22px JetBrains Mono, monospace";
@@ -2766,7 +2763,7 @@ function generateScorecardPng(stock) {
 
     ctx.fillStyle = "#0ecb81";
     ctx.font = "bold 24px JetBrains Mono, monospace";
-    ctx.fillText("PW-RSI Right-Side:     55.24% 2x Rate | -16.49% MDD | 29d Underwater", 45, 260);
+    ctx.fillText("MA20/60 Reclaimed:     55.24% 2x Rate | -16.49% MDD | 29d Underwater", 45, 260);
   }
 
   ctx.fillStyle = "#8492a6";
@@ -2778,7 +2775,7 @@ function generateScorecardPng(stock) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = stock ? `RightSideAlpha_${stock.ticker}_TearSheet.png` : "RightSideAlpha_Benchmark.png";
+    a.download = stock ? `TruthOfMarket_${stock.ticker}_TearSheet.png` : "TruthOfMarket_Benchmark.png";
     a.click();
     URL.revokeObjectURL(url);
     showToast(stock ? `Downloaded $${stock.ticker} Tear Sheet PNG` : "Downloaded Benchmark Tear Sheet PNG");

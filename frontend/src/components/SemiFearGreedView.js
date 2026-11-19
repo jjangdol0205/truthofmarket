@@ -322,21 +322,21 @@ export function renderSemiFearGreedView(state) {
         <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
           <a
             class="btn"
-            href="${state.config?.youtube_url || "https://www.youtube.com/@RightSideAlpha"}"
+            href="${state.config?.youtube_url || "https://www.youtube.com/@TruthOfMarketUS"}"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener"
             style="background:#dc2626; color:#ffffff; border-color:#b91c1c;"
           >
-            📺 YouTube (@RightSideAlpha) ↗
+            YouTube @TruthOfMarketUS
           </a>
           <a
             class="btn"
-            href="${state.config?.instagram_url || "https://www.instagram.com/rightsidealpha"}"
+            href="${state.config?.instagram_url || "https://www.instagram.com/truthofmarket/"}"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener"
             style="background:#db2777; color:#ffffff; border-color:#be185d;"
           >
-            📸 Instagram (@rightsidealpha) ↗
+            Instagram @truthofmarket
           </a>
           <a
             class="btn ${state.isProUnlocked ? "" : "btn-gated-vip-tg"}"
@@ -740,7 +740,7 @@ export function renderSemiFearGreedView(state) {
           Planning Your 401(k)/IRA Monthly Retirement Cashflow or Reviewing Individual Equity Factors?
         </h3>
         <p style="font-size:0.84rem; color:var(--muted);">
-          Return to our 30-Second Retirement Cashflow Calculator (SGOV · SCHD · JEPI · VOO) or explore the Quantitative Factor Research Archive.
+          Return to our 4-Step Historical SMH &times; XLV + SGOV Sector Balance Simulator or explore the Quantitative Factor Research Archive.
         </p>
       </div>
       <div style="display:flex; gap:8px; flex-wrap:wrap;">

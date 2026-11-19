@@ -46,35 +46,34 @@
     </p>
 
     <div class="card">
-      <h2>TruthOfMarket — US 401(k)/IRA Retirement Cashflow &amp; Safe Allocation Calculator (https://truthofmarket.com)</h2>
+      <h2>TruthOfMarket — Historical SMH &times; XLV + SGOV Sector Balance Simulator (https://truthofmarket.com)</h2>
       <p><strong>Operated by:</strong> Educational Market Data &amp; Quantitative Research Desk</p>
       <p><strong>Billing &amp; Checkout:</strong> Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)</p>
       <p><strong>Digital SaaS Tiers:</strong></p>
       <ul>
-        <li><strong>Monthly VIP Educational Calculator Software ($29.00/month USD):</strong> Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Allocation Calculator</li>
-        <li><strong>Annual VIP Educational Calculator Software ($199.00/year USD — Save 43%):</strong> Includes Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide + 3-Bucket Allocation Calculator</li>
+        <li><strong>Monthly VIP Educational Calculator Software ($29.00/month USD):</strong> Includes Daily Morning SMH &times; XLV Temperature &amp; Weight Tracking Briefings + Account-Scale Dollar Allocation Calculator</li>
+        <li><strong>Annual VIP Educational Calculator Software ($199.00/year USD — Save 43%):</strong> Includes all Monthly VIP deliverables + Lifetime-Updated Retirement Safe-Withdrawal &amp; Tax-Account Masterbook PDF + Annual Cash-Flow Planning Sheet</li>
       </ul>
       <p><strong>What the customer receives immediately after checkout:</strong></p>
       <ul>
-        <li><strong>Deliverable 1 (Self-Directed Web Calculator Suite):</strong> Full access to 3-scenario retirement cashflow calculators, 2–4x/year portfolio weight allocation review tools, and multi-asset variance simulators.</li>
-        <li><strong>Deliverable 2 (Lifetime-Updated 401(k)/IRA Drawdown Defense PDF Guide &amp; 26-Year CSV Dataset):</strong> Complete digital PDF reference guide plus daily $SMH / $XLV / $QQQ historical public market dataset (2000–2026).</li>
-        <li><strong>Deliverable 3 (TradingView Pine Script v5 Educational Overlay):</strong> Copy-paste moving-average visualization script for personal charting.</li>
+        <li><strong>Deliverable 1 (Self-Directed Web Calculator Suite):</strong> Full access to SMH &times; XLV + SGOV sector balance calculators, regime ratio reference sheets, and multi-asset variance simulators.</li>
+        <li><strong>Deliverable 2 (Lifetime-Updated Drawdown Defense &amp; Tax-Account Masterbook PDF):</strong> Complete digital PDF reference guide plus 26-year (2000–2026) $SMH / $XLV historical public market dataset.</li>
+        <li><strong>Deliverable 3 (TradingView Pine Script v5 Educational Overlay):</strong> Copy-paste 20-day and 60-day moving-average visualization script for personal charting.</li>
       </ul>
-      <a class="btn btn-green" href="/?payment=success&amp;unlock=1" target="_blank" rel="noopener">🔓 Open Unlocked Calculator Software Demo &rarr;</a>
+      <a class="btn btn-green" href="/?payment=success&amp;unlock=1" target="_blank" rel="noopener">Open Unlocked Calculator Software Demo &rarr;</a>
       <a class="btn" href="/terms.html">Terms of Service</a>
       <a class="btn" href="/privacy.html">Privacy Policy</a>
       <a class="btn" href="/refund.html">14-Day Refund Policy</a>
 
       <h3 style="font-size:0.95rem;color:#f8fafc;margin-top:18px;">Sample Deliverable: TradingView Pine Script v5 Educational Chart Overlay</h3>
       <pre>//@version=5
-indicator("TruthOfMarket Educational Moving-Average &amp; Dispersion Overlay v5", overlay=true)
+indicator("TruthOfMarket Educational Moving-Average Overlay v5", overlay=true)
 ma20 = ta.sma(close, 20)
 ma60 = ta.sma(close, 60)
-atr14 = ta.atr(14)
-lowerVarianceBand = close - (2.0 * atr14)
+lowerVarianceBand = close * 0.91
 plot(ma20, "20-Day SMA", color=color.new(color.aqua, 0), linewidth=2)
 plot(ma60, "60-Day SMA", color=color.new(color.orange, 0), linewidth=2)
-plot(lowerVarianceBand, "2.0x ATR Lower Dispersion Reference", color=color.new(color.yellow, 30), style=plot.style_circles)</pre>
+plot(lowerVarianceBand, "Lower Variance Reference Band", color=color.new(color.yellow, 30), style=plot.style_circles)</pre>
     </div>
 
     <div class="card">

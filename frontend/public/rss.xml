@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>TruthOfMarket | US 401k/IRA Retirement Cashflow &amp; Household Budget Calculator</title>
+    <title>TruthOfMarket | Historical SMH × XLV Sector Balance Simulator &amp; Market Indicator Digest</title>
     <link>https://truthofmarket.com/</link>
     <atom:link href="https://truthofmarket.com/rss.xml" rel="self" type="application/rss+xml" />
     <atom:link href="https://pubsubhubbub.appspot.com/" rel="hub" />
-    <description>Self-directed educational calculator software for US 401(k)/IRA retirement cashflow simulation, 3-color market weather visualization, and calm 2-4x/year SGOV · SCHD · JEPI · VOO portfolio budget review.</description>
+    <description>Self-directed educational calculator software for Historical SMH × XLV + SGOV two-pillar sector balance simulation, 26-year drawdown studies, and daily market indicator data digests.</description>
     <language>en-US</language>
     <lastBuildDate>Wed, 18 Nov 2026 21:00:00 +0000</lastBuildDate>
     <item>
-      <title><![CDATA[Morning Bell Market Weather Note (2026-11-18): Sentiment Gauge at 10.6/100 (EXTREME_FEAR) & Calm 2-4x/Year Budget Review]]></title>
+      <title><![CDATA[Morning Bell Market Weather Note (2026-11-18): Sentiment Gauge at 10.6/100 (EXTREME_FEAR) & SMH × XLV Sector Balance]]></title>
       <link>https://truthofmarket.com/insights/daily-us-quant-regime-brief.html</link>
       <guid isPermaLink="true">https://truthofmarket.com/insights/daily-us-quant-regime-brief.html</guid>
       <pubDate>Wed, 18 Nov 2026 21:00:00 +0000</pubDate>
-      <description><![CDATA[Educational US market weather summary as of 2026-11-18: $SMH $457.91 (-31.54% off 52W high), $SMH:$XLV barbell calculator context, and SGOV · SCHD · JEPI · VOO retirement allocation study.]]></description>
+      <description><![CDATA[Educational US market weather summary as of 2026-11-18: $SMH $457.91 (-31.54% off 52W high), $SMH × $XLV two-pillar balance calculator context, and $SGOV US Treasury reserve study.]]></description>
     </item>
     <item>
       <title><![CDATA[Understanding Moving-Average Confirmation: 26.8-Year Empirical Factor Study (2000-2026)]]></title>
@@ -27,21 +27,21 @@
       <link>https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html</link>
       <guid isPermaLink="true">https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html</guid>
       <pubDate>Wed, 18 Nov 2026 21:00:00 +0000</pubDate>
-      <description><![CDATA[Empirical educational study of combining Semiconductors ($SMH) with Healthcare ($XLV) under calm 2-4x/year weight budget review.]]></description>
+      <description><![CDATA[Empirical educational study of combining Semiconductors ($SMH) with Healthcare ($XLV) under calm semi-annual weight review.]]></description>
     </item>
     <item>
       <title><![CDATA[The Mathematics of Drawdown Asymmetry: Why Portfolio Cushions Preserve Long-Term Compounding]]></title>
       <link>https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html</link>
       <guid isPermaLink="true">https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html</guid>
       <pubDate>Wed, 18 Nov 2026 21:00:00 +0000</pubDate>
-      <description><![CDATA[Educational compounding math showing how deep drawdowns require nonlinear recovery gains, and how short-term US Treasury cushions reduce sequence-of-returns risk.]]></description>
+      <description><![CDATA[Educational compounding math showing how deep drawdowns require nonlinear recovery gains, and how $XLV and short-term US Treasury ($SGOV) cushions reduce sequence-of-returns risk.]]></description>
     </item>
     <item>
-      <title><![CDATA[TruthOfMarket — 30-Second US 401(k)/IRA Retirement Cashflow & Household Budget Calculator (As of 2026-11-18)]]></title>
+      <title><![CDATA[TruthOfMarket — 4-Step Historical SMH × XLV + SGOV Sector Balance Simulator (As of 2026-11-18)]]></title>
       <link>https://truthofmarket.com/</link>
       <guid isPermaLink="true">https://truthofmarket.com/</guid>
       <pubDate>Wed, 18 Nov 2026 21:00:00 +0000</pubDate>
-      <description><![CDATA[Self-directed educational retirement income calculator modeling SGOV (US T-Bill Cushion), SCHD (Dividend Growth), JEPI (Monthly Paycheck), and VOO (S&P 500 Core) with calm 2-4x/year weight budget review.]]></description>
+      <description><![CDATA[Self-directed educational sector balance simulator modeling non-leveraged Semiconductor Growth ($SMH), Healthcare Defense ($XLV), and 0-3 Month US Treasury Reserves ($SGOV).]]></description>
     </item>
     <item>
       <title><![CDATA[Public Market Weather & Sector Sentiment Gauge (10.6 EXTREME_FEAR) — $SMH/$XLV Barbell Calculator]]></title>

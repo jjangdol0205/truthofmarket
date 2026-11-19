@@ -16,12 +16,12 @@ const enCopy = {
   heroTitle: "Balance AI Semiconductor Growth ($SMH) With Healthcare Defense ($XLV) — Sleep Calmly.",
   heroDesc:
     "Answer 4 quick taps to calculate your historical $SMH × $XLV baseline sector mix across 26 years of Dot-Com, 2008, and 2022 market cycles.",
-  pwRsiExplainerBtn: "How 2–4x/Yr Budget Review Works",
-  pwRsiModalTitle: "Calm 2–4x/Year 3-Bucket Household Budget & Cashflow Methodology",
-  kpi1_label: "Core S&P 500 Pillar",
-  kpi1_sub: "$VOO broad US compounding core",
-  kpi2_label: "Dividend Growth & Income",
-  kpi2_sub: "$SCHD (~3.5%) + $JEPI (~7.4% mo.)",
+  pwRsiExplainerBtn: "How Two-Pillar Balance Review Works",
+  pwRsiModalTitle: "Calm SMH × XLV + SGOV Sector Balance & Drawdown Methodology",
+  kpi1_label: "Semiconductor Growth Pillar",
+  kpi1_sub: "$SMH structural innovation sleeve",
+  kpi2_label: "Healthcare Defensive Pillar",
+  kpi2_sub: "$XLV non-cyclical cashflow sleeve",
   kpi3_label: "US T-Bill Cash Shield",
   kpi3_sub: "$SGOV (~4.7% state-tax-advantaged)",
   kpi4_label: "Calm Review Cadence",
@@ -96,11 +96,11 @@ const enCopy = {
   tool3CopyBtn: "Copy Script Source",
 
   // Cross-Platform Banner (Home Retirement Focus)
-  crossTitle: "US RETIREMENT MARKET WEATHER · S&P 500 BREADTH & DRAWDOWN GUARD",
-  crossHeading: "Want to Review Your Exact Dollar Budget Allocation Across $SGOV, $SCHD, $JEPI & $VOO?",
+  crossTitle: "HISTORICAL SECTOR ARCHITECTURE · SMH × XLV + SGOV",
+  crossHeading: "Want to Review Your Baseline Allocation Across $SMH, $XLV & $SGOV?",
   crossDesc:
-    "Check today's 3-Color US Retirement Market Weather above or explore our $0 Safe Brokerage Limit-Order & Cashflow Budget Manual for Fidelity, Charles Schwab, and Vanguard.",
-  crossBtn: "Review 3-Color Market Weather",
+    "Run our 4-Step Historical SMH × XLV + SGOV Sector Balance Simulator or explore our complimentary $0 US Brokerage Limit-Order Guide for Fidelity, Charles Schwab, and Vanguard.",
+  crossBtn: "Open 4-Step Sector Simulator",
 
   // SemiFearGreed Standalone Page Copy (/semi-fear-greed.html)
   cnnBadge: "PUBLIC MARKET SENTIMENT DATA · UPDATED DAILY",

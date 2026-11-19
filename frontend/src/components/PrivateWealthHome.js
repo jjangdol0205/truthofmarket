@@ -319,6 +319,10 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
         <span>&middot;</span>
         <a href="/contact.html">Contact</a>
         <span>&middot;</span>
+        <a href="https://www.youtube.com/@TruthOfMarketUS" target="_blank" rel="noopener">YouTube @TruthOfMarketUS</a>
+        <span>&middot;</span>
+        <a href="https://www.instagram.com/truthofmarket/" target="_blank" rel="noopener">Instagram @truthofmarket</a>
+        <span>&middot;</span>
         <a href="mailto:beable9489@gmail.com">beable9489@gmail.com</a>
       </div>
       <p class="pw-legal-disclaimer">
@@ -329,17 +333,17 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
     <!-- Member Sign-In / Restore Modal (0 Emojis) -->
     <div class="pw-modal-backdrop" id="pwRestoreModal" role="dialog" aria-modal="true" aria-labelledby="pwRestoreTitle">
       <div class="pw-modal-dialog">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;">
+        <div class="pw-modal-header-row">
           <span class="pw-kicker" style="margin:0;">MEMBER ACCESS &amp; RESTORE</span>
-          <button type="button" class="pw-back-btn" id="btnClosePwRestoreModal">Close</button>
+          <button type="button" class="pw-modal-close-btn" id="btnClosePwRestoreModal" aria-label="Close Member Sign-In Modal">Close</button>
         </div>
         <h3 class="pw-serif-h2" id="pwRestoreTitle" style="font-size:1.65rem;">Restore Your Baseline or Paid License</h3>
         <p style="margin:0 0 16px;font-size:0.92rem;color:#475569;">
           Enter the email address used during registration to reopen your saved SMH &times; XLV baseline, or enter a Polar.sh license key if applicable.
         </p>
         <form id="pwRestoreForm" novalidate style="display:flex;flex-direction:column;gap:12px;">
-          <input type="email" id="pwRestoreEmailInput" class="pw-email-input" placeholder="Registered email address" autocomplete="email" />
-          <input type="text" id="pwRestoreLicenseInput" class="pw-email-input" placeholder="Optional: Polar.sh license key" autocomplete="off" />
+          <input type="email" id="pwRestoreEmailInput" class="pw-email-input" style="min-width:180px;width:100%;box-sizing:border-box;" placeholder="Registered email address" autocomplete="email" />
+          <input type="text" id="pwRestoreLicenseInput" class="pw-email-input" style="min-width:180px;width:100%;box-sizing:border-box;" placeholder="Optional: Polar.sh license key" autocomplete="off" />
           <button type="submit" class="pw-btn-primary pw-btn-emerald" style="width:100%;">Restore Session &rarr;</button>
         </form>
         <div id="pwRestoreStatus" role="status" aria-live="polite" style="display:none;margin-top:12px;font-size:0.88rem;color:#065F46;"></div>
@@ -349,9 +353,9 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
     <!-- Complimentary $0 Brokerage Safe-Order Guide Modal (0 Emojis) -->
     <div class="pw-modal-backdrop" id="pwStarterGuideModal" role="dialog" aria-modal="true" aria-labelledby="pwStarterGuideTitle">
       <div class="pw-modal-dialog">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;">
+        <div class="pw-modal-header-row">
           <span class="pw-kicker" style="margin:0;">COMPLIMENTARY EXECUTION REFERENCE ($0)</span>
-          <button type="button" class="pw-back-btn" id="btnClosePwStarterGuideModal">Close</button>
+          <button type="button" class="pw-modal-close-btn" id="btnClosePwStarterGuideModal" aria-label="Close Brokerage Reference Modal">Close</button>
         </div>
         <h3 class="pw-serif-h2" id="pwStarterGuideTitle" style="font-size:1.65rem;">US Brokerage Limit-Order &amp; ETF Reference</h3>
         <div style="font-size:0.92rem;line-height:1.7;color:#334155;display:flex;flex-direction:column;gap:12px;">

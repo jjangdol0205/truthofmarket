@@ -1,49 +1,30 @@
-# RightSideAlpha × SemiFearGreed (https://truthofmarket.com)
+# TruthOfMarket (https://truthofmarket.com)
 
-> Institutional US Equity Post-Washout Right-Side Ignition (PW-RSI) Terminal & 7-Factor Semiconductor ($SMH × $XLV) Fear & Greed Index.
-> Live Daily Closing Snapshot as of 2026-11-17 | 26.8-Year Empirical Backtest (2000–2026): PW-RSI 24.48% CAGR (349.3x vs QQQ 14.3x).
+> Self-Directed Historical SMH × XLV + SGOV Two-Pillar Sector Balance Simulator & Daily Market Indicator Digest.
+> Operated by: Educational Market Data & Quantitative Research Desk (beable9489@gmail.com)
+> Official Channels: https://www.youtube.com/@TruthOfMarketUS | https://www.instagram.com/truthofmarket/
+> Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.
 
-## 1. Live Macro & Semiconductor Fear & Greed Snapshot
-- **As of Date**: 2026-11-17
-- **7-Factor Semiconductor Fear & Greed Score**: 11.4/100 (Extreme Fear)
-- **$SMH (VanEck Semiconductor ETF)**: $460.1 (-31.22% off 52-week high)
-- **$XLV (Health Care Select Sector SPDR ETF)**: $185.24
-- **$QQQ (Invesco QQQ Trust)**: $656.95
-- **Active Barbell Allocation Directive**: 80% $SMH : 20% $XLV Contrarian Barbell
-- **Interactive Terminal**: https://truthofmarket.com/semi-fear-greed.html
-- **Daily Editorial Quant Journal**: https://truthofmarket.com/insights/daily-us-quant-regime-brief.html
+## 1. Core Two-Pillar Sector Balance & Market Weather Tools
+- **Main 4-Step SMH × XLV + SGOV Sector Balance Simulator**: https://truthofmarket.com/
+- **Sector Sentiment & $SMH:$XLV Barbell Calculator**: https://truthofmarket.com/semi-fear-greed.html
+- **Self-Directed Quantitative Factor Research Archive**: https://truthofmarket.com/pro-swing.html
+- **Editorial Notes & 26-Year Drawdown Studies**: https://truthofmarket.com/insights/
+- **Full Structured Data Corpus**: https://truthofmarket.com/llms-full.txt
 
-## 2. Core Quantitative Rules & Editorial Research (/insights/)
-- **Methodology Deep-Dive**: https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html
-- **$SMH:$XLV Barbell Study**: https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html
-- **Rule 1 (-9.0% Hard Stop Math)**: https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html
+## 2. Flagship Editorial Notes (/insights/)
+- **Why Quiet Barbells Outlast Loud Bull Markets**: https://truthofmarket.com/insights/why-quiet-barbells-outlast-loud-bull-markets.html
+- **Two Clocks in One Portfolio: Twenty-Six Years of $SMH and $XLV**: https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html
+- **Daily Morning Market Weather Note**: https://truthofmarket.com/insights/daily-us-quant-regime-brief.html
+- **Notes on Moving-Average Discipline (2000–2026)**: https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html
+- **The Quiet Arithmetic of Drawdowns and Treasury Cushions**: https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html
 
-## 3. Live US Equity Coverage & Direct Research URLs
-- Main Screener & Position Doctor: https://truthofmarket.com/
-- Quant Insights Archive: https://truthofmarket.com/insights/index.html
-- Live Telegram Quant Channel: https://t.me/truthofmarketss
-- **$CELH (Celsius Holdings)**: Close $31.18 | -9% Hard Stop $28.37 | +100% Target $62.36 -> https://truthofmarket.com/stocks/celh.html
-- **$QCOM (Qualcomm Inc)**: Close $166.67 | -9% Hard Stop $151.67 | +100% Target $333.34 -> https://truthofmarket.com/stocks/qcom.html
-- **$KLAC (KLA Corp)**: Close $144.56 | -9% Hard Stop $131.55 | +100% Target $289.12 -> https://truthofmarket.com/stocks/klac.html
-- **$APP (AppLovin Corp)**: Close $398.94 | -9% Hard Stop $363.04 | +100% Target $797.88 -> https://truthofmarket.com/stocks/app.html
-- **$DIS (Walt Disney Co)**: Close $116.94 | -9% Hard Stop $106.42 | +100% Target $233.88 -> https://truthofmarket.com/stocks/dis.html
-- **$AMZN (Amazon.com Inc)**: Close $257.89 | -9% Hard Stop $234.68 | +100% Target $515.78 -> https://truthofmarket.com/stocks/amzn.html
-- **$SBUX (Starbucks Corp)**: Close $107.49 | -9% Hard Stop $97.82 | +100% Target $214.98 -> https://truthofmarket.com/stocks/sbux.html
-- **$LULU (Lululemon Athletica)**: Close $104.14 | -9% Hard Stop $94.77 | +100% Target $208.28 -> https://truthofmarket.com/stocks/lulu.html
-- **$UAL (United Airlines)**: Close $106.35 | -9% Hard Stop $96.78 | +100% Target $212.7 -> https://truthofmarket.com/stocks/ual.html
-- **$TSLA (Tesla Inc)**: Close $380.11 | -9% Hard Stop $345.9 | +100% Target $760.22 -> https://truthofmarket.com/stocks/tsla.html
-- **$SMCI (Super Micro Computer)**: Close $24.14 | -9% Hard Stop $21.97 | +100% Target $48.28 -> https://truthofmarket.com/stocks/smci.html
-- **$GE (GE Aerospace)**: Close $326.4 | -9% Hard Stop $297.02 | +100% Target $652.8 -> https://truthofmarket.com/stocks/ge.html
-- **$VRTX (Vertex Pharmaceuticals)**: Close $534.2 | -9% Hard Stop $486.12 | +100% Target $1068.4 -> https://truthofmarket.com/stocks/vrtx.html
-- **$UBER (Uber Technologies)**: Close $68.81 | -9% Hard Stop $62.62 | +100% Target $137.62 -> https://truthofmarket.com/stocks/uber.html
-- **$DUOL (Duolingo Inc)**: Close $160.08 | -9% Hard Stop $145.67 | +100% Target $320.16 -> https://truthofmarket.com/stocks/duol.html
-- **$MPWR (Monolithic Power Systems)**: Close $1317.37 | -9% Hard Stop $1198.81 | +100% Target $2634.74 -> https://truthofmarket.com/stocks/mpwr.html
-- **$META (Meta Platforms Inc)**: Close $618.87 | -9% Hard Stop $563.17 | +100% Target $1237.74 -> https://truthofmarket.com/stocks/meta.html
-- **$MDB (MongoDB Inc)**: Close $298.63 | -9% Hard Stop $271.75 | +100% Target $597.26 -> https://truthofmarket.com/stocks/mdb.html
-- **$TSM (TSMC (ADR))**: Close $359.69 | -9% Hard Stop $327.32 | +100% Target $719.38 -> https://truthofmarket.com/stocks/tsm.html
-- **$GM (General Motors Co)**: Close $84.05 | -9% Hard Stop $76.49 | +100% Target $168.1 -> https://truthofmarket.com/stocks/gm.html
-- **$CCL (Carnival Corp)**: Close $28.16 | -9% Hard Stop $25.63 | +100% Target $56.32 -> https://truthofmarket.com/stocks/ccl.html
-- **$HOOD (Robinhood Markets)**: Close $69.19 | -9% Hard Stop $62.96 | +100% Target $138.38 -> https://truthofmarket.com/stocks/hood.html
-- **$SNAP (Snap Inc)**: Close $5.5 | -9% Hard Stop $5.0 | +100% Target $11.0 -> https://truthofmarket.com/stocks/snap.html
-- **$DECK (Deckers Outdoor)**: Close $81.48 | -9% Hard Stop $74.15 | +100% Target $162.96 -> https://truthofmarket.com/stocks/deck.html
-- **$MBLY (Mobileye Global)**: Close $5.19 | -9% Hard Stop $4.72 | +100% Target $10.38 -> https://truthofmarket.com/stocks/mbly.html
+## 3. Core Sector ETF & Legal Pages
+- **$SMH (VanEck Semiconductor ETF)**: https://truthofmarket.com/stocks/smh.html
+- **$XLV (Health Care Select Sector SPDR ETF)**: https://truthofmarket.com/stocks/xlv.html
+- **$SGOV (iShares 0-3 Month Treasury Bond ETF)**: https://truthofmarket.com/stocks/sgov.html
+- **$SMH vs $XLV Side-by-Side Study**: https://truthofmarket.com/compare/smh-vs-xlv.html
+- **Terms of Service**: https://truthofmarket.com/terms.html
+- **Privacy Policy**: https://truthofmarket.com/privacy.html
+- **14-Day Refund Policy**: https://truthofmarket.com/refund.html
+- **Contact Support Desk**: https://truthofmarket.com/contact.html

@@ -279,9 +279,14 @@
       styleEl = document.createElement("style");
       styleEl.id = "tomVipWaitlistStyles";
       styleEl.textContent = [
-        "#tomVipWaitlistModal{position:fixed;inset:0;z-index:10060;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,0.72);backdrop-filter:blur(6px);}",
-        "#tomVipWaitlistDialog{width:100%;max-width:600px;background:#ffffff;border:2px solid #059669;border-radius:16px;padding:24px 22px;color:#0f172a;box-shadow:0 24px 56px rgba(15,23,42,0.32);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;max-height:92vh;overflow-y:auto;}",
+        "#tomVipWaitlistModal,#tomVipWaitlistModal *{box-sizing:border-box;}",
+        "#tomVipWaitlistModal{position:fixed;inset:0;z-index:10060;display:none;align-items:center;justify-content:center;padding:16px 12px;background:rgba(15,23,42,0.72);backdrop-filter:blur(6px);overflow-y:auto;}",
+        "#tomVipWaitlistDialog{position:relative;width:100%;max-width:600px;background:#ffffff;border:2px solid #059669;border-radius:16px;padding:22px 20px;color:#0f172a;box-shadow:0 24px 56px rgba(15,23,42,0.32);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow-x:hidden;overflow-y:auto;margin:auto;}",
         "html[data-tom-theme='dark'] #tomVipWaitlistDialog{background:linear-gradient(155deg,#0f172a 0%,#071929 100%);border-color:#10b981;color:#f8fafc;box-shadow:0 24px 56px rgba(0,0,0,0.65);}",
+        ".tom-wl-top-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px;}",
+        ".tom-wl-priority-pill{display:inline-block;flex:0 1 auto;min-width:0;max-width:calc(100% - 86px);background:#ecfdf5;border:1px solid #059669;color:#065f46;padding:6px 12px;border-radius:999px;font-size:12.5px;line-height:1.35;font-weight:800;letter-spacing:0.02em;}",
+        "#btnCloseTomVipWaitlist{appearance:none;flex:0 0 auto;flex-shrink:0;min-height:44px;min-width:72px;padding:8px 14px;border-radius:8px;border:1.5px solid #64748b;background:#f1f5f9;color:#0f172a;font-weight:800;font-size:15px;line-height:1.2;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;}",
+        "#btnCloseTomVipWaitlist:hover{background:#e2e8f0;border-color:#334155;}",
         ".tom-wl-plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}",
         ".tom-wl-plan-btn{padding:12px 12px;border-radius:12px;border:2px solid #cbd5e1;background:#f8fafc;color:#0f172a;text-align:left;cursor:pointer;transition:all 0.15s ease;font-family:inherit;}",
         "html[data-tom-theme='dark'] .tom-wl-plan-btn{border-color:#334155;background:rgba(15,23,42,0.85);color:#cbd5e1;}",
@@ -289,7 +294,7 @@
         "html[data-tom-theme='dark'] .tom-wl-plan-btn.is-selected{border-color:#10b981;background:rgba(16,185,129,0.16);color:#ffffff;}",
         ".tom-wl-benefits-box{margin:10px 0 14px;padding:12px 14px;border-radius:12px;background:#f8fafc;border:1px solid #cbd5e1;font-size:15px;line-height:1.55;color:#1e293b;}",
         "html[data-tom-theme='dark'] .tom-wl-benefits-box{background:rgba(15,23,42,0.75);border-color:#334155;color:#e2e8f0;}",
-        "@media(max-width:540px){.tom-wl-plan-grid{grid-template-columns:1fr;}#tomVipWaitlistDialog{padding:18px 15px;}}",
+        "@media(max-width:540px){.tom-wl-plan-grid{grid-template-columns:1fr;}#tomVipWaitlistDialog{padding:18px 14px;}.tom-wl-priority-pill{font-size:11.5px;padding:5px 10px;}}",
       ].join("");
       document.head.appendChild(styleEl);
     }
@@ -303,11 +308,11 @@
     backdrop.setAttribute("aria-labelledby", "tomVipWaitlistTitle");
     backdrop.innerHTML =
       '<div id="tomVipWaitlistDialog">' +
-      '  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;">' +
-      '    <span style="display:inline-flex;align-items:center;gap:6px;background:#ecfdf5;border:1px solid #059669;color:#065f46;padding:4px 12px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:0.02em;">' +
+      '  <div class="tom-wl-top-row">' +
+      '    <span class="tom-wl-priority-pill">' +
       "      FOUNDING MEMBER PRIORITY ACCESS &bull; 20% EARLY-BIRD LOCK" +
       "    </span>" +
-      '    <button type="button" id="btnCloseTomVipWaitlist" aria-label="Close modal" style="min-height:42px;padding:6px 12px;border-radius:8px;border:1px solid #94a3b8;background:#f1f5f9;color:#0f172a;font-weight:800;font-size:15px;cursor:pointer;">Close</button>' +
+      '    <button type="button" id="btnCloseTomVipWaitlist" aria-label="Close modal">Close</button>' +
       "  </div>" +
       '  <h3 id="tomVipWaitlistTitle" style="margin:0 0 8px;font-size:clamp(1.2rem,2.4vw,1.45rem);line-height:1.32;font-weight:900;">' +
       "    VIP Founding Member Launch Alert &amp; 20% Early-Bird Discount Reservation (1-Second Email Reserve)" +

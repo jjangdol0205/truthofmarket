@@ -190,7 +190,7 @@ export function renderDoctorVipUnlockPreview(state) {
             <span style="font-size:0.72rem; color:var(--muted);">${sector}</span>
           </div>
           <div style="display:flex; align-items:center; gap:12px; font-size:0.72rem;">
-            <span class="mono" style="color:#34d399; font-weight:700;">PW-RSI ${score}</span>
+            <span class="mono" style="color:#34d399; font-weight:700;">FACTOR ${score}</span>
             <span class="mono" style="color:#94a3b8;">${volSurge.toFixed(2)}x Vol</span>
             <span class="mono" style="color:var(--muted);">TRG ${triggerDisp}</span>
             <span class="mono" style="color:var(--muted);">STP ${stopDisp}</span>
@@ -266,7 +266,7 @@ export function renderDoctorVipUnlockPreview(state) {
         ${headerBadge}
       </div>
       <p style="font-size:0.72rem; color:var(--muted); margin-bottom:10px; line-height:1.4;">
-        Exit capital from dead-money or stopped-out positions and immediately rotate into high-conviction right-side ignition breakouts (PW-RSI &ge; 75, 10D Volume Surge &ge; 1.40x).
+        Compare individual equity holdings against medium-term moving-average alignment (Factor Score &ge; 75, 10D Relative Volume &ge; 1.40x) and core SMH &times; XLV + SGOV benchmarks.
       </p>
       <div class="doc-vip-picks-list">
         ${rowsHtml}

@@ -6,7 +6,7 @@ const HIGH_VOLATILITY_TICKERS = new Set([
 ]);
 
 const RETIREMENT_INCOME_BLUECHIPS = new Set([
-  "VOO", "SCHD", "JEPI", "SGOV", "XLV", "JNJ", "PG", "KO", "COST", "V", "MSFT", "AAPL",
+  "SMH", "XLV", "SGOV", "VOO", "JNJ", "PG", "KO", "COST", "V", "MSFT", "AAPL",
   "PEP", "WMT", "JPM", "UNH", "HD", "ABBV", "CVX", "XOM", "LLY", "AVGO", "MA", "LMT",
 ]);
 

@@ -56,7 +56,7 @@ export function renderProVault(state) {
   const pineCode =
     state.pineCode ||
     `//@version=5
-indicator("RightSideAlpha PW-RSI Ignition v2.6", overlay=true)
+indicator("TruthOfMarket MA20/60 & Volume Overlay v2.6", overlay=true)
 ma20 = ta.sma(close, 20)
 ma60 = ta.sma(close, 60)
 low52 = ta.lowest(low, 252)
@@ -67,8 +67,8 @@ proxLow = (close - low52) / low52 * 100
 ddHigh = (close - high52) / high52 * 100
 ignition = ddHigh <= -35 and proxLow >= 10 and proxLow <= 40 and close > ma20 and close > ma60 and washout10d
 plot(ma20, "MA20", color=color.new(color.aqua, 0), linewidth=2)
-plot(ma60, "MA60 Trigger", color=color.new(color.orange, 0), linewidth=2)
-plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, location.belowbar, color.green, text="IGNITION", textcolor=color.white)`;
+plot(ma60, "MA60 Reference", color=color.new(color.orange, 0), linewidth=2)
+plotshape(ignition and not ignition[1], "MA20/60 RECLAIM", shape.labelup, location.belowbar, color.green, text="RECLAIM", textcolor=color.white)`;
 
   return `
     <section class="proof-card" id="proVaultSection" style="border-top:2px solid var(--fin-blue); margin-bottom:22px;">

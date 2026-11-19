@@ -99,11 +99,10 @@ SENIOR_HOME_BLUECHIP_ALLOWLIST = {
 }
 
 FEATURED_HOME_CORE_TICKERS = (
-    ("VOO", "S&P 500 Core"),
-    ("SCHD", "Dividend Growth ~3.5%"),
-    ("JEPI", "Monthly Income ~7.4%"),
-    ("SGOV", "US T-Bill Cash ~4.7%"),
-    ("XLV", "Healthcare Cushion"),
+    ("SMH", "Semiconductor Growth Pillar"),
+    ("XLV", "Healthcare Defensive Pillar"),
+    ("SGOV", "0-3 Mo US T-Bill Reserve"),
+    ("VOO", "S&P 500 Benchmark"),
 )
 
 FEATURED_HOME_BLUECHIP_TICKERS = (
@@ -305,10 +304,10 @@ def build_ticker_directory_html(
                 f'<a href="{prefix}stocks/{sym.lower()}.html" title="{html.escape(comp_name)} (${sym}) Dividend &amp; Blue-Chip Profile" style="color:#0f172a;background:#f8fafc;border:1px solid #cbd5e1;text-decoration:none;padding:6px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.94rem;">${sym} <span style="font-family:Inter,sans-serif;font-weight:600;color:#475569;font-size:0.86rem;">({html.escape(comp_name)})</span></a>'
             )
         home_cmp_pairs = [
-            ("VOO", "SCHD", "S&P 500 Core vs Dividend Growth"),
-            ("JEPI", "SCHD", "Monthly Income vs Dividend Growth"),
+            ("SMH", "XLV", "Two-Pillar Sector Balance Study"),
+            ("QQQ", "SMH", "Nasdaq-100 vs Semiconductor ETF"),
+            ("LLY", "UNH", "Healthcare Cashflow Leaders"),
             ("JNJ", "PG", "Healthcare vs Consumer Staples"),
-            ("KO", "PEP", "Dividend Aristocrats Study"),
             ("COST", "WMT", "Warehouse vs Value Retail"),
             ("AAPL", "MSFT", "Blue-Chip Cashflow Leaders"),
             ("V", "MA", "Global Payment Networks"),
@@ -323,14 +322,14 @@ def build_ticker_directory_html(
         cmp_joined = "\n      ".join(cmp_pills)
         return f"""  <section class="seo-directory-footer" style="max-width:1280px;width:calc(100% - 24px);box-sizing:border-box;overflow-x:hidden;margin:24px auto 36px;padding:24px 22px;background:#ffffff;border:1.5px solid #cbd5e1;border-radius:14px;color:#1e293b;font-size:1rem;box-shadow:0 4px 16px rgba(15,23,42,0.05);">
     <div style="margin-bottom:16px;padding:14px 16px;border-radius:10px;background:#ecfdf5;border:1.5px solid #059669;color:#064e3b;font-size:1.02rem;line-height:1.65;">
-      <strong>🛡️ US Retirement 4-Core Allocation Standard (As of 2026-11-16 US Market Close):</strong>
-      <b>$VOO</b> (S&amp;P 500 Core) &middot; <b>$SCHD</b> (Dividend Growth ~3.5%) &middot; <b>$JEPI</b> (Monthly Income ~7.4%) &middot; <b>$SGOV</b> (US T-Bill Cash ~4.7%) — Reviewed calmly 2–4 times per year via our <b>US Retirement Market Weather (S&amp;P 500 Breadth &amp; Drawdown Guard)</b>.
+      <strong>Two-Pillar Sector Balance Standard:</strong>
+      <b>$SMH</b> (Semiconductor Growth) &times; <b>$XLV</b> (Healthcare Defense) + <b>$SGOV</b> (0–3 Month US T-Bill Reserve) — Reviewed calmly across market cycles via our historical sector sentiment framework.
     </div>
     <div style="font-weight:900;color:#0f172a;margin-bottom:8px;font-size:1.12rem;">
-      🏛️ RETIREMENT CORE ETFs &amp; BLUE-CHIP DIVIDEND DIRECTORY
+      CORE SECTOR ETFs &amp; BLUE-CHIP EQUITY DIRECTORY
     </div>
     <p style="margin:0 0 12px;color:#334155;font-size:0.98rem;line-height:1.65;">
-      Explore self-directed 52-week range context, dividend consistency, and calm 2–4x/year portfolio weight studies across liquid US retirement ETFs and blue-chip dividend leaders:
+      Explore self-directed 52-week range context, moving-average alignment, and historical sector balance studies across liquid US ETFs and blue-chip companies:
     </p>
     <nav aria-label="US Retirement Core ETFs" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px;">
       {core_joined}
@@ -339,14 +338,14 @@ def build_ticker_directory_html(
       {bc_joined}
     </nav>
     <div style="font-weight:800;color:#0f172a;margin:12px 0 8px;font-size:1.05rem;">
-      ⚖️ SIDE-BY-SIDE BLUE-CHIP &amp; DIVIDEND ETF COMPARISONS
+      SIDE-BY-SIDE SECTOR &amp; BLUE-CHIP COMPARISONS
     </div>
     <nav aria-label="Head-to-Head US Blue-Chip Comparisons" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
       {cmp_joined}
     </nav>
     <div style="margin-top:18px;padding-top:14px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:0.96rem;color:#1e293b;">
-      <span>🏛️ <strong>Educational Market Data &amp; Quantitative Research Desk:</strong> Questions about VIP worksheets, license keys, or 14-day refunds?</span>
-      <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#1d4ed8;font-weight:800;text-decoration:none;padding:10px 16px;min-height:48px;display:inline-flex;align-items:center;border:1.5px solid #93c5fd;border-radius:8px;background:#eff6ff;font-size:0.95rem;">✉️ Support Desk (beable9489@gmail.com) &rarr;</a>
+      <span><strong>Educational Market Data &amp; Quantitative Research Desk:</strong> Questions about VIP worksheets, license keys, or 14-day refunds?</span>
+      <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#1d4ed8;font-weight:800;text-decoration:none;padding:10px 16px;min-height:48px;display:inline-flex;align-items:center;border:1.5px solid #93c5fd;border-radius:8px;background:#eff6ff;font-size:0.95rem;">Support Desk (beable9489@gmail.com) &rarr;</a>
     </div>
     <div style="margin-top:14px;padding:12px 16px;border-radius:10px;background:#f8fafc;border:1px solid #cbd5e1;display:flex;flex-wrap:wrap;gap:14px;align-items:center;font-size:0.92rem;">
       <a href="{prefix}terms.html" style="color:#1d4ed8;font-weight:800;text-decoration:underline;">Terms of Service</a>
@@ -359,9 +358,9 @@ def build_ticker_directory_html(
       <span style="color:#94a3b8;">&middot;</span>
       <a href="{prefix}insights/" style="color:#0369a1;font-weight:700;text-decoration:underline;">Educational Insights Journal</a>
       <span style="color:#94a3b8;">&middot;</span>
-      <a href="{prefix}semi-fear-greed.html" style="color:#475569;font-weight:700;text-decoration:underline;">Sector Barbell Calculator</a>
+      <a href="https://www.youtube.com/@TruthOfMarketUS" target="_blank" rel="noopener" style="color:#475569;font-weight:700;text-decoration:underline;">YouTube @TruthOfMarketUS</a>
       <span style="color:#94a3b8;">&middot;</span>
-      <a href="{prefix}pro-swing.html" style="color:#475569;font-weight:700;text-decoration:underline;">Equity Factor Archive</a>
+      <a href="https://www.instagram.com/truthofmarket/" target="_blank" rel="noopener" style="color:#475569;font-weight:700;text-decoration:underline;">Instagram @truthofmarket</a>
       <span style="color:#94a3b8;">&middot;</span>
       <a href="mailto:beable9489@gmail.com" style="color:#b45309;font-weight:800;text-decoration:underline;">beable9489@gmail.com</a>
       <span style="color:#94a3b8;">&middot;</span>
@@ -378,7 +377,7 @@ def build_ticker_directory_html(
         f'<a href="{prefix}pro-swing.html" style="color:#0369a1;text-decoration:none;font-weight:800;padding:6px 12px;border:1px solid #7dd3fc;border-radius:6px;background:#f0f9ff;font-size:0.94rem;">📊 Equity Factor Archive</a>',
         f'<a href="{prefix}insights/" style="color:#065f46;text-decoration:none;font-weight:800;padding:6px 12px;border:1px solid #6ee7b7;border-radius:6px;background:#ecfdf5;font-size:0.94rem;">📘 Educational Insights Journal</a>',
     ]
-    for etf in ("VOO", "SCHD", "JEPI", "SGOV", "XLV", "SMH", "QQQ"):
+    for etf in ("SMH", "XLV", "SGOV", "VOO", "QQQ"):
         links.append(
             f'<a href="{prefix}stocks/{etf.lower()}.html" style="color:#0369a1;background:#f8fafc;text-decoration:none;font-weight:800;padding:6px 11px;border:1px solid #cbd5e1;border-radius:6px;font-size:0.94rem;">${etf} ETF</a>'
         )
@@ -439,6 +438,10 @@ def build_ticker_directory_html(
       <a href="{prefix}refund.html" style="color:#047857;font-weight:800;text-decoration:underline;">14-Day Refund Policy</a>
       <span style="color:#94a3b8;">&middot;</span>
       <a href="{prefix}contact.html" style="color:#1d4ed8;font-weight:700;text-decoration:underline;">Contact Support</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <a href="https://www.youtube.com/@TruthOfMarketUS" target="_blank" rel="noopener" style="color:#475569;font-weight:700;text-decoration:underline;">YouTube @TruthOfMarketUS</a>
+      <span style="color:#94a3b8;">&middot;</span>
+      <a href="https://www.instagram.com/truthofmarket/" target="_blank" rel="noopener" style="color:#475569;font-weight:700;text-decoration:underline;">Instagram @truthofmarket</a>
       <span style="color:#94a3b8;">&middot;</span>
       <a href="mailto:beable9489@gmail.com" style="color:#b45309;font-weight:800;text-decoration:underline;">Support: beable9489@gmail.com</a>
       <span style="color:#94a3b8;">&middot;</span>
@@ -699,7 +702,7 @@ def generate_single_stock_page(
     if is_vip_locked:
         exec_summary_text = (
             f"${tkr} ({name_en}) currently records a quantitative factor score of {score}/100 "
-            f"(10-day relative volume {vol_surge:.2f}x). Detailed historical dispersion bands and CSV exports are available in VIP Calculator Software."
+            f"(10-day relative volume {vol_surge:.2f}x), with 60-day MA at ${ma60:.2f}. Detailed historical dispersion bands and CSV exports are available in VIP Calculator Software."
         )
         exec_box_html = f"""
       <div style="margin-top:12px;padding:12px 16px;background:rgba(234,179,8,0.08);border:1px solid rgba(234,179,8,0.4);border-radius:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
@@ -708,9 +711,9 @@ def generate_single_stock_page(
             🔒 VIP HISTORICAL FACTOR DATASET &bull; SCORE {score}/100 ({html.escape(sector.upper())})
           </div>
           <div style="font-size:0.84rem;color:#e2e8f0;margin-top:3px;">
-            🎯 MA60 Reference: <span style="filter:blur(5px);user-select:none;font-family:JetBrains Mono,monospace;">$148.50</span> &nbsp;|&nbsp;
-            📉 Lower Variance Band: <span style="filter:blur(5px);user-select:none;font-family:JetBrains Mono,monospace;">$135.10</span> &nbsp;|&nbsp;
-            📈 Upper Dispersion Band: <span style="filter:blur(5px);user-select:none;font-family:JetBrains Mono,monospace;">$297.00</span>
+            🎯 MA60 Reference: <span style="font-family:JetBrains Mono,monospace;font-weight:700;color:#38bdf8;">${ma60:.2f}</span> &nbsp;|&nbsp;
+            📉 Lower Variance Band: <span style="filter:blur(5px);user-select:none;font-family:JetBrains Mono,monospace;">${low_ref_p:.2f}</span> &nbsp;|&nbsp;
+            📈 Upper Dispersion Band: <span style="filter:blur(5px);user-select:none;font-family:JetBrains Mono,monospace;">${up_ref_p:.2f}</span>
           </div>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
@@ -727,18 +730,18 @@ def generate_single_stock_page(
     else:
         exec_summary_text = (
             f"As of {as_of}, ${tkr} ({name_en}) closed at ${close_p:.2f} with a quantitative factor score of {score}/100 ({zone_label}). "
-            f"Its 60-day moving-average reference is ${trg_p:.2f}, modeled lower variance band is ${low_ref_p:.2f}, and upper dispersion reference is ${up_ref_p:.2f}."
+            f"Its 60-day moving-average reference is ${ma60:.2f}, modeled lower variance band is ${low_ref_p:.2f}, and upper dispersion reference is ${up_ref_p:.2f}."
         )
         exec_box_html = f"""
       <div style="margin-top:12px;padding:12px 16px;background:rgba(15,23,42,0.85);border:1px solid #334155;border-radius:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
         <div style="font-size:0.84rem;color:#e2e8f0;font-family:JetBrains Mono,monospace;">
-          🎯 <strong>MA20/MA60 Ref:</strong> <span style="color:#38bdf8;">${trg_p:.2f}</span> &nbsp;|&nbsp;
+          🎯 <strong>MA60 Reference:</strong> <span style="color:#38bdf8;">${ma60:.2f}</span> &nbsp;|&nbsp;
           📉 <strong>Lower Variance Band:</strong> <span style="color:#f87171;">${low_ref_p:.2f}</span> &nbsp;|&nbsp;
           📈 <strong>Upper Dispersion Band:</strong> <span style="color:#4ade80;">${up_ref_p:.2f}</span>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <a href="/" style="background:#0ea5e9;color:#ffffff;text-decoration:none;padding:7px 13px;border-radius:6px;font-weight:800;font-size:0.78rem;">
-            🏡 30-Sec Retirement Calculator
+            🏡 4-Step Sector Simulator
           </a>
           <a href="{POLAR_MONTHLY_HREF}" class="polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="background:#2563eb;color:#ffffff;text-decoration:none;padding:7px 13px;border-radius:6px;font-weight:700;font-size:0.78rem;">
             ⚡ Start Monthly VIP — $29/mo
@@ -787,11 +790,11 @@ def generate_single_stock_page(
     lead_bottom = build_senior_lead_magnet_html(
         f"${tkr} Volatility & Risk" if is_speculative else f"${tkr}",
         (
-            f"Evaluating High-Beta Volatility on ${tkr}? Compare Against Calm 4-Core Retirement Benchmarks"
+            f"Evaluating High-Beta Volatility on ${tkr}? Compare Against Calm SMH × XLV Sector Benchmarks"
             if is_speculative
             else f"Follow ${tkr} Without Daily Trading Stress — Join the Free Morning Bell Club"
         ),
-        "Enter your email once to receive calm 8:30 AM ET 3-color market weather notes and $VOO · $SCHD · $JEPI · $SGOV allocation studies.",
+        "Enter your email once to receive calm 8:30 AM ET market weather notes and $SMH × $XLV + $SGOV two-pillar allocation studies.",
         signal_badge=traffic_badge,
         position="bottom",
     )
@@ -1038,7 +1041,7 @@ def generate_comparison_page(
         </div>
         <div style="font-size:0.82rem;color:#e2e8f0;margin-top:3px;">
           🔒 <strong>${winner} vs ${loser} Historical Dispersion Bands &amp; CSV Dataset:</strong>
-          <span style="filter:blur(5px);user-select:none;font-family:JetBrains Mono,monospace;">$184.20 / $268.00</span>
+          <span style="filter:blur(5px);user-select:none;font-family:JetBrains Mono,monospace;">${trg_a:.2f} / ${trg_b:.2f}</span>
           &nbsp;(Self-Directed Educational Calculator Software)
         </div>
       </div>
@@ -1284,8 +1287,8 @@ def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "
     # 3.5 Generate Editorial Insights (/insights/)
     from scripts.generate_daily_quant_insights import generate_all_quant_insights
     insight_smap_entries, insight_rss_items = generate_all_quant_insights()
-    for loc, prio, freq in insight_smap_entries:
-        sitemap_urls.append((loc, prio, freq))
+    for entry in insight_smap_entries:
+        sitemap_urls.append(entry)
     llms_insight_lines = [f"- {it['title']} -> {it['link']}" for it in insight_rss_items]
 
     # 4. Generate llms-full.txt (clean Educational Calculator Software positioning)
@@ -1306,12 +1309,13 @@ def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "
         )
 
     llms_full_txt = (
-        f"# TruthOfMarket (https://truthofmarket.com) — Educational Market Data & Retirement Cashflow Corpus\n"
+        f"# TruthOfMarket (https://truthofmarket.com) — Historical SMH × XLV Sector Balance & Market Data Corpus\n"
         f"> Operated by: Educational Market Data & Quantitative Research Desk (beable9489@gmail.com)\n"
-        f"> Updated: {as_of} | US 401(k)/IRA Retirement Cashflow Calculator + Market Weather + 76 US Equity Factor Studies\n"
+        f"> Official Channels: https://www.youtube.com/@TruthOfMarketUS | https://www.instagram.com/truthofmarket/\n"
+        f"> Updated: {as_of} | 4-Step Historical SMH × XLV + SGOV Sector Balance Simulator + 76 US Equity Factor Studies\n"
         f"> {MANDATORY_DISCLAIMER}\n\n"
-        f"## 1. Core Retirement Cashflow & Market Weather Tools\n"
-        f"- 30-Second US 401(k)/IRA Retirement Cashflow Calculator (SGOV · SCHD · JEPI · VOO): https://truthofmarket.com/\n"
+        f"## 1. Core Sector Balance & Market Weather Tools\n"
+        f"- 4-Step Historical SMH × XLV + SGOV Sector Balance Simulator: https://truthofmarket.com/\n"
         f"- Market Weather & $SMH:$XLV Barbell Calculator ({float(semi.get('fg_score') or 18.0):.1f}/100): https://truthofmarket.com/semi-fear-greed.html\n"
         f"- Self-Directed Quantitative Research Archive: https://truthofmarket.com/pro-swing.html\n"
         f"- Educational Insights Journal: https://truthofmarket.com/insights/\n"
@@ -1328,10 +1332,12 @@ def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "
     )
     (PUB / "llms-full.txt").write_text(llms_full_txt, encoding="utf-8")
 
-    today_iso = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    default_lastmod = as_of if len(as_of) == 10 else datetime.now(timezone.utc).strftime("%Y-%m-%d")
     seen_locs: set[str] = set()
     url_blocks: List[str] = []
-    for raw_loc, prio, freq in sitemap_urls:
+    for sm_item in sitemap_urls:
+        raw_loc, prio, freq = sm_item[0], sm_item[1], sm_item[2]
+        item_lastmod = sm_item[3] if len(sm_item) >= 4 and sm_item[3] else default_lastmod
         clean_loc = _normalize_canonical_sitemap_loc(raw_loc)
         if clean_loc in seen_locs:
             continue
@@ -1339,7 +1345,7 @@ def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "
         url_blocks.append(
             f"""  <url>
     <loc>{clean_loc}</loc>
-    <lastmod>{today_iso}</lastmod>
+    <lastmod>{item_lastmod}</lastmod>
     <changefreq>{freq}</changefreq>
     <priority>{prio}</priority>
   </url>"""

@@ -12,8 +12,8 @@ export function renderModals(state) {
     "#tom-vip-annual"
   );
   const tgChannelUrl = cfg.telegram_channel_url || "https://t.me/truthofmarketss";
-  const ytUrl = cfg.youtube_url || "https://www.youtube.com/@RightSideAlpha";
-  const igUrl = cfg.instagram_url || "https://www.instagram.com/rightsidealpha";
+  const ytUrl = cfg.youtube_url || "https://www.youtube.com/@TruthOfMarketUS";
+  const igUrl = cfg.instagram_url || "https://www.instagram.com/truthofmarket/";
   const tgChatId = state.telegramChatId || cfg.telegram_chat_id || "@truthofmarketss";
   const tgToken = state.telegramBotToken || "DEMO-BOT-TOKEN";
   const tgType = state.telegramAlertType || "SEMI_BRIEFING";
@@ -48,7 +48,7 @@ export function renderModals(state) {
           <div style="font-size:0.68rem; font-family:var(--font-mono); color:#93c5fd; text-transform:uppercase; letter-spacing:0.05em;">
             SELF-DIRECTED EDUCATIONAL CALCULATOR SOFTWARE · VIP ACCESS
           </div>
-          <button type="button" class="btn btn-sm" id="btnCancelLicense" style="padding:4px 10px;">✕ Close</button>
+          <button type="button" class="btn btn-sm" id="btnCancelLicense" style="min-height:44px; min-width:68px; flex-shrink:0; padding:8px 14px;">Close</button>
         </div>
         <h3 style="font-size:1.18rem; font-weight:800; margin-top:4px; color:var(--text);">Unlock Full VIP Retiree Worksheets &amp; Tax-Bucket Reference</h3>
         <p style="color:var(--text-secondary); font-size:0.95rem; margin-top:6px; line-height:1.55;">
@@ -255,10 +255,10 @@ export function renderModals(state) {
         <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">TELEGRAM OFFICIAL CHANNEL URL</label>
         <input type="text" id="cfgTgChannel" value="${tgChannelUrl}" />
 
-        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">OFFICIAL YOUTUBE CHANNEL URL (@RightSideAlpha)</label>
+        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">OFFICIAL YOUTUBE CHANNEL URL (@TruthOfMarketUS)</label>
         <input type="text" id="cfgYoutubeUrl" value="${ytUrl}" />
 
-        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">OFFICIAL INSTAGRAM PROFILE URL (@rightsidealpha)</label>
+        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">OFFICIAL INSTAGRAM PROFILE URL (@truthofmarket)</label>
         <input type="text" id="cfgInstagramUrl" value="${igUrl}" />
 
         <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">TRADINGVIEW PARTNER ID</label>
@@ -348,7 +348,7 @@ export function renderModals(state) {
       </div>
     </div>
 
-    <!-- CALM 2-4X/YEAR BUDGET REVIEW METHODOLOGY MODAL -->
+    <!-- CALM SEMI-ANNUAL TWO-PILLAR SECTOR BALANCE METHODOLOGY MODAL -->
     <div class="modal-backdrop" id="pwRsiModal">
       <div class="modal" style="max-width:680px;">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:10px;">
@@ -357,45 +357,45 @@ export function renderModals(state) {
               SELF-DIRECTED EDUCATIONAL CALCULATOR METHODOLOGY
             </div>
             <h3 style="font-size:1.15rem; font-weight:800; color:#ffffff; margin:3px 0 0;">
-              ${t.pwRsiModalTitle || "Calm 2–4x/Year 3-Bucket Household Budget & Cashflow Methodology"}
+              ${t.pwRsiModalTitle || "Calm SMH × XLV + SGOV Sector Balance & Drawdown Methodology"}
             </h3>
           </div>
-          <button class="btn btn-sm" id="btnClosePwRsiModal" style="padding:4px 8px;">✕ Close</button>
+          <button class="btn btn-sm" id="btnClosePwRsiModal" style="min-height:44px; min-width:68px; flex-shrink:0; padding:6px 12px;">Close</button>
         </div>
 
         <div style="max-height:70vh; overflow-y:auto; padding-right:4px; font-size:0.92rem; line-height:1.65; color:#cbd5e1;">
           <div style="background:#0b1322; border:1px solid rgba(56,189,248,0.25); border-radius:8px; padding:14px 16px; margin-bottom:12px;">
             <div style="font-weight:800; color:#ffffff; margin-bottom:4px; font-size:0.98rem;">
-              Why Calm 2–4x/Year Budget Discipline Protects Retirement Longevity
+              Why Pairing Two Distinct Sector Clocks Protects Retirement Longevity
             </div>
             <p style="margin:0; color:var(--muted); font-size:0.88rem;">
-              Sequence-of-returns shocks occur when retirees are forced to sell depressed equity holdings to pay monthly living bills during a market downturn. Separating your nest egg into 3 clear buckets keeps 2–3 years of living expenses insulated in short-term US Treasuries while dividends and S&amp;P 500 compounding replenish cash calmly.
+              Sequence-of-returns shocks occur when retirees hold 100% correlated equity exposure during a prolonged tech or macro downturn. Pairing non-leveraged 1x US Semiconductor growth ($SMH) with non-cyclical US Healthcare defense ($XLV) alongside a dedicated 0–3 month US Treasury cushion ($SGOV) reduces historical drawdowns while preserving long-term compounding.
             </p>
           </div>
 
           <div style="display:grid; grid-template-columns:1fr; gap:10px; margin-bottom:12px;">
             <div style="background:#090d16; border:1px solid #1e293b; border-radius:8px; padding:12px 14px;">
-              <div style="font-weight:800; color:#38bdf8; margin-bottom:4px;">Bucket 1: US T-Bill &amp; Government MMF Cushion ($SGOV · SPAXX · SWVXX · VMFXX)</div>
+              <div style="font-weight:800; color:#38bdf8; margin-bottom:4px;">Pillar 1: Structural Semiconductor Growth ($SMH · Non-Leveraged 1x)</div>
               <p style="margin:0; font-size:0.86rem; color:var(--muted);">
-                Holds 20% to 40% depending on our 3-Color Market Weather indicator, earning monthly Treasury interest while insulating near-term retirement cashflow.
+                Captures long-term compute, industrial automation, and silicon infrastructure compounding without 3x daily-reset volatility decay.
               </p>
             </div>
             <div style="background:#090d16; border:1px solid #1e293b; border-radius:8px; padding:12px 14px;">
-              <div style="font-weight:800; color:#34d399; margin-bottom:4px;">Bucket 2: Monthly &amp; Rising Dividend Income ($JEPI · $SCHD · $XLV)</div>
+              <div style="font-weight:800; color:#34d399; margin-bottom:4px;">Pillar 2: Non-Cyclical Healthcare Defense ($XLV · Non-Leveraged 1x)</div>
               <p style="margin:0; font-size:0.86rem; color:var(--muted);">
-                Holds 35% to 40% across monthly distribution and 10+ year dividend-growth ETFs to support predictable retirement income.
+                Pharmaceuticals, medical devices, and healthcare services operate on inelastic demographic demand, buffering portfolio variance when rate or tech cycles contract.
               </p>
             </div>
             <div style="background:#090d16; border:1px solid #1e293b; border-radius:8px; padding:12px 14px;">
-              <div style="font-weight:800; color:#fbbf24; margin-bottom:4px;">Bucket 3: S&amp;P 500 Core Compounding ($VOO)</div>
+              <div style="font-weight:800; color:#fbbf24; margin-bottom:4px;">Liquidity Cushion: 0–3 Month US T-Bill &amp; Money-Market Reserve ($SGOV · SPAXX · SWVXX · VMFXX)</div>
               <p style="margin:0; font-size:0.86rem; color:var(--muted);">
-                Holds 20% to 45% in ultra-low-cost broad US equities, reviewed calmly just 2–4 times per year when 3-Color Market Weather shifts.
+                Insulates 2–3 years of planned retirement withdrawals in short-term US Treasury liquidity, reviewed calmly twice per year.
               </p>
             </div>
           </div>
 
           <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px; border-top:1px solid var(--border); padding-top:10px;">
-            <button type="button" class="btn btn-primary btn-sm" id="btnUnderstandPwRsi" style="min-height:42px;">Got It — Return to Calculator</button>
+            <button type="button" class="btn btn-primary btn-sm" id="btnUnderstandPwRsi" style="min-height:44px; padding:8px 16px;">Got It — Return to Calculator</button>
           </div>
         </div>
       </div>
@@ -497,7 +497,7 @@ export function renderModals(state) {
             <div class="tom-manual-broker-list">
               <div class="tom-manual-broker-item">
                 <strong>🟢 Fidelity App / Fidelity.com (3 Taps):</strong>
-                <span>1) Tap <b>Transact → Trade</b> and enter the ETF symbol (such as SGOV, SCHD, JEPI, or VOO). 2) Switch <b>Order Type</b> from <i>Market</i> to <b>Limit</b> and enter your limit price. 3) Keep Time-in-Force on <b>Day</b>, tap <b>Preview</b>, and confirm.</span>
+                <span>1) Tap <b>Transact → Trade</b> and enter the ETF symbol (such as SMH, XLV, or SGOV). 2) Switch <b>Order Type</b> from <i>Market</i> to <b>Limit</b> and enter your limit price. 3) Keep Time-in-Force on <b>Day</b>, tap <b>Preview</b>, and confirm.</span>
               </div>
               <div class="tom-manual-broker-item">
                 <strong>🔵 Charles Schwab Mobile / Web (3 Taps):</strong>
@@ -511,23 +511,23 @@ export function renderModals(state) {
           </article>
 
           <article class="tom-manual-chapter" id="tomManualStep2">
-            <div class="tom-manual-chapter-tag tag-amber">STEP 2 OF 3 · CALM 2–4X/YEAR PORTFOLIO WEIGHT BUDGET REVIEW</div>
-            <h4>Aligning Your 3 Retirement Buckets 2–4 Times a Year with the 3-Color Market Weather Indicator</h4>
+            <div class="tom-manual-chapter-tag tag-amber">STEP 2 OF 3 · TWO-PILLAR SECTOR BALANCE REVIEW</div>
+            <h4>Aligning Your SMH &times; XLV + SGOV Baseline Across Market Regimes</h4>
             <p>
-              <b>No Daily Stress or Frequent Trading:</b> Instead of reacting to noisy daily headlines, self-directed retirement investors review portfolio weights calmly just <b>2 to 4 times per year</b> across four liquid, low-fee core ETFs (<b>SGOV · SCHD · JEPI · VOO</b>) aligned with our 3-Color Market Weather indicator:
+              <b>No Daily Stress or Frequent Trading:</b> Instead of reacting to noisy daily headlines, self-directed retirement investors review portfolio weights calmly across two non-leveraged 1x sector pillars (<b>SMH</b> Semiconductor Growth &times; <b>XLV</b> Healthcare Defense) plus a short-term US Treasury liquidity cushion (<b>SGOV</b>):
             </p>
             <div class="tom-manual-broker-list">
               <div class="tom-manual-broker-item">
-                <strong>🟢 Calm Uptrend Weather (20% SGOV · 35% JEPI+SCHD · 45% VOO):</strong>
-                <span>Maintain a 2-year T-Bill cash cushion in <b>SGOV</b> while allowing dividend growth (<b>SCHD</b>), monthly distributions (<b>JEPI</b>), and broad S&amp;P 500 compounding (<b>VOO</b>) to work steadily.</span>
+                <strong>🟢 Balanced Growth Baseline (55% SMH · 35% XLV · 10% SGOV):</strong>
+                <span>Participate in structural semiconductor innovation (<b>SMH</b>) while anchoring household composure with healthcare cash flows (<b>XLV</b>) and short-term Treasury liquidity (<b>SGOV</b>).</span>
               </div>
               <div class="tom-manual-broker-item">
-                <strong>🟡 Cautious Base Weather (30% SGOV · 40% JEPI+SCHD · 30% VOO):</strong>
-                <span>When market breadth is mixed, emphasize monthly income and dividend stability while holding 30% in short-term Treasury cash reserves.</span>
+                <strong>🟡 Cautious Breadth Regime (45% SMH · 40% XLV · 15% SGOV):</strong>
+                <span>When market breadth cools or valuations stretch, emphasize non-cyclical healthcare resilience and short-term Treasury reserves.</span>
               </div>
               <div class="tom-manual-broker-item">
-                <strong>🔴 Crash Defense Weather (40% SGOV · 40% JEPI+SCHD · 20% VOO):</strong>
-                <span>During elevated market volatility, gently allocate up to 40% into <b>SGOV</b> / government money-market reserves so 2–3 years of retirement living expenses are insulated from sequence-of-returns drawdowns.</span>
+                <strong>🔴 Preservation Priority (35% SMH · 45% XLV · 20% SGOV):</strong>
+                <span>During elevated volatility, hold a dedicated cushion in <b>XLV</b> and <b>SGOV</b> / government money-market reserves so near-term retirement expenses remain insulated from drawdowns.</span>
               </div>
             </div>
           </article>

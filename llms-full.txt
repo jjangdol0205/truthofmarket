@@ -1,10 +1,11 @@
-# TruthOfMarket (https://truthofmarket.com) — Educational Market Data & Retirement Cashflow Corpus
+# TruthOfMarket (https://truthofmarket.com) — Historical SMH × XLV Sector Balance & Market Data Corpus
 > Operated by: Educational Market Data & Quantitative Research Desk (beable9489@gmail.com)
-> Updated: 2026-11-18 | US 401(k)/IRA Retirement Cashflow Calculator + Market Weather + 76 US Equity Factor Studies
+> Official Channels: https://www.youtube.com/@TruthOfMarketUS | https://www.instagram.com/truthofmarket/
+> Updated: 2026-11-18 | 4-Step Historical SMH × XLV + SGOV Sector Balance Simulator + 76 US Equity Factor Studies
 > Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.
 
-## 1. Core Retirement Cashflow & Market Weather Tools
-- 30-Second US 401(k)/IRA Retirement Cashflow Calculator (SGOV · SCHD · JEPI · VOO): https://truthofmarket.com/
+## 1. Core Sector Balance & Market Weather Tools
+- 4-Step Historical SMH × XLV + SGOV Sector Balance Simulator: https://truthofmarket.com/
 - Market Weather & $SMH:$XLV Barbell Calculator (10.6/100): https://truthofmarket.com/semi-fear-greed.html
 - Self-Directed Quantitative Research Archive: https://truthofmarket.com/pro-swing.html
 - Educational Insights Journal: https://truthofmarket.com/insights/

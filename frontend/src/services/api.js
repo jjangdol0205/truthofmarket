@@ -1604,7 +1604,7 @@ export async function buildClientTelegramPreview({
   if (atype === "TEST_PING") {
     const topSym = ignStocks[0]?.ticker || "CELH";
     const topClose = Number(ignStocks[0]?.close ?? 27.93).toFixed(2);
-    const text = `✅ [Telegram Connected] SemiFearGreed & RightSideAlpha Alert Bot Active!\n• Semi Fear & Greed (${ov.date}): ${Number(ov.fg_score).toFixed(1)}/100 (${String(ov.regime_en).toUpperCase()})\n• $SMH: $${Number(ov.smh_close).toFixed(2)} | $XLV: $${Number(ov.xlv_close).toFixed(2)} | $QQQ: $${Number(ov.qqq_close).toFixed(2)}\n• Top US Ignition Pick: $${topSym} ($${topClose})`;
+    const text = `✅ [Telegram Connected] TruthOfMarket Sector & Factor Alert Bot Active!\n• Sector Sentiment (${ov.date}): ${Number(ov.fg_score).toFixed(1)}/100 (${String(ov.regime_en).toUpperCase()})\n• $SMH: $${Number(ov.smh_close).toFixed(2)} | $XLV: $${Number(ov.xlv_close).toFixed(2)} | $QQQ: $${Number(ov.qqq_close).toFixed(2)}\n• Top US Factor Study: $${topSym} ($${topClose})`;
     return { text, as_of_date: ov.date || "2026-10-26", alert_type: atype, lang: lg };
   }
 
@@ -1619,8 +1619,8 @@ export async function buildClientTelegramPreview({
 export const DEFAULT_TG_BOT_TOKEN = "DEMO-BOT-TOKEN";
 export const DEFAULT_TG_CHAT_ID = "@truthofmarketss";
 export const DEFAULT_TG_CHANNEL_URL = "https://t.me/truthofmarketss";
-export const DEFAULT_YOUTUBE_URL = "https://www.youtube.com/@RightSideAlpha";
-export const DEFAULT_INSTAGRAM_URL = "https://www.instagram.com/rightsidealpha";
+export const DEFAULT_YOUTUBE_URL = "https://www.youtube.com/@TruthOfMarketUS";
+export const DEFAULT_INSTAGRAM_URL = "https://www.instagram.com/truthofmarket/";
 
 export async function syncTelegramBotBrowser(botToken, currentChatId = "") {
   const cid = String(currentChatId || DEFAULT_TG_CHAT_ID).trim();
@@ -1713,7 +1713,7 @@ export async function verifyTelegramBot(data) {
       configured: Boolean(cid),
       mode: "DEMO_SIMULATION",
       bot_username: "truthofmarketss",
-      bot_name: "TruthOfMarket & RightSideAlpha Dispatch",
+      bot_name: "TruthOfMarket Research Dispatch",
       chat_id: cid || "@truthofmarketss",
       message: "Demo Telegram Dispatch verified (Simulation Mode Ready).",
     };

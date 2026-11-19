@@ -280,9 +280,14 @@
       styleEl = document.createElement("style");
       styleEl.id = "tomVipWaitlistStyles";
       styleEl.textContent = [
-        "#tomVipWaitlistModal{position:fixed;inset:0;z-index:10060;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,42,0.72);backdrop-filter:blur(6px);}",
-        "#tomVipWaitlistDialog{width:100%;max-width:600px;background:#ffffff;border:2px solid #059669;border-radius:16px;padding:24px 22px;color:#0f172a;box-shadow:0 24px 56px rgba(15,23,42,0.32);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;max-height:92vh;overflow-y:auto;}",
+        "#tomVipWaitlistModal,#tomVipWaitlistModal *{box-sizing:border-box;}",
+        "#tomVipWaitlistModal{position:fixed;inset:0;z-index:10060;display:none;align-items:center;justify-content:center;padding:16px 12px;background:rgba(15,23,42,0.72);backdrop-filter:blur(6px);overflow-y:auto;}",
+        "#tomVipWaitlistDialog{position:relative;width:100%;max-width:600px;background:#ffffff;border:2px solid #059669;border-radius:16px;padding:22px 20px;color:#0f172a;box-shadow:0 24px 56px rgba(15,23,42,0.32);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow-x:hidden;overflow-y:auto;margin:auto;}",
         "html[data-tom-theme='dark'] #tomVipWaitlistDialog{background:linear-gradient(155deg,#0f172a 0%,#071929 100%);border-color:#10b981;color:#f8fafc;box-shadow:0 24px 56px rgba(0,0,0,0.65);}",
+        ".tom-wl-top-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px;}",
+        ".tom-wl-priority-pill{display:inline-block;flex:0 1 auto;min-width:0;max-width:calc(100% - 86px);background:#ecfdf5;border:1px solid #059669;color:#065f46;padding:6px 12px;border-radius:999px;font-size:12.5px;line-height:1.35;font-weight:800;letter-spacing:0.02em;}",
+        "#btnCloseTomVipWaitlist{appearance:none;flex:0 0 auto;flex-shrink:0;min-height:44px;min-width:72px;padding:8px 14px;border-radius:8px;border:1.5px solid #64748b;background:#f1f5f9;color:#0f172a;font-weight:800;font-size:15px;line-height:1.2;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;}",
+        "#btnCloseTomVipWaitlist:hover{background:#e2e8f0;border-color:#334155;}",
         ".tom-wl-plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}",
         ".tom-wl-plan-btn{padding:12px 12px;border-radius:12px;border:2px solid #cbd5e1;background:#f8fafc;color:#0f172a;text-align:left;cursor:pointer;transition:all 0.15s ease;font-family:inherit;}",
         "html[data-tom-theme='dark'] .tom-wl-plan-btn{border-color:#334155;background:rgba(15,23,42,0.85);color:#cbd5e1;}",
@@ -290,7 +295,7 @@
         "html[data-tom-theme='dark'] .tom-wl-plan-btn.is-selected{border-color:#10b981;background:rgba(16,185,129,0.16);color:#ffffff;}",
         ".tom-wl-benefits-box{margin:10px 0 14px;padding:12px 14px;border-radius:12px;background:#f8fafc;border:1px solid #cbd5e1;font-size:15px;line-height:1.55;color:#1e293b;}",
         "html[data-tom-theme='dark'] .tom-wl-benefits-box{background:rgba(15,23,42,0.75);border-color:#334155;color:#e2e8f0;}",
-        "@media(max-width:540px){.tom-wl-plan-grid{grid-template-columns:1fr;}#tomVipWaitlistDialog{padding:18px 15px;}}",
+        "@media(max-width:540px){.tom-wl-plan-grid{grid-template-columns:1fr;}#tomVipWaitlistDialog{padding:18px 14px;}.tom-wl-priority-pill{font-size:11.5px;padding:5px 10px;}}",
       ].join("");
       document.head.appendChild(styleEl);
     }
@@ -304,11 +309,11 @@
     backdrop.setAttribute("aria-labelledby", "tomVipWaitlistTitle");
     backdrop.innerHTML =
       '<div id="tomVipWaitlistDialog">' +
-      '  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;">' +
-      '    <span style="display:inline-flex;align-items:center;gap:6px;background:#ecfdf5;border:1px solid #059669;color:#065f46;padding:4px 12px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:0.02em;">' +
+      '  <div class="tom-wl-top-row">' +
+      '    <span class="tom-wl-priority-pill">' +
       "      FOUNDING MEMBER PRIORITY ACCESS &bull; 20% EARLY-BIRD LOCK" +
       "    </span>" +
-      '    <button type="button" id="btnCloseTomVipWaitlist" aria-label="Close modal" style="min-height:42px;padding:6px 12px;border-radius:8px;border:1px solid #94a3b8;background:#f1f5f9;color:#0f172a;font-weight:800;font-size:15px;cursor:pointer;">Close</button>' +
+      '    <button type="button" id="btnCloseTomVipWaitlist" aria-label="Close modal">Close</button>' +
       "  </div>" +
       '  <h3 id="tomVipWaitlistTitle" style="margin:0 0 8px;font-size:clamp(1.2rem,2.4vw,1.45rem);line-height:1.32;font-weight:900;">' +
       "    VIP Founding Member Launch Alert &amp; 20% Early-Bird Discount Reservation (1-Second Email Reserve)" +
@@ -743,12 +748,12 @@ const enCopy = {
   heroTitle: "Balance AI Semiconductor Growth ($SMH) With Healthcare Defense ($XLV) — Sleep Calmly.",
   heroDesc:
     "Answer 4 quick taps to calculate your historical $SMH × $XLV baseline sector mix across 26 years of Dot-Com, 2008, and 2022 market cycles.",
-  pwRsiExplainerBtn: "How 2–4x/Yr Budget Review Works",
-  pwRsiModalTitle: "Calm 2–4x/Year 3-Bucket Household Budget & Cashflow Methodology",
-  kpi1_label: "Core S&P 500 Pillar",
-  kpi1_sub: "$VOO broad US compounding core",
-  kpi2_label: "Dividend Growth & Income",
-  kpi2_sub: "$SCHD (~3.5%) + $JEPI (~7.4% mo.)",
+  pwRsiExplainerBtn: "How Two-Pillar Balance Review Works",
+  pwRsiModalTitle: "Calm SMH × XLV + SGOV Sector Balance & Drawdown Methodology",
+  kpi1_label: "Semiconductor Growth Pillar",
+  kpi1_sub: "$SMH structural innovation sleeve",
+  kpi2_label: "Healthcare Defensive Pillar",
+  kpi2_sub: "$XLV non-cyclical cashflow sleeve",
   kpi3_label: "US T-Bill Cash Shield",
   kpi3_sub: "$SGOV (~4.7% state-tax-advantaged)",
   kpi4_label: "Calm Review Cadence",
@@ -823,11 +828,11 @@ const enCopy = {
   tool3CopyBtn: "Copy Script Source",
 
   // Cross-Platform Banner (Home Retirement Focus)
-  crossTitle: "US RETIREMENT MARKET WEATHER · S&P 500 BREADTH & DRAWDOWN GUARD",
-  crossHeading: "Want to Review Your Exact Dollar Budget Allocation Across $SGOV, $SCHD, $JEPI & $VOO?",
+  crossTitle: "HISTORICAL SECTOR ARCHITECTURE · SMH × XLV + SGOV",
+  crossHeading: "Want to Review Your Baseline Allocation Across $SMH, $XLV & $SGOV?",
   crossDesc:
-    "Check today's 3-Color US Retirement Market Weather above or explore our $0 Safe Brokerage Limit-Order & Cashflow Budget Manual for Fidelity, Charles Schwab, and Vanguard.",
-  crossBtn: "Review 3-Color Market Weather",
+    "Run our 4-Step Historical SMH × XLV + SGOV Sector Balance Simulator or explore our complimentary $0 US Brokerage Limit-Order Guide for Fidelity, Charles Schwab, and Vanguard.",
+  crossBtn: "Open 4-Step Sector Simulator",
 
   // SemiFearGreed Standalone Page Copy (/semi-fear-greed.html)
   cnnBadge: "PUBLIC MARKET SENTIMENT DATA · UPDATED DAILY",
@@ -2448,7 +2453,7 @@ async function buildClientTelegramPreview({
   if (atype === "TEST_PING") {
     const topSym = ignStocks[0]?.ticker || "CELH";
     const topClose = Number(ignStocks[0]?.close ?? 27.93).toFixed(2);
-    const text = `✅ [Telegram Connected] SemiFearGreed & RightSideAlpha Alert Bot Active!\n• Semi Fear & Greed (${ov.date}): ${Number(ov.fg_score).toFixed(1)}/100 (${String(ov.regime_en).toUpperCase()})\n• $SMH: $${Number(ov.smh_close).toFixed(2)} | $XLV: $${Number(ov.xlv_close).toFixed(2)} | $QQQ: $${Number(ov.qqq_close).toFixed(2)}\n• Top US Ignition Pick: $${topSym} ($${topClose})`;
+    const text = `✅ [Telegram Connected] TruthOfMarket Sector & Factor Alert Bot Active!\n• Sector Sentiment (${ov.date}): ${Number(ov.fg_score).toFixed(1)}/100 (${String(ov.regime_en).toUpperCase()})\n• $SMH: $${Number(ov.smh_close).toFixed(2)} | $XLV: $${Number(ov.xlv_close).toFixed(2)} | $QQQ: $${Number(ov.qqq_close).toFixed(2)}\n• Top US Factor Study: $${topSym} ($${topClose})`;
     return { text, as_of_date: ov.date || "2026-10-26", alert_type: atype, lang: lg };
   }
 
@@ -2462,8 +2467,8 @@ async function buildClientTelegramPreview({
 const DEFAULT_TG_BOT_TOKEN = "DEMO-BOT-TOKEN";
 const DEFAULT_TG_CHAT_ID = "@truthofmarketss";
 const DEFAULT_TG_CHANNEL_URL = "https://t.me/truthofmarketss";
-const DEFAULT_YOUTUBE_URL = "https://www.youtube.com/@RightSideAlpha";
-const DEFAULT_INSTAGRAM_URL = "https://www.instagram.com/rightsidealpha";
+const DEFAULT_YOUTUBE_URL = "https://www.youtube.com/@TruthOfMarketUS";
+const DEFAULT_INSTAGRAM_URL = "https://www.instagram.com/truthofmarket/";
 async function syncTelegramBotBrowser(botToken, currentChatId = "") {
   const cid = String(currentChatId || DEFAULT_TG_CHAT_ID).trim();
   return { chatId: cid, botUsername: "truthofmarketss", synced: true };
@@ -2552,7 +2557,7 @@ async function verifyTelegramBot(data) {
       configured: Boolean(cid),
       mode: "DEMO_SIMULATION",
       bot_username: "truthofmarketss",
-      bot_name: "TruthOfMarket & RightSideAlpha Dispatch",
+      bot_name: "TruthOfMarket Research Dispatch",
       chat_id: cid || "@truthofmarketss",
       message: "Demo Telegram Dispatch verified (Simulation Mode Ready).",
     };
@@ -2845,7 +2850,7 @@ function renderDoctorVipUnlockPreview(state) {
             <span style="font-size:0.72rem; color:var(--muted);">${sector}</span>
           </div>
           <div style="display:flex; align-items:center; gap:12px; font-size:0.72rem;">
-            <span class="mono" style="color:#34d399; font-weight:700;">PW-RSI ${score}</span>
+            <span class="mono" style="color:#34d399; font-weight:700;">FACTOR ${score}</span>
             <span class="mono" style="color:#94a3b8;">${volSurge.toFixed(2)}x Vol</span>
             <span class="mono" style="color:var(--muted);">TRG ${triggerDisp}</span>
             <span class="mono" style="color:var(--muted);">STP ${stopDisp}</span>
@@ -2921,7 +2926,7 @@ function renderDoctorVipUnlockPreview(state) {
         ${headerBadge}
       </div>
       <p style="font-size:0.72rem; color:var(--muted); margin-bottom:10px; line-height:1.4;">
-        Exit capital from dead-money or stopped-out positions and immediately rotate into high-conviction right-side ignition breakouts (PW-RSI &ge; 75, 10D Volume Surge &ge; 1.40x).
+        Compare individual equity holdings against medium-term moving-average alignment (Factor Score &ge; 75, 10D Relative Volume &ge; 1.40x) and core SMH &times; XLV + SGOV benchmarks.
       </p>
       <div class="doc-vip-picks-list">
         ${rowsHtml}
@@ -3360,10 +3365,10 @@ const BLIND_TEST_I18N = {
     correctTag: "✅ QUANT REGIME MATCHED!",
     wrongTag: "❌ LEFT-SIDE DRAWDOWN ZONE:",
     revealTickerLabel: "REVEALED LIVE TICKER",
-    battleTitle: "📊 $10,000 HISTORICAL BACKTEST COMPARISON: SUB-MA60 DIP-BUYING VS. PW-RSI MODEL",
+    battleTitle: "📊 $10,000 HISTORICAL BACKTEST COMPARISON: SUB-MA60 DIP-BUYING VS. MA20/60 RECLAIM MODEL",
     retailSideTitle: "❌ Sub-MA60 Dip-Buying (-18% Below MA60)",
-    retailSideDesc: "Averages into sub-MA60 downtrends ($NVDA / $SMCI / $INTC) without calm allocation discipline. Unhedged tail drawdowns erode retirement principal.",
-    quantSideTitle: "🟢 RightSideAlpha PW-RSI + Volume Model",
+    retailSideDesc: "Averages into sub-MA60 downtrends ($SMCI / $INTC) without calm allocation discipline. Unhedged tail drawdowns erode retirement principal.",
+    quantSideTitle: "🟢 TruthOfMarket MA20/60 + Volume Model",
     quantSideDesc: "Filters for MA60 reclaim + ≥1.4x institutional volume surge with a modeled -9.0% risk boundary (-1.35% portfolio allocation cap).",
     vipUnlockBannerTitle: "🔥 ROUND 3 FEATURED A 3.41x VOLUME ANOMALY — UNLOCK ALL 72 QUANT FACTOR DATASETS & PINE SCRIPT",
     vipUnlockBannerSub:
@@ -5369,7 +5374,7 @@ function renderProofCard(state) {
               <td class="col-num">24.82%</td>
             </tr>
             <tr class="proof-highlight">
-              <td style="font-family:var(--font-sans);">3. PW-RSI Right-Side Ignition (+14–35% off low + MA20/60 Breakout + 1.40x Vol + 55D Time-Stop)</td>
+              <td style="font-family:var(--font-sans);">3. MA20/60 Trend Reclaim Cohort (+14–35% off low + MA20/60 Alignment + 1.40x Vol)</td>
               <td class="col-num" style="color:var(--fin-up);">55.24%</td>
               <td class="col-num" style="color:var(--fin-up);">+80.47% (Mean +109.1%)</td>
               <td class="col-num" style="color:var(--fin-up);">-16.49%</td>
@@ -5392,7 +5397,7 @@ const HIGH_VOLATILITY_TICKERS = new Set([
 ]);
 
 const RETIREMENT_INCOME_BLUECHIPS = new Set([
-  "VOO", "SCHD", "JEPI", "SGOV", "XLV", "JNJ", "PG", "KO", "COST", "V", "MSFT", "AAPL",
+  "SMH", "XLV", "SGOV", "VOO", "JNJ", "PG", "KO", "COST", "V", "MSFT", "AAPL",
   "PEP", "WMT", "JPM", "UNH", "HD", "ABBV", "CVX", "XOM", "LLY", "AVGO", "MA", "LMT",
 ]);
 function renderScreenerControls(state) {
@@ -5891,7 +5896,7 @@ function renderProVault(state) {
   const pineCode =
     state.pineCode ||
     `//@version=5
-indicator("RightSideAlpha PW-RSI Ignition v2.6", overlay=true)
+indicator("TruthOfMarket MA20/60 & Volume Overlay v2.6", overlay=true)
 ma20 = ta.sma(close, 20)
 ma60 = ta.sma(close, 60)
 low52 = ta.lowest(low, 252)
@@ -5902,8 +5907,8 @@ proxLow = (close - low52) / low52 * 100
 ddHigh = (close - high52) / high52 * 100
 ignition = ddHigh <= -35 and proxLow >= 10 and proxLow <= 40 and close > ma20 and close > ma60 and washout10d
 plot(ma20, "MA20", color=color.new(color.aqua, 0), linewidth=2)
-plot(ma60, "MA60 Trigger", color=color.new(color.orange, 0), linewidth=2)
-plotshape(ignition and not ignition[1], "PW-RSI IGNITION", shape.labelup, location.belowbar, color.green, text="IGNITION", textcolor=color.white)`;
+plot(ma60, "MA60 Reference", color=color.new(color.orange, 0), linewidth=2)
+plotshape(ignition and not ignition[1], "MA20/60 RECLAIM", shape.labelup, location.belowbar, color.green, text="RECLAIM", textcolor=color.white)`;
 
   return `
     <section class="proof-card" id="proVaultSection" style="border-top:2px solid var(--fin-blue); margin-bottom:22px;">
@@ -6482,8 +6487,8 @@ function renderModals(state) {
     "#tom-vip-annual"
   );
   const tgChannelUrl = cfg.telegram_channel_url || "https://t.me/truthofmarketss";
-  const ytUrl = cfg.youtube_url || "https://www.youtube.com/@RightSideAlpha";
-  const igUrl = cfg.instagram_url || "https://www.instagram.com/rightsidealpha";
+  const ytUrl = cfg.youtube_url || "https://www.youtube.com/@TruthOfMarketUS";
+  const igUrl = cfg.instagram_url || "https://www.instagram.com/truthofmarket/";
   const tgChatId = state.telegramChatId || cfg.telegram_chat_id || "@truthofmarketss";
   const tgToken = state.telegramBotToken || "DEMO-BOT-TOKEN";
   const tgType = state.telegramAlertType || "SEMI_BRIEFING";
@@ -6518,7 +6523,7 @@ function renderModals(state) {
           <div style="font-size:0.68rem; font-family:var(--font-mono); color:#93c5fd; text-transform:uppercase; letter-spacing:0.05em;">
             SELF-DIRECTED EDUCATIONAL CALCULATOR SOFTWARE · VIP ACCESS
           </div>
-          <button type="button" class="btn btn-sm" id="btnCancelLicense" style="padding:4px 10px;">✕ Close</button>
+          <button type="button" class="btn btn-sm" id="btnCancelLicense" style="min-height:44px; min-width:68px; flex-shrink:0; padding:8px 14px;">Close</button>
         </div>
         <h3 style="font-size:1.18rem; font-weight:800; margin-top:4px; color:var(--text);">Unlock Full VIP Retiree Worksheets &amp; Tax-Bucket Reference</h3>
         <p style="color:var(--text-secondary); font-size:0.95rem; margin-top:6px; line-height:1.55;">
@@ -6725,10 +6730,10 @@ function renderModals(state) {
         <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">TELEGRAM OFFICIAL CHANNEL URL</label>
         <input type="text" id="cfgTgChannel" value="${tgChannelUrl}" />
 
-        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">OFFICIAL YOUTUBE CHANNEL URL (@RightSideAlpha)</label>
+        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">OFFICIAL YOUTUBE CHANNEL URL (@TruthOfMarketUS)</label>
         <input type="text" id="cfgYoutubeUrl" value="${ytUrl}" />
 
-        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">OFFICIAL INSTAGRAM PROFILE URL (@rightsidealpha)</label>
+        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">OFFICIAL INSTAGRAM PROFILE URL (@truthofmarket)</label>
         <input type="text" id="cfgInstagramUrl" value="${igUrl}" />
 
         <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">TRADINGVIEW PARTNER ID</label>
@@ -6818,7 +6823,7 @@ function renderModals(state) {
       </div>
     </div>
 
-    <!-- CALM 2-4X/YEAR BUDGET REVIEW METHODOLOGY MODAL -->
+    <!-- CALM SEMI-ANNUAL TWO-PILLAR SECTOR BALANCE METHODOLOGY MODAL -->
     <div class="modal-backdrop" id="pwRsiModal">
       <div class="modal" style="max-width:680px;">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:10px;">
@@ -6827,45 +6832,45 @@ function renderModals(state) {
               SELF-DIRECTED EDUCATIONAL CALCULATOR METHODOLOGY
             </div>
             <h3 style="font-size:1.15rem; font-weight:800; color:#ffffff; margin:3px 0 0;">
-              ${t.pwRsiModalTitle || "Calm 2–4x/Year 3-Bucket Household Budget & Cashflow Methodology"}
+              ${t.pwRsiModalTitle || "Calm SMH × XLV + SGOV Sector Balance & Drawdown Methodology"}
             </h3>
           </div>
-          <button class="btn btn-sm" id="btnClosePwRsiModal" style="padding:4px 8px;">✕ Close</button>
+          <button class="btn btn-sm" id="btnClosePwRsiModal" style="min-height:44px; min-width:68px; flex-shrink:0; padding:6px 12px;">Close</button>
         </div>
 
         <div style="max-height:70vh; overflow-y:auto; padding-right:4px; font-size:0.92rem; line-height:1.65; color:#cbd5e1;">
           <div style="background:#0b1322; border:1px solid rgba(56,189,248,0.25); border-radius:8px; padding:14px 16px; margin-bottom:12px;">
             <div style="font-weight:800; color:#ffffff; margin-bottom:4px; font-size:0.98rem;">
-              Why Calm 2–4x/Year Budget Discipline Protects Retirement Longevity
+              Why Pairing Two Distinct Sector Clocks Protects Retirement Longevity
             </div>
             <p style="margin:0; color:var(--muted); font-size:0.88rem;">
-              Sequence-of-returns shocks occur when retirees are forced to sell depressed equity holdings to pay monthly living bills during a market downturn. Separating your nest egg into 3 clear buckets keeps 2–3 years of living expenses insulated in short-term US Treasuries while dividends and S&amp;P 500 compounding replenish cash calmly.
+              Sequence-of-returns shocks occur when retirees hold 100% correlated equity exposure during a prolonged tech or macro downturn. Pairing non-leveraged 1x US Semiconductor growth ($SMH) with non-cyclical US Healthcare defense ($XLV) alongside a dedicated 0–3 month US Treasury cushion ($SGOV) reduces historical drawdowns while preserving long-term compounding.
             </p>
           </div>
 
           <div style="display:grid; grid-template-columns:1fr; gap:10px; margin-bottom:12px;">
             <div style="background:#090d16; border:1px solid #1e293b; border-radius:8px; padding:12px 14px;">
-              <div style="font-weight:800; color:#38bdf8; margin-bottom:4px;">Bucket 1: US T-Bill &amp; Government MMF Cushion ($SGOV · SPAXX · SWVXX · VMFXX)</div>
+              <div style="font-weight:800; color:#38bdf8; margin-bottom:4px;">Pillar 1: Structural Semiconductor Growth ($SMH · Non-Leveraged 1x)</div>
               <p style="margin:0; font-size:0.86rem; color:var(--muted);">
-                Holds 20% to 40% depending on our 3-Color Market Weather indicator, earning monthly Treasury interest while insulating near-term retirement cashflow.
+                Captures long-term compute, industrial automation, and silicon infrastructure compounding without 3x daily-reset volatility decay.
               </p>
             </div>
             <div style="background:#090d16; border:1px solid #1e293b; border-radius:8px; padding:12px 14px;">
-              <div style="font-weight:800; color:#34d399; margin-bottom:4px;">Bucket 2: Monthly &amp; Rising Dividend Income ($JEPI · $SCHD · $XLV)</div>
+              <div style="font-weight:800; color:#34d399; margin-bottom:4px;">Pillar 2: Non-Cyclical Healthcare Defense ($XLV · Non-Leveraged 1x)</div>
               <p style="margin:0; font-size:0.86rem; color:var(--muted);">
-                Holds 35% to 40% across monthly distribution and 10+ year dividend-growth ETFs to support predictable retirement income.
+                Pharmaceuticals, medical devices, and healthcare services operate on inelastic demographic demand, buffering portfolio variance when rate or tech cycles contract.
               </p>
             </div>
             <div style="background:#090d16; border:1px solid #1e293b; border-radius:8px; padding:12px 14px;">
-              <div style="font-weight:800; color:#fbbf24; margin-bottom:4px;">Bucket 3: S&amp;P 500 Core Compounding ($VOO)</div>
+              <div style="font-weight:800; color:#fbbf24; margin-bottom:4px;">Liquidity Cushion: 0–3 Month US T-Bill &amp; Money-Market Reserve ($SGOV · SPAXX · SWVXX · VMFXX)</div>
               <p style="margin:0; font-size:0.86rem; color:var(--muted);">
-                Holds 20% to 45% in ultra-low-cost broad US equities, reviewed calmly just 2–4 times per year when 3-Color Market Weather shifts.
+                Insulates 2–3 years of planned retirement withdrawals in short-term US Treasury liquidity, reviewed calmly twice per year.
               </p>
             </div>
           </div>
 
           <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px; border-top:1px solid var(--border); padding-top:10px;">
-            <button type="button" class="btn btn-primary btn-sm" id="btnUnderstandPwRsi" style="min-height:42px;">Got It — Return to Calculator</button>
+            <button type="button" class="btn btn-primary btn-sm" id="btnUnderstandPwRsi" style="min-height:44px; padding:8px 16px;">Got It — Return to Calculator</button>
           </div>
         </div>
       </div>
@@ -6967,7 +6972,7 @@ function renderModals(state) {
             <div class="tom-manual-broker-list">
               <div class="tom-manual-broker-item">
                 <strong>🟢 Fidelity App / Fidelity.com (3 Taps):</strong>
-                <span>1) Tap <b>Transact → Trade</b> and enter the ETF symbol (such as SGOV, SCHD, JEPI, or VOO). 2) Switch <b>Order Type</b> from <i>Market</i> to <b>Limit</b> and enter your limit price. 3) Keep Time-in-Force on <b>Day</b>, tap <b>Preview</b>, and confirm.</span>
+                <span>1) Tap <b>Transact → Trade</b> and enter the ETF symbol (such as SMH, XLV, or SGOV). 2) Switch <b>Order Type</b> from <i>Market</i> to <b>Limit</b> and enter your limit price. 3) Keep Time-in-Force on <b>Day</b>, tap <b>Preview</b>, and confirm.</span>
               </div>
               <div class="tom-manual-broker-item">
                 <strong>🔵 Charles Schwab Mobile / Web (3 Taps):</strong>
@@ -6981,23 +6986,23 @@ function renderModals(state) {
           </article>
 
           <article class="tom-manual-chapter" id="tomManualStep2">
-            <div class="tom-manual-chapter-tag tag-amber">STEP 2 OF 3 · CALM 2–4X/YEAR PORTFOLIO WEIGHT BUDGET REVIEW</div>
-            <h4>Aligning Your 3 Retirement Buckets 2–4 Times a Year with the 3-Color Market Weather Indicator</h4>
+            <div class="tom-manual-chapter-tag tag-amber">STEP 2 OF 3 · TWO-PILLAR SECTOR BALANCE REVIEW</div>
+            <h4>Aligning Your SMH &times; XLV + SGOV Baseline Across Market Regimes</h4>
             <p>
-              <b>No Daily Stress or Frequent Trading:</b> Instead of reacting to noisy daily headlines, self-directed retirement investors review portfolio weights calmly just <b>2 to 4 times per year</b> across four liquid, low-fee core ETFs (<b>SGOV · SCHD · JEPI · VOO</b>) aligned with our 3-Color Market Weather indicator:
+              <b>No Daily Stress or Frequent Trading:</b> Instead of reacting to noisy daily headlines, self-directed retirement investors review portfolio weights calmly across two non-leveraged 1x sector pillars (<b>SMH</b> Semiconductor Growth &times; <b>XLV</b> Healthcare Defense) plus a short-term US Treasury liquidity cushion (<b>SGOV</b>):
             </p>
             <div class="tom-manual-broker-list">
               <div class="tom-manual-broker-item">
-                <strong>🟢 Calm Uptrend Weather (20% SGOV · 35% JEPI+SCHD · 45% VOO):</strong>
-                <span>Maintain a 2-year T-Bill cash cushion in <b>SGOV</b> while allowing dividend growth (<b>SCHD</b>), monthly distributions (<b>JEPI</b>), and broad S&amp;P 500 compounding (<b>VOO</b>) to work steadily.</span>
+                <strong>🟢 Balanced Growth Baseline (55% SMH · 35% XLV · 10% SGOV):</strong>
+                <span>Participate in structural semiconductor innovation (<b>SMH</b>) while anchoring household composure with healthcare cash flows (<b>XLV</b>) and short-term Treasury liquidity (<b>SGOV</b>).</span>
               </div>
               <div class="tom-manual-broker-item">
-                <strong>🟡 Cautious Base Weather (30% SGOV · 40% JEPI+SCHD · 30% VOO):</strong>
-                <span>When market breadth is mixed, emphasize monthly income and dividend stability while holding 30% in short-term Treasury cash reserves.</span>
+                <strong>🟡 Cautious Breadth Regime (45% SMH · 40% XLV · 15% SGOV):</strong>
+                <span>When market breadth cools or valuations stretch, emphasize non-cyclical healthcare resilience and short-term Treasury reserves.</span>
               </div>
               <div class="tom-manual-broker-item">
-                <strong>🔴 Crash Defense Weather (40% SGOV · 40% JEPI+SCHD · 20% VOO):</strong>
-                <span>During elevated market volatility, gently allocate up to 40% into <b>SGOV</b> / government money-market reserves so 2–3 years of retirement living expenses are insulated from sequence-of-returns drawdowns.</span>
+                <strong>🔴 Preservation Priority (35% SMH · 45% XLV · 20% SGOV):</strong>
+                <span>During elevated volatility, hold a dedicated cushion in <b>XLV</b> and <b>SGOV</b> / government money-market reserves so near-term retirement expenses remain insulated from drawdowns.</span>
               </div>
             </div>
           </article>
@@ -7386,21 +7391,21 @@ function renderSemiFearGreedView(state) {
         <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
           <a
             class="btn"
-            href="${state.config?.youtube_url || "https://www.youtube.com/@RightSideAlpha"}"
+            href="${state.config?.youtube_url || "https://www.youtube.com/@TruthOfMarketUS"}"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener"
             style="background:#dc2626; color:#ffffff; border-color:#b91c1c;"
           >
-            📺 YouTube (@RightSideAlpha) ↗
+            YouTube @TruthOfMarketUS
           </a>
           <a
             class="btn"
-            href="${state.config?.instagram_url || "https://www.instagram.com/rightsidealpha"}"
+            href="${state.config?.instagram_url || "https://www.instagram.com/truthofmarket/"}"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener"
             style="background:#db2777; color:#ffffff; border-color:#be185d;"
           >
-            📸 Instagram (@rightsidealpha) ↗
+            Instagram @truthofmarket
           </a>
           <a
             class="btn ${state.isProUnlocked ? "" : "btn-gated-vip-tg"}"
@@ -7804,7 +7809,7 @@ function renderSemiFearGreedView(state) {
           Planning Your 401(k)/IRA Monthly Retirement Cashflow or Reviewing Individual Equity Factors?
         </h3>
         <p style="font-size:0.84rem; color:var(--muted);">
-          Return to our 30-Second Retirement Cashflow Calculator (SGOV · SCHD · JEPI · VOO) or explore the Quantitative Factor Research Archive.
+          Return to our 4-Step Historical SMH &times; XLV + SGOV Sector Balance Simulator or explore the Quantitative Factor Research Archive.
         </p>
       </div>
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
@@ -8142,6 +8147,10 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
         <span>&middot;</span>
         <a href="/contact.html">Contact</a>
         <span>&middot;</span>
+        <a href="https://www.youtube.com/@TruthOfMarketUS" target="_blank" rel="noopener">YouTube @TruthOfMarketUS</a>
+        <span>&middot;</span>
+        <a href="https://www.instagram.com/truthofmarket/" target="_blank" rel="noopener">Instagram @truthofmarket</a>
+        <span>&middot;</span>
         <a href="mailto:beable9489@gmail.com">beable9489@gmail.com</a>
       </div>
       <p class="pw-legal-disclaimer">
@@ -8152,17 +8161,17 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
     <!-- Member Sign-In / Restore Modal (0 Emojis) -->
     <div class="pw-modal-backdrop" id="pwRestoreModal" role="dialog" aria-modal="true" aria-labelledby="pwRestoreTitle">
       <div class="pw-modal-dialog">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;">
+        <div class="pw-modal-header-row">
           <span class="pw-kicker" style="margin:0;">MEMBER ACCESS &amp; RESTORE</span>
-          <button type="button" class="pw-back-btn" id="btnClosePwRestoreModal">Close</button>
+          <button type="button" class="pw-modal-close-btn" id="btnClosePwRestoreModal" aria-label="Close Member Sign-In Modal">Close</button>
         </div>
         <h3 class="pw-serif-h2" id="pwRestoreTitle" style="font-size:1.65rem;">Restore Your Baseline or Paid License</h3>
         <p style="margin:0 0 16px;font-size:0.92rem;color:#475569;">
           Enter the email address used during registration to reopen your saved SMH &times; XLV baseline, or enter a Polar.sh license key if applicable.
         </p>
         <form id="pwRestoreForm" novalidate style="display:flex;flex-direction:column;gap:12px;">
-          <input type="email" id="pwRestoreEmailInput" class="pw-email-input" placeholder="Registered email address" autocomplete="email" />
-          <input type="text" id="pwRestoreLicenseInput" class="pw-email-input" placeholder="Optional: Polar.sh license key" autocomplete="off" />
+          <input type="email" id="pwRestoreEmailInput" class="pw-email-input" style="min-width:180px;width:100%;box-sizing:border-box;" placeholder="Registered email address" autocomplete="email" />
+          <input type="text" id="pwRestoreLicenseInput" class="pw-email-input" style="min-width:180px;width:100%;box-sizing:border-box;" placeholder="Optional: Polar.sh license key" autocomplete="off" />
           <button type="submit" class="pw-btn-primary pw-btn-emerald" style="width:100%;">Restore Session &rarr;</button>
         </form>
         <div id="pwRestoreStatus" role="status" aria-live="polite" style="display:none;margin-top:12px;font-size:0.88rem;color:#065F46;"></div>
@@ -8172,9 +8181,9 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
     <!-- Complimentary $0 Brokerage Safe-Order Guide Modal (0 Emojis) -->
     <div class="pw-modal-backdrop" id="pwStarterGuideModal" role="dialog" aria-modal="true" aria-labelledby="pwStarterGuideTitle">
       <div class="pw-modal-dialog">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;">
+        <div class="pw-modal-header-row">
           <span class="pw-kicker" style="margin:0;">COMPLIMENTARY EXECUTION REFERENCE ($0)</span>
-          <button type="button" class="pw-back-btn" id="btnClosePwStarterGuideModal">Close</button>
+          <button type="button" class="pw-modal-close-btn" id="btnClosePwStarterGuideModal" aria-label="Close Brokerage Reference Modal">Close</button>
         </div>
         <h3 class="pw-serif-h2" id="pwStarterGuideTitle" style="font-size:1.65rem;">US Brokerage Limit-Order &amp; ETF Reference</h3>
         <div style="font-size:0.92rem;line-height:1.7;color:#334155;display:flex;flex-direction:column;gap:12px;">
@@ -8639,7 +8648,7 @@ const defaultView =
       localStorage.removeItem("rsa_cfg_ls_ltd");
     }
     const oldTv = localStorage.getItem("rsa_cfg_aff_tv") || "";
-    if (oldTv === "rightsidealpha") {
+    if (oldTv && oldTv.toLowerCase().includes("rightside")) {
       localStorage.setItem("rsa_cfg_aff_tv", "1173809");
     }
     const oldSa = localStorage.getItem("rsa_cfg_aff_sa") || "";
@@ -8649,7 +8658,8 @@ const defaultView =
     if (!localStorage.getItem("rsa_aff_v6_us_tools")) {
       localStorage.setItem("rsa_cfg_broker_url", "https://trendspider.com/?_go=rightside");
       localStorage.setItem("rsa_cfg_broker_name", "TrendSpider (rightside)");
-      localStorage.setItem("rsa_cfg_youtube_url", "https://www.youtube.com/@RightSideAlpha");
+      localStorage.setItem("rsa_cfg_youtube_url", "https://www.youtube.com/@TruthOfMarketUS");
+      localStorage.setItem("rsa_cfg_instagram_url", "https://www.instagram.com/truthofmarket/");
       localStorage.setItem("rsa_tg_channel_url", "https://t.me/truthofmarketss");
       localStorage.setItem("rsa_tg_chat_id", "@truthofmarketss");
       localStorage.setItem("rsa_aff_v6_us_tools", "1");
@@ -8663,12 +8673,12 @@ const defaultView =
       localStorage.setItem("rsa_tg_chat_id", "@truthofmarketss");
     }
     const oldYt = localStorage.getItem("rsa_cfg_youtube_url") || "";
-    if (!oldYt || oldYt.includes("youtube.com/@rightsidealpha")) {
-      localStorage.setItem("rsa_cfg_youtube_url", "https://www.youtube.com/@RightSideAlpha");
+    if (!oldYt || !oldYt.toLowerCase().includes("@truthofmarketus")) {
+      localStorage.setItem("rsa_cfg_youtube_url", "https://www.youtube.com/@TruthOfMarketUS");
     }
     const oldIg = localStorage.getItem("rsa_cfg_instagram_url") || "";
-    if (oldIg.includes("semifeargreed")) {
-      localStorage.setItem("rsa_cfg_instagram_url", "https://www.instagram.com/rightsidealpha");
+    if (!oldIg || !oldIg.toLowerCase().includes("instagram.com/truthofmarket")) {
+      localStorage.setItem("rsa_cfg_instagram_url", "https://www.instagram.com/truthofmarket/");
     }
   } catch (_) {}
 })();
@@ -8737,7 +8747,7 @@ const state = {
   telegramAlertType: "SEMI_BRIEFING",
   telegramPreviewText: "",
   config: {
-    site1_name: "RightSideAlpha",
+    site1_name: "TruthOfMarket",
     site1_url: localStorage.getItem("rsa_cfg_site1_url") || "https://truthofmarket.com",
     site2_url: "https://truthofmarket.com",
     polar_tom_monthly_url:
@@ -8924,16 +8934,12 @@ function renderApp() {
             ✉️ beable9489@gmail.com
           </a>
           <span style="color:var(--border);">|</span>
-          <a href="${state.config.youtube_url || DEFAULT_YOUTUBE_URL}" target="_blank" rel="noopener noreferrer" class="tom-footer-social">
-            📺 YouTube (@RightSideAlpha) ↗
+          <a href="${state.config.youtube_url || DEFAULT_YOUTUBE_URL}" target="_blank" rel="noopener" class="tom-footer-social">
+            YouTube @TruthOfMarketUS
           </a>
           <span style="color:var(--border);">|</span>
-          <a href="${state.config.instagram_url || DEFAULT_INSTAGRAM_URL}" target="_blank" rel="noopener noreferrer" class="tom-footer-social">
-            📸 Instagram (@rightsidealpha) ↗
-          </a>
-          <span style="color:var(--border);">|</span>
-          <a href="${state.config.x_url || "https://x.com/rightsidealpha"}" target="_blank" rel="noopener noreferrer" class="tom-footer-social">
-            𝕏 (@rightsidealpha) ↗
+          <a href="${state.config.instagram_url || DEFAULT_INSTAGRAM_URL}" target="_blank" rel="noopener" class="tom-footer-social">
+            Instagram @truthofmarket
           </a>
           <span style="color:var(--border);">|</span>
           <button type="button" class="btn btn-sm" id="btnToggleTomTheme" title="Switch between Daylight Mode and Optional Dark Mode">
@@ -9534,7 +9540,7 @@ function bindEvents() {
     });
   });
 
-  // Search Input (RightSideAlpha)
+  // Search Input (TruthOfMarket)
   const searchInput = document.getElementById("searchInput");
   if (searchInput) {
     searchInput.addEventListener("input", (e) => {
@@ -10426,7 +10432,7 @@ function bindEvents() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `RightSideAlpha_VIP_Watchlist_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.download = `TruthOfMarket_VIP_Watchlist_${new Date().toISOString().slice(0, 10)}.csv`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -10645,7 +10651,7 @@ function bindEvents() {
     });
   });
 
-  // PW-RSI Explainer Modal wiring (Feature F4)
+  // Factor Explainer Modal wiring (Feature F4)
   const pwRsiModal = document.getElementById("pwRsiModal");
   const btnOpenPwRsiExplainer = document.getElementById("btnOpenPwRsiExplainer");
   const btnClosePwRsiModal = document.getElementById("btnClosePwRsiModal");
@@ -11077,7 +11083,7 @@ function openStockDetailModal(ticker) {
   bodyEl.innerHTML = `
     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 130px), 1fr)); gap:8px; margin-bottom:12px;">
       <div style="background:#05080f; border:1px solid var(--border); border-radius:4px; padding:8px 10px;">
-        <div class="mono" style="font-size:0.66rem; color:var(--muted);">PW-RSI SCORE</div>
+        <div class="mono" style="font-size:0.66rem; color:var(--muted);">FACTOR SCORE</div>
         <div class="mono" style="font-size:1.05rem; font-weight:800; color:#34d399;">${Number(s.score ?? 0)} / 100</div>
       </div>
       <div style="background:#05080f; border:1px solid var(--border); border-radius:4px; padding:8px 10px;">
@@ -11268,7 +11274,7 @@ function generateScorecardPng(stock) {
 
   ctx.fillStyle = "#0ecb81";
   ctx.font = "bold 20px Inter, sans-serif";
-  ctx.fillText("RIGHTSIDEALPHA · US EQUITY TURNAROUND TERMINAL", 45, 62);
+  ctx.fillText("TRUTHOFMARKET · US EQUITY FACTOR ARCHIVE", 45, 62);
 
   if (stock) {
     ctx.fillStyle = "#ffffff";
@@ -11295,7 +11301,7 @@ function generateScorecardPng(stock) {
   } else {
     ctx.fillStyle = "#ffffff";
     ctx.font = "bold 34px Inter, sans-serif";
-    ctx.fillText("20-Year US Equity Backtest: Left-Side vs PW-RSI Right-Side", 45, 125);
+    ctx.fillText("20-Year US Equity Study: Sub-MA60 vs MA20/MA60 Reclaimed", 45, 125);
 
     ctx.fillStyle = "#f6465d";
     ctx.font = "22px JetBrains Mono, monospace";
@@ -11303,7 +11309,7 @@ function generateScorecardPng(stock) {
 
     ctx.fillStyle = "#0ecb81";
     ctx.font = "bold 24px JetBrains Mono, monospace";
-    ctx.fillText("PW-RSI Right-Side:     55.24% 2x Rate | -16.49% MDD | 29d Underwater", 45, 260);
+    ctx.fillText("MA20/60 Reclaimed:     55.24% 2x Rate | -16.49% MDD | 29d Underwater", 45, 260);
   }
 
   ctx.fillStyle = "#8492a6";
@@ -11315,7 +11321,7 @@ function generateScorecardPng(stock) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = stock ? `RightSideAlpha_${stock.ticker}_TearSheet.png` : "RightSideAlpha_Benchmark.png";
+    a.download = stock ? `TruthOfMarket_${stock.ticker}_TearSheet.png` : "TruthOfMarket_Benchmark.png";
     a.click();
     URL.revokeObjectURL(url);
     showToast(stock ? `Downloaded $${stock.ticker} Tear Sheet PNG` : "Downloaded Benchmark Tear Sheet PNG");

@@ -165,7 +165,7 @@ export function renderProofCard(state) {
               <td class="col-num">24.82%</td>
             </tr>
             <tr class="proof-highlight">
-              <td style="font-family:var(--font-sans);">3. PW-RSI Right-Side Ignition (+14–35% off low + MA20/60 Breakout + 1.40x Vol + 55D Time-Stop)</td>
+              <td style="font-family:var(--font-sans);">3. MA20/60 Trend Reclaim Cohort (+14–35% off low + MA20/60 Alignment + 1.40x Vol)</td>
               <td class="col-num" style="color:var(--fin-up);">55.24%</td>
               <td class="col-num" style="color:var(--fin-up);">+80.47% (Mean +109.1%)</td>
               <td class="col-num" style="color:var(--fin-up);">-16.49%</td>

@@ -253,7 +253,7 @@ a {
   letter-spacing: 0.04em;
 }
 
-/* Platform Switcher Tabs (RightSideAlpha vs SemiFearGreed) */
+/* Platform Switcher Tabs (TruthOfMarket Sector & Factor Views) */
 .platform-switcher {
   display: inline-flex;
   flex-wrap: wrap;
@@ -466,7 +466,7 @@ a {
 }
 
 /* ==========================================================================
-   RIGHTSIDEALPHA: INSTITUTIONAL HEADER & KPI TERMINAL RIBBON
+   TRUTHOFMARKET: INSTITUTIONAL HEADER & KPI TERMINAL RIBBON
    ========================================================================== */
 .hero {
   background: var(--card);
@@ -3644,7 +3644,7 @@ html[data-tom-font="22"] body {
   line-height: 1.75;
 }
 
-/* Retirement 4-Core ETFs Market Ribbon */
+/* SMH x XLV + SGOV Core ETFs Market Ribbon */
 .market-ribbon {
   background: #f1f5f9;
   border-bottom: 1px solid #cbd5e1;
@@ -5555,7 +5555,9 @@ html[data-tom-theme="dark"] .tom-unlocked-manual-btn {
     margin-top: 16px;
   }
   .pw-email-input {
-    flex: 1 1 250px;
+    width: 100%;
+    min-width: 180px;
+    box-sizing: border-box;
     min-height: 52px;
     padding: 12px 16px;
     background: #FFFFFF;
@@ -5564,6 +5566,15 @@ html[data-tom-theme="dark"] .tom-unlocked-manual-btn {
     font-family: 'Inter', sans-serif;
     font-size: 1rem;
     color: #0F172A;
+  }
+  .pw-email-form .pw-email-input {
+    flex: 1 1 220px;
+  }
+  #pwRestoreForm .pw-email-input {
+    flex: 0 0 auto;
+    width: 100%;
+    min-width: 180px;
+    box-sizing: border-box;
   }
   .pw-email-input:focus {
     outline: none;
@@ -5759,6 +5770,10 @@ html[data-tom-theme="dark"] .tom-unlocked-manual-btn {
   }
 
   /* Clean Private-Wealth Modal */
+  .pw-modal-backdrop,
+  .pw-modal-backdrop * {
+    box-sizing: border-box;
+  }
   .pw-modal-backdrop {
     display: none;
     position: fixed;
@@ -5780,14 +5795,49 @@ html[data-tom-theme="dark"] .tom-unlocked-manual-btn {
     background: #FFFFFF;
     border: 1px solid #CBD5E1;
     border-radius: 6px;
-    padding: 28px 26px;
+    padding: 28px 24px;
     color: #0F172A;
-    max-height: 90vh;
+    max-height: calc(100vh - 32px);
+    max-height: calc(100dvh - 32px);
+    overflow-x: hidden;
     overflow-y: auto;
+    margin: auto;
+  }
+  .pw-modal-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .pw-modal-close-btn {
+    appearance: none;
+    flex: 0 0 auto;
+    flex-shrink: 0;
+    min-height: 44px;
+    min-width: 68px;
+    padding: 8px 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #F8FAFC;
+    border: 1px solid #CBD5E1;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #0F172A;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .pw-modal-close-btn:hover {
+    background: #F1F5F9;
+    border-color: #94A3B8;
   }
   @media (max-width: 680px) {
     .pw-shell { padding: 24px 18px 36px; }
     .pw-step-card, .pw-gate-card { padding: 22px 18px; }
+    .pw-modal-dialog { padding: 20px 16px; }
     .pw-table-card { padding: 18px 14px 14px; }
     .pw-tier-grid, .pw-ratio-grid { grid-template-columns: 1fr; }
     .pw-btn-primary { width: 100%; }

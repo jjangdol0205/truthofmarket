@@ -33,7 +33,7 @@ export function renderScoreboardCard(stock, config = {}) {
   // Header Title
   ctx.fillStyle = "#94a3b8";
   ctx.font = "bold 20px -apple-system, Segoe UI, sans-serif";
-  ctx.fillText("⚡ RIGHTSIDEALPHA.IO — 20-YR QUANTITATIVE PW-RSI DIAGNOSTIC", 42, 58);
+  ctx.fillText("TRUTHOFMARKET.COM — 20-YR HISTORICAL FACTOR STUDY", 42, 58);
 
   // Stock Ticker & Close Price
   ctx.fillStyle = "#f8fafc";
@@ -47,9 +47,9 @@ export function renderScoreboardCard(stock, config = {}) {
   ctx.fillStyle = "#ffffff";
   ctx.font = "bold 24px -apple-system, Segoe UI, sans-serif";
   const zoneLabel = stock.zone_code === "IGNITION_ZONE"
-    ? "🟢 RIGHT-SIDE IGNITION"
-    : (stock.zone_code === "LEFT_SIDE_KNIFE" ? "🔴 LEFT-SIDE FALLING KNIFE" : "🟡 WASHOUT WATCH (Pre-MA60)");
-  ctx.fillText(`${zoneLabel}  |  PW-RSI Score: ${stock.score || stock.pw_score || 85}/100`, 56, 181);
+    ? "🟢 ABOVE-MA TREND"
+    : (stock.zone_code === "LEFT_SIDE_KNIFE" ? "🔴 SUB-MA60 DOWNTREND" : "🟡 BASE CONSOLIDATION");
+  ctx.fillText(`${zoneLabel}  |  Factor Score: ${stock.score || stock.pw_score || 85}/100`, 56, 181);
 
   // 4 Quantitative Bullets
   ctx.fillStyle = "#cbd5e1";

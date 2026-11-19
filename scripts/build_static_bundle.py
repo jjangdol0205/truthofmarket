@@ -105,11 +105,11 @@ def refresh_health_and_rss() -> tuple[str, str]:
 
     insight_items_xml = f"""
     <item>
-      <title><![CDATA[Morning Bell Market Weather Note ({as_of_date}): Sentiment Gauge at {fg_score:.1f}/100 ({regime_code}) & Calm 2-4x/Year Budget Review]]></title>
+      <title><![CDATA[Morning Bell Market Weather Note ({as_of_date}): Sentiment Gauge at {fg_score:.1f}/100 ({regime_code}) & SMH × XLV Sector Balance]]></title>
       <link>https://truthofmarket.com/insights/daily-us-quant-regime-brief.html</link>
       <guid isPermaLink="true">https://truthofmarket.com/insights/daily-us-quant-regime-brief.html</guid>
       <pubDate>{rfc_now}</pubDate>
-      <description><![CDATA[Educational US market weather summary as of {as_of_date}: $SMH ${smh_close:.2f} ({smh_dd_pct:.2f}% off 52W high), $SMH:$XLV barbell calculator context, and SGOV · SCHD · JEPI · VOO retirement allocation study.]]></description>
+      <description><![CDATA[Educational US market weather summary as of {as_of_date}: $SMH ${smh_close:.2f} ({smh_dd_pct:.2f}% off 52W high), $SMH × $XLV two-pillar balance calculator context, and $SGOV US Treasury reserve study.]]></description>
     </item>
     <item>
       <title><![CDATA[Understanding Moving-Average Confirmation: 26.8-Year Empirical Factor Study (2000-2026)]]></title>
@@ -123,32 +123,32 @@ def refresh_health_and_rss() -> tuple[str, str]:
       <link>https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html</link>
       <guid isPermaLink="true">https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html</guid>
       <pubDate>{rfc_now}</pubDate>
-      <description><![CDATA[Empirical educational study of combining Semiconductors ($SMH) with Healthcare ($XLV) under calm 2-4x/year weight budget review.]]></description>
+      <description><![CDATA[Empirical educational study of combining Semiconductors ($SMH) with Healthcare ($XLV) under calm semi-annual weight review.]]></description>
     </item>
     <item>
       <title><![CDATA[The Mathematics of Drawdown Asymmetry: Why Portfolio Cushions Preserve Long-Term Compounding]]></title>
       <link>https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html</link>
       <guid isPermaLink="true">https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html</guid>
       <pubDate>{rfc_now}</pubDate>
-      <description><![CDATA[Educational compounding math showing how deep drawdowns require nonlinear recovery gains, and how short-term US Treasury cushions reduce sequence-of-returns risk.]]></description>
+      <description><![CDATA[Educational compounding math showing how deep drawdowns require nonlinear recovery gains, and how $XLV and short-term US Treasury ($SGOV) cushions reduce sequence-of-returns risk.]]></description>
     </item>"""
 
     rss_xml = f"""<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>TruthOfMarket | US 401k/IRA Retirement Cashflow &amp; Household Budget Calculator</title>
+    <title>TruthOfMarket | Historical SMH × XLV Sector Balance Simulator &amp; Market Indicator Digest</title>
     <link>https://truthofmarket.com/</link>
     <atom:link href="https://truthofmarket.com/rss.xml" rel="self" type="application/rss+xml" />
     <atom:link href="https://pubsubhubbub.appspot.com/" rel="hub" />
-    <description>Self-directed educational calculator software for US 401(k)/IRA retirement cashflow simulation, 3-color market weather visualization, and calm 2-4x/year SGOV · SCHD · JEPI · VOO portfolio budget review.</description>
+    <description>Self-directed educational calculator software for Historical SMH × XLV + SGOV two-pillar sector balance simulation, 26-year drawdown studies, and daily market indicator data digests.</description>
     <language>en-US</language>
     <lastBuildDate>{rfc_now}</lastBuildDate>{insight_items_xml}
     <item>
-      <title><![CDATA[TruthOfMarket — 30-Second US 401(k)/IRA Retirement Cashflow & Household Budget Calculator (As of {as_of_date})]]></title>
+      <title><![CDATA[TruthOfMarket — 4-Step Historical SMH × XLV + SGOV Sector Balance Simulator (As of {as_of_date})]]></title>
       <link>https://truthofmarket.com/</link>
       <guid isPermaLink="true">https://truthofmarket.com/</guid>
       <pubDate>{rfc_now}</pubDate>
-      <description><![CDATA[Self-directed educational retirement income calculator modeling SGOV (US T-Bill Cushion), SCHD (Dividend Growth), JEPI (Monthly Paycheck), and VOO (S&P 500 Core) with calm 2-4x/year weight budget review.]]></description>
+      <description><![CDATA[Self-directed educational sector balance simulator modeling non-leveraged Semiconductor Growth ($SMH), Healthcare Defense ($XLV), and 0-3 Month US Treasury Reserves ($SGOV).]]></description>
     </item>
     <item>
       <title><![CDATA[Public Market Weather & Sector Sentiment Gauge ({fg_score:.1f} {regime_code}) — $SMH/$XLV Barbell Calculator]]></title>
@@ -252,9 +252,8 @@ def main() -> None:
         "email": "beable9489@gmail.com",
         "logo": "https://truthofmarket.com/favicon.svg",
         "sameAs": [
-          "https://www.youtube.com/@RightSideAlpha",
-          "https://www.instagram.com/rightsidealpha",
-          "https://x.com/rightsidealpha"
+          "https://www.youtube.com/@TruthOfMarketUS",
+          "https://www.instagram.com/truthofmarket/"
         ]
       }},
       {{
@@ -658,6 +657,10 @@ def main() -> None:
         <span>&middot;</span>
         <a href="/contact.html">Contact</a>
         <span>&middot;</span>
+        <a href="https://www.youtube.com/@TruthOfMarketUS" target="_blank" rel="noopener">YouTube @TruthOfMarketUS</a>
+        <span>&middot;</span>
+        <a href="https://www.instagram.com/truthofmarket/" target="_blank" rel="noopener">Instagram @truthofmarket</a>
+        <span>&middot;</span>
         <a href="mailto:beable9489@gmail.com">beable9489@gmail.com</a>
       </div>
       <p class="pw-legal-disclaimer">
@@ -668,17 +671,17 @@ def main() -> None:
     <!-- Member Sign-In / Restore Modal (0 Emojis) -->
     <div class="pw-modal-backdrop" id="pwRestoreModal" role="dialog" aria-modal="true" aria-labelledby="pwRestoreTitle">
       <div class="pw-modal-dialog">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;">
+        <div class="pw-modal-header-row">
           <span class="pw-kicker" style="margin:0;">MEMBER ACCESS &amp; RESTORE</span>
-          <button type="button" class="pw-back-btn" id="btnClosePwRestoreModal">Close</button>
+          <button type="button" class="pw-modal-close-btn" id="btnClosePwRestoreModal" aria-label="Close Member Sign-In Modal">Close</button>
         </div>
         <h3 class="pw-serif-h2" id="pwRestoreTitle" style="font-size:1.65rem;">Restore Your Baseline or Paid License</h3>
         <p style="margin:0 0 16px;font-size:0.92rem;color:#475569;">
           Enter the email address used during registration to reopen your saved SMH &times; XLV baseline, or enter a Polar.sh license key if applicable.
         </p>
         <form id="pwRestoreForm" novalidate style="display:flex;flex-direction:column;gap:12px;">
-          <input type="email" id="pwRestoreEmailInput" class="pw-email-input" placeholder="Registered email address" autocomplete="email" />
-          <input type="text" id="pwRestoreLicenseInput" class="pw-email-input" placeholder="Optional: Polar.sh license key" autocomplete="off" />
+          <input type="email" id="pwRestoreEmailInput" class="pw-email-input" style="min-width:180px;width:100%;box-sizing:border-box;" placeholder="Registered email address" autocomplete="email" />
+          <input type="text" id="pwRestoreLicenseInput" class="pw-email-input" style="min-width:180px;width:100%;box-sizing:border-box;" placeholder="Optional: Polar.sh license key" autocomplete="off" />
           <button type="submit" class="pw-btn-primary pw-btn-emerald" style="width:100%;">Restore Session &rarr;</button>
         </form>
         <div id="pwRestoreStatus" role="status" aria-live="polite" style="display:none;margin-top:12px;font-size:0.88rem;color:#065F46;"></div>
@@ -688,9 +691,9 @@ def main() -> None:
     <!-- Complimentary $0 Brokerage Safe-Order Guide Modal (0 Emojis) -->
     <div class="pw-modal-backdrop" id="pwStarterGuideModal" role="dialog" aria-modal="true" aria-labelledby="pwStarterGuideTitle">
       <div class="pw-modal-dialog">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;">
+        <div class="pw-modal-header-row">
           <span class="pw-kicker" style="margin:0;">COMPLIMENTARY EXECUTION REFERENCE ($0)</span>
-          <button type="button" class="pw-back-btn" id="btnClosePwStarterGuideModal">Close</button>
+          <button type="button" class="pw-modal-close-btn" id="btnClosePwStarterGuideModal" aria-label="Close Brokerage Reference Modal">Close</button>
         </div>
         <h3 class="pw-serif-h2" id="pwStarterGuideTitle" style="font-size:1.65rem;">US Brokerage Limit-Order &amp; ETF Reference</h3>
         <div style="font-size:0.92rem;line-height:1.7;color:#334155;display:flex;flex-direction:column;gap:12px;">
