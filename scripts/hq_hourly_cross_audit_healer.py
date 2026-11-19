@@ -279,7 +279,7 @@ def audit_and_heal_kfk() -> dict:
 
     if needs_push:
         subprocess.run(["git", "add", "index.html", "src/js/app.js", "scripts/naver_cdp_live_runner.py"], cwd=str(KFK_ROOT), timeout=30, capture_output=True)
-        subprocess.run(["git", "commit", "-m", "chore(kfk-auto-heal): auto-restore 1-click Coupang & newborn spotlight"], cwd=str(KFK_ROOT), timeout=30, capture_output=True)
+        subprocess.run(["git", "commit", "-m", "chore(kfk-auto-heal): auto-restore 1-click Coupang & newborn spotlight [skip render]"], cwd=str(KFK_ROOT), timeout=30, capture_output=True)
         subprocess.run(["git", "pull", "--rebase", "--autostash", "origin", "main"], cwd=str(KFK_ROOT), timeout=60, capture_output=True)
         subprocess.run(["git", "push", "origin", "main"], cwd=str(KFK_ROOT), timeout=60, capture_output=True)
 

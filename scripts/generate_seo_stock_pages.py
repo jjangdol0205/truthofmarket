@@ -358,7 +358,7 @@ def build_ticker_directory_html(
       <span style="color:#94a3b8;">&middot;</span>
       <a href="{prefix}insights/" style="color:#0369a1;font-weight:700;text-decoration:underline;">Educational Insights Journal</a>
       <span style="color:#94a3b8;">&middot;</span>
-      <a href="https://www.youtube.com/@TruthOfMarketUS" target="_blank" rel="noopener" style="color:#475569;font-weight:700;text-decoration:underline;">YouTube @TruthOfMarketUS</a>
+      <a href="https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA" target="_blank" rel="noopener" style="color:#475569;font-weight:700;text-decoration:underline;">YouTube @TruthOfMarketUS</a>
       <span style="color:#94a3b8;">&middot;</span>
       <a href="https://www.instagram.com/truthofmarket/" target="_blank" rel="noopener" style="color:#475569;font-weight:700;text-decoration:underline;">Instagram @truthofmarket</a>
       <span style="color:#94a3b8;">&middot;</span>
@@ -439,7 +439,7 @@ def build_ticker_directory_html(
       <span style="color:#94a3b8;">&middot;</span>
       <a href="{prefix}contact.html" style="color:#1d4ed8;font-weight:700;text-decoration:underline;">Contact Support</a>
       <span style="color:#94a3b8;">&middot;</span>
-      <a href="https://www.youtube.com/@TruthOfMarketUS" target="_blank" rel="noopener" style="color:#475569;font-weight:700;text-decoration:underline;">YouTube @TruthOfMarketUS</a>
+      <a href="https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA" target="_blank" rel="noopener" style="color:#475569;font-weight:700;text-decoration:underline;">YouTube @TruthOfMarketUS</a>
       <span style="color:#94a3b8;">&middot;</span>
       <a href="https://www.instagram.com/truthofmarket/" target="_blank" rel="noopener" style="color:#475569;font-weight:700;text-decoration:underline;">Instagram @truthofmarket</a>
       <span style="color:#94a3b8;">&middot;</span>
@@ -1311,7 +1311,7 @@ def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "
     llms_full_txt = (
         f"# TruthOfMarket (https://truthofmarket.com) — Historical SMH × XLV Sector Balance & Market Data Corpus\n"
         f"> Operated by: Educational Market Data & Quantitative Research Desk (beable9489@gmail.com)\n"
-        f"> Official Channels: https://www.youtube.com/@TruthOfMarketUS | https://www.instagram.com/truthofmarket/\n"
+        f"> Official Channels: https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA | https://www.instagram.com/truthofmarket/\n"
         f"> Updated: {as_of} | 4-Step Historical SMH × XLV + SGOV Sector Balance Simulator + 76 US Equity Factor Studies\n"
         f"> {MANDATORY_DISCLAIMER}\n\n"
         f"## 1. Core Sector Balance & Market Weather Tools\n"

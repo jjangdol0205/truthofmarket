@@ -221,7 +221,7 @@ def _footer_legal_html() -> str:
         <a href="/privacy.html">Privacy</a> &middot;
         <a href="/refund.html">14-Day Refund Policy</a> &middot;
         <a href="/contact.html">Contact</a> &middot;
-        <a href="https://www.youtube.com/@TruthOfMarketUS" target="_blank" rel="noopener">YouTube @TruthOfMarketUS</a> &middot;
+        <a href="https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA" target="_blank" rel="noopener">YouTube @TruthOfMarketUS</a> &middot;
         <a href="https://www.instagram.com/truthofmarket/" target="_blank" rel="noopener">Instagram @truthofmarket</a> &middot;
         <a href="mailto:beable9489@gmail.com">beable9489@gmail.com</a>
       </div>
@@ -274,7 +274,7 @@ def _render_article_shell(
                         "url": "https://truthofmarket.com/",
                         "logo": {"@type": "ImageObject", "url": "https://truthofmarket.com/favicon.svg"},
                         "sameAs": [
-                            "https://www.youtube.com/@TruthOfMarketUS",
+                            "https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA",
                             "https://www.instagram.com/truthofmarket/",
                         ],
                     },
@@ -990,7 +990,7 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700&display=swap" rel="stylesheet" />
-  <script type="application/ld+json">{{"@context":"https://schema.org","@type":"CollectionPage","name":"TruthOfMarket Editorial Notes","url":"https://truthofmarket.com/insights/","dateModified":"{as_of}","publisher":{{"@type":"Organization","name":"TruthOfMarket","url":"https://truthofmarket.com/","sameAs":["https://www.youtube.com/@TruthOfMarketUS","https://www.instagram.com/truthofmarket/"]}}}}</script>
+  <script type="application/ld+json">{{"@context":"https://schema.org","@type":"CollectionPage","name":"TruthOfMarket Editorial Notes","url":"https://truthofmarket.com/insights/","dateModified":"{as_of}","publisher":{{"@type":"Organization","name":"TruthOfMarket","url":"https://truthofmarket.com/","sameAs":["https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA","https://www.instagram.com/truthofmarket/"]}}}}</script>
   {_beacon_script("index.html")}
   <style>
     body {{ margin:0; background:#fcfcfa; color:#1a1a1a; font-family:'Newsreader',Georgia,serif; font-size:19px; line-height:1.8; }}

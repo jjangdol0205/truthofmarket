@@ -10,7 +10,7 @@ export function renderFooter(state) {
         <span>·</span>
         <a href="/refund.html" style="color:#93c5fd; text-decoration:underline;">14-Day Refund Policy</a>
         <span>·</span>
-        <a href="https://www.youtube.com/@TruthOfMarketUS" target="_blank" rel="noopener" style="color:#93c5fd; text-decoration:underline;">YouTube @TruthOfMarketUS</a>
+        <a href="https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA" target="_blank" rel="noopener" style="color:#93c5fd; text-decoration:underline;">YouTube @TruthOfMarketUS</a>
         <span>·</span>
         <a href="https://www.instagram.com/truthofmarket/" target="_blank" rel="noopener" style="color:#93c5fd; text-decoration:underline;">Instagram @truthofmarket</a>
         <span>·</span>

@@ -1619,7 +1619,7 @@ export async function buildClientTelegramPreview({
 export const DEFAULT_TG_BOT_TOKEN = "DEMO-BOT-TOKEN";
 export const DEFAULT_TG_CHAT_ID = "@truthofmarketss";
 export const DEFAULT_TG_CHANNEL_URL = "https://t.me/truthofmarketss";
-export const DEFAULT_YOUTUBE_URL = "https://www.youtube.com/@TruthOfMarketUS";
+export const DEFAULT_YOUTUBE_URL = "https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA";
 export const DEFAULT_INSTAGRAM_URL = "https://www.instagram.com/truthofmarket/";
 
 export async function syncTelegramBotBrowser(botToken, currentChatId = "") {

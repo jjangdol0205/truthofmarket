@@ -112,7 +112,7 @@ const defaultView =
     if (!localStorage.getItem("rsa_aff_v6_us_tools")) {
       localStorage.setItem("rsa_cfg_broker_url", "https://trendspider.com/?_go=rightside");
       localStorage.setItem("rsa_cfg_broker_name", "TrendSpider (rightside)");
-      localStorage.setItem("rsa_cfg_youtube_url", "https://www.youtube.com/@TruthOfMarketUS");
+      localStorage.setItem("rsa_cfg_youtube_url", "https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA");
       localStorage.setItem("rsa_cfg_instagram_url", "https://www.instagram.com/truthofmarket/");
       localStorage.setItem("rsa_tg_channel_url", "https://t.me/truthofmarketss");
       localStorage.setItem("rsa_tg_chat_id", "@truthofmarketss");
@@ -128,7 +128,7 @@ const defaultView =
     }
     const oldYt = localStorage.getItem("rsa_cfg_youtube_url") || "";
     if (!oldYt || !oldYt.toLowerCase().includes("@truthofmarketus")) {
-      localStorage.setItem("rsa_cfg_youtube_url", "https://www.youtube.com/@TruthOfMarketUS");
+      localStorage.setItem("rsa_cfg_youtube_url", "https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA");
     }
     const oldIg = localStorage.getItem("rsa_cfg_instagram_url") || "";
     if (!oldIg || !oldIg.toLowerCase().includes("instagram.com/truthofmarket")) {

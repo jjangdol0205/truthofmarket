@@ -2467,7 +2467,7 @@ async function buildClientTelegramPreview({
 const DEFAULT_TG_BOT_TOKEN = "DEMO-BOT-TOKEN";
 const DEFAULT_TG_CHAT_ID = "@truthofmarketss";
 const DEFAULT_TG_CHANNEL_URL = "https://t.me/truthofmarketss";
-const DEFAULT_YOUTUBE_URL = "https://www.youtube.com/@TruthOfMarketUS";
+const DEFAULT_YOUTUBE_URL = "https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA";
 const DEFAULT_INSTAGRAM_URL = "https://www.instagram.com/truthofmarket/";
 async function syncTelegramBotBrowser(botToken, currentChatId = "") {
   const cid = String(currentChatId || DEFAULT_TG_CHAT_ID).trim();
@@ -6487,7 +6487,7 @@ function renderModals(state) {
     "#tom-vip-annual"
   );
   const tgChannelUrl = cfg.telegram_channel_url || "https://t.me/truthofmarketss";
-  const ytUrl = cfg.youtube_url || "https://www.youtube.com/@TruthOfMarketUS";
+  const ytUrl = cfg.youtube_url || "https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA";
   const igUrl = cfg.instagram_url || "https://www.instagram.com/truthofmarket/";
   const tgChatId = state.telegramChatId || cfg.telegram_chat_id || "@truthofmarketss";
   const tgToken = state.telegramBotToken || "DEMO-BOT-TOKEN";
@@ -7391,7 +7391,7 @@ function renderSemiFearGreedView(state) {
         <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
           <a
             class="btn"
-            href="${state.config?.youtube_url || "https://www.youtube.com/@TruthOfMarketUS"}"
+            href="${state.config?.youtube_url || "https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA"}"
             target="_blank"
             rel="noopener"
             style="background:#dc2626; color:#ffffff; border-color:#b91c1c;"
@@ -8147,7 +8147,7 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
         <span>&middot;</span>
         <a href="/contact.html">Contact</a>
         <span>&middot;</span>
-        <a href="https://www.youtube.com/@TruthOfMarketUS" target="_blank" rel="noopener">YouTube @TruthOfMarketUS</a>
+        <a href="https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA" target="_blank" rel="noopener">YouTube @TruthOfMarketUS</a>
         <span>&middot;</span>
         <a href="https://www.instagram.com/truthofmarket/" target="_blank" rel="noopener">Instagram @truthofmarket</a>
         <span>&middot;</span>
@@ -8658,7 +8658,7 @@ const defaultView =
     if (!localStorage.getItem("rsa_aff_v6_us_tools")) {
       localStorage.setItem("rsa_cfg_broker_url", "https://trendspider.com/?_go=rightside");
       localStorage.setItem("rsa_cfg_broker_name", "TrendSpider (rightside)");
-      localStorage.setItem("rsa_cfg_youtube_url", "https://www.youtube.com/@TruthOfMarketUS");
+      localStorage.setItem("rsa_cfg_youtube_url", "https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA");
       localStorage.setItem("rsa_cfg_instagram_url", "https://www.instagram.com/truthofmarket/");
       localStorage.setItem("rsa_tg_channel_url", "https://t.me/truthofmarketss");
       localStorage.setItem("rsa_tg_chat_id", "@truthofmarketss");
@@ -8674,7 +8674,7 @@ const defaultView =
     }
     const oldYt = localStorage.getItem("rsa_cfg_youtube_url") || "";
     if (!oldYt || !oldYt.toLowerCase().includes("@truthofmarketus")) {
-      localStorage.setItem("rsa_cfg_youtube_url", "https://www.youtube.com/@TruthOfMarketUS");
+      localStorage.setItem("rsa_cfg_youtube_url", "https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA");
     }
     const oldIg = localStorage.getItem("rsa_cfg_instagram_url") || "";
     if (!oldIg || !oldIg.toLowerCase().includes("instagram.com/truthofmarket")) {

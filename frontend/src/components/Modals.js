@@ -12,7 +12,7 @@ export function renderModals(state) {
     "#tom-vip-annual"
   );
   const tgChannelUrl = cfg.telegram_channel_url || "https://t.me/truthofmarketss";
-  const ytUrl = cfg.youtube_url || "https://www.youtube.com/@TruthOfMarketUS";
+  const ytUrl = cfg.youtube_url || "https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA";
   const igUrl = cfg.instagram_url || "https://www.instagram.com/truthofmarket/";
   const tgChatId = state.telegramChatId || cfg.telegram_chat_id || "@truthofmarketss";
   const tgToken = state.telegramBotToken || "DEMO-BOT-TOKEN";

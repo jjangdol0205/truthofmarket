@@ -8,7 +8,7 @@ const fs = require("fs");
 
 const bridge = require("./master_hq_telegram_bridge.js");
 
-const EXPECTED_TG_CONV_ID = "1921e31e-ab59-4720-9419-93cac770374d";
+const EXPECTED_TG_CONV_ID = "73f230e4-d0b1-4732-b378-27fedb0c9c83";
 const EXPECTED_PC_CONV_ID = "dbc61f0a-76cb-48e3-b617-a616c069564c";
 
 let passed = 0;
@@ -30,21 +30,27 @@ console.log("=================================================================="
 console.log("  HQ Telegram Bridge: 1~5사업부 직통 명령어 & 본사 감사 피드백 테스트");
 console.log("==================================================================");
 
-test("1. MASTER_CONVERSATION_ID is dedicated to 1921e31e-ab59-4720-9419-93cac770374d", () => {
+test("1. MASTER_CONVERSATION_ID is unified to 73f230e4-d0b1-4732-b378-27fedb0c9c83", () => {
   assert.strictEqual(bridge.MASTER_CONVERSATION_ID, EXPECTED_TG_CONV_ID);
   assert.strictEqual(bridge.PC_DIRECT_CONVERSATION_ID, EXPECTED_PC_CONV_ID);
 });
 
-test("2. resolveSafeTelegramConversationId blocks PC_DIRECT_CONVERSATION_ID from Telegram dispatches", () => {
+test("2. resolveSafeTelegramConversationId blocks PC_DIRECT_CONVERSATION_ID and retired IDs from Telegram dispatches", () => {
   assert.strictEqual(bridge.resolveSafeTelegramConversationId(EXPECTED_PC_CONV_ID), EXPECTED_TG_CONV_ID);
+  assert.strictEqual(bridge.resolveSafeTelegramConversationId("1921e31e-ab59-4720-9419-93cac770374d"), EXPECTED_TG_CONV_ID);
+  assert.strictEqual(bridge.resolveSafeTelegramConversationId("00e8ecab-c61b-4e2a-a175-abe14541cbfb"), EXPECTED_TG_CONV_ID);
+  assert.strictEqual(bridge.resolveSafeTelegramConversationId("5dedd920-f82a-44e4-8034-116294946391"), EXPECTED_TG_CONV_ID);
   assert.strictEqual(bridge.resolveSafeTelegramConversationId(""), EXPECTED_TG_CONV_ID);
   assert.strictEqual(bridge.resolveSafeTelegramConversationId(null), EXPECTED_TG_CONV_ID);
   assert.strictEqual(bridge.resolveSafeTelegramConversationId(EXPECTED_TG_CONV_ID), EXPECTED_TG_CONV_ID);
 });
 
-test("3. All 5 divisions (ALL, TOM, KFG, GBA, HERO, KFK) route exclusively to 1921e31e-ab59-4720-9419-93cac770374d and have 5 distinct bot tokens", () => {
-  assert.strictEqual(bridge.BOT_TOKENS.length, 5, `Expected 5 distinct bot tokens, got ${bridge.BOT_TOKENS.length}`);
-  for (const code of ["ALL", "TOM", "KFG", "GBA", "HERO", "KFK"]) {
+test("3. All divisions (HQ, ALL, TOM, KFG, GBA, HERO, KFK) route exclusively to live remote channels and separate HQ (@Allcompany1_bot) from GBA (@SemifearGreedbot)", () => {
+  assert.ok(
+    bridge.BOT_TOKENS.length === 5 || bridge.BOT_TOKENS.length === 6,
+    `Expected 5 or 6 distinct bot tokens, got ${bridge.BOT_TOKENS.length}`
+  );
+  for (const code of ["HQ", "ALL", "TOM", "KFG", "GBA", "HERO", "KFK"]) {
     assert.ok(bridge.DIVISIONS[code], `Missing division ${code}`);
     assert.strictEqual(
       bridge.DIVISIONS[code].conversationId,
@@ -52,6 +58,7 @@ test("3. All 5 divisions (ALL, TOM, KFG, GBA, HERO, KFK) route exclusively to 19
       `Division ${code} has wrong conversationId: ${bridge.DIVISIONS[code].conversationId}`
     );
   }
+  assert.notStrictEqual(bridge.DIVISIONS.HQ.botHandle, bridge.DIVISIONS.GBA.botHandle, "HQ and GBA must have separate bot handles");
 });
 
 test("4. 1사업부 ~ 5사업부 .env files all point ANTIGRAVITY_CONVERSATION_ID to Telegram channel", () => {
@@ -106,7 +113,8 @@ test("7. parseAuditFeedbackRequest detects natural language feedback requests ('
 
 test("8. buildAntigravityPromptText supports both Execution Mode and HQ Chief Auditor Mode", () => {
   const auditPrompt = bridge.buildAntigravityPromptText(bridge.DIVISIONS.TOM, "1사업부 결제창 디자인 어떤지 피드백 줘", true);
-  assert.ok(auditPrompt.includes("본사 총괄·감사 모드 (HQ Chief Auditor)"));
+  assert.ok(auditPrompt.includes("그룹 비서실장·감사 모드 (HQ Chief Auditor)"));
+  assert.ok(auditPrompt.includes("@Allcompany1_bot"));
   assert.ok(auditPrompt.includes("코드를 임의로 수정하지 말고"));
 
   for (const code of ["TOM", "KFG", "GBA", "HERO", "KFK"]) {

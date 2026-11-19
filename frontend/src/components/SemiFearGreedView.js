@@ -322,7 +322,7 @@ export function renderSemiFearGreedView(state) {
         <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
           <a
             class="btn"
-            href="${state.config?.youtube_url || "https://www.youtube.com/@TruthOfMarketUS"}"
+            href="${state.config?.youtube_url || "https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA"}"
             target="_blank"
             rel="noopener"
             style="background:#dc2626; color:#ffffff; border-color:#b91c1c;"
