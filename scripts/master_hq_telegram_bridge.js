@@ -193,7 +193,7 @@ function syncCommonDirectivesMarkdown(data) {
       `| **🏛️ \`hq_main\` (\`모두컴퍼니 본부\`)** | \`1921e31e-ab59-4720-9419-93cac770374d\` | 1~5사업부 홈페이지 UI/UX·기능 개선·프로덕션 배포(\`/live-audit\`)·전사 본부 총괄 |`,
       `| **🎬 \`sns_video\` (\`인스타/유튜브 자동화\`)** | \`f2b2b95c-ed94-4be6-bc9d-28aeed49efec\` | 인스타·유튜브·네이버클립·쇼츠·롱폼 라디오·Flow 영상 자동화 |`,
       `| **📈 \`seo_monetize\` (\`수익화/SEO·서치콘솔\`)** | \`b25d5399-9ec2-459c-8c03-fa723a739244\` | 서치콘솔·네이버·일간 팬덤 에디터 레터형 SEO 칼럼·제휴 자동화 |`,
-      `| **💳 \`payment_pg\` (\`결제/레몬스퀴지\`)** | \`6340fe0a-b009-4c17-a686-97dc3a605525\` | Lemon Squeezy Store #296100 공인 Live UUID 결제·가치사다리 검증 (\`Polar.sh\` 동결) |`,
+      `| **💳 \`payment_pg\` (\`결제/레몬스퀴지\`)** | \`6340fe0a-b009-4c17-a686-97dc3a605525\` | Lemon Squeezy Store #296100 공인 Live UUID 결제·가치사다리 검증 (\`Whop.com\` 동결) |`,
       `| **🔒 보호 채널 (전송 차단)** | \`876538cc-3cd8-41af-8abe-00937e093957\` | 개인 자소서/문서 방 (\`${PC_DIRECT_CONVERSATION_ID}\` 포함 원격 전송 원천 차단) |`,
       ``,
       `---`,

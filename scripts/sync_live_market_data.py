@@ -481,29 +481,31 @@ def main():
         semi_ov["smh_rsi"] = smh_rsi
         semi_ov["vol_ann_pct"] = vol_20
         semi_ov["natural_smh_weight_pct"] = nat_smh_weight
-        semi_ov["recommended_smh_weight"] = rec_smh_w
-        semi_ov["recommended_xlv_weight"] = rec_xlv_w
+        semi_ov.pop("recommended_smh_weight", None)
+        semi_ov.pop("recommended_xlv_weight", None)
+        semi_ov["historical_study_smh_ratio"] = rec_smh_w
+        semi_ov["historical_study_xlv_ratio"] = rec_xlv_w
 
         if is_ext_fear:
-            semi_ov["action_headline_en"] = "CONTRARIAN ACCUMULATION SIGNAL ACTIVE (70:30 → 80:20 SHIFT)"
-            semi_ov["action_headline_jp"] = "逆張り買い増しシグナル点灯中 (70:30 → 80:20 転換)"
+            semi_ov["action_headline_en"] = "HISTORICAL EXTREME-FEAR REGIME STUDY (80% SMH : 20% XLV CASE)"
+            semi_ov["action_headline_jp"] = "極度の恐怖局面・過去統計ケーススタディ (80% SMH : 20% XLV)"
             semi_ov["action_detail_en"] = (
-                f"Semiconductor sentiment is in {reg_en} ({fg_score:.1f}/100) with $SMH {smh_dd:.2f}% from its 52-week high. "
-                "Empirical 26.8-year backtesting (2000–2026) confirms shifting the barbell from 70:30 to 80% $SMH / 20% $XLV during -20%+ drawdowns boosts long-term compounding without panic selling."
+                f"Semiconductor sentiment stands in {reg_en} ({fg_score:.1f}/100) with $SMH {smh_dd:.2f}% from its 52-week high. "
+                "In our 2000–2025 historical statistical workbook, periods below -20% drawdown corresponded to the 80% $SMH / 20% $XLV historical study cohort."
             )
             semi_ov["action_detail_jp"] = (
-                f"半導体センチメントは{reg_jp} ({fg_score:.1f}/100)、$SMHは52週高値から {smh_dd:.2f}% 下落しています。"
-                "26.8年間（2000–2026）の実証バックテストに基づき、ディフェンシブ枠($XLV)の一部を半導体($SMH)へ移す80:20逆張りリバランス実行区間です。"
+                f"半導体センチメントは{reg_jp} ({fg_score:.1f}/100)、$SMHは52週高値から {smh_dd:.2f}% の水準にあります。"
+                "2000–2025年の過去統計ワークブック上、-20%超の調整局面における 80% $SMH : 20% $XLV 統計比較ケースに該当します。"
             )
         else:
-            semi_ov["action_headline_en"] = "DISCIPLINED BARBELL CORE — HOLD 70% $SMH : 30% $XLV"
-            semi_ov["action_headline_jp"] = "基本バーベル維持 — 70% $SMH : 30% $XLV コア配分"
+            semi_ov["action_headline_en"] = "HISTORICAL BASELINE REGIME STUDY — 70% $SMH : 30% $XLV CASE"
+            semi_ov["action_headline_jp"] = "標準局面・過去統計ケーススタディ — 70% $SMH : 30% $XLV"
             semi_ov["action_detail_en"] = (
                 f"Semiconductor sentiment stands at {fg_score:.1f}/100 ({reg_en}) with $SMH {smh_dd:.2f}% from its 52-week high. "
-                "Maintain the 70% $SMH growth engine and 30% $XLV defensive shock absorber, reserving the 80:20 contrarian shift for Extreme Fear (<25) or -20% drawdowns."
+                "Our 2000–2025 historical statistical workbook tracks a 70% $SMH growth pillar and 30% $XLV defensive pillar across neutral regimes."
             )
             semi_ov["action_detail_jp"] = (
-                f"半導体センチメントは {fg_score:.1f}/100 ({reg_jp})、$SMHは52週高値比 {smh_dd:.2f}% です。70% $SMH : 30% $XLV の基本比率を維持します。"
+                f"半導体センチメントは {fg_score:.1f}/100 ({reg_jp})、$SMHは52週高値比 {smh_dd:.2f}% です。過去統計ワークブック上の 70% $SMH : 30% $XLV 標準比較モデルを参照します。"
             )
         semi_ov["action_headline_kr"] = semi_ov["action_headline_en"]
         semi_ov["action_detail_kr"] = semi_ov["action_detail_en"]
@@ -548,38 +550,38 @@ def main():
             elif fid == "f2_drawdown":
                 f_obj["raw_value"] = smh_dd
                 f_obj["raw_display"] = f"{smh_dd:.2f}% off 52W High"
-                f_obj["desc_en"] = f"$SMH is {smh_dd:.2f}% below its rolling 252-day high. Exceeding the -20% drawdown threshold directly triggers our 70:30 → 80:20 contrarian rebalancing rule."
-                f_obj["desc_jp"] = f"$SMHは過去52週高値から {smh_dd:.2f}% 下落しています。-20%以上の下落は70:30から80:20への逆張りリバランスを発動させる中核シグナルです。"
+                f_obj["desc_en"] = f"$SMH is {smh_dd:.2f}% below its rolling 252-day high. In our 2000–2025 historical statistical study, drawdowns beyond -20% mark deep-compression observation windows."
+                f_obj["desc_jp"] = f"$SMHは過去52週高値から {smh_dd:.2f}% 下落しています。2000–2025年の過去統計研究における深押し局面の観測指標です。"
                 f_obj["desc_kr"] = f_obj["desc_en"]
             elif fid == "f3_safehaven":
                 f_obj["raw_value"] = safehaven_spread
                 f_obj["raw_display"] = f"{safehaven_spread:+.2f}%p (20D Spread)"
-                f_obj["desc_en"] = f"Over the past 20 trading days, $SMH has underperformed defensive Healthcare ($XLV) by {safehaven_spread:+.2f}%p. Heavy rotation into $XLV creates the exact cash cushion needed to buy discounted semiconductors."
-                f_obj["desc_jp"] = f"直近20営業日で$SMHはディフェンシブなヘルスケア($XLV)に対して {safehaven_spread:+.2f}%p のスプレッドを記録。$XLVが底堅く推移することで、割安な$SMHを買い増す原資が保たれます。"
+                f_obj["desc_en"] = f"Over the past 20 trading days, $SMH relative return versus Healthcare ($XLV) is {safehaven_spread:+.2f}%p, illustrating how non-cyclical healthcare buffers sector dispersion."
+                f_obj["desc_jp"] = f"直近20営業日で$SMHはディフェンシブなヘルスケア($XLV)に対して {safehaven_spread:+.2f}%p のスプレッドを記録しています。"
                 f_obj["desc_kr"] = f_obj["desc_en"]
             elif fid == "f4_rsi":
                 f_obj["raw_value"] = smh_rsi
                 f_obj["raw_display"] = f"RSI {smh_rsi:.1f} / 100"
-                f_obj["desc_en"] = f"Blended 14-day Relative Strength Index stands at {smh_rsi:.1f}. Readings below 42 indicate washed-out short-term selling pressure across semiconductor leaders."
-                f_obj["desc_jp"] = f"14日加重RSIは {smh_rsi:.1f} です。42以下の水準は半導体セクターの短期的な投げ売りが一巡しつつあることを示します。"
+                f_obj["desc_en"] = f"Blended 14-day Relative Strength Index stands at {smh_rsi:.1f}. Readings below 42 reflect short-term momentum compression across semiconductor constituents."
+                f_obj["desc_jp"] = f"14日加重RSIは {smh_rsi:.1f} です。42以下の水準は半導体セクターの短期モメンタム低下を示します。"
                 f_obj["desc_kr"] = f_obj["desc_en"]
             elif fid == "f5_volatility":
                 f_obj["raw_value"] = vol_20
                 f_obj["raw_display"] = f"{vol_20:.1f}% Ann. Vol"
-                f_obj["desc_en"] = f"$SMH 20-day annualized volatility is {vol_20:.1f}%. Elevated volatility spikes reflect institutional hedging and option skew fear, whereas Healthcare ($XLV) dampens total portfolio variance by ~30%."
-                f_obj["desc_jp"] = f"$SMHの20日年率ボラティリティは {vol_20:.1f}% です。ボラティリティ急騰は市場の恐怖を反映しますが、$XLVを30%組み合わせることでポートフォリオ全体の変動を大幅に抑制します。"
+                f_obj["desc_en"] = f"$SMH 20-day annualized volatility is {vol_20:.1f}%. Pairing Healthcare ($XLV) alongside $SMH historically dampened blended portfolio variance by ~30%."
+                f_obj["desc_jp"] = f"$SMHの20日年率ボラティリティは {vol_20:.1f}% です。$XLVを組み合わせた過去検証では全体の変動幅が抑制されました。"
                 f_obj["desc_kr"] = f_obj["desc_en"]
             elif fid == "f6_leadership":
                 f_obj["raw_value"] = leadership_pct
                 f_obj["raw_display"] = f"{leadership_pct:+.2f}% vs QQQ (60D)"
-                f_obj["desc_en"] = f"Over the past 60 trading days, $SMH relative strength against $QQQ is {leadership_pct:+.2f}%. Mean-reversion after negative 60-day relative alpha has historically preceded multi-quarter semiconductor outperformance."
-                f_obj["desc_jp"] = f"過去60営業日の対$QQQ相対アルファは {leadership_pct:+.2f}% です。半導体がナスダック総合を一時的にアンダーパフォームした後の平均回帰は強力な上昇サイクルを生んできました。"
+                f_obj["desc_en"] = f"Over the past 60 trading days, $SMH relative performance against $QQQ is {leadership_pct:+.2f}%."
+                f_obj["desc_jp"] = f"過去60営業日の対$QQQ相対スプレッドは {leadership_pct:+.2f}% です。"
                 f_obj["desc_kr"] = f_obj["desc_en"]
             elif fid == "f7_drift":
                 f_obj["raw_value"] = nat_smh_weight
                 f_obj["raw_display"] = f"{nat_smh_weight:.1f}% SMH ({drift_pctp:+.2f}%p)"
-                f_obj["desc_en"] = f"An unrebalanced 70:30 portfolio from 6 months ago now holds {nat_smh_weight:.1f}% $SMH ({drift_pctp:+.2f}%p drift). Because $SMH weight shrunk below 70% while $XLV held firm, mechanical rebalancing automatically buys $SMH low."
-                f_obj["desc_jp"] = f"6ヶ月前に70:30で組成したポートフォリオの現在の$SMH自然比重は {nat_smh_weight:.1f}% ({drift_pctp:+.2f}%p) に低下しています。値持ちの良い$XLVを売り、安くなった$SMHを買い増す機械的逆張りが機能します。"
+                f_obj["desc_en"] = f"An unadjusted 70:30 historical study mix from 6 months ago stands at {nat_smh_weight:.1f}% $SMH ({drift_pctp:+.2f}%p drift)."
+                f_obj["desc_jp"] = f"6ヶ月前の70:30基準モデルに対する現在の$SMH自然比重は {nat_smh_weight:.1f}% ({drift_pctp:+.2f}%p) です。"
                 f_obj["desc_kr"] = f_obj["desc_en"]
 
         for etf_obj, df_e, sym in [

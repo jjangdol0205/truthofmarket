@@ -1,119 +1,90 @@
 // --- src/components/PaymentWaitlist.js ---
 /**
- * TruthOfMarket (Division 1) — Polar.sh Native PAYMENT_CONFIG, VIP Founding Member Waitlist Modal,
- * In-App WebView Safe Redirect & PDF Guide Guard & 70% Scroll + 15s Dwell `read_complete` Beacon.
+ * TruthOfMarket (Division 1) — Whop (@whop/checkout) Live PAYMENT_CONFIG,
+ * Embedded Whop Checkout Modal + 1-Tap Direct Checkout Fallback,
+ * ?payment=success&provider=whop&plan=monthly|annual Return Handler,
+ * CRM Helper & 70% Scroll + 15s Dwell `read_complete` Beacon.
  */
-(function initTomUnifiedPaymentAndBeacon() {
+(function initTomUnifiedWhopCheckoutAndBeacon() {
   if (typeof window === "undefined") return;
 
-  var PRE_SEEDED_TOM_MONTHLY_URL = "https://buy.polar.sh/polar_cl_ifEzJdkptSMdHoPJ8MriuYleze1To288pYefu3QvaLc?locale=en";
-  var PRE_SEEDED_TOM_ANNUAL_URL = "https://buy.polar.sh/polar_cl_IPZpLD1EeUXCrNMxo1Yji8oT8RPgD9jhdassj38WMyf?locale=en";
-
-  function ensurePolarLocaleUrl(rawUrl, defaultLocale, emailOverride) {
-    var url = String(rawUrl || "").trim();
-    if (!url || !/^https:\/\/(buy\.)?polar\.sh\//i.test(url)) return "";
-    var loc = String(defaultLocale || "en").trim() || "en";
-    var memberEmail = String(emailOverride || "").trim().toLowerCase();
-    var validEmail = memberEmail && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(memberEmail) ? memberEmail : "";
-    try {
-      var u = new URL(url);
-      u.searchParams.set("locale", loc);
-      if (validEmail && !u.searchParams.get("customer_email")) {
-        u.searchParams.set("customer_email", validEmail);
-      }
-      return u.toString();
-    } catch (_) {
-      var cleanBase = url
-        .replace(/([?&])locale=[^&]*/gi, "$1")
-        .replace(/\?&/, "?")
-        .replace(/[?&]+$/, "");
-      var sep = cleanBase.indexOf("?") !== -1 ? "&" : "?";
-      var out = cleanBase + sep + "locale=" + encodeURIComponent(loc);
-      if (validEmail && out.indexOf("customer_email=") === -1) {
-        out += "&customer_email=" + encodeURIComponent(validEmail);
-      }
-      return out;
-    }
-  }
+  var WHOP_TOM_MONTHLY_PLAN_ID = "plan_xVJeNwyrDef8T";
+  var WHOP_TOM_ANNUAL_PLAN_ID = "plan_9sdgFI753ucXQ";
+  var WHOP_TOM_MONTHLY_CH_ID = "ch_uFPUZl9jaGdNTvH";
+  var WHOP_TOM_ANNUAL_CH_ID = "ch_G3EyPgGXTTahfv7";
+  var WHOP_TOM_MONTHLY_URL = "https://whop.com/checkout/plan_xVJeNwyrDef8T";
+  var WHOP_TOM_ANNUAL_URL = "https://whop.com/checkout/plan_9sdgFI753ucXQ";
+  var WHOP_TOM_MONTHLY_REDIRECT = "https://truthofmarket.com/?payment=success&provider=whop&plan=monthly";
+  var WHOP_TOM_ANNUAL_REDIRECT = "https://truthofmarket.com/?payment=success&provider=whop&plan=annual";
 
   var DEFAULT_PAYMENT_CONFIG = {
-    PROVIDER: "polar_sh",
+    PROVIDER: "whop",
     DIVISION: "TOM",
     STORE_SLOT: "FINANCE_STORE_SLOT",
-    STORE_LIVE_READY: false,
-    POLAR_CHECKOUT_URLS: {
-      monthly_29: PRE_SEEDED_TOM_MONTHLY_URL,
-      annual_199: PRE_SEEDED_TOM_ANNUAL_URL,
+    STORE_LIVE_READY: true,
+    COMPANY_ID: "biz_4ynqri19wFDIwm",
+    STORE_NAME: "TruthOfMarket Research",
+    WHOP_PLAN_IDS: {
+      monthly: WHOP_TOM_MONTHLY_PLAN_ID,
+      annual: WHOP_TOM_ANNUAL_PLAN_ID,
     },
-    POLAR_TOM_MONTHLY_URL: PRE_SEEDED_TOM_MONTHLY_URL,
-    POLAR_TOM_ANNUAL_URL: PRE_SEEDED_TOM_ANNUAL_URL,
+    WHOP_CHECKOUT_CONFIG_IDS: {
+      monthly: WHOP_TOM_MONTHLY_CH_ID,
+      annual: WHOP_TOM_ANNUAL_CH_ID,
+    },
+    WHOP_CHECKOUT_URLS: {
+      monthly: WHOP_TOM_MONTHLY_URL,
+      annual: WHOP_TOM_ANNUAL_URL,
+    },
+    WHOP_REDIRECT_URLS: {
+      monthly: WHOP_TOM_MONTHLY_REDIRECT,
+      annual: WHOP_TOM_ANNUAL_REDIRECT,
+    },
+    WHOP_TOM_MONTHLY_URL: WHOP_TOM_MONTHLY_URL,
+    WHOP_TOM_ANNUAL_URL: WHOP_TOM_ANNUAL_URL,
     SUPPORT_EMAIL: "beable9489@gmail.com",
   };
 
   if (!window.PAYMENT_CONFIG || typeof window.PAYMENT_CONFIG !== "object") {
     window.PAYMENT_CONFIG = DEFAULT_PAYMENT_CONFIG;
   } else {
-    window.PAYMENT_CONFIG.PROVIDER = "polar_sh";
-    window.PAYMENT_CONFIG.DIVISION = window.PAYMENT_CONFIG.DIVISION || "TOM";
+    window.PAYMENT_CONFIG.PROVIDER = "whop";
+    window.PAYMENT_CONFIG.DIVISION = "TOM";
     window.PAYMENT_CONFIG.STORE_SLOT = window.PAYMENT_CONFIG.STORE_SLOT || "FINANCE_STORE_SLOT";
-    if (typeof window.PAYMENT_CONFIG.STORE_LIVE_READY !== "boolean") {
-      window.PAYMENT_CONFIG.STORE_LIVE_READY = false;
-    }
-    if (
-      !window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS ||
-      typeof window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS !== "object"
-    ) {
-      window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS = {
-        monthly_29: PRE_SEEDED_TOM_MONTHLY_URL,
-        annual_199: PRE_SEEDED_TOM_ANNUAL_URL,
-      };
-    } else {
-      if (!window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29) {
-        window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29 = PRE_SEEDED_TOM_MONTHLY_URL;
-      } else {
-        window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29 =
-          ensurePolarLocaleUrl(window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29, "en") || PRE_SEEDED_TOM_MONTHLY_URL;
-      }
-      if (!window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199) {
-        window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199 = PRE_SEEDED_TOM_ANNUAL_URL;
-      } else {
-        window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199 =
-          ensurePolarLocaleUrl(window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199, "en") || PRE_SEEDED_TOM_ANNUAL_URL;
-      }
-    }
-    if (!window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL) {
-      window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL = PRE_SEEDED_TOM_MONTHLY_URL;
-    } else {
-      window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL =
-        ensurePolarLocaleUrl(window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL, "en") || PRE_SEEDED_TOM_MONTHLY_URL;
-    }
-    if (!window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL) {
-      window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL = PRE_SEEDED_TOM_ANNUAL_URL;
-    } else {
-      window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL =
-        ensurePolarLocaleUrl(window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL, "en") || PRE_SEEDED_TOM_ANNUAL_URL;
-    }
-    if (!window.PAYMENT_CONFIG.SUPPORT_EMAIL) {
-      window.PAYMENT_CONFIG.SUPPORT_EMAIL = "beable9489@gmail.com";
-    }
+    window.PAYMENT_CONFIG.STORE_LIVE_READY = true;
+    window.PAYMENT_CONFIG.COMPANY_ID = "biz_4ynqri19wFDIwm";
+    window.PAYMENT_CONFIG.STORE_NAME = "TruthOfMarket Research";
+    window.PAYMENT_CONFIG.WHOP_PLAN_IDS = {
+      monthly: WHOP_TOM_MONTHLY_PLAN_ID,
+      annual: WHOP_TOM_ANNUAL_PLAN_ID,
+    };
+    window.PAYMENT_CONFIG.WHOP_CHECKOUT_CONFIG_IDS = {
+      monthly: WHOP_TOM_MONTHLY_CH_ID,
+      annual: WHOP_TOM_ANNUAL_CH_ID,
+    };
+    window.PAYMENT_CONFIG.WHOP_CHECKOUT_URLS = {
+      monthly: WHOP_TOM_MONTHLY_URL,
+      annual: WHOP_TOM_ANNUAL_URL,
+    };
+    window.PAYMENT_CONFIG.WHOP_REDIRECT_URLS = {
+      monthly: WHOP_TOM_MONTHLY_REDIRECT,
+      annual: WHOP_TOM_ANNUAL_REDIRECT,
+    };
+    window.PAYMENT_CONFIG.WHOP_TOM_MONTHLY_URL = WHOP_TOM_MONTHLY_URL;
+    window.PAYMENT_CONFIG.WHOP_TOM_ANNUAL_URL = WHOP_TOM_ANNUAL_URL;
+    window.PAYMENT_CONFIG.SUPPORT_EMAIL = window.PAYMENT_CONFIG.SUPPORT_EMAIL || "beable9489@gmail.com";
   }
 
-  var COPY_MODE =
-    window.PAYMENT_CONFIG && window.PAYMENT_CONFIG.STORE_LIVE_READY === true
-      ? "LIVE_SHARP"
-      : "UNDERWRITING_SAFE";
-  window.TOM_COPY_MODE = COPY_MODE;
+  window.TOM_COPY_MODE = "LIVE_SHARP";
   window.getTomCopyMode = function () {
-    return window.PAYMENT_CONFIG && window.PAYMENT_CONFIG.STORE_LIVE_READY === true
-      ? "LIVE_SHARP"
-      : "UNDERWRITING_SAFE";
+    return "LIVE_SHARP";
   };
 
   function getKstDateString() {
     try {
       return new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
     } catch (_) {
-      return "2026-11-17";
+      return "2026-11-19";
     }
   }
 
@@ -149,41 +120,51 @@
     return "";
   }
 
-  function resolvePolarCheckoutUrl(planKey) {
-    var pCfg = window.PAYMENT_CONFIG || {};
-    var urls = pCfg.POLAR_CHECKOUT_URLS || {};
-    var raw =
-      planKey === "annual"
-        ? String(urls.annual_199 || pCfg.POLAR_TOM_ANNUAL_URL || "").trim()
-        : String(urls.monthly_29 || pCfg.POLAR_TOM_MONTHLY_URL || "").trim();
-    if (raw && /^https:\/\/(buy\.)?polar\.sh\//i.test(raw)) {
-      return ensurePolarLocaleUrl(raw, "en");
-    }
-    return "";
+  function resolveTomWhopPlanSpec(planKey) {
+    var isAnnual = String(planKey || "").toLowerCase() === "annual";
+    return isAnnual
+      ? {
+          key: "annual",
+          planId: WHOP_TOM_ANNUAL_PLAN_ID,
+          checkoutConfigId: WHOP_TOM_ANNUAL_CH_ID,
+          purchaseUrl: WHOP_TOM_ANNUAL_URL,
+          redirectUrl: WHOP_TOM_ANNUAL_REDIRECT,
+          title: "Annual Research Pass",
+          priceLabel: "$199 / year (Save 43%)",
+        }
+      : {
+          key: "monthly",
+          planId: WHOP_TOM_MONTHLY_PLAN_ID,
+          checkoutConfigId: WHOP_TOM_MONTHLY_CH_ID,
+          purchaseUrl: WHOP_TOM_MONTHLY_URL,
+          redirectUrl: WHOP_TOM_MONTHLY_REDIRECT,
+          title: "Monthly Research Pass",
+          priceLabel: "$29 / month",
+        };
   }
 
-  function appendPolarCustomerEmail(checkoutUrl, emailOverride) {
-    var url = String(checkoutUrl || "").trim();
-    if (!url) return "";
-    var memberEmail = String(emailOverride || getKnownTomMemberEmail() || "").trim().toLowerCase();
-    if (/^https:\/\/(buy\.)?polar\.sh\//i.test(url)) {
-      return ensurePolarLocaleUrl(url, "en", memberEmail);
-    }
-    if (memberEmail && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(memberEmail) && url.indexOf("customer_email=") === -1) {
-      return url + (url.indexOf("?") !== -1 ? "&" : "?") + "customer_email=" + encodeURIComponent(memberEmail);
-    }
-    return url;
-  }
+  window.resolveTomWhopCheckoutUrl = function (planKey) {
+    return resolveTomWhopPlanSpec(planKey).purchaseUrl;
+  };
 
-  window.ensurePolarLocaleUrl = ensurePolarLocaleUrl;
-  window.resolveTomPolarCheckoutUrl = resolvePolarCheckoutUrl;
-  window.appendTomPolarCustomerEmail = appendPolarCustomerEmail;
+  function ensureWhopLoaderScript() {
+    try {
+      if (typeof document === "undefined") return;
+      var existing = document.querySelector('script[src*="js.whop.com/static/checkout/loader.js"]');
+      if (existing) return;
+      var sc = document.createElement("script");
+      sc.src = "https://js.whop.com/static/checkout/loader.js";
+      sc.async = true;
+      sc.defer = true;
+      (document.head || document.documentElement).appendChild(sc);
+    } catch (_) {}
+  }
 
   function postCrmRegistrationWithFallback(opts) {
     var cleanEmail = String((opts && opts.email) || "")
       .trim()
       .toLowerCase();
-    var segment = String((opts && opts.segment) || "vip_waitlist").trim();
+    var segment = String((opts && opts.segment) || "retirement_401k_ira").trim();
     var notes = String((opts && opts.notes) || "").trim();
     var lang = String((opts && opts.lang) || "en-US").trim();
 
@@ -271,107 +252,81 @@
 
   window.submitTomVipWaitlistOrManualEmail = postCrmRegistrationWithFallback;
 
-  function ensureWaitlistModalDom() {
-    var existing = document.getElementById("tomVipWaitlistModal");
+  function ensureWhopModalDom() {
+    var existing = document.getElementById("tomWhopCheckoutModal");
     if (existing) return existing;
 
-    var styleEl = document.getElementById("tomVipWaitlistStyles");
+    var styleEl = document.getElementById("tomWhopCheckoutStyles");
     if (!styleEl) {
       styleEl = document.createElement("style");
-      styleEl.id = "tomVipWaitlistStyles";
+      styleEl.id = "tomWhopCheckoutStyles";
       styleEl.textContent = [
-        "#tomVipWaitlistModal,#tomVipWaitlistModal *{box-sizing:border-box;}",
-        "#tomVipWaitlistModal{position:fixed;inset:0;z-index:10060;display:none;align-items:center;justify-content:center;padding:16px 12px;background:rgba(15,23,42,0.72);backdrop-filter:blur(6px);overflow-y:auto;}",
-        "#tomVipWaitlistDialog{position:relative;width:100%;max-width:600px;background:#ffffff;border:2px solid #059669;border-radius:16px;padding:22px 20px;color:#0f172a;box-shadow:0 24px 56px rgba(15,23,42,0.32);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow-x:hidden;overflow-y:auto;margin:auto;}",
-        "html[data-tom-theme='dark'] #tomVipWaitlistDialog{background:linear-gradient(155deg,#0f172a 0%,#071929 100%);border-color:#10b981;color:#f8fafc;box-shadow:0 24px 56px rgba(0,0,0,0.65);}",
-        ".tom-wl-top-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px;}",
-        ".tom-wl-priority-pill{display:inline-block;flex:0 1 auto;min-width:0;max-width:calc(100% - 86px);background:#ecfdf5;border:1px solid #059669;color:#065f46;padding:6px 12px;border-radius:999px;font-size:12.5px;line-height:1.35;font-weight:800;letter-spacing:0.02em;}",
-        "#btnCloseTomVipWaitlist{appearance:none;flex:0 0 auto;flex-shrink:0;min-height:44px;min-width:72px;padding:8px 14px;border-radius:8px;border:1.5px solid #64748b;background:#f1f5f9;color:#0f172a;font-weight:800;font-size:15px;line-height:1.2;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;}",
-        "#btnCloseTomVipWaitlist:hover{background:#e2e8f0;border-color:#334155;}",
-        ".tom-wl-plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}",
-        ".tom-wl-plan-btn{padding:12px 12px;border-radius:12px;border:2px solid #cbd5e1;background:#f8fafc;color:#0f172a;text-align:left;cursor:pointer;transition:all 0.15s ease;font-family:inherit;}",
-        "html[data-tom-theme='dark'] .tom-wl-plan-btn{border-color:#334155;background:rgba(15,23,42,0.85);color:#cbd5e1;}",
-        ".tom-wl-plan-btn.is-selected{border-color:#059669;background:#ecfdf5;color:#064e3b;box-shadow:0 0 0 2px rgba(5,150,105,0.2);}",
-        "html[data-tom-theme='dark'] .tom-wl-plan-btn.is-selected{border-color:#10b981;background:rgba(16,185,129,0.16);color:#ffffff;}",
-        ".tom-wl-benefits-box{margin:10px 0 14px;padding:12px 14px;border-radius:12px;background:#f8fafc;border:1px solid #cbd5e1;font-size:15px;line-height:1.55;color:#1e293b;}",
-        "html[data-tom-theme='dark'] .tom-wl-benefits-box{background:rgba(15,23,42,0.75);border-color:#334155;color:#e2e8f0;}",
-        "@media(max-width:540px){.tom-wl-plan-grid{grid-template-columns:1fr;}#tomVipWaitlistDialog{padding:18px 14px;}.tom-wl-priority-pill{font-size:11.5px;padding:5px 10px;}}",
+        "#tomWhopCheckoutModal,#tomWhopCheckoutModal *{box-sizing:border-box;}",
+        "#tomWhopCheckoutModal{position:fixed;inset:0;z-index:10060;display:none;align-items:center;justify-content:center;padding:16px 12px;background:rgba(15,23,42,0.74);backdrop-filter:blur(6px);overflow-y:auto;}",
+        "#tomWhopCheckoutDialog{position:relative;width:100%;max-width:640px;background:#ffffff;border:1.5px solid #065f46;border-radius:12px;padding:20px 20px 18px;color:#0f172a;box-shadow:0 24px 56px rgba(15,23,42,0.34);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;max-height:calc(100vh - 28px);max-height:calc(100dvh - 28px);overflow-x:hidden;overflow-y:auto;margin:auto;}",
+        ".tom-whop-top-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;}",
+        ".tom-whop-kicker-pill{display:inline-block;background:#ecfdf5;border:1px solid #059669;color:#065f46;padding:5px 11px;border-radius:999px;font-size:11.5px;line-height:1.35;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;}",
+        "#btnCloseTomWhopModal{appearance:none;flex-shrink:0;min-height:44px;min-width:72px;padding:8px 14px;border-radius:6px;border:1px solid #94a3b8;background:#f8fafc;color:#0f172a;font-weight:700;font-size:14px;cursor:pointer;}",
+        "#btnCloseTomWhopModal:hover{background:#e2e8f0;}",
+        ".tom-whop-plan-tabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}",
+        ".tom-whop-tab-btn{padding:12px 14px;border-radius:8px;border:1.5px solid #cbd5e1;background:#f8fafc;color:#0f172a;text-align:left;cursor:pointer;font-family:inherit;transition:all 0.15s ease;}",
+        ".tom-whop-tab-btn.is-selected{border-color:#065f46;background:#ecfdf5;color:#064e3b;box-shadow:0 0 0 2px rgba(6,95,70,0.15);}",
+        ".tom-whop-direct-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;margin-bottom:12px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;}",
+        ".tom-whop-direct-btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:10px 16px;border-radius:6px;background:#065f46;color:#ffffff !important;font-size:14.5px;font-weight:700;text-decoration:none !important;white-space:nowrap;}",
+        ".tom-whop-direct-btn:hover{background:#047857;}",
+        "#tomWhopEmbedMount{min-height:380px;border:1px solid #e2e8f0;border-radius:8px;background:#fbfbf9;padding:6px;overflow:hidden;}",
+        "@media(max-width:560px){.tom-whop-plan-tabs{grid-template-columns:1fr;}#tomWhopCheckoutDialog{padding:16px 14px;}.tom-whop-direct-btn{width:100%;}}",
       ].join("");
       document.head.appendChild(styleEl);
     }
 
-    var savedEmail = getKnownTomMemberEmail();
-
     var backdrop = document.createElement("div");
-    backdrop.id = "tomVipWaitlistModal";
+    backdrop.id = "tomWhopCheckoutModal";
     backdrop.setAttribute("role", "dialog");
     backdrop.setAttribute("aria-modal", "true");
-    backdrop.setAttribute("aria-labelledby", "tomVipWaitlistTitle");
+    backdrop.setAttribute("aria-labelledby", "tomWhopModalTitle");
     backdrop.innerHTML =
-      '<div id="tomVipWaitlistDialog">' +
-      '  <div class="tom-wl-top-row">' +
-      '    <span class="tom-wl-priority-pill">' +
-      "      FOUNDING MEMBER PRIORITY ACCESS &bull; 20% EARLY-BIRD LOCK" +
-      "    </span>" +
-      '    <button type="button" id="btnCloseTomVipWaitlist" aria-label="Close modal">Close</button>' +
+      '<div id="tomWhopCheckoutDialog">' +
+      '  <div class="tom-whop-top-row">' +
+      '    <span class="tom-whop-kicker-pill">INDEPENDENT MARKET DATA &amp; EDUCATIONAL RESEARCH</span>' +
+      '    <button type="button" id="btnCloseTomWhopModal" aria-label="Close checkout modal">Close</button>' +
       "  </div>" +
-      '  <h3 id="tomVipWaitlistTitle" style="margin:0 0 8px;font-size:clamp(1.2rem,2.4vw,1.45rem);line-height:1.32;font-weight:900;">' +
-      "    VIP Founding Member Launch Alert &amp; 20% Early-Bird Discount Reservation (1-Second Email Reserve)" +
+      '  <h3 id="tomWhopModalTitle" style="margin:0 0 6px;font-size:1.25rem;line-height:1.3;font-weight:800;color:#0f172a;">' +
+      "    TruthOfMarket Research Pass &mdash; Secure Checkout" +
       "  </h3>" +
-      '  <p style="margin:0;font-size:16.5px;line-height:1.6;">' +
-      "    Our Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) self-directed educational calculator software checkout is completing final gateway activation. Reserve your spot in <b>1 second ($0 charged today)</b> to lock in a <b>20% Founding Member Discount</b>—plus instant free Morning Bell Club access." +
+      '  <p style="margin:0;font-size:14px;line-height:1.55;color:#475569;">' +
+      "    Educational Market Data Newsletter + 2000&ndash;2025 Historical Statistical Workbook (SMH &times; XLV + SGOV 2-Pillar Historical Case Study &mdash; Strictly Non-Advisory Educational Publisher)." +
       "  </p>" +
-      '  <div class="tom-wl-benefits-box">' +
-      '    <div style="font-weight:800;color:#047857;margin-bottom:6px;">Included in Private Wealth Membership ($29/mo or $199/yr):</div>' +
-      '    <div style="margin-bottom:4px;">&bull; <b>Daily Automated SMH &times; XLV Market Indicator &amp; Ratio Digest:</b> Morning email tracking public semiconductor overheating / fear data (0&ndash;100) and historical <b>$SMH : $XLV</b> sector mix shifts across regimes.</div>' +
-      '    <div style="margin-bottom:4px;">&bull; <b>Account-Size Dollar ($) Allocation Worksheet:</b> Exact dollar amounts across <b>$SMH</b> (Semiconductors), <b>$XLV</b> (Healthcare Defense) &amp; optional <b>$SGOV</b> T-Bill cushion for your exact account scale.</div>' +
-      '    <div>&bull; <b>Lifetime-Updated 14-Page SMH &times; XLV Master PDF Guide:</b> Complete 26-year (2000&ndash;2026) Dot-Com / 2008 / 2022 drawdown study + printable self-directed execution checklist.</div>' +
-      "  </div>" +
-      '  <div class="tom-wl-plan-grid" role="radiogroup" aria-label="Select VIP Plan to Reserve">' +
-      '    <button type="button" class="tom-wl-plan-btn is-selected" data-wl-plan="Monthly VIP ($29/mo)">' +
-      '      <div style="font-size:12.5px;font-weight:800;color:#047857;">MONTHLY VIP SOFTWARE</div>' +
-      '      <div style="font-size:17px;font-weight:900;margin:3px 0;">Monthly VIP ($29/mo)</div>' +
-      '      <div style="font-size:13px;color:#b45309;font-weight:800;">20% Early-Bird: $23.20/mo</div>' +
-      '      <div style="font-size:12px;margin-top:4px;line-height:1.35;">All 3 Retiree Worksheets + Drawdown Defense PDF Guide</div>' +
+      '  <div class="tom-whop-plan-tabs" role="radiogroup" aria-label="Select Research Pass">' +
+      '    <button type="button" class="tom-whop-tab-btn is-selected" data-whop-tab="monthly">' +
+      '      <div style="font-size:11.5px;font-weight:700;color:#065f46;letter-spacing:0.04em;">MONTHLY RESEARCH PASS</div>' +
+      '      <div style="font-size:17px;font-weight:800;margin:2px 0;">$29 <span style="font-size:13px;font-weight:500;color:#475569;">/ month</span></div>' +
+      '      <div style="font-size:12px;color:#475569;">Morning Market Data Newsletter + Regime Workbook</div>' +
       "    </button>" +
-      '    <button type="button" class="tom-wl-plan-btn" data-wl-plan="Annual VIP ($199/yr)">' +
-      '      <div style="font-size:12.5px;font-weight:800;color:#b45309;">ANNUAL VIP SOFTWARE (SAVE 43%)</div>' +
-      '      <div style="font-size:17px;font-weight:900;margin:3px 0;">Annual VIP ($199/yr)</div>' +
-      '      <div style="font-size:13px;color:#047857;font-weight:800;">20% Early-Bird: $159.20/yr</div>' +
-      '      <div style="font-size:12px;margin-top:4px;line-height:1.35;">Full 12-Month Pass + Lifetime-Updated PDF Guide Bundle</div>' +
+      '    <button type="button" class="tom-whop-tab-btn" data-whop-tab="annual">' +
+      '      <div style="font-size:11.5px;font-weight:700;color:#b45309;letter-spacing:0.04em;">ANNUAL RESEARCH PASS &middot; SAVE 43%</div>' +
+      '      <div style="font-size:17px;font-weight:800;margin:2px 0;">$199 <span style="font-size:13px;font-weight:500;color:#475569;">/ year</span></div>' +
+      '      <div style="font-size:12px;color:#475569;">12-Month Newsletter + Complete 2000&ndash;2025 Statistical Workbook</div>' +
       "    </button>" +
       "  </div>" +
-      '  <form id="tomVipWaitlistForm" novalidate style="display:flex;flex-direction:column;gap:10px;">' +
-      '    <input type="hidden" id="tomVipWaitlistSelectedPlan" value="Monthly VIP ($29/mo)" />' +
-      '    <label for="tomVipWaitlistEmail" style="font-size:15px;font-weight:800;">Your Best Email Address (Zero Spam &bull; No Card Needed Today):</label>' +
-      '    <input type="email" id="tomVipWaitlistEmail" required autocomplete="email" placeholder="Enter your email (e.g., robert@email.com)" value="' +
-      String(savedEmail).replace(/"/g, "") +
-      '" style="width:100%;min-height:56px;padding:12px 16px;border-radius:10px;border:2px solid #64748b;background:#ffffff;color:#0f172a;font-size:18px;font-weight:700;box-sizing:border-box;" />' +
-      '    <button type="submit" id="btnSubmitTomVipWaitlist" style="width:100%;min-height:58px;padding:13px 18px;border-radius:11px;border:none;background:linear-gradient(135deg,#059669 0%,#047857 100%);color:#ffffff;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 8px 22px rgba(5,150,105,0.28);">' +
-      "      Reserve My 20% VIP Discount &amp; Launch Alert (1-Sec) &rarr;" +
-      "    </button>" +
-      "  </form>" +
-      '  <div id="tomVipWaitlistConfirm" role="status" aria-live="polite" style="display:none;margin-top:12px;padding:14px 16px;border-radius:10px;background:#ecfdf5;border:1.5px solid #059669;color:#064e3b;font-size:16px;line-height:1.55;font-weight:700;"></div>' +
-      '  <div style="margin-top:12px;padding-top:10px;border-top:1px solid #cbd5e1;font-size:13.5px;color:#475569;line-height:1.5;">' +
-      '    Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) &bull; 14-Day No-Questions-Asked Refund Policy once live &bull; Self-Directed Educational Calculator Software &bull; Support: <a href="mailto:beable9489@gmail.com" style="color:#1d4ed8;font-weight:700;text-decoration:underline;">beable9489@gmail.com</a>' +
+      '  <div class="tom-whop-direct-bar">' +
+      '    <span style="font-size:13px;color:#334155;font-weight:600;">Using a mobile WebView or ad-blocker? Complete checkout directly in one tap:</span>' +
+      '    <a id="tomWhopDirectTopBtn" class="tom-whop-direct-btn" data-whop-direct-tab="1" href="' +
+      WHOP_TOM_MONTHLY_URL +
+      '" target="_blank" rel="noopener">Open Secure Whop Checkout in New Tab &rarr;</a>' +
+      "  </div>" +
+      '  <div id="tomWhopEmbedMount" aria-live="polite"></div>' +
+      '  <div style="margin-top:12px;padding-top:10px;border-top:1px solid #e2e8f0;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;color:#475569;">' +
+      '    <span>Secure Checkout via Whop.com &middot; 14-Day Refund Policy &middot; Cancel anytime &middot; Support: <a href="mailto:beable9489@gmail.com" style="color:#1d4ed8;font-weight:700;">beable9489@gmail.com</a></span>' +
+      '    <a id="tomWhopDirectFooterLink" data-whop-direct-tab="1" href="' +
+      WHOP_TOM_MONTHLY_URL +
+      '" target="_blank" rel="noopener" style="color:#065f46;font-weight:700;text-decoration:underline;">Open Secure Whop Checkout in New Tab &rarr;</a>' +
       "  </div>" +
       "</div>";
 
     document.body.appendChild(backdrop);
 
-    var planInput = document.getElementById("tomVipWaitlistSelectedPlan");
-    var planBtns = backdrop.querySelectorAll(".tom-wl-plan-btn");
-    planBtns.forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        var plan = btn.getAttribute("data-wl-plan") || "Monthly VIP ($29/mo)";
-        if (planInput) planInput.value = plan;
-        planBtns.forEach(function (b) {
-          b.classList.toggle("is-selected", b === btn);
-        });
-      });
-    });
-
-    var closeBtn = document.getElementById("btnCloseTomVipWaitlist");
+    var closeBtn = document.getElementById("btnCloseTomWhopModal");
     if (closeBtn) {
       closeBtn.addEventListener("click", function () {
         backdrop.style.display = "none";
@@ -383,157 +338,99 @@
       }
     });
 
-    var form = document.getElementById("tomVipWaitlistForm");
-    if (form) {
-      form.addEventListener("submit", function (ev) {
-        ev.preventDefault();
-        var emailEl = document.getElementById("tomVipWaitlistEmail");
-        var confirmEl = document.getElementById("tomVipWaitlistConfirm");
-        var submitBtn = document.getElementById("btnSubmitTomVipWaitlist");
-        var selectedPlan = (planInput && planInput.value) || "Monthly VIP ($29/mo)";
-        var email = String((emailEl && emailEl.value) || "")
-          .trim()
-          .toLowerCase();
-
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
-          if (confirmEl) {
-            confirmEl.style.display = "block";
-            confirmEl.style.borderColor = "#dc2626";
-            confirmEl.style.background = "#fef2f2";
-            confirmEl.style.color = "#991b1b";
-            confirmEl.textContent = "Please enter a valid email address (for example, robert@email.com).";
-          }
-          if (emailEl) emailEl.focus();
-          return;
-        }
-
-        if (submitBtn) {
-          submitBtn.disabled = true;
-          submitBtn.textContent = "Reserving Your 20% Founding Discount...";
-        }
-
-        try {
-          localStorage.setItem("tom_free_member_email", email);
-          localStorage.setItem("tom_vip_waitlist_plan", selectedPlan);
-        } catch (_) {}
-
-        try {
-          var kst = getKstDateString();
-          fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/vip_waitlist_" + kst, {
-            mode: "cors",
-            keepalive: true,
-          }).catch(function () {});
-          fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/vip_waitlist_total", {
-            mode: "cors",
-            keepalive: true,
-          }).catch(function () {});
-          fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/vip_waitlist", {
-            mode: "cors",
-            keepalive: true,
-          }).catch(function () {});
-          fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/signup", {
-            mode: "cors",
-            keepalive: true,
-          }).catch(function () {});
-          fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/signup_total", {
-            mode: "cors",
-            keepalive: true,
-          }).catch(function () {});
-        } catch (_) {}
-
-        postCrmRegistrationWithFallback({
-          email: email,
-          segment: "vip_waitlist",
-          lang: "en-US",
-          notes: "site=truthofmarket.com | provider=polar_sh | plan=" + selectedPlan,
-        }).finally(function () {
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = "Reserve My 20% VIP Discount &amp; Launch Alert (1-Sec) &rarr;";
-          }
-        });
-
-        if (confirmEl) {
-          confirmEl.style.display = "block";
-          confirmEl.style.borderColor = "#059669";
-          confirmEl.style.background = "#ecfdf5";
-          confirmEl.style.color = "#064e3b";
-          confirmEl.innerHTML =
-            "<strong>20% Founding Member Reservation Confirmed.</strong><br/>Reserved Plan: <b>" +
-            selectedPlan.replace(/[<>&"]/g, "") +
-            "</b> for <b>" +
-            email.replace(/[<>&"]/g, "") +
-            "</b>. We will email your private 20% discount Polar.sh checkout link the moment live billing opens—and your complimentary Morning Bell Retirement &amp; Macro Brief is now active.";
-        }
+    backdrop.querySelectorAll("[data-whop-tab]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var pk = btn.getAttribute("data-whop-tab") === "annual" ? "annual" : "monthly";
+        mountWhopPlanInModal(pk);
       });
-    }
+    });
 
     return backdrop;
   }
 
-  window.openTomVipWaitlistModal = function (planKey) {
-    var modal = ensureWaitlistModalDom();
-    var selectedLabel = planKey === "annual" ? "Annual VIP ($199/yr)" : "Monthly VIP ($29/mo)";
-    var planInput = document.getElementById("tomVipWaitlistSelectedPlan");
-    if (planInput) planInput.value = selectedLabel;
-    modal.querySelectorAll(".tom-wl-plan-btn").forEach(function (btn) {
-      btn.classList.toggle("is-selected", btn.getAttribute("data-wl-plan") === selectedLabel);
+  function mountWhopPlanInModal(planKey) {
+    ensureWhopLoaderScript();
+    var modal = ensureWhopModalDom();
+    var spec = resolveTomWhopPlanSpec(planKey);
+
+    modal.querySelectorAll("[data-whop-tab]").forEach(function (btn) {
+      var active = btn.getAttribute("data-whop-tab") === spec.key;
+      btn.classList.toggle("is-selected", active);
+      btn.setAttribute("aria-checked", active ? "true" : "false");
     });
-    var emailEl = document.getElementById("tomVipWaitlistEmail");
-    if (emailEl && !emailEl.value) {
-      var latestEmail = getKnownTomMemberEmail();
-      if (latestEmail) emailEl.value = latestEmail;
+
+    var topDirect = document.getElementById("tomWhopDirectTopBtn");
+    var footDirect = document.getElementById("tomWhopDirectFooterLink");
+    if (topDirect) topDirect.setAttribute("href", spec.purchaseUrl);
+    if (footDirect) footDirect.setAttribute("href", spec.purchaseUrl);
+
+    var mount = document.getElementById("tomWhopEmbedMount");
+    if (mount) {
+      mount.innerHTML = "";
+      var embedDiv = document.createElement("div");
+      embedDiv.className = "whop-checkout-embed";
+      embedDiv.setAttribute("data-whop-checkout-plan-id", spec.planId);
+      embedDiv.setAttribute("data-whop-checkout-return-url", spec.redirectUrl);
+      embedDiv.setAttribute("data-whop-checkout-redirect-url", spec.redirectUrl);
+      embedDiv.setAttribute("data-whop-checkout-theme", "light");
+      var savedEmail = getKnownTomMemberEmail();
+      if (savedEmail) {
+        embedDiv.setAttribute("data-whop-checkout-prefill-email", savedEmail);
+      }
+      mount.appendChild(embedDiv);
     }
-    var confirmEl = document.getElementById("tomVipWaitlistConfirm");
-    if (confirmEl) confirmEl.style.display = "none";
+  }
+
+  window.openTomWhopCheckoutModal = function (planKey) {
+    var modal = ensureWhopModalDom();
+    mountWhopPlanInModal(planKey === "annual" ? "annual" : "monthly");
     modal.style.display = "flex";
-    setTimeout(function () {
-      if (emailEl && !emailEl.value) emailEl.focus();
-    }, 60);
   };
+  window.openTomVipWaitlistModal = window.openTomWhopCheckoutModal;
 
   if (window.__TOM_PAYMENT_SYSTEM_READY__) return;
   window.__TOM_PAYMENT_SYSTEM_READY__ = true;
 
-  // 1. Unified Capture-Phase Paid Checkout Click Guard (Strictly 1 Abacus Fire Per Click)
+  ensureWhopLoaderScript();
+
+  // 1. Unified Capture-Phase Paid Checkout Click Handler
   window.addEventListener(
     "click",
     function (e) {
       var el =
         e.target && e.target.closest
-          ? e.target.closest(".polar-checkout-button, [data-polar-checkout], [data-tom-paid-plan]") ||
+          ? e.target.closest("[data-whop-direct-tab], .whop-checkout-button, [data-whop-checkout], [data-tom-paid-plan]") ||
             e.target.closest("a, button, [role='button']")
           : null;
       if (!el) return;
 
+      if (el.hasAttribute("data-whop-direct-tab")) {
+        return;
+      }
+
       var href = String(el.getAttribute("href") || "");
-      var planAttr = String(el.getAttribute("data-tom-paid-plan") || "").toLowerCase();
-      var polarPlanAttr = String(el.getAttribute("data-polar-plan") || "").toLowerCase();
+      var planAttr = String(el.getAttribute("data-tom-paid-plan") || el.getAttribute("data-whop-plan") || "").toLowerCase();
       var cls = String(el.className || "");
 
-      var isPortalManageLink = href.indexOf("polar.sh/purchases") !== -1;
       var isPaidCta =
-        !isPortalManageLink &&
-        (cls.indexOf("polar-checkout-button") !== -1 ||
-          el.hasAttribute("data-polar-checkout") ||
-          Boolean(planAttr) ||
-          Boolean(polarPlanAttr) ||
-          href.indexOf("buy.polar.sh") !== -1 ||
-          href.indexOf("polar.sh/checkout") !== -1 ||
-          href.indexOf("#tom-vip-") === 0);
+        cls.indexOf("whop-checkout-button") !== -1 ||
+        el.hasAttribute("data-whop-checkout") ||
+        Boolean(planAttr) ||
+        href.indexOf("whop.com/checkout/plan_") !== -1 ||
+        href.indexOf("#tom-vip-") === 0 ||
+        href.indexOf("#tom-whop-") === 0;
 
       if (!isPaidCta) return;
 
       var txt = String(el.innerText || el.textContent || "").toLowerCase();
       var isAnnual =
         planAttr === "annual" ||
-        polarPlanAttr === "annual_199" ||
+        href.indexOf(WHOP_TOM_ANNUAL_PLAN_ID) !== -1 ||
         href.indexOf("annual") !== -1 ||
         txt.indexOf("199") !== -1 ||
         txt.indexOf("annual") !== -1;
       var planKey = isAnnual ? "annual" : "monthly";
 
-      // Fire Abacus paid_click_<YYYY-MM-DD> & paid_click_total strictly once per click
       if (!e.__tomPaidClickTracked) {
         e.__tomPaidClickTracked = true;
         try {
@@ -553,58 +450,39 @@
         } catch (_) {}
       }
 
-      var pCfg = window.PAYMENT_CONFIG || {};
-      var resolvedPolarUrl = resolvePolarCheckoutUrl(planKey);
-
-      if (pCfg.STORE_LIVE_READY !== true || !resolvedPolarUrl) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (typeof e.stopImmediatePropagation === "function") {
-          e.stopImmediatePropagation();
-        }
-        window.openTomVipWaitlistModal(planKey);
+      if (e.ctrlKey || e.metaKey || e.shiftKey) {
         return;
       }
 
-      // Live Polar.sh Checkout Active Path (STORE_LIVE_READY === true AND valid Polar URL configured)
       e.preventDefault();
       e.stopPropagation();
       if (typeof e.stopImmediatePropagation === "function") {
         e.stopImmediatePropagation();
       }
 
-      var checkoutUrl = appendPolarCustomerEmail(resolvedPolarUrl);
-      if (window.isTomInAppWebView()) {
-        window.location.href = checkoutUrl;
-        return;
-      }
-      if (window.PolarEmbedCheckout && typeof window.PolarEmbedCheckout.create === "function") {
-        var curTheme = document.documentElement.getAttribute("data-tom-theme") === "dark" ? "dark" : "light";
-        window.PolarEmbedCheckout.create(checkoutUrl, curTheme).catch(function () {
-          window.location.href = checkoutUrl;
-        });
-      } else {
-        window.location.href = checkoutUrl;
-      }
+      window.openTomWhopCheckoutModal(planKey);
     },
     true
   );
 
-  // 2. Escape key closes VIP Waitlist Modal + Polar.sh Checkout Success Unlock
+  // 2. Escape key closes Whop Checkout Modal
   window.addEventListener("keydown", function (ev) {
     if (ev.key === "Escape") {
-      var wl = document.getElementById("tomVipWaitlistModal");
+      var wl = document.getElementById("tomWhopCheckoutModal");
       if (wl && wl.style.display === "flex") {
         wl.style.display = "none";
       }
     }
   });
 
-  function applyPolarCheckoutUnlock(orderRef) {
-    var cleanRef = String(orderRef || "RSA-PRO-2026-POLAR-VIP").trim();
+  // 3. Handle ?payment=success&provider=whop&plan=monthly|annual cleanly on return
+  function applyWhopCheckoutUnlock(orderRef, planSlug) {
+    var cleanPlan = String(planSlug || "monthly").toLowerCase() === "annual" ? "annual" : "monthly";
+    var cleanRef = String(orderRef || ("WHOP-PASS-2026-" + cleanPlan.toUpperCase())).trim();
     try {
       localStorage.setItem("rsa_pro_unlocked", "true");
       localStorage.setItem("rsa_token", cleanRef);
+      localStorage.setItem("tom_whop_active_plan", cleanPlan);
       var kst = getKstDateString();
       if (localStorage.getItem("hq_paid_" + kst) !== "1") {
         localStorage.setItem("hq_paid_" + kst, "1");
@@ -618,46 +496,43 @@
         }).catch(function () {});
       }
     } catch (_) {}
-  }
 
-  function setupPolarCheckoutSuccess() {
     try {
-      var searchStr = (window.location && window.location.search) || "";
-      if (
-        searchStr.indexOf("payment=success") !== -1 ||
-        searchStr.indexOf("polar_checkout_success") !== -1
-      ) {
-        var sp = new URLSearchParams(searchStr);
-        var cid = sp.get("checkout_id") || sp.get("customer_session_token") || "POLAR-VIP";
-        applyPolarCheckoutUnlock("RSA-PRO-2026-" + cid);
-      }
-      if (!window.__tomPolarPostMessageBound) {
-        window.__tomPolarPostMessageBound = true;
-        window.addEventListener("message", function (ev) {
-          try {
-            var origin = String((ev && ev.origin) || "").toLowerCase();
-            if (origin.indexOf("polar.sh") === -1) return;
-            var d = ev.data;
-            var isSuccess =
-              d === "polar_checkout_success" ||
-              (d &&
-                typeof d === "object" &&
-                (d.event === "success" ||
-                  d.event === "polar_checkout_success" ||
-                  d.type === "polar_checkout_success" ||
-                  d.status === "succeeded"));
-            if (isSuccess) {
-              applyPolarCheckoutUnlock("RSA-PRO-2026-POLAR-EMBED");
-            }
-          } catch (_) {}
-        });
+      if (typeof document !== "undefined" && document.body && !document.getElementById("tomWhopReturnBanner")) {
+        var planTitle = cleanPlan === "annual" ? "Annual Research Pass ($199/yr)" : "Monthly Research Pass ($29/mo)";
+        var banner = document.createElement("div");
+        banner.id = "tomWhopReturnBanner";
+        banner.setAttribute("role", "status");
+        banner.style.cssText =
+          "max-width:820px;margin:16px auto 0;padding:14px 18px;border-radius:8px;background:#ecfdf5;border:1.5px solid #059669;color:#064e3b;font-family:'Inter',sans-serif;font-size:15px;line-height:1.55;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;";
+        banner.innerHTML =
+          "<div><strong>Whop Checkout Confirmed &mdash; " +
+          planTitle +
+          " Active.</strong> Your Research Pass session is now unlocked in this browser. Need receipt or multi-device help? Contact <a href='mailto:beable9489@gmail.com' style='color:#065f46;font-weight:700;text-decoration:underline;'>beable9489@gmail.com</a>.</div>" +
+          "<button type='button' onclick='this.parentNode.remove()' style='padding:6px 12px;border-radius:6px;border:1px solid #059669;background:#ffffff;color:#064e3b;font-weight:700;cursor:pointer;'>Dismiss</button>";
+        document.body.insertBefore(banner, document.body.firstChild);
       }
     } catch (_) {}
   }
-  setupPolarCheckoutSuccess();
-  window.addEventListener("load", setupPolarCheckoutSuccess);
 
-  // 3. Session-Scoped `read_complete` Beacon (Scroll Depth >= 70% AND Dwell Time >= 15000ms)
+  function setupWhopCheckoutSuccess() {
+    try {
+      var searchStr = (window.location && window.location.search) || "";
+      if (searchStr.indexOf("payment=success") !== -1 || searchStr.indexOf("checkout_status=succeeded") !== -1) {
+        var sp = new URLSearchParams(searchStr);
+        var planParam = sp.get("plan") === "annual" ? "annual" : "monthly";
+        var cid = sp.get("receipt_id") || sp.get("checkout_id") || sp.get("session_id") || ("WHOP-" + planParam.toUpperCase());
+        applyWhopCheckoutUnlock("WHOP-2026-" + cid, planParam);
+      }
+    } catch (_) {}
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupWhopCheckoutSuccess);
+  } else {
+    setupWhopCheckoutSuccess();
+  }
+
+  // 4. Session-Scoped `read_complete` Beacon (Scroll Depth >= 70% AND Dwell Time >= 15000ms)
   (function bindReadCompleteBeacon() {
     var SESSION_KEY = "tom_read_complete_fired_v1";
     try {
@@ -773,10 +648,10 @@ const enCopy = {
   auditedAlphaBadge: "+14.2% Historical Spread vs S&P 500 · 2.03x Sharpe Ratio",
 
   // Soft Paywall Call to Action (Used in /pro-swing.html Quantitative Archive)
-  softPaywallUnlockCta: "Start Monthly VIP — $29/mo",
+  softPaywallUnlockCta: "Start Monthly Research Pass — $29/mo",
   softPaywallTitle: "🔒 Full Quantitative Factor Dataset & Retiree Cashflow & Budget Worksheets",
   softPaywallDesc:
-    "$CELH is displayed as an open educational factor example. Upgrade to Monthly VIP ($29/mo) or Annual VIP ($199/yr) to unlock the Custom Nest-Egg Dollar ($) Budget Worksheet, 12-Month Dividend Paycheck Calendar & Tax-Bucket Reference, and Large-Print Weather Action Sheet.",
+    "$CELH is displayed as an open educational factor example. Upgrade to Monthly Research Pass ($29/mo) or Annual Research Pass ($199/yr) to unlock the Custom Nest-Egg Dollar ($) Budget Worksheet, 12-Month Dividend Paycheck Calendar & Tax-Bucket Reference, and Large-Print Weather Action Sheet.",
 
   // Empirical Factor Table (/pro-swing.html)
   proofHeading: "Historical Factor Study · Moving-Average Trend Filter vs. Unfiltered Lows",
@@ -811,7 +686,7 @@ const enCopy = {
   vaultBadgeLocked: "VIP EDUCATIONAL CALCULATOR SUITE · LOCKED",
   vaultBadgeUnlocked: "VIP EDUCATIONAL CALCULATOR SUITE · UNLOCKED",
   vaultTitle: "Self-Directed Quantitative Factor Calculators & Sector Matrix",
-  vaultUnlockBtn: "🔑 Start Monthly VIP — $29/mo",
+  vaultUnlockBtn: "🔑 Start Monthly Research Pass — $29/mo",
   tool1Title: "COST-BASIS DRAWDOWN & WEIGHT CALCULATOR",
   tool1Sub: "Mathematical Cost-Basis & Holding-Period Variance Calculator",
   tool1Desc:
@@ -865,7 +740,7 @@ const enCopy = {
   disclaimer:
     "Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.",
   copyright:
-    "© 2026 TruthOfMarket — Educational Market Data & Quantitative Research Desk · Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay).",
+    "© 2026 TruthOfMarket — Educational Market Data & Quantitative Research Desk · Whop.com (Global Card / Apple Pay / Google Pay).",
 };
 const translations = {
   en: enCopy,
@@ -909,38 +784,25 @@ function getVipTelegramUrl(isPro = false) {
   }
   return "#pro-vip-telegram";
 }
-const CANONICAL_TOM_MONTHLY_URL = "#tom-vip-monthly";
-const CANONICAL_TOM_ANNUAL_URL = "#tom-vip-annual";
-function formatCheckoutUrl(rawUrl, fallbackUrl = "#tom-vip-monthly") {
-  const withEnLocale = (uStr) => {
-    try {
-      const u = new URL(uStr);
-      u.searchParams.set("locale", "en");
-      return u.toString();
-    } catch (_) {
-      return uStr.includes("locale=") ? uStr : uStr + (uStr.includes("?") ? "&" : "?") + "locale=en";
-    }
-  };
+const CANONICAL_TOM_MONTHLY_URL = "https://whop.com/checkout/plan_xVJeNwyrDef8T";
+const CANONICAL_TOM_ANNUAL_URL = "https://whop.com/checkout/plan_9sdgFI753ucXQ";
+function formatCheckoutUrl(rawUrl, fallbackUrl = CANONICAL_TOM_MONTHLY_URL) {
   const candidate = String(rawUrl || "").trim();
-  if (candidate && /^https:\/\/(buy\.)?polar\.sh\//i.test(candidate)) {
-    return withEnLocale(candidate);
+  if (candidate && /^https:\/\/whop\.com\/checkout\//i.test(candidate)) {
+    return candidate;
   }
+  const isAnnualFallback = String(fallbackUrl || "").toLowerCase().includes("annual") || String(fallbackUrl || "").includes("plan_9sdgFI753ucXQ");
   if (typeof window !== "undefined" && window.PAYMENT_CONFIG) {
     const pCfg = window.PAYMENT_CONFIG;
-    const urls = pCfg.POLAR_CHECKOUT_URLS || {};
-    const isAnnualFallback = String(fallbackUrl || "").toLowerCase().includes("annual");
+    const urls = pCfg.WHOP_CHECKOUT_URLS || {};
     const fromCfg = isAnnualFallback
-      ? String(urls.annual_199 || pCfg.POLAR_TOM_ANNUAL_URL || "").trim()
-      : String(urls.monthly_29 || pCfg.POLAR_TOM_MONTHLY_URL || "").trim();
-    if (pCfg.STORE_LIVE_READY === true && fromCfg && /^https:\/\/(buy\.)?polar\.sh\//i.test(fromCfg)) {
-      return withEnLocale(fromCfg);
+      ? String(urls.annual || pCfg.WHOP_TOM_ANNUAL_URL || "").trim()
+      : String(urls.monthly || pCfg.WHOP_TOM_MONTHLY_URL || "").trim();
+    if (fromCfg && /^https:\/\/whop\.com\/checkout\//i.test(fromCfg)) {
+      return fromCfg;
     }
   }
-  const fb = String(fallbackUrl || "#tom-vip-monthly").trim();
-  if (fb && /^https:\/\/(buy\.)?polar\.sh\//i.test(fb)) {
-    return withEnLocale(fb);
-  }
-  return fb.startsWith("#") ? fb : "#tom-vip-monthly";
+  return isAnnualFallback ? CANONICAL_TOM_ANNUAL_URL : CANONICAL_TOM_MONTHLY_URL;
 }
 
 function isStaticHost() {
@@ -1281,16 +1143,16 @@ async function validateLicense(licenseKey) {
           license_key: null,
           tier: "free",
           expires_at: null,
-          message: "Please enter a valid Polar.sh VIP license key.",
+          message: "Please enter a valid Whop Research Pass receipt ID.",
         };
       }
-      if (/^(RSA|GBA|POLAR)-(PRO|LTD|VIP)-2026-[A-Z0-9-]+$/i.test(key)) {
+      if (/^(RSA|GBA|WHOP)-(PRO|LTD|VIP)-2026-[A-Z0-9-]+$/i.test(key)) {
         return {
           valid: true,
           license_key: key.toUpperCase(),
           tier: key.toUpperCase().includes("-LTD-") ? "pro_annual" : "pro",
           expires_at: "2099-12-31T23:59:59Z",
-          message: "VIP Calculator Software License Activated — Full Dataset & 26Y CSV Unlocked.",
+          message: "VIP Calculator Software License Activated — Full Dataset & 2000–2025 Historical Statistical Workbook Unlocked.",
         };
       }
       if (
@@ -1310,8 +1172,8 @@ async function validateLicense(licenseKey) {
         const orgId =
           typeof window !== "undefined" &&
           window.PAYMENT_CONFIG &&
-          window.PAYMENT_CONFIG.POLAR_ORG_ID
-            ? String(window.PAYMENT_CONFIG.POLAR_ORG_ID).trim()
+          window.PAYMENT_CONFIG.COMPANY_ID
+            ? String(window.PAYMENT_CONFIG.COMPANY_ID).trim()
             : "";
         if (!orgId) {
           return {
@@ -1320,11 +1182,11 @@ async function validateLicense(licenseKey) {
             tier: "free",
             expires_at: null,
             message:
-              "Invalid or unrecognized license key. Please check your Polar.sh receipt or contact beable9489@gmail.com.",
+              "Invalid or unrecognized license key. Please check your Whop receipt or contact beable9489@gmail.com.",
           };
         }
-        const polarResp = await fetch(
-          "https://api.polar.sh/v1/customer-portal/license-keys/validate",
+        const whopResp = await fetch(
+          "/api/license/validate",
           {
             method: "POST",
             headers: {
@@ -1334,21 +1196,21 @@ async function validateLicense(licenseKey) {
             body: JSON.stringify({ key, organization_id: orgId }),
           }
         );
-        const polarData = await polarResp.json().catch(() => null);
-        const statusStr = String(polarData?.status || "").toLowerCase();
+        const whopData = await whopResp.json().catch(() => null);
+        const statusStr = String(whopData?.status || "").toLowerCase();
         const valid = Boolean(
-          polarResp.ok &&
-            polarData &&
-            (statusStr === "granted" || statusStr === "active" || polarData.valid === true)
+          whopResp.ok &&
+            whopData &&
+            (statusStr === "granted" || statusStr === "active" || whopData.valid === true)
         );
         return {
           valid,
           license_key: valid ? key : null,
           tier: valid ? "pro" : "free",
-          expires_at: valid ? polarData?.expires_at || "2099-12-31T23:59:59Z" : null,
+          expires_at: valid ? whopData?.expires_at || "2099-12-31T23:59:59Z" : null,
           message: valid
-            ? "VIP Software License Verified via Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)."
-            : "Invalid or expired license key. Please verify your Polar.sh receipt or subscribe below.",
+            ? "VIP Software License Verified via Whop.com (Global Card / Apple Pay / Google Pay)."
+            : "Invalid or expired license key. Please verify your Whop receipt or subscribe below.",
         };
       } catch (_) {
         return {
@@ -1357,7 +1219,7 @@ async function validateLicense(licenseKey) {
           tier: "free",
           expires_at: null,
           message:
-            "License verification failed. Please check your Polar.sh license key and network connection.",
+            "License verification failed. Please check your Whop receipt ID and network connection.",
         };
       }
     }
@@ -1377,15 +1239,15 @@ async function fetchProVault() {
       return {
         unlocked: active,
         tier: active ? "pro" : "free",
-        pine_script_available: active,
-        tools: ["position_doctor", "morning_pdf", "pine_script_v5"],
+        workbook_available: active,
+        tools: ["position_doctor", "morning_pdf", "statistical_workbook"],
       };
     }
   );
 }
-async function fetchPineScript() {
+async function fetchFactorFormula() {
   return fetchJsonWithFallback(
-    "/api/pro/pinescript",
+    "/api/pro/factor-formula",
     {
       headers: {
         ...getAuthHeader(),
@@ -1393,7 +1255,7 @@ async function fetchPineScript() {
       },
     },
     async () => {
-      const r = await fetch("/static_api/pinescript.json");
+      const r = await fetch("/static_api/factor_formula.json");
       return r.json();
     }
   );
@@ -1691,6 +1553,17 @@ async function evaluatePortfolioDoctor(payload) {
               verdict: "Neutral",
             },
           ],
+          rebalance_recommendations: [
+            {
+              action: "MAINTAIN",
+              ticker: null,
+              target_ticker: null,
+              amount_usd: 0.0,
+              allocation_pct: 100.0,
+              reason: "No active holdings in portfolio; ready for Right-Side Ignition deployment.",
+              setup_type: "CASH_RESERVE",
+            },
+          ],
           adjust_recommendations: [
             {
               action: "MAINTAIN",
@@ -1944,6 +1817,7 @@ async function evaluatePortfolioDoctor(payload) {
         items: diagnostics,
         stress_scenarios: stressScenarios,
         adjust_recommendations: adjustRecommendations,
+        rebalance_recommendations: adjustRecommendations,
       };
     }
   );
@@ -2389,7 +2263,7 @@ async function buildClientTelegramPreview({
       `• $SMH: $${Number(ov.smh_close).toFixed(2)} (${Number(ov.smh_dd_pct).toFixed(2)}% 52W DD)`,
       `• $XLV: $${Number(ov.xlv_close).toFixed(2)} (${xlv1d >= 0 ? "+" : ""}${xlv1d.toFixed(2)}% 1D) | $QQQ: $${Number(ov.qqq_close).toFixed(2)} (${qqq1d >= 0 ? "+" : ""}${qqq1d.toFixed(2)}% 1D)`,
       ``,
-      `📊 $100,000 Simulated Weight Calculation (${ov.recommended_smh_weight}% $SMH : ${ov.recommended_xlv_weight}% $XLV):`,
+      `📊 $100,000 Simulated Weight Calculation (${ov.historical_study_smh_ratio}% $SMH : ${ov.historical_study_xlv_ratio}% $XLV):`,
       `• $SMH (${reb.target_smh_weight_pct}%): $${Number(reb.target_smh_usd).toLocaleString()} (${reb.target_smh_shares} sh) -> ${dSmhSign}$${Math.abs(Number(reb.delta_smh_usd)).toLocaleString()} (${smhShSign} sh)`,
       `• $XLV (${reb.target_xlv_weight_pct}%): $${Number(reb.target_xlv_usd).toLocaleString()} (${reb.target_xlv_shares} sh) -> ${dXlvSign}$${Math.abs(Number(reb.delta_xlv_usd)).toLocaleString()} (${xlvShSign} sh)`,
       `🔗 Calculator: https://truthofmarket.com/semi-fear-greed.html`,
@@ -2866,11 +2740,11 @@ function renderDoctorVipUnlockPreview(state) {
 
   const cfg = (state && state.config) || {};
   const docMonthlyUrl = formatCheckoutUrl(
-    cfg.polar_tom_monthly_url || cfg.ls_site1_monthly_url,
+    cfg.whop_tom_monthly_url || cfg.ls_site1_monthly_url,
     "#tom-vip-monthly"
   );
   const docAnnualUrl = formatCheckoutUrl(
-    cfg.polar_tom_annual_url || cfg.ls_site1_ltd_url,
+    cfg.whop_tom_annual_url || cfg.ls_site1_ltd_url,
     "#tom-vip-annual"
   );
 
@@ -2878,26 +2752,26 @@ function renderDoctorVipUnlockPreview(state) {
     ? `
       <div class="doc-vip-action-bar" style="margin-top:12px; display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
         <a href="${docMonthlyUrl}"
-           data-polar-checkout
-           data-polar-plan="monthly_29"
+           data-whop-checkout
+           data-whop-plan="monthly"
            data-tom-paid-plan="monthly"
-           class="btn btn-primary polar-checkout-button"
+           class="btn btn-primary whop-checkout-button"
            id="btnDocUnlockMonthly"
            style="flex:1; min-width:180px; justify-content:center; padding:9px 12px; font-weight:800; font-size:0.78rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
-          ⚡ Start Monthly VIP — $29/mo
+          ⚡ Start Monthly Research Pass — $29/mo
         </a>
         <a href="${docAnnualUrl}"
-           data-polar-checkout
-           data-polar-plan="annual_199"
+           data-whop-checkout
+           data-whop-plan="annual"
            data-tom-paid-plan="annual"
-           class="btn polar-checkout-button"
+           class="btn whop-checkout-button"
            id="btnDocUnlockLifetime"
            style="flex:1; min-width:180px; justify-content:center; padding:9px 12px; font-weight:800; font-size:0.78rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color:#000; border:none;">
-          💎 Start Annual VIP — $199/yr
+          💎 Start Annual Research Pass — $199/yr
         </a>
       </div>
       <div class="doc-compliance-notice" style="margin-top:8px; font-size:0.66rem; color:var(--muted); text-align:center; font-family:var(--font-mono); line-height:1.45;">
-        🔒 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · Self-Directed Educational Calculator Software · 14-Day Refund Policy
+        🔒 Whop.com (Global Card / Apple Pay / Google Pay) · Self-Directed Educational Calculator Software · 14-Day Refund Policy
       </div>
       <div style="margin-top:6px; font-size:0.7rem; color:#94a3b8; text-align:center; line-height:1.45;">
         Support Desk: <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#93c5fd; font-weight:700; text-decoration:underline;">beable9489@gmail.com</a>
@@ -3370,11 +3244,11 @@ const BLIND_TEST_I18N = {
     retailSideDesc: "Averages into sub-MA60 downtrends ($SMCI / $INTC) without calm allocation discipline. Unhedged tail drawdowns erode retirement principal.",
     quantSideTitle: "🟢 TruthOfMarket MA20/60 + Volume Model",
     quantSideDesc: "Filters for MA60 reclaim + ≥1.4x institutional volume surge with a modeled -9.0% risk boundary (-1.35% portfolio allocation cap).",
-    vipUnlockBannerTitle: "🔥 ROUND 3 FEATURED A 3.41x VOLUME ANOMALY — UNLOCK ALL 72 QUANT FACTOR DATASETS & PINE SCRIPT",
+    vipUnlockBannerTitle: "🔥 ROUND 3 FEATURED A 3.41x VOLUME ANOMALY — UNLOCK ALL 72 QUANT FACTOR DATASETS & STATISTICAL WORKBOOK",
     vipUnlockBannerSub:
-      "Public preview displays #1 Showcase ($CELH · 2.46x Vol). Pro License holders unlock the complete 72-stock factor matrix, Pine Script v5 source code, and 26-year historical CSV datasets.",
-    unlockMonthlyBtn: "👑 Start Monthly VIP — $29/mo",
-    unlockLifetimeBtn: "💎 Start Annual VIP — $199/yr",
+      "Public preview displays #1 Showcase ($CELH · 2.46x Vol). Pro License holders unlock the complete 72-stock factor matrix, 2000–2025 historical factor study code, and 26-year historical statistical workbooks.",
+    unlockMonthlyBtn: "👑 Start Monthly Research Pass — $29/mo",
+    unlockLifetimeBtn: "💎 Start Annual Research Pass — $199/yr",
   },
   jp: {
     badge: "🎯 教育用ヒストリカル検証 · チャートパターン認識クイズ",
@@ -3397,11 +3271,11 @@ const BLIND_TEST_I18N = {
     retailSideDesc: "移動平均線の下で推移する銘柄群の過去ドローダウン推移シミュレーション",
     quantSideTitle: "🟢 MA60回復＋出来高ファクターモデル",
     quantSideDesc: "MA60回復＋相対出来高1.4倍以上の過去データ群におけるシミュレーション",
-    vipUnlockBannerTitle: "🔥 全72銘柄ファクターデータセット＆Pine Script v5をアンロック",
+    vipUnlockBannerTitle: "🔥 全72銘柄ファクターデータセット＆2000–2025年統計ワークブックをアンロック",
     vipUnlockBannerSub:
-      "Monthly VIP ($29/mo) または Annual VIP ($199/yr) で全72銘柄の教育用ファクターマトリクスと26.8年CSVデータを閲覧できます。",
-    unlockMonthlyBtn: "👑 Start Monthly VIP — $29/mo",
-    unlockLifetimeBtn: "💎 Start Annual VIP — $199/yr",
+      "Monthly Research Pass ($29/mo) または Annual Research Pass ($199/yr) で全72銘柄の教育用ファクターマトリクスと2000–2025年統計ワークブックを閲覧できます。",
+    unlockMonthlyBtn: "👑 Start Monthly Research Pass — $29/mo",
+    unlockLifetimeBtn: "💎 Start Annual Research Pass — $199/yr",
   },
 };
 BLIND_TEST_I18N.kr = BLIND_TEST_I18N.en;
@@ -3519,8 +3393,8 @@ function buildRoundsData(state) {
       explanation: isPro
         ? `Correct regime is RIGHT-SIDE BREAKOUT! Pro Terminal displays $${fslr.ticker} ($${Number(fslr.close || 191.61).toFixed(2)}) — Factor Score 98/100 with a 3.41x institutional volume expansion.`
         : lang === "jp"
-        ? `正解は【右側ブレイク(IGNITION)】です！この銘柄は72銘柄の中でスコア98・機関出来高3.41倍を記録したProファクター銘柄です。下のProパス($29/月または$199永久パス)で全データセットとPine Scriptを解放できます。`
-        : `Correct regime is RIGHT-SIDE BREAKOUT! This chart is today's #2 Pro Factor Setup scoring 98/100 with a 3.41x institutional volume expansion. Unlock the full 72-stock factor matrix, historical CSV, and Pine Script v5 license below.`,
+        ? `正解は【右側ブレイク(IGNITION)】です！この銘柄は72銘柄の中でスコア98・機関出来高3.41倍を記録したProファクター銘柄です。下のProパス($29/月または$199永久パス)で全データセットとHistorical Statistical Workbookを解放できます。`
+        : `Correct regime is RIGHT-SIDE BREAKOUT! This chart is today's #2 Pro Factor Setup scoring 98/100 with a 3.41x institutional volume expansion. Unlock the full 72-stock factor matrix, historical CSV, and Historical Statistical Workbook license below.`,
     },
   ];
 }
@@ -3641,11 +3515,11 @@ function renderChartBlindTest(state) {
   const iqScore = solvedCount === 0 ? "—" : `${Math.round((correctCount / solvedCount) * 100)} / 100`;
   const cfg = state.config || {};
   const monthlyUrl = formatCheckoutUrl(
-    cfg.polar_tom_monthly_url || cfg.ls_site1_monthly_url,
+    cfg.whop_tom_monthly_url || cfg.ls_site1_monthly_url,
     "#tom-vip-monthly"
   );
   const annualUrl = formatCheckoutUrl(
-    cfg.polar_tom_annual_url || cfg.ls_site1_ltd_url,
+    cfg.whop_tom_annual_url || cfg.ls_site1_ltd_url,
     "#tom-vip-annual"
   );
 
@@ -3815,20 +3689,20 @@ function renderChartBlindTest(state) {
                 : `
                   <a
                     href="${monthlyUrl}"
-                    data-polar-checkout
-                    data-polar-plan="monthly_29"
+                    data-whop-checkout
+                    data-whop-plan="monthly"
                     data-tom-paid-plan="monthly"
-                    class="polar-checkout-button btn btn-sm"
+                    class="whop-checkout-button btn btn-sm"
                     style="background:#10b981; border:1px solid #059669; color:#052e16; font-weight:800; font-size:0.74rem; padding:7px 12px; border-radius:6px; text-decoration:none;"
                   >
                     ${copy.unlockMonthlyBtn}
                   </a>
                   <a
                     href="${annualUrl}"
-                    data-polar-checkout
-                    data-polar-plan="annual_199"
+                    data-whop-checkout
+                    data-whop-plan="annual"
                     data-tom-paid-plan="annual"
-                    class="polar-checkout-button btn btn-sm"
+                    class="whop-checkout-button btn btn-sm"
                     style="background:rgba(245,158,11,0.2); border:1px solid #f59e0b; color:#fbbf24; font-weight:800; font-size:0.74rem; padding:7px 12px; border-radius:6px; text-decoration:none;"
                   >
                     ${copy.unlockLifetimeBtn}
@@ -5032,11 +4906,11 @@ function renderHero(state) {
 function renderFreeStarterManual(state) {
   const cfg = (state && state.config) || {};
   const polarMonthly = formatCheckoutUrl(
-    cfg.polar_tom_monthly_url || cfg.ls_site1_monthly_url,
+    cfg.whop_tom_monthly_url || cfg.ls_site1_monthly_url,
     "#tom-vip-monthly"
   );
   const polarAnnual = formatCheckoutUrl(
-    cfg.polar_tom_annual_url || cfg.ls_site1_ltd_url,
+    cfg.whop_tom_annual_url || cfg.ls_site1_ltd_url,
     "#tom-vip-annual"
   );
   const isWebView =
@@ -5105,18 +4979,18 @@ function renderFreeStarterManual(state) {
         </button>
         <a
           href="${polarMonthly}"
-          class="tom-manual-vip-link polar-checkout-button"
-          data-polar-checkout
-          data-polar-plan="monthly_29"
+          class="tom-manual-vip-link whop-checkout-button"
+          data-whop-checkout
+          data-whop-plan="monthly"
           data-tom-paid-plan="monthly"
         >
           ⚡ Stage 3: Daily Tracking VIP — $29/mo
         </a>
         <a
           href="${polarAnnual}"
-          class="tom-manual-vip-link is-ltd polar-checkout-button"
-          data-polar-checkout
-          data-polar-plan="annual_199"
+          class="tom-manual-vip-link is-ltd whop-checkout-button"
+          data-whop-checkout
+          data-whop-plan="annual"
           data-tom-paid-plan="annual"
         >
           👑 Annual VIP — $199/yr (Save 43%)
@@ -5455,12 +5329,12 @@ function renderScreenerControls(state) {
               .join("")}
           </select>
 
-          <button type="button" class="btn btn-sm" id="btnExportVipWatchlistCsv" style="min-height:40px; background:rgba(251,191,36,0.12); border-color:rgba(251,191,36,0.4); color:#fbbf24; font-weight:700; padding:6px 8px; font-size:0.71rem;" title="Download CSV of starred VIP Watchlist tickers">
-            ⭐ CSV (${cWatchlist})
+          <button type="button" class="btn btn-sm" id="btnExportVipWatchlistCsv" style="min-height:40px; background:rgba(251,191,36,0.12); border-color:rgba(251,191,36,0.4); color:#fbbf24; font-weight:700; padding:6px 8px; font-size:0.71rem;" title="Save starred VIP Watchlist snapshot">
+            ⭐ Saved (${cWatchlist})
           </button>
         </div>
 
-        <div class="filter-tabs" role="tablist" aria-label="Signal Regime Filters">
+        <div class="filter-tabs" role="tablist" aria-label="Factor Regime Filters">
           <button type="button" class="filter-tab ${f === "ALL" ? "active" : ""}" data-zone="ALL">
             <span>${t.filterAll || "All 72"}</span>
             <span class="tab-count">${cAll}</span>
@@ -5500,7 +5374,7 @@ function renderStockTable(state) {
   const stocks = (state.filteredStocks || []).filter((s) => !String(s.ticker).includes("."));
   const cfg = state.config || {};
   const monthlyUrl = formatCheckoutUrl(
-    cfg.polar_tom_monthly_url || cfg.ls_site1_monthly_url,
+    cfg.whop_tom_monthly_url || cfg.ls_site1_monthly_url,
     "#tom-vip-monthly"
   );
 
@@ -5520,10 +5394,10 @@ function renderStockTable(state) {
         ${t.softPaywallTitle || "🔒 VIP Historical Factor Dataset & Reference Bands"}
       </div>
       <p style="color:#cbd5e1; font-size:0.82rem; margin:0 0 12px; line-height:1.5;">
-        ${t.softPaywallDesc || "Click any unlocked stock row for factor details, or unlock Monthly VIP ($29/mo) to reveal all hidden dataset rows, MA60 reference bands, and CSV exports."}
+        ${t.softPaywallDesc || "Click any unlocked stock row for factor details, or unlock Monthly Research Pass ($29/mo) to reveal all hidden dataset rows, MA60 reference bands, and statistical workbooks."}
       </p>
-      <a class="soft-paywall-btn polar-checkout-button btn-unlock-row" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${monthlyUrl}" style="min-height:42px;">
-        🔒 ${t.softPaywallUnlockCta || "Start Monthly VIP — $29/mo"} →
+      <a class="soft-paywall-btn whop-checkout-button btn-unlock-row" data-whop-checkout data-whop-plan="monthly" data-tom-paid-plan="monthly" href="${monthlyUrl}" style="min-height:42px;">
+        🔒 ${t.softPaywallUnlockCta || "Start Monthly Research Pass — $29/mo"} →
       </a>
     </div>
   `
@@ -5572,7 +5446,7 @@ function renderStockRows(state) {
   const isPro = state.isProUnlocked;
   const cfg = state.config || {};
   const polarMonthlyUrl = formatCheckoutUrl(
-    cfg.polar_tom_monthly_url || cfg.ls_site1_monthly_url,
+    cfg.whop_tom_monthly_url || cfg.ls_site1_monthly_url,
     "#tom-vip-monthly"
   );
   const tvAffId = encodeURIComponent(cfg.tradingview_aff_id || "1173809");
@@ -5624,8 +5498,8 @@ function renderStockRows(state) {
             </div>
             <div class="mobile-stock-card-summary" style="margin-top:8px; padding-top:7px; border-top:1px solid rgba(51,65,85,0.55); align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap;">
               <span class="badge ${badgeClass}">${cleanZoneLabel}</span>
-              <a class="btn btn-primary btn-sm polar-checkout-button btn-unlock-row" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthlyUrl}" style="min-height:40px; white-space:nowrap; font-weight:700;">
-                🔒 Start Monthly VIP — $29/mo
+              <a class="btn btn-primary btn-sm whop-checkout-button btn-unlock-row" data-whop-checkout data-whop-plan="monthly" data-tom-paid-plan="monthly" href="${polarMonthlyUrl}" style="min-height:40px; white-space:nowrap; font-weight:700;">
+                🔒 Start Monthly Research Pass — $29/mo
               </a>
             </div>
           </div>
@@ -5654,13 +5528,13 @@ function renderStockRows(state) {
         <td class="mono col-num" style="color:#34d399; font-weight:700;">&ge;1.40x</td>
         <td class="mono col-num" style="color:#94a3b8;">🔒 VIP</td>
         <td>
-          <a class="btn btn-primary btn-sm polar-checkout-button btn-unlock-row" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthlyUrl}" style="min-height:38px; white-space:nowrap; font-weight:700;">
-            🔒 Start Monthly VIP — $29/mo
+          <a class="btn btn-primary btn-sm whop-checkout-button btn-unlock-row" data-whop-checkout data-whop-plan="monthly" data-tom-paid-plan="monthly" href="${polarMonthlyUrl}" style="min-height:38px; white-space:nowrap; font-weight:700;">
+            🔒 Start Monthly Research Pass — $29/mo
           </a>
         </td>
         <td>
-          <a class="btn btn-primary btn-sm polar-checkout-button btn-unlock-row" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthlyUrl}" style="min-height:38px; white-space:nowrap; font-weight:700;">
-            🔒 Start Monthly VIP — $29/mo
+          <a class="btn btn-primary btn-sm whop-checkout-button btn-unlock-row" data-whop-checkout data-whop-plan="monthly" data-tom-paid-plan="monthly" href="${polarMonthlyUrl}" style="min-height:38px; white-space:nowrap; font-weight:700;">
+            🔒 Start Monthly Research Pass — $29/mo
           </a>
         </td>
       </tr>
@@ -5699,8 +5573,8 @@ function renderStockRows(state) {
              }</div>
              <div><span style="color:var(--muted);">STP</span> <span style="color:var(--fin-down); font-weight:600;">${stopDisp}</span> · <span style="color:var(--fin-up);">TP ${tp1Disp}</span></div>
            </div>`
-        : `<a class="btn btn-sm polar-checkout-button btn-unlock-row" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthlyUrl}" style="min-height:38px; white-space:nowrap; font-weight:700; border-color:rgba(59,130,246,0.45); color:#93c5fd; background:rgba(37,99,235,0.14);">
-             🔒 Start Monthly VIP — $29/mo
+        : `<a class="btn btn-sm whop-checkout-button btn-unlock-row" data-whop-checkout data-whop-plan="monthly" data-tom-paid-plan="monthly" href="${polarMonthlyUrl}" style="min-height:38px; white-space:nowrap; font-weight:700; border-color:rgba(59,130,246,0.45); color:#93c5fd; background:rgba(37,99,235,0.14);">
+             🔒 Start Monthly Research Pass — $29/mo
            </a>`;
 
       const tvUrl = `https://www.tradingview.com/symbols/${encodeURIComponent(s.ticker)}/?aff_id=${tvAffId}`;
@@ -5933,10 +5807,10 @@ plotshape(ignition and not ignition[1], "MA20/60 RECLAIM", shape.labelup, locati
                  <div style="background:#0d1424; border:1px solid var(--fin-blue); box-shadow:0 12px 32px rgba(0,0,0,0.75); border-radius:6px; padding:22px 26px; text-align:center; max-width:500px;">
                    <div class="mono" style="font-size:0.72rem; color:#fbbf24; font-weight:800; letter-spacing:0.05em;">👑 VIP EDUCATIONAL CALCULATOR SUITE LOCKED</div>
                    <div style="font-size:1.05rem; font-weight:800; color:#ffffff; margin:8px 0;">
-                     Unlock All 72 Factor Datasets, Position Sizing Math Calculator &amp; Pine Script v5
+                     Unlock All 72 Factor Datasets, Position Sizing Math Calculator &amp; 2000–2025 Historical Statistical Workbook
                    </div>
                    <div style="font-size:0.8rem; color:var(--muted); margin-bottom:14px; line-height:1.5;">
-                     Free users see 1 open factor example ($CELH). Upgrade to Monthly VIP ($29/mo) or Annual VIP ($199/yr) to access the full quantitative factor dataset, mathematical share-sizing models, and the 26.8-Year Semiconductor CSV.
+                     Free users see 1 open factor example ($CELH). Upgrade to Monthly Research Pass ($29/mo) or Annual Research Pass ($199/yr) to access the full quantitative factor dataset, mathematical share-sizing models, and the 2000–2025 Semiconductor & Healthcare Statistical Workbook.
                    </div>
                    <span class="btn btn-primary" style="justify-content:center; width:100%; padding:10px; font-weight:800;">
                      🔑 Enter License Key / Reserve VIP Access →
@@ -6062,7 +5936,7 @@ plotshape(ignition and not ignition[1], "MA20/60 RECLAIM", shape.labelup, locati
               ⭐ Filter Screener to VIP Watchlist
             </button>
             <button type="button" class="btn btn-sm" id="btnVaultExportWatchlistCsv" style="background:rgba(251,191,36,0.12); border-color:rgba(251,191,36,0.4); color:#fbbf24; font-weight:700;">
-              📥 Export Watchlist CSV
+              📥 Save Watchlist Workbook
             </button>
           </div>
         </div>
@@ -6152,7 +6026,7 @@ plotshape(ignition and not ignition[1], "MA20/60 RECLAIM", shape.labelup, locati
           </div>
         </div>
 
-        <!-- Module 03: TradingView Pine Script v5 -->
+        <!-- Module 03: TradingView 2000–2025 Historical Statistical Workbook -->
         <div style="background:#090d16; border:1px solid var(--border); border-top:2px solid #6366f1; border-radius:4px; padding:18px; display:flex; flex-direction:column; justify-content:space-between;">
           <div>
             <div style="font-size:0.7rem; font-family:var(--font-mono); font-weight:700; color:#818cf8; letter-spacing:0.05em; text-transform:uppercase;">
@@ -6165,7 +6039,7 @@ plotshape(ignition and not ignition[1], "MA20/60 RECLAIM", shape.labelup, locati
           </div>
 
           <div style="margin-top:12px;">
-            <button class="btn btn-purple" id="btnCopyPineScript" style="width:100%; justify-content:center; padding:9px;">
+            <button class="btn btn-purple" id="btnCopyStatistical Workbook" style="width:100%; justify-content:center; padding:9px;">
               ${t.tool3CopyBtn}
             </button>
           </div>
@@ -6178,10 +6052,10 @@ plotshape(ignition and not ignition[1], "MA20/60 RECLAIM", shape.labelup, locati
               👑 PRO VIP EXCLUSIVE · BARBELL CALCULATOR & EXPORT KIT
             </div>
             <h3 style="font-size:1rem; font-weight:800; margin:6px 0; color:#ffffff;">
-              80:20 ($SMH : $XLV) Custom Portfolio Blueprint & 1-Click TradingView / CSV Kit
+              80:20 ($SMH : $XLV) Custom Portfolio Blueprint & 1-Click TradingView / Statistical Workbook
             </h3>
             <p style="font-size:0.78rem; color:var(--muted); margin-bottom:10px;">
-              Automatically allocates your <b class="mono" style="color:#fff;">$${proCapUsd.toLocaleString()}</b> account across core Semiconductor ETF ($SMH), Healthcare Shield ($XLV), and Top VIP Ignition slots, plus instant CSV &amp; TradingView exports:
+              Automatically allocates your <b class="mono" style="color:#fff;">$${proCapUsd.toLocaleString()}</b> account across core Semiconductor ETF ($SMH), Healthcare Shield ($XLV), and Top VIP Ignition slots, plus 2000–2025 historical statistical workbook summaries:
             </p>
 
             <div style="background:#05080f; border:1px solid var(--border); border-radius:4px; padding:11px; font-size:0.76rem; margin-bottom:12px;">
@@ -6202,7 +6076,7 @@ plotshape(ignition and not ignition[1], "MA20/60 RECLAIM", shape.labelup, locati
 
           <div style="display:flex; flex-direction:column; gap:7px;">
             <button type="button" class="btn btn-emerald" id="btnDownloadPro72Csv" style="width:100%; justify-content:center; padding:8px; font-weight:800;">
-              📥 Download Full 72-Stock VIP Action Sheet (.CSV)
+              📥 Download Full 72-Stock Historical Factor Workbook
             </button>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:7px;">
               <button type="button" class="btn" id="btnCopyTvWatchlist" style="justify-content:center; padding:8px; font-size:0.75rem; border-color:rgba(56,189,248,0.45); color:#38bdf8;">
@@ -6238,7 +6112,7 @@ function getTomPricingCopyByMode() {
       heading: "Track Daily SMH × XLV Regime Shifts Automatically Every Morning",
       subheading:
         "Receive daily overheating & fear regime tracking emails before the US bell, exact account-size dollar ($) allocation worksheets, and the lifetime-updated 14-Page SMH × XLV Master PDF Guide. Backed by our 14-Day Refund Policy.",
-      t1Badge: "MONTHLY VIP",
+      t1Badge: "MONTHLY RESEARCH PASS",
       t1Title: "Monthly SMH × XLV Daily Tracking & Worksheet Suite",
       t1Period: "/ month",
       t1Bundle:
@@ -6248,22 +6122,22 @@ function getTomPricingCopyByMode() {
         "<b>Account-Size Dollar ($) Allocation Worksheet:</b> Enter your exact account balance (e.g., <b>$150,000</b>, <b>$300,000</b>, or <b>$500,000</b>) to compute exact dollar amounts across <b>$SMH</b>, <b>$XLV</b>, and optional <b>$SGOV</b> T-Bill cushion.",
         "<b>Lifetime-Updated 14-Page SMH &times; XLV Master PDF Guide:</b> Complete 26-year (2000–2026) crash study, IRA/Taxable bucket reference, and printable self-directed execution checklist.",
       ],
-      t1Btn: "Start Monthly VIP — $29/mo →",
+      t1Btn: "Start Monthly Research Pass — $29/mo →",
       t1PayNote:
-        "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · 1-Click Cancel · 14-Day Refund Policy",
-      t2Badge: "ANNUAL VIP",
+        "💳 Whop.com (Global Card / Apple Pay / Google Pay) · 1-Click Cancel · 14-Day Refund Policy",
+      t2Badge: "ANNUAL RESEARCH PASS",
       t2Title: "Annual SMH × XLV Daily Tracking & Master Pass",
       t2Period: "/ year",
       t2Bundle:
         "Save 43% ($149/yr saved) · Full 12-Month Daily Tracking Digest + 14-Page SMH × XLV Master PDF Guide",
       t2Items: [
         "<b>Full 12-Month Daily Automated SMH &times; XLV Tracking Digest:</b> Uninterrupted morning regime &amp; ratio-shift email tracking across every market season.",
-        "<b>Account-Size Dollar ($) Allocation Worksheet + 26-Year CSV Dataset:</b> Full historical 2000–2026 <b>$SMH / $XLV / $QQQ</b> daily series and multi-account dollar worksheets.",
+        "<b>Account-Size Dollar ($) Allocation Worksheet + 2000–2025 Historical Statistical Workbook:</b> Full historical 2000–2026 <b>$SMH / $XLV / $QQQ</b> daily series and multi-account dollar worksheets.",
         "<b>Lifetime-Updated 14-Page SMH &times; XLV Master PDF Guide:</b> Save 43% vs. monthly billing — backed by our unconditional 14-Day Refund Policy.",
       ],
-      t2Btn: "Start Annual VIP — $199/yr (Save 43%) →",
+      t2Btn: "Start Annual Research Pass — $199/yr (Save 43%) →",
       t2PayNote:
-        "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · Billed Annually · 14-Day Refund Policy",
+        "💳 Whop.com (Global Card / Apple Pay / Google Pay) · Billed Annually · 14-Day Refund Policy",
       autoUnlockNote:
         "✨ Instant Software Activation: Your SMH × XLV Dollar ($) Allocation Worksheet, 14-Page Master PDF Guide, and Daily Tracking Digest activate immediately after checkout.",
       restoreSummary: "🔑 Switching computers or already subscribed? Restore your VIP License Key here",
@@ -6276,8 +6150,8 @@ function getTomPricingCopyByMode() {
     heading: "Historical SMH × XLV Sector Balance Simulator & Daily Automated Market Indicator Data Digest",
     subheading:
       "Upgrade for automated morning semiconductor & healthcare indicator data digests, custom account-size dollar ($) allocation worksheets, and our lifetime-updated 14-Page SMH × XLV Master PDF Guide. Backed by our 14-Day No-Questions-Asked Refund Policy.",
-    t1Badge: "MONTHLY VIP",
-    t1Title: "Monthly VIP Sector Balance Worksheet & Daily Indicator Digest",
+    t1Badge: "MONTHLY RESEARCH PASS",
+    t1Title: "Monthly Research Pass Sector Balance Worksheet & Daily Indicator Digest",
     t1Period: "/ month",
     t1Bundle:
       "Includes Daily Automated SMH × XLV Indicator Data Digest + Lifetime-Updated 14-Page SMH × XLV Master PDF Guide",
@@ -6286,22 +6160,22 @@ function getTomPricingCopyByMode() {
       "<b>Account-Size Dollar ($) Allocation Worksheet:</b> Enter any simulated portfolio size (e.g., <b>$150,000</b>, <b>$300,000</b>, or <b>$500,000</b>) to calculate exact mathematical dollar weights across <b>$SMH</b>, <b>$XLV</b>, and <b>$SGOV</b> Treasury reserves.",
       "<b>Lifetime-Updated 14-Page SMH &times; XLV Master PDF Guide:</b> 26-year (2000–2026) Dot-Com / 2008 / 2022 empirical drawdown study, Traditional/Roth IRA educational tax-location reference, and printable 1-page worksheet.",
     ],
-    t1Btn: "Start Monthly VIP — $29/mo",
+    t1Btn: "Start Monthly Research Pass — $29/mo",
     t1PayNote:
-      "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · 1-Click Cancel · 14-Day Refund Policy",
-    t2Badge: "ANNUAL VIP",
-    t2Title: "Annual VIP Sector Balance Worksheet & Daily Indicator Pass",
+      "💳 Whop.com (Global Card / Apple Pay / Google Pay) · 1-Click Cancel · 14-Day Refund Policy",
+    t2Badge: "ANNUAL RESEARCH PASS",
+    t2Title: "Annual Research Pass Sector Balance Worksheet & Daily Indicator Pass",
     t2Period: "/ year",
     t2Bundle:
       "Includes 12-Month Automated SMH × XLV Indicator Digest + Lifetime-Updated 14-Page SMH × XLV Master PDF Guide",
     t2Items: [
       "<b>12-Month Automated SMH &times; XLV Regime &amp; Ratio Tracking Email Digest:</b> Full-year daily morning public market indicator summaries and historical sector ratio study tables.",
-      "<b>Account-Size Dollar ($) Allocation Worksheet + 26-Year CSV Archive:</b> Exact dollar worksheets plus downloadable 2000–2026 public market historical series.",
+      "<b>Account-Size Dollar ($) Allocation Worksheet + 2000–2025 Historical Statistical Workbook:</b> Exact dollar worksheets plus downloadable 2000–2026 public market historical series.",
       "<b>Lifetime-Updated 14-Page SMH &times; XLV Master PDF Guide:</b> Save 43% ($149/yr saved vs. monthly) — self-directed educational calculator software backed by our 14-Day Refund Policy.",
     ],
-    t2Btn: "Start Annual VIP — $199/yr",
+    t2Btn: "Start Annual Research Pass — $199/yr",
     t2PayNote:
-      "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · Billed Annually · 14-Day Refund Policy",
+      "💳 Whop.com (Global Card / Apple Pay / Google Pay) · Billed Annually · 14-Day Refund Policy",
     autoUnlockNote:
       "✨ Instant Software Activation: Your Custom SMH × XLV Dollar ($) Allocation Worksheet, 14-Page Master PDF Guide, and Daily Indicator Digest unlock automatically after checkout.",
     restoreSummary: "🔑 Switching computers or already subscribed? Restore your VIP License Key here",
@@ -6312,11 +6186,11 @@ function renderPricing(state) {
   const cfg = state.config || {};
   const c = getTomPricingCopyByMode();
   const polarMonthly = formatCheckoutUrl(
-    cfg.polar_tom_monthly_url || cfg.ls_site1_monthly_url,
+    cfg.whop_tom_monthly_url || cfg.ls_site1_monthly_url,
     "#tom-vip-monthly"
   );
   const polarAnnual = formatCheckoutUrl(
-    cfg.polar_tom_annual_url || cfg.ls_site1_ltd_url,
+    cfg.whop_tom_annual_url || cfg.ls_site1_ltd_url,
     "#tom-vip-annual"
   );
 
@@ -6364,7 +6238,7 @@ function renderPricing(state) {
       </div>
 
       <div class="pricing-grid">
-        <!-- Tier 1: Monthly VIP ($29/mo) -->
+        <!-- Tier 1: Monthly Research Pass ($29/mo) -->
         <div class="price-card featured">
           <div>
             <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
@@ -6384,7 +6258,7 @@ function renderPricing(state) {
             </ul>
           </div>
           <div>
-            <a class="btn btn-primary polar-checkout-button price-cta-btn" id="cardMonthlyBtn" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthly}">
+            <a class="btn btn-primary whop-checkout-button price-cta-btn" id="cardMonthlyBtn" data-whop-checkout data-whop-plan="monthly" data-tom-paid-plan="monthly" href="${polarMonthly}">
               ${c.t1Btn}
             </a>
             <div class="price-pay-note">
@@ -6394,7 +6268,7 @@ function renderPricing(state) {
           </div>
         </div>
 
-        <!-- Tier 2: Annual VIP ($199/yr) -->
+        <!-- Tier 2: Annual Research Pass ($199/yr) -->
         <div class="price-card best-value">
           <div>
             <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
@@ -6415,7 +6289,7 @@ function renderPricing(state) {
             </ul>
           </div>
           <div>
-            <a class="btn btn-emerald polar-checkout-button price-cta-btn" id="cardLtdBtn" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" href="${polarAnnual}">
+            <a class="btn btn-emerald whop-checkout-button price-cta-btn" id="cardLtdBtn" data-whop-checkout data-whop-plan="annual" data-tom-paid-plan="annual" href="${polarAnnual}">
               ${c.t2Btn}
             </a>
             <div class="price-pay-note is-emerald">
@@ -6440,7 +6314,7 @@ function renderPricing(state) {
             ${c.restoreSummary} ▾
           </summary>
           <div class="pricing-restore-body">
-            <span>Already have a Polar.sh VIP receipt key on another computer or tablet? Restore your VIP session in 1 click:</span>
+            <span>Already have a Whop Research Pass receipt ID on another computer or tablet? Restore your VIP session in 1 click:</span>
             <button type="button" class="btn btn-sm" onclick="var b=document.getElementById('btnOpenLicense');if(b){b.click();}else{var m=document.getElementById('licenseModal');if(m)m.style.display='flex';}">
               ${c.restoreBtn} &rarr;
             </button>
@@ -6454,7 +6328,7 @@ function renderPricing(state) {
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
           </svg>
-          <span><b>Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)</b></span>
+          <span><b>Whop.com (Global Card / Apple Pay / Google Pay)</b></span>
         </div>
         <div class="trust-badge">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -6479,11 +6353,11 @@ function renderModals(state) {
   const t = state.t || {};
   const cfg = state.config || {};
   const polarMonthly = formatCheckoutUrl(
-    cfg.polar_tom_monthly_url || cfg.ls_site1_monthly_url,
+    cfg.whop_tom_monthly_url || cfg.ls_site1_monthly_url,
     "#tom-vip-monthly"
   );
   const polarAnnual = formatCheckoutUrl(
-    cfg.polar_tom_annual_url || cfg.ls_site1_ltd_url,
+    cfg.whop_tom_annual_url || cfg.ls_site1_ltd_url,
     "#tom-vip-annual"
   );
   const tgChannelUrl = cfg.telegram_channel_url || "https://t.me/truthofmarketss";
@@ -6501,8 +6375,8 @@ function renderModals(state) {
   const ovRsi = Number(ov.smh_rsi ?? 40.6).toFixed(1);
   const ovXlv = Number(ov.xlv_close ?? 184.87).toFixed(2);
   const ovQqq = Number(ov.qqq_close ?? 690.49).toFixed(2);
-  const ovW1 = ov.recommended_smh_weight ?? 80;
-  const ovW2 = ov.recommended_xlv_weight ?? 20;
+  const ovW1 = ov.historical_study_smh_ratio ?? 80;
+  const ovW2 = ov.historical_study_xlv_ratio ?? 20;
   const tgPreview =
     state.telegramPreviewText ||
     `🧭 [TruthOfMarket] Daily Market Weather & Barbell Summary (${ovDate})\n• Sentiment Score: ${ovScore} / 100 (${ovRegime})\n• $SMH: $${ovSmh} (${ovDd}% 52W DD | RSI ${ovRsi})\n• $XLV: $${ovXlv} | $QQQ: $${ovQqq}\n• Educational Barbell Model: ${ovW1}% $SMH : ${ovW2}% $XLV`;
@@ -6530,15 +6404,15 @@ function renderModals(state) {
           Includes Custom Nest-Egg Dollar ($) Budget Worksheet, 12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Reference, and Large-Print 1-Page Weather Action Sheet. Backed by our 14-Day Refund Policy.
         </p>
         <div style="display:grid; grid-template-columns:1fr; gap:10px; margin:14px 0 10px;">
-          <a class="btn btn-primary polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthly}" style="justify-content:center; min-height:62px; padding:12px 16px; font-size:1.02rem; font-weight:800; border-radius:12px;">
-            Start Monthly VIP — $29/mo
+          <a class="btn btn-primary whop-checkout-button" data-whop-checkout data-whop-plan="monthly" data-tom-paid-plan="monthly" href="${polarMonthly}" style="justify-content:center; min-height:62px; padding:12px 16px; font-size:1.02rem; font-weight:800; border-radius:12px;">
+            Start Monthly Research Pass — $29/mo
           </a>
-          <a class="btn btn-emerald polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" href="${polarAnnual}" style="justify-content:center; min-height:62px; padding:12px 16px; font-size:1.02rem; font-weight:800; border-radius:12px;">
-            Start Annual VIP — $199/yr (Save 43%)
+          <a class="btn btn-emerald whop-checkout-button" data-whop-checkout data-whop-plan="annual" data-tom-paid-plan="annual" href="${polarAnnual}" style="justify-content:center; min-height:62px; padding:12px 16px; font-size:1.02rem; font-weight:800; border-radius:12px;">
+            Start Annual Research Pass — $199/yr (Save 43%)
           </a>
         </div>
         <div style="margin-bottom:8px; font-size:0.78rem; color:#e2e8f0; font-weight:700; text-align:center; line-height:1.45;">
-          💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · 1-Click Cancel Anytime · 14-Day Refund Policy
+          💳 Whop.com (Global Card / Apple Pay / Google Pay) · 1-Click Cancel Anytime · 14-Day Refund Policy
         </div>
         <div style="margin-bottom:12px; font-size:0.72rem; color:#94a3b8; text-align:center; line-height:1.45;">
           Support Desk: <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20VIP%20Software%20Support" style="color:#93c5fd; font-weight:700; text-decoration:underline;">beable9489@gmail.com</a>
@@ -6549,7 +6423,7 @@ function renderModals(state) {
             🔑 Switching devices or already have a License Key? Restore here
           </summary>
           <div style="margin-top:10px;">
-            <input type="text" id="licenseInput" value="${state.licenseKey || ""}" placeholder="Enter Polar.sh VIP License Key (XXXX-XXXX-XXXX-XXXX)" autocomplete="off" />
+            <input type="text" id="licenseInput" value="${state.licenseKey || ""}" placeholder="Enter Whop Research Pass Receipt ID (XXXX-XXXX-XXXX-XXXX)" autocomplete="off" />
             <div style="display:flex; gap:8px; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-top:8px;">
               <div>
                 ${
@@ -6721,11 +6595,11 @@ function renderModals(state) {
         <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">PLATFORM DOMAIN</label>
         <input type="text" id="cfgSite1Url" value="${cfg.site1_url || "https://truthofmarket.com"}" />
 
-        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">POLAR.SH MONTHLY VIP URL ($29/MO)</label>
-        <input type="text" id="cfgLsMonthly" value="${cfg.polar_tom_monthly_url || ""}" placeholder="https://buy.polar.sh/..." />
+        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">WHOP MONTHLY RESEARCH PASS URL ($29/MO)</label>
+        <input type="text" id="cfgLsMonthly" value="${cfg.whop_tom_monthly_url || ""}" placeholder="https://whop.com/checkout/plan_..." />
 
-        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">POLAR.SH ANNUAL VIP URL ($199/YR)</label>
-        <input type="text" id="cfgLsLtd" value="${cfg.polar_tom_annual_url || ""}" placeholder="https://buy.polar.sh/..." />
+        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">WHOP ANNUAL RESEARCH PASS URL ($199/YR)</label>
+        <input type="text" id="cfgLsLtd" value="${cfg.whop_tom_annual_url || ""}" placeholder="https://whop.com/checkout/plan_..." />
 
         <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">TELEGRAM OFFICIAL CHANNEL URL</label>
         <input type="text" id="cfgTgChannel" value="${tgChannelUrl}" />
@@ -6780,7 +6654,7 @@ function renderModals(state) {
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
           <div>
             <div style="font-size:0.68rem; font-family:var(--font-mono); color:#93c5fd; text-transform:uppercase; letter-spacing:0.05em;">
-              LEGAL &amp; COMPLIANCE · Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)
+              LEGAL &amp; COMPLIANCE · Whop.com (Global Card / Apple Pay / Google Pay)
             </div>
             <h3 style="font-size:1.1rem; font-weight:800; color:#ffffff; margin-top:3px;" id="legalModalTitle">
               Terms of Service, Privacy Policy &amp; 14-Day Refund Policy
@@ -6803,20 +6677,20 @@ function renderModals(state) {
           <div data-legal-section="privacy" style="border-top:1px solid var(--border); padding-top:12px; margin-top:12px;">
             <h4 style="color:#ffffff; font-size:0.95rem; font-weight:800; margin-bottom:6px;">2. Privacy Policy</h4>
             <p style="color:var(--muted); margin-bottom:10px;">
-              Portfolio inputs entered into our calculators are processed locally in your browser and are never sold or shared with third parties. Payment processing is handled securely by <b>Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)</b> under PCI-DSS Level 1 compliance.
+              Portfolio inputs entered into our calculators are processed locally in your browser and are never sold or shared with third parties. Payment processing is handled securely by <b>Whop.com (Global Card / Apple Pay / Google Pay)</b> under PCI-DSS Level 1 compliance.
             </p>
           </div>
           <div data-legal-section="refund" style="border-top:1px solid var(--border); padding-top:12px; margin-top:12px;">
             <h4 style="color:#ffffff; font-size:0.95rem; font-weight:800; margin-bottom:6px;">3. 14-Day No-Questions-Asked Refund Policy &amp; 1-Click Cancellation</h4>
             <p style="color:var(--muted); margin-bottom:10px;">
-              Both Monthly VIP ($29/mo) and Annual VIP ($199/yr) software subscriptions are backed by a <b>14-Day No-Questions-Asked Full Refund Guarantee</b>. Email <a href="mailto:beable9489@gmail.com" style="color:#60a5fa; font-weight:700;">beable9489@gmail.com</a> within 14 calendar days of initial purchase for a 100% full refund to your original payment method. You may also cancel recurring billing anytime in 1 click via your Polar.sh Customer Billing Portal.
+              Both Monthly Research Pass ($29/mo) and Annual Research Pass ($199/yr) software subscriptions are backed by a <b>14-Day No-Questions-Asked Full Refund Guarantee</b>. Email <a href="mailto:beable9489@gmail.com" style="color:#60a5fa; font-weight:700;">beable9489@gmail.com</a> within 14 calendar days of initial purchase for a 100% full refund to your original payment method. You may also cancel recurring billing anytime in 1 click via your Whop Orders Portal.
             </p>
           </div>
           <div data-legal-section="support" style="border-top:1px solid var(--border); padding-top:12px; margin-top:12px;">
             <h4 style="color:#ffffff; font-size:0.95rem; font-weight:800; margin-bottom:6px;">4. Educational Market Data &amp; Quantitative Research Desk</h4>
             <p style="color:var(--muted);">
               • <b>Official Support Email</b>: <a href="mailto:beable9489@gmail.com" style="color:#60a5fa; font-weight:700;">beable9489@gmail.com</a><br/>
-              • <b>Merchant of Record</b>: Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) (<a href="https://polar.sh/purchases" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;">Manage Orders &amp; Receipts ↗</a>)
+              • <b>Merchant of Record</b>: Whop.com (Global Card / Apple Pay / Google Pay) (<a href="https://whop.com/orders/" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;">Manage Orders &amp; Receipts ↗</a>)
             </p>
           </div>
         </div>
@@ -7042,21 +6916,21 @@ function renderModals(state) {
               </button>
               <a
                 href="${polarMonthly}"
-                class="tom-manual-funnel-paid polar-checkout-button"
-                data-polar-checkout
-                data-polar-plan="monthly_29"
+                class="tom-manual-funnel-paid whop-checkout-button"
+                data-whop-checkout
+                data-whop-plan="monthly"
                 data-tom-paid-plan="monthly"
               >
-                ⚡ Start Monthly VIP — $29/mo
+                ⚡ Start Monthly Research Pass — $29/mo
               </a>
               <a
                 href="${polarAnnual}"
-                class="tom-manual-funnel-paid is-ltd polar-checkout-button"
-                data-polar-checkout
-                data-polar-plan="annual_199"
+                class="tom-manual-funnel-paid is-ltd whop-checkout-button"
+                data-whop-checkout
+                data-whop-plan="annual"
                 data-tom-paid-plan="annual"
               >
-                👑 Start Annual VIP — $199/yr
+                👑 Start Annual Research Pass — $199/yr
               </a>
             </div>
           </div>
@@ -7445,7 +7319,7 @@ function renderSemiFearGreedView(state) {
           }
         </div>
 
-        <!-- RIGHT COLUMN: CNN 4-ROW HISTORICAL STACK + BARBELL SIGNAL -->
+        <!-- RIGHT COLUMN: CNN 4-ROW HISTORICAL STACK + HISTORICAL STUDY RATIO -->
         <div class="cnn-card" style="display:flex; flex-direction:column; justify-content:space-between;">
           <div>
             <div style="font-size:0.78rem; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; color:var(--muted); margin-bottom:8px;">
@@ -7476,7 +7350,7 @@ function renderSemiFearGreedView(state) {
           <!-- Active SMH:XLV Barbell Regime Box -->
           <div style="margin-top:16px; padding:14px 16px; background:rgba(220,38,38,0.1); border:1px solid rgba(220,38,38,0.3); border-left:4px solid #dc2626; border-radius:4px;">
             <div style="font-size:0.68rem; font-weight:800; color:#fca5a5; letter-spacing:0.05em; text-transform:uppercase;">
-              ${t.cnnActiveRuleLabel} · TARGET ${ov.recommended_smh_weight}% $SMH : ${ov.recommended_xlv_weight}% $XLV
+              ${t.cnnActiveRuleLabel} · TARGET ${ov.historical_study_smh_ratio}% $SMH : ${ov.historical_study_xlv_ratio}% $XLV
             </div>
             <div style="font-size:0.88rem; font-weight:800; color:#ffffff; margin-top:4px;">
               ${actionHeadline}
@@ -7753,7 +7627,7 @@ function renderSemiFearGreedView(state) {
           <p style="font-size:0.8rem; color:var(--muted); margin-top:2px;">${t.eraSectionDesc}</p>
         </div>
         <button class="btn btn-sm" id="btnDownloadSemiCsv">
-          Download 2000–2026 Daily CSV Dataset (Pro)
+          Download 2000–2026 Historical Statistical Workbook (Pro)
         </button>
       </div>
 
@@ -7796,7 +7670,7 @@ function renderSemiFearGreedView(state) {
       </div>
     </section>
 
-    <!-- SECTION 5: MONTHLY & ANNUAL VIP EDUCATIONAL SOFTWARE PRICING -->
+    <!-- SECTION 5: MONTHLY & ANNUAL RESEARCH PASS EDUCATIONAL SOFTWARE PRICING -->
     ${renderPricing(state)}
 
     <!-- CROSS-PLATFORM SWITCH BANNER BACK TO RETIREMENT ARCHITECT & QUANT ARCHIVE -->
@@ -7827,53 +7701,66 @@ function renderSemiFearGreedView(state) {
 
 // --- src/components/PrivateWealthHome.js ---
 /**
- * TruthOfMarket — Single-Breath Private-Wealth Step-Up Platform (GEMINI.md Section 9)
+ * TruthOfMarket — Single-Breath Educational Sector Research Platform
  * 0 Emojis · 0 Clutter Below Step-Up Container · 1-Line Legal Footer Only
+ * Strictly Non-Advisory Educational Publisher · Whop (@whop/checkout) Live Integration
  */
 
 const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shell">
       <header class="pw-masthead">
         <button type="button" class="pw-brand-btn" data-pw-go-home="1">
           <span class="pw-wordmark">TRUTH OF MARKET</span>
-          <span class="pw-submark">Private Wealth Quantitative Desk</span>
+          <span class="pw-submark">Independent Market Data &amp; Educational Research</span>
         </button>
         <button type="button" class="pw-signin-link" id="btnOpenPwRestoreModal">Member Sign-In / Restore</button>
       </header>
 
-      <!-- Screen 0: Founding Manifesto & 2000-2025 Institutional Simulation Table -->
+      <!-- Screen 0: Above-the-Fold Instant Start CTA + Live Market Temperature + Founding Note & 2000-2025 Simulation Table -->
       <section id="pwScreen0" data-pw-screen="0">
-        <div class="pw-kicker">FOUNDING CHARTER &middot; QUANTITATIVE SECTOR ARCHITECTURE</div>
+        <div class="pw-kicker">INDEPENDENT MARKET DATA &amp; EDUCATIONAL RESEARCH</div>
         <h1 class="pw-serif-h1">Why quiet two-pillar discipline outlasts loud stock picking.</h1>
+
+        <div class="pw-live-temp-pill" id="tomLiveTempBadge" role="status" aria-live="polite">
+          <span class="pw-live-dot" aria-hidden="true"></span>
+          <span id="tomLiveTempText">Data As Of: 2026-11-18 &middot; Sector Temperature: 11 / 100 (Extreme Fear Regime)</span>
+        </div>
+
+        <div class="pw-primary-cta-wrap pw-above-fold-cta">
+          <button type="button" class="pw-btn-primary pw-btn-emerald" id="btnStartPwStepUp" data-pw-start-stepup="1">
+            Explore Historical Sector Backtest (4 Steps) &rarr;
+          </button>
+          <span class="pw-cta-caption">Instant free 2000&ndash;2025 historical study ratio &amp; drawdown comparison &middot; Zero email wall</span>
+        </div>
 
         <figure class="pw-editorial-figure">
           <div class="pw-editorial-plate">
             <img src="/images/tom-private-wealth-study.jpg" alt="Sunlit coastal study desk overlooking quiet morning harbor water" width="1200" height="675" loading="eager" decoding="async" />
           </div>
-          <figcaption class="pw-editorial-caption">Quiet discipline over daily market noise &mdash; designing a household portfolio calm enough to hold through every cycle.</figcaption>
+          <figcaption class="pw-editorial-caption">Quiet empirical study over daily market noise &mdash; comparing two-pillar sector resilience across 25 years of market cycles.</figcaption>
         </figure>
 
         <div class="pw-manifesto">
           <p>
-            Most households approaching or living in retirement do not lose sleep&mdash;or hard-earned capital&mdash;because they ignored the market. They lose both because financial media pushes investors to chase dozens of noisy stock tips at once, quietly drifting into pure technology concentration right before a multi-year downturn.
+            Most households approaching or living in retirement do not lose sleep&mdash;or hard-earned savings&mdash;because they ignored the market. They lose both because financial media pushes savers to chase dozens of noisy stock stories at once, quietly drifting into pure technology concentration right before a multi-year downturn.
           </p>
           <p>
-            We built <strong>Truth of Market</strong> for a calmer purpose. Rather than sending speculative trade alerts, our quantitative research desk focuses on one enduring discipline: participating in structural semiconductor innovation (<strong>SMH</strong>) while anchoring household composure with non-cyclical healthcare cash flows (<strong>XLV</strong>) and short-term US Treasury reserves (<strong>SGOV</strong>).
+            We built <strong>Truth of Market</strong> as an independent, strictly non-advisory educational research publisher. Rather than issuing speculative trade alerts, our historical research studies one enduring empirical structure: pairing secular semiconductor innovation (<strong>SMH</strong>) with non-cyclical healthcare cash flows (<strong>XLV</strong>) and short-term US Treasury reserves (<strong>SGOV</strong>).
           </p>
           <p>
-            Through a brief four-question assessment below, this platform maps your initial sector baseline, tracks daily public market temperature so you know when historical risk has stretched to extremes, and provides structured retirement withdrawal and tax-account planning tools.
+            Use our <strong>Historical Sector Backtest Explorer</strong> to compare how different 2000&ndash;2025 <strong>SMH &times; XLV + SGOV</strong> historical study ratios behaved across past downturns, and explore our <strong>Educational Market Data Newsletter + 2000&ndash;2025 Historical Statistical Workbook</strong>.
           </p>
         </div>
 
         <div class="pw-table-card" role="region" aria-label="2000-2025 Historical Simulation Comparison">
           <div class="pw-table-header">
-            <span class="pw-table-title">TABLE I &mdash; HISTORICAL SECTOR SIMULATION (2000&ndash;2025)</span>
+            <span class="pw-table-title">TABLE I &mdash; 2000&ndash;2025 HISTORICAL SECTOR STATISTICAL CASE STUDY</span>
             <span class="pw-table-meta">Non-Leveraged 1x Spot Index / ETF Series</span>
           </div>
           <div class="pw-table-scroll">
             <table class="pw-sim-table">
               <thead>
                 <tr>
-                  <th>Architecture</th>
+                  <th>Historical Case Study</th>
                   <th>Annualized (CAGR)</th>
                   <th>Worst Crisis DD</th>
                   <th>Recovery Period</th>
@@ -7903,7 +7790,7 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
                   <td>0.16x</td>
                 </tr>
                 <tr class="is-featured">
-                  <td>SMH &times; XLV Disciplined Balance</td>
+                  <td>SMH &times; XLV 2-Pillar Historical Study</td>
                   <td>~11.4%</td>
                   <td class="pw-dd-neg">-27.8%</td>
                   <td>19 mos</td>
@@ -7913,19 +7800,19 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
             </table>
           </div>
           <p class="pw-table-note">
-            Historical index/ETF simulation (2000&ndash;2025, semi-annual systematic ratio reset) for self-directed educational data visualization only; past results do not guarantee future performance.
+            2000&ndash;2025 historical statistical case study (semi-annual systematic ratio reset on non-leveraged 1x spot series) published strictly for general educational research; past historical statistics never guarantee future performance.
           </p>
         </div>
 
         <div class="pw-primary-cta-wrap">
-          <button type="button" class="pw-btn-primary pw-btn-emerald" id="btnStartPwStepUp">
-            Design My Personal Balance &rarr;
+          <button type="button" class="pw-btn-primary pw-btn-emerald" data-pw-start-stepup="1">
+            Historical Sector Backtest Explorer (4 Steps) &rarr;
           </button>
-          <span class="pw-cta-caption">Four brief inputs &middot; Instant baseline computation &middot; No brokerage login required</span>
+          <span class="pw-cta-caption">Four brief study parameters &middot; Instant free baseline summary &middot; No brokerage login required</span>
         </div>
       </section>
 
-      <!-- Screen 1: Focused 1-Question-at-a-Time Step-Up Assessment (Step 1 of 4 -> 4 of 4) -->
+      <!-- Screen 1: Focused 1-Question-at-a-Time Historical Sector Backtest Explorer (Step 1 of 4 -> 4 of 4) -->
       <section id="pwScreen1" data-pw-screen="1" style="display:none;">
         <div class="pw-step-card">
           <div class="pw-step-top">
@@ -7937,28 +7824,28 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
           </div>
 
           <div data-pw-qpane="1">
-            <h2 class="pw-q-title">What is your primary objective for this capital?</h2>
-            <p class="pw-q-sub">Select the mandate that best reflects how this account serves your household.</p>
-            <div class="pw-option-list" role="radiogroup" aria-label="Primary Capital Goal">
+            <h2 class="pw-q-title">Which historical case-study profile would you like to explore?</h2>
+            <p class="pw-q-sub">Select the long-term study profile to compare across the 2000&ndash;2025 dataset.</p>
+            <div class="pw-option-list" role="radiogroup" aria-label="Historical Study Profile">
               <button type="button" class="pw-opt-btn" data-pw-field="objective" data-pw-val="growth">
-                <div class="pw-opt-head"><span><span class="pw-opt-num">I</span><span class="pw-opt-title">Capital Growth &amp; AI Participation</span></span><span>&rarr;</span></div>
-                <span class="pw-opt-desc">Emphasize structural semiconductor compounding (SMH) while tempering severe cycle drawdowns with XLV.</span>
+                <div class="pw-opt-head"><span><span class="pw-opt-num">I</span><span class="pw-opt-title">Secular Growth &amp; Semiconductor Study</span></span><span>&rarr;</span></div>
+                <span class="pw-opt-desc">Examine higher semiconductor compounding weight (SMH) paired with healthcare drawdown buffering (XLV).</span>
               </button>
               <button type="button" class="pw-opt-btn is-selected" data-pw-field="objective" data-pw-val="balanced">
-                <div class="pw-opt-head"><span><span class="pw-opt-num">II</span><span class="pw-opt-title">Balanced Retirement Income &amp; Stability</span></span><span>&rarr;</span></div>
-                <span class="pw-opt-desc">Pair secular growth (SMH) with resilient healthcare cash flows (XLV) for steady multi-cycle compounding.</span>
+                <div class="pw-opt-head"><span><span class="pw-opt-num">II</span><span class="pw-opt-title">Balanced Retirement Cash-Flow Study</span></span><span>&rarr;</span></div>
+                <span class="pw-opt-desc">Compare balanced secular growth (SMH) and non-cyclical healthcare cash flows (XLV) across full cycles.</span>
               </button>
               <button type="button" class="pw-opt-btn" data-pw-field="objective" data-pw-val="preservation">
-                <div class="pw-opt-head"><span><span class="pw-opt-num">III</span><span class="pw-opt-title">Capital Preservation First</span></span><span>&rarr;</span></div>
-                <span class="pw-opt-desc">Prioritize defensive healthcare (XLV) and short-term US Treasury liquidity (SGOV) to protect principal.</span>
+                <div class="pw-opt-head"><span><span class="pw-opt-num">III</span><span class="pw-opt-title">Defensive Stability &amp; Treasury Reserve Study</span></span><span>&rarr;</span></div>
+                <span class="pw-opt-desc">Study defensive healthcare (XLV) and 0&ndash;3 month US Treasury liquidity (SGOV) during deep downturns.</span>
               </button>
             </div>
           </div>
 
           <div data-pw-qpane="2" style="display:none;">
-            <h2 class="pw-q-title">What is the approximate scale of your portfolio?</h2>
-            <p class="pw-q-sub">Used strictly in your browser to calibrate defensive reserve thresholds across 401(k), IRA, and taxable accounts.</p>
-            <div class="pw-scale-grid" role="radiogroup" aria-label="Portfolio Scale">
+            <h2 class="pw-q-title">Select a sample dollar scale for worksheet illustration.</h2>
+            <p class="pw-q-sub">Computed locally in your browser to illustrate historical dollar-bucket math across 401(k), IRA, and taxable accounts.</p>
+            <div class="pw-scale-grid" role="radiogroup" aria-label="Sample Portfolio Scale">
               <button type="button" class="pw-scale-btn" data-pw-field="scale" data-pw-val="50000">$50,000</button>
               <button type="button" class="pw-scale-btn" data-pw-field="scale" data-pw-val="150000">$150,000</button>
               <button type="button" class="pw-scale-btn is-selected" data-pw-field="scale" data-pw-val="300000">$300,000</button>
@@ -7968,176 +7855,179 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
           </div>
 
           <div data-pw-qpane="3" style="display:none;">
-            <h2 class="pw-q-title">During a severe market downturn, what drawdown can you hold through calmly?</h2>
-            <p class="pw-q-sub">The best allocation is the one quiet enough that you never liquidate shares at the bottom of a cycle.</p>
-            <div class="pw-option-list" role="radiogroup" aria-label="Maximum Drawdown Tolerance">
+            <h2 class="pw-q-title">Which historical drawdown band do you want to benchmark?</h2>
+            <p class="pw-q-sub">Compare how varying defensive cushions altered historical peak-to-trough declines between 2000 and 2025.</p>
+            <div class="pw-option-list" role="radiogroup" aria-label="Historical Drawdown Benchmark">
               <button type="button" class="pw-opt-btn" data-pw-field="comfort" data-pw-val="dd10">
-                <div class="pw-opt-head"><span><span class="pw-opt-num">I</span><span class="pw-opt-title">-10% Calm Priority</span></span><span>&rarr;</span></div>
-                <span class="pw-opt-desc">Include a dedicated short-term US Treasury reserve (SGOV) alongside XLV to keep volatility muted.</span>
+                <div class="pw-opt-head"><span><span class="pw-opt-num">I</span><span class="pw-opt-title">-10% Low-Variance Study Band</span></span><span>&rarr;</span></div>
+                <span class="pw-opt-desc">Models a larger short-term US Treasury reserve (SGOV) alongside XLV to study muted historical volatility.</span>
               </button>
               <button type="button" class="pw-opt-btn is-selected" data-pw-field="comfort" data-pw-val="dd18">
-                <div class="pw-opt-head"><span><span class="pw-opt-num">II</span><span class="pw-opt-title">-18% Balanced</span></span><span>&rarr;</span></div>
-                <span class="pw-opt-desc">Accept moderate cyclical fluctuations in exchange for balanced SMH &times; XLV long-term participation.</span>
+                <div class="pw-opt-head"><span><span class="pw-opt-num">II</span><span class="pw-opt-title">-18% Balanced Study Band</span></span><span>&rarr;</span></div>
+                <span class="pw-opt-desc">Models the balanced SMH &times; XLV + SGOV historical case study across 2000, 2008, and 2022.</span>
               </button>
               <button type="button" class="pw-opt-btn" data-pw-field="comfort" data-pw-val="dd25">
-                <div class="pw-opt-head"><span><span class="pw-opt-num">III</span><span class="pw-opt-title">-25% Long-Term Compounding</span></span><span>&rarr;</span></div>
-                <span class="pw-opt-desc">Focus on multi-year compounding with higher semiconductor equity weighting.</span>
+                <div class="pw-opt-head"><span><span class="pw-opt-num">III</span><span class="pw-opt-title">-25% Long-Horizon Compounding Band</span></span><span>&rarr;</span></div>
+                <span class="pw-opt-desc">Models higher semiconductor equity exposure over multi-decade compounding windows.</span>
               </button>
             </div>
           </div>
 
           <div data-pw-qpane="4" style="display:none;">
-            <h2 class="pw-q-title">How much of your equity portfolio currently sits in technology or semiconductors?</h2>
-            <p class="pw-q-sub">Helps highlight concentration exposure relative to your target historical baseline.</p>
-            <div class="pw-option-list" role="radiogroup" aria-label="Current Tech Exposure">
+            <h2 class="pw-q-title">What technology concentration benchmark should we compare against?</h2>
+            <p class="pw-q-sub">Used to contrast single-sector concentration against the two-pillar historical study ratio.</p>
+            <div class="pw-option-list" role="radiogroup" aria-label="Comparison Tech Concentration">
               <button type="button" class="pw-opt-btn is-selected" data-pw-field="techMix" data-pw-val="tech_high">
-                <div class="pw-opt-head"><span><span class="pw-opt-num">I</span><span class="pw-opt-title">Over 70% Concentrated in Tech &amp; Semiconductors</span></span></div>
-                <span class="pw-opt-desc">Heavily exposed to a single capital-spending cycle; evaluating healthcare defensive ballast.</span>
+                <div class="pw-opt-head"><span><span class="pw-opt-num">I</span><span class="pw-opt-title">Over 70% Tech &amp; Semiconductor Concentration</span></span></div>
+                <span class="pw-opt-desc">Compare heavy single-sector cyclicality against healthcare defensive ballast.</span>
               </button>
               <button type="button" class="pw-opt-btn" data-pw-field="techMix" data-pw-val="tech_mid">
-                <div class="pw-opt-head"><span><span class="pw-opt-num">II</span><span class="pw-opt-title">30% to 70% Balanced Exposure</span></span></div>
-                <span class="pw-opt-desc">Moderately diversified across sectors; refining into a clean two-pillar architecture.</span>
+                <div class="pw-opt-head"><span><span class="pw-opt-num">II</span><span class="pw-opt-title">30% to 70% Broad Equity Mix</span></span></div>
+                <span class="pw-opt-desc">Compare a diversified equity mix against the SMH &times; XLV + SGOV historical case study.</span>
               </button>
               <button type="button" class="pw-opt-btn" data-pw-field="techMix" data-pw-val="tech_low">
-                <div class="pw-opt-head"><span><span class="pw-opt-num">III</span><span class="pw-opt-title">Under 30% Tech or Primarily Cash</span></span></div>
-                <span class="pw-opt-desc">Holding cash or broad index funds; establishing a disciplined entry baseline.</span>
+                <div class="pw-opt-head"><span><span class="pw-opt-num">III</span><span class="pw-opt-title">Under 30% Tech or Primarily Cash Reserves</span></span></div>
+                <span class="pw-opt-desc">Compare cash-heavy holdings against a measured two-pillar historical baseline.</span>
               </button>
             </div>
             <div style="margin-top:24px;">
               <button type="button" class="pw-btn-primary pw-btn-emerald" id="btnSubmitPwAssessment" style="width:100%;">
-                Generate My Baseline Allocation &rarr;
+                View Free Historical Study Ratio &rarr;
               </button>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Screen 2: Free Email Gate (#tomMorningBellClub + #tom-passwordless-club-signup) -> Opens Partial Baseline -->
+      <!-- Screen 2: Immediate Free Historical Study Summary (ZERO Email Wall) + Optional Save Box -->
       <section id="tomMorningBellClub" data-pw-screen="2" style="display:none;">
         <div class="pw-gate-card">
           <div class="pw-profile-strip">
-            <span id="pwProfileSummaryLine">Selected Mandate: Balanced Retirement &middot; $300,000 &middot; -18% Tolerance</span>
-            <button type="button" class="pw-inline-link" id="btnEditPwInputs">Edit Inputs</button>
+            <span id="pwProfileSummaryLine">Study Profile: Balanced Cash-Flow &middot; $300,000 Sample &middot; -18% Study Band</span>
+            <button type="button" class="pw-inline-link" id="btnEditPwInputs">Edit Study Inputs</button>
           </div>
 
-          <div id="tom-passwordless-club-signup">
-            <!-- Locked Email Gate -->
-            <div id="pwEmailGateLockedView">
-              <div class="pw-kicker">STEP-UP STAGE I &middot; COMPLIMENTARY BASELINE SUMMARY</div>
-              <h2 class="pw-serif-h2">Open your initial SMH &times; XLV baseline ratio.</h2>
-              <p style="margin:0;color:#475569;font-size:0.96rem;">
-                Enter your email below (passwordless, 1-click unsubscribe anytime) to view your initial historical baseline percentages and receive our morning research note.
-              </p>
-              <form class="pw-email-form" id="pwFreeGateForm" novalidate>
-                <input type="text" name="website_hp" id="pwGateHp" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none;" />
-                <input type="email" id="pwGateEmailInput" class="pw-email-input" required autocomplete="email" placeholder="Enter your email address" aria-label="Email address" />
-                <button type="submit" class="pw-btn-primary pw-btn-emerald" id="btnPwGateSubmit">
-                  Open My Baseline Allocation &rarr;
-                </button>
-              </form>
-              <div id="pwGateStatusMsg" role="status" aria-live="polite" style="display:none;margin-top:10px;font-size:0.88rem;color:#991B1B;"></div>
+          <div id="pwFreeBaselineSummaryView">
+            <div class="pw-kicker">HISTORICAL SECTOR BACKTEST EXPLORER &middot; FREE STUDY SUMMARY</div>
+            <h2 class="pw-serif-h2" id="pwUnlockedRatioHeadline">55% SMH &middot; 35% XLV &middot; 10% SGOV Historical Study Ratio</h2>
+            <p style="margin:0;color:#475569;font-size:0.94rem;" id="pwUnlockedRationaleText">
+              Computed from 2000&ndash;2025 non-leveraged 1x ETF historical series for self-directed educational study. Need basic brokerage order terminology? <button type="button" class="pw-inline-link" id="tomFreeStarterManual">Open the complimentary $0 US Brokerage Limit-Order Reference</button>.
+            </p>
+
+            <div class="pw-ratio-bar" id="pwRatioVisualBar" aria-hidden="true">
+              <span style="width:55%;background:#0F172A;"></span>
+              <span style="width:35%;background:#065F46;"></span>
+              <span style="width:10%;background:#94A3B8;"></span>
             </div>
 
-            <!-- Partial Unlocked View (Initial Percentage Ratio ONLY; Tracking & PDF Gated in Paid Tiers) -->
-            <div id="pwEmailGateUnlockedView" style="display:none;">
-              <div class="pw-kicker">INITIAL HISTORICAL BASELINE &middot; PARTIAL SUMMARY OPEN</div>
-              <h2 class="pw-serif-h2" id="pwUnlockedRatioHeadline">55% SMH &middot; 35% XLV &middot; 10% SGOV Reserve</h2>
-              <p style="margin:0;color:#475569;font-size:0.94rem;" id="pwUnlockedRationaleText">
-                Calibrated from 2000&ndash;2025 non-leveraged ETF series for your selected mandate. Need brokerage execution basics? <button type="button" class="pw-inline-link" id="tomFreeStarterManual">Open the complimentary $0 US Brokerage Limit-Order Guide</button>.
-              </p>
-
-              <div class="pw-ratio-bar" id="pwRatioVisualBar" aria-hidden="true">
-                <span style="width:55%;background:#0F172A;"></span>
-                <span style="width:35%;background:#065F46;"></span>
-                <span style="width:10%;background:#94A3B8;"></span>
+            <div class="pw-ratio-grid" id="pwRatioCellsGrid">
+              <div class="pw-ratio-cell">
+                <div class="pw-ratio-ticker">SMH &middot; GROWTH PILLAR</div>
+                <div class="pw-ratio-pct" id="pwPctSmh">55%</div>
+                <div class="pw-ratio-name">Semiconductor 1x ETF</div>
               </div>
-
-              <div class="pw-ratio-grid" id="pwRatioCellsGrid">
-                <div class="pw-ratio-cell">
-                  <div class="pw-ratio-ticker">SMH &middot; GROWTH</div>
-                  <div class="pw-ratio-pct" id="pwPctSmh">55%</div>
-                  <div class="pw-ratio-name">Semiconductor Pillar</div>
-                </div>
-                <div class="pw-ratio-cell">
-                  <div class="pw-ratio-ticker">XLV &middot; DEFENSE</div>
-                  <div class="pw-ratio-pct" id="pwPctXlv">35%</div>
-                  <div class="pw-ratio-name">Healthcare Cash Flow</div>
-                </div>
-                <div class="pw-ratio-cell">
-                  <div class="pw-ratio-ticker">SGOV &middot; LIQUIDITY</div>
-                  <div class="pw-ratio-pct" id="pwPctSgov">10%</div>
-                  <div class="pw-ratio-name">0&ndash;3 Mo US T-Bill</div>
-                </div>
+              <div class="pw-ratio-cell">
+                <div class="pw-ratio-ticker">XLV &middot; DEFENSIVE PILLAR</div>
+                <div class="pw-ratio-pct" id="pwPctXlv">35%</div>
+                <div class="pw-ratio-name">US Healthcare 1x ETF</div>
               </div>
+              <div class="pw-ratio-cell">
+                <div class="pw-ratio-ticker">SGOV &middot; TREASURY RESERVE</div>
+                <div class="pw-ratio-pct" id="pwPctSgov">10%</div>
+                <div class="pw-ratio-name">0&ndash;3 Mo US T-Bill</div>
+              </div>
+            </div>
 
-              <div class="pw-gated-preview-list">
-                <div class="pw-gated-row">
-                  <span>Daily Morning SMH &times; XLV Market Temperature (0&ndash;100) &amp; Weight Tracking Mail</span>
-                  <span class="pw-gated-badge">UNLOCKS IN TIER I &amp; II BELOW</span>
+            <div class="pw-drawdown-compare-box" role="region" aria-label="2000-2025 Historical Crisis Drawdown Comparison">
+              <div class="pw-drawdown-compare-title">2000&ndash;2025 HISTORICAL CRISIS DRAWDOWN COMPARISON</div>
+              <div class="pw-drawdown-compare-grid">
+                <div class="pw-dd-cmp-item">
+                  <span class="pw-dd-cmp-label">100% Semiconductor (SMH Alone)</span>
+                  <strong class="pw-dd-cmp-val">-74.6% Max DD &middot; 89 mos recovery</strong>
                 </div>
-                <div class="pw-gated-row">
-                  <span>Retirement Safe-Withdrawal &amp; Tax-Account Masterbook PDF + Annual Cash-Flow Sheet</span>
-                  <span class="pw-gated-badge">UNLOCKS IN TIER II BELOW</span>
+                <div class="pw-dd-cmp-item">
+                  <span class="pw-dd-cmp-label">S&amp;P 500 Index Alone</span>
+                  <strong class="pw-dd-cmp-val">-50.9% Max DD &middot; 56 mos recovery</strong>
+                </div>
+                <div class="pw-dd-cmp-item is-highlight">
+                  <span class="pw-dd-cmp-label">Selected SMH &times; XLV + SGOV Study Ratio</span>
+                  <strong class="pw-dd-cmp-val" id="pwStudyDrawdownCompareVal">~-24.8% Hist. Crisis DD &middot; ~17 mos recovery</strong>
                 </div>
               </div>
             </div>
+          </div>
+
+          <div id="tom-passwordless-club-signup" class="pw-save-summary-box">
+            <div class="pw-kicker" style="margin-bottom:6px;">FREE MORNING RESEARCH NOTES &middot; ZERO PASSWORD</div>
+            <h3 class="pw-save-summary-title">Save My Study Summary &amp; Receive Morning Research Notes (Free)</h3>
+            <p style="margin:0;color:#475569;font-size:0.92rem;">
+              Enter your email to save this historical study summary and receive our calm morning market data newsletter (1-click unsubscribe anytime).
+            </p>
+            <form class="pw-email-form" id="pwFreeGateForm" novalidate>
+              <input type="text" name="website_hp" id="pwGateHp" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none;" />
+              <input type="email" id="pwGateEmailInput" class="pw-email-input" required autocomplete="email" placeholder="Enter your email address" aria-label="Email address" />
+              <button type="submit" class="pw-btn-primary pw-btn-emerald" id="btnPwGateSubmit">
+                Save Study Summary (Free) &rarr;
+              </button>
+            </form>
+            <div id="pwGateStatusMsg" role="status" aria-live="polite" style="display:none;margin-top:10px;font-size:0.88rem;color:#065F46;font-weight:600;"></div>
           </div>
         </div>
       </section>
 
-      <!-- Screen 3: 2-Tier Differentiated Paid Membership (Polar.sh ?locale=en + COPY_MODE) -->
+      <!-- Screen 3: 2-Tier Whop Research Passes (#pricing) -->
       <section id="pricing" class="pw-tiers-section" data-pw-screen="3" style="display:none;">
-        <div class="pw-kicker">STEP-UP STAGE II &middot; PRIVATE WEALTH MEMBERSHIP</div>
-        <h2 class="pw-serif-h2" id="pwPricingHeadline">Complete daily regime tracking and retirement withdrawal architecture.</h2>
+        <div class="pw-kicker">INDEPENDENT MARKET DATA &amp; EDUCATIONAL RESEARCH PASSES</div>
+        <h2 class="pw-serif-h2" id="pwPricingHeadline">Educational Market Data Newsletter + 2000&ndash;2025 Historical Statistical Workbook.</h2>
         <p style="margin:0;color:#475569;font-size:0.95rem;" id="pwPricingSubcopy">
-          Know every morning where semiconductor overheating or fear sits on our 25-year scale, and access the complete safe-withdrawal and tax-account planning suite.
+          SMH &times; XLV + SGOV 2-Pillar Historical Case Study &mdash; Strictly Non-Advisory Educational Publisher. Explore daily public market temperature data notes and the complete historical statistical workbook.
         </p>
 
         <div class="pw-tier-grid">
           <div class="pw-tier-card">
             <div>
-              <div class="pw-tier-kicker">TIER I &middot; MONTHLY EDITION</div>
-              <h3 class="pw-tier-name">Monthly Tracking Edition</h3>
+              <div class="pw-tier-kicker">TIER I &middot; MONTHLY RESEARCH PASS</div>
+              <h3 class="pw-tier-name">Monthly Research Pass</h3>
               <div class="pw-tier-price">$29 <span>/ month</span></div>
-              <div class="pw-tier-saving">Flexible month-to-month access</div>
+              <div class="pw-tier-saving">Flexible month-to-month access &middot; Cancel anytime</div>
               <ul class="pw-tier-list">
-                <li><strong>Daily Morning SMH &times; XLV Temperature &amp; Weight Tracking Briefings</strong> delivered before the US market open</li>
-                <li><strong>Historical Regime Ratio Reference Sheet</strong> mapping 0&ndash;100 sentiment bands to model sector weights</li>
-                <li><strong>Account-Scale Dollar Allocation Calculator</strong> across SMH, XLV, and SGOV reserves</li>
+                <li><strong>Educational Market Data Newsletter</strong> delivered before the US market open (0&ndash;100 public sector temperature &amp; historical regime study notes)</li>
+                <li><strong>2000&ndash;2025 Historical Statistical Workbook (Monthly Edition)</strong> comparing SMH &times; XLV + SGOV historical case-study cohorts</li>
+                <li><strong>Sample Dollar-Scale Educational Worksheet</strong> illustrating tax-location concepts across 401(k), IRA, and taxable accounts</li>
               </ul>
             </div>
-            <a href="#tom-vip-monthly" class="pw-btn-primary polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="width:100%;">
-              Select Monthly Tracking &mdash; $29/mo &rarr;
+            <a href="https://whop.com/checkout/plan_xVJeNwyrDef8T" class="pw-btn-primary whop-checkout-button" data-whop-checkout data-whop-plan="monthly" data-tom-paid-plan="monthly" style="width:100%;">
+              Select Monthly Research Pass &mdash; $29/mo &rarr;
             </a>
           </div>
 
           <div class="pw-tier-card is-annual">
             <div>
-              <div class="pw-tier-kicker">TIER II &middot; ANNUAL PRIVATE WEALTH &middot; SAVE 43%</div>
-              <h3 class="pw-tier-name">Annual Private Wealth Edition</h3>
+              <div class="pw-tier-kicker">TIER II &middot; ANNUAL RESEARCH PASS &middot; SAVE 43%</div>
+              <h3 class="pw-tier-name">Annual Research Pass</h3>
               <div class="pw-tier-price">$199 <span>/ year</span></div>
               <div class="pw-tier-saving">Equivalent to $16.58/mo (Save 43% vs. monthly)</div>
               <ul class="pw-tier-list">
-                <li><strong>Everything in Tier I</strong> &mdash; full 12 months of Daily Morning SMH &times; XLV Temperature &amp; Weight Tracking Briefings</li>
-                <li><strong>Lifetime-Updated Retirement Safe-Withdrawal &amp; Tax-Account Masterbook PDF</strong> (401(k), IRA &amp; taxable sequencing)</li>
-                <li><strong>Annual Cash-Flow &amp; Systematic Ratio Planning Sheet</strong> for multi-decade household budgeting</li>
+                <li><strong>Full 12 Months of the Educational Market Data Newsletter</strong> covering daily SMH &times; XLV + SGOV public indicator readings</li>
+                <li><strong>Complete 2000&ndash;2025 Historical Statistical Workbook &amp; Reference Masterbook PDF</strong> (Dot-Com, 2008 &amp; 2022 drawdown case studies + retirement withdrawal math)</li>
+                <li><strong>Annual Household Cash-Flow &amp; Semi-Annual Review Educational Workbook</strong></li>
               </ul>
             </div>
-            <a href="#tom-vip-annual" class="pw-btn-primary pw-btn-emerald polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="width:100%;">
-              Select Annual Private Wealth &mdash; $199/yr &rarr;
+            <a href="https://whop.com/checkout/plan_9sdgFI753ucXQ" class="pw-btn-primary pw-btn-emerald whop-checkout-button" data-whop-checkout data-whop-plan="annual" data-tom-paid-plan="annual" style="width:100%;">
+              Select Annual Research Pass &mdash; $199/yr &rarr;
             </a>
           </div>
         </div>
 
         <p class="pw-mor-note">
-          Merchant of Record: Polar.sh (Global Card / Apple Pay / Google Pay) &middot; 14-Day Refund Policy &middot; Cancel anytime in one click.
+          Secure Checkout via Whop.com (Global Card / Apple Pay / Google Pay) &middot; 14-Day Refund Policy &middot; Cancel anytime in one click &middot; Strictly Non-Advisory Educational Publisher.
         </p>
       </section>
     </main>
 
     <footer class="pw-legal-footer">
       <div class="pw-legal-links">
-        <span>TruthOfMarket</span>
+        <span>TruthOfMarket Research</span>
         <span>&middot;</span>
         <a href="/terms.html">Terms</a>
         <span>&middot;</span>
@@ -8154,7 +8044,7 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
         <a href="mailto:beable9489@gmail.com">beable9489@gmail.com</a>
       </div>
       <p class="pw-legal-disclaimer">
-        TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.
+        TruthOfMarket is an independent, strictly non-advisory educational research publisher providing general market data newsletters and 2000&ndash;2025 historical statistical workbooks only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.
       </p>
     </footer>
 
@@ -8165,13 +8055,13 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
           <span class="pw-kicker" style="margin:0;">MEMBER ACCESS &amp; RESTORE</span>
           <button type="button" class="pw-modal-close-btn" id="btnClosePwRestoreModal" aria-label="Close Member Sign-In Modal">Close</button>
         </div>
-        <h3 class="pw-serif-h2" id="pwRestoreTitle" style="font-size:1.65rem;">Restore Your Baseline or Paid License</h3>
+        <h3 class="pw-serif-h2" id="pwRestoreTitle" style="font-size:1.65rem;">Restore Your Saved Study Ratio or Research Pass</h3>
         <p style="margin:0 0 16px;font-size:0.92rem;color:#475569;">
-          Enter the email address used during registration to reopen your saved SMH &times; XLV baseline, or enter a Polar.sh license key if applicable.
+          Enter the email address used during registration to reopen your saved SMH &times; XLV + SGOV historical study summary, or enter a Whop receipt / pass reference if applicable.
         </p>
         <form id="pwRestoreForm" novalidate style="display:flex;flex-direction:column;gap:12px;">
           <input type="email" id="pwRestoreEmailInput" class="pw-email-input" style="min-width:180px;width:100%;box-sizing:border-box;" placeholder="Registered email address" autocomplete="email" />
-          <input type="text" id="pwRestoreLicenseInput" class="pw-email-input" style="min-width:180px;width:100%;box-sizing:border-box;" placeholder="Optional: Polar.sh license key" autocomplete="off" />
+          <input type="text" id="pwRestoreLicenseInput" class="pw-email-input" style="min-width:180px;width:100%;box-sizing:border-box;" placeholder="Optional: Whop receipt or pass ID" autocomplete="off" />
           <button type="submit" class="pw-btn-primary pw-btn-emerald" style="width:100%;">Restore Session &rarr;</button>
         </form>
         <div id="pwRestoreStatus" role="status" aria-live="polite" style="display:none;margin-top:12px;font-size:0.88rem;color:#065F46;"></div>
@@ -8182,22 +8072,22 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
     <div class="pw-modal-backdrop" id="pwStarterGuideModal" role="dialog" aria-modal="true" aria-labelledby="pwStarterGuideTitle">
       <div class="pw-modal-dialog">
         <div class="pw-modal-header-row">
-          <span class="pw-kicker" style="margin:0;">COMPLIMENTARY EXECUTION REFERENCE ($0)</span>
+          <span class="pw-kicker" style="margin:0;">COMPLIMENTARY EDUCATIONAL REFERENCE ($0)</span>
           <button type="button" class="pw-modal-close-btn" id="btnClosePwStarterGuideModal" aria-label="Close Brokerage Reference Modal">Close</button>
         </div>
-        <h3 class="pw-serif-h2" id="pwStarterGuideTitle" style="font-size:1.65rem;">US Brokerage Limit-Order &amp; ETF Reference</h3>
+        <h3 class="pw-serif-h2" id="pwStarterGuideTitle" style="font-size:1.65rem;">US Brokerage Limit-Order &amp; ETF Terminology Guide</h3>
         <div style="font-size:0.92rem;line-height:1.7;color:#334155;display:flex;flex-direction:column;gap:12px;">
           <div>
-            <strong style="color:#0F172A;">I. Place Limit Orders Rather Than Market Orders</strong><br/>
-            On Fidelity, Charles Schwab, or Vanguard, select <em>Limit Order</em> rather than <em>Market Order</em> during the first 15 minutes after the 9:30 AM ET open to avoid temporary bid-ask spread widening on ETFs.
+            <strong style="color:#0F172A;">I. Limit Orders vs. Market Orders</strong><br/>
+            On self-directed platforms such as Fidelity, Charles Schwab, or Vanguard, a <em>Limit Order</em> specifies a maximum purchase price rather than accepting temporary bid-ask spread widening during the first 15 minutes after the 9:30 AM ET open.
           </div>
           <div>
-            <strong style="color:#0F172A;">II. Non-Leveraged 1x Spot Sector ETFs Only</strong><br/>
+            <strong style="color:#0F172A;">II. Non-Leveraged 1x Spot Sector ETFs</strong><br/>
             Both <strong>SMH</strong> (Semiconductors) and <strong>XLV</strong> (US Healthcare) are unleveraged 1x spot ETFs free from daily 3x leveraged volatility-reset decay.
           </div>
           <div>
-            <strong style="color:#0F172A;">III. Short-Term US Treasury Liquidity Cushion</strong><br/>
-            Near-term household cash reserves can be insulated in 0&ndash;3 month US Treasury bills (<strong>SGOV</strong>) or government money-market funds (SPAXX / SWVXX / VMFXX).
+            <strong style="color:#0F172A;">III. Short-Term US Treasury Liquidity Reference</strong><br/>
+            In historical case studies, short-term household reserve buckets are commonly modeled using 0&ndash;3 month US Treasury bills (<strong>SGOV</strong>) or government money-market funds (SPAXX / SWVXX / VMFXX).
           </div>
         </div>
       </div>
@@ -8232,21 +8122,25 @@ function computePwBaseline(ans) {
     xlv = 100 - smh - sgov;
   }
 
+  const estCrisisDd = -(0.34 * (smh / 100) + 0.175 * (xlv / 100) + 0.005 * (sgov / 100)) * 100;
+  const estRecMos = Math.max(9, Math.round(25 * (smh / 100) + 11 * (xlv / 100) + 2 * (sgov / 100)));
+
   const objLabel =
     obj === "growth"
-      ? "Capital Growth & AI"
+      ? "Secular Growth Study"
       : obj === "preservation"
-      ? "Capital Preservation"
-      : "Balanced Retirement";
+      ? "Defensive Stability Study"
+      : "Balanced Cash-Flow Study";
   const scaleLabel = scale >= 1000000 ? "$1,000,000+" : "$" + scale.toLocaleString();
-  const ddLabel = comfort === "dd10" ? "-10% Calm" : comfort === "dd25" ? "-25% Compounding" : "-18% Balanced";
+  const ddLabel = comfort === "dd10" ? "-10% Band" : comfort === "dd25" ? "-25% Band" : "-18% Band";
 
   return {
     smh,
     xlv,
     sgov,
-    headline: `${smh}% SMH · ${xlv}% XLV · ${sgov}% SGOV Reserve`,
-    summaryLine: `Mandate: ${objLabel} · ${scaleLabel} · ${ddLabel} Tolerance`,
+    headline: `${smh}% SMH · ${xlv}% XLV · ${sgov}% SGOV Historical Study Ratio`,
+    summaryLine: `Study Profile: ${objLabel} · ${scaleLabel} Sample · ${ddLabel}`,
+    ddCompareText: `~${estCrisisDd.toFixed(1)}% Hist. Crisis DD · ~${estRecMos} mos recovery`,
   };
 }
 function renderPrivateWealthSingleBreathHome() {
@@ -8272,6 +8166,35 @@ function bindPrivateWealthSingleBreathEvents(state) {
     }
   } catch (_) {}
 
+  const hydrateLiveTempBadge = () => {
+    const applyOverview = (ov) => {
+      if (!ov || typeof ov !== "object") return;
+      const dt = String(ov.date || "").trim();
+      const rawScore = Number(ov.fg_score);
+      if (!dt || !Number.isFinite(rawScore)) return;
+      const scoreInt = Math.round(rawScore);
+      const regRaw = String(ov.regime_en || "Neutral").trim();
+      const regText = /regime$/i.test(regRaw) ? regRaw : `${regRaw} Regime`;
+      const txtEl = document.getElementById("tomLiveTempText");
+      if (txtEl) {
+        txtEl.textContent = `Data As Of: ${dt} · Sector Temperature: ${scoreInt} / 100 (${regText})`;
+      }
+    };
+
+    if (state && state.semiOverview) {
+      applyOverview(state.semiOverview);
+    }
+    fetch("/data/semi_overview.json", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then(applyOverview)
+      .catch(() => {
+        fetch("/static_api/semi_overview.json", { cache: "no-store" })
+          .then((r) => (r.ok ? r.json() : null))
+          .then(applyOverview)
+          .catch(() => {});
+      });
+  };
+
   const getSavedEmail = () => {
     try {
       if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.getLocalMember === "function") {
@@ -8281,15 +8204,6 @@ function bindPrivateWealthSingleBreathEvents(state) {
       return String(localStorage.getItem("tom_free_member_email") || "").trim().toLowerCase();
     } catch (_) {
       return "";
-    }
-  };
-
-  const applyCopyMode = () => {
-    const isLiveSharp = Boolean(window.PAYMENT_CONFIG && window.PAYMENT_CONFIG.STORE_LIVE_READY === true);
-    window.TOM_COPY_MODE = isLiveSharp ? "LIVE_SHARP" : "UNDERWRITING_SAFE";
-    const hEl = document.getElementById("pwPricingHeadline");
-    if (hEl && isLiveSharp) {
-      hEl.textContent = "Receive daily morning SMH × XLV regime weights and the complete retirement masterbook.";
     }
   };
 
@@ -8318,6 +8232,9 @@ function bindPrivateWealthSingleBreathEvents(state) {
     if (pXlv) pXlv.textContent = b.xlv + "%";
     if (pSgov) pSgov.textContent = b.sgov + "%";
 
+    const ddCmpEl = document.getElementById("pwStudyDrawdownCompareVal");
+    if (ddCmpEl) ddCmpEl.textContent = b.ddCompareText;
+
     const barEl = document.getElementById("pwRatioVisualBar");
     if (barEl) {
       barEl.innerHTML =
@@ -8327,11 +8244,10 @@ function bindPrivateWealthSingleBreathEvents(state) {
     }
 
     const email = getSavedEmail();
-    const isUnlocked = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
-    const lockedView = document.getElementById("pwEmailGateLockedView");
-    const unlockedView = document.getElementById("pwEmailGateUnlockedView");
-    if (lockedView) lockedView.style.display = isUnlocked ? "none" : "block";
-    if (unlockedView) unlockedView.style.display = isUnlocked ? "block" : "none";
+    const inp = document.getElementById("pwGateEmailInput");
+    if (inp && email && !inp.value) {
+      inp.value = email;
+    }
   };
 
   const showScreen = (screenNum) => {
@@ -8362,13 +8278,14 @@ function bindPrivateWealthSingleBreathEvents(state) {
     syncOptionSelections();
   };
 
-  const startBtn = document.getElementById("btnStartPwStepUp");
-  if (startBtn) {
+  document.querySelectorAll("[data-pw-start-stepup], #btnStartPwStepUp").forEach((startBtn) => {
+    if (startBtn.__pwBound) return;
+    startBtn.__pwBound = true;
     startBtn.addEventListener("click", () => {
       showQuestionStep(1);
       showScreen(1);
     });
-  }
+  });
 
   document.querySelectorAll("[data-pw-go-home]").forEach((b) => {
     b.addEventListener("click", () => showScreen(0));
@@ -8427,20 +8344,20 @@ function bindPrivateWealthSingleBreathEvents(state) {
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
         if (msg) {
           msg.style.display = "block";
+          msg.style.color = "#991B1B";
           msg.textContent = "Please enter a valid email address.";
         }
         if (inp) inp.focus();
         return;
       }
-      if (msg) msg.style.display = "none";
       const submitBtn = document.getElementById("btnPwGateSubmit");
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.textContent = "Opening Baseline...";
+        submitBtn.textContent = "Saving Summary...";
       }
 
       const b = computePwBaseline(answers);
-      const noteStr = `site=truthofmarket.com | baseline=${b.headline} | ${b.summaryLine}`;
+      const noteStr = `site=truthofmarket.com | study_ratio=${b.headline} | ${b.summaryLine}`;
       try {
         const kst = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
         localStorage.setItem("tom_free_member_email", email);
@@ -8462,12 +8379,16 @@ function bindPrivateWealthSingleBreathEvents(state) {
         }
       } catch (_) {}
 
-      const finishUnlock = () => {
+      const finishSave = () => {
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.innerHTML = "Open My Baseline Allocation &rarr;";
+          submitBtn.textContent = "Saved & Subscribed";
         }
-        syncStage2And3Data();
+        if (msg) {
+          msg.style.display = "block";
+          msg.style.color = "#065F46";
+          msg.textContent = `Saved for ${email}. Complimentary morning research notes are now active (1-click unsubscribe anytime).`;
+        }
       };
 
       if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.registerMember === "function") {
@@ -8480,8 +8401,8 @@ function bindPrivateWealthSingleBreathEvents(state) {
           notes: noteStr,
           message: noteStr,
         })
-          .then(finishUnlock)
-          .catch(finishUnlock);
+          .then(finishSave)
+          .catch(finishSave);
       } else if (typeof window.submitTomVipWaitlistOrManualEmail === "function") {
         window.submitTomVipWaitlistOrManualEmail({
           email,
@@ -8489,10 +8410,10 @@ function bindPrivateWealthSingleBreathEvents(state) {
           lang: "en-US",
           notes: noteStr,
         })
-          .then(finishUnlock)
-          .catch(finishUnlock);
+          .then(finishSave)
+          .catch(finishSave);
       } else {
-        finishUnlock();
+        finishSave();
       }
     });
   }
@@ -8528,11 +8449,11 @@ function bindPrivateWealthSingleBreathEvents(state) {
       const em = String(emInp ? emInp.value : "").trim().toLowerCase();
       const lic = String(licInp ? licInp.value : "").trim();
 
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em) && lic.length < 12) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em) && lic.length < 8) {
         if (stEl) {
           stEl.style.display = "block";
           stEl.style.color = "#991B1B";
-          stEl.textContent = "Please enter a valid registered email or license key.";
+          stEl.textContent = "Please enter a valid registered email or Whop receipt ID.";
         }
         return;
       }
@@ -8541,7 +8462,7 @@ function bindPrivateWealthSingleBreathEvents(state) {
           localStorage.setItem("tom_free_member_email", em);
           if (state) state.freeMemberEmail = em;
         }
-        if (lic.length >= 12) {
+        if (lic.length >= 8) {
           localStorage.setItem("rsa_pro_unlocked", "true");
           localStorage.setItem("rsa_token", lic);
           if (state) {
@@ -8553,7 +8474,7 @@ function bindPrivateWealthSingleBreathEvents(state) {
       if (stEl) {
         stEl.style.display = "block";
         stEl.style.color = "#065F46";
-        stEl.textContent = "Session restored. Opening your baseline view.";
+        stEl.textContent = "Session restored. Opening your historical study summary.";
       }
       setTimeout(() => {
         if (restoreModal) restoreModal.classList.remove("is-open");
@@ -8577,11 +8498,12 @@ function bindPrivateWealthSingleBreathEvents(state) {
     });
   }
 
-  applyCopyMode();
+  hydrateLiveTempBadge();
   syncOptionSelections();
 
   const h = (window.location.hash || "").toLowerCase();
-  if (h === "#pricing" || h === "#tommorningbellclub") {
+  const s = (window.location.search || "").toLowerCase();
+  if (h === "#pricing" || h === "#tommorningbellclub" || s.includes("payment=success")) {
     showScreen(2);
     if (h === "#pricing") {
       setTimeout(() => {
@@ -8640,11 +8562,11 @@ const defaultView =
       localStorage.setItem("rsa_cfg_site1_url", "https://truthofmarket.com");
     }
     const oldM = localStorage.getItem("rsa_cfg_ls_monthly") || "";
-    if (oldM && !/^https:\/\/(buy\.)?polar\.sh\//i.test(oldM)) {
+    if (oldM && !/^https:\/\/whop\.com\/checkout\//i.test(oldM)) {
       localStorage.removeItem("rsa_cfg_ls_monthly");
     }
     const oldL = localStorage.getItem("rsa_cfg_ls_ltd") || "";
-    if (oldL && !/^https:\/\/(buy\.)?polar\.sh\//i.test(oldL)) {
+    if (oldL && !/^https:\/\/whop\.com\/checkout\//i.test(oldL)) {
       localStorage.removeItem("rsa_cfg_ls_ltd");
     }
     const oldTv = localStorage.getItem("rsa_cfg_aff_tv") || "";
@@ -8750,12 +8672,12 @@ const state = {
     site1_name: "TruthOfMarket",
     site1_url: localStorage.getItem("rsa_cfg_site1_url") || "https://truthofmarket.com",
     site2_url: "https://truthofmarket.com",
-    polar_tom_monthly_url:
-      localStorage.getItem("rsa_cfg_polar_monthly") ||
+    whop_tom_monthly_url:
+      localStorage.getItem("rsa_cfg_whop_monthly") ||
       localStorage.getItem("rsa_cfg_ls_monthly") ||
       "",
-    polar_tom_annual_url:
-      localStorage.getItem("rsa_cfg_polar_annual") ||
+    whop_tom_annual_url:
+      localStorage.getItem("rsa_cfg_whop_annual") ||
       localStorage.getItem("rsa_cfg_ls_ltd") ||
       "",
     ls_site1_monthly_url: "",
@@ -8990,7 +8912,7 @@ function switchView(targetView) {
 }
 
 async function handlePolarCheckoutSuccess(orderRef) {
-  const tokenVal = String(orderRef || "RSA-PRO-2026-POLAR-CHECKOUT").trim();
+  const tokenVal = String(orderRef || "RSA-PRO-2026-WHOP-CHECKOUT").trim();
   state.isProUnlocked = true;
   state.licenseKey = tokenVal;
   try {
@@ -9014,7 +8936,7 @@ async function handlePolarCheckoutSuccess(orderRef) {
   if (licModal) licModal.style.display = "none";
   renderApp();
   showToast(
-    "Polar.sh Payment Confirmed! All 72 Pro Setups Unlocked (Check your email for your permanent License Key)."
+    "Whop Research Pass Confirmed! All 72 Pro Setups Unlocked (Check your email for your permanent License Key)."
   );
 }
 
@@ -9026,18 +8948,18 @@ function bindRsaPolarCheckoutEvents() {
       window.addEventListener("message", (ev) => {
         try {
           const origin = String(ev?.origin || "").toLowerCase();
-          if (!origin.includes("polar.sh")) return;
+          if (!origin.includes("whop.com")) return;
           const d = ev.data;
           const isSuccess =
-            d === "polar_checkout_success" ||
+            d === "whop_checkout_success" ||
             (d &&
               typeof d === "object" &&
               (d.event === "success" ||
-                d.event === "polar_checkout_success" ||
-                d.type === "polar_checkout_success" ||
+                d.event === "whop_checkout_success" ||
+                d.type === "whop_checkout_success" ||
                 d.status === "succeeded"));
           if (isSuccess) {
-            handlePolarCheckoutSuccess("RSA-PRO-2026-POLAR-EMBED");
+            handlePolarCheckoutSuccess("RSA-PRO-2026-WHOP-EMBED");
           }
         } catch (_) {}
       });
@@ -9061,7 +8983,7 @@ if (typeof window !== "undefined") {
 }
 
 function bindEvents() {
-  // Initialize Polar.sh checkout postMessage & auto-unlock handler
+  // Initialize Whop.com checkout postMessage & auto-unlock handler
   bindRsaPolarCheckoutEvents();
 
   // Senior Font Size A+ 3-Step Cycle (18px -> 20px -> 22px -> 18px) & Daylight/Dark Toggle
@@ -9705,7 +9627,7 @@ function bindEvents() {
         e.preventDefault();
         openLicenseModal(
           false,
-          "🔒 VIP Telegram Educational Research Channel is available for Monthly VIP ($29/mo) and Annual VIP ($199/yr) subscribers."
+          "🔒 VIP Telegram Educational Research Channel is available for Monthly Research Pass ($29/mo) and Annual Research Pass ($199/yr) subscribers."
         );
       }
     });
@@ -9735,7 +9657,7 @@ function bindEvents() {
     if (!key) {
       if (msgEl) {
         msgEl.style.color = "var(--fin-down)";
-        msgEl.textContent = "Please enter your Polar.sh VIP license key.";
+        msgEl.textContent = "Please enter your Whop.com VIP license key.";
       }
       return;
     }
@@ -9760,7 +9682,7 @@ function bindEvents() {
         if (msgEl) {
           msgEl.style.color = "var(--fin-down)";
           msgEl.textContent =
-            res.message || "Invalid or expired license key. Please verify your Polar.sh receipt or subscribe below.";
+            res.message || "Invalid or expired license key. Please verify your Whop.com receipt or subscribe below.";
         }
       }
     } catch (err) {
@@ -9974,8 +9896,8 @@ function bindEvents() {
         "https://trendspider.com/?_go=rightside";
 
       state.config.site1_url = s1Url;
-      state.config.polar_tom_monthly_url = polarM;
-      state.config.polar_tom_annual_url = polarA;
+      state.config.whop_tom_monthly_url = polarM;
+      state.config.whop_tom_annual_url = polarA;
       state.config.telegram_channel_url = tgCh;
       state.config.youtube_url = ytUrl;
       state.config.instagram_url = igUrl;
@@ -9985,8 +9907,8 @@ function bindEvents() {
       state.config.broker_referral_url = brkUrl;
 
       localStorage.setItem("rsa_cfg_site1_url", s1Url);
-      localStorage.setItem("rsa_cfg_polar_monthly", polarM);
-      localStorage.setItem("rsa_cfg_polar_annual", polarA);
+      localStorage.setItem("rsa_cfg_whop_monthly", polarM);
+      localStorage.setItem("rsa_cfg_whop_annual", polarA);
       localStorage.setItem("rsa_tg_channel_url", tgCh);
       localStorage.setItem("rsa_cfg_youtube_url", ytUrl);
       localStorage.setItem("rsa_cfg_instagram_url", igUrl);
@@ -10001,8 +9923,8 @@ function bindEvents() {
           seekingalpha_source: saSrc,
           broker_name: brkName,
           broker_referral_url: brkUrl,
-          polar_tom_monthly_url: polarM,
-          polar_tom_annual_url: polarA,
+          whop_tom_monthly_url: polarM,
+          whop_tom_annual_url: polarA,
           site1_url: s1Url,
           telegram_channel_url: tgCh,
           youtube_url: ytUrl,
@@ -10240,12 +10162,12 @@ function bindEvents() {
     });
   }
 
-  // Pro VIP 1-Click 72-Stock CSV Export, TradingView Watchlist & Webhook JSON
+  // Pro VIP 1-Click 72-Stock Workbook Snapshot, TradingView Watchlist & Webhook JSON
   const btnDownloadPro72Csv = document.getElementById("btnDownloadPro72Csv");
   if (btnDownloadPro72Csv) {
     btnDownloadPro72Csv.addEventListener("click", () => {
       if (!state.isProUnlocked) {
-        openLicenseModal(false, "🔒 Upgrade to VIP Software ($29/mo Monthly VIP or $199/yr Annual VIP) to download the full Historical Factor Dataset (.CSV).");
+        openLicenseModal(false, "🔒 Upgrade to VIP Software ($29/mo Monthly Research Pass or $199/yr Annual Research Pass) to download the full Historical Factor Dataset (Workbook).");
         return;
       }
       const perSlot = Math.round((state.proPortfolioUsd || 30000) * 0.15);
@@ -10267,7 +10189,7 @@ function bindEvents() {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showToast("📥 Downloaded Historical Factor Dataset (.CSV)");
+      showToast("📥 Downloaded Historical Factor Dataset (Workbook)");
     });
   }
 
@@ -10406,7 +10328,7 @@ function bindEvents() {
     });
   }
 
-  // 1-Click VIP Watchlist CSV Export
+  // 1-Click VIP Watchlist Workbook Snapshot
   const exportWatchlistCsv = () => {
     if (!state.isProUnlocked) {
       openLicenseModal(false, "Save custom VIP watchlists and get breakout alerts with Pro VIP.");
@@ -10437,7 +10359,7 @@ function bindEvents() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    showToast(`📥 Exported ${starredStocks.length} Starred Watchlist Tickers (.CSV)`);
+    showToast(`📥 Exported ${starredStocks.length} Starred Watchlist Tickers (Workbook)`);
   };
 
   const btnExportVipWatchlistCsv = document.getElementById("btnExportVipWatchlistCsv");
@@ -10867,16 +10789,16 @@ function bindEvents() {
     });
   });
 
-  // Copy Pine Script v5
-  const btnCopyPineScript = document.getElementById("btnCopyPineScript");
-  if (btnCopyPineScript) {
-    btnCopyPineScript.addEventListener("click", async () => {
+  // Copy Historical Factor Formula
+  const btnCopyHistorical Factor Formula = document.getElementById("btnCopyHistorical Factor Formula");
+  if (btnCopyHistorical Factor Formula) {
+    btnCopyHistorical Factor Formula.addEventListener("click", async () => {
       const code = document.getElementById("pineCodeBox")?.textContent || "";
       try {
         await navigator.clipboard.writeText(code);
-        showToast("TradingView Pine Script v5 Copied to Clipboard");
+        showToast("TradingView Historical Factor Formula Copied to Clipboard");
       } catch (e) {
-        showToast("Pine Script Ready to Copy");
+        showToast("Historical Factor Formula Ready to Copy");
       }
     });
   }
@@ -11000,7 +10922,7 @@ function bindEvents() {
     btnDownloadSemiCsv.addEventListener("click", async () => {
       if (!state.isProUnlocked) {
         openLicenseModal(false);
-        showToast("Unlock VIP Software ($29/mo Monthly VIP or $199/yr Annual VIP) to download the 26-Year Daily CSV Dataset");
+        showToast("Unlock VIP Software ($29/mo Monthly Research Pass or $199/yr Annual Research Pass) to download the 2000–2025 Historical Statistical Workbook");
         return;
       }
       const key = encodeURIComponent(state.licenseKey || "");
@@ -11030,9 +10952,9 @@ function bindEvents() {
         a.download = `SemiFearGreed_SMH_XLV_2000_2026_History_${state.semiOverview?.date || "latest"}.csv`;
         a.click();
         URL.revokeObjectURL(url);
-        showToast("Downloaded 26-Year Daily CSV Dataset");
+        showToast("Downloaded 2000–2025 Historical Statistical Workbook");
       } catch (err) {
-        showToast("Failed to generate CSV dataset");
+        showToast("Failed to generate statistical workbook");
       }
     });
   }
@@ -11057,11 +10979,11 @@ function openStockDetailModal(ticker) {
   const stop = Number(s.stop_loss_price ?? closeVal * 0.91).toFixed(2);
   const tp1 = Number(s.tp1_2x_price ?? closeVal * 2.0).toFixed(2);
   const polarMonthly = formatCheckoutUrl(
-    state.config?.polar_tom_monthly_url || state.config?.ls_site1_monthly_url,
+    state.config?.whop_tom_monthly_url || state.config?.ls_site1_monthly_url,
     "#tom-vip-monthly"
   );
   const polarAnnual = formatCheckoutUrl(
-    state.config?.polar_tom_annual_url || state.config?.ls_site1_ltd_url,
+    state.config?.whop_tom_annual_url || state.config?.ls_site1_ltd_url,
     "#tom-vip-annual"
   );
   const tvAffId = encodeURIComponent(state.config?.tradingview_aff_id || "1173809");
@@ -11118,13 +11040,13 @@ function openStockDetailModal(ticker) {
              <span>Upper Model Ref: <b style="color:var(--fin-up);">$${tp1}</b></span>
            </div>`
         : `<div style="background:rgba(37,99,235,0.1); border:1px solid rgba(59,130,246,0.38); border-radius:6px; padding:12px; margin-bottom:12px;">
-             <div style="font-weight:800; color:#ffffff; margin-bottom:6px;">🔒 Historical Factor Reference Bands &amp; CSV Export</div>
+             <div style="font-weight:800; color:#ffffff; margin-bottom:6px;">🔒 Historical Factor Reference Bands &amp; Workbook Snapshot</div>
              <div style="display:flex; gap:8px; flex-wrap:wrap;">
-               <a class="btn btn-primary btn-sm polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthly}" style="min-height:40px; font-weight:800;">
-                 🔒 Start Monthly VIP — $29/mo
+               <a class="btn btn-primary btn-sm whop-checkout-button" data-whop-checkout data-whop-plan="monthly" data-tom-paid-plan="monthly" href="${polarMonthly}" style="min-height:40px; font-weight:800;">
+                 🔒 Start Monthly Research Pass — $29/mo
                </a>
-               <a class="btn btn-emerald btn-sm polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" href="${polarAnnual}" style="min-height:40px; font-weight:800;">
-                 💎 Start Annual VIP — $199/yr
+               <a class="btn btn-emerald btn-sm whop-checkout-button" data-whop-checkout data-whop-plan="annual" data-tom-paid-plan="annual" href="${polarAnnual}" style="min-height:40px; font-weight:800;">
+                 💎 Start Annual Research Pass — $199/yr
                </a>
              </div>
            </div>`
@@ -11357,7 +11279,7 @@ function generateSemiGaugePng() {
 
   ctx.fillStyle = "#b91c1c";
   ctx.font = "bold 22px Inter, sans-serif";
-  ctx.fillText(`Active Signal: ${ov.action_headline_en}`, 45, 230);
+  ctx.fillText(`Historical Regime: ${ov.action_headline_en}`, 45, 230);
 
   ctx.fillStyle = "#4b5563";
   ctx.font = "18px JetBrains Mono, monospace";
@@ -11538,7 +11460,7 @@ async function loadAllData() {
         if (v !== undefined && v !== null && v !== "") {
           if (
             (k === "ls_site1_monthly_url" || k === "ls_site1_ltd_url") &&
-            !/^https:\/\/(buy\.)?polar\.sh\//i.test(String(v))
+            !/^https:\/\/whop\.com\/checkout\//i.test(String(v))
           ) {
             return;
           }
@@ -11590,7 +11512,7 @@ async function loadAllData() {
     }
 
     if (state.isProUnlocked) {
-      const pine = await fetchPineScript().catch(() => null);
+      const pine = await fetchFactorFormula().catch(() => null);
       if (pine && pine.code) state.pineCode = pine.code;
     }
     applyClientFilterAndSort();
@@ -11661,12 +11583,12 @@ async function init() {
   renderApp();
   handleSpecialAnchorScroll();
 
-  // Auto-unlock Pro Terminal when returning from Polar.sh checkout with ?payment=success, ?polar_checkout_success=1, ?license_key=, ?order_key=, or ?key=
+  // Auto-unlock Pro Terminal when returning from Whop.com checkout with ?payment=success, ?whop_checkout_success=1, ?license_key=, ?order_key=, or ?key=
   if (
     initialSearch.get("payment") === "success" ||
-    initialSearch.get("polar_checkout_success") === "1"
+    initialSearch.get("whop_checkout_success") === "1"
   ) {
-    const cid = initialSearch.get("checkout_id") || initialSearch.get("customer_session_token") || "POLAR-VIP";
+    const cid = initialSearch.get("checkout_id") || initialSearch.get("customer_session_token") || "WHOP-VIP";
     if (!state.isProUnlocked) {
       await handlePolarCheckoutSuccess(`RSA-PRO-2026-${cid}`);
     }
@@ -11688,7 +11610,7 @@ async function init() {
         localStorage.setItem("rsa_token", urlLicenseKey);
         await loadAllData();
         renderApp();
-        showToast("Polar.sh VIP License Verified — All 72 US Equity Targets Unlocked!");
+        showToast("Whop Research Pass Verified — All 72 US Equity Targets Unlocked!");
       }
     } catch (_) {}
   }
@@ -11703,8 +11625,8 @@ async function init() {
         if (msgEl) {
           msgEl.style.color = "#34d399";
           msgEl.textContent = checkoutParam === "annual"
-            ? "🏆 Annual VIP ($199/yr): Click Start Annual VIP — $199/yr above, or paste your License Key below to unlock immediately."
-            : "⚡ Monthly VIP ($29/mo): Click Start Monthly VIP — $29/mo above, or paste your License Key below to unlock immediately.";
+            ? "🏆 Annual Research Pass ($199/yr): Click Start Annual Research Pass — $199/yr above, or paste your License Key below to unlock immediately."
+            : "⚡ Monthly Research Pass ($29/mo): Click Start Monthly Research Pass — $29/mo above, or paste your License Key below to unlock immediately.";
         }
       }
     }, 200);
