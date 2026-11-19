@@ -29,19 +29,26 @@
   <link rel="stylesheet" crossorigin href="/assets/index-CaOpdap3.css?v=20261117senior" />
   <script>
   window.PAYMENT_CONFIG = {
-    PROVIDER: 'polar_sh',
+    PROVIDER: 'whop',
     DIVISION: 'TOM',
     STORE_SLOT: 'FINANCE_STORE_SLOT',
-    STORE_LIVE_READY: false,
-    POLAR_CHECKOUT_URLS: {
-      monthly_29: 'https://buy.polar.sh/polar_cl_ifEzJdkptSMdHoPJ8MriuYleze1To288pYefu3QvaLc?locale=en',
-      annual_199: 'https://buy.polar.sh/polar_cl_IPZpLD1EeUXCrNMxo1Yji8oT8RPgD9jhdassj38WMyf?locale=en'
+    STORE_LIVE_READY: true,
+    COMPANY_ID: 'biz_4ynqri19wFDIwm',
+    STORE_NAME: 'TruthOfMarket Research',
+    WHOP_PLAN_IDS: {
+      monthly: 'plan_xVJeNwyrDef8T',
+      annual: 'plan_9sdgFI753ucXQ'
     },
-    POLAR_TOM_MONTHLY_URL: 'https://buy.polar.sh/polar_cl_ifEzJdkptSMdHoPJ8MriuYleze1To288pYefu3QvaLc?locale=en',
-    POLAR_TOM_ANNUAL_URL: 'https://buy.polar.sh/polar_cl_IPZpLD1EeUXCrNMxo1Yji8oT8RPgD9jhdassj38WMyf?locale=en',
+    WHOP_CHECKOUT_URLS: {
+      monthly: 'https://whop.com/checkout/plan_xVJeNwyrDef8T',
+      annual: 'https://whop.com/checkout/plan_9sdgFI753ucXQ'
+    },
+    WHOP_TOM_MONTHLY_URL: 'https://whop.com/checkout/plan_xVJeNwyrDef8T',
+    WHOP_TOM_ANNUAL_URL: 'https://whop.com/checkout/plan_9sdgFI753ucXQ',
     SUPPORT_EMAIL: 'beable9489@gmail.com'
   };
   </script>
+  <script async defer src="https://js.whop.com/static/checkout/loader.js"></script>
   <script src="/hq_member_crm_client.js" defer></script>
   <script src="/tom_payment_waitlist.js" defer></script>
   <script>
@@ -92,7 +99,7 @@
         document.querySelectorAll('.tom-lead-status').forEach(function(el) {
           el.style.display = 'block';
           el.style.color = '#86efac';
-          el.innerHTML = '✅ <strong>Welcome aboard!</strong> Free 8:30 AM ET 3-Color Market Weather &amp; Calm 2–4x/Year Budget Review Briefs are now active for <strong>' + email.replace(/[<>&"]/g, '') + '</strong>' + (topicLabel ? ' (' + topicLabel.replace(/[<>&"]/g, '') + ')' : '') + '.';
+          el.innerHTML = '<strong>Welcome aboard!</strong> Complimentary Morning Research Notes &amp; Historical Study Updates are now active for <strong>' + email.replace(/[<>&"]/g, '') + '</strong>' + (topicLabel ? ' (' + topicLabel.replace(/[<>&"]/g, '') + ')' : '') + '.';
         });
         document.querySelectorAll('.tom-lead-form input[type="email"]').forEach(function(inp) { inp.value = email; });
         return false;
@@ -122,7 +129,7 @@
         localStorage.setItem('hq_uv_ever_' + ns, '1');
         fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/uv_total', { mode: 'cors', keepalive: true }).catch(function(){});
       }
-      if (location.search.indexOf('payment=success') !== -1 || location.search.indexOf('polar_checkout_success') !== -1 || location.search.indexOf('unlock=1') !== -1) {
+      if (location.search.indexOf('payment=success') !== -1 || location.search.indexOf('unlock=1') !== -1) {
         if (localStorage.getItem('hq_paid_' + kst) !== '1') {
           localStorage.setItem('hq_paid_' + kst, '1');
           fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_member_' + kst, { mode: 'cors', keepalive: true }).catch(function(){});
@@ -174,20 +181,20 @@
           📊 FACTOR SUMMARY: $MSFT SHOWS HIGHER RELATIVE SCORE (90/100 &bull; 1.28x VOL)
         </div>
         <div style="font-size:0.82rem;color:#e2e8f0;margin-top:3px;">
-          🔒 <strong>$MSFT vs $GOOGL Historical Dispersion Bands &amp; CSV Dataset:</strong>
+          <strong>$MSFT vs $GOOGL Historical Dispersion Bands &amp; Statistical Workbook:</strong>
           <span style="filter:blur(5px);user-select:none;font-family:JetBrains Mono,monospace;">$424.21 / $98.00</span>
-          &nbsp;(Self-Directed Educational Calculator Software)
+          &nbsp;(Independent Market Data &amp; Educational Research)
         </div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
         <a href="/" style="background:#0ea5e9;color:#fff;text-decoration:none;padding:8px 13px;border-radius:6px;font-weight:800;font-size:0.78rem;">
-          🏡 30-Sec Retirement Calculator
+          Historical Sector Explorer
         </a>
-        <a href="#tom-vip-monthly" class="polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="background:#eab308;color:#0f172a;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:800;font-size:0.78rem;">
-          ⚡ Start Monthly VIP — $29/mo
+        <a href="https://whop.com/checkout/plan_xVJeNwyrDef8T" class="whop-checkout-button" data-whop-checkout data-tom-paid-plan="monthly" style="background:#eab308;color:#0f172a;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:800;font-size:0.78rem;">
+          Monthly Research Pass — $29/mo
         </a>
-        <a href="#tom-vip-annual" class="polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="background:#1e293b;border:1px solid #475569;color:#f8fafc;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:700;font-size:0.78rem;">
-          💎 Start Annual VIP — $199/yr
+        <a href="https://whop.com/checkout/plan_9sdgFI753ucXQ" class="whop-checkout-button" data-whop-checkout data-tom-paid-plan="annual" style="background:#1e293b;border:1px solid #475569;color:#f8fafc;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:700;font-size:0.78rem;">
+          Annual Research Pass — $199/yr
         </a>
       </div>
     </div>
@@ -213,14 +220,14 @@
     <div class="tom-lead-status" role="status" aria-live="polite" style="display:none;margin-top:12px;font-size:18px;font-weight:700;line-height:1.5;"></div>
     <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(148,163,184,0.25);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
       <div style="font-size:16px;color:#e2e8f0;font-weight:700;">
-        💳 <strong>Self-Directed Educational Calculator Software:</strong> Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay):
+        <strong>Independent Market Data &amp; Educational Research:</strong> Secure Checkout via Whop.com:
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:10px;">
-        <a href="#tom-vip-monthly" class="polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#2563eb;color:#ffffff;font-size:17px;font-weight:800;text-decoration:none;">
-          ⚡ Start Monthly VIP — $29/mo
+        <a href="https://whop.com/checkout/plan_xVJeNwyrDef8T" class="whop-checkout-button" data-whop-checkout data-tom-paid-plan="monthly" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#2563eb;color:#ffffff;font-size:17px;font-weight:800;text-decoration:none;">
+          Monthly Research Pass — $29/mo
         </a>
-        <a href="#tom-vip-annual" class="polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#f59e0b;color:#0f172a;font-size:17px;font-weight:900;text-decoration:none;">
-          💎 Start Annual VIP — $199/yr
+        <a href="https://whop.com/checkout/plan_9sdgFI753ucXQ" class="whop-checkout-button" data-whop-checkout data-tom-paid-plan="annual" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#f59e0b;color:#0f172a;font-size:17px;font-weight:900;text-decoration:none;">
+          Annual Research Pass — $199/yr
         </a>
       </div>
     </div>
@@ -393,10 +400,10 @@
       <span style="color:#94a3b8;">&middot;</span>
       <a href="mailto:beable9489@gmail.com" style="color:#b45309;font-weight:800;text-decoration:underline;">Support: beable9489@gmail.com</a>
       <span style="color:#94a3b8;">&middot;</span>
-      <span style="color:#334155;font-weight:700;">Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)</span>
+      <span style="color:#334155;font-weight:700;">Whop.com (Global Card / Apple Pay / Google Pay)</span>
     </div>
     <p style="margin:12px 0 0;font-size:0.88rem;line-height:1.6;color:#475569;font-weight:600;">
-      Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.
+      Disclaimer: TruthOfMarket Research is a strictly non-advisory educational publisher providing general market data newsletters and 2000–2025 historical statistical workbooks only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.
     </p>
   </section>
 </body>

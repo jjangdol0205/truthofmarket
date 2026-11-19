@@ -27,14 +27,14 @@ PUB = ROOT / "frontend" / "public"
 SEMI_PATH = ROOT / "static_api" / "semi_overview.json"
 STOCKS_FREE_PATH = ROOT / "static_api" / "stocks_free.json"
 
-TOM_M_URL = "https://buy.polar.sh/polar_cl_ifEzJdkptSMdHoPJ8MriuYleze1To288pYefu3QvaLc?locale=en"
-TOM_A_URL = "https://buy.polar.sh/polar_cl_IPZpLD1EeUXCrNMxo1Yji8oT8RPgD9jhdassj38WMyf?locale=en"
-POLAR_MONTHLY_HREF = "#tom-vip-monthly"
-POLAR_ANNUAL_HREF = "#tom-vip-annual"
+WHOP_M_URL = "https://whop.com/checkout/plan_xVJeNwyrDef8T"
+WHOP_A_URL = "https://whop.com/checkout/plan_9sdgFI753ucXQ"
+WHOP_MONTHLY_HREF = WHOP_M_URL
+WHOP_ANNUAL_HREF = WHOP_A_URL
 
 MANDATORY_DISCLAIMER = (
-    "Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical "
-    "portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice."
+    "Disclaimer: TruthOfMarket Research is a strictly non-advisory educational publisher providing general "
+    "market data newsletters and 2000–2025 historical statistical workbooks only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice."
 )
 
 
@@ -51,21 +51,28 @@ def _beacon_script(slug: str = "hub") -> str:
     safe_slug = re.sub(r"[^a-zA-Z0-9_.-]", "", slug)
     return f"""<script>
   window.PAYMENT_CONFIG = {{
-    PROVIDER: 'polar_sh',
+    PROVIDER: 'whop',
     DIVISION: 'TOM',
     STORE_SLOT: 'FINANCE_STORE_SLOT',
-    STORE_LIVE_READY: false,
-    POLAR_CHECKOUT_URLS: {{
-      monthly_29: '{TOM_M_URL}',
-      annual_199: '{TOM_A_URL}'
+    STORE_LIVE_READY: true,
+    COMPANY_ID: 'biz_4ynqri19wFDIwm',
+    STORE_NAME: 'TruthOfMarket Research',
+    WHOP_PLAN_IDS: {{
+      monthly: 'plan_xVJeNwyrDef8T',
+      annual: 'plan_9sdgFI753ucXQ'
     }},
-    POLAR_TOM_MONTHLY_URL: '{TOM_M_URL}',
-    POLAR_TOM_ANNUAL_URL: '{TOM_A_URL}',
+    WHOP_CHECKOUT_URLS: {{
+      monthly: '{WHOP_M_URL}',
+      annual: '{WHOP_A_URL}'
+    }},
+    WHOP_TOM_MONTHLY_URL: '{WHOP_M_URL}',
+    WHOP_TOM_ANNUAL_URL: '{WHOP_A_URL}',
     SUPPORT_EMAIL: 'beable9489@gmail.com'
   }};
-  var COPY_MODE = (window.PAYMENT_CONFIG && window.PAYMENT_CONFIG.STORE_LIVE_READY) ? 'LIVE_SHARP' : 'UNDERWRITING_SAFE';
+  var COPY_MODE = 'LIVE_SHARP';
   window.TOM_COPY_MODE = COPY_MODE;
   </script>
+  <script async defer src="https://js.whop.com/static/checkout/loader.js"></script>
   <script src="/hq_member_crm_client.js" defer></script>
   <script src="/tom_payment_waitlist.js" defer></script>
   <script>
@@ -203,10 +210,10 @@ def _substack_end_subscribe_html(slug: str) -> str:
       <div class="substack-sub-status" role="status" aria-live="polite" style="display:none;"></div>
     </section>
 
-    <aside class="editorial-postscript" aria-label="Tools and Daily Data Digest">
-      <div class="ps-label">Editorial Postscript &middot; Self-Directed Tools</div>
+    <aside class="editorial-postscript" aria-label="Historical Explorer and Research Passes">
+      <div class="ps-label">Editorial Postscript &middot; Independent Educational Research</div>
       <p>
-        Want to check where your own portfolio sits on the historical growth-versus-defense spectrum? Run our free 4-tap <a href="/#tom-retirement-architect"><strong>SMH &times; XLV Sector Balance Survey</strong></a>, or explore our automated morning indicator digest (<a href="{POLAR_MONTHLY_HREF}" class="polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly">Monthly VIP $29/mo</a> &middot; <a href="{POLAR_ANNUAL_HREF}" class="polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual">Annual VIP $199/yr</a> via Polar.sh).
+        Want to compare historical study ratios across 2000&ndash;2025 market cycles? Open our complimentary 4-step <a href="/#tom-retirement-architect"><strong>Historical Sector Backtest Explorer</strong></a>, or explore our Educational Market Data Newsletter + 2000&ndash;2025 Historical Statistical Workbook (<a href="{WHOP_MONTHLY_HREF}" class="whop-checkout-button" data-whop-checkout data-tom-paid-plan="monthly">Monthly Research Pass $29/mo</a> &middot; <a href="{WHOP_ANNUAL_HREF}" class="whop-checkout-button" data-whop-checkout data-tom-paid-plan="annual">Annual Research Pass $199/yr</a> via Whop.com).
       </p>
     </aside>"""
 
@@ -215,7 +222,7 @@ def _footer_legal_html() -> str:
     return f"""
     <footer class="essay-footer">
       <div class="essay-footer-links">
-        <a href="/">Home Simulator</a> &middot;
+        <a href="/">Historical Explorer</a> &middot;
         <a href="/insights/">All Essays</a> &middot;
         <a href="/terms.html">Terms</a> &middot;
         <a href="/privacy.html">Privacy</a> &middot;
@@ -226,7 +233,7 @@ def _footer_legal_html() -> str:
         <a href="mailto:beable9489@gmail.com">beable9489@gmail.com</a>
       </div>
       <p class="essay-disclaimer">{html.escape(MANDATORY_DISCLAIMER)}</p>
-      <p class="essay-copy">&copy; 2026 TruthOfMarket &middot; Educational Market Data &amp; Quantitative Research Desk &middot; Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay).</p>
+      <p class="essay-copy">&copy; 2026 TruthOfMarket Research &middot; Independent Market Data &amp; Educational Research &middot; Billing via Whop.com.</p>
     </footer>"""
 
 
@@ -695,8 +702,8 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
     smh_rsi = float(semi.get("smh_rsi") or 31.4)
     xlv_c = float(semi.get("xlv_close") or 184.80)
     qqq_c = float(semi.get("qqq_close") or 656.10)
-    rec_smh = int(semi.get("recommended_smh_weight") or 70)
-    rec_xlv = int(semi.get("recommended_xlv_weight") or 30)
+    rec_smh = int(semi.get("historical_study_smh_ratio") or 70)
+    rec_xlv = int(semi.get("historical_study_xlv_ratio") or 30)
 
     unlocked = [s for s in stocks if s.get("ticker") and s.get("ticker") != "LOCKED"]
     unlocked_sorted = sorted(unlocked, key=lambda x: float(x.get("score") or 0), reverse=True)

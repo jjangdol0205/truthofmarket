@@ -206,11 +206,11 @@ export function renderDoctorVipUnlockPreview(state) {
 
   const cfg = (state && state.config) || {};
   const docMonthlyUrl = formatCheckoutUrl(
-    cfg.polar_tom_monthly_url || cfg.ls_site1_monthly_url,
+    cfg.whop_tom_monthly_url || cfg.ls_site1_monthly_url,
     "#tom-vip-monthly"
   );
   const docAnnualUrl = formatCheckoutUrl(
-    cfg.polar_tom_annual_url || cfg.ls_site1_ltd_url,
+    cfg.whop_tom_annual_url || cfg.ls_site1_ltd_url,
     "#tom-vip-annual"
   );
 
@@ -218,26 +218,26 @@ export function renderDoctorVipUnlockPreview(state) {
     ? `
       <div class="doc-vip-action-bar" style="margin-top:12px; display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
         <a href="${docMonthlyUrl}"
-           data-polar-checkout
-           data-polar-plan="monthly_29"
+           data-whop-checkout
+           data-whop-plan="monthly"
            data-tom-paid-plan="monthly"
-           class="btn btn-primary polar-checkout-button"
+           class="btn btn-primary whop-checkout-button"
            id="btnDocUnlockMonthly"
            style="flex:1; min-width:180px; justify-content:center; padding:9px 12px; font-weight:800; font-size:0.78rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
-          ⚡ Start Monthly VIP — $29/mo
+          ⚡ Start Monthly Research Pass — $29/mo
         </a>
         <a href="${docAnnualUrl}"
-           data-polar-checkout
-           data-polar-plan="annual_199"
+           data-whop-checkout
+           data-whop-plan="annual"
            data-tom-paid-plan="annual"
-           class="btn polar-checkout-button"
+           class="btn whop-checkout-button"
            id="btnDocUnlockLifetime"
            style="flex:1; min-width:180px; justify-content:center; padding:9px 12px; font-weight:800; font-size:0.78rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color:#000; border:none;">
-          💎 Start Annual VIP — $199/yr
+          💎 Start Annual Research Pass — $199/yr
         </a>
       </div>
       <div class="doc-compliance-notice" style="margin-top:8px; font-size:0.66rem; color:var(--muted); text-align:center; font-family:var(--font-mono); line-height:1.45;">
-        🔒 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · Self-Directed Educational Calculator Software · 14-Day Refund Policy
+        🔒 Whop.com (Global Card / Apple Pay / Google Pay) · Self-Directed Educational Calculator Software · 14-Day Refund Policy
       </div>
       <div style="margin-top:6px; font-size:0.7rem; color:#94a3b8; text-align:center; line-height:1.45;">
         Support Desk: <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#93c5fd; font-weight:700; text-decoration:underline;">beable9489@gmail.com</a>

@@ -5090,7 +5090,7 @@ html[data-tom-theme="dark"] .tom-unlocked-manual-btn {
   }
 }
 
-/* === PRIVATE WEALTH SINGLE-BREATH PLATFORM (SECTION 9) === */
+/* === EDUCATIONAL SECTOR RESEARCH SINGLE-BREATH PLATFORM === */
 
   .pw-body-reset, body {
     margin: 0;
@@ -5105,7 +5105,7 @@ html[data-tom-theme="dark"] .tom-unlocked-manual-btn {
   .pw-shell {
     max-width: 820px;
     margin: 0 auto;
-    padding: 36px 24px 48px;
+    padding: 28px 24px 48px;
     box-sizing: border-box;
   }
   .pw-shell *, .pw-shell *::before, .pw-shell *::after {
@@ -5117,8 +5117,8 @@ html[data-tom-theme="dark"] .tom-unlocked-manual-btn {
     align-items: baseline;
     gap: 16px;
     flex-wrap: wrap;
-    padding-bottom: 20px;
-    margin-bottom: 40px;
+    padding-bottom: 16px;
+    margin-bottom: 24px;
     border-bottom: 1px solid #E2E8F0;
   }
   .pw-brand-btn {
@@ -5178,11 +5178,98 @@ html[data-tom-theme="dark"] .tom-unlocked-manual-btn {
   .pw-serif-h1 {
     font-family: 'Instrument Serif', 'Playfair Display', Georgia, 'Times New Roman', serif;
     font-weight: 400;
-    font-size: clamp(2.25rem, 4.8vw, 3.2rem);
+    font-size: clamp(2.05rem, 4.6vw, 3.1rem);
     line-height: 1.12;
     letter-spacing: -0.02em;
     color: #0F172A;
-    margin: 0 0 22px;
+    margin: 0 0 14px;
+  }
+  .pw-live-temp-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    margin: 0 0 18px;
+    background: #F3F8F5;
+    border: 1px solid #A7F3D0;
+    border-radius: 999px;
+    font-family: 'Inter', sans-serif;
+    font-variant-numeric: tabular-nums;
+    font-size: 0.84rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #065F46;
+  }
+  .pw-live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #059669;
+    flex-shrink: 0;
+  }
+  .pw-above-fold-cta {
+    margin: 0 0 28px;
+  }
+  .pw-drawdown-compare-box {
+    margin: 18px 0 0;
+    padding: 16px;
+    background: #FBFBF9;
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+  }
+  .pw-drawdown-compare-title {
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #475569;
+    margin-bottom: 10px;
+  }
+  .pw-drawdown-compare-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    font-variant-numeric: tabular-nums;
+  }
+  .pw-dd-cmp-item {
+    padding: 10px 12px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .pw-dd-cmp-item.is-highlight {
+    background: #ECFDF5;
+    border-color: #059669;
+  }
+  .pw-dd-cmp-label {
+    font-size: 0.78rem;
+    color: #475569;
+  }
+  .pw-dd-cmp-val {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #0F172A;
+  }
+  .pw-dd-cmp-item.is-highlight .pw-dd-cmp-val {
+    color: #065F46;
+  }
+  .pw-save-summary-box {
+    margin-top: 22px;
+    padding-top: 20px;
+    border-top: 1px solid #E2E8F0;
+  }
+  .pw-save-summary-title {
+    font-family: 'Instrument Serif', 'Playfair Display', Georgia, serif;
+    font-size: 1.45rem;
+    font-weight: 400;
+    color: #0F172A;
+    margin: 0 0 6px;
+  }
+  @media (max-width: 680px) {
+    .pw-drawdown-compare-grid { grid-template-columns: 1fr; }
   }
   .pw-editorial-figure {
     margin: 0 0 30px;
@@ -5769,7 +5856,7 @@ html[data-tom-theme="dark"] .tom-unlocked-manual-btn {
     color: #64748B;
   }
 
-  /* Clean Private-Wealth Modal */
+  /* Clean Educational-Research Modal */
   .pw-modal-backdrop,
   .pw-modal-backdrop * {
     box-sizing: border-box;

@@ -15,7 +15,7 @@ function getTomPricingCopyByMode() {
       heading: "Track Daily SMH × XLV Regime Shifts Automatically Every Morning",
       subheading:
         "Receive daily overheating & fear regime tracking emails before the US bell, exact account-size dollar ($) allocation worksheets, and the lifetime-updated 14-Page SMH × XLV Master PDF Guide. Backed by our 14-Day Refund Policy.",
-      t1Badge: "MONTHLY VIP",
+      t1Badge: "MONTHLY RESEARCH PASS",
       t1Title: "Monthly SMH × XLV Daily Tracking & Worksheet Suite",
       t1Period: "/ month",
       t1Bundle:
@@ -25,22 +25,22 @@ function getTomPricingCopyByMode() {
         "<b>Account-Size Dollar ($) Allocation Worksheet:</b> Enter your exact account balance (e.g., <b>$150,000</b>, <b>$300,000</b>, or <b>$500,000</b>) to compute exact dollar amounts across <b>$SMH</b>, <b>$XLV</b>, and optional <b>$SGOV</b> T-Bill cushion.",
         "<b>Lifetime-Updated 14-Page SMH &times; XLV Master PDF Guide:</b> Complete 26-year (2000–2026) crash study, IRA/Taxable bucket reference, and printable self-directed execution checklist.",
       ],
-      t1Btn: "Start Monthly VIP — $29/mo →",
+      t1Btn: "Start Monthly Research Pass — $29/mo →",
       t1PayNote:
-        "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · 1-Click Cancel · 14-Day Refund Policy",
-      t2Badge: "ANNUAL VIP",
+        "💳 Whop.com (Global Card / Apple Pay / Google Pay) · 1-Click Cancel · 14-Day Refund Policy",
+      t2Badge: "ANNUAL RESEARCH PASS",
       t2Title: "Annual SMH × XLV Daily Tracking & Master Pass",
       t2Period: "/ year",
       t2Bundle:
         "Save 43% ($149/yr saved) · Full 12-Month Daily Tracking Digest + 14-Page SMH × XLV Master PDF Guide",
       t2Items: [
         "<b>Full 12-Month Daily Automated SMH &times; XLV Tracking Digest:</b> Uninterrupted morning regime &amp; ratio-shift email tracking across every market season.",
-        "<b>Account-Size Dollar ($) Allocation Worksheet + 26-Year CSV Dataset:</b> Full historical 2000–2026 <b>$SMH / $XLV / $QQQ</b> daily series and multi-account dollar worksheets.",
+        "<b>Account-Size Dollar ($) Allocation Worksheet + 2000–2025 Historical Statistical Workbook:</b> Full historical 2000–2026 <b>$SMH / $XLV / $QQQ</b> daily series and multi-account dollar worksheets.",
         "<b>Lifetime-Updated 14-Page SMH &times; XLV Master PDF Guide:</b> Save 43% vs. monthly billing — backed by our unconditional 14-Day Refund Policy.",
       ],
-      t2Btn: "Start Annual VIP — $199/yr (Save 43%) →",
+      t2Btn: "Start Annual Research Pass — $199/yr (Save 43%) →",
       t2PayNote:
-        "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · Billed Annually · 14-Day Refund Policy",
+        "💳 Whop.com (Global Card / Apple Pay / Google Pay) · Billed Annually · 14-Day Refund Policy",
       autoUnlockNote:
         "✨ Instant Software Activation: Your SMH × XLV Dollar ($) Allocation Worksheet, 14-Page Master PDF Guide, and Daily Tracking Digest activate immediately after checkout.",
       restoreSummary: "🔑 Switching computers or already subscribed? Restore your VIP License Key here",
@@ -53,8 +53,8 @@ function getTomPricingCopyByMode() {
     heading: "Historical SMH × XLV Sector Balance Simulator & Daily Automated Market Indicator Data Digest",
     subheading:
       "Upgrade for automated morning semiconductor & healthcare indicator data digests, custom account-size dollar ($) allocation worksheets, and our lifetime-updated 14-Page SMH × XLV Master PDF Guide. Backed by our 14-Day No-Questions-Asked Refund Policy.",
-    t1Badge: "MONTHLY VIP",
-    t1Title: "Monthly VIP Sector Balance Worksheet & Daily Indicator Digest",
+    t1Badge: "MONTHLY RESEARCH PASS",
+    t1Title: "Monthly Research Pass Sector Balance Worksheet & Daily Indicator Digest",
     t1Period: "/ month",
     t1Bundle:
       "Includes Daily Automated SMH × XLV Indicator Data Digest + Lifetime-Updated 14-Page SMH × XLV Master PDF Guide",
@@ -63,22 +63,22 @@ function getTomPricingCopyByMode() {
       "<b>Account-Size Dollar ($) Allocation Worksheet:</b> Enter any simulated portfolio size (e.g., <b>$150,000</b>, <b>$300,000</b>, or <b>$500,000</b>) to calculate exact mathematical dollar weights across <b>$SMH</b>, <b>$XLV</b>, and <b>$SGOV</b> Treasury reserves.",
       "<b>Lifetime-Updated 14-Page SMH &times; XLV Master PDF Guide:</b> 26-year (2000–2026) Dot-Com / 2008 / 2022 empirical drawdown study, Traditional/Roth IRA educational tax-location reference, and printable 1-page worksheet.",
     ],
-    t1Btn: "Start Monthly VIP — $29/mo",
+    t1Btn: "Start Monthly Research Pass — $29/mo",
     t1PayNote:
-      "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · 1-Click Cancel · 14-Day Refund Policy",
-    t2Badge: "ANNUAL VIP",
-    t2Title: "Annual VIP Sector Balance Worksheet & Daily Indicator Pass",
+      "💳 Whop.com (Global Card / Apple Pay / Google Pay) · 1-Click Cancel · 14-Day Refund Policy",
+    t2Badge: "ANNUAL RESEARCH PASS",
+    t2Title: "Annual Research Pass Sector Balance Worksheet & Daily Indicator Pass",
     t2Period: "/ year",
     t2Bundle:
       "Includes 12-Month Automated SMH × XLV Indicator Digest + Lifetime-Updated 14-Page SMH × XLV Master PDF Guide",
     t2Items: [
       "<b>12-Month Automated SMH &times; XLV Regime &amp; Ratio Tracking Email Digest:</b> Full-year daily morning public market indicator summaries and historical sector ratio study tables.",
-      "<b>Account-Size Dollar ($) Allocation Worksheet + 26-Year CSV Archive:</b> Exact dollar worksheets plus downloadable 2000–2026 public market historical series.",
+      "<b>Account-Size Dollar ($) Allocation Worksheet + 2000–2025 Historical Statistical Workbook:</b> Exact dollar worksheets plus downloadable 2000–2026 public market historical series.",
       "<b>Lifetime-Updated 14-Page SMH &times; XLV Master PDF Guide:</b> Save 43% ($149/yr saved vs. monthly) — self-directed educational calculator software backed by our 14-Day Refund Policy.",
     ],
-    t2Btn: "Start Annual VIP — $199/yr",
+    t2Btn: "Start Annual Research Pass — $199/yr",
     t2PayNote:
-      "💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · Billed Annually · 14-Day Refund Policy",
+      "💳 Whop.com (Global Card / Apple Pay / Google Pay) · Billed Annually · 14-Day Refund Policy",
     autoUnlockNote:
       "✨ Instant Software Activation: Your Custom SMH × XLV Dollar ($) Allocation Worksheet, 14-Page Master PDF Guide, and Daily Indicator Digest unlock automatically after checkout.",
     restoreSummary: "🔑 Switching computers or already subscribed? Restore your VIP License Key here",
@@ -90,11 +90,11 @@ export function renderPricing(state) {
   const cfg = state.config || {};
   const c = getTomPricingCopyByMode();
   const polarMonthly = formatCheckoutUrl(
-    cfg.polar_tom_monthly_url || cfg.ls_site1_monthly_url,
+    cfg.whop_tom_monthly_url || cfg.ls_site1_monthly_url,
     "#tom-vip-monthly"
   );
   const polarAnnual = formatCheckoutUrl(
-    cfg.polar_tom_annual_url || cfg.ls_site1_ltd_url,
+    cfg.whop_tom_annual_url || cfg.ls_site1_ltd_url,
     "#tom-vip-annual"
   );
 
@@ -142,7 +142,7 @@ export function renderPricing(state) {
       </div>
 
       <div class="pricing-grid">
-        <!-- Tier 1: Monthly VIP ($29/mo) -->
+        <!-- Tier 1: Monthly Research Pass ($29/mo) -->
         <div class="price-card featured">
           <div>
             <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
@@ -162,7 +162,7 @@ export function renderPricing(state) {
             </ul>
           </div>
           <div>
-            <a class="btn btn-primary polar-checkout-button price-cta-btn" id="cardMonthlyBtn" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthly}">
+            <a class="btn btn-primary whop-checkout-button price-cta-btn" id="cardMonthlyBtn" data-whop-checkout data-whop-plan="monthly" data-tom-paid-plan="monthly" href="${polarMonthly}">
               ${c.t1Btn}
             </a>
             <div class="price-pay-note">
@@ -172,7 +172,7 @@ export function renderPricing(state) {
           </div>
         </div>
 
-        <!-- Tier 2: Annual VIP ($199/yr) -->
+        <!-- Tier 2: Annual Research Pass ($199/yr) -->
         <div class="price-card best-value">
           <div>
             <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
@@ -193,7 +193,7 @@ export function renderPricing(state) {
             </ul>
           </div>
           <div>
-            <a class="btn btn-emerald polar-checkout-button price-cta-btn" id="cardLtdBtn" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" href="${polarAnnual}">
+            <a class="btn btn-emerald whop-checkout-button price-cta-btn" id="cardLtdBtn" data-whop-checkout data-whop-plan="annual" data-tom-paid-plan="annual" href="${polarAnnual}">
               ${c.t2Btn}
             </a>
             <div class="price-pay-note is-emerald">
@@ -218,7 +218,7 @@ export function renderPricing(state) {
             ${c.restoreSummary} ▾
           </summary>
           <div class="pricing-restore-body">
-            <span>Already have a Polar.sh VIP receipt key on another computer or tablet? Restore your VIP session in 1 click:</span>
+            <span>Already have a Whop Research Pass receipt ID on another computer or tablet? Restore your VIP session in 1 click:</span>
             <button type="button" class="btn btn-sm" onclick="var b=document.getElementById('btnOpenLicense');if(b){b.click();}else{var m=document.getElementById('licenseModal');if(m)m.style.display='flex';}">
               ${c.restoreBtn} &rarr;
             </button>
@@ -232,7 +232,7 @@ export function renderPricing(state) {
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
           </svg>
-          <span><b>Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)</b></span>
+          <span><b>Whop.com (Global Card / Apple Pay / Google Pay)</b></span>
         </div>
         <div class="trust-badge">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">

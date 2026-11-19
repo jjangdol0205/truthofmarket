@@ -65,12 +65,12 @@ export function renderScreenerControls(state) {
               .join("")}
           </select>
 
-          <button type="button" class="btn btn-sm" id="btnExportVipWatchlistCsv" style="min-height:40px; background:rgba(251,191,36,0.12); border-color:rgba(251,191,36,0.4); color:#fbbf24; font-weight:700; padding:6px 8px; font-size:0.71rem;" title="Download CSV of starred VIP Watchlist tickers">
-            ⭐ CSV (${cWatchlist})
+          <button type="button" class="btn btn-sm" id="btnExportVipWatchlistCsv" style="min-height:40px; background:rgba(251,191,36,0.12); border-color:rgba(251,191,36,0.4); color:#fbbf24; font-weight:700; padding:6px 8px; font-size:0.71rem;" title="Save starred VIP Watchlist snapshot">
+            ⭐ Saved (${cWatchlist})
           </button>
         </div>
 
-        <div class="filter-tabs" role="tablist" aria-label="Signal Regime Filters">
+        <div class="filter-tabs" role="tablist" aria-label="Factor Regime Filters">
           <button type="button" class="filter-tab ${f === "ALL" ? "active" : ""}" data-zone="ALL">
             <span>${t.filterAll || "All 72"}</span>
             <span class="tab-count">${cAll}</span>
@@ -111,7 +111,7 @@ export function renderStockTable(state) {
   const stocks = (state.filteredStocks || []).filter((s) => !String(s.ticker).includes("."));
   const cfg = state.config || {};
   const monthlyUrl = formatCheckoutUrl(
-    cfg.polar_tom_monthly_url || cfg.ls_site1_monthly_url,
+    cfg.whop_tom_monthly_url || cfg.ls_site1_monthly_url,
     "#tom-vip-monthly"
   );
 
@@ -131,10 +131,10 @@ export function renderStockTable(state) {
         ${t.softPaywallTitle || "🔒 VIP Historical Factor Dataset & Reference Bands"}
       </div>
       <p style="color:#cbd5e1; font-size:0.82rem; margin:0 0 12px; line-height:1.5;">
-        ${t.softPaywallDesc || "Click any unlocked stock row for factor details, or unlock Monthly VIP ($29/mo) to reveal all hidden dataset rows, MA60 reference bands, and CSV exports."}
+        ${t.softPaywallDesc || "Click any unlocked stock row for factor details, or unlock Monthly Research Pass ($29/mo) to reveal all hidden dataset rows, MA60 reference bands, and statistical workbooks."}
       </p>
-      <a class="soft-paywall-btn polar-checkout-button btn-unlock-row" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${monthlyUrl}" style="min-height:42px;">
-        🔒 ${t.softPaywallUnlockCta || "Start Monthly VIP — $29/mo"} →
+      <a class="soft-paywall-btn whop-checkout-button btn-unlock-row" data-whop-checkout data-whop-plan="monthly" data-tom-paid-plan="monthly" href="${monthlyUrl}" style="min-height:42px;">
+        🔒 ${t.softPaywallUnlockCta || "Start Monthly Research Pass — $29/mo"} →
       </a>
     </div>
   `
@@ -184,7 +184,7 @@ export function renderStockRows(state) {
   const isPro = state.isProUnlocked;
   const cfg = state.config || {};
   const polarMonthlyUrl = formatCheckoutUrl(
-    cfg.polar_tom_monthly_url || cfg.ls_site1_monthly_url,
+    cfg.whop_tom_monthly_url || cfg.ls_site1_monthly_url,
     "#tom-vip-monthly"
   );
   const tvAffId = encodeURIComponent(cfg.tradingview_aff_id || "1173809");
@@ -236,8 +236,8 @@ export function renderStockRows(state) {
             </div>
             <div class="mobile-stock-card-summary" style="margin-top:8px; padding-top:7px; border-top:1px solid rgba(51,65,85,0.55); align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap;">
               <span class="badge ${badgeClass}">${cleanZoneLabel}</span>
-              <a class="btn btn-primary btn-sm polar-checkout-button btn-unlock-row" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthlyUrl}" style="min-height:40px; white-space:nowrap; font-weight:700;">
-                🔒 Start Monthly VIP — $29/mo
+              <a class="btn btn-primary btn-sm whop-checkout-button btn-unlock-row" data-whop-checkout data-whop-plan="monthly" data-tom-paid-plan="monthly" href="${polarMonthlyUrl}" style="min-height:40px; white-space:nowrap; font-weight:700;">
+                🔒 Start Monthly Research Pass — $29/mo
               </a>
             </div>
           </div>
@@ -266,13 +266,13 @@ export function renderStockRows(state) {
         <td class="mono col-num" style="color:#34d399; font-weight:700;">&ge;1.40x</td>
         <td class="mono col-num" style="color:#94a3b8;">🔒 VIP</td>
         <td>
-          <a class="btn btn-primary btn-sm polar-checkout-button btn-unlock-row" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthlyUrl}" style="min-height:38px; white-space:nowrap; font-weight:700;">
-            🔒 Start Monthly VIP — $29/mo
+          <a class="btn btn-primary btn-sm whop-checkout-button btn-unlock-row" data-whop-checkout data-whop-plan="monthly" data-tom-paid-plan="monthly" href="${polarMonthlyUrl}" style="min-height:38px; white-space:nowrap; font-weight:700;">
+            🔒 Start Monthly Research Pass — $29/mo
           </a>
         </td>
         <td>
-          <a class="btn btn-primary btn-sm polar-checkout-button btn-unlock-row" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthlyUrl}" style="min-height:38px; white-space:nowrap; font-weight:700;">
-            🔒 Start Monthly VIP — $29/mo
+          <a class="btn btn-primary btn-sm whop-checkout-button btn-unlock-row" data-whop-checkout data-whop-plan="monthly" data-tom-paid-plan="monthly" href="${polarMonthlyUrl}" style="min-height:38px; white-space:nowrap; font-weight:700;">
+            🔒 Start Monthly Research Pass — $29/mo
           </a>
         </td>
       </tr>
@@ -311,8 +311,8 @@ export function renderStockRows(state) {
              }</div>
              <div><span style="color:var(--muted);">STP</span> <span style="color:var(--fin-down); font-weight:600;">${stopDisp}</span> · <span style="color:var(--fin-up);">TP ${tp1Disp}</span></div>
            </div>`
-        : `<a class="btn btn-sm polar-checkout-button btn-unlock-row" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthlyUrl}" style="min-height:38px; white-space:nowrap; font-weight:700; border-color:rgba(59,130,246,0.45); color:#93c5fd; background:rgba(37,99,235,0.14);">
-             🔒 Start Monthly VIP — $29/mo
+        : `<a class="btn btn-sm whop-checkout-button btn-unlock-row" data-whop-checkout data-whop-plan="monthly" data-tom-paid-plan="monthly" href="${polarMonthlyUrl}" style="min-height:38px; white-space:nowrap; font-weight:700; border-color:rgba(59,130,246,0.45); color:#93c5fd; background:rgba(37,99,235,0.14);">
+             🔒 Start Monthly Research Pass — $29/mo
            </a>`;
 
       const tvUrl = `https://www.tradingview.com/symbols/${encodeURIComponent(s.ticker)}/?aff_id=${tvAffId}`;

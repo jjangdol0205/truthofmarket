@@ -10,7 +10,7 @@ import {
   fetchResearchBrief,
   validateLicense,
   verifyAdminCredentials,
-  fetchPineScript,
+  fetchFactorFormula,
   evaluatePositionDoctor,
   evaluatePortfolioDoctor,
   fetchSectorMatrix,
@@ -94,11 +94,11 @@ const defaultView =
       localStorage.setItem("rsa_cfg_site1_url", "https://truthofmarket.com");
     }
     const oldM = localStorage.getItem("rsa_cfg_ls_monthly") || "";
-    if (oldM && !/^https:\/\/(buy\.)?polar\.sh\//i.test(oldM)) {
+    if (oldM && !/^https:\/\/whop\.com\/checkout\//i.test(oldM)) {
       localStorage.removeItem("rsa_cfg_ls_monthly");
     }
     const oldL = localStorage.getItem("rsa_cfg_ls_ltd") || "";
-    if (oldL && !/^https:\/\/(buy\.)?polar\.sh\//i.test(oldL)) {
+    if (oldL && !/^https:\/\/whop\.com\/checkout\//i.test(oldL)) {
       localStorage.removeItem("rsa_cfg_ls_ltd");
     }
     const oldTv = localStorage.getItem("rsa_cfg_aff_tv") || "";
@@ -204,12 +204,12 @@ const state = {
     site1_name: "TruthOfMarket",
     site1_url: localStorage.getItem("rsa_cfg_site1_url") || "https://truthofmarket.com",
     site2_url: "https://truthofmarket.com",
-    polar_tom_monthly_url:
-      localStorage.getItem("rsa_cfg_polar_monthly") ||
+    whop_tom_monthly_url:
+      localStorage.getItem("rsa_cfg_whop_monthly") ||
       localStorage.getItem("rsa_cfg_ls_monthly") ||
       "",
-    polar_tom_annual_url:
-      localStorage.getItem("rsa_cfg_polar_annual") ||
+    whop_tom_annual_url:
+      localStorage.getItem("rsa_cfg_whop_annual") ||
       localStorage.getItem("rsa_cfg_ls_ltd") ||
       "",
     ls_site1_monthly_url: "",
@@ -444,7 +444,7 @@ function switchView(targetView) {
 }
 
 async function handlePolarCheckoutSuccess(orderRef) {
-  const tokenVal = String(orderRef || "RSA-PRO-2026-POLAR-CHECKOUT").trim();
+  const tokenVal = String(orderRef || "RSA-PRO-2026-WHOP-CHECKOUT").trim();
   state.isProUnlocked = true;
   state.licenseKey = tokenVal;
   try {
@@ -468,7 +468,7 @@ async function handlePolarCheckoutSuccess(orderRef) {
   if (licModal) licModal.style.display = "none";
   renderApp();
   showToast(
-    "Polar.sh Payment Confirmed! All 72 Pro Setups Unlocked (Check your email for your permanent License Key)."
+    "Whop Research Pass Confirmed! All 72 Pro Setups Unlocked (Check your email for your permanent License Key)."
   );
 }
 
@@ -480,18 +480,18 @@ function bindRsaPolarCheckoutEvents() {
       window.addEventListener("message", (ev) => {
         try {
           const origin = String(ev?.origin || "").toLowerCase();
-          if (!origin.includes("polar.sh")) return;
+          if (!origin.includes("whop.com")) return;
           const d = ev.data;
           const isSuccess =
-            d === "polar_checkout_success" ||
+            d === "whop_checkout_success" ||
             (d &&
               typeof d === "object" &&
               (d.event === "success" ||
-                d.event === "polar_checkout_success" ||
-                d.type === "polar_checkout_success" ||
+                d.event === "whop_checkout_success" ||
+                d.type === "whop_checkout_success" ||
                 d.status === "succeeded"));
           if (isSuccess) {
-            handlePolarCheckoutSuccess("RSA-PRO-2026-POLAR-EMBED");
+            handlePolarCheckoutSuccess("RSA-PRO-2026-WHOP-EMBED");
           }
         } catch (_) {}
       });
@@ -515,7 +515,7 @@ if (typeof window !== "undefined") {
 }
 
 function bindEvents() {
-  // Initialize Polar.sh checkout postMessage & auto-unlock handler
+  // Initialize Whop.com checkout postMessage & auto-unlock handler
   bindRsaPolarCheckoutEvents();
 
   // Senior Font Size A+ 3-Step Cycle (18px -> 20px -> 22px -> 18px) & Daylight/Dark Toggle
@@ -1159,7 +1159,7 @@ function bindEvents() {
         e.preventDefault();
         openLicenseModal(
           false,
-          "🔒 VIP Telegram Educational Research Channel is available for Monthly VIP ($29/mo) and Annual VIP ($199/yr) subscribers."
+          "🔒 VIP Telegram Educational Research Channel is available for Monthly Research Pass ($29/mo) and Annual Research Pass ($199/yr) subscribers."
         );
       }
     });
@@ -1189,7 +1189,7 @@ function bindEvents() {
     if (!key) {
       if (msgEl) {
         msgEl.style.color = "var(--fin-down)";
-        msgEl.textContent = "Please enter your Polar.sh VIP license key.";
+        msgEl.textContent = "Please enter your Whop.com VIP license key.";
       }
       return;
     }
@@ -1214,7 +1214,7 @@ function bindEvents() {
         if (msgEl) {
           msgEl.style.color = "var(--fin-down)";
           msgEl.textContent =
-            res.message || "Invalid or expired license key. Please verify your Polar.sh receipt or subscribe below.";
+            res.message || "Invalid or expired license key. Please verify your Whop.com receipt or subscribe below.";
         }
       }
     } catch (err) {
@@ -1428,8 +1428,8 @@ function bindEvents() {
         "https://trendspider.com/?_go=rightside";
 
       state.config.site1_url = s1Url;
-      state.config.polar_tom_monthly_url = polarM;
-      state.config.polar_tom_annual_url = polarA;
+      state.config.whop_tom_monthly_url = polarM;
+      state.config.whop_tom_annual_url = polarA;
       state.config.telegram_channel_url = tgCh;
       state.config.youtube_url = ytUrl;
       state.config.instagram_url = igUrl;
@@ -1439,8 +1439,8 @@ function bindEvents() {
       state.config.broker_referral_url = brkUrl;
 
       localStorage.setItem("rsa_cfg_site1_url", s1Url);
-      localStorage.setItem("rsa_cfg_polar_monthly", polarM);
-      localStorage.setItem("rsa_cfg_polar_annual", polarA);
+      localStorage.setItem("rsa_cfg_whop_monthly", polarM);
+      localStorage.setItem("rsa_cfg_whop_annual", polarA);
       localStorage.setItem("rsa_tg_channel_url", tgCh);
       localStorage.setItem("rsa_cfg_youtube_url", ytUrl);
       localStorage.setItem("rsa_cfg_instagram_url", igUrl);
@@ -1455,8 +1455,8 @@ function bindEvents() {
           seekingalpha_source: saSrc,
           broker_name: brkName,
           broker_referral_url: brkUrl,
-          polar_tom_monthly_url: polarM,
-          polar_tom_annual_url: polarA,
+          whop_tom_monthly_url: polarM,
+          whop_tom_annual_url: polarA,
           site1_url: s1Url,
           telegram_channel_url: tgCh,
           youtube_url: ytUrl,
@@ -1694,12 +1694,12 @@ function bindEvents() {
     });
   }
 
-  // Pro VIP 1-Click 72-Stock CSV Export, TradingView Watchlist & Webhook JSON
+  // Pro VIP 1-Click 72-Stock Workbook Snapshot, TradingView Watchlist & Webhook JSON
   const btnDownloadPro72Csv = document.getElementById("btnDownloadPro72Csv");
   if (btnDownloadPro72Csv) {
     btnDownloadPro72Csv.addEventListener("click", () => {
       if (!state.isProUnlocked) {
-        openLicenseModal(false, "🔒 Upgrade to VIP Software ($29/mo Monthly VIP or $199/yr Annual VIP) to download the full Historical Factor Dataset (.CSV).");
+        openLicenseModal(false, "🔒 Upgrade to VIP Software ($29/mo Monthly Research Pass or $199/yr Annual Research Pass) to download the full Historical Factor Dataset (Workbook).");
         return;
       }
       const perSlot = Math.round((state.proPortfolioUsd || 30000) * 0.15);
@@ -1721,7 +1721,7 @@ function bindEvents() {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showToast("📥 Downloaded Historical Factor Dataset (.CSV)");
+      showToast("📥 Downloaded Historical Factor Dataset (Workbook)");
     });
   }
 
@@ -1860,7 +1860,7 @@ function bindEvents() {
     });
   }
 
-  // 1-Click VIP Watchlist CSV Export
+  // 1-Click VIP Watchlist Workbook Snapshot
   const exportWatchlistCsv = () => {
     if (!state.isProUnlocked) {
       openLicenseModal(false, "Save custom VIP watchlists and get breakout alerts with Pro VIP.");
@@ -1891,7 +1891,7 @@ function bindEvents() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    showToast(`📥 Exported ${starredStocks.length} Starred Watchlist Tickers (.CSV)`);
+    showToast(`📥 Exported ${starredStocks.length} Starred Watchlist Tickers (Workbook)`);
   };
 
   const btnExportVipWatchlistCsv = document.getElementById("btnExportVipWatchlistCsv");
@@ -2321,16 +2321,16 @@ function bindEvents() {
     });
   });
 
-  // Copy Pine Script v5
-  const btnCopyPineScript = document.getElementById("btnCopyPineScript");
-  if (btnCopyPineScript) {
-    btnCopyPineScript.addEventListener("click", async () => {
+  // Copy Historical Factor Formula
+  const btnCopyHistorical Factor Formula = document.getElementById("btnCopyHistorical Factor Formula");
+  if (btnCopyHistorical Factor Formula) {
+    btnCopyHistorical Factor Formula.addEventListener("click", async () => {
       const code = document.getElementById("pineCodeBox")?.textContent || "";
       try {
         await navigator.clipboard.writeText(code);
-        showToast("TradingView Pine Script v5 Copied to Clipboard");
+        showToast("TradingView Historical Factor Formula Copied to Clipboard");
       } catch (e) {
-        showToast("Pine Script Ready to Copy");
+        showToast("Historical Factor Formula Ready to Copy");
       }
     });
   }
@@ -2454,7 +2454,7 @@ function bindEvents() {
     btnDownloadSemiCsv.addEventListener("click", async () => {
       if (!state.isProUnlocked) {
         openLicenseModal(false);
-        showToast("Unlock VIP Software ($29/mo Monthly VIP or $199/yr Annual VIP) to download the 26-Year Daily CSV Dataset");
+        showToast("Unlock VIP Software ($29/mo Monthly Research Pass or $199/yr Annual Research Pass) to download the 2000–2025 Historical Statistical Workbook");
         return;
       }
       const key = encodeURIComponent(state.licenseKey || "");
@@ -2484,9 +2484,9 @@ function bindEvents() {
         a.download = `SemiFearGreed_SMH_XLV_2000_2026_History_${state.semiOverview?.date || "latest"}.csv`;
         a.click();
         URL.revokeObjectURL(url);
-        showToast("Downloaded 26-Year Daily CSV Dataset");
+        showToast("Downloaded 2000–2025 Historical Statistical Workbook");
       } catch (err) {
-        showToast("Failed to generate CSV dataset");
+        showToast("Failed to generate statistical workbook");
       }
     });
   }
@@ -2511,11 +2511,11 @@ function openStockDetailModal(ticker) {
   const stop = Number(s.stop_loss_price ?? closeVal * 0.91).toFixed(2);
   const tp1 = Number(s.tp1_2x_price ?? closeVal * 2.0).toFixed(2);
   const polarMonthly = formatCheckoutUrl(
-    state.config?.polar_tom_monthly_url || state.config?.ls_site1_monthly_url,
+    state.config?.whop_tom_monthly_url || state.config?.ls_site1_monthly_url,
     "#tom-vip-monthly"
   );
   const polarAnnual = formatCheckoutUrl(
-    state.config?.polar_tom_annual_url || state.config?.ls_site1_ltd_url,
+    state.config?.whop_tom_annual_url || state.config?.ls_site1_ltd_url,
     "#tom-vip-annual"
   );
   const tvAffId = encodeURIComponent(state.config?.tradingview_aff_id || "1173809");
@@ -2572,13 +2572,13 @@ function openStockDetailModal(ticker) {
              <span>Upper Model Ref: <b style="color:var(--fin-up);">$${tp1}</b></span>
            </div>`
         : `<div style="background:rgba(37,99,235,0.1); border:1px solid rgba(59,130,246,0.38); border-radius:6px; padding:12px; margin-bottom:12px;">
-             <div style="font-weight:800; color:#ffffff; margin-bottom:6px;">🔒 Historical Factor Reference Bands &amp; CSV Export</div>
+             <div style="font-weight:800; color:#ffffff; margin-bottom:6px;">🔒 Historical Factor Reference Bands &amp; Workbook Snapshot</div>
              <div style="display:flex; gap:8px; flex-wrap:wrap;">
-               <a class="btn btn-primary btn-sm polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthly}" style="min-height:40px; font-weight:800;">
-                 🔒 Start Monthly VIP — $29/mo
+               <a class="btn btn-primary btn-sm whop-checkout-button" data-whop-checkout data-whop-plan="monthly" data-tom-paid-plan="monthly" href="${polarMonthly}" style="min-height:40px; font-weight:800;">
+                 🔒 Start Monthly Research Pass — $29/mo
                </a>
-               <a class="btn btn-emerald btn-sm polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" href="${polarAnnual}" style="min-height:40px; font-weight:800;">
-                 💎 Start Annual VIP — $199/yr
+               <a class="btn btn-emerald btn-sm whop-checkout-button" data-whop-checkout data-whop-plan="annual" data-tom-paid-plan="annual" href="${polarAnnual}" style="min-height:40px; font-weight:800;">
+                 💎 Start Annual Research Pass — $199/yr
                </a>
              </div>
            </div>`
@@ -2811,7 +2811,7 @@ function generateSemiGaugePng() {
 
   ctx.fillStyle = "#b91c1c";
   ctx.font = "bold 22px Inter, sans-serif";
-  ctx.fillText(`Active Signal: ${ov.action_headline_en}`, 45, 230);
+  ctx.fillText(`Historical Regime: ${ov.action_headline_en}`, 45, 230);
 
   ctx.fillStyle = "#4b5563";
   ctx.font = "18px JetBrains Mono, monospace";
@@ -2992,7 +2992,7 @@ async function loadAllData() {
         if (v !== undefined && v !== null && v !== "") {
           if (
             (k === "ls_site1_monthly_url" || k === "ls_site1_ltd_url") &&
-            !/^https:\/\/(buy\.)?polar\.sh\//i.test(String(v))
+            !/^https:\/\/whop\.com\/checkout\//i.test(String(v))
           ) {
             return;
           }
@@ -3044,7 +3044,7 @@ async function loadAllData() {
     }
 
     if (state.isProUnlocked) {
-      const pine = await fetchPineScript().catch(() => null);
+      const pine = await fetchFactorFormula().catch(() => null);
       if (pine && pine.code) state.pineCode = pine.code;
     }
     applyClientFilterAndSort();
@@ -3115,12 +3115,12 @@ async function init() {
   renderApp();
   handleSpecialAnchorScroll();
 
-  // Auto-unlock Pro Terminal when returning from Polar.sh checkout with ?payment=success, ?polar_checkout_success=1, ?license_key=, ?order_key=, or ?key=
+  // Auto-unlock Pro Terminal when returning from Whop.com checkout with ?payment=success, ?whop_checkout_success=1, ?license_key=, ?order_key=, or ?key=
   if (
     initialSearch.get("payment") === "success" ||
-    initialSearch.get("polar_checkout_success") === "1"
+    initialSearch.get("whop_checkout_success") === "1"
   ) {
-    const cid = initialSearch.get("checkout_id") || initialSearch.get("customer_session_token") || "POLAR-VIP";
+    const cid = initialSearch.get("checkout_id") || initialSearch.get("customer_session_token") || "WHOP-VIP";
     if (!state.isProUnlocked) {
       await handlePolarCheckoutSuccess(`RSA-PRO-2026-${cid}`);
     }
@@ -3142,7 +3142,7 @@ async function init() {
         localStorage.setItem("rsa_token", urlLicenseKey);
         await loadAllData();
         renderApp();
-        showToast("Polar.sh VIP License Verified — All 72 US Equity Targets Unlocked!");
+        showToast("Whop Research Pass Verified — All 72 US Equity Targets Unlocked!");
       }
     } catch (_) {}
   }
@@ -3157,8 +3157,8 @@ async function init() {
         if (msgEl) {
           msgEl.style.color = "#34d399";
           msgEl.textContent = checkoutParam === "annual"
-            ? "🏆 Annual VIP ($199/yr): Click Start Annual VIP — $199/yr above, or paste your License Key below to unlock immediately."
-            : "⚡ Monthly VIP ($29/mo): Click Start Monthly VIP — $29/mo above, or paste your License Key below to unlock immediately.";
+            ? "🏆 Annual Research Pass ($199/yr): Click Start Annual Research Pass — $199/yr above, or paste your License Key below to unlock immediately."
+            : "⚡ Monthly Research Pass ($29/mo): Click Start Monthly Research Pass — $29/mo above, or paste your License Key below to unlock immediately.";
         }
       }
     }, 200);

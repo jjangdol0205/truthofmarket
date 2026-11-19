@@ -376,7 +376,7 @@ export function renderSemiFearGreedView(state) {
           }
         </div>
 
-        <!-- RIGHT COLUMN: CNN 4-ROW HISTORICAL STACK + BARBELL SIGNAL -->
+        <!-- RIGHT COLUMN: CNN 4-ROW HISTORICAL STACK + HISTORICAL STUDY RATIO -->
         <div class="cnn-card" style="display:flex; flex-direction:column; justify-content:space-between;">
           <div>
             <div style="font-size:0.78rem; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; color:var(--muted); margin-bottom:8px;">
@@ -407,7 +407,7 @@ export function renderSemiFearGreedView(state) {
           <!-- Active SMH:XLV Barbell Regime Box -->
           <div style="margin-top:16px; padding:14px 16px; background:rgba(220,38,38,0.1); border:1px solid rgba(220,38,38,0.3); border-left:4px solid #dc2626; border-radius:4px;">
             <div style="font-size:0.68rem; font-weight:800; color:#fca5a5; letter-spacing:0.05em; text-transform:uppercase;">
-              ${t.cnnActiveRuleLabel} · TARGET ${ov.recommended_smh_weight}% $SMH : ${ov.recommended_xlv_weight}% $XLV
+              ${t.cnnActiveRuleLabel} · TARGET ${ov.historical_study_smh_ratio}% $SMH : ${ov.historical_study_xlv_ratio}% $XLV
             </div>
             <div style="font-size:0.88rem; font-weight:800; color:#ffffff; margin-top:4px;">
               ${actionHeadline}
@@ -684,7 +684,7 @@ export function renderSemiFearGreedView(state) {
           <p style="font-size:0.8rem; color:var(--muted); margin-top:2px;">${t.eraSectionDesc}</p>
         </div>
         <button class="btn btn-sm" id="btnDownloadSemiCsv">
-          Download 2000–2026 Daily CSV Dataset (Pro)
+          Download 2000–2026 Historical Statistical Workbook (Pro)
         </button>
       </div>
 
@@ -727,7 +727,7 @@ export function renderSemiFearGreedView(state) {
       </div>
     </section>
 
-    <!-- SECTION 5: MONTHLY & ANNUAL VIP EDUCATIONAL SOFTWARE PRICING -->
+    <!-- SECTION 5: MONTHLY & ANNUAL RESEARCH PASS EDUCATIONAL SOFTWARE PRICING -->
     ${renderPricing(state)}
 
     <!-- CROSS-PLATFORM SWITCH BANNER BACK TO RETIREMENT ARCHITECT & QUANT ARCHIVE -->

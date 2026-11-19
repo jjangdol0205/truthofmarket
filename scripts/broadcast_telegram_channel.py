@@ -151,8 +151,8 @@ def build_vip_briefing_with_news(client: httpx.Client) -> str:
     as_of = semi.get("date") or "2026-11-05"
     fg_score = float(semi.get("fg_score", 18.0))
     regime_en = str(semi.get("regime_en", "Extreme Fear")).upper()
-    smh_w = int(semi.get("recommended_smh_weight", 80 if fg_score <= 25.0 else 70))
-    xlv_w = int(semi.get("recommended_xlv_weight", 100 - smh_w))
+    smh_w = int(semi.get("historical_study_smh_ratio", 80 if fg_score <= 25.0 else 70))
+    xlv_w = int(semi.get("historical_study_xlv_ratio", 100 - smh_w))
     smh_close = float(semi.get("smh_close", 504.48))
     smh_dd = float(semi.get("smh_dd_pct", -24.58))
     smh_rsi = float(semi.get("smh_rsi", 34.2))

@@ -1042,11 +1042,11 @@ export function renderHero(state) {
 export function renderFreeStarterManual(state) {
   const cfg = (state && state.config) || {};
   const polarMonthly = formatCheckoutUrl(
-    cfg.polar_tom_monthly_url || cfg.ls_site1_monthly_url,
+    cfg.whop_tom_monthly_url || cfg.ls_site1_monthly_url,
     "#tom-vip-monthly"
   );
   const polarAnnual = formatCheckoutUrl(
-    cfg.polar_tom_annual_url || cfg.ls_site1_ltd_url,
+    cfg.whop_tom_annual_url || cfg.ls_site1_ltd_url,
     "#tom-vip-annual"
   );
   const isWebView =
@@ -1115,18 +1115,18 @@ export function renderFreeStarterManual(state) {
         </button>
         <a
           href="${polarMonthly}"
-          class="tom-manual-vip-link polar-checkout-button"
-          data-polar-checkout
-          data-polar-plan="monthly_29"
+          class="tom-manual-vip-link whop-checkout-button"
+          data-whop-checkout
+          data-whop-plan="monthly"
           data-tom-paid-plan="monthly"
         >
           ⚡ Stage 3: Daily Tracking VIP — $29/mo
         </a>
         <a
           href="${polarAnnual}"
-          class="tom-manual-vip-link is-ltd polar-checkout-button"
-          data-polar-checkout
-          data-polar-plan="annual_199"
+          class="tom-manual-vip-link is-ltd whop-checkout-button"
+          data-whop-checkout
+          data-whop-plan="annual"
           data-tom-paid-plan="annual"
         >
           👑 Annual VIP — $199/yr (Save 43%)

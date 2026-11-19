@@ -1,51 +1,64 @@
 /**
- * TruthOfMarket — Single-Breath Private-Wealth Step-Up Platform (GEMINI.md Section 9)
+ * TruthOfMarket — Single-Breath Educational Sector Research Platform
  * 0 Emojis · 0 Clutter Below Step-Up Container · 1-Line Legal Footer Only
+ * Strictly Non-Advisory Educational Publisher · Whop (@whop/checkout) Live Integration
  */
 
 const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shell">
       <header class="pw-masthead">
         <button type="button" class="pw-brand-btn" data-pw-go-home="1">
           <span class="pw-wordmark">TRUTH OF MARKET</span>
-          <span class="pw-submark">Private Wealth Quantitative Desk</span>
+          <span class="pw-submark">Independent Market Data &amp; Educational Research</span>
         </button>
         <button type="button" class="pw-signin-link" id="btnOpenPwRestoreModal">Member Sign-In / Restore</button>
       </header>
 
-      <!-- Screen 0: Founding Manifesto & 2000-2025 Institutional Simulation Table -->
+      <!-- Screen 0: Above-the-Fold Instant Start CTA + Live Market Temperature + Founding Note & 2000-2025 Simulation Table -->
       <section id="pwScreen0" data-pw-screen="0">
-        <div class="pw-kicker">FOUNDING CHARTER &middot; QUANTITATIVE SECTOR ARCHITECTURE</div>
+        <div class="pw-kicker">INDEPENDENT MARKET DATA &amp; EDUCATIONAL RESEARCH</div>
         <h1 class="pw-serif-h1">Why quiet two-pillar discipline outlasts loud stock picking.</h1>
+
+        <div class="pw-live-temp-pill" id="tomLiveTempBadge" role="status" aria-live="polite">
+          <span class="pw-live-dot" aria-hidden="true"></span>
+          <span id="tomLiveTempText">Data As Of: 2026-11-18 &middot; Sector Temperature: 11 / 100 (Extreme Fear Regime)</span>
+        </div>
+
+        <div class="pw-primary-cta-wrap pw-above-fold-cta">
+          <button type="button" class="pw-btn-primary pw-btn-emerald" id="btnStartPwStepUp" data-pw-start-stepup="1">
+            Explore Historical Sector Backtest (4 Steps) &rarr;
+          </button>
+          <span class="pw-cta-caption">Instant free 2000&ndash;2025 historical study ratio &amp; drawdown comparison &middot; Zero email wall</span>
+        </div>
 
         <figure class="pw-editorial-figure">
           <div class="pw-editorial-plate">
             <img src="/images/tom-private-wealth-study.jpg" alt="Sunlit coastal study desk overlooking quiet morning harbor water" width="1200" height="675" loading="eager" decoding="async" />
           </div>
-          <figcaption class="pw-editorial-caption">Quiet discipline over daily market noise &mdash; designing a household portfolio calm enough to hold through every cycle.</figcaption>
+          <figcaption class="pw-editorial-caption">Quiet empirical study over daily market noise &mdash; comparing two-pillar sector resilience across 25 years of market cycles.</figcaption>
         </figure>
 
         <div class="pw-manifesto">
           <p>
-            Most households approaching or living in retirement do not lose sleep&mdash;or hard-earned capital&mdash;because they ignored the market. They lose both because financial media pushes investors to chase dozens of noisy stock tips at once, quietly drifting into pure technology concentration right before a multi-year downturn.
+            Most households approaching or living in retirement do not lose sleep&mdash;or hard-earned savings&mdash;because they ignored the market. They lose both because financial media pushes savers to chase dozens of noisy stock stories at once, quietly drifting into pure technology concentration right before a multi-year downturn.
           </p>
           <p>
-            We built <strong>Truth of Market</strong> for a calmer purpose. Rather than sending speculative trade alerts, our quantitative research desk focuses on one enduring discipline: participating in structural semiconductor innovation (<strong>SMH</strong>) while anchoring household composure with non-cyclical healthcare cash flows (<strong>XLV</strong>) and short-term US Treasury reserves (<strong>SGOV</strong>).
+            We built <strong>Truth of Market</strong> as an independent, strictly non-advisory educational research publisher. Rather than issuing speculative trade alerts, our historical research studies one enduring empirical structure: pairing secular semiconductor innovation (<strong>SMH</strong>) with non-cyclical healthcare cash flows (<strong>XLV</strong>) and short-term US Treasury reserves (<strong>SGOV</strong>).
           </p>
           <p>
-            Through a brief four-question assessment below, this platform maps your initial sector baseline, tracks daily public market temperature so you know when historical risk has stretched to extremes, and provides structured retirement withdrawal and tax-account planning tools.
+            Use our <strong>Historical Sector Backtest Explorer</strong> to compare how different 2000&ndash;2025 <strong>SMH &times; XLV + SGOV</strong> historical study ratios behaved across past downturns, and explore our <strong>Educational Market Data Newsletter + 2000&ndash;2025 Historical Statistical Workbook</strong>.
           </p>
         </div>
 
         <div class="pw-table-card" role="region" aria-label="2000-2025 Historical Simulation Comparison">
           <div class="pw-table-header">
-            <span class="pw-table-title">TABLE I &mdash; HISTORICAL SECTOR SIMULATION (2000&ndash;2025)</span>
+            <span class="pw-table-title">TABLE I &mdash; 2000&ndash;2025 HISTORICAL SECTOR STATISTICAL CASE STUDY</span>
             <span class="pw-table-meta">Non-Leveraged 1x Spot Index / ETF Series</span>
           </div>
           <div class="pw-table-scroll">
             <table class="pw-sim-table">
               <thead>
                 <tr>
-                  <th>Architecture</th>
+                  <th>Historical Case Study</th>
                   <th>Annualized (CAGR)</th>
                   <th>Worst Crisis DD</th>
                   <th>Recovery Period</th>
@@ -75,7 +88,7 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
                   <td>0.16x</td>
                 </tr>
                 <tr class="is-featured">
-                  <td>SMH &times; XLV Disciplined Balance</td>
+                  <td>SMH &times; XLV 2-Pillar Historical Study</td>
                   <td>~11.4%</td>
                   <td class="pw-dd-neg">-27.8%</td>
                   <td>19 mos</td>
@@ -85,19 +98,19 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
             </table>
           </div>
           <p class="pw-table-note">
-            Historical index/ETF simulation (2000&ndash;2025, semi-annual systematic ratio reset) for self-directed educational data visualization only; past results do not guarantee future performance.
+            2000&ndash;2025 historical statistical case study (semi-annual systematic ratio reset on non-leveraged 1x spot series) published strictly for general educational research; past historical statistics never guarantee future performance.
           </p>
         </div>
 
         <div class="pw-primary-cta-wrap">
-          <button type="button" class="pw-btn-primary pw-btn-emerald" id="btnStartPwStepUp">
-            Design My Personal Balance &rarr;
+          <button type="button" class="pw-btn-primary pw-btn-emerald" data-pw-start-stepup="1">
+            Historical Sector Backtest Explorer (4 Steps) &rarr;
           </button>
-          <span class="pw-cta-caption">Four brief inputs &middot; Instant baseline computation &middot; No brokerage login required</span>
+          <span class="pw-cta-caption">Four brief study parameters &middot; Instant free baseline summary &middot; No brokerage login required</span>
         </div>
       </section>
 
-      <!-- Screen 1: Focused 1-Question-at-a-Time Step-Up Assessment (Step 1 of 4 -> 4 of 4) -->
+      <!-- Screen 1: Focused 1-Question-at-a-Time Historical Sector Backtest Explorer (Step 1 of 4 -> 4 of 4) -->
       <section id="pwScreen1" data-pw-screen="1" style="display:none;">
         <div class="pw-step-card">
           <div class="pw-step-top">
@@ -109,28 +122,28 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
           </div>
 
           <div data-pw-qpane="1">
-            <h2 class="pw-q-title">What is your primary objective for this capital?</h2>
-            <p class="pw-q-sub">Select the mandate that best reflects how this account serves your household.</p>
-            <div class="pw-option-list" role="radiogroup" aria-label="Primary Capital Goal">
+            <h2 class="pw-q-title">Which historical case-study profile would you like to explore?</h2>
+            <p class="pw-q-sub">Select the long-term study profile to compare across the 2000&ndash;2025 dataset.</p>
+            <div class="pw-option-list" role="radiogroup" aria-label="Historical Study Profile">
               <button type="button" class="pw-opt-btn" data-pw-field="objective" data-pw-val="growth">
-                <div class="pw-opt-head"><span><span class="pw-opt-num">I</span><span class="pw-opt-title">Capital Growth &amp; AI Participation</span></span><span>&rarr;</span></div>
-                <span class="pw-opt-desc">Emphasize structural semiconductor compounding (SMH) while tempering severe cycle drawdowns with XLV.</span>
+                <div class="pw-opt-head"><span><span class="pw-opt-num">I</span><span class="pw-opt-title">Secular Growth &amp; Semiconductor Study</span></span><span>&rarr;</span></div>
+                <span class="pw-opt-desc">Examine higher semiconductor compounding weight (SMH) paired with healthcare drawdown buffering (XLV).</span>
               </button>
               <button type="button" class="pw-opt-btn is-selected" data-pw-field="objective" data-pw-val="balanced">
-                <div class="pw-opt-head"><span><span class="pw-opt-num">II</span><span class="pw-opt-title">Balanced Retirement Income &amp; Stability</span></span><span>&rarr;</span></div>
-                <span class="pw-opt-desc">Pair secular growth (SMH) with resilient healthcare cash flows (XLV) for steady multi-cycle compounding.</span>
+                <div class="pw-opt-head"><span><span class="pw-opt-num">II</span><span class="pw-opt-title">Balanced Retirement Cash-Flow Study</span></span><span>&rarr;</span></div>
+                <span class="pw-opt-desc">Compare balanced secular growth (SMH) and non-cyclical healthcare cash flows (XLV) across full cycles.</span>
               </button>
               <button type="button" class="pw-opt-btn" data-pw-field="objective" data-pw-val="preservation">
-                <div class="pw-opt-head"><span><span class="pw-opt-num">III</span><span class="pw-opt-title">Capital Preservation First</span></span><span>&rarr;</span></div>
-                <span class="pw-opt-desc">Prioritize defensive healthcare (XLV) and short-term US Treasury liquidity (SGOV) to protect principal.</span>
+                <div class="pw-opt-head"><span><span class="pw-opt-num">III</span><span class="pw-opt-title">Defensive Stability &amp; Treasury Reserve Study</span></span><span>&rarr;</span></div>
+                <span class="pw-opt-desc">Study defensive healthcare (XLV) and 0&ndash;3 month US Treasury liquidity (SGOV) during deep downturns.</span>
               </button>
             </div>
           </div>
 
           <div data-pw-qpane="2" style="display:none;">
-            <h2 class="pw-q-title">What is the approximate scale of your portfolio?</h2>
-            <p class="pw-q-sub">Used strictly in your browser to calibrate defensive reserve thresholds across 401(k), IRA, and taxable accounts.</p>
-            <div class="pw-scale-grid" role="radiogroup" aria-label="Portfolio Scale">
+            <h2 class="pw-q-title">Select a sample dollar scale for worksheet illustration.</h2>
+            <p class="pw-q-sub">Computed locally in your browser to illustrate historical dollar-bucket math across 401(k), IRA, and taxable accounts.</p>
+            <div class="pw-scale-grid" role="radiogroup" aria-label="Sample Portfolio Scale">
               <button type="button" class="pw-scale-btn" data-pw-field="scale" data-pw-val="50000">$50,000</button>
               <button type="button" class="pw-scale-btn" data-pw-field="scale" data-pw-val="150000">$150,000</button>
               <button type="button" class="pw-scale-btn is-selected" data-pw-field="scale" data-pw-val="300000">$300,000</button>
@@ -140,176 +153,179 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
           </div>
 
           <div data-pw-qpane="3" style="display:none;">
-            <h2 class="pw-q-title">During a severe market downturn, what drawdown can you hold through calmly?</h2>
-            <p class="pw-q-sub">The best allocation is the one quiet enough that you never liquidate shares at the bottom of a cycle.</p>
-            <div class="pw-option-list" role="radiogroup" aria-label="Maximum Drawdown Tolerance">
+            <h2 class="pw-q-title">Which historical drawdown band do you want to benchmark?</h2>
+            <p class="pw-q-sub">Compare how varying defensive cushions altered historical peak-to-trough declines between 2000 and 2025.</p>
+            <div class="pw-option-list" role="radiogroup" aria-label="Historical Drawdown Benchmark">
               <button type="button" class="pw-opt-btn" data-pw-field="comfort" data-pw-val="dd10">
-                <div class="pw-opt-head"><span><span class="pw-opt-num">I</span><span class="pw-opt-title">-10% Calm Priority</span></span><span>&rarr;</span></div>
-                <span class="pw-opt-desc">Include a dedicated short-term US Treasury reserve (SGOV) alongside XLV to keep volatility muted.</span>
+                <div class="pw-opt-head"><span><span class="pw-opt-num">I</span><span class="pw-opt-title">-10% Low-Variance Study Band</span></span><span>&rarr;</span></div>
+                <span class="pw-opt-desc">Models a larger short-term US Treasury reserve (SGOV) alongside XLV to study muted historical volatility.</span>
               </button>
               <button type="button" class="pw-opt-btn is-selected" data-pw-field="comfort" data-pw-val="dd18">
-                <div class="pw-opt-head"><span><span class="pw-opt-num">II</span><span class="pw-opt-title">-18% Balanced</span></span><span>&rarr;</span></div>
-                <span class="pw-opt-desc">Accept moderate cyclical fluctuations in exchange for balanced SMH &times; XLV long-term participation.</span>
+                <div class="pw-opt-head"><span><span class="pw-opt-num">II</span><span class="pw-opt-title">-18% Balanced Study Band</span></span><span>&rarr;</span></div>
+                <span class="pw-opt-desc">Models the balanced SMH &times; XLV + SGOV historical case study across 2000, 2008, and 2022.</span>
               </button>
               <button type="button" class="pw-opt-btn" data-pw-field="comfort" data-pw-val="dd25">
-                <div class="pw-opt-head"><span><span class="pw-opt-num">III</span><span class="pw-opt-title">-25% Long-Term Compounding</span></span><span>&rarr;</span></div>
-                <span class="pw-opt-desc">Focus on multi-year compounding with higher semiconductor equity weighting.</span>
+                <div class="pw-opt-head"><span><span class="pw-opt-num">III</span><span class="pw-opt-title">-25% Long-Horizon Compounding Band</span></span><span>&rarr;</span></div>
+                <span class="pw-opt-desc">Models higher semiconductor equity exposure over multi-decade compounding windows.</span>
               </button>
             </div>
           </div>
 
           <div data-pw-qpane="4" style="display:none;">
-            <h2 class="pw-q-title">How much of your equity portfolio currently sits in technology or semiconductors?</h2>
-            <p class="pw-q-sub">Helps highlight concentration exposure relative to your target historical baseline.</p>
-            <div class="pw-option-list" role="radiogroup" aria-label="Current Tech Exposure">
+            <h2 class="pw-q-title">What technology concentration benchmark should we compare against?</h2>
+            <p class="pw-q-sub">Used to contrast single-sector concentration against the two-pillar historical study ratio.</p>
+            <div class="pw-option-list" role="radiogroup" aria-label="Comparison Tech Concentration">
               <button type="button" class="pw-opt-btn is-selected" data-pw-field="techMix" data-pw-val="tech_high">
-                <div class="pw-opt-head"><span><span class="pw-opt-num">I</span><span class="pw-opt-title">Over 70% Concentrated in Tech &amp; Semiconductors</span></span></div>
-                <span class="pw-opt-desc">Heavily exposed to a single capital-spending cycle; evaluating healthcare defensive ballast.</span>
+                <div class="pw-opt-head"><span><span class="pw-opt-num">I</span><span class="pw-opt-title">Over 70% Tech &amp; Semiconductor Concentration</span></span></div>
+                <span class="pw-opt-desc">Compare heavy single-sector cyclicality against healthcare defensive ballast.</span>
               </button>
               <button type="button" class="pw-opt-btn" data-pw-field="techMix" data-pw-val="tech_mid">
-                <div class="pw-opt-head"><span><span class="pw-opt-num">II</span><span class="pw-opt-title">30% to 70% Balanced Exposure</span></span></div>
-                <span class="pw-opt-desc">Moderately diversified across sectors; refining into a clean two-pillar architecture.</span>
+                <div class="pw-opt-head"><span><span class="pw-opt-num">II</span><span class="pw-opt-title">30% to 70% Broad Equity Mix</span></span></div>
+                <span class="pw-opt-desc">Compare a diversified equity mix against the SMH &times; XLV + SGOV historical case study.</span>
               </button>
               <button type="button" class="pw-opt-btn" data-pw-field="techMix" data-pw-val="tech_low">
-                <div class="pw-opt-head"><span><span class="pw-opt-num">III</span><span class="pw-opt-title">Under 30% Tech or Primarily Cash</span></span></div>
-                <span class="pw-opt-desc">Holding cash or broad index funds; establishing a disciplined entry baseline.</span>
+                <div class="pw-opt-head"><span><span class="pw-opt-num">III</span><span class="pw-opt-title">Under 30% Tech or Primarily Cash Reserves</span></span></div>
+                <span class="pw-opt-desc">Compare cash-heavy holdings against a measured two-pillar historical baseline.</span>
               </button>
             </div>
             <div style="margin-top:24px;">
               <button type="button" class="pw-btn-primary pw-btn-emerald" id="btnSubmitPwAssessment" style="width:100%;">
-                Generate My Baseline Allocation &rarr;
+                View Free Historical Study Ratio &rarr;
               </button>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Screen 2: Free Email Gate (#tomMorningBellClub + #tom-passwordless-club-signup) -> Opens Partial Baseline -->
+      <!-- Screen 2: Immediate Free Historical Study Summary (ZERO Email Wall) + Optional Save Box -->
       <section id="tomMorningBellClub" data-pw-screen="2" style="display:none;">
         <div class="pw-gate-card">
           <div class="pw-profile-strip">
-            <span id="pwProfileSummaryLine">Selected Mandate: Balanced Retirement &middot; $300,000 &middot; -18% Tolerance</span>
-            <button type="button" class="pw-inline-link" id="btnEditPwInputs">Edit Inputs</button>
+            <span id="pwProfileSummaryLine">Study Profile: Balanced Cash-Flow &middot; $300,000 Sample &middot; -18% Study Band</span>
+            <button type="button" class="pw-inline-link" id="btnEditPwInputs">Edit Study Inputs</button>
           </div>
 
-          <div id="tom-passwordless-club-signup">
-            <!-- Locked Email Gate -->
-            <div id="pwEmailGateLockedView">
-              <div class="pw-kicker">STEP-UP STAGE I &middot; COMPLIMENTARY BASELINE SUMMARY</div>
-              <h2 class="pw-serif-h2">Open your initial SMH &times; XLV baseline ratio.</h2>
-              <p style="margin:0;color:#475569;font-size:0.96rem;">
-                Enter your email below (passwordless, 1-click unsubscribe anytime) to view your initial historical baseline percentages and receive our morning research note.
-              </p>
-              <form class="pw-email-form" id="pwFreeGateForm" novalidate>
-                <input type="text" name="website_hp" id="pwGateHp" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none;" />
-                <input type="email" id="pwGateEmailInput" class="pw-email-input" required autocomplete="email" placeholder="Enter your email address" aria-label="Email address" />
-                <button type="submit" class="pw-btn-primary pw-btn-emerald" id="btnPwGateSubmit">
-                  Open My Baseline Allocation &rarr;
-                </button>
-              </form>
-              <div id="pwGateStatusMsg" role="status" aria-live="polite" style="display:none;margin-top:10px;font-size:0.88rem;color:#991B1B;"></div>
+          <div id="pwFreeBaselineSummaryView">
+            <div class="pw-kicker">HISTORICAL SECTOR BACKTEST EXPLORER &middot; FREE STUDY SUMMARY</div>
+            <h2 class="pw-serif-h2" id="pwUnlockedRatioHeadline">55% SMH &middot; 35% XLV &middot; 10% SGOV Historical Study Ratio</h2>
+            <p style="margin:0;color:#475569;font-size:0.94rem;" id="pwUnlockedRationaleText">
+              Computed from 2000&ndash;2025 non-leveraged 1x ETF historical series for self-directed educational study. Need basic brokerage order terminology? <button type="button" class="pw-inline-link" id="tomFreeStarterManual">Open the complimentary $0 US Brokerage Limit-Order Reference</button>.
+            </p>
+
+            <div class="pw-ratio-bar" id="pwRatioVisualBar" aria-hidden="true">
+              <span style="width:55%;background:#0F172A;"></span>
+              <span style="width:35%;background:#065F46;"></span>
+              <span style="width:10%;background:#94A3B8;"></span>
             </div>
 
-            <!-- Partial Unlocked View (Initial Percentage Ratio ONLY; Tracking & PDF Gated in Paid Tiers) -->
-            <div id="pwEmailGateUnlockedView" style="display:none;">
-              <div class="pw-kicker">INITIAL HISTORICAL BASELINE &middot; PARTIAL SUMMARY OPEN</div>
-              <h2 class="pw-serif-h2" id="pwUnlockedRatioHeadline">55% SMH &middot; 35% XLV &middot; 10% SGOV Reserve</h2>
-              <p style="margin:0;color:#475569;font-size:0.94rem;" id="pwUnlockedRationaleText">
-                Calibrated from 2000&ndash;2025 non-leveraged ETF series for your selected mandate. Need brokerage execution basics? <button type="button" class="pw-inline-link" id="tomFreeStarterManual">Open the complimentary $0 US Brokerage Limit-Order Guide</button>.
-              </p>
-
-              <div class="pw-ratio-bar" id="pwRatioVisualBar" aria-hidden="true">
-                <span style="width:55%;background:#0F172A;"></span>
-                <span style="width:35%;background:#065F46;"></span>
-                <span style="width:10%;background:#94A3B8;"></span>
+            <div class="pw-ratio-grid" id="pwRatioCellsGrid">
+              <div class="pw-ratio-cell">
+                <div class="pw-ratio-ticker">SMH &middot; GROWTH PILLAR</div>
+                <div class="pw-ratio-pct" id="pwPctSmh">55%</div>
+                <div class="pw-ratio-name">Semiconductor 1x ETF</div>
               </div>
-
-              <div class="pw-ratio-grid" id="pwRatioCellsGrid">
-                <div class="pw-ratio-cell">
-                  <div class="pw-ratio-ticker">SMH &middot; GROWTH</div>
-                  <div class="pw-ratio-pct" id="pwPctSmh">55%</div>
-                  <div class="pw-ratio-name">Semiconductor Pillar</div>
-                </div>
-                <div class="pw-ratio-cell">
-                  <div class="pw-ratio-ticker">XLV &middot; DEFENSE</div>
-                  <div class="pw-ratio-pct" id="pwPctXlv">35%</div>
-                  <div class="pw-ratio-name">Healthcare Cash Flow</div>
-                </div>
-                <div class="pw-ratio-cell">
-                  <div class="pw-ratio-ticker">SGOV &middot; LIQUIDITY</div>
-                  <div class="pw-ratio-pct" id="pwPctSgov">10%</div>
-                  <div class="pw-ratio-name">0&ndash;3 Mo US T-Bill</div>
-                </div>
+              <div class="pw-ratio-cell">
+                <div class="pw-ratio-ticker">XLV &middot; DEFENSIVE PILLAR</div>
+                <div class="pw-ratio-pct" id="pwPctXlv">35%</div>
+                <div class="pw-ratio-name">US Healthcare 1x ETF</div>
               </div>
+              <div class="pw-ratio-cell">
+                <div class="pw-ratio-ticker">SGOV &middot; TREASURY RESERVE</div>
+                <div class="pw-ratio-pct" id="pwPctSgov">10%</div>
+                <div class="pw-ratio-name">0&ndash;3 Mo US T-Bill</div>
+              </div>
+            </div>
 
-              <div class="pw-gated-preview-list">
-                <div class="pw-gated-row">
-                  <span>Daily Morning SMH &times; XLV Market Temperature (0&ndash;100) &amp; Weight Tracking Mail</span>
-                  <span class="pw-gated-badge">UNLOCKS IN TIER I &amp; II BELOW</span>
+            <div class="pw-drawdown-compare-box" role="region" aria-label="2000-2025 Historical Crisis Drawdown Comparison">
+              <div class="pw-drawdown-compare-title">2000&ndash;2025 HISTORICAL CRISIS DRAWDOWN COMPARISON</div>
+              <div class="pw-drawdown-compare-grid">
+                <div class="pw-dd-cmp-item">
+                  <span class="pw-dd-cmp-label">100% Semiconductor (SMH Alone)</span>
+                  <strong class="pw-dd-cmp-val">-74.6% Max DD &middot; 89 mos recovery</strong>
                 </div>
-                <div class="pw-gated-row">
-                  <span>Retirement Safe-Withdrawal &amp; Tax-Account Masterbook PDF + Annual Cash-Flow Sheet</span>
-                  <span class="pw-gated-badge">UNLOCKS IN TIER II BELOW</span>
+                <div class="pw-dd-cmp-item">
+                  <span class="pw-dd-cmp-label">S&amp;P 500 Index Alone</span>
+                  <strong class="pw-dd-cmp-val">-50.9% Max DD &middot; 56 mos recovery</strong>
+                </div>
+                <div class="pw-dd-cmp-item is-highlight">
+                  <span class="pw-dd-cmp-label">Selected SMH &times; XLV + SGOV Study Ratio</span>
+                  <strong class="pw-dd-cmp-val" id="pwStudyDrawdownCompareVal">~-24.8% Hist. Crisis DD &middot; ~17 mos recovery</strong>
                 </div>
               </div>
             </div>
+          </div>
+
+          <div id="tom-passwordless-club-signup" class="pw-save-summary-box">
+            <div class="pw-kicker" style="margin-bottom:6px;">FREE MORNING RESEARCH NOTES &middot; ZERO PASSWORD</div>
+            <h3 class="pw-save-summary-title">Save My Study Summary &amp; Receive Morning Research Notes (Free)</h3>
+            <p style="margin:0;color:#475569;font-size:0.92rem;">
+              Enter your email to save this historical study summary and receive our calm morning market data newsletter (1-click unsubscribe anytime).
+            </p>
+            <form class="pw-email-form" id="pwFreeGateForm" novalidate>
+              <input type="text" name="website_hp" id="pwGateHp" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none;" />
+              <input type="email" id="pwGateEmailInput" class="pw-email-input" required autocomplete="email" placeholder="Enter your email address" aria-label="Email address" />
+              <button type="submit" class="pw-btn-primary pw-btn-emerald" id="btnPwGateSubmit">
+                Save Study Summary (Free) &rarr;
+              </button>
+            </form>
+            <div id="pwGateStatusMsg" role="status" aria-live="polite" style="display:none;margin-top:10px;font-size:0.88rem;color:#065F46;font-weight:600;"></div>
           </div>
         </div>
       </section>
 
-      <!-- Screen 3: 2-Tier Differentiated Paid Membership (Polar.sh ?locale=en + COPY_MODE) -->
+      <!-- Screen 3: 2-Tier Whop Research Passes (#pricing) -->
       <section id="pricing" class="pw-tiers-section" data-pw-screen="3" style="display:none;">
-        <div class="pw-kicker">STEP-UP STAGE II &middot; PRIVATE WEALTH MEMBERSHIP</div>
-        <h2 class="pw-serif-h2" id="pwPricingHeadline">Complete daily regime tracking and retirement withdrawal architecture.</h2>
+        <div class="pw-kicker">INDEPENDENT MARKET DATA &amp; EDUCATIONAL RESEARCH PASSES</div>
+        <h2 class="pw-serif-h2" id="pwPricingHeadline">Educational Market Data Newsletter + 2000&ndash;2025 Historical Statistical Workbook.</h2>
         <p style="margin:0;color:#475569;font-size:0.95rem;" id="pwPricingSubcopy">
-          Know every morning where semiconductor overheating or fear sits on our 25-year scale, and access the complete safe-withdrawal and tax-account planning suite.
+          SMH &times; XLV + SGOV 2-Pillar Historical Case Study &mdash; Strictly Non-Advisory Educational Publisher. Explore daily public market temperature data notes and the complete historical statistical workbook.
         </p>
 
         <div class="pw-tier-grid">
           <div class="pw-tier-card">
             <div>
-              <div class="pw-tier-kicker">TIER I &middot; MONTHLY EDITION</div>
-              <h3 class="pw-tier-name">Monthly Tracking Edition</h3>
+              <div class="pw-tier-kicker">TIER I &middot; MONTHLY RESEARCH PASS</div>
+              <h3 class="pw-tier-name">Monthly Research Pass</h3>
               <div class="pw-tier-price">$29 <span>/ month</span></div>
-              <div class="pw-tier-saving">Flexible month-to-month access</div>
+              <div class="pw-tier-saving">Flexible month-to-month access &middot; Cancel anytime</div>
               <ul class="pw-tier-list">
-                <li><strong>Daily Morning SMH &times; XLV Temperature &amp; Weight Tracking Briefings</strong> delivered before the US market open</li>
-                <li><strong>Historical Regime Ratio Reference Sheet</strong> mapping 0&ndash;100 sentiment bands to model sector weights</li>
-                <li><strong>Account-Scale Dollar Allocation Calculator</strong> across SMH, XLV, and SGOV reserves</li>
+                <li><strong>Educational Market Data Newsletter</strong> delivered before the US market open (0&ndash;100 public sector temperature &amp; historical regime study notes)</li>
+                <li><strong>2000&ndash;2025 Historical Statistical Workbook (Monthly Edition)</strong> comparing SMH &times; XLV + SGOV historical case-study cohorts</li>
+                <li><strong>Sample Dollar-Scale Educational Worksheet</strong> illustrating tax-location concepts across 401(k), IRA, and taxable accounts</li>
               </ul>
             </div>
-            <a href="#tom-vip-monthly" class="pw-btn-primary polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="width:100%;">
-              Select Monthly Tracking &mdash; $29/mo &rarr;
+            <a href="https://whop.com/checkout/plan_xVJeNwyrDef8T" class="pw-btn-primary whop-checkout-button" data-whop-checkout data-whop-plan="monthly" data-tom-paid-plan="monthly" style="width:100%;">
+              Select Monthly Research Pass &mdash; $29/mo &rarr;
             </a>
           </div>
 
           <div class="pw-tier-card is-annual">
             <div>
-              <div class="pw-tier-kicker">TIER II &middot; ANNUAL PRIVATE WEALTH &middot; SAVE 43%</div>
-              <h3 class="pw-tier-name">Annual Private Wealth Edition</h3>
+              <div class="pw-tier-kicker">TIER II &middot; ANNUAL RESEARCH PASS &middot; SAVE 43%</div>
+              <h3 class="pw-tier-name">Annual Research Pass</h3>
               <div class="pw-tier-price">$199 <span>/ year</span></div>
               <div class="pw-tier-saving">Equivalent to $16.58/mo (Save 43% vs. monthly)</div>
               <ul class="pw-tier-list">
-                <li><strong>Everything in Tier I</strong> &mdash; full 12 months of Daily Morning SMH &times; XLV Temperature &amp; Weight Tracking Briefings</li>
-                <li><strong>Lifetime-Updated Retirement Safe-Withdrawal &amp; Tax-Account Masterbook PDF</strong> (401(k), IRA &amp; taxable sequencing)</li>
-                <li><strong>Annual Cash-Flow &amp; Systematic Ratio Planning Sheet</strong> for multi-decade household budgeting</li>
+                <li><strong>Full 12 Months of the Educational Market Data Newsletter</strong> covering daily SMH &times; XLV + SGOV public indicator readings</li>
+                <li><strong>Complete 2000&ndash;2025 Historical Statistical Workbook &amp; Reference Masterbook PDF</strong> (Dot-Com, 2008 &amp; 2022 drawdown case studies + retirement withdrawal math)</li>
+                <li><strong>Annual Household Cash-Flow &amp; Semi-Annual Review Educational Workbook</strong></li>
               </ul>
             </div>
-            <a href="#tom-vip-annual" class="pw-btn-primary pw-btn-emerald polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="width:100%;">
-              Select Annual Private Wealth &mdash; $199/yr &rarr;
+            <a href="https://whop.com/checkout/plan_9sdgFI753ucXQ" class="pw-btn-primary pw-btn-emerald whop-checkout-button" data-whop-checkout data-whop-plan="annual" data-tom-paid-plan="annual" style="width:100%;">
+              Select Annual Research Pass &mdash; $199/yr &rarr;
             </a>
           </div>
         </div>
 
         <p class="pw-mor-note">
-          Merchant of Record: Polar.sh (Global Card / Apple Pay / Google Pay) &middot; 14-Day Refund Policy &middot; Cancel anytime in one click.
+          Secure Checkout via Whop.com (Global Card / Apple Pay / Google Pay) &middot; 14-Day Refund Policy &middot; Cancel anytime in one click &middot; Strictly Non-Advisory Educational Publisher.
         </p>
       </section>
     </main>
 
     <footer class="pw-legal-footer">
       <div class="pw-legal-links">
-        <span>TruthOfMarket</span>
+        <span>TruthOfMarket Research</span>
         <span>&middot;</span>
         <a href="/terms.html">Terms</a>
         <span>&middot;</span>
@@ -326,7 +342,7 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
         <a href="mailto:beable9489@gmail.com">beable9489@gmail.com</a>
       </div>
       <p class="pw-legal-disclaimer">
-        TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.
+        TruthOfMarket is an independent, strictly non-advisory educational research publisher providing general market data newsletters and 2000&ndash;2025 historical statistical workbooks only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.
       </p>
     </footer>
 
@@ -337,13 +353,13 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
           <span class="pw-kicker" style="margin:0;">MEMBER ACCESS &amp; RESTORE</span>
           <button type="button" class="pw-modal-close-btn" id="btnClosePwRestoreModal" aria-label="Close Member Sign-In Modal">Close</button>
         </div>
-        <h3 class="pw-serif-h2" id="pwRestoreTitle" style="font-size:1.65rem;">Restore Your Baseline or Paid License</h3>
+        <h3 class="pw-serif-h2" id="pwRestoreTitle" style="font-size:1.65rem;">Restore Your Saved Study Ratio or Research Pass</h3>
         <p style="margin:0 0 16px;font-size:0.92rem;color:#475569;">
-          Enter the email address used during registration to reopen your saved SMH &times; XLV baseline, or enter a Polar.sh license key if applicable.
+          Enter the email address used during registration to reopen your saved SMH &times; XLV + SGOV historical study summary, or enter a Whop receipt / pass reference if applicable.
         </p>
         <form id="pwRestoreForm" novalidate style="display:flex;flex-direction:column;gap:12px;">
           <input type="email" id="pwRestoreEmailInput" class="pw-email-input" style="min-width:180px;width:100%;box-sizing:border-box;" placeholder="Registered email address" autocomplete="email" />
-          <input type="text" id="pwRestoreLicenseInput" class="pw-email-input" style="min-width:180px;width:100%;box-sizing:border-box;" placeholder="Optional: Polar.sh license key" autocomplete="off" />
+          <input type="text" id="pwRestoreLicenseInput" class="pw-email-input" style="min-width:180px;width:100%;box-sizing:border-box;" placeholder="Optional: Whop receipt or pass ID" autocomplete="off" />
           <button type="submit" class="pw-btn-primary pw-btn-emerald" style="width:100%;">Restore Session &rarr;</button>
         </form>
         <div id="pwRestoreStatus" role="status" aria-live="polite" style="display:none;margin-top:12px;font-size:0.88rem;color:#065F46;"></div>
@@ -354,22 +370,22 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
     <div class="pw-modal-backdrop" id="pwStarterGuideModal" role="dialog" aria-modal="true" aria-labelledby="pwStarterGuideTitle">
       <div class="pw-modal-dialog">
         <div class="pw-modal-header-row">
-          <span class="pw-kicker" style="margin:0;">COMPLIMENTARY EXECUTION REFERENCE ($0)</span>
+          <span class="pw-kicker" style="margin:0;">COMPLIMENTARY EDUCATIONAL REFERENCE ($0)</span>
           <button type="button" class="pw-modal-close-btn" id="btnClosePwStarterGuideModal" aria-label="Close Brokerage Reference Modal">Close</button>
         </div>
-        <h3 class="pw-serif-h2" id="pwStarterGuideTitle" style="font-size:1.65rem;">US Brokerage Limit-Order &amp; ETF Reference</h3>
+        <h3 class="pw-serif-h2" id="pwStarterGuideTitle" style="font-size:1.65rem;">US Brokerage Limit-Order &amp; ETF Terminology Guide</h3>
         <div style="font-size:0.92rem;line-height:1.7;color:#334155;display:flex;flex-direction:column;gap:12px;">
           <div>
-            <strong style="color:#0F172A;">I. Place Limit Orders Rather Than Market Orders</strong><br/>
-            On Fidelity, Charles Schwab, or Vanguard, select <em>Limit Order</em> rather than <em>Market Order</em> during the first 15 minutes after the 9:30 AM ET open to avoid temporary bid-ask spread widening on ETFs.
+            <strong style="color:#0F172A;">I. Limit Orders vs. Market Orders</strong><br/>
+            On self-directed platforms such as Fidelity, Charles Schwab, or Vanguard, a <em>Limit Order</em> specifies a maximum purchase price rather than accepting temporary bid-ask spread widening during the first 15 minutes after the 9:30 AM ET open.
           </div>
           <div>
-            <strong style="color:#0F172A;">II. Non-Leveraged 1x Spot Sector ETFs Only</strong><br/>
+            <strong style="color:#0F172A;">II. Non-Leveraged 1x Spot Sector ETFs</strong><br/>
             Both <strong>SMH</strong> (Semiconductors) and <strong>XLV</strong> (US Healthcare) are unleveraged 1x spot ETFs free from daily 3x leveraged volatility-reset decay.
           </div>
           <div>
-            <strong style="color:#0F172A;">III. Short-Term US Treasury Liquidity Cushion</strong><br/>
-            Near-term household cash reserves can be insulated in 0&ndash;3 month US Treasury bills (<strong>SGOV</strong>) or government money-market funds (SPAXX / SWVXX / VMFXX).
+            <strong style="color:#0F172A;">III. Short-Term US Treasury Liquidity Reference</strong><br/>
+            In historical case studies, short-term household reserve buckets are commonly modeled using 0&ndash;3 month US Treasury bills (<strong>SGOV</strong>) or government money-market funds (SPAXX / SWVXX / VMFXX).
           </div>
         </div>
       </div>
@@ -404,21 +420,25 @@ function computePwBaseline(ans) {
     xlv = 100 - smh - sgov;
   }
 
+  const estCrisisDd = -(0.34 * (smh / 100) + 0.175 * (xlv / 100) + 0.005 * (sgov / 100)) * 100;
+  const estRecMos = Math.max(9, Math.round(25 * (smh / 100) + 11 * (xlv / 100) + 2 * (sgov / 100)));
+
   const objLabel =
     obj === "growth"
-      ? "Capital Growth & AI"
+      ? "Secular Growth Study"
       : obj === "preservation"
-      ? "Capital Preservation"
-      : "Balanced Retirement";
+      ? "Defensive Stability Study"
+      : "Balanced Cash-Flow Study";
   const scaleLabel = scale >= 1000000 ? "$1,000,000+" : "$" + scale.toLocaleString();
-  const ddLabel = comfort === "dd10" ? "-10% Calm" : comfort === "dd25" ? "-25% Compounding" : "-18% Balanced";
+  const ddLabel = comfort === "dd10" ? "-10% Band" : comfort === "dd25" ? "-25% Band" : "-18% Band";
 
   return {
     smh,
     xlv,
     sgov,
-    headline: `${smh}% SMH · ${xlv}% XLV · ${sgov}% SGOV Reserve`,
-    summaryLine: `Mandate: ${objLabel} · ${scaleLabel} · ${ddLabel} Tolerance`,
+    headline: `${smh}% SMH · ${xlv}% XLV · ${sgov}% SGOV Historical Study Ratio`,
+    summaryLine: `Study Profile: ${objLabel} · ${scaleLabel} Sample · ${ddLabel}`,
+    ddCompareText: `~${estCrisisDd.toFixed(1)}% Hist. Crisis DD · ~${estRecMos} mos recovery`,
   };
 }
 
@@ -446,6 +466,35 @@ export function bindPrivateWealthSingleBreathEvents(state) {
     }
   } catch (_) {}
 
+  const hydrateLiveTempBadge = () => {
+    const applyOverview = (ov) => {
+      if (!ov || typeof ov !== "object") return;
+      const dt = String(ov.date || "").trim();
+      const rawScore = Number(ov.fg_score);
+      if (!dt || !Number.isFinite(rawScore)) return;
+      const scoreInt = Math.round(rawScore);
+      const regRaw = String(ov.regime_en || "Neutral").trim();
+      const regText = /regime$/i.test(regRaw) ? regRaw : `${regRaw} Regime`;
+      const txtEl = document.getElementById("tomLiveTempText");
+      if (txtEl) {
+        txtEl.textContent = `Data As Of: ${dt} · Sector Temperature: ${scoreInt} / 100 (${regText})`;
+      }
+    };
+
+    if (state && state.semiOverview) {
+      applyOverview(state.semiOverview);
+    }
+    fetch("/data/semi_overview.json", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then(applyOverview)
+      .catch(() => {
+        fetch("/static_api/semi_overview.json", { cache: "no-store" })
+          .then((r) => (r.ok ? r.json() : null))
+          .then(applyOverview)
+          .catch(() => {});
+      });
+  };
+
   const getSavedEmail = () => {
     try {
       if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.getLocalMember === "function") {
@@ -455,15 +504,6 @@ export function bindPrivateWealthSingleBreathEvents(state) {
       return String(localStorage.getItem("tom_free_member_email") || "").trim().toLowerCase();
     } catch (_) {
       return "";
-    }
-  };
-
-  const applyCopyMode = () => {
-    const isLiveSharp = Boolean(window.PAYMENT_CONFIG && window.PAYMENT_CONFIG.STORE_LIVE_READY === true);
-    window.TOM_COPY_MODE = isLiveSharp ? "LIVE_SHARP" : "UNDERWRITING_SAFE";
-    const hEl = document.getElementById("pwPricingHeadline");
-    if (hEl && isLiveSharp) {
-      hEl.textContent = "Receive daily morning SMH × XLV regime weights and the complete retirement masterbook.";
     }
   };
 
@@ -492,6 +532,9 @@ export function bindPrivateWealthSingleBreathEvents(state) {
     if (pXlv) pXlv.textContent = b.xlv + "%";
     if (pSgov) pSgov.textContent = b.sgov + "%";
 
+    const ddCmpEl = document.getElementById("pwStudyDrawdownCompareVal");
+    if (ddCmpEl) ddCmpEl.textContent = b.ddCompareText;
+
     const barEl = document.getElementById("pwRatioVisualBar");
     if (barEl) {
       barEl.innerHTML =
@@ -501,11 +544,10 @@ export function bindPrivateWealthSingleBreathEvents(state) {
     }
 
     const email = getSavedEmail();
-    const isUnlocked = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
-    const lockedView = document.getElementById("pwEmailGateLockedView");
-    const unlockedView = document.getElementById("pwEmailGateUnlockedView");
-    if (lockedView) lockedView.style.display = isUnlocked ? "none" : "block";
-    if (unlockedView) unlockedView.style.display = isUnlocked ? "block" : "none";
+    const inp = document.getElementById("pwGateEmailInput");
+    if (inp && email && !inp.value) {
+      inp.value = email;
+    }
   };
 
   const showScreen = (screenNum) => {
@@ -536,13 +578,14 @@ export function bindPrivateWealthSingleBreathEvents(state) {
     syncOptionSelections();
   };
 
-  const startBtn = document.getElementById("btnStartPwStepUp");
-  if (startBtn) {
+  document.querySelectorAll("[data-pw-start-stepup], #btnStartPwStepUp").forEach((startBtn) => {
+    if (startBtn.__pwBound) return;
+    startBtn.__pwBound = true;
     startBtn.addEventListener("click", () => {
       showQuestionStep(1);
       showScreen(1);
     });
-  }
+  });
 
   document.querySelectorAll("[data-pw-go-home]").forEach((b) => {
     b.addEventListener("click", () => showScreen(0));
@@ -601,20 +644,20 @@ export function bindPrivateWealthSingleBreathEvents(state) {
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
         if (msg) {
           msg.style.display = "block";
+          msg.style.color = "#991B1B";
           msg.textContent = "Please enter a valid email address.";
         }
         if (inp) inp.focus();
         return;
       }
-      if (msg) msg.style.display = "none";
       const submitBtn = document.getElementById("btnPwGateSubmit");
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.textContent = "Opening Baseline...";
+        submitBtn.textContent = "Saving Summary...";
       }
 
       const b = computePwBaseline(answers);
-      const noteStr = `site=truthofmarket.com | baseline=${b.headline} | ${b.summaryLine}`;
+      const noteStr = `site=truthofmarket.com | study_ratio=${b.headline} | ${b.summaryLine}`;
       try {
         const kst = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
         localStorage.setItem("tom_free_member_email", email);
@@ -636,12 +679,16 @@ export function bindPrivateWealthSingleBreathEvents(state) {
         }
       } catch (_) {}
 
-      const finishUnlock = () => {
+      const finishSave = () => {
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.innerHTML = "Open My Baseline Allocation &rarr;";
+          submitBtn.textContent = "Saved & Subscribed";
         }
-        syncStage2And3Data();
+        if (msg) {
+          msg.style.display = "block";
+          msg.style.color = "#065F46";
+          msg.textContent = `Saved for ${email}. Complimentary morning research notes are now active (1-click unsubscribe anytime).`;
+        }
       };
 
       if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.registerMember === "function") {
@@ -654,8 +701,8 @@ export function bindPrivateWealthSingleBreathEvents(state) {
           notes: noteStr,
           message: noteStr,
         })
-          .then(finishUnlock)
-          .catch(finishUnlock);
+          .then(finishSave)
+          .catch(finishSave);
       } else if (typeof window.submitTomVipWaitlistOrManualEmail === "function") {
         window.submitTomVipWaitlistOrManualEmail({
           email,
@@ -663,10 +710,10 @@ export function bindPrivateWealthSingleBreathEvents(state) {
           lang: "en-US",
           notes: noteStr,
         })
-          .then(finishUnlock)
-          .catch(finishUnlock);
+          .then(finishSave)
+          .catch(finishSave);
       } else {
-        finishUnlock();
+        finishSave();
       }
     });
   }
@@ -702,11 +749,11 @@ export function bindPrivateWealthSingleBreathEvents(state) {
       const em = String(emInp ? emInp.value : "").trim().toLowerCase();
       const lic = String(licInp ? licInp.value : "").trim();
 
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em) && lic.length < 12) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em) && lic.length < 8) {
         if (stEl) {
           stEl.style.display = "block";
           stEl.style.color = "#991B1B";
-          stEl.textContent = "Please enter a valid registered email or license key.";
+          stEl.textContent = "Please enter a valid registered email or Whop receipt ID.";
         }
         return;
       }
@@ -715,7 +762,7 @@ export function bindPrivateWealthSingleBreathEvents(state) {
           localStorage.setItem("tom_free_member_email", em);
           if (state) state.freeMemberEmail = em;
         }
-        if (lic.length >= 12) {
+        if (lic.length >= 8) {
           localStorage.setItem("rsa_pro_unlocked", "true");
           localStorage.setItem("rsa_token", lic);
           if (state) {
@@ -727,7 +774,7 @@ export function bindPrivateWealthSingleBreathEvents(state) {
       if (stEl) {
         stEl.style.display = "block";
         stEl.style.color = "#065F46";
-        stEl.textContent = "Session restored. Opening your baseline view.";
+        stEl.textContent = "Session restored. Opening your historical study summary.";
       }
       setTimeout(() => {
         if (restoreModal) restoreModal.classList.remove("is-open");
@@ -751,11 +798,12 @@ export function bindPrivateWealthSingleBreathEvents(state) {
     });
   }
 
-  applyCopyMode();
+  hydrateLiveTempBadge();
   syncOptionSelections();
 
   const h = (window.location.hash || "").toLowerCase();
-  if (h === "#pricing" || h === "#tommorningbellclub") {
+  const s = (window.location.search || "").toLowerCase();
+  if (h === "#pricing" || h === "#tommorningbellclub" || s.includes("payment=success")) {
     showScreen(2);
     if (h === "#pricing") {
       setTimeout(() => {

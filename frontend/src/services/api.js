@@ -35,39 +35,26 @@ export function getVipTelegramUrl(isPro = false) {
   return "#pro-vip-telegram";
 }
 
-export const CANONICAL_TOM_MONTHLY_URL = "#tom-vip-monthly";
-export const CANONICAL_TOM_ANNUAL_URL = "#tom-vip-annual";
+export const CANONICAL_TOM_MONTHLY_URL = "https://whop.com/checkout/plan_xVJeNwyrDef8T";
+export const CANONICAL_TOM_ANNUAL_URL = "https://whop.com/checkout/plan_9sdgFI753ucXQ";
 
-export function formatCheckoutUrl(rawUrl, fallbackUrl = "#tom-vip-monthly") {
-  const withEnLocale = (uStr) => {
-    try {
-      const u = new URL(uStr);
-      u.searchParams.set("locale", "en");
-      return u.toString();
-    } catch (_) {
-      return uStr.includes("locale=") ? uStr : uStr + (uStr.includes("?") ? "&" : "?") + "locale=en";
-    }
-  };
+export function formatCheckoutUrl(rawUrl, fallbackUrl = CANONICAL_TOM_MONTHLY_URL) {
   const candidate = String(rawUrl || "").trim();
-  if (candidate && /^https:\/\/(buy\.)?polar\.sh\//i.test(candidate)) {
-    return withEnLocale(candidate);
+  if (candidate && /^https:\/\/whop\.com\/checkout\//i.test(candidate)) {
+    return candidate;
   }
+  const isAnnualFallback = String(fallbackUrl || "").toLowerCase().includes("annual") || String(fallbackUrl || "").includes("plan_9sdgFI753ucXQ");
   if (typeof window !== "undefined" && window.PAYMENT_CONFIG) {
     const pCfg = window.PAYMENT_CONFIG;
-    const urls = pCfg.POLAR_CHECKOUT_URLS || {};
-    const isAnnualFallback = String(fallbackUrl || "").toLowerCase().includes("annual");
+    const urls = pCfg.WHOP_CHECKOUT_URLS || {};
     const fromCfg = isAnnualFallback
-      ? String(urls.annual_199 || pCfg.POLAR_TOM_ANNUAL_URL || "").trim()
-      : String(urls.monthly_29 || pCfg.POLAR_TOM_MONTHLY_URL || "").trim();
-    if (pCfg.STORE_LIVE_READY === true && fromCfg && /^https:\/\/(buy\.)?polar\.sh\//i.test(fromCfg)) {
-      return withEnLocale(fromCfg);
+      ? String(urls.annual || pCfg.WHOP_TOM_ANNUAL_URL || "").trim()
+      : String(urls.monthly || pCfg.WHOP_TOM_MONTHLY_URL || "").trim();
+    if (fromCfg && /^https:\/\/whop\.com\/checkout\//i.test(fromCfg)) {
+      return fromCfg;
     }
   }
-  const fb = String(fallbackUrl || "#tom-vip-monthly").trim();
-  if (fb && /^https:\/\/(buy\.)?polar\.sh\//i.test(fb)) {
-    return withEnLocale(fb);
-  }
-  return fb.startsWith("#") ? fb : "#tom-vip-monthly";
+  return isAnnualFallback ? CANONICAL_TOM_ANNUAL_URL : CANONICAL_TOM_MONTHLY_URL;
 }
 
 function isStaticHost() {
@@ -415,16 +402,16 @@ export async function validateLicense(licenseKey) {
           license_key: null,
           tier: "free",
           expires_at: null,
-          message: "Please enter a valid Polar.sh VIP license key.",
+          message: "Please enter a valid Whop Research Pass receipt ID.",
         };
       }
-      if (/^(RSA|GBA|POLAR)-(PRO|LTD|VIP)-2026-[A-Z0-9-]+$/i.test(key)) {
+      if (/^(RSA|GBA|WHOP)-(PRO|LTD|VIP)-2026-[A-Z0-9-]+$/i.test(key)) {
         return {
           valid: true,
           license_key: key.toUpperCase(),
           tier: key.toUpperCase().includes("-LTD-") ? "pro_annual" : "pro",
           expires_at: "2099-12-31T23:59:59Z",
-          message: "VIP Calculator Software License Activated — Full Dataset & 26Y CSV Unlocked.",
+          message: "VIP Calculator Software License Activated — Full Dataset & 2000–2025 Historical Statistical Workbook Unlocked.",
         };
       }
       if (
@@ -444,8 +431,8 @@ export async function validateLicense(licenseKey) {
         const orgId =
           typeof window !== "undefined" &&
           window.PAYMENT_CONFIG &&
-          window.PAYMENT_CONFIG.POLAR_ORG_ID
-            ? String(window.PAYMENT_CONFIG.POLAR_ORG_ID).trim()
+          window.PAYMENT_CONFIG.COMPANY_ID
+            ? String(window.PAYMENT_CONFIG.COMPANY_ID).trim()
             : "";
         if (!orgId) {
           return {
@@ -454,11 +441,11 @@ export async function validateLicense(licenseKey) {
             tier: "free",
             expires_at: null,
             message:
-              "Invalid or unrecognized license key. Please check your Polar.sh receipt or contact beable9489@gmail.com.",
+              "Invalid or unrecognized license key. Please check your Whop receipt or contact beable9489@gmail.com.",
           };
         }
-        const polarResp = await fetch(
-          "https://api.polar.sh/v1/customer-portal/license-keys/validate",
+        const whopResp = await fetch(
+          "/api/license/validate",
           {
             method: "POST",
             headers: {
@@ -468,21 +455,21 @@ export async function validateLicense(licenseKey) {
             body: JSON.stringify({ key, organization_id: orgId }),
           }
         );
-        const polarData = await polarResp.json().catch(() => null);
-        const statusStr = String(polarData?.status || "").toLowerCase();
+        const whopData = await whopResp.json().catch(() => null);
+        const statusStr = String(whopData?.status || "").toLowerCase();
         const valid = Boolean(
-          polarResp.ok &&
-            polarData &&
-            (statusStr === "granted" || statusStr === "active" || polarData.valid === true)
+          whopResp.ok &&
+            whopData &&
+            (statusStr === "granted" || statusStr === "active" || whopData.valid === true)
         );
         return {
           valid,
           license_key: valid ? key : null,
           tier: valid ? "pro" : "free",
-          expires_at: valid ? polarData?.expires_at || "2099-12-31T23:59:59Z" : null,
+          expires_at: valid ? whopData?.expires_at || "2099-12-31T23:59:59Z" : null,
           message: valid
-            ? "VIP Software License Verified via Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)."
-            : "Invalid or expired license key. Please verify your Polar.sh receipt or subscribe below.",
+            ? "VIP Software License Verified via Whop.com (Global Card / Apple Pay / Google Pay)."
+            : "Invalid or expired license key. Please verify your Whop receipt or subscribe below.",
         };
       } catch (_) {
         return {
@@ -491,7 +478,7 @@ export async function validateLicense(licenseKey) {
           tier: "free",
           expires_at: null,
           message:
-            "License verification failed. Please check your Polar.sh license key and network connection.",
+            "License verification failed. Please check your Whop receipt ID and network connection.",
         };
       }
     }
@@ -512,16 +499,16 @@ export async function fetchProVault() {
       return {
         unlocked: active,
         tier: active ? "pro" : "free",
-        pine_script_available: active,
-        tools: ["position_doctor", "morning_pdf", "pine_script_v5"],
+        workbook_available: active,
+        tools: ["position_doctor", "morning_pdf", "statistical_workbook"],
       };
     }
   );
 }
 
-export async function fetchPineScript() {
+export async function fetchFactorFormula() {
   return fetchJsonWithFallback(
-    "/api/pro/pinescript",
+    "/api/pro/factor-formula",
     {
       headers: {
         ...getAuthHeader(),
@@ -529,7 +516,7 @@ export async function fetchPineScript() {
       },
     },
     async () => {
-      const r = await fetch("/static_api/pinescript.json");
+      const r = await fetch("/static_api/factor_formula.json");
       return r.json();
     }
   );
@@ -834,6 +821,17 @@ export async function evaluatePortfolioDoctor(payload) {
               verdict: "Neutral",
             },
           ],
+          rebalance_recommendations: [
+            {
+              action: "MAINTAIN",
+              ticker: null,
+              target_ticker: null,
+              amount_usd: 0.0,
+              allocation_pct: 100.0,
+              reason: "No active holdings in portfolio; ready for Right-Side Ignition deployment.",
+              setup_type: "CASH_RESERVE",
+            },
+          ],
           adjust_recommendations: [
             {
               action: "MAINTAIN",
@@ -1087,6 +1085,7 @@ export async function evaluatePortfolioDoctor(payload) {
         items: diagnostics,
         stress_scenarios: stressScenarios,
         adjust_recommendations: adjustRecommendations,
+        rebalance_recommendations: adjustRecommendations,
       };
     }
   );
@@ -1540,7 +1539,7 @@ export async function buildClientTelegramPreview({
       `• $SMH: $${Number(ov.smh_close).toFixed(2)} (${Number(ov.smh_dd_pct).toFixed(2)}% 52W DD)`,
       `• $XLV: $${Number(ov.xlv_close).toFixed(2)} (${xlv1d >= 0 ? "+" : ""}${xlv1d.toFixed(2)}% 1D) | $QQQ: $${Number(ov.qqq_close).toFixed(2)} (${qqq1d >= 0 ? "+" : ""}${qqq1d.toFixed(2)}% 1D)`,
       ``,
-      `📊 $100,000 Simulated Weight Calculation (${ov.recommended_smh_weight}% $SMH : ${ov.recommended_xlv_weight}% $XLV):`,
+      `📊 $100,000 Simulated Weight Calculation (${ov.historical_study_smh_ratio}% $SMH : ${ov.historical_study_xlv_ratio}% $XLV):`,
       `• $SMH (${reb.target_smh_weight_pct}%): $${Number(reb.target_smh_usd).toLocaleString()} (${reb.target_smh_shares} sh) -> ${dSmhSign}$${Math.abs(Number(reb.delta_smh_usd)).toLocaleString()} (${smhShSign} sh)`,
       `• $XLV (${reb.target_xlv_weight_pct}%): $${Number(reb.target_xlv_usd).toLocaleString()} (${reb.target_xlv_shares} sh) -> ${dXlvSign}$${Math.abs(Number(reb.delta_xlv_usd)).toLocaleString()} (${xlvShSign} sh)`,
       `🔗 Calculator: https://truthofmarket.com/semi-fear-greed.html`,

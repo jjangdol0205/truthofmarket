@@ -26,12 +26,12 @@ PUB = ROOT / "frontend" / "public"
 STOCKS_MASTER_PATH = ROOT / "data" / "stocks_pro_master.json"
 SEMI_OVERVIEW_PATH = ROOT / "static_api" / "semi_overview.json"
 
-POLAR_MONTHLY_HREF = "#tom-vip-monthly"
-POLAR_ANNUAL_HREF = "#tom-vip-annual"
+WHOP_MONTHLY_HREF = "https://whop.com/checkout/plan_xVJeNwyrDef8T"
+WHOP_ANNUAL_HREF = "https://whop.com/checkout/plan_9sdgFI753ucXQ"
 
 MANDATORY_DISCLAIMER = (
-    "Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical "
-    "portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice."
+    "Disclaimer: TruthOfMarket Research is a strictly non-advisory educational publisher providing general "
+    "market data newsletters and 2000–2025 historical statistical workbooks only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice."
 )
 
 COMPARE_PAIRS: List[tuple[str, str, str]] = [
@@ -130,19 +130,26 @@ HIGH_VOLATILITY_SPECULATIVE_TICKERS = {
 
 HEAD_BEACON_SCRIPT = """  <script>
   window.PAYMENT_CONFIG = {
-    PROVIDER: 'polar_sh',
+    PROVIDER: 'whop',
     DIVISION: 'TOM',
     STORE_SLOT: 'FINANCE_STORE_SLOT',
-    STORE_LIVE_READY: false,
-    POLAR_CHECKOUT_URLS: {
-      monthly_29: 'https://buy.polar.sh/polar_cl_ifEzJdkptSMdHoPJ8MriuYleze1To288pYefu3QvaLc?locale=en',
-      annual_199: 'https://buy.polar.sh/polar_cl_IPZpLD1EeUXCrNMxo1Yji8oT8RPgD9jhdassj38WMyf?locale=en'
+    STORE_LIVE_READY: true,
+    COMPANY_ID: 'biz_4ynqri19wFDIwm',
+    STORE_NAME: 'TruthOfMarket Research',
+    WHOP_PLAN_IDS: {
+      monthly: 'plan_xVJeNwyrDef8T',
+      annual: 'plan_9sdgFI753ucXQ'
     },
-    POLAR_TOM_MONTHLY_URL: 'https://buy.polar.sh/polar_cl_ifEzJdkptSMdHoPJ8MriuYleze1To288pYefu3QvaLc?locale=en',
-    POLAR_TOM_ANNUAL_URL: 'https://buy.polar.sh/polar_cl_IPZpLD1EeUXCrNMxo1Yji8oT8RPgD9jhdassj38WMyf?locale=en',
+    WHOP_CHECKOUT_URLS: {
+      monthly: 'https://whop.com/checkout/plan_xVJeNwyrDef8T',
+      annual: 'https://whop.com/checkout/plan_9sdgFI753ucXQ'
+    },
+    WHOP_TOM_MONTHLY_URL: 'https://whop.com/checkout/plan_xVJeNwyrDef8T',
+    WHOP_TOM_ANNUAL_URL: 'https://whop.com/checkout/plan_9sdgFI753ucXQ',
     SUPPORT_EMAIL: 'beable9489@gmail.com'
   };
   </script>
+  <script async defer src="https://js.whop.com/static/checkout/loader.js"></script>
   <script src="/hq_member_crm_client.js" defer></script>
   <script src="/tom_payment_waitlist.js" defer></script>
   <script>
@@ -193,7 +200,7 @@ HEAD_BEACON_SCRIPT = """  <script>
         document.querySelectorAll('.tom-lead-status').forEach(function(el) {
           el.style.display = 'block';
           el.style.color = '#86efac';
-          el.innerHTML = '✅ <strong>Welcome aboard!</strong> Free 8:30 AM ET 3-Color Market Weather &amp; Calm 2–4x/Year Budget Review Briefs are now active for <strong>' + email.replace(/[<>&"]/g, '') + '</strong>' + (topicLabel ? ' (' + topicLabel.replace(/[<>&"]/g, '') + ')' : '') + '.';
+          el.innerHTML = '<strong>Welcome aboard!</strong> Complimentary Morning Research Notes &amp; Historical Study Updates are now active for <strong>' + email.replace(/[<>&"]/g, '') + '</strong>' + (topicLabel ? ' (' + topicLabel.replace(/[<>&"]/g, '') + ')' : '') + '.';
         });
         document.querySelectorAll('.tom-lead-form input[type="email"]').forEach(function(inp) { inp.value = email; });
         return false;
@@ -223,7 +230,7 @@ HEAD_BEACON_SCRIPT = """  <script>
         localStorage.setItem('hq_uv_ever_' + ns, '1');
         fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/uv_total', { mode: 'cors', keepalive: true }).catch(function(){});
       }
-      if (location.search.indexOf('payment=success') !== -1 || location.search.indexOf('polar_checkout_success') !== -1 || location.search.indexOf('unlock=1') !== -1) {
+      if (location.search.indexOf('payment=success') !== -1 || location.search.indexOf('unlock=1') !== -1) {
         if (localStorage.getItem('hq_paid_' + kst) !== '1') {
           localStorage.setItem('hq_paid_' + kst, '1');
           fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_member_' + kst, { mode: 'cors', keepalive: true }).catch(function(){});
@@ -264,14 +271,14 @@ def build_senior_lead_magnet_html(
     <div class="tom-lead-status" role="status" aria-live="polite" style="display:none;margin-top:12px;font-size:18px;font-weight:700;line-height:1.5;"></div>
     <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(148,163,184,0.25);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
       <div style="font-size:16px;color:#e2e8f0;font-weight:700;">
-        💳 <strong>Self-Directed Educational Calculator Software:</strong> Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay):
+        <strong>Independent Market Data &amp; Educational Research:</strong> Secure Checkout via Whop.com:
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:10px;">
-        <a href="{POLAR_MONTHLY_HREF}" class="polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#2563eb;color:#ffffff;font-size:17px;font-weight:800;text-decoration:none;">
-          ⚡ Start Monthly VIP — $29/mo
+        <a href="{WHOP_MONTHLY_HREF}" class="whop-checkout-button" data-whop-checkout data-tom-paid-plan="monthly" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#2563eb;color:#ffffff;font-size:17px;font-weight:800;text-decoration:none;">
+          Monthly Research Pass — $29/mo
         </a>
-        <a href="{POLAR_ANNUAL_HREF}" class="polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#f59e0b;color:#0f172a;font-size:17px;font-weight:900;text-decoration:none;">
-          💎 Start Annual VIP — $199/yr
+        <a href="{WHOP_ANNUAL_HREF}" class="whop-checkout-button" data-whop-checkout data-tom-paid-plan="annual" style="display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:10px 20px;border-radius:10px;background:#f59e0b;color:#0f172a;font-size:17px;font-weight:900;text-decoration:none;">
+          Annual Research Pass — $199/yr
         </a>
       </div>
     </div>
@@ -364,7 +371,7 @@ def build_ticker_directory_html(
       <span style="color:#94a3b8;">&middot;</span>
       <a href="mailto:beable9489@gmail.com" style="color:#b45309;font-weight:800;text-decoration:underline;">beable9489@gmail.com</a>
       <span style="color:#94a3b8;">&middot;</span>
-      <span style="color:#334155;font-weight:700;">Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)</span>
+      <span style="color:#334155;font-weight:700;">Whop.com (Global Card / Apple Pay / Google Pay)</span>
     </div>
     <p style="margin:12px 0 0;font-size:0.9rem;line-height:1.6;color:#475569;font-weight:600;">
       {html.escape(MANDATORY_DISCLAIMER)}
@@ -445,7 +452,7 @@ def build_ticker_directory_html(
       <span style="color:#94a3b8;">&middot;</span>
       <a href="mailto:beable9489@gmail.com" style="color:#b45309;font-weight:800;text-decoration:underline;">Support: beable9489@gmail.com</a>
       <span style="color:#94a3b8;">&middot;</span>
-      <span style="color:#334155;font-weight:700;">Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)</span>
+      <span style="color:#334155;font-weight:700;">Whop.com (Global Card / Apple Pay / Google Pay)</span>
     </div>
     <p style="margin:12px 0 0;font-size:0.88rem;line-height:1.6;color:#475569;font-weight:600;">
       {html.escape(MANDATORY_DISCLAIMER)}
@@ -623,11 +630,11 @@ def generate_semi_fear_greed_page(semi: Dict[str, Any], stocks: List[Dict[str, A
           </p>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <a href="{POLAR_MONTHLY_HREF}" class="polar-checkout-button btn btn-primary" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="background:#2563eb;border-color:#3b82f6;color:#fff;text-decoration:none;padding:8px 14px;min-height:40px;display:inline-flex;align-items:center;border-radius:6px;font-weight:700;font-size:0.82rem;">
-            ⚡ Start Monthly VIP — $29/mo
+          <a href="{WHOP_MONTHLY_HREF}" class="whop-checkout-button btn btn-primary" data-whop-checkout data-tom-paid-plan="monthly" style="background:#2563eb;border-color:#3b82f6;color:#fff;text-decoration:none;padding:8px 14px;min-height:40px;display:inline-flex;align-items:center;border-radius:6px;font-weight:700;font-size:0.82rem;">
+            Monthly Research Pass — $29/mo
           </a>
-          <a href="{POLAR_ANNUAL_HREF}" class="polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="background:#f59e0b;color:#0f172a;text-decoration:none;padding:8px 14px;min-height:40px;display:inline-flex;align-items:center;border-radius:6px;font-weight:800;font-size:0.82rem;">
-            💎 Start Annual VIP — $199/yr
+          <a href="{WHOP_ANNUAL_HREF}" class="whop-checkout-button" data-whop-checkout data-tom-paid-plan="annual" style="background:#f59e0b;color:#0f172a;text-decoration:none;padding:8px 14px;min-height:40px;display:inline-flex;align-items:center;border-radius:6px;font-weight:800;font-size:0.82rem;">
+            Annual Research Pass — $199/yr
           </a>
         </div>
       </div>
@@ -702,26 +709,26 @@ def generate_single_stock_page(
     if is_vip_locked:
         exec_summary_text = (
             f"${tkr} ({name_en}) currently records a quantitative factor score of {score}/100 "
-            f"(10-day relative volume {vol_surge:.2f}x), with 60-day MA at ${ma60:.2f}. Detailed historical dispersion bands and CSV exports are available in VIP Calculator Software."
+            f"(10-day relative volume {vol_surge:.2f}x), with 60-day MA at ${ma60:.2f}. Detailed historical dispersion bands and 2000–2025 statistical workbooks are available in our Research Pass."
         )
         exec_box_html = f"""
       <div style="margin-top:12px;padding:12px 16px;background:rgba(234,179,8,0.08);border:1px solid rgba(234,179,8,0.4);border-radius:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
         <div>
           <div style="font-size:0.74rem;font-family:JetBrains Mono,monospace;color:#facc15;font-weight:800;">
-            🔒 VIP HISTORICAL FACTOR DATASET &bull; SCORE {score}/100 ({html.escape(sector.upper())})
+            HISTORICAL STATISTICAL WORKBOOK &bull; SCORE {score}/100 ({html.escape(sector.upper())})
           </div>
           <div style="font-size:0.84rem;color:#e2e8f0;margin-top:3px;">
-            🎯 MA60 Reference: <span style="font-family:JetBrains Mono,monospace;font-weight:700;color:#38bdf8;">${ma60:.2f}</span> &nbsp;|&nbsp;
-            📉 Lower Variance Band: <span style="filter:blur(5px);user-select:none;font-family:JetBrains Mono,monospace;">${low_ref_p:.2f}</span> &nbsp;|&nbsp;
-            📈 Upper Dispersion Band: <span style="filter:blur(5px);user-select:none;font-family:JetBrains Mono,monospace;">${up_ref_p:.2f}</span>
+            MA60 Reference: <span style="font-family:JetBrains Mono,monospace;font-weight:700;color:#38bdf8;">${ma60:.2f}</span> &nbsp;|&nbsp;
+            Lower Variance Band: <span style="filter:blur(5px);user-select:none;font-family:JetBrains Mono,monospace;">${low_ref_p:.2f}</span> &nbsp;|&nbsp;
+            Upper Dispersion Band: <span style="filter:blur(5px);user-select:none;font-family:JetBrains Mono,monospace;">${up_ref_p:.2f}</span>
           </div>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <a href="{POLAR_MONTHLY_HREF}" class="polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="background:#eab308;color:#0f172a;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:800;font-size:0.8rem;">
-            ⚡ Start Monthly VIP — $29/mo
+          <a href="{WHOP_MONTHLY_HREF}" class="whop-checkout-button" data-whop-checkout data-tom-paid-plan="monthly" style="background:#eab308;color:#0f172a;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:800;font-size:0.8rem;">
+            Monthly Research Pass — $29/mo
           </a>
-          <a href="{POLAR_ANNUAL_HREF}" class="polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="background:#1e293b;border:1px solid #475569;color:#f8fafc;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:700;font-size:0.8rem;">
-            💎 Start Annual VIP — $199/yr
+          <a href="{WHOP_ANNUAL_HREF}" class="whop-checkout-button" data-whop-checkout data-tom-paid-plan="annual" style="background:#1e293b;border:1px solid #475569;color:#f8fafc;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:700;font-size:0.8rem;">
+            Annual Research Pass — $199/yr
           </a>
         </div>
       </div>"""
@@ -735,19 +742,19 @@ def generate_single_stock_page(
         exec_box_html = f"""
       <div style="margin-top:12px;padding:12px 16px;background:rgba(15,23,42,0.85);border:1px solid #334155;border-radius:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
         <div style="font-size:0.84rem;color:#e2e8f0;font-family:JetBrains Mono,monospace;">
-          🎯 <strong>MA60 Reference:</strong> <span style="color:#38bdf8;">${ma60:.2f}</span> &nbsp;|&nbsp;
-          📉 <strong>Lower Variance Band:</strong> <span style="color:#f87171;">${low_ref_p:.2f}</span> &nbsp;|&nbsp;
-          📈 <strong>Upper Dispersion Band:</strong> <span style="color:#4ade80;">${up_ref_p:.2f}</span>
+          <strong>MA60 Reference:</strong> <span style="color:#38bdf8;">${ma60:.2f}</span> &nbsp;|&nbsp;
+          <strong>Lower Variance Band:</strong> <span style="color:#f87171;">${low_ref_p:.2f}</span> &nbsp;|&nbsp;
+          <strong>Upper Dispersion Band:</strong> <span style="color:#4ade80;">${up_ref_p:.2f}</span>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <a href="/" style="background:#0ea5e9;color:#ffffff;text-decoration:none;padding:7px 13px;border-radius:6px;font-weight:800;font-size:0.78rem;">
-            🏡 4-Step Sector Simulator
+            Historical Sector Explorer
           </a>
-          <a href="{POLAR_MONTHLY_HREF}" class="polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="background:#2563eb;color:#ffffff;text-decoration:none;padding:7px 13px;border-radius:6px;font-weight:700;font-size:0.78rem;">
-            ⚡ Start Monthly VIP — $29/mo
+          <a href="{WHOP_MONTHLY_HREF}" class="whop-checkout-button" data-whop-checkout data-tom-paid-plan="monthly" style="background:#2563eb;color:#ffffff;text-decoration:none;padding:7px 13px;border-radius:6px;font-weight:700;font-size:0.78rem;">
+            Monthly Research Pass — $29/mo
           </a>
-          <a href="{POLAR_ANNUAL_HREF}" class="polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="background:#f59e0b;color:#0f172a;text-decoration:none;padding:7px 13px;border-radius:6px;font-weight:800;font-size:0.78rem;">
-            💎 Start Annual VIP — $199/yr
+          <a href="{WHOP_ANNUAL_HREF}" class="whop-checkout-button" data-whop-checkout data-tom-paid-plan="annual" style="background:#f59e0b;color:#0f172a;text-decoration:none;padding:7px 13px;border-radius:6px;font-weight:800;font-size:0.78rem;">
+            Annual Research Pass — $199/yr
           </a>
         </div>
       </div>"""
@@ -1040,20 +1047,20 @@ def generate_comparison_page(
           📊 FACTOR SUMMARY: ${winner} SHOWS HIGHER RELATIVE SCORE ({win_score}/100 &bull; {win_vol:.2f}x VOL)
         </div>
         <div style="font-size:0.82rem;color:#e2e8f0;margin-top:3px;">
-          🔒 <strong>${winner} vs ${loser} Historical Dispersion Bands &amp; CSV Dataset:</strong>
+          <strong>${winner} vs ${loser} Historical Dispersion Bands &amp; Statistical Workbook:</strong>
           <span style="filter:blur(5px);user-select:none;font-family:JetBrains Mono,monospace;">${trg_a:.2f} / ${trg_b:.2f}</span>
-          &nbsp;(Self-Directed Educational Calculator Software)
+          &nbsp;(Independent Market Data &amp; Educational Research)
         </div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
         <a href="/" style="background:#0ea5e9;color:#fff;text-decoration:none;padding:8px 13px;border-radius:6px;font-weight:800;font-size:0.78rem;">
-          🏡 30-Sec Retirement Calculator
+          Historical Sector Explorer
         </a>
-        <a href="{POLAR_MONTHLY_HREF}" class="polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" style="background:#eab308;color:#0f172a;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:800;font-size:0.78rem;">
-          ⚡ Start Monthly VIP — $29/mo
+        <a href="{WHOP_MONTHLY_HREF}" class="whop-checkout-button" data-whop-checkout data-tom-paid-plan="monthly" style="background:#eab308;color:#0f172a;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:800;font-size:0.78rem;">
+          Monthly Research Pass — $29/mo
         </a>
-        <a href="{POLAR_ANNUAL_HREF}" class="polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" style="background:#1e293b;border:1px solid #475569;color:#f8fafc;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:700;font-size:0.78rem;">
-          💎 Start Annual VIP — $199/yr
+        <a href="{WHOP_ANNUAL_HREF}" class="whop-checkout-button" data-whop-checkout data-tom-paid-plan="annual" style="background:#1e293b;border:1px solid #475569;color:#f8fafc;text-decoration:none;padding:8px 14px;border-radius:6px;font-weight:700;font-size:0.78rem;">
+          Annual Research Pass — $199/yr
         </a>
       </div>
     </div>

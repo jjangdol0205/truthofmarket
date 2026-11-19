@@ -1,118 +1,89 @@
 /**
- * TruthOfMarket (Division 1) — Polar.sh Native PAYMENT_CONFIG, VIP Founding Member Waitlist Modal,
- * In-App WebView Safe Redirect & PDF Guide Guard & 70% Scroll + 15s Dwell `read_complete` Beacon.
+ * TruthOfMarket (Division 1) — Whop (@whop/checkout) Live PAYMENT_CONFIG,
+ * Embedded Whop Checkout Modal + 1-Tap Direct Checkout Fallback,
+ * ?payment=success&provider=whop&plan=monthly|annual Return Handler,
+ * CRM Helper & 70% Scroll + 15s Dwell `read_complete` Beacon.
  */
-(function initTomUnifiedPaymentAndBeacon() {
+(function initTomUnifiedWhopCheckoutAndBeacon() {
   if (typeof window === "undefined") return;
 
-  var PRE_SEEDED_TOM_MONTHLY_URL = "https://buy.polar.sh/polar_cl_ifEzJdkptSMdHoPJ8MriuYleze1To288pYefu3QvaLc?locale=en";
-  var PRE_SEEDED_TOM_ANNUAL_URL = "https://buy.polar.sh/polar_cl_IPZpLD1EeUXCrNMxo1Yji8oT8RPgD9jhdassj38WMyf?locale=en";
-
-  function ensurePolarLocaleUrl(rawUrl, defaultLocale, emailOverride) {
-    var url = String(rawUrl || "").trim();
-    if (!url || !/^https:\/\/(buy\.)?polar\.sh\//i.test(url)) return "";
-    var loc = String(defaultLocale || "en").trim() || "en";
-    var memberEmail = String(emailOverride || "").trim().toLowerCase();
-    var validEmail = memberEmail && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(memberEmail) ? memberEmail : "";
-    try {
-      var u = new URL(url);
-      u.searchParams.set("locale", loc);
-      if (validEmail && !u.searchParams.get("customer_email")) {
-        u.searchParams.set("customer_email", validEmail);
-      }
-      return u.toString();
-    } catch (_) {
-      var cleanBase = url
-        .replace(/([?&])locale=[^&]*/gi, "$1")
-        .replace(/\?&/, "?")
-        .replace(/[?&]+$/, "");
-      var sep = cleanBase.indexOf("?") !== -1 ? "&" : "?";
-      var out = cleanBase + sep + "locale=" + encodeURIComponent(loc);
-      if (validEmail && out.indexOf("customer_email=") === -1) {
-        out += "&customer_email=" + encodeURIComponent(validEmail);
-      }
-      return out;
-    }
-  }
+  var WHOP_TOM_MONTHLY_PLAN_ID = "plan_xVJeNwyrDef8T";
+  var WHOP_TOM_ANNUAL_PLAN_ID = "plan_9sdgFI753ucXQ";
+  var WHOP_TOM_MONTHLY_CH_ID = "ch_uFPUZl9jaGdNTvH";
+  var WHOP_TOM_ANNUAL_CH_ID = "ch_G3EyPgGXTTahfv7";
+  var WHOP_TOM_MONTHLY_URL = "https://whop.com/checkout/plan_xVJeNwyrDef8T";
+  var WHOP_TOM_ANNUAL_URL = "https://whop.com/checkout/plan_9sdgFI753ucXQ";
+  var WHOP_TOM_MONTHLY_REDIRECT = "https://truthofmarket.com/?payment=success&provider=whop&plan=monthly";
+  var WHOP_TOM_ANNUAL_REDIRECT = "https://truthofmarket.com/?payment=success&provider=whop&plan=annual";
 
   var DEFAULT_PAYMENT_CONFIG = {
-    PROVIDER: "polar_sh",
+    PROVIDER: "whop",
     DIVISION: "TOM",
     STORE_SLOT: "FINANCE_STORE_SLOT",
-    STORE_LIVE_READY: false,
-    POLAR_CHECKOUT_URLS: {
-      monthly_29: PRE_SEEDED_TOM_MONTHLY_URL,
-      annual_199: PRE_SEEDED_TOM_ANNUAL_URL,
+    STORE_LIVE_READY: true,
+    COMPANY_ID: "biz_4ynqri19wFDIwm",
+    STORE_NAME: "TruthOfMarket Research",
+    WHOP_PLAN_IDS: {
+      monthly: WHOP_TOM_MONTHLY_PLAN_ID,
+      annual: WHOP_TOM_ANNUAL_PLAN_ID,
     },
-    POLAR_TOM_MONTHLY_URL: PRE_SEEDED_TOM_MONTHLY_URL,
-    POLAR_TOM_ANNUAL_URL: PRE_SEEDED_TOM_ANNUAL_URL,
+    WHOP_CHECKOUT_CONFIG_IDS: {
+      monthly: WHOP_TOM_MONTHLY_CH_ID,
+      annual: WHOP_TOM_ANNUAL_CH_ID,
+    },
+    WHOP_CHECKOUT_URLS: {
+      monthly: WHOP_TOM_MONTHLY_URL,
+      annual: WHOP_TOM_ANNUAL_URL,
+    },
+    WHOP_REDIRECT_URLS: {
+      monthly: WHOP_TOM_MONTHLY_REDIRECT,
+      annual: WHOP_TOM_ANNUAL_REDIRECT,
+    },
+    WHOP_TOM_MONTHLY_URL: WHOP_TOM_MONTHLY_URL,
+    WHOP_TOM_ANNUAL_URL: WHOP_TOM_ANNUAL_URL,
     SUPPORT_EMAIL: "beable9489@gmail.com",
   };
 
   if (!window.PAYMENT_CONFIG || typeof window.PAYMENT_CONFIG !== "object") {
     window.PAYMENT_CONFIG = DEFAULT_PAYMENT_CONFIG;
   } else {
-    window.PAYMENT_CONFIG.PROVIDER = "polar_sh";
-    window.PAYMENT_CONFIG.DIVISION = window.PAYMENT_CONFIG.DIVISION || "TOM";
+    window.PAYMENT_CONFIG.PROVIDER = "whop";
+    window.PAYMENT_CONFIG.DIVISION = "TOM";
     window.PAYMENT_CONFIG.STORE_SLOT = window.PAYMENT_CONFIG.STORE_SLOT || "FINANCE_STORE_SLOT";
-    if (typeof window.PAYMENT_CONFIG.STORE_LIVE_READY !== "boolean") {
-      window.PAYMENT_CONFIG.STORE_LIVE_READY = false;
-    }
-    if (
-      !window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS ||
-      typeof window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS !== "object"
-    ) {
-      window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS = {
-        monthly_29: PRE_SEEDED_TOM_MONTHLY_URL,
-        annual_199: PRE_SEEDED_TOM_ANNUAL_URL,
-      };
-    } else {
-      if (!window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29) {
-        window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29 = PRE_SEEDED_TOM_MONTHLY_URL;
-      } else {
-        window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29 =
-          ensurePolarLocaleUrl(window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.monthly_29, "en") || PRE_SEEDED_TOM_MONTHLY_URL;
-      }
-      if (!window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199) {
-        window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199 = PRE_SEEDED_TOM_ANNUAL_URL;
-      } else {
-        window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199 =
-          ensurePolarLocaleUrl(window.PAYMENT_CONFIG.POLAR_CHECKOUT_URLS.annual_199, "en") || PRE_SEEDED_TOM_ANNUAL_URL;
-      }
-    }
-    if (!window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL) {
-      window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL = PRE_SEEDED_TOM_MONTHLY_URL;
-    } else {
-      window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL =
-        ensurePolarLocaleUrl(window.PAYMENT_CONFIG.POLAR_TOM_MONTHLY_URL, "en") || PRE_SEEDED_TOM_MONTHLY_URL;
-    }
-    if (!window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL) {
-      window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL = PRE_SEEDED_TOM_ANNUAL_URL;
-    } else {
-      window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL =
-        ensurePolarLocaleUrl(window.PAYMENT_CONFIG.POLAR_TOM_ANNUAL_URL, "en") || PRE_SEEDED_TOM_ANNUAL_URL;
-    }
-    if (!window.PAYMENT_CONFIG.SUPPORT_EMAIL) {
-      window.PAYMENT_CONFIG.SUPPORT_EMAIL = "beable9489@gmail.com";
-    }
+    window.PAYMENT_CONFIG.STORE_LIVE_READY = true;
+    window.PAYMENT_CONFIG.COMPANY_ID = "biz_4ynqri19wFDIwm";
+    window.PAYMENT_CONFIG.STORE_NAME = "TruthOfMarket Research";
+    window.PAYMENT_CONFIG.WHOP_PLAN_IDS = {
+      monthly: WHOP_TOM_MONTHLY_PLAN_ID,
+      annual: WHOP_TOM_ANNUAL_PLAN_ID,
+    };
+    window.PAYMENT_CONFIG.WHOP_CHECKOUT_CONFIG_IDS = {
+      monthly: WHOP_TOM_MONTHLY_CH_ID,
+      annual: WHOP_TOM_ANNUAL_CH_ID,
+    };
+    window.PAYMENT_CONFIG.WHOP_CHECKOUT_URLS = {
+      monthly: WHOP_TOM_MONTHLY_URL,
+      annual: WHOP_TOM_ANNUAL_URL,
+    };
+    window.PAYMENT_CONFIG.WHOP_REDIRECT_URLS = {
+      monthly: WHOP_TOM_MONTHLY_REDIRECT,
+      annual: WHOP_TOM_ANNUAL_REDIRECT,
+    };
+    window.PAYMENT_CONFIG.WHOP_TOM_MONTHLY_URL = WHOP_TOM_MONTHLY_URL;
+    window.PAYMENT_CONFIG.WHOP_TOM_ANNUAL_URL = WHOP_TOM_ANNUAL_URL;
+    window.PAYMENT_CONFIG.SUPPORT_EMAIL = window.PAYMENT_CONFIG.SUPPORT_EMAIL || "beable9489@gmail.com";
   }
 
-  var COPY_MODE =
-    window.PAYMENT_CONFIG && window.PAYMENT_CONFIG.STORE_LIVE_READY === true
-      ? "LIVE_SHARP"
-      : "UNDERWRITING_SAFE";
-  window.TOM_COPY_MODE = COPY_MODE;
+  window.TOM_COPY_MODE = "LIVE_SHARP";
   window.getTomCopyMode = function () {
-    return window.PAYMENT_CONFIG && window.PAYMENT_CONFIG.STORE_LIVE_READY === true
-      ? "LIVE_SHARP"
-      : "UNDERWRITING_SAFE";
+    return "LIVE_SHARP";
   };
 
   function getKstDateString() {
     try {
       return new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
     } catch (_) {
-      return "2026-11-17";
+      return "2026-11-19";
     }
   }
 
@@ -148,41 +119,51 @@
     return "";
   }
 
-  function resolvePolarCheckoutUrl(planKey) {
-    var pCfg = window.PAYMENT_CONFIG || {};
-    var urls = pCfg.POLAR_CHECKOUT_URLS || {};
-    var raw =
-      planKey === "annual"
-        ? String(urls.annual_199 || pCfg.POLAR_TOM_ANNUAL_URL || "").trim()
-        : String(urls.monthly_29 || pCfg.POLAR_TOM_MONTHLY_URL || "").trim();
-    if (raw && /^https:\/\/(buy\.)?polar\.sh\//i.test(raw)) {
-      return ensurePolarLocaleUrl(raw, "en");
-    }
-    return "";
+  function resolveTomWhopPlanSpec(planKey) {
+    var isAnnual = String(planKey || "").toLowerCase() === "annual";
+    return isAnnual
+      ? {
+          key: "annual",
+          planId: WHOP_TOM_ANNUAL_PLAN_ID,
+          checkoutConfigId: WHOP_TOM_ANNUAL_CH_ID,
+          purchaseUrl: WHOP_TOM_ANNUAL_URL,
+          redirectUrl: WHOP_TOM_ANNUAL_REDIRECT,
+          title: "Annual Research Pass",
+          priceLabel: "$199 / year (Save 43%)",
+        }
+      : {
+          key: "monthly",
+          planId: WHOP_TOM_MONTHLY_PLAN_ID,
+          checkoutConfigId: WHOP_TOM_MONTHLY_CH_ID,
+          purchaseUrl: WHOP_TOM_MONTHLY_URL,
+          redirectUrl: WHOP_TOM_MONTHLY_REDIRECT,
+          title: "Monthly Research Pass",
+          priceLabel: "$29 / month",
+        };
   }
 
-  function appendPolarCustomerEmail(checkoutUrl, emailOverride) {
-    var url = String(checkoutUrl || "").trim();
-    if (!url) return "";
-    var memberEmail = String(emailOverride || getKnownTomMemberEmail() || "").trim().toLowerCase();
-    if (/^https:\/\/(buy\.)?polar\.sh\//i.test(url)) {
-      return ensurePolarLocaleUrl(url, "en", memberEmail);
-    }
-    if (memberEmail && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(memberEmail) && url.indexOf("customer_email=") === -1) {
-      return url + (url.indexOf("?") !== -1 ? "&" : "?") + "customer_email=" + encodeURIComponent(memberEmail);
-    }
-    return url;
-  }
+  window.resolveTomWhopCheckoutUrl = function (planKey) {
+    return resolveTomWhopPlanSpec(planKey).purchaseUrl;
+  };
 
-  window.ensurePolarLocaleUrl = ensurePolarLocaleUrl;
-  window.resolveTomPolarCheckoutUrl = resolvePolarCheckoutUrl;
-  window.appendTomPolarCustomerEmail = appendPolarCustomerEmail;
+  function ensureWhopLoaderScript() {
+    try {
+      if (typeof document === "undefined") return;
+      var existing = document.querySelector('script[src*="js.whop.com/static/checkout/loader.js"]');
+      if (existing) return;
+      var sc = document.createElement("script");
+      sc.src = "https://js.whop.com/static/checkout/loader.js";
+      sc.async = true;
+      sc.defer = true;
+      (document.head || document.documentElement).appendChild(sc);
+    } catch (_) {}
+  }
 
   function postCrmRegistrationWithFallback(opts) {
     var cleanEmail = String((opts && opts.email) || "")
       .trim()
       .toLowerCase();
-    var segment = String((opts && opts.segment) || "vip_waitlist").trim();
+    var segment = String((opts && opts.segment) || "retirement_401k_ira").trim();
     var notes = String((opts && opts.notes) || "").trim();
     var lang = String((opts && opts.lang) || "en-US").trim();
 
@@ -270,107 +251,81 @@
 
   window.submitTomVipWaitlistOrManualEmail = postCrmRegistrationWithFallback;
 
-  function ensureWaitlistModalDom() {
-    var existing = document.getElementById("tomVipWaitlistModal");
+  function ensureWhopModalDom() {
+    var existing = document.getElementById("tomWhopCheckoutModal");
     if (existing) return existing;
 
-    var styleEl = document.getElementById("tomVipWaitlistStyles");
+    var styleEl = document.getElementById("tomWhopCheckoutStyles");
     if (!styleEl) {
       styleEl = document.createElement("style");
-      styleEl.id = "tomVipWaitlistStyles";
+      styleEl.id = "tomWhopCheckoutStyles";
       styleEl.textContent = [
-        "#tomVipWaitlistModal,#tomVipWaitlistModal *{box-sizing:border-box;}",
-        "#tomVipWaitlistModal{position:fixed;inset:0;z-index:10060;display:none;align-items:center;justify-content:center;padding:16px 12px;background:rgba(15,23,42,0.72);backdrop-filter:blur(6px);overflow-y:auto;}",
-        "#tomVipWaitlistDialog{position:relative;width:100%;max-width:600px;background:#ffffff;border:2px solid #059669;border-radius:16px;padding:22px 20px;color:#0f172a;box-shadow:0 24px 56px rgba(15,23,42,0.32);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow-x:hidden;overflow-y:auto;margin:auto;}",
-        "html[data-tom-theme='dark'] #tomVipWaitlistDialog{background:linear-gradient(155deg,#0f172a 0%,#071929 100%);border-color:#10b981;color:#f8fafc;box-shadow:0 24px 56px rgba(0,0,0,0.65);}",
-        ".tom-wl-top-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px;}",
-        ".tom-wl-priority-pill{display:inline-block;flex:0 1 auto;min-width:0;max-width:calc(100% - 86px);background:#ecfdf5;border:1px solid #059669;color:#065f46;padding:6px 12px;border-radius:999px;font-size:12.5px;line-height:1.35;font-weight:800;letter-spacing:0.02em;}",
-        "#btnCloseTomVipWaitlist{appearance:none;flex:0 0 auto;flex-shrink:0;min-height:44px;min-width:72px;padding:8px 14px;border-radius:8px;border:1.5px solid #64748b;background:#f1f5f9;color:#0f172a;font-weight:800;font-size:15px;line-height:1.2;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;}",
-        "#btnCloseTomVipWaitlist:hover{background:#e2e8f0;border-color:#334155;}",
-        ".tom-wl-plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}",
-        ".tom-wl-plan-btn{padding:12px 12px;border-radius:12px;border:2px solid #cbd5e1;background:#f8fafc;color:#0f172a;text-align:left;cursor:pointer;transition:all 0.15s ease;font-family:inherit;}",
-        "html[data-tom-theme='dark'] .tom-wl-plan-btn{border-color:#334155;background:rgba(15,23,42,0.85);color:#cbd5e1;}",
-        ".tom-wl-plan-btn.is-selected{border-color:#059669;background:#ecfdf5;color:#064e3b;box-shadow:0 0 0 2px rgba(5,150,105,0.2);}",
-        "html[data-tom-theme='dark'] .tom-wl-plan-btn.is-selected{border-color:#10b981;background:rgba(16,185,129,0.16);color:#ffffff;}",
-        ".tom-wl-benefits-box{margin:10px 0 14px;padding:12px 14px;border-radius:12px;background:#f8fafc;border:1px solid #cbd5e1;font-size:15px;line-height:1.55;color:#1e293b;}",
-        "html[data-tom-theme='dark'] .tom-wl-benefits-box{background:rgba(15,23,42,0.75);border-color:#334155;color:#e2e8f0;}",
-        "@media(max-width:540px){.tom-wl-plan-grid{grid-template-columns:1fr;}#tomVipWaitlistDialog{padding:18px 14px;}.tom-wl-priority-pill{font-size:11.5px;padding:5px 10px;}}",
+        "#tomWhopCheckoutModal,#tomWhopCheckoutModal *{box-sizing:border-box;}",
+        "#tomWhopCheckoutModal{position:fixed;inset:0;z-index:10060;display:none;align-items:center;justify-content:center;padding:16px 12px;background:rgba(15,23,42,0.74);backdrop-filter:blur(6px);overflow-y:auto;}",
+        "#tomWhopCheckoutDialog{position:relative;width:100%;max-width:640px;background:#ffffff;border:1.5px solid #065f46;border-radius:12px;padding:20px 20px 18px;color:#0f172a;box-shadow:0 24px 56px rgba(15,23,42,0.34);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;max-height:calc(100vh - 28px);max-height:calc(100dvh - 28px);overflow-x:hidden;overflow-y:auto;margin:auto;}",
+        ".tom-whop-top-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;}",
+        ".tom-whop-kicker-pill{display:inline-block;background:#ecfdf5;border:1px solid #059669;color:#065f46;padding:5px 11px;border-radius:999px;font-size:11.5px;line-height:1.35;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;}",
+        "#btnCloseTomWhopModal{appearance:none;flex-shrink:0;min-height:44px;min-width:72px;padding:8px 14px;border-radius:6px;border:1px solid #94a3b8;background:#f8fafc;color:#0f172a;font-weight:700;font-size:14px;cursor:pointer;}",
+        "#btnCloseTomWhopModal:hover{background:#e2e8f0;}",
+        ".tom-whop-plan-tabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}",
+        ".tom-whop-tab-btn{padding:12px 14px;border-radius:8px;border:1.5px solid #cbd5e1;background:#f8fafc;color:#0f172a;text-align:left;cursor:pointer;font-family:inherit;transition:all 0.15s ease;}",
+        ".tom-whop-tab-btn.is-selected{border-color:#065f46;background:#ecfdf5;color:#064e3b;box-shadow:0 0 0 2px rgba(6,95,70,0.15);}",
+        ".tom-whop-direct-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;margin-bottom:12px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;}",
+        ".tom-whop-direct-btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:10px 16px;border-radius:6px;background:#065f46;color:#ffffff !important;font-size:14.5px;font-weight:700;text-decoration:none !important;white-space:nowrap;}",
+        ".tom-whop-direct-btn:hover{background:#047857;}",
+        "#tomWhopEmbedMount{min-height:380px;border:1px solid #e2e8f0;border-radius:8px;background:#fbfbf9;padding:6px;overflow:hidden;}",
+        "@media(max-width:560px){.tom-whop-plan-tabs{grid-template-columns:1fr;}#tomWhopCheckoutDialog{padding:16px 14px;}.tom-whop-direct-btn{width:100%;}}",
       ].join("");
       document.head.appendChild(styleEl);
     }
 
-    var savedEmail = getKnownTomMemberEmail();
-
     var backdrop = document.createElement("div");
-    backdrop.id = "tomVipWaitlistModal";
+    backdrop.id = "tomWhopCheckoutModal";
     backdrop.setAttribute("role", "dialog");
     backdrop.setAttribute("aria-modal", "true");
-    backdrop.setAttribute("aria-labelledby", "tomVipWaitlistTitle");
+    backdrop.setAttribute("aria-labelledby", "tomWhopModalTitle");
     backdrop.innerHTML =
-      '<div id="tomVipWaitlistDialog">' +
-      '  <div class="tom-wl-top-row">' +
-      '    <span class="tom-wl-priority-pill">' +
-      "      FOUNDING MEMBER PRIORITY ACCESS &bull; 20% EARLY-BIRD LOCK" +
-      "    </span>" +
-      '    <button type="button" id="btnCloseTomVipWaitlist" aria-label="Close modal">Close</button>' +
+      '<div id="tomWhopCheckoutDialog">' +
+      '  <div class="tom-whop-top-row">' +
+      '    <span class="tom-whop-kicker-pill">INDEPENDENT MARKET DATA &amp; EDUCATIONAL RESEARCH</span>' +
+      '    <button type="button" id="btnCloseTomWhopModal" aria-label="Close checkout modal">Close</button>' +
       "  </div>" +
-      '  <h3 id="tomVipWaitlistTitle" style="margin:0 0 8px;font-size:clamp(1.2rem,2.4vw,1.45rem);line-height:1.32;font-weight:900;">' +
-      "    VIP Founding Member Launch Alert &amp; 20% Early-Bird Discount Reservation (1-Second Email Reserve)" +
+      '  <h3 id="tomWhopModalTitle" style="margin:0 0 6px;font-size:1.25rem;line-height:1.3;font-weight:800;color:#0f172a;">' +
+      "    TruthOfMarket Research Pass &mdash; Secure Checkout" +
       "  </h3>" +
-      '  <p style="margin:0;font-size:16.5px;line-height:1.6;">' +
-      "    Our Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) self-directed educational calculator software checkout is completing final gateway activation. Reserve your spot in <b>1 second ($0 charged today)</b> to lock in a <b>20% Founding Member Discount</b>—plus instant free Morning Bell Club access." +
+      '  <p style="margin:0;font-size:14px;line-height:1.55;color:#475569;">' +
+      "    Educational Market Data Newsletter + 2000&ndash;2025 Historical Statistical Workbook (SMH &times; XLV + SGOV 2-Pillar Historical Case Study &mdash; Strictly Non-Advisory Educational Publisher)." +
       "  </p>" +
-      '  <div class="tom-wl-benefits-box">' +
-      '    <div style="font-weight:800;color:#047857;margin-bottom:6px;">Included in Private Wealth Membership ($29/mo or $199/yr):</div>' +
-      '    <div style="margin-bottom:4px;">&bull; <b>Daily Automated SMH &times; XLV Market Indicator &amp; Ratio Digest:</b> Morning email tracking public semiconductor overheating / fear data (0&ndash;100) and historical <b>$SMH : $XLV</b> sector mix shifts across regimes.</div>' +
-      '    <div style="margin-bottom:4px;">&bull; <b>Account-Size Dollar ($) Allocation Worksheet:</b> Exact dollar amounts across <b>$SMH</b> (Semiconductors), <b>$XLV</b> (Healthcare Defense) &amp; optional <b>$SGOV</b> T-Bill cushion for your exact account scale.</div>' +
-      '    <div>&bull; <b>Lifetime-Updated 14-Page SMH &times; XLV Master PDF Guide:</b> Complete 26-year (2000&ndash;2026) Dot-Com / 2008 / 2022 drawdown study + printable self-directed execution checklist.</div>' +
-      "  </div>" +
-      '  <div class="tom-wl-plan-grid" role="radiogroup" aria-label="Select VIP Plan to Reserve">' +
-      '    <button type="button" class="tom-wl-plan-btn is-selected" data-wl-plan="Monthly VIP ($29/mo)">' +
-      '      <div style="font-size:12.5px;font-weight:800;color:#047857;">MONTHLY VIP SOFTWARE</div>' +
-      '      <div style="font-size:17px;font-weight:900;margin:3px 0;">Monthly VIP ($29/mo)</div>' +
-      '      <div style="font-size:13px;color:#b45309;font-weight:800;">20% Early-Bird: $23.20/mo</div>' +
-      '      <div style="font-size:12px;margin-top:4px;line-height:1.35;">All 3 Retiree Worksheets + Drawdown Defense PDF Guide</div>' +
+      '  <div class="tom-whop-plan-tabs" role="radiogroup" aria-label="Select Research Pass">' +
+      '    <button type="button" class="tom-whop-tab-btn is-selected" data-whop-tab="monthly">' +
+      '      <div style="font-size:11.5px;font-weight:700;color:#065f46;letter-spacing:0.04em;">MONTHLY RESEARCH PASS</div>' +
+      '      <div style="font-size:17px;font-weight:800;margin:2px 0;">$29 <span style="font-size:13px;font-weight:500;color:#475569;">/ month</span></div>' +
+      '      <div style="font-size:12px;color:#475569;">Morning Market Data Newsletter + Regime Workbook</div>' +
       "    </button>" +
-      '    <button type="button" class="tom-wl-plan-btn" data-wl-plan="Annual VIP ($199/yr)">' +
-      '      <div style="font-size:12.5px;font-weight:800;color:#b45309;">ANNUAL VIP SOFTWARE (SAVE 43%)</div>' +
-      '      <div style="font-size:17px;font-weight:900;margin:3px 0;">Annual VIP ($199/yr)</div>' +
-      '      <div style="font-size:13px;color:#047857;font-weight:800;">20% Early-Bird: $159.20/yr</div>' +
-      '      <div style="font-size:12px;margin-top:4px;line-height:1.35;">Full 12-Month Pass + Lifetime-Updated PDF Guide Bundle</div>' +
+      '    <button type="button" class="tom-whop-tab-btn" data-whop-tab="annual">' +
+      '      <div style="font-size:11.5px;font-weight:700;color:#b45309;letter-spacing:0.04em;">ANNUAL RESEARCH PASS &middot; SAVE 43%</div>' +
+      '      <div style="font-size:17px;font-weight:800;margin:2px 0;">$199 <span style="font-size:13px;font-weight:500;color:#475569;">/ year</span></div>' +
+      '      <div style="font-size:12px;color:#475569;">12-Month Newsletter + Complete 2000&ndash;2025 Statistical Workbook</div>' +
       "    </button>" +
       "  </div>" +
-      '  <form id="tomVipWaitlistForm" novalidate style="display:flex;flex-direction:column;gap:10px;">' +
-      '    <input type="hidden" id="tomVipWaitlistSelectedPlan" value="Monthly VIP ($29/mo)" />' +
-      '    <label for="tomVipWaitlistEmail" style="font-size:15px;font-weight:800;">Your Best Email Address (Zero Spam &bull; No Card Needed Today):</label>' +
-      '    <input type="email" id="tomVipWaitlistEmail" required autocomplete="email" placeholder="Enter your email (e.g., robert@email.com)" value="' +
-      String(savedEmail).replace(/"/g, "") +
-      '" style="width:100%;min-height:56px;padding:12px 16px;border-radius:10px;border:2px solid #64748b;background:#ffffff;color:#0f172a;font-size:18px;font-weight:700;box-sizing:border-box;" />' +
-      '    <button type="submit" id="btnSubmitTomVipWaitlist" style="width:100%;min-height:58px;padding:13px 18px;border-radius:11px;border:none;background:linear-gradient(135deg,#059669 0%,#047857 100%);color:#ffffff;font-size:18px;font-weight:900;cursor:pointer;box-shadow:0 8px 22px rgba(5,150,105,0.28);">' +
-      "      Reserve My 20% VIP Discount &amp; Launch Alert (1-Sec) &rarr;" +
-      "    </button>" +
-      "  </form>" +
-      '  <div id="tomVipWaitlistConfirm" role="status" aria-live="polite" style="display:none;margin-top:12px;padding:14px 16px;border-radius:10px;background:#ecfdf5;border:1.5px solid #059669;color:#064e3b;font-size:16px;line-height:1.55;font-weight:700;"></div>' +
-      '  <div style="margin-top:12px;padding-top:10px;border-top:1px solid #cbd5e1;font-size:13.5px;color:#475569;line-height:1.5;">' +
-      '    Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) &bull; 14-Day No-Questions-Asked Refund Policy once live &bull; Self-Directed Educational Calculator Software &bull; Support: <a href="mailto:beable9489@gmail.com" style="color:#1d4ed8;font-weight:700;text-decoration:underline;">beable9489@gmail.com</a>' +
+      '  <div class="tom-whop-direct-bar">' +
+      '    <span style="font-size:13px;color:#334155;font-weight:600;">Using a mobile WebView or ad-blocker? Complete checkout directly in one tap:</span>' +
+      '    <a id="tomWhopDirectTopBtn" class="tom-whop-direct-btn" data-whop-direct-tab="1" href="' +
+      WHOP_TOM_MONTHLY_URL +
+      '" target="_blank" rel="noopener">Open Secure Whop Checkout in New Tab &rarr;</a>' +
+      "  </div>" +
+      '  <div id="tomWhopEmbedMount" aria-live="polite"></div>' +
+      '  <div style="margin-top:12px;padding-top:10px;border-top:1px solid #e2e8f0;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;color:#475569;">' +
+      '    <span>Secure Checkout via Whop.com &middot; 14-Day Refund Policy &middot; Cancel anytime &middot; Support: <a href="mailto:beable9489@gmail.com" style="color:#1d4ed8;font-weight:700;">beable9489@gmail.com</a></span>' +
+      '    <a id="tomWhopDirectFooterLink" data-whop-direct-tab="1" href="' +
+      WHOP_TOM_MONTHLY_URL +
+      '" target="_blank" rel="noopener" style="color:#065f46;font-weight:700;text-decoration:underline;">Open Secure Whop Checkout in New Tab &rarr;</a>' +
       "  </div>" +
       "</div>";
 
     document.body.appendChild(backdrop);
 
-    var planInput = document.getElementById("tomVipWaitlistSelectedPlan");
-    var planBtns = backdrop.querySelectorAll(".tom-wl-plan-btn");
-    planBtns.forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        var plan = btn.getAttribute("data-wl-plan") || "Monthly VIP ($29/mo)";
-        if (planInput) planInput.value = plan;
-        planBtns.forEach(function (b) {
-          b.classList.toggle("is-selected", b === btn);
-        });
-      });
-    });
-
-    var closeBtn = document.getElementById("btnCloseTomVipWaitlist");
+    var closeBtn = document.getElementById("btnCloseTomWhopModal");
     if (closeBtn) {
       closeBtn.addEventListener("click", function () {
         backdrop.style.display = "none";
@@ -382,157 +337,99 @@
       }
     });
 
-    var form = document.getElementById("tomVipWaitlistForm");
-    if (form) {
-      form.addEventListener("submit", function (ev) {
-        ev.preventDefault();
-        var emailEl = document.getElementById("tomVipWaitlistEmail");
-        var confirmEl = document.getElementById("tomVipWaitlistConfirm");
-        var submitBtn = document.getElementById("btnSubmitTomVipWaitlist");
-        var selectedPlan = (planInput && planInput.value) || "Monthly VIP ($29/mo)";
-        var email = String((emailEl && emailEl.value) || "")
-          .trim()
-          .toLowerCase();
-
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
-          if (confirmEl) {
-            confirmEl.style.display = "block";
-            confirmEl.style.borderColor = "#dc2626";
-            confirmEl.style.background = "#fef2f2";
-            confirmEl.style.color = "#991b1b";
-            confirmEl.textContent = "Please enter a valid email address (for example, robert@email.com).";
-          }
-          if (emailEl) emailEl.focus();
-          return;
-        }
-
-        if (submitBtn) {
-          submitBtn.disabled = true;
-          submitBtn.textContent = "Reserving Your 20% Founding Discount...";
-        }
-
-        try {
-          localStorage.setItem("tom_free_member_email", email);
-          localStorage.setItem("tom_vip_waitlist_plan", selectedPlan);
-        } catch (_) {}
-
-        try {
-          var kst = getKstDateString();
-          fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/vip_waitlist_" + kst, {
-            mode: "cors",
-            keepalive: true,
-          }).catch(function () {});
-          fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/vip_waitlist_total", {
-            mode: "cors",
-            keepalive: true,
-          }).catch(function () {});
-          fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/vip_waitlist", {
-            mode: "cors",
-            keepalive: true,
-          }).catch(function () {});
-          fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/signup", {
-            mode: "cors",
-            keepalive: true,
-          }).catch(function () {});
-          fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/signup_total", {
-            mode: "cors",
-            keepalive: true,
-          }).catch(function () {});
-        } catch (_) {}
-
-        postCrmRegistrationWithFallback({
-          email: email,
-          segment: "vip_waitlist",
-          lang: "en-US",
-          notes: "site=truthofmarket.com | provider=polar_sh | plan=" + selectedPlan,
-        }).finally(function () {
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = "Reserve My 20% VIP Discount &amp; Launch Alert (1-Sec) &rarr;";
-          }
-        });
-
-        if (confirmEl) {
-          confirmEl.style.display = "block";
-          confirmEl.style.borderColor = "#059669";
-          confirmEl.style.background = "#ecfdf5";
-          confirmEl.style.color = "#064e3b";
-          confirmEl.innerHTML =
-            "<strong>20% Founding Member Reservation Confirmed.</strong><br/>Reserved Plan: <b>" +
-            selectedPlan.replace(/[<>&"]/g, "") +
-            "</b> for <b>" +
-            email.replace(/[<>&"]/g, "") +
-            "</b>. We will email your private 20% discount Polar.sh checkout link the moment live billing opens—and your complimentary Morning Bell Retirement &amp; Macro Brief is now active.";
-        }
+    backdrop.querySelectorAll("[data-whop-tab]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var pk = btn.getAttribute("data-whop-tab") === "annual" ? "annual" : "monthly";
+        mountWhopPlanInModal(pk);
       });
-    }
+    });
 
     return backdrop;
   }
 
-  window.openTomVipWaitlistModal = function (planKey) {
-    var modal = ensureWaitlistModalDom();
-    var selectedLabel = planKey === "annual" ? "Annual VIP ($199/yr)" : "Monthly VIP ($29/mo)";
-    var planInput = document.getElementById("tomVipWaitlistSelectedPlan");
-    if (planInput) planInput.value = selectedLabel;
-    modal.querySelectorAll(".tom-wl-plan-btn").forEach(function (btn) {
-      btn.classList.toggle("is-selected", btn.getAttribute("data-wl-plan") === selectedLabel);
+  function mountWhopPlanInModal(planKey) {
+    ensureWhopLoaderScript();
+    var modal = ensureWhopModalDom();
+    var spec = resolveTomWhopPlanSpec(planKey);
+
+    modal.querySelectorAll("[data-whop-tab]").forEach(function (btn) {
+      var active = btn.getAttribute("data-whop-tab") === spec.key;
+      btn.classList.toggle("is-selected", active);
+      btn.setAttribute("aria-checked", active ? "true" : "false");
     });
-    var emailEl = document.getElementById("tomVipWaitlistEmail");
-    if (emailEl && !emailEl.value) {
-      var latestEmail = getKnownTomMemberEmail();
-      if (latestEmail) emailEl.value = latestEmail;
+
+    var topDirect = document.getElementById("tomWhopDirectTopBtn");
+    var footDirect = document.getElementById("tomWhopDirectFooterLink");
+    if (topDirect) topDirect.setAttribute("href", spec.purchaseUrl);
+    if (footDirect) footDirect.setAttribute("href", spec.purchaseUrl);
+
+    var mount = document.getElementById("tomWhopEmbedMount");
+    if (mount) {
+      mount.innerHTML = "";
+      var embedDiv = document.createElement("div");
+      embedDiv.className = "whop-checkout-embed";
+      embedDiv.setAttribute("data-whop-checkout-plan-id", spec.planId);
+      embedDiv.setAttribute("data-whop-checkout-return-url", spec.redirectUrl);
+      embedDiv.setAttribute("data-whop-checkout-redirect-url", spec.redirectUrl);
+      embedDiv.setAttribute("data-whop-checkout-theme", "light");
+      var savedEmail = getKnownTomMemberEmail();
+      if (savedEmail) {
+        embedDiv.setAttribute("data-whop-checkout-prefill-email", savedEmail);
+      }
+      mount.appendChild(embedDiv);
     }
-    var confirmEl = document.getElementById("tomVipWaitlistConfirm");
-    if (confirmEl) confirmEl.style.display = "none";
+  }
+
+  window.openTomWhopCheckoutModal = function (planKey) {
+    var modal = ensureWhopModalDom();
+    mountWhopPlanInModal(planKey === "annual" ? "annual" : "monthly");
     modal.style.display = "flex";
-    setTimeout(function () {
-      if (emailEl && !emailEl.value) emailEl.focus();
-    }, 60);
   };
+  window.openTomVipWaitlistModal = window.openTomWhopCheckoutModal;
 
   if (window.__TOM_PAYMENT_SYSTEM_READY__) return;
   window.__TOM_PAYMENT_SYSTEM_READY__ = true;
 
-  // 1. Unified Capture-Phase Paid Checkout Click Guard (Strictly 1 Abacus Fire Per Click)
+  ensureWhopLoaderScript();
+
+  // 1. Unified Capture-Phase Paid Checkout Click Handler
   window.addEventListener(
     "click",
     function (e) {
       var el =
         e.target && e.target.closest
-          ? e.target.closest(".polar-checkout-button, [data-polar-checkout], [data-tom-paid-plan]") ||
+          ? e.target.closest("[data-whop-direct-tab], .whop-checkout-button, [data-whop-checkout], [data-tom-paid-plan]") ||
             e.target.closest("a, button, [role='button']")
           : null;
       if (!el) return;
 
+      if (el.hasAttribute("data-whop-direct-tab")) {
+        return;
+      }
+
       var href = String(el.getAttribute("href") || "");
-      var planAttr = String(el.getAttribute("data-tom-paid-plan") || "").toLowerCase();
-      var polarPlanAttr = String(el.getAttribute("data-polar-plan") || "").toLowerCase();
+      var planAttr = String(el.getAttribute("data-tom-paid-plan") || el.getAttribute("data-whop-plan") || "").toLowerCase();
       var cls = String(el.className || "");
 
-      var isPortalManageLink = href.indexOf("polar.sh/purchases") !== -1;
       var isPaidCta =
-        !isPortalManageLink &&
-        (cls.indexOf("polar-checkout-button") !== -1 ||
-          el.hasAttribute("data-polar-checkout") ||
-          Boolean(planAttr) ||
-          Boolean(polarPlanAttr) ||
-          href.indexOf("buy.polar.sh") !== -1 ||
-          href.indexOf("polar.sh/checkout") !== -1 ||
-          href.indexOf("#tom-vip-") === 0);
+        cls.indexOf("whop-checkout-button") !== -1 ||
+        el.hasAttribute("data-whop-checkout") ||
+        Boolean(planAttr) ||
+        href.indexOf("whop.com/checkout/plan_") !== -1 ||
+        href.indexOf("#tom-vip-") === 0 ||
+        href.indexOf("#tom-whop-") === 0;
 
       if (!isPaidCta) return;
 
       var txt = String(el.innerText || el.textContent || "").toLowerCase();
       var isAnnual =
         planAttr === "annual" ||
-        polarPlanAttr === "annual_199" ||
+        href.indexOf(WHOP_TOM_ANNUAL_PLAN_ID) !== -1 ||
         href.indexOf("annual") !== -1 ||
         txt.indexOf("199") !== -1 ||
         txt.indexOf("annual") !== -1;
       var planKey = isAnnual ? "annual" : "monthly";
 
-      // Fire Abacus paid_click_<YYYY-MM-DD> & paid_click_total strictly once per click
       if (!e.__tomPaidClickTracked) {
         e.__tomPaidClickTracked = true;
         try {
@@ -552,58 +449,39 @@
         } catch (_) {}
       }
 
-      var pCfg = window.PAYMENT_CONFIG || {};
-      var resolvedPolarUrl = resolvePolarCheckoutUrl(planKey);
-
-      if (pCfg.STORE_LIVE_READY !== true || !resolvedPolarUrl) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (typeof e.stopImmediatePropagation === "function") {
-          e.stopImmediatePropagation();
-        }
-        window.openTomVipWaitlistModal(planKey);
+      if (e.ctrlKey || e.metaKey || e.shiftKey) {
         return;
       }
 
-      // Live Polar.sh Checkout Active Path (STORE_LIVE_READY === true AND valid Polar URL configured)
       e.preventDefault();
       e.stopPropagation();
       if (typeof e.stopImmediatePropagation === "function") {
         e.stopImmediatePropagation();
       }
 
-      var checkoutUrl = appendPolarCustomerEmail(resolvedPolarUrl);
-      if (window.isTomInAppWebView()) {
-        window.location.href = checkoutUrl;
-        return;
-      }
-      if (window.PolarEmbedCheckout && typeof window.PolarEmbedCheckout.create === "function") {
-        var curTheme = document.documentElement.getAttribute("data-tom-theme") === "dark" ? "dark" : "light";
-        window.PolarEmbedCheckout.create(checkoutUrl, curTheme).catch(function () {
-          window.location.href = checkoutUrl;
-        });
-      } else {
-        window.location.href = checkoutUrl;
-      }
+      window.openTomWhopCheckoutModal(planKey);
     },
     true
   );
 
-  // 2. Escape key closes VIP Waitlist Modal + Polar.sh Checkout Success Unlock
+  // 2. Escape key closes Whop Checkout Modal
   window.addEventListener("keydown", function (ev) {
     if (ev.key === "Escape") {
-      var wl = document.getElementById("tomVipWaitlistModal");
+      var wl = document.getElementById("tomWhopCheckoutModal");
       if (wl && wl.style.display === "flex") {
         wl.style.display = "none";
       }
     }
   });
 
-  function applyPolarCheckoutUnlock(orderRef) {
-    var cleanRef = String(orderRef || "RSA-PRO-2026-POLAR-VIP").trim();
+  // 3. Handle ?payment=success&provider=whop&plan=monthly|annual cleanly on return
+  function applyWhopCheckoutUnlock(orderRef, planSlug) {
+    var cleanPlan = String(planSlug || "monthly").toLowerCase() === "annual" ? "annual" : "monthly";
+    var cleanRef = String(orderRef || ("WHOP-PASS-2026-" + cleanPlan.toUpperCase())).trim();
     try {
       localStorage.setItem("rsa_pro_unlocked", "true");
       localStorage.setItem("rsa_token", cleanRef);
+      localStorage.setItem("tom_whop_active_plan", cleanPlan);
       var kst = getKstDateString();
       if (localStorage.getItem("hq_paid_" + kst) !== "1") {
         localStorage.setItem("hq_paid_" + kst, "1");
@@ -617,46 +495,43 @@
         }).catch(function () {});
       }
     } catch (_) {}
-  }
 
-  function setupPolarCheckoutSuccess() {
     try {
-      var searchStr = (window.location && window.location.search) || "";
-      if (
-        searchStr.indexOf("payment=success") !== -1 ||
-        searchStr.indexOf("polar_checkout_success") !== -1
-      ) {
-        var sp = new URLSearchParams(searchStr);
-        var cid = sp.get("checkout_id") || sp.get("customer_session_token") || "POLAR-VIP";
-        applyPolarCheckoutUnlock("RSA-PRO-2026-" + cid);
-      }
-      if (!window.__tomPolarPostMessageBound) {
-        window.__tomPolarPostMessageBound = true;
-        window.addEventListener("message", function (ev) {
-          try {
-            var origin = String((ev && ev.origin) || "").toLowerCase();
-            if (origin.indexOf("polar.sh") === -1) return;
-            var d = ev.data;
-            var isSuccess =
-              d === "polar_checkout_success" ||
-              (d &&
-                typeof d === "object" &&
-                (d.event === "success" ||
-                  d.event === "polar_checkout_success" ||
-                  d.type === "polar_checkout_success" ||
-                  d.status === "succeeded"));
-            if (isSuccess) {
-              applyPolarCheckoutUnlock("RSA-PRO-2026-POLAR-EMBED");
-            }
-          } catch (_) {}
-        });
+      if (typeof document !== "undefined" && document.body && !document.getElementById("tomWhopReturnBanner")) {
+        var planTitle = cleanPlan === "annual" ? "Annual Research Pass ($199/yr)" : "Monthly Research Pass ($29/mo)";
+        var banner = document.createElement("div");
+        banner.id = "tomWhopReturnBanner";
+        banner.setAttribute("role", "status");
+        banner.style.cssText =
+          "max-width:820px;margin:16px auto 0;padding:14px 18px;border-radius:8px;background:#ecfdf5;border:1.5px solid #059669;color:#064e3b;font-family:'Inter',sans-serif;font-size:15px;line-height:1.55;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;";
+        banner.innerHTML =
+          "<div><strong>Whop Checkout Confirmed &mdash; " +
+          planTitle +
+          " Active.</strong> Your Research Pass session is now unlocked in this browser. Need receipt or multi-device help? Contact <a href='mailto:beable9489@gmail.com' style='color:#065f46;font-weight:700;text-decoration:underline;'>beable9489@gmail.com</a>.</div>" +
+          "<button type='button' onclick='this.parentNode.remove()' style='padding:6px 12px;border-radius:6px;border:1px solid #059669;background:#ffffff;color:#064e3b;font-weight:700;cursor:pointer;'>Dismiss</button>";
+        document.body.insertBefore(banner, document.body.firstChild);
       }
     } catch (_) {}
   }
-  setupPolarCheckoutSuccess();
-  window.addEventListener("load", setupPolarCheckoutSuccess);
 
-  // 3. Session-Scoped `read_complete` Beacon (Scroll Depth >= 70% AND Dwell Time >= 15000ms)
+  function setupWhopCheckoutSuccess() {
+    try {
+      var searchStr = (window.location && window.location.search) || "";
+      if (searchStr.indexOf("payment=success") !== -1 || searchStr.indexOf("checkout_status=succeeded") !== -1) {
+        var sp = new URLSearchParams(searchStr);
+        var planParam = sp.get("plan") === "annual" ? "annual" : "monthly";
+        var cid = sp.get("receipt_id") || sp.get("checkout_id") || sp.get("session_id") || ("WHOP-" + planParam.toUpperCase());
+        applyWhopCheckoutUnlock("WHOP-2026-" + cid, planParam);
+      }
+    } catch (_) {}
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupWhopCheckoutSuccess);
+  } else {
+    setupWhopCheckoutSuccess();
+  }
+
+  // 4. Session-Scoped `read_complete` Beacon (Scroll Depth >= 70% AND Dwell Time >= 15000ms)
   (function bindReadCompleteBeacon() {
     var SESSION_KEY = "tom_read_complete_fired_v1";
     try {

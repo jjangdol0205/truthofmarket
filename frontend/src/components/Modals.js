@@ -4,11 +4,11 @@ export function renderModals(state) {
   const t = state.t || {};
   const cfg = state.config || {};
   const polarMonthly = formatCheckoutUrl(
-    cfg.polar_tom_monthly_url || cfg.ls_site1_monthly_url,
+    cfg.whop_tom_monthly_url || cfg.ls_site1_monthly_url,
     "#tom-vip-monthly"
   );
   const polarAnnual = formatCheckoutUrl(
-    cfg.polar_tom_annual_url || cfg.ls_site1_ltd_url,
+    cfg.whop_tom_annual_url || cfg.ls_site1_ltd_url,
     "#tom-vip-annual"
   );
   const tgChannelUrl = cfg.telegram_channel_url || "https://t.me/truthofmarketss";
@@ -26,8 +26,8 @@ export function renderModals(state) {
   const ovRsi = Number(ov.smh_rsi ?? 40.6).toFixed(1);
   const ovXlv = Number(ov.xlv_close ?? 184.87).toFixed(2);
   const ovQqq = Number(ov.qqq_close ?? 690.49).toFixed(2);
-  const ovW1 = ov.recommended_smh_weight ?? 80;
-  const ovW2 = ov.recommended_xlv_weight ?? 20;
+  const ovW1 = ov.historical_study_smh_ratio ?? 80;
+  const ovW2 = ov.historical_study_xlv_ratio ?? 20;
   const tgPreview =
     state.telegramPreviewText ||
     `🧭 [TruthOfMarket] Daily Market Weather & Barbell Summary (${ovDate})\n• Sentiment Score: ${ovScore} / 100 (${ovRegime})\n• $SMH: $${ovSmh} (${ovDd}% 52W DD | RSI ${ovRsi})\n• $XLV: $${ovXlv} | $QQQ: $${ovQqq}\n• Educational Barbell Model: ${ovW1}% $SMH : ${ovW2}% $XLV`;
@@ -55,15 +55,15 @@ export function renderModals(state) {
           Includes Custom Nest-Egg Dollar ($) Budget Worksheet, 12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Reference, and Large-Print 1-Page Weather Action Sheet. Backed by our 14-Day Refund Policy.
         </p>
         <div style="display:grid; grid-template-columns:1fr; gap:10px; margin:14px 0 10px;">
-          <a class="btn btn-primary polar-checkout-button" data-polar-checkout data-polar-plan="monthly_29" data-tom-paid-plan="monthly" href="${polarMonthly}" style="justify-content:center; min-height:62px; padding:12px 16px; font-size:1.02rem; font-weight:800; border-radius:12px;">
-            Start Monthly VIP — $29/mo
+          <a class="btn btn-primary whop-checkout-button" data-whop-checkout data-whop-plan="monthly" data-tom-paid-plan="monthly" href="${polarMonthly}" style="justify-content:center; min-height:62px; padding:12px 16px; font-size:1.02rem; font-weight:800; border-radius:12px;">
+            Start Monthly Research Pass — $29/mo
           </a>
-          <a class="btn btn-emerald polar-checkout-button" data-polar-checkout data-polar-plan="annual_199" data-tom-paid-plan="annual" href="${polarAnnual}" style="justify-content:center; min-height:62px; padding:12px 16px; font-size:1.02rem; font-weight:800; border-radius:12px;">
-            Start Annual VIP — $199/yr (Save 43%)
+          <a class="btn btn-emerald whop-checkout-button" data-whop-checkout data-whop-plan="annual" data-tom-paid-plan="annual" href="${polarAnnual}" style="justify-content:center; min-height:62px; padding:12px 16px; font-size:1.02rem; font-weight:800; border-radius:12px;">
+            Start Annual Research Pass — $199/yr (Save 43%)
           </a>
         </div>
         <div style="margin-bottom:8px; font-size:0.78rem; color:#e2e8f0; font-weight:700; text-align:center; line-height:1.45;">
-          💳 Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) · 1-Click Cancel Anytime · 14-Day Refund Policy
+          💳 Whop.com (Global Card / Apple Pay / Google Pay) · 1-Click Cancel Anytime · 14-Day Refund Policy
         </div>
         <div style="margin-bottom:12px; font-size:0.72rem; color:#94a3b8; text-align:center; line-height:1.45;">
           Support Desk: <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20VIP%20Software%20Support" style="color:#93c5fd; font-weight:700; text-decoration:underline;">beable9489@gmail.com</a>
@@ -74,7 +74,7 @@ export function renderModals(state) {
             🔑 Switching devices or already have a License Key? Restore here
           </summary>
           <div style="margin-top:10px;">
-            <input type="text" id="licenseInput" value="${state.licenseKey || ""}" placeholder="Enter Polar.sh VIP License Key (XXXX-XXXX-XXXX-XXXX)" autocomplete="off" />
+            <input type="text" id="licenseInput" value="${state.licenseKey || ""}" placeholder="Enter Whop Research Pass Receipt ID (XXXX-XXXX-XXXX-XXXX)" autocomplete="off" />
             <div style="display:flex; gap:8px; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-top:8px;">
               <div>
                 ${
@@ -246,11 +246,11 @@ export function renderModals(state) {
         <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">PLATFORM DOMAIN</label>
         <input type="text" id="cfgSite1Url" value="${cfg.site1_url || "https://truthofmarket.com"}" />
 
-        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">POLAR.SH MONTHLY VIP URL ($29/MO)</label>
-        <input type="text" id="cfgLsMonthly" value="${cfg.polar_tom_monthly_url || ""}" placeholder="https://buy.polar.sh/..." />
+        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">WHOP MONTHLY RESEARCH PASS URL ($29/MO)</label>
+        <input type="text" id="cfgLsMonthly" value="${cfg.whop_tom_monthly_url || ""}" placeholder="https://whop.com/checkout/plan_..." />
 
-        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">POLAR.SH ANNUAL VIP URL ($199/YR)</label>
-        <input type="text" id="cfgLsLtd" value="${cfg.polar_tom_annual_url || ""}" placeholder="https://buy.polar.sh/..." />
+        <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">WHOP ANNUAL RESEARCH PASS URL ($199/YR)</label>
+        <input type="text" id="cfgLsLtd" value="${cfg.whop_tom_annual_url || ""}" placeholder="https://whop.com/checkout/plan_..." />
 
         <label style="font-size:0.72rem; color:var(--muted); font-family:var(--font-mono);">TELEGRAM OFFICIAL CHANNEL URL</label>
         <input type="text" id="cfgTgChannel" value="${tgChannelUrl}" />
@@ -305,7 +305,7 @@ export function renderModals(state) {
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
           <div>
             <div style="font-size:0.68rem; font-family:var(--font-mono); color:#93c5fd; text-transform:uppercase; letter-spacing:0.05em;">
-              LEGAL &amp; COMPLIANCE · Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)
+              LEGAL &amp; COMPLIANCE · Whop.com (Global Card / Apple Pay / Google Pay)
             </div>
             <h3 style="font-size:1.1rem; font-weight:800; color:#ffffff; margin-top:3px;" id="legalModalTitle">
               Terms of Service, Privacy Policy &amp; 14-Day Refund Policy
@@ -328,20 +328,20 @@ export function renderModals(state) {
           <div data-legal-section="privacy" style="border-top:1px solid var(--border); padding-top:12px; margin-top:12px;">
             <h4 style="color:#ffffff; font-size:0.95rem; font-weight:800; margin-bottom:6px;">2. Privacy Policy</h4>
             <p style="color:var(--muted); margin-bottom:10px;">
-              Portfolio inputs entered into our calculators are processed locally in your browser and are never sold or shared with third parties. Payment processing is handled securely by <b>Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay)</b> under PCI-DSS Level 1 compliance.
+              Portfolio inputs entered into our calculators are processed locally in your browser and are never sold or shared with third parties. Payment processing is handled securely by <b>Whop.com (Global Card / Apple Pay / Google Pay)</b> under PCI-DSS Level 1 compliance.
             </p>
           </div>
           <div data-legal-section="refund" style="border-top:1px solid var(--border); padding-top:12px; margin-top:12px;">
             <h4 style="color:#ffffff; font-size:0.95rem; font-weight:800; margin-bottom:6px;">3. 14-Day No-Questions-Asked Refund Policy &amp; 1-Click Cancellation</h4>
             <p style="color:var(--muted); margin-bottom:10px;">
-              Both Monthly VIP ($29/mo) and Annual VIP ($199/yr) software subscriptions are backed by a <b>14-Day No-Questions-Asked Full Refund Guarantee</b>. Email <a href="mailto:beable9489@gmail.com" style="color:#60a5fa; font-weight:700;">beable9489@gmail.com</a> within 14 calendar days of initial purchase for a 100% full refund to your original payment method. You may also cancel recurring billing anytime in 1 click via your Polar.sh Customer Billing Portal.
+              Both Monthly Research Pass ($29/mo) and Annual Research Pass ($199/yr) software subscriptions are backed by a <b>14-Day No-Questions-Asked Full Refund Guarantee</b>. Email <a href="mailto:beable9489@gmail.com" style="color:#60a5fa; font-weight:700;">beable9489@gmail.com</a> within 14 calendar days of initial purchase for a 100% full refund to your original payment method. You may also cancel recurring billing anytime in 1 click via your Whop Orders Portal.
             </p>
           </div>
           <div data-legal-section="support" style="border-top:1px solid var(--border); padding-top:12px; margin-top:12px;">
             <h4 style="color:#ffffff; font-size:0.95rem; font-weight:800; margin-bottom:6px;">4. Educational Market Data &amp; Quantitative Research Desk</h4>
             <p style="color:var(--muted);">
               • <b>Official Support Email</b>: <a href="mailto:beable9489@gmail.com" style="color:#60a5fa; font-weight:700;">beable9489@gmail.com</a><br/>
-              • <b>Merchant of Record</b>: Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay) (<a href="https://polar.sh/purchases" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;">Manage Orders &amp; Receipts ↗</a>)
+              • <b>Merchant of Record</b>: Whop.com (Global Card / Apple Pay / Google Pay) (<a href="https://whop.com/orders/" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;">Manage Orders &amp; Receipts ↗</a>)
             </p>
           </div>
         </div>
@@ -567,21 +567,21 @@ export function renderModals(state) {
               </button>
               <a
                 href="${polarMonthly}"
-                class="tom-manual-funnel-paid polar-checkout-button"
-                data-polar-checkout
-                data-polar-plan="monthly_29"
+                class="tom-manual-funnel-paid whop-checkout-button"
+                data-whop-checkout
+                data-whop-plan="monthly"
                 data-tom-paid-plan="monthly"
               >
-                ⚡ Start Monthly VIP — $29/mo
+                ⚡ Start Monthly Research Pass — $29/mo
               </a>
               <a
                 href="${polarAnnual}"
-                class="tom-manual-funnel-paid is-ltd polar-checkout-button"
-                data-polar-checkout
-                data-polar-plan="annual_199"
+                class="tom-manual-funnel-paid is-ltd whop-checkout-button"
+                data-whop-checkout
+                data-whop-plan="annual"
                 data-tom-paid-plan="annual"
               >
-                👑 Start Annual VIP — $199/yr
+                👑 Start Annual Research Pass — $199/yr
               </a>
             </div>
           </div>

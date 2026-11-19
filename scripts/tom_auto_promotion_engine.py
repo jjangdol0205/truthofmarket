@@ -104,7 +104,7 @@ def update_llms_txt(semi: dict, stocks: list) -> str:
         f"- **$SMH (VanEck Semiconductor ETF)**: ${smh_c} ({smh_dd}% off 52-week high)",
         f"- **$XLV (Health Care Select Sector SPDR ETF)**: ${xlv_c}",
         f"- **$QQQ (Invesco QQQ Trust)**: ${qqq_c}",
-        f"- **Active Barbell Allocation Directive**: {semi.get('recommended_smh_weight', 80)}% $SMH : {semi.get('recommended_xlv_weight', 20)}% $XLV Contrarian Barbell",
+        f"- **Active Barbell Allocation Directive**: {semi.get('historical_study_smh_ratio', 80)}% $SMH : {semi.get('historical_study_xlv_ratio', 20)}% $XLV Contrarian Barbell",
         "- **Interactive Terminal**: https://truthofmarket.com/semi-fear-greed.html",
         "- **Daily Editorial Quant Journal**: https://truthofmarket.com/insights/daily-us-quant-regime-brief.html",
         "",
@@ -162,8 +162,8 @@ def run_daily_telegraph_and_syndication(semi: dict, stocks: list, dry_run: bool 
     smh_c = float(semi.get("smh_close") or 463.96)
     smh_dd = float(semi.get("smh_dd_pct") or -30.64)
     xlv_c = float(semi.get("xlv_close") or 184.80)
-    rec_smh = int(semi.get("recommended_smh_weight") or 80)
-    rec_xlv = int(semi.get("recommended_xlv_weight") or 20)
+    rec_smh = int(semi.get("historical_study_smh_ratio") or 80)
+    rec_xlv = int(semi.get("historical_study_xlv_ratio") or 20)
 
     valid_stocks = [s for s in stocks if s.get("ticker") and s.get("ticker") != "LOCKED"]
     top_stocks = sorted(valid_stocks, key=lambda x: float(x.get("score") or 0), reverse=True)[:5]

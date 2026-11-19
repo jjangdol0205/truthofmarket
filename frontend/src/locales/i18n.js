@@ -41,10 +41,10 @@ const enCopy = {
   auditedAlphaBadge: "+14.2% Historical Spread vs S&P 500 · 2.03x Sharpe Ratio",
 
   // Soft Paywall Call to Action (Used in /pro-swing.html Quantitative Archive)
-  softPaywallUnlockCta: "Start Monthly VIP — $29/mo",
+  softPaywallUnlockCta: "Start Monthly Research Pass — $29/mo",
   softPaywallTitle: "🔒 Full Quantitative Factor Dataset & Retiree Cashflow & Budget Worksheets",
   softPaywallDesc:
-    "$CELH is displayed as an open educational factor example. Upgrade to Monthly VIP ($29/mo) or Annual VIP ($199/yr) to unlock the Custom Nest-Egg Dollar ($) Budget Worksheet, 12-Month Dividend Paycheck Calendar & Tax-Bucket Reference, and Large-Print Weather Action Sheet.",
+    "$CELH is displayed as an open educational factor example. Upgrade to Monthly Research Pass ($29/mo) or Annual Research Pass ($199/yr) to unlock the Custom Nest-Egg Dollar ($) Budget Worksheet, 12-Month Dividend Paycheck Calendar & Tax-Bucket Reference, and Large-Print Weather Action Sheet.",
 
   // Empirical Factor Table (/pro-swing.html)
   proofHeading: "Historical Factor Study · Moving-Average Trend Filter vs. Unfiltered Lows",
@@ -79,7 +79,7 @@ const enCopy = {
   vaultBadgeLocked: "VIP EDUCATIONAL CALCULATOR SUITE · LOCKED",
   vaultBadgeUnlocked: "VIP EDUCATIONAL CALCULATOR SUITE · UNLOCKED",
   vaultTitle: "Self-Directed Quantitative Factor Calculators & Sector Matrix",
-  vaultUnlockBtn: "🔑 Start Monthly VIP — $29/mo",
+  vaultUnlockBtn: "🔑 Start Monthly Research Pass — $29/mo",
   tool1Title: "COST-BASIS DRAWDOWN & WEIGHT CALCULATOR",
   tool1Sub: "Mathematical Cost-Basis & Holding-Period Variance Calculator",
   tool1Desc:
@@ -133,7 +133,7 @@ const enCopy = {
   disclaimer:
     "Disclaimer: TruthOfMarket provides self-directed educational data visualization and mathematical portfolio calculators only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.",
   copyright:
-    "© 2026 TruthOfMarket — Educational Market Data & Quantitative Research Desk · Polar.sh (Merchant of Record · Global Card / Apple Pay / Google Pay).",
+    "© 2026 TruthOfMarket — Educational Market Data & Quantitative Research Desk · Whop.com (Global Card / Apple Pay / Google Pay).",
 };
 
 export const translations = {

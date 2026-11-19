@@ -93,10 +93,10 @@ plotshape(ignition and not ignition[1], "MA20/60 RECLAIM", shape.labelup, locati
                  <div style="background:#0d1424; border:1px solid var(--fin-blue); box-shadow:0 12px 32px rgba(0,0,0,0.75); border-radius:6px; padding:22px 26px; text-align:center; max-width:500px;">
                    <div class="mono" style="font-size:0.72rem; color:#fbbf24; font-weight:800; letter-spacing:0.05em;">👑 VIP EDUCATIONAL CALCULATOR SUITE LOCKED</div>
                    <div style="font-size:1.05rem; font-weight:800; color:#ffffff; margin:8px 0;">
-                     Unlock All 72 Factor Datasets, Position Sizing Math Calculator &amp; Pine Script v5
+                     Unlock All 72 Factor Datasets, Position Sizing Math Calculator &amp; 2000–2025 Historical Statistical Workbook
                    </div>
                    <div style="font-size:0.8rem; color:var(--muted); margin-bottom:14px; line-height:1.5;">
-                     Free users see 1 open factor example ($CELH). Upgrade to Monthly VIP ($29/mo) or Annual VIP ($199/yr) to access the full quantitative factor dataset, mathematical share-sizing models, and the 26.8-Year Semiconductor CSV.
+                     Free users see 1 open factor example ($CELH). Upgrade to Monthly Research Pass ($29/mo) or Annual Research Pass ($199/yr) to access the full quantitative factor dataset, mathematical share-sizing models, and the 2000–2025 Semiconductor & Healthcare Statistical Workbook.
                    </div>
                    <span class="btn btn-primary" style="justify-content:center; width:100%; padding:10px; font-weight:800;">
                      🔑 Enter License Key / Reserve VIP Access →
@@ -222,7 +222,7 @@ plotshape(ignition and not ignition[1], "MA20/60 RECLAIM", shape.labelup, locati
               ⭐ Filter Screener to VIP Watchlist
             </button>
             <button type="button" class="btn btn-sm" id="btnVaultExportWatchlistCsv" style="background:rgba(251,191,36,0.12); border-color:rgba(251,191,36,0.4); color:#fbbf24; font-weight:700;">
-              📥 Export Watchlist CSV
+              📥 Save Watchlist Workbook
             </button>
           </div>
         </div>
@@ -312,7 +312,7 @@ plotshape(ignition and not ignition[1], "MA20/60 RECLAIM", shape.labelup, locati
           </div>
         </div>
 
-        <!-- Module 03: TradingView Pine Script v5 -->
+        <!-- Module 03: TradingView 2000–2025 Historical Statistical Workbook -->
         <div style="background:#090d16; border:1px solid var(--border); border-top:2px solid #6366f1; border-radius:4px; padding:18px; display:flex; flex-direction:column; justify-content:space-between;">
           <div>
             <div style="font-size:0.7rem; font-family:var(--font-mono); font-weight:700; color:#818cf8; letter-spacing:0.05em; text-transform:uppercase;">
@@ -325,7 +325,7 @@ plotshape(ignition and not ignition[1], "MA20/60 RECLAIM", shape.labelup, locati
           </div>
 
           <div style="margin-top:12px;">
-            <button class="btn btn-purple" id="btnCopyPineScript" style="width:100%; justify-content:center; padding:9px;">
+            <button class="btn btn-purple" id="btnCopyStatistical Workbook" style="width:100%; justify-content:center; padding:9px;">
               ${t.tool3CopyBtn}
             </button>
           </div>
@@ -338,10 +338,10 @@ plotshape(ignition and not ignition[1], "MA20/60 RECLAIM", shape.labelup, locati
               👑 PRO VIP EXCLUSIVE · BARBELL CALCULATOR & EXPORT KIT
             </div>
             <h3 style="font-size:1rem; font-weight:800; margin:6px 0; color:#ffffff;">
-              80:20 ($SMH : $XLV) Custom Portfolio Blueprint & 1-Click TradingView / CSV Kit
+              80:20 ($SMH : $XLV) Custom Portfolio Blueprint & 1-Click TradingView / Statistical Workbook
             </h3>
             <p style="font-size:0.78rem; color:var(--muted); margin-bottom:10px;">
-              Automatically allocates your <b class="mono" style="color:#fff;">$${proCapUsd.toLocaleString()}</b> account across core Semiconductor ETF ($SMH), Healthcare Shield ($XLV), and Top VIP Ignition slots, plus instant CSV &amp; TradingView exports:
+              Automatically allocates your <b class="mono" style="color:#fff;">$${proCapUsd.toLocaleString()}</b> account across core Semiconductor ETF ($SMH), Healthcare Shield ($XLV), and Top VIP Ignition slots, plus 2000–2025 historical statistical workbook summaries:
             </p>
 
             <div style="background:#05080f; border:1px solid var(--border); border-radius:4px; padding:11px; font-size:0.76rem; margin-bottom:12px;">
@@ -362,7 +362,7 @@ plotshape(ignition and not ignition[1], "MA20/60 RECLAIM", shape.labelup, locati
 
           <div style="display:flex; flex-direction:column; gap:7px;">
             <button type="button" class="btn btn-emerald" id="btnDownloadPro72Csv" style="width:100%; justify-content:center; padding:8px; font-weight:800;">
-              📥 Download Full 72-Stock VIP Action Sheet (.CSV)
+              📥 Download Full 72-Stock Historical Factor Workbook
             </button>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:7px;">
               <button type="button" class="btn" id="btnCopyTvWatchlist" style="justify-content:center; padding:8px; font-size:0.75rem; border-color:rgba(56,189,248,0.45); color:#38bdf8;">

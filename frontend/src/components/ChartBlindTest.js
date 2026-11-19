@@ -27,11 +27,11 @@ const BLIND_TEST_I18N = {
     retailSideDesc: "Averages into sub-MA60 downtrends ($SMCI / $INTC) without calm allocation discipline. Unhedged tail drawdowns erode retirement principal.",
     quantSideTitle: "🟢 TruthOfMarket MA20/60 + Volume Model",
     quantSideDesc: "Filters for MA60 reclaim + ≥1.4x institutional volume surge with a modeled -9.0% risk boundary (-1.35% portfolio allocation cap).",
-    vipUnlockBannerTitle: "🔥 ROUND 3 FEATURED A 3.41x VOLUME ANOMALY — UNLOCK ALL 72 QUANT FACTOR DATASETS & PINE SCRIPT",
+    vipUnlockBannerTitle: "🔥 ROUND 3 FEATURED A 3.41x VOLUME ANOMALY — UNLOCK ALL 72 QUANT FACTOR DATASETS & STATISTICAL WORKBOOK",
     vipUnlockBannerSub:
-      "Public preview displays #1 Showcase ($CELH · 2.46x Vol). Pro License holders unlock the complete 72-stock factor matrix, Pine Script v5 source code, and 26-year historical CSV datasets.",
-    unlockMonthlyBtn: "👑 Start Monthly VIP — $29/mo",
-    unlockLifetimeBtn: "💎 Start Annual VIP — $199/yr",
+      "Public preview displays #1 Showcase ($CELH · 2.46x Vol). Pro License holders unlock the complete 72-stock factor matrix, 2000–2025 historical factor study code, and 26-year historical statistical workbooks.",
+    unlockMonthlyBtn: "👑 Start Monthly Research Pass — $29/mo",
+    unlockLifetimeBtn: "💎 Start Annual Research Pass — $199/yr",
   },
   jp: {
     badge: "🎯 教育用ヒストリカル検証 · チャートパターン認識クイズ",
@@ -54,11 +54,11 @@ const BLIND_TEST_I18N = {
     retailSideDesc: "移動平均線の下で推移する銘柄群の過去ドローダウン推移シミュレーション",
     quantSideTitle: "🟢 MA60回復＋出来高ファクターモデル",
     quantSideDesc: "MA60回復＋相対出来高1.4倍以上の過去データ群におけるシミュレーション",
-    vipUnlockBannerTitle: "🔥 全72銘柄ファクターデータセット＆Pine Script v5をアンロック",
+    vipUnlockBannerTitle: "🔥 全72銘柄ファクターデータセット＆2000–2025年統計ワークブックをアンロック",
     vipUnlockBannerSub:
-      "Monthly VIP ($29/mo) または Annual VIP ($199/yr) で全72銘柄の教育用ファクターマトリクスと26.8年CSVデータを閲覧できます。",
-    unlockMonthlyBtn: "👑 Start Monthly VIP — $29/mo",
-    unlockLifetimeBtn: "💎 Start Annual VIP — $199/yr",
+      "Monthly Research Pass ($29/mo) または Annual Research Pass ($199/yr) で全72銘柄の教育用ファクターマトリクスと2000–2025年統計ワークブックを閲覧できます。",
+    unlockMonthlyBtn: "👑 Start Monthly Research Pass — $29/mo",
+    unlockLifetimeBtn: "💎 Start Annual Research Pass — $199/yr",
   },
 };
 BLIND_TEST_I18N.kr = BLIND_TEST_I18N.en;
@@ -176,8 +176,8 @@ function buildRoundsData(state) {
       explanation: isPro
         ? `Correct regime is RIGHT-SIDE BREAKOUT! Pro Terminal displays $${fslr.ticker} ($${Number(fslr.close || 191.61).toFixed(2)}) — Factor Score 98/100 with a 3.41x institutional volume expansion.`
         : lang === "jp"
-        ? `正解は【右側ブレイク(IGNITION)】です！この銘柄は72銘柄の中でスコア98・機関出来高3.41倍を記録したProファクター銘柄です。下のProパス($29/月または$199永久パス)で全データセットとPine Scriptを解放できます。`
-        : `Correct regime is RIGHT-SIDE BREAKOUT! This chart is today's #2 Pro Factor Setup scoring 98/100 with a 3.41x institutional volume expansion. Unlock the full 72-stock factor matrix, historical CSV, and Pine Script v5 license below.`,
+        ? `正解は【右側ブレイク(IGNITION)】です！この銘柄は72銘柄の中でスコア98・機関出来高3.41倍を記録したProファクター銘柄です。下のProパス($29/月または$199永久パス)で全データセットとHistorical Statistical Workbookを解放できます。`
+        : `Correct regime is RIGHT-SIDE BREAKOUT! This chart is today's #2 Pro Factor Setup scoring 98/100 with a 3.41x institutional volume expansion. Unlock the full 72-stock factor matrix, historical CSV, and Historical Statistical Workbook license below.`,
     },
   ];
 }
@@ -299,11 +299,11 @@ export function renderChartBlindTest(state) {
   const iqScore = solvedCount === 0 ? "—" : `${Math.round((correctCount / solvedCount) * 100)} / 100`;
   const cfg = state.config || {};
   const monthlyUrl = formatCheckoutUrl(
-    cfg.polar_tom_monthly_url || cfg.ls_site1_monthly_url,
+    cfg.whop_tom_monthly_url || cfg.ls_site1_monthly_url,
     "#tom-vip-monthly"
   );
   const annualUrl = formatCheckoutUrl(
-    cfg.polar_tom_annual_url || cfg.ls_site1_ltd_url,
+    cfg.whop_tom_annual_url || cfg.ls_site1_ltd_url,
     "#tom-vip-annual"
   );
 
@@ -473,20 +473,20 @@ export function renderChartBlindTest(state) {
                 : `
                   <a
                     href="${monthlyUrl}"
-                    data-polar-checkout
-                    data-polar-plan="monthly_29"
+                    data-whop-checkout
+                    data-whop-plan="monthly"
                     data-tom-paid-plan="monthly"
-                    class="polar-checkout-button btn btn-sm"
+                    class="whop-checkout-button btn btn-sm"
                     style="background:#10b981; border:1px solid #059669; color:#052e16; font-weight:800; font-size:0.74rem; padding:7px 12px; border-radius:6px; text-decoration:none;"
                   >
                     ${copy.unlockMonthlyBtn}
                   </a>
                   <a
                     href="${annualUrl}"
-                    data-polar-checkout
-                    data-polar-plan="annual_199"
+                    data-whop-checkout
+                    data-whop-plan="annual"
                     data-tom-paid-plan="annual"
-                    class="polar-checkout-button btn btn-sm"
+                    class="whop-checkout-button btn btn-sm"
                     style="background:rgba(245,158,11,0.2); border:1px solid #f59e0b; color:#fbbf24; font-weight:800; font-size:0.74rem; padding:7px 12px; border-radius:6px; text-decoration:none;"
                   >
                     ${copy.unlockLifetimeBtn}
