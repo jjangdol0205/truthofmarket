@@ -629,7 +629,7 @@ def execute_hourly_cycle(hour: int, notify: bool = True, force_all: bool = False
                 "KFK",
                 f"🚀 <b>[5사업부: 키즈핏 코리아 {hour:02d}:00 Zero-Ban 패시브 텍스트 동기화 완료]</b>\n"
                 f"• <b>오늘의 임상 노트</b>: {r_kfk['telegraph_url']}\n"
-                f"• <b>수익 가드레일</b>: 쿠팡(AF7865143)·링크프라이스(A100708867) 정상 / 금지어 0건",
+                f"• <b>수익 가드레일</b>: Latpeed 유료 2등급(daMaP / _5Nq4) 정상 · 제휴/금지어 0건",
             )
 
     return entry
@@ -708,6 +708,12 @@ def run_daemon(notify: bool = True):
 
 
 def main():
+    if sys.platform == "win32":
+        try:
+            import ctypes
+            ctypes.windll.kernel32.SetPriorityClass(ctypes.windll.kernel32.GetCurrentProcess(), 0x00004000)
+        except Exception:
+            pass
     if "--help" in sys.argv or "-h" in sys.argv:
         print("Usage: hq_24h_hourly_scheduler.py [--daemon] [--run-now] [--hour H] [--force-all] [--notify] [--silent]")
         return
