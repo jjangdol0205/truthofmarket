@@ -498,6 +498,26 @@
     } catch (_) {}
 
     try {
+      var knownEm = getKnownTomMemberEmail();
+      var savedAns = {};
+      try {
+        savedAns = JSON.parse(localStorage.getItem("tom_pw_stepup_answers_v1") || "{}") || {};
+      } catch (_) {}
+      if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.deliverPaidMagicPack === "function") {
+        window.DreamCompanyCRM.deliverPaidMagicPack({
+          div: "TOM",
+          email: knownEm,
+          plan_tier: cleanPlan === "annual" ? "Annual Research Pass ($199/yr)" : "Monthly Research Pass ($29/mo)",
+          order_ref: cleanRef,
+          base_url: "https://truthofmarket.com/",
+          hash_anchor: "tomPaidScreen4Vault",
+          profile_state: savedAns,
+        });
+      }
+      window.dispatchEvent(new CustomEvent("tom:paid-unlocked", { detail: { orderRef: cleanRef, plan: cleanPlan } }));
+    } catch (_) {}
+
+    try {
       if (typeof document !== "undefined" && document.body && !document.getElementById("tomWhopReturnBanner")) {
         var planTitle = cleanPlan === "annual" ? "Annual Research Pass ($199/yr)" : "Monthly Research Pass ($29/mo)";
         var banner = document.createElement("div");
@@ -508,12 +528,14 @@
         banner.innerHTML =
           "<div><strong>Whop Checkout Confirmed &mdash; " +
           planTitle +
-          " Active.</strong> Your Research Pass session is now unlocked in this browser. Need receipt or multi-device help? Contact <a href='mailto:beable9489@gmail.com' style='color:#065f46;font-weight:700;text-decoration:underline;'>beable9489@gmail.com</a>.</div>" +
+          " Active.</strong> Your Paid Screen 4 Vault &amp; 1:1 Custom PDF are open below, with a 14-day refund policy (<a href='mailto:beable9489@gmail.com?subject=TOM%2014-Day%20Refund%20or%20Support' style='color:#065f46;font-weight:700;text-decoration:underline;'>1-Click Support</a>).</div>" +
           "<button type='button' onclick='this.parentNode.remove()' style='padding:6px 12px;border-radius:6px;border:1px solid #059669;background:#ffffff;color:#064e3b;font-weight:700;cursor:pointer;'>Dismiss</button>";
         document.body.insertBefore(banner, document.body.firstChild);
       }
     } catch (_) {}
   }
+
+  window.unlockTomPaidScreen4 = applyWhopCheckoutUnlock;
 
   function setupWhopCheckoutSuccess() {
     try {
@@ -8023,6 +8045,48 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
           Secure Checkout via Whop.com (Global Card / Apple Pay / Google Pay) &middot; 14-Day Refund Policy &middot; Cancel anytime in one click &middot; Strictly Non-Advisory Educational Publisher.
         </p>
       </section>
+
+      <!-- Screen 4: Paid Research Vault, Custom Dollar SMH x XLV + SGOV Workbook PDF, Stress Test, 401k/IRA Roadmap & Monthly Report Card -->
+      <section id="tomPaidScreen4Vault" class="pw-tiers-section" data-pw-screen="4" style="display:none;margin-top:28px;">
+        <div class="pw-gate-card" style="border:1.5px solid #065F46;background:#FFFFFF;">
+          <div class="pw-kicker" style="color:#065F46;">PAID RESEARCH VAULT &middot; PERMANENT CROSS-DEVICE EDITION</div>
+          <h2 class="pw-serif-h2" id="tomScreen4Headline">Custom Dollar SMH &times; XLV + SGOV Historical Workbook &amp; Stress-Test Edition</h2>
+          <p style="margin:0 0 16px;color:#475569;font-size:0.95rem;">
+            Adjust your household sample dollar scale below to update your 1:1 educational worksheet, -35% market-crash stress test, 401(k)/IRA tax-location study roadmap, and large-print Fidelity/Schwab/Vanguard 5-minute limit-order guide.
+          </p>
+
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:14px 16px;background:#F8FAFC;border:1px solid #CBD5E1;border-radius:8px;margin-bottom:18px;">
+            <label for="tomCustomDollarInput" style="font-weight:700;font-size:0.95rem;color:#0F172A;">Household Sample Scale ($ USD):</label>
+            <input type="number" id="tomCustomDollarInput" min="10000" max="10000000" step="10000" value="300000" style="padding:10px 14px;border:1px solid #94A3B8;border-radius:6px;font-size:1.05rem;font-weight:700;width:180px;font-variant-numeric:tabular-nums;" />
+            <button type="button" class="pw-btn-primary pw-btn-emerald" id="btnDownloadTomCustomPdf">
+              Download / Print 1:1 Custom 4-Page PDF &rarr;
+            </button>
+          </div>
+
+          <div id="tomScreen4DollarTable" class="pw-table-card" style="margin-bottom:18px;"></div>
+          <div id="tomScreen4StressTest" class="pw-table-card" style="margin-bottom:18px;"></div>
+          <div id="tomScreen4TaxRoadmap" class="pw-table-card" style="margin-bottom:18px;padding:18px;"></div>
+          <div id="tomScreen4BrokerGuide" class="pw-table-card" style="margin-bottom:18px;padding:18px;"></div>
+          <div id="tomScreen4MonthlyCard" class="pw-table-card" style="margin-bottom:18px;padding:18px;"></div>
+
+          <div style="padding:16px;background:#ECFDF5;border:1px solid #6EE7B7;border-radius:8px;margin-bottom:14px;">
+            <div class="pw-kicker" style="color:#065F46;margin-bottom:6px;">60-SECOND PERMANENT CROSS-DEVICE MAGIC LINK &amp; 14-DAY REFUND DESK</div>
+            <p style="margin:0 0 10px;font-size:0.9rem;color:#064E3B;">
+              Send your permanent cross-device restore link (works on any phone, tablet, or PC with zero password) and welcome pack directly to your email:
+            </p>
+            <form id="tomPaidMagicEmailForm" class="pw-email-form" novalidate>
+              <input type="email" id="tomPaidMagicEmailInput" class="pw-email-input" placeholder="Enter your email for permanent cross-device link" autocomplete="email" />
+              <button type="submit" class="pw-btn-primary pw-btn-emerald" id="btnSendTomMagicLink">Email My Permanent Link &rarr;</button>
+            </form>
+            <div id="tomPaidMagicStatus" role="status" aria-live="polite" style="display:none;margin-top:8px;font-size:0.88rem;font-weight:600;color:#065F46;"></div>
+            <div style="margin-top:10px;font-size:0.84rem;color:#334155;">
+              14-Day Refund Guarantee &amp; 1-Click Support: <a id="tomOneClickRefundLink" href="mailto:beable9489@gmail.com?subject=TOM%2014-Day%20Refund%20or%20Support" style="color:#065F46;font-weight:700;text-decoration:underline;">Request 1-Click Support or 14-Day Refund (beable9489@gmail.com)</a>
+            </div>
+          </div>
+
+          <div id="tomSatisfactionMount"></div>
+        </div>
+      </section>
     </main>
 
     <footer class="pw-legal-footer">
@@ -8166,6 +8230,25 @@ function bindPrivateWealthSingleBreathEvents(state) {
     }
   } catch (_) {}
 
+  let liveTempScore = 11;
+  let liveTempDate = "2026-11-18";
+
+  // Restore cross-device magic_restore payload if present
+  try {
+    if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.decodeMagicRestoreParam === "function") {
+      const magicObj = window.DreamCompanyCRM.decodeMagicRestoreParam(window.location.search);
+      if (magicObj && typeof magicObj === "object") {
+        if (magicObj.objective) answers.objective = magicObj.objective;
+        if (magicObj.scale) answers.scale = Number(magicObj.scale) || 300000;
+        if (magicObj.comfort) answers.comfort = magicObj.comfort;
+        if (magicObj.techMix) answers.techMix = magicObj.techMix;
+        localStorage.setItem("rsa_pro_unlocked", "true");
+        localStorage.setItem("tom_pw_stepup_answers_v1", JSON.stringify(answers));
+        if (magicObj.email) localStorage.setItem("tom_free_member_email", String(magicObj.email).toLowerCase());
+      }
+    }
+  } catch (_) {}
+
   const hydrateLiveTempBadge = () => {
     const applyOverview = (ov) => {
       if (!ov || typeof ov !== "object") return;
@@ -8173,12 +8256,15 @@ function bindPrivateWealthSingleBreathEvents(state) {
       const rawScore = Number(ov.fg_score);
       if (!dt || !Number.isFinite(rawScore)) return;
       const scoreInt = Math.round(rawScore);
+      liveTempScore = scoreInt;
+      liveTempDate = dt;
       const regRaw = String(ov.regime_en || "Neutral").trim();
       const regText = /regime$/i.test(regRaw) ? regRaw : `${regRaw} Regime`;
       const txtEl = document.getElementById("tomLiveTempText");
       if (txtEl) {
         txtEl.textContent = `Data As Of: ${dt} · Sector Temperature: ${scoreInt} / 100 (${regText})`;
       }
+      renderScreen4PaidVault();
     };
 
     if (state && state.semiOverview) {
@@ -8250,18 +8336,143 @@ function bindPrivateWealthSingleBreathEvents(state) {
     }
   };
 
+  const fmtUsd = (n) => "$" + Math.round(Number(n) || 0).toLocaleString("en-US");
+
+  const renderScreen4PaidVault = () => {
+    const b = computePwBaseline(answers);
+    const scaleInp = document.getElementById("tomCustomDollarInput");
+    const totalUsd = Math.max(10000, Number(scaleInp && scaleInp.value ? scaleInp.value : answers.scale) || 300000);
+    if (scaleInp && Number(scaleInp.value) !== totalUsd) {
+      scaleInp.value = String(totalUsd);
+    }
+    const smhUsd = Math.round(totalUsd * (b.smh / 100));
+    const xlvUsd = Math.round(totalUsd * (b.xlv / 100));
+    const sgovUsd = totalUsd - smhUsd - xlvUsd;
+
+    const tblEl = document.getElementById("tomScreen4DollarTable");
+    if (tblEl) {
+      tblEl.innerHTML =
+        `<div class="pw-table-header"><span class="pw-table-title">SECTION I &mdash; SAMPLE DOLLAR-SCALE EDUCATIONAL WORKSHEET (${fmtUsd(totalUsd)})</span><span class="pw-table-meta">1x Spot ETF Case Study</span></div>` +
+        `<div class="pw-table-scroll"><table class="pw-sim-table"><thead><tr><th>Study Sleeve</th><th>Study Ratio</th><th>Sample Dollar Amount</th><th>Historical Role in 2000&ndash;2025 Dataset</th></tr></thead><tbody>` +
+        `<tr><td><strong>SMH</strong> (Semiconductor 1x)</td><td>${b.smh}%</td><td style="font-variant-numeric:tabular-nums;font-weight:700;">${fmtUsd(smhUsd)}</td><td>Secular innovation &amp; long-term compounding engine</td></tr>` +
+        `<tr><td><strong>XLV</strong> (US Healthcare 1x)</td><td>${b.xlv}%</td><td style="font-variant-numeric:tabular-nums;font-weight:700;">${fmtUsd(xlvUsd)}</td><td>Non-cyclical cash-flow ballast during tech contractions</td></tr>` +
+        `<tr class="is-featured"><td><strong>SGOV</strong> (0&ndash;3 Mo US T-Bill)</td><td>${b.sgov}%</td><td style="font-variant-numeric:tabular-nums;font-weight:700;">${fmtUsd(sgovUsd)}</td><td>Multi-year calm withdrawal buffer (zero equity forced selling)</td></tr>` +
+        `</tbody></table></div>`;
+    }
+
+    const sp35Loss = Math.round(totalUsd * 0.35);
+    const tech49Loss = Math.round(totalUsd * 0.49);
+    const studyShockPct = Math.round((0.46 * (b.smh / 100) + 0.16 * (b.xlv / 100) + 0.0 * (b.sgov / 100)) * 1000) / 10;
+    const studyShockLoss = Math.round(totalUsd * (studyShockPct / 100));
+    const stressEl = document.getElementById("tomScreen4StressTest");
+    if (stressEl) {
+      stressEl.innerHTML =
+        `<div class="pw-table-header"><span class="pw-table-title">SECTION II &mdash; -35% SEVERE MARKET CRASH STRESS TEST (${fmtUsd(totalUsd)} SCALE)</span><span class="pw-table-meta">Drawdown Cushion Study</span></div>` +
+        `<div class="pw-table-scroll"><table class="pw-sim-table"><thead><tr><th>Comparison Cohort</th><th>Modeled Shock</th><th>Dollar Change</th><th>Remaining Value &amp; SGOV Cushion</th></tr></thead><tbody>` +
+        `<tr><td>100% Semiconductor Alone</td><td class="pw-dd-neg">-49.0%</td><td class="pw-dd-neg">-${fmtUsd(tech49Loss)}</td><td>${fmtUsd(totalUsd - tech49Loss)} ($0 T-Bill buffer)</td></tr>` +
+        `<tr><td>S&amp;P 500 Index Alone</td><td class="pw-dd-neg">-35.0%</td><td class="pw-dd-neg">-${fmtUsd(sp35Loss)}</td><td>${fmtUsd(totalUsd - sp35Loss)} ($0 T-Bill buffer)</td></tr>` +
+        `<tr class="is-featured"><td><strong>Selected SMH &times; XLV + SGOV Study</strong></td><td class="pw-eff-pos">-${studyShockPct.toFixed(1)}%</td><td class="pw-eff-pos">-${fmtUsd(studyShockLoss)}</td><td><strong>${fmtUsd(totalUsd - studyShockLoss)} (${fmtUsd(sgovUsd)} SGOV intact)</strong></td></tr>` +
+        `</tbody></table></div>` +
+        `<p class="pw-table-note">Educational historical stress illustration only: keeping ${fmtUsd(sgovUsd)} in 0&ndash;3 month US Treasury reserves (SGOV) historically prevented forced equity sales during 18&ndash;24 month market recoveries.</p>`;
+    }
+
+    const taxEl = document.getElementById("tomScreen4TaxRoadmap");
+    if (taxEl) {
+      taxEl.innerHTML =
+        `<div class="pw-kicker" style="margin-bottom:6px;">SECTION III &mdash; US RETIREMENT TAX-LOCATION EDUCATIONAL ROADMAP</div>` +
+        `<h3 style="margin:0 0 10px;font-size:1.15rem;color:#0F172A;">401(k) &middot; Traditional IRA &middot; Roth IRA &middot; Taxable Account Study Mapping</h3>` +
+        `<div style="display:grid;gap:10px;font-size:0.94rem;color:#334155;">` +
+        `<div style="padding:12px;background:#F8FAFC;border-left:3px solid #0F172A;border-radius:6px;"><strong>1. Roth IRA (Tax-Free Compounding Sleeve &mdash; Est. ${fmtUsd(Math.round(smhUsd * 0.55))}):</strong> Commonly studied for higher-growth 1x <strong>SMH</strong> holdings so multi-year appreciation compounds without future RMD or withdrawal tax friction.</div>` +
+        `<div style="padding:12px;background:#F8FAFC;border-left:3px solid #065F46;border-radius:6px;"><strong>2. 401(k) / Traditional IRA (Tax-Deferred Rebalancing Sleeve &mdash; Est. ${fmtUsd(xlvUsd + Math.round(smhUsd * 0.45))}):</strong> Studying semi-annual ratio resets between <strong>XLV</strong> and <strong>SMH</strong> inside tax-deferred accounts avoids triggering annual taxable capital-gains distributions.</div>` +
+        `<div style="padding:12px;background:#F8FAFC;border-left:3px solid #64748B;border-radius:6px;"><strong>3. Taxable Brokerage / Treasury Direct (Liquidity Sleeve &mdash; ${fmtUsd(sgovUsd)}):</strong> Holding 0&ndash;3 month US Treasury ETF <strong>SGOV</strong> provides penalty-free household cash access while US Treasury interest is generally exempt from state and local income taxes.</div>` +
+        `</div>`;
+    }
+
+    const brokerEl = document.getElementById("tomScreen4BrokerGuide");
+    if (brokerEl) {
+      brokerEl.innerHTML =
+        `<div class="pw-kicker" style="margin-bottom:6px;">SECTION IV &mdash; FIDELITY &middot; CHARLES SCHWAB &middot; VANGUARD 5-MINUTE VISUAL GUIDE</div>` +
+        `<h3 style="margin:0 0 10px;font-size:1.15rem;color:#0F172A;">Large-Print Self-Directed Limit-Order Checklist (18px+ Senior Clarity)</h3>` +
+        `<ol style="margin:0;padding-left:22px;font-size:1.02rem;line-height:1.8;color:#1E293B;">` +
+        `<li><strong>Trade During Calm Midday Hours (10:00 AM &ndash; 3:30 PM ET):</strong> Skip the first and last 15 minutes of the trading session when ETF bid-ask spreads temporarily widen.</li>` +
+        `<li><strong>Verify Exact 1x Unleveraged Tickers:</strong> Confirm <strong>SMH</strong> (VanEck Semiconductor ETF), <strong>XLV</strong> (Health Care Select Sector SPDR), and <strong>SGOV</strong> (iShares 0&ndash;3 Month Treasury Bond ETF). Never select 3x leveraged tickers.</li>` +
+        `<li><strong>Select "Limit Order" Instead of "Market Order":</strong> On Fidelity, Schwab, or Vanguard, set your Limit Price at the current Ask price (or +$0.05) so execution price is strictly bounded.</li>` +
+        `<li><strong>Semi-Annual Calendar Review Only:</strong> Check drift just twice a year (e.g., January 15 &amp; July 15) rather than reacting to daily headlines.</li>` +
+        `</ol>`;
+    }
+
+    const rebalanceWindow = liveTempScore >= 78 || liveTempScore <= 22;
+    const verdictLabel = rebalanceWindow
+      ? "[1-SECOND STATUS: HISTORICAL DRIFT REVIEW WINDOW]"
+      : "[1-SECOND STATUS: KEEP CALM & HOLD — REST EASY THIS MONTH]";
+    const monthlyEl = document.getElementById("tomScreen4MonthlyCard");
+    if (monthlyEl) {
+      monthlyEl.innerHTML =
+        `<div class="pw-kicker" style="margin-bottom:6px;">SECTION V &mdash; MONTHLY 1ST REASSURANCE REPORT CARD &amp; WEEKLY PLAIN-ENGLISH ESSAY</div>` +
+        `<div style="padding:12px 16px;border-radius:8px;background:${rebalanceWindow ? "#FEF3C7" : "#ECFDF5"};color:${rebalanceWindow ? "#92400E" : "#065F46"};font-weight:800;font-size:1.02rem;margin-bottom:10px;">${verdictLabel} &middot; Temperature ${liveTempScore}/100 (As Of ${liveTempDate})</div>` +
+        `<p style="margin:0 0 8px;font-size:0.96rem;color:#334155;"><strong>Monthly Cushion Summary:</strong> Across recent market swings, pairing unleveraged SMH with defensive healthcare XLV and ${fmtUsd(sgovUsd)} in SGOV Treasury reserves kept household volatility muted compared with single-sector tech holdings.</p>` +
+        `<p style="margin:0;font-size:0.94rem;color:#475569;"><strong>Weekly Plain-English Note:</strong> A calm retirement plan works best when your near-term living expenses sit outside the stock market in short-term Treasury bills—turning market pullbacks from an emergency into background weather.</p>`;
+    }
+
+    const satMount = document.getElementById("tomSatisfactionMount");
+    if (satMount && !satMount.__mounted && window.DreamCompanyCRM && typeof window.DreamCompanyCRM.mountSatisfactionBar === "function") {
+      satMount.__mounted = true;
+      window.DreamCompanyCRM.mountSatisfactionBar(satMount, { div: "TOM", context: "screen4_paid_vault", email: getSavedEmail() });
+    }
+  };
+
+  const openTomCustomPdfWindow = () => {
+    renderScreen4PaidVault();
+    const dollarHtml = (document.getElementById("tomScreen4DollarTable") || {}).innerHTML || "";
+    const stressHtml = (document.getElementById("tomScreen4StressTest") || {}).innerHTML || "";
+    const taxHtml = (document.getElementById("tomScreen4TaxRoadmap") || {}).innerHTML || "";
+    const brokerHtml = (document.getElementById("tomScreen4BrokerGuide") || {}).innerHTML || "";
+    const monthlyHtml = (document.getElementById("tomScreen4MonthlyCard") || {}).innerHTML || "";
+    const w = window.open("", "_blank");
+    if (!w) {
+      window.print();
+      return;
+    }
+    w.document.write(
+      `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>TruthOfMarket 1:1 Custom SMH x XLV + SGOV Workbook PDF</title>` +
+      `<style>body{font-family:Georgia,serif;max-width:780px;margin:24px auto;padding:0 20px;color:#0f172a;font-size:16px;line-height:1.65;}h1,h2,h3{font-family:Inter,Arial,sans-serif;}table{width:100%;border-collapse:collapse;margin:12px 0;font-family:Inter,Arial,sans-serif;font-size:14px;}th,td{border:1px solid #cbd5e1;padding:9px 10px;text-align:left;}th{background:#f1f5f9;}.page-break{page-break-before:always;margin-top:28px;padding-top:18px;border-top:2px solid #0f172a;}@media print{.no-print{display:none;}}</style></head><body>` +
+      `<div class="no-print" style="padding:12px;background:#ecfdf5;border:1px solid #059669;border-radius:8px;margin-bottom:18px;font-family:Arial,sans-serif;"><strong>Ready to Save as PDF:</strong> Choose <em>Save as PDF</em> in the print dialog. <button onclick="window.print()" style="margin-left:12px;padding:8px 16px;background:#065f46;color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer;">Save / Print PDF</button></div>` +
+      `<h1>TruthOfMarket &mdash; 1:1 Custom SMH &times; XLV + SGOV Educational Workbook</h1>` +
+      `<p style="font-size:13px;color:#475569;">Independent Market Data &amp; Educational Research Publisher (Strictly Non-Advisory Historical Statistics &middot; Support: beable9489@gmail.com)</p>` +
+      `<div>${dollarHtml}</div><div style="margin-top:18px;">${stressHtml}</div>` +
+      `<div class="page-break">${taxHtml}</div><div class="page-break">${brokerHtml}</div><div class="page-break">${monthlyHtml}</div>` +
+      `</body></html>`
+    );
+    w.document.close();
+    setTimeout(() => {
+      try { w.print(); } catch (_) {}
+    }, 350);
+  };
+
   const showScreen = (screenNum) => {
     currentScreen = screenNum;
+    const isPaidUnlocked = (() => {
+      try {
+        return localStorage.getItem("rsa_pro_unlocked") === "true" || screenNum === 4;
+      } catch (_) {
+        return screenNum === 4;
+      }
+    })();
     const s0 = document.getElementById("pwScreen0");
     const s1 = document.getElementById("pwScreen1");
     const s2 = document.getElementById("tomMorningBellClub");
     const s3 = document.getElementById("pricing");
+    const s4 = document.getElementById("tomPaidScreen4Vault");
     if (s0) s0.style.display = screenNum === 0 ? "block" : "none";
     if (s1) s1.style.display = screenNum === 1 ? "block" : "none";
     if (s2) s2.style.display = screenNum >= 2 ? "block" : "none";
     if (s3) s3.style.display = screenNum >= 2 ? "block" : "none";
+    if (s4) s4.style.display = screenNum === 4 || (screenNum >= 2 && isPaidUnlocked) ? "block" : "none";
     if (screenNum >= 2) {
       syncStage2And3Data();
+      if (s4 && s4.style.display === "block") {
+        renderScreen4PaidVault();
+      }
     }
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -8478,10 +8689,69 @@ function bindPrivateWealthSingleBreathEvents(state) {
       }
       setTimeout(() => {
         if (restoreModal) restoreModal.classList.remove("is-open");
-        showScreen(2);
+        showScreen(lic.length >= 8 ? 4 : 2);
       }, 450);
     });
   }
+
+  const customDollarInp = document.getElementById("tomCustomDollarInput");
+  if (customDollarInp) {
+    customDollarInp.value = String(answers.scale || 300000);
+    customDollarInp.addEventListener("input", () => {
+      answers.scale = Math.max(10000, Number(customDollarInp.value) || 300000);
+      renderScreen4PaidVault();
+    });
+  }
+
+  const pdfBtn = document.getElementById("btnDownloadTomCustomPdf");
+  if (pdfBtn) {
+    pdfBtn.addEventListener("click", openTomCustomPdfWindow);
+  }
+
+  const magicForm = document.getElementById("tomPaidMagicEmailForm");
+  if (magicForm) {
+    magicForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const inp = document.getElementById("tomPaidMagicEmailInput");
+      const st = document.getElementById("tomPaidMagicStatus");
+      const em = String(inp ? inp.value : getSavedEmail()).trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)) {
+        if (st) {
+          st.style.display = "block";
+          st.style.color = "#991B1B";
+          st.textContent = "Please enter a valid email address.";
+        }
+        return;
+      }
+      if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.deliverPaidMagicPack === "function") {
+        window.DreamCompanyCRM.deliverPaidMagicPack({
+          div: "TOM",
+          email: em,
+          plan_tier: (localStorage.getItem("tom_whop_active_plan") === "annual") ? "Annual Research Pass ($199/yr)" : "Monthly Research Pass ($29/mo)",
+          order_ref: localStorage.getItem("rsa_token") || "TOM-MAGIC-LINK",
+          base_url: "https://truthofmarket.com/",
+          hash_anchor: "tomPaidScreen4Vault",
+          profile_state: answers,
+        }).then((res) => {
+          if (st) {
+            st.style.display = "block";
+            st.style.color = "#065F46";
+            st.textContent = `Permanent cross-device restore link sent to ${em} (14-day refund guarantee included).`;
+          }
+          const rf = document.getElementById("tomOneClickRefundLink");
+          if (rf && res && res.refund_support_url) rf.href = res.refund_support_url;
+        });
+      }
+    });
+  }
+
+  window.addEventListener("tom:paid-unlocked", () => {
+    showScreen(4);
+    setTimeout(() => {
+      const v4 = document.getElementById("tomPaidScreen4Vault");
+      if (v4 && v4.scrollIntoView) v4.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 150);
+  });
 
   const guideModal = document.getElementById("pwStarterGuideModal");
   const openGuideBtn = document.getElementById("tomFreeStarterManual");
@@ -8503,7 +8773,18 @@ function bindPrivateWealthSingleBreathEvents(state) {
 
   const h = (window.location.hash || "").toLowerCase();
   const s = (window.location.search || "").toLowerCase();
-  if (h === "#pricing" || h === "#tommorningbellclub" || s.includes("payment=success")) {
+  if (
+    h === "#tompaidscreen4vault" ||
+    s.includes("payment=success") ||
+    s.includes("paid_restore=1") ||
+    s.includes("magic_restore=")
+  ) {
+    showScreen(4);
+    setTimeout(() => {
+      const v4 = document.getElementById("tomPaidScreen4Vault");
+      if (v4 && v4.scrollIntoView) v4.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 150);
+  } else if (h === "#pricing" || h === "#tommorningbellclub") {
     showScreen(2);
     if (h === "#pricing") {
       setTimeout(() => {

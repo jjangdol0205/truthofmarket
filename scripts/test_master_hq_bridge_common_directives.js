@@ -8,7 +8,7 @@ const fs = require("fs");
 
 const bridge = require("./master_hq_telegram_bridge.js");
 
-const EXPECTED_TG_CONV_ID = "73f230e4-d0b1-4732-b378-27fedb0c9c83";
+const EXPECTED_TG_CONV_ID = "1921e31e-ab59-4720-9419-93cac770374d";
 const EXPECTED_PC_CONV_ID = "dbc61f0a-76cb-48e3-b617-a616c069564c";
 
 let passed = 0;
@@ -30,7 +30,7 @@ console.log("=================================================================="
 console.log("  HQ Telegram Bridge: 1~5사업부 직통 명령어 & 본사 감사 피드백 테스트");
 console.log("==================================================================");
 
-test("1. MASTER_CONVERSATION_ID is unified to 73f230e4-d0b1-4732-b378-27fedb0c9c83", () => {
+test("1. MASTER_CONVERSATION_ID is unified to 1921e31e-ab59-4720-9419-93cac770374d", () => {
   assert.strictEqual(bridge.MASTER_CONVERSATION_ID, EXPECTED_TG_CONV_ID);
   assert.strictEqual(bridge.PC_DIRECT_CONVERSATION_ID, EXPECTED_PC_CONV_ID);
 });

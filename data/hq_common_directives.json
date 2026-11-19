@@ -1,6 +1,6 @@
 {
   "updatedAt": "2026-11-19T06:52:43.802267+00:00",
-  "telegramDedicatedConversationId": "73f230e4-d0b1-4732-b378-27fedb0c9c83",
+  "telegramDedicatedConversationId": "1921e31e-ab59-4720-9419-93cac770374d",
   "pcDirectConversationId": "876538cc-3cd8-41af-8abe-00937e093957",
   "standingDirectives": [
     {
@@ -158,6 +158,12 @@
       "title": "[2026-11-19 총 회장님 확정] 4사업부 버추얼 트로트 가수 『백운호』 고유 성대 100% 고정 무인 음원·헌정곡 파이프라인(baek_woonho_music_studio.py · Suno 전면 배제 · containsSyntheticMedia=True)",
       "rule": "① [Suno 전면 배제 & 무료 한국어 7·5조 트로트 작곡·가창]: 유료 결제·수동 클릭이 필요한 Suno를 쓰지 않고(0건), D:\\드림컴퍼니\\4사업부\\scripts\\baek_woonho_music_studio.py(가상환경·캐시는 C: 보호를 위해 D:\\드림컴퍼니\\.venvs 및 D:\\드림컴퍼니\\.cache 격리)에서 오픈소스 ACE-Step 1.5(또는 GEMINI_API_KEY Lyria / 로컬 76 BPM 정통 트로트 편곡·가창 폴백)로 사연 맞춤형 7·5조 트로트 완곡을 생성한다. ② [백운호 고유 성대 100% 고정(demucs + Seed-VC)]: 실존 가수 음성·초상 침해가 0%인 순수 합성 중저음 바리톤 마스터 보이스(assets/voice/baek_woonho_ref.wav, 20~30초)를 영구 고정하고, demucs 음원 분리 후 Plachtaa/seed-vc(44.1kHz singing voice conversion)로 보컬 음색을 변환해 MR과 리버브·-0.5dBFS 마스터링 재합성함으로써 어떤 곡이든 100% 동일한 백운호 목소리로 고정한다. ③ [유튜브 양산형 회피 사연+헌정곡 무대 패키지 & 합성음원 투명성]: 정지 사진 1장 영상을 금지하고 [전반부 45초 어머님 사연 내레이션 + 후반부 2분 30초 백운호 신곡 무대(부드러운 줌/조명 파티클 + 105pt 왕글씨 가사 자막)] 구조로 출력하며, 유튜브 업로드 API 호출 시 status.containsSyntheticMedia = True 플래그를 자동 체크한다.",
       "createdAt": "2026-11-19T03:32:02+09:00"
+    },
+    {
+      "id": 27,
+      "title": "단일 대화창(hq_main) 올인원 통합 & FFmpeg 저전력(2스레드·순차) 하드웨어 보호",
+      "rule": "PC 과부하(Kernel-Power 41) 방지를 위해 텔레그램·웹·영상·글·결제 모든 기능을 단일 대화방(1921e31e-ab59-4720-9419-93cac770374d) 1곳으로 통일하고 나머지 4개 대화창은 영구 종료한다. 모든 FFmpeg 영상 인코딩은 1워커 순차 실행 및 -threads 2 (BelowNormal 우선순위)를 강제한다.",
+      "createdAt": "2026-11-19T22:40:00+09:00"
     }
   ],
   "recentCommonOrders": [

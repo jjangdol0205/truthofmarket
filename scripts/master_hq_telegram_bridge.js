@@ -90,10 +90,13 @@ const LANGUAGE_SERVER_EXE = "C:\\Users\\jjang\\AppData\\Local\\Programs\\Antigra
 const AGENTAPI_BAT = "C:\\Users\\jjang\\.gemini\\antigravity\\bin\\agentapi.bat";
 
 // [단일 통합관제 일원화] 텔레그램 원격 작업 통합 채널(73f230e4-d0b1-4732-b378-27fedb0c9c83) vs 사장님 PC 직접 작업 채널 분리
-const MASTER_CONVERSATION_ID = "73f230e4-d0b1-4732-b378-27fedb0c9c83";
+const MASTER_CONVERSATION_ID = "1921e31e-ab59-4720-9419-93cac770374d";
 const PC_DIRECT_CONVERSATION_ID = "dbc61f0a-76cb-48e3-b617-a616c069564c";
 const RETIRED_REMOTE_CONVERSATION_IDS = new Set([
-  "1921e31e-ab59-4720-9419-93cac770374d",
+  "73f230e4-d0b1-4732-b378-27fedb0c9c83",
+  "f2b2b95c-ed94-4be6-bc9d-28aeed49efec",
+  "b25d5399-9ec2-459c-8c03-fa723a739244",
+  "6340fe0a-b009-4c17-a686-97dc3a605525",
   "00e8ecab-c61b-4e2a-a175-abe14541cbfb",
   "e851791d-b399-4618-a5fc-633bc9e34153",
   "2fbfd48d-147a-451d-a2ea-fc1f5410befb",
@@ -101,9 +104,6 @@ const RETIRED_REMOTE_CONVERSATION_IDS = new Set([
   "51b21715-6db7-43dd-8c3c-3f278ad7d93d",
   "7c8eda90-c470-4393-88fd-71b78192350b",
   "5dedd920-f82a-44e4-8034-116294946391",
-  "b25d5399-9ec2-459c-8c03-fa723a739244",
-  "f2b2b95c-ed94-4be6-bc9d-28aeed49efec",
-  "6340fe0a-b009-4c17-a686-97dc3a605525",
   "f24bd054-1b51-4346-b561-56996bc93686",
   "28de4b55-9677-4f05-b1ff-f98015cc6d29",
   "ec5f83c2-178c-4ca1-b225-26fc1a459bd8",

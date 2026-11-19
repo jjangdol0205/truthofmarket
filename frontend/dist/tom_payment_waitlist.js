@@ -497,6 +497,26 @@
     } catch (_) {}
 
     try {
+      var knownEm = getKnownTomMemberEmail();
+      var savedAns = {};
+      try {
+        savedAns = JSON.parse(localStorage.getItem("tom_pw_stepup_answers_v1") || "{}") || {};
+      } catch (_) {}
+      if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.deliverPaidMagicPack === "function") {
+        window.DreamCompanyCRM.deliverPaidMagicPack({
+          div: "TOM",
+          email: knownEm,
+          plan_tier: cleanPlan === "annual" ? "Annual Research Pass ($199/yr)" : "Monthly Research Pass ($29/mo)",
+          order_ref: cleanRef,
+          base_url: "https://truthofmarket.com/",
+          hash_anchor: "tomPaidScreen4Vault",
+          profile_state: savedAns,
+        });
+      }
+      window.dispatchEvent(new CustomEvent("tom:paid-unlocked", { detail: { orderRef: cleanRef, plan: cleanPlan } }));
+    } catch (_) {}
+
+    try {
       if (typeof document !== "undefined" && document.body && !document.getElementById("tomWhopReturnBanner")) {
         var planTitle = cleanPlan === "annual" ? "Annual Research Pass ($199/yr)" : "Monthly Research Pass ($29/mo)";
         var banner = document.createElement("div");
@@ -507,12 +527,14 @@
         banner.innerHTML =
           "<div><strong>Whop Checkout Confirmed &mdash; " +
           planTitle +
-          " Active.</strong> Your Research Pass session is now unlocked in this browser. Need receipt or multi-device help? Contact <a href='mailto:beable9489@gmail.com' style='color:#065f46;font-weight:700;text-decoration:underline;'>beable9489@gmail.com</a>.</div>" +
+          " Active.</strong> Your Paid Screen 4 Vault &amp; 1:1 Custom PDF are open below, with a 14-day refund policy (<a href='mailto:beable9489@gmail.com?subject=TOM%2014-Day%20Refund%20or%20Support' style='color:#065f46;font-weight:700;text-decoration:underline;'>1-Click Support</a>).</div>" +
           "<button type='button' onclick='this.parentNode.remove()' style='padding:6px 12px;border-radius:6px;border:1px solid #059669;background:#ffffff;color:#064e3b;font-weight:700;cursor:pointer;'>Dismiss</button>";
         document.body.insertBefore(banner, document.body.firstChild);
       }
     } catch (_) {}
   }
+
+  window.unlockTomPaidScreen4 = applyWhopCheckoutUnlock;
 
   function setupWhopCheckoutSuccess() {
     try {
