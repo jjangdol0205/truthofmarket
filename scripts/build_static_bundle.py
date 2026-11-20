@@ -171,13 +171,6 @@ def refresh_health_and_rss() -> tuple[str, str, str, int, str]:
       <pubDate>{rfc_now}</pubDate>
       <description><![CDATA[Self-directed educational sector sentiment gauge ($SMH Close ${smh_close:.2f}, {smh_dd_pct:.2f}% from 52W High as of {as_of_date}) and historical $SMH vs. $XLV statistical study.]]></description>
     </item>
-    <item>
-      <title><![CDATA[Celsius Holdings ($CELH) Public Factor Case Study: 52W Consolidation & Volume Analysis (${celh_close:.2f})]]></title>
-      <link>https://truthofmarket.com/stocks/celh.html</link>
-      <guid isPermaLink="true">https://truthofmarket.com/stocks/celh.html</guid>
-      <pubDate>{rfc_now}</pubDate>
-      <description><![CDATA[Educational factor summary of Celsius Holdings ($CELH, Close ${celh_close:.2f} as of {as_of_date}): moving-average alignment, lower variance band (${celh_low_ref:.2f}), and upper dispersion band (${celh_up_ref:.2f}).]]></description>
-    </item>
   </channel>
 </rss>
 """
@@ -238,7 +231,7 @@ def main() -> None:
     }},
     WHOP_TOM_MONTHLY_URL: 'https://whop.com/checkout/plan_xVJeNwyrDef8T',
     WHOP_TOM_ANNUAL_URL: 'https://whop.com/checkout/plan_9sdgFI753ucXQ',
-    SUPPORT_EMAIL: 'beable9489@gmail.com'
+    SUPPORT_EMAIL: 'hello@truthofmarket.com'
   }};
   var COPY_MODE = 'LIVE_SHARP';
   window.TOM_COPY_MODE = COPY_MODE;
@@ -281,7 +274,7 @@ def main() -> None:
         "@id": "https://truthofmarket.com/#organization",
         "name": "TruthOfMarket Research — Independent Market Data & Educational Research",
         "url": "https://truthofmarket.com/",
-        "email": "beable9489@gmail.com",
+        "email": "hello@truthofmarket.com",
         "logo": "https://truthofmarket.com/favicon.svg",
         "sameAs": [
           "https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA",
@@ -441,10 +434,10 @@ def main() -> None:
                 </tr>
                 <tr class="is-featured">
                   <td>SMH &times; XLV 2-Pillar Historical Study</td>
-                  <td>~11.4%</td>
+                  <td>~12.8%</td>
                   <td class="pw-dd-neg">-27.8%</td>
-                  <td>19 mos</td>
-                  <td class="pw-eff-pos">0.41x</td>
+                  <td>17 mos</td>
+                  <td class="pw-eff-pos">0.46x</td>
                 </tr>
               </tbody>
             </table>
@@ -669,8 +662,9 @@ def main() -> None:
           </div>
         </div>
 
+        <p style="margin:14px 0 8px;text-align:center;"><a href="/assets/downloads/tom_sample_2p.pdf" target="_blank" rel="noopener" style="color:#0F2C22;font-weight:700;text-decoration:underline;">Preview Free 2-Page Sample Workbook PDF &rarr;</a> &middot; <a href="/archive.html" style="color:#0F2C22;font-weight:700;text-decoration:underline;">Research Archive</a></p>
         <p class="pw-mor-note">
-          Secure Checkout via Whop.com (Global Card / Apple Pay / Google Pay) &middot; 14-Day Refund Policy &middot; Cancel anytime in one click &middot; Strictly Non-Advisory Educational Publisher.
+          Secure Checkout via Whop.com (Global Card / Apple Pay / Google Pay) &middot; Standard Digital Refund Policy (7-Day Unopened / 1-Click Cancel) &middot; Cancel anytime in one click &middot; Strictly Non-Advisory Educational Publisher.
         </p>
       </section>
 
@@ -698,7 +692,7 @@ def main() -> None:
           <div id="tomScreen4MonthlyCard" class="pw-table-card" style="margin-bottom:18px;padding:18px;"></div>
 
           <div style="padding:16px;background:#ECFDF5;border:1px solid #6EE7B7;border-radius:8px;margin-bottom:14px;">
-            <div class="pw-kicker" style="color:#065F46;margin-bottom:6px;">60-SECOND PERMANENT CROSS-DEVICE MAGIC LINK &amp; 14-DAY REFUND DESK</div>
+            <div class="pw-kicker" style="color:#065F46;margin-bottom:6px;">60-SECOND PERMANENT CROSS-DEVICE MAGIC LINK &amp; DIGITAL SUPPORT DESK</div>
             <p style="margin:0 0 10px;font-size:0.9rem;color:#064E3B;">
               Send your permanent cross-device restore link (works on any phone, tablet, or PC with zero password) and welcome pack directly to your email:
             </p>
@@ -708,7 +702,7 @@ def main() -> None:
             </form>
             <div id="tomPaidMagicStatus" role="status" aria-live="polite" style="display:none;margin-top:8px;font-size:0.88rem;font-weight:600;color:#065F46;"></div>
             <div style="margin-top:10px;font-size:0.84rem;color:#334155;">
-              14-Day Refund Guarantee &amp; 1-Click Support: <a id="tomOneClickRefundLink" href="mailto:beable9489@gmail.com?subject=TOM%2014-Day%20Refund%20or%20Support" style="color:#065F46;font-weight:700;text-decoration:underline;">Request 1-Click Support or 14-Day Refund (beable9489@gmail.com)</a>
+              Standard Digital Refund Policy &amp; 1-Click Support: <a id="tomOneClickRefundLink" href="mailto:hello@truthofmarket.com?subject=TOM%2014-Day%20Refund%20or%20Support" style="color:#065F46;font-weight:700;text-decoration:underline;">Request 1-Click Support or Digital Refund Policy (hello@truthofmarket.com)</a>
             </div>
           </div>
 
@@ -733,7 +727,7 @@ def main() -> None:
         <span>&middot;</span>
         <a href="https://www.instagram.com/truthofmarket/" target="_blank" rel="noopener">Instagram @truthofmarket</a>
         <span>&middot;</span>
-        <a href="mailto:beable9489@gmail.com">beable9489@gmail.com</a>
+        <a href="mailto:hello@truthofmarket.com">hello@truthofmarket.com</a>
       </div>
       <p class="pw-legal-disclaimer">
         TruthOfMarket is an independent, strictly non-advisory educational research publisher providing general market data newsletters and 2000&ndash;2025 historical statistical workbooks only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.
@@ -803,6 +797,7 @@ def main() -> None:
 
     for stale_rel in [
         "instagram_us_setup.html",
+        "pro-swing.html",
         "flow_10_promo_shorts_board.html",
         "flow_10_prompts_studio.html",
         "flow_ep11_20_prompts_studio.html",
@@ -862,6 +857,7 @@ def main() -> None:
         (target_dir / "static_api" / "health.json").write_text(health_json, encoding="utf-8")
         for stale_rel in [
             "instagram_us_setup.html",
+        "pro-swing.html",
             "flow_10_promo_shorts_board.html",
             "flow_10_prompts_studio.html",
             "flow_ep11_20_prompts_studio.html",

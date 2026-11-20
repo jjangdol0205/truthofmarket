@@ -331,14 +331,14 @@ plotshape(ignition and not ignition[1], "MA20/60 RECLAIM", shape.labelup, locati
           </div>
         </div>
 
-        <!-- Module 04: Pro VIP 80:20 Barbell Portfolio Allocation & 1-Click Institutional Export Kit -->
+        <!-- Module 04: Pro VIP 55:35:10 Barbell Portfolio Allocation & 1-Click Institutional Export Kit -->
         <div style="background:#090d16; border:1px solid var(--border); border-top:2px solid #10b981; border-radius:4px; padding:18px; display:flex; flex-direction:column; justify-content:space-between;">
           <div>
             <div style="font-size:0.7rem; font-family:var(--font-mono); font-weight:700; color:#34d399; letter-spacing:0.05em; text-transform:uppercase;">
               👑 PRO VIP EXCLUSIVE · BARBELL CALCULATOR & EXPORT KIT
             </div>
             <h3 style="font-size:1rem; font-weight:800; margin:6px 0; color:#ffffff;">
-              80:20 ($SMH : $XLV) Custom Portfolio Blueprint & 1-Click TradingView / Statistical Workbook
+              55:35:10 ($SMH : $XLV) Custom Portfolio Blueprint & 1-Click TradingView / Statistical Workbook
             </h3>
             <p style="font-size:0.78rem; color:var(--muted); margin-bottom:10px;">
               Automatically allocates your <b class="mono" style="color:#fff;">$${proCapUsd.toLocaleString()}</b> account across core Semiconductor ETF ($SMH), Healthcare Shield ($XLV), and Top VIP Ignition slots, plus 2000–2025 historical statistical workbook summaries:

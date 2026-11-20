@@ -384,8 +384,8 @@ function renderApp() {
       <footer class="tom-fixed-legal-footer">
         <div class="tom-footer-top-row">
           <span class="mono tom-footer-desk-label">EDUCATIONAL MARKET DATA &amp; QUANTITATIVE RESEARCH DESK:</span>
-          <a href="mailto:beable9489@gmail.com" class="tom-footer-email-link">
-            ✉️ beable9489@gmail.com
+          <a href="mailto:hello@truthofmarket.com" class="tom-footer-email-link">
+            ✉️ hello@truthofmarket.com
           </a>
           <span style="color:var(--border);">|</span>
           <a href="${state.config.youtube_url || DEFAULT_YOUTUBE_URL}" target="_blank" rel="noopener" class="tom-footer-social">
@@ -408,7 +408,7 @@ function renderApp() {
           <span style="color:var(--border);">&middot;</span>
           <a href="/privacy.html">Privacy Policy</a>
           <span style="color:var(--border);">&middot;</span>
-          <a href="/refund.html" class="is-refund">14-Day Refund Policy</a>
+          <a href="/refund.html" class="is-refund">Standard Digital Refund Policy</a>
           <span style="color:var(--border);">&middot;</span>
           <a href="/contact.html">Contact Desk</a>
           <span style="color:var(--border);">&middot;</span>
@@ -418,7 +418,7 @@ function renderApp() {
           <span style="color:var(--border);">&middot;</span>
           <a href="/pro-swing.html">Equity Factor Archive</a>
           <span style="color:var(--border);">&middot;</span>
-          <a href="mailto:beable9489@gmail.com" class="is-support">Support: beable9489@gmail.com</a>
+          <a href="mailto:hello@truthofmarket.com" class="is-support">Support: hello@truthofmarket.com</a>
         </div>
         <p id="disclaimerText" class="tom-footer-disclaimer">${t.disclaimer}</p>
         <p class="tom-footer-copyright" id="copyrightText">${t.copyright}</p>
@@ -2322,9 +2322,9 @@ function bindEvents() {
   });
 
   // Copy Historical Factor Formula
-  const btnCopyHistorical Factor Formula = document.getElementById("btnCopyHistorical Factor Formula");
-  if (btnCopyHistorical Factor Formula) {
-    btnCopyHistorical Factor Formula.addEventListener("click", async () => {
+  const btnCopyHistoricalFactorFormula = document.getElementById("btnCopyHistoricalFactorFormula");
+  if (btnCopyHistoricalFactorFormula) {
+    btnCopyHistoricalFactorFormula.addEventListener("click", async () => {
       const code = document.getElementById("pineCodeBox")?.textContent || "";
       try {
         await navigator.clipboard.writeText(code);

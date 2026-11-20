@@ -1,0 +1,124 @@
+name: Dream Company 365-Day Cloud Auto-Promo & Watchdog
+
+on:
+  schedule:
+    # Daily 07:00 KST (22:00 UTC) — Runs staggered 5-div Shorts/Reels + Tue/Fri 14m00s-14m40s HERO Radio
+    - cron: "0 22 * * *"
+    # Weekly Monday 06:00 KST (Sunday 21:00 UTC) — 45-day IG token refresh + [skip ci] keepalive commit
+    - cron: "0 21 * * 0"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Run mode (daily | stage2_yt_reset | token_refresh | dry_run)"
+        required: false
+        default: "daily"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dreamcompany-daily-auto-promo
+  cancel-in-progress: false
+
+jobs:
+  cloud-auto-promo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout workspace
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Cache FFmpeg & static TTS/font assets (protects 2,000 min/mo limit)
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+            cloud_automation/.cache
+          key: dc-promo-v1-${{ runner.os }}-${{ hashFiles('cloud_automation/requirements.txt') }}
+          restore-keys: |
+            dc-promo-v1-${{ runner.os }}-
+
+      - name: Install lightweight dependencies & FFmpeg
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-noto-cjk > /dev/null
+          python -m pip install --upgrade pip -q
+          pip install -q -r cloud_automation/requirements.txt
+
+      - name: Run Stage 2 YouTube Reset / Captions Sync (if secrets configured)
+        if: ${{ github.event.inputs.mode == 'stage2_yt_reset' || github.event_name == 'schedule' }}
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN_TOM: ${{ secrets.YT_REFRESH_TOKEN_TOM }}
+          YT_REFRESH_TOKEN_KFG: ${{ secrets.YT_REFRESH_TOKEN_KFG }}
+          YT_REFRESH_TOKEN_GBA: ${{ secrets.YT_REFRESH_TOKEN_GBA }}
+          YT_REFRESH_TOKEN_HERO: ${{ secrets.YT_REFRESH_TOKEN_HERO }}
+          YT_REFRESH_TOKEN_KFK: ${{ secrets.YT_REFRESH_TOKEN_KFK }}
+        run: |
+          python -u -X utf8 cloud_automation/yt_stage2_reset_and_captions.py --once-if-pending
+
+      - name: Run Daily 5-Div Cloud Promo Pipeline (Auto-Gate + R2 24h Staging + Lyria Cap <=2/wk)
+        if: ${{ github.event.inputs.mode != 'token_refresh' }}
+        env:
+          RUN_MODE: ${{ github.event.inputs.mode || 'daily' }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          HQ_MASTER_EMAIL: ${{ secrets.HQ_MASTER_EMAIL || 'beable9489@gmail.com' }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          R2_BUCKET_NAME: dreamcompany-reels-staging
+          R2_PUBLIC_BASE: https://pub-c1592ad8d860431c9bf3d4dd12c228ef.r2.dev
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN_TOM: ${{ secrets.YT_REFRESH_TOKEN_TOM }}
+          YT_REFRESH_TOKEN_KFG: ${{ secrets.YT_REFRESH_TOKEN_KFG }}
+          YT_REFRESH_TOKEN_GBA: ${{ secrets.YT_REFRESH_TOKEN_GBA }}
+          YT_REFRESH_TOKEN_HERO: ${{ secrets.YT_REFRESH_TOKEN_HERO }}
+          YT_REFRESH_TOKEN_KFK: ${{ secrets.YT_REFRESH_TOKEN_KFK }}
+          IG_ACCESS_TOKEN_TOM: ${{ secrets.IG_ACCESS_TOKEN_TOM }}
+          IG_USER_ID_TOM: ${{ secrets.IG_USER_ID_TOM }}
+          IG_ACCESS_TOKEN_KFG: ${{ secrets.IG_ACCESS_TOKEN_KFG }}
+          IG_USER_ID_KFG: ${{ secrets.IG_USER_ID_KFG }}
+          IG_ACCESS_TOKEN_GBA: ${{ secrets.IG_ACCESS_TOKEN_GBA }}
+          IG_USER_ID_GBA: ${{ secrets.IG_USER_ID_GBA }}
+          IG_ACCESS_TOKEN_HERO: ${{ secrets.IG_ACCESS_TOKEN_HERO }}
+          IG_USER_ID_HERO: ${{ secrets.IG_USER_ID_HERO }}
+          IG_ACCESS_TOKEN_KFK: ${{ secrets.IG_ACCESS_TOKEN_KFK }}
+          IG_USER_ID_KFK: ${{ secrets.IG_USER_ID_KFK }}
+          HQ_TELEGRAM_BOT_TOKEN: ${{ secrets.HQ_TELEGRAM_BOT_TOKEN }}
+          HQ_TELEGRAM_CHAT_ID: ${{ secrets.HQ_TELEGRAM_CHAT_ID }}
+        run: |
+          python -u -X utf8 cloud_automation/cloud_promo_runner.py
+
+      - name: Refresh Instagram Long-Lived Tokens (45-Day Auto Renewal + Expiry Alert)
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          HQ_MASTER_EMAIL: ${{ secrets.HQ_MASTER_EMAIL || 'beable9489@gmail.com' }}
+          META_APP_ID: ${{ secrets.META_APP_ID }}
+          META_APP_SECRET: ${{ secrets.META_APP_SECRET }}
+          IG_ACCESS_TOKEN_TOM: ${{ secrets.IG_ACCESS_TOKEN_TOM }}
+          IG_ACCESS_TOKEN_KFG: ${{ secrets.IG_ACCESS_TOKEN_KFG }}
+          IG_ACCESS_TOKEN_GBA: ${{ secrets.IG_ACCESS_TOKEN_GBA }}
+          IG_ACCESS_TOKEN_HERO: ${{ secrets.IG_ACCESS_TOKEN_HERO }}
+          IG_ACCESS_TOKEN_KFK: ${{ secrets.IG_ACCESS_TOKEN_KFK }}
+        run: |
+          python -u -X utf8 cloud_automation/ig_token_refresher.py
+
+      - name: Commit data/promo_history.json with [skip ci] (Prevents GitHub 60-Day Schedule Disable)
+        run: |
+          git config user.name "DreamCompany Cloud Bot"
+          git config user.email "hello@truthofmarket.com"
+          git add data/promo_history.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(cloud-promo): update promo_history.json [skip ci]"
+            git push
+          else
+            echo "No promo_history.json diff today."
+          fi

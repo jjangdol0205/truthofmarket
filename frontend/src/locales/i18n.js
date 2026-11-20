@@ -29,9 +29,9 @@ const enCopy = {
 
   // Historical Comparative Allocation Card
   auditedCardTag: "HISTORICAL ALLOCATION RESEARCH · 1998–2026",
-  auditedCardTitle: "SMH/XLV Barbell Allocation (+28.4%) vs. S&P 500 (+14.2%) Historical Study",
+  auditedCardTitle: "SMH/XLV Barbell Allocation (+12.8% CAGR) vs. S&P 500 (+14.2%) Historical Study",
   auditedCardDesc:
-    "Point-in-time educational historical study across 6,625 trading days. Reviewed calmly with an 80:20 educational weight shift during deep sector pulldowns.",
+    "Point-in-time educational historical study across 6,625 trading days. Reviewed calmly with an 55:35:10 educational weight shift during deep sector pulldowns.",
   auditedBarbellLabel: "SMH 70% : XLV 30% Barbell Model",
   auditedSpyLabel: "S&P 500 (SPY) Benchmark",
   auditedMetricCagr: "Historical Annualized Rate",
@@ -106,7 +106,7 @@ const enCopy = {
   cnnBadge: "PUBLIC MARKET SENTIMENT DATA · UPDATED DAILY",
   cnnTitle: "US Sector Sentiment & Barbell Allocation Gauge (Educational Data)",
   cnnSubtitle:
-    "Visualize public sector breadth & drawdown indicators (0–100) and explore historical 70:30 vs. 80:20 $SMH:$XLV portfolio weight math.",
+    "Visualize public sector breadth & drawdown indicators (0–100) and explore historical 55:35:10 vs. 55:35:10 $SMH:$XLV portfolio weight math.",
   cnnTabOverview: "Overview",
   cnnTabTimeline: "Timeline",
   cnnLastUpdated: "Last updated",
@@ -118,7 +118,7 @@ const enCopy = {
   cnnIndicatorsSub:
     "Computed daily from public $SMH, $XLV, and $QQQ momentum, 52-week drawdown, defensive spread, RSI-14, realized volatility, relative spread, and weight drift.",
   rebalSectionTag: "SELF-DIRECTED BARBELL ALLOCATION CALCULATOR",
-  rebalSectionTitle: "$SMH + $XLV Educational Weight Calculator (70:30 ↔ 80:20)",
+  rebalSectionTitle: "$SMH + $XLV Educational Weight Calculator (55:35:10 ↔ 55:35:10)",
   rebalSectionDesc:
     "Simulate pairing semiconductor ETF ($SMH 70%) with healthcare ETF ($XLV 30%), and model 2–4x/year weight adjustments when sentiment drops below 25.",
   lumpSectionTag: "TRANCHE ALLOCATION CALCULATOR",

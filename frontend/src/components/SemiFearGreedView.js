@@ -535,7 +535,7 @@ export function renderSemiFearGreedView(state) {
           <div>
             <label style="font-size:0.68rem; font-family:var(--font-mono); color:var(--muted);">ALLOCATION MODE</label>
             <select id="semiModeInput" style="width:100%; padding:8px 10px; background:#060911; border:1px solid var(--border); color:#fff; border-radius:4px; font-family:var(--font-sans); font-weight:600; margin-top:3px;">
-              <option value="AUTO_REGIME" ${state.semiMode === "AUTO_REGIME" ? "selected" : ""}>Auto Regime (70:30 ↔ 80:20 on Fear ≤ 25)</option>
+              <option value="AUTO_REGIME" ${state.semiMode === "AUTO_REGIME" ? "selected" : ""}>Auto Regime (55:35:10 ↔ 55:35:10 on Fear ≤ 25)</option>
               <option value="BASELINE_70_30" ${state.semiMode === "BASELINE_70_30" ? "selected" : ""}>70% $SMH : 30% $XLV Golden Baseline</option>
               <option value="CONTRARIAN_80_20" ${state.semiMode === "CONTRARIAN_80_20" ? "selected" : ""}>80% $SMH : 20% $XLV Contrarian Accumulation</option>
               <option value="AGGRESSIVE_90_10" ${state.semiMode === "AGGRESSIVE_90_10" ? "selected" : ""}>90% $SMH : 10% $XLV Right-Side Tilt</option>
@@ -698,9 +698,9 @@ export function renderSemiFearGreedView(state) {
               <th>Period</th>
               <th>100% $QQQ CAGR</th>
               <th>100% $QQQ Multiple</th>
-              <th>70:30 Baseline CAGR</th>
-              <th>70:30 (80:20 Fear Tilt) CAGR</th>
-              <th>70:30 (80:20 Tilt) Multiple</th>
+              <th>55:35:10 Baseline CAGR</th>
+              <th>55:35:10 (55:35:10 Fear Tilt) CAGR</th>
+              <th>55:35:10 (55:35:10 Tilt) Multiple</th>
               <th>Max Drawdown (vs QQQ)</th>
             </tr>
           </thead>

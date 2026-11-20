@@ -198,7 +198,7 @@ export function computeTomSmhXlvBaseline(survey) {
     smhPct = 70;
     xlvPct = 30;
     sgovPct = 0;
-    profileName = "Classic 70:30 Growth-Defense Barbell (70% SMH : 30% XLV)";
+    profileName = "Classic 55:35:10 Growth-Defense Barbell (70% SMH : 30% XLV)";
   } else {
     smhPct = 60;
     xlvPct = 40;
@@ -422,7 +422,7 @@ function renderUnlockedSmhXlvContentHtml(baseline) {
           <tr>
             <td><strong>2000–2026 Full-Cycle Study</strong></td>
             <td>High Single-Sector Volatility</td>
-            <td class="is-pos"><strong>+28.4%/yr Historical Model</strong> (2.03 Sharpe)</td>
+            <td class="is-pos"><strong>+12.8% CAGR/yr Historical Model</strong> (2.03 Sharpe)</td>
           </tr>
         </tbody>
       </table>

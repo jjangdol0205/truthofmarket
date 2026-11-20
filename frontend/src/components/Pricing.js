@@ -14,7 +14,7 @@ function getTomPricingCopyByMode() {
       kicker: "STAGE 3 OF 3 · DAILY SMH × XLV REGIME & RATIO TRACKING VIP",
       heading: "Track Daily SMH × XLV Regime Shifts Automatically Every Morning",
       subheading:
-        "Receive daily overheating & fear regime tracking emails before the US bell, exact account-size dollar ($) allocation worksheets, and the lifetime-updated 14-Page SMH × XLV Master PDF Guide. Backed by our 14-Day Refund Policy.",
+        "Receive daily overheating & fear regime tracking emails before the US bell, exact account-size dollar ($) allocation worksheets, and the lifetime-updated 14-Page SMH × XLV Master PDF Guide. Backed by our Standard Digital Refund Policy.",
       t1Badge: "MONTHLY RESEARCH PASS",
       t1Title: "Monthly SMH × XLV Daily Tracking & Worksheet Suite",
       t1Period: "/ month",
@@ -27,7 +27,7 @@ function getTomPricingCopyByMode() {
       ],
       t1Btn: "Start Monthly Research Pass — $29/mo →",
       t1PayNote:
-        "💳 Whop.com (Global Card / Apple Pay / Google Pay) · 1-Click Cancel · 14-Day Refund Policy",
+        "💳 Whop.com (Global Card / Apple Pay / Google Pay) · 1-Click Cancel · Standard Digital Refund Policy",
       t2Badge: "ANNUAL RESEARCH PASS",
       t2Title: "Annual SMH × XLV Daily Tracking & Master Pass",
       t2Period: "/ year",
@@ -36,11 +36,11 @@ function getTomPricingCopyByMode() {
       t2Items: [
         "<b>Full 12-Month Daily Automated SMH &times; XLV Tracking Digest:</b> Uninterrupted morning regime &amp; ratio-shift email tracking across every market season.",
         "<b>Account-Size Dollar ($) Allocation Worksheet + 2000–2025 Historical Statistical Workbook:</b> Full historical 2000–2026 <b>$SMH / $XLV / $QQQ</b> daily series and multi-account dollar worksheets.",
-        "<b>Lifetime-Updated 14-Page SMH &times; XLV Master PDF Guide:</b> Save 43% vs. monthly billing — backed by our unconditional 14-Day Refund Policy.",
+        "<b>Lifetime-Updated 14-Page SMH &times; XLV Master PDF Guide:</b> Save 43% vs. monthly billing — backed by our unconditional Standard Digital Refund Policy.",
       ],
       t2Btn: "Start Annual Research Pass — $199/yr (Save 43%) →",
       t2PayNote:
-        "💳 Whop.com (Global Card / Apple Pay / Google Pay) · Billed Annually · 14-Day Refund Policy",
+        "💳 Whop.com (Global Card / Apple Pay / Google Pay) · Billed Annually · Standard Digital Refund Policy",
       autoUnlockNote:
         "✨ Instant Software Activation: Your SMH × XLV Dollar ($) Allocation Worksheet, 14-Page Master PDF Guide, and Daily Tracking Digest activate immediately after checkout.",
       restoreSummary: "🔑 Switching computers or already subscribed? Restore your VIP License Key here",
@@ -52,7 +52,7 @@ function getTomPricingCopyByMode() {
     kicker: "STAGE 3 OF 3 · SELF-DIRECTED EDUCATIONAL SOFTWARE & DAILY INDICATOR DATA DIGEST",
     heading: "Historical SMH × XLV Sector Balance Simulator & Daily Automated Market Indicator Data Digest",
     subheading:
-      "Upgrade for automated morning semiconductor & healthcare indicator data digests, custom account-size dollar ($) allocation worksheets, and our lifetime-updated 14-Page SMH × XLV Master PDF Guide. Backed by our 14-Day No-Questions-Asked Refund Policy.",
+      "Upgrade for automated morning semiconductor & healthcare indicator data digests, custom account-size dollar ($) allocation worksheets, and our lifetime-updated 14-Page SMH × XLV Master PDF Guide. Backed by our Standard Digital Refund & 1-Click Cancel Refund Policy.",
     t1Badge: "MONTHLY RESEARCH PASS",
     t1Title: "Monthly Research Pass Sector Balance Worksheet & Daily Indicator Digest",
     t1Period: "/ month",
@@ -65,7 +65,7 @@ function getTomPricingCopyByMode() {
     ],
     t1Btn: "Start Monthly Research Pass — $29/mo",
     t1PayNote:
-      "💳 Whop.com (Global Card / Apple Pay / Google Pay) · 1-Click Cancel · 14-Day Refund Policy",
+      "💳 Whop.com (Global Card / Apple Pay / Google Pay) · 1-Click Cancel · Standard Digital Refund Policy",
     t2Badge: "ANNUAL RESEARCH PASS",
     t2Title: "Annual Research Pass Sector Balance Worksheet & Daily Indicator Pass",
     t2Period: "/ year",
@@ -74,11 +74,11 @@ function getTomPricingCopyByMode() {
     t2Items: [
       "<b>12-Month Automated SMH &times; XLV Regime &amp; Ratio Tracking Email Digest:</b> Full-year daily morning public market indicator summaries and historical sector ratio study tables.",
       "<b>Account-Size Dollar ($) Allocation Worksheet + 2000–2025 Historical Statistical Workbook:</b> Exact dollar worksheets plus downloadable 2000–2026 public market historical series.",
-      "<b>Lifetime-Updated 14-Page SMH &times; XLV Master PDF Guide:</b> Save 43% ($149/yr saved vs. monthly) — self-directed educational calculator software backed by our 14-Day Refund Policy.",
+      "<b>Lifetime-Updated 14-Page SMH &times; XLV Master PDF Guide:</b> Save 43% ($149/yr saved vs. monthly) — self-directed educational calculator software backed by our Standard Digital Refund Policy.",
     ],
     t2Btn: "Start Annual Research Pass — $199/yr",
     t2PayNote:
-      "💳 Whop.com (Global Card / Apple Pay / Google Pay) · Billed Annually · 14-Day Refund Policy",
+      "💳 Whop.com (Global Card / Apple Pay / Google Pay) · Billed Annually · Standard Digital Refund Policy",
     autoUnlockNote:
       "✨ Instant Software Activation: Your Custom SMH × XLV Dollar ($) Allocation Worksheet, 14-Page Master PDF Guide, and Daily Indicator Digest unlock automatically after checkout.",
     restoreSummary: "🔑 Switching computers or already subscribed? Restore your VIP License Key here",
@@ -100,7 +100,7 @@ export function renderPricing(state) {
 
   const checkoutFallbackHtml = `
     <div class="pricing-support-note">
-      Questions, software licenses, or 14-day refunds? Email <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Support%20%26%20VIP%20Software" class="pricing-support-link">beable9489@gmail.com</a>.
+      Questions, software licenses, or standard digital refunds? Email <a href="mailto:hello@truthofmarket.com?subject=TruthOfMarket%20Support%20%26%20VIP%20Software" class="pricing-support-link">hello@truthofmarket.com</a>.
     </div>
   `;
 
@@ -153,7 +153,7 @@ export function renderPricing(state) {
               ${c.t1Title}
             </h3>
             <div class="price-num">$29 <span class="price-period">${c.t1Period}</span></div>
-            <div class="price-subtext">Billed monthly &middot; Cancel anytime with 1 click &middot; 14-Day Refund Policy</div>
+            <div class="price-subtext">Billed monthly &middot; Cancel anytime with 1 click &middot; Standard Digital Refund Policy</div>
             <div class="price-bundle-box is-monthly">
               📘 ${c.t1Bundle}
             </div>
@@ -183,7 +183,7 @@ export function renderPricing(state) {
               ${c.t2Title}
             </h3>
             <div class="price-num">$199 <span class="price-period">${c.t2Period}</span></div>
-            <div class="price-subtext">Annual recurring pass ($199/yr) &middot; Cancel anytime &middot; 14-Day Refund Policy</div>
+            <div class="price-subtext">Annual recurring pass ($199/yr) &middot; Cancel anytime &middot; Standard Digital Refund Policy</div>
             <div class="price-savings-pill">⚡ Save $149/Yr vs. $29/mo Monthly Billing ($199/yr vs. $348/yr)</div>
             <div class="price-bundle-box is-annual">
               📘 ${c.t2Bundle}
@@ -238,7 +238,7 @@ export function renderPricing(state) {
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
           </svg>
-          <span>14-Day No-Questions-Asked Refund Policy</span>
+          <span>Standard Digital Refund & 1-Click Cancel Refund Policy</span>
         </div>
         <div class="trust-badge">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
