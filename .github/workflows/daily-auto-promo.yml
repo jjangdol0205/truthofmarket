@@ -118,7 +118,8 @@ jobs:
           git add data/promo_history.json
           if ! git diff --cached --quiet; then
             git commit -m "chore(cloud-promo): update promo_history.json [skip ci]"
-            git push
+            git pull --rebase --autostash origin main || true
+            git push origin HEAD:main
           else
             echo "No promo_history.json diff today."
           fi
