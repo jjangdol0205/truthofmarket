@@ -74,6 +74,7 @@
       monthly: WHOP_TOM_MONTHLY_REDIRECT,
       annual: WHOP_TOM_ANNUAL_REDIRECT,
     };
+    window.PAYMENT_CONFIG.WHOP_TOM_STARTER_URL = WHOP_TOM_STARTER_URL;
     window.PAYMENT_CONFIG.WHOP_TOM_MONTHLY_URL = WHOP_TOM_MONTHLY_URL;
     window.PAYMENT_CONFIG.WHOP_TOM_ANNUAL_URL = WHOP_TOM_ANNUAL_URL;
     window.PAYMENT_CONFIG.SUPPORT_EMAIL = window.PAYMENT_CONFIG.SUPPORT_EMAIL || "beable9489@gmail.com";
@@ -290,7 +291,8 @@
         ".tom-whop-direct-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;margin-bottom:12px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;}",
         ".tom-whop-direct-btn{display:inline-flex;align-items:center;justify-content:center;text-align:center;min-height:44px;padding:10px 14px;border-radius:6px;background:#065f46;color:#ffffff !important;font-size:13.5px;font-weight:700;text-decoration:none !important;white-space:normal;line-height:1.3;}",
         ".tom-whop-direct-btn:hover{background:#047857;}",
-        "#tomWhopEmbedMount{min-height:380px;border:1px solid #e2e8f0;border-radius:8px;background:#fbfbf9;padding:6px;overflow:hidden;}",
+        "#tomWhopEmbedMount{min-height:480px;border:1px solid #e2e8f0;border-radius:8px;background:#ffffff;padding:6px;overflow:visible;}",
+        "#tomWhopEmbedMount iframe{width:100% !important;min-height:468px !important;border:0 !important;background:#ffffff !important;border-radius:6px;}",
         "@media(max-width:560px){.tom-whop-plan-tabs{grid-template-columns:1fr;}#tomWhopCheckoutDialog{padding:16px 14px;}.tom-whop-direct-btn{width:100%;}}",
       ].join("");
       document.head.appendChild(styleEl);
@@ -330,13 +332,13 @@
       '      <div style="font-size:11.5px;color:#475569;">12-Mo Suite + Masterbook</div>' +
       "    </button>" +
       "  </div>" +
-      '  <div id="tomWhopEmbedMount" aria-live="polite" style="margin-bottom:10px;"></div>' +
       '  <div class="tom-whop-direct-bar">' +
-      '    <span style="font-size:12.5px;color:#334155;font-weight:600;">Prefer a direct checkout tab?</span>' +
+      '    <span style="font-size:12.5px;color:#0f172a;font-weight:700;">Fastest on Mobile (Apple Pay &middot; Google Pay &middot; Card):</span>' +
       '    <a id="tomWhopDirectTopBtn" class="tom-whop-direct-btn" data-whop-direct-tab="1" href="' +
       WHOP_TOM_MONTHLY_URL +
-      '" target="_blank" rel="noopener">Open Whop Checkout in New Tab &rarr;</a>' +
+      '" target="_blank" rel="noopener">Open Full-Screen Secure Checkout &rarr;</a>' +
       "  </div>" +
+      '  <div id="tomWhopEmbedMount" aria-live="polite" style="margin-bottom:10px;"></div>' +
       '  <div style="margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;font-size:12px;color:#475569;">' +
       '    <span>Secure Checkout via Whop.com &middot; 7-Day Unopened Refund &middot; 1-Click Cancel &middot; <a href="mailto:hello@truthofmarket.com" style="color:#065f46;font-weight:700;">hello@truthofmarket.com</a></span>' +
       '    <a id="tomWhopDirectFooterLink" data-whop-direct-tab="1" href="' +
@@ -494,7 +496,8 @@
 
   // 3. Handle ?payment=success&provider=whop&plan=monthly|annual cleanly on return
   function applyWhopCheckoutUnlock(orderRef, planSlug) {
-    var cleanPlan = String(planSlug || "monthly").toLowerCase() === "annual" ? "annual" : "monthly";
+    var rawPlanLow = String(planSlug || "monthly").toLowerCase();
+    var cleanPlan = rawPlanLow === "annual" ? "annual" : (rawPlanLow === "starter" ? "starter" : "monthly");
     var cleanRef = String(orderRef || ("WHOP-PASS-2026-" + cleanPlan.toUpperCase())).trim();
     try {
       localStorage.setItem("rsa_pro_unlocked", "true");
@@ -546,7 +549,7 @@
           "<div><strong>Whop Checkout Confirmed &mdash; " +
           planTitle +
           " Active.</strong> Your Paid Screen 4 Vault &amp; Protected 14-Page PDF are open below (<a href='mailto:hello@truthofmarket.com?subject=TOM%20Support%20or%20Refund' style='color:#065f46;font-weight:700;text-decoration:underline;'>1-Click Support</a>).</div>" +
-          "<button type='button' onclick='this.parentNode.remove()' style='padding:6px 12px;border-radius:6px;border:1px solid #059669;background:#ffffff;color:#064e3b;font-weight:700;cursor:pointer;'>Dismiss</button>";
+          "<button type='button' data-csp-act='remove-parent' style='padding:6px 12px;border-radius:6px;border:1px solid #059669;background:#ffffff;color:#064e3b;font-weight:700;cursor:pointer;'>Dismiss</button>";
         document.body.insertBefore(banner, document.body.firstChild);
       }
     } catch (_) {}
