@@ -529,7 +529,7 @@
           "<div><strong>Whop Checkout Confirmed &mdash; " +
           planTitle +
           " Active.</strong> Your Paid Screen 4 Vault &amp; Protected 14-Page PDF are open below (<a href='mailto:hello@truthofmarket.com?subject=TOM%20Support%20or%20Refund' style='color:#065f46;font-weight:700;text-decoration:underline;'>1-Click Support</a>).</div>" +
-          "<button type='button' data-csp-act='remove-parent' style='padding:6px 12px;border-radius:6px;border:1px solid #059669;background:#ffffff;color:#064e3b;font-weight:700;cursor:pointer;'>Dismiss</button>";
+          "<button type='button' onclick='this.parentNode.remove()' style='padding:6px 12px;border-radius:6px;border:1px solid #059669;background:#ffffff;color:#064e3b;font-weight:700;cursor:pointer;'>Dismiss</button>";
         document.body.insertBefore(banner, document.body.firstChild);
       }
     } catch (_) {}
@@ -6372,7 +6372,7 @@ function renderPricing(state) {
           </summary>
           <div class="pricing-restore-body">
             <span>Already have a Whop Research Pass receipt ID on another computer or tablet? Restore your VIP session in 1 click:</span>
-            <button type="button" class="btn btn-sm" data-csp-act="tom-open-license">
+            <button type="button" class="btn btn-sm" onclick="var b=document.getElementById('btnOpenLicense');if(b){b.click();}else{var m=document.getElementById('licenseModal');if(m)m.style.display='flex';}">
               ${c.restoreBtn} &rarr;
             </button>
           </div>
@@ -8515,7 +8515,7 @@ function bindPrivateWealthSingleBreathEvents(state) {
     w.document.write(
       `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>TruthOfMarket 1:1 Custom SMH x XLV + SGOV Workbook PDF</title>` +
       `<style>body{font-family:Georgia,serif;max-width:780px;margin:24px auto;padding:0 20px;color:#0f172a;font-size:16px;line-height:1.65;}h1,h2,h3{font-family:Inter,Arial,sans-serif;}table{width:100%;border-collapse:collapse;margin:12px 0;font-family:Inter,Arial,sans-serif;font-size:14px;}th,td{border:1px solid #cbd5e1;padding:9px 10px;text-align:left;}th{background:#f1f5f9;}.page-break{page-break-before:always;margin-top:28px;padding-top:18px;border-top:2px solid #0f172a;}@media print{.no-print{display:none;}}</style></head><body>` +
-      `<div class="no-print" style="padding:12px;background:#ecfdf5;border:1px solid #059669;border-radius:8px;margin-bottom:18px;font-family:Arial,sans-serif;"><strong>Ready to Save as PDF:</strong> Choose <em>Save as PDF</em> in the print dialog. <button type="button" id="tom-popup-print-btn" style="margin-left:12px;padding:8px 16px;background:#065f46;color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer;">Save / Print PDF</button></div>` +
+      `<div class="no-print" style="padding:12px;background:#ecfdf5;border:1px solid #059669;border-radius:8px;margin-bottom:18px;font-family:Arial,sans-serif;"><strong>Ready to Save as PDF:</strong> Choose <em>Save as PDF</em> in the print dialog. <button onclick="window.print()" style="margin-left:12px;padding:8px 16px;background:#065f46;color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer;">Save / Print PDF</button></div>` +
       `<h1>TruthOfMarket &mdash; 1:1 Custom SMH &times; XLV + SGOV Educational Workbook</h1>` +
       `<p style="font-size:13px;color:#475569;">Independent Market Data &amp; Educational Research Publisher (Strictly Non-Advisory Historical Statistics &middot; Support: hello@truthofmarket.com)</p>` +
       `<div>${dollarHtml}</div><div style="margin-top:18px;">${stressHtml}</div>` +
@@ -8523,7 +8523,6 @@ function bindPrivateWealthSingleBreathEvents(state) {
       `</body></html>`
     );
     w.document.close();
-    try { const pb = w.document.getElementById("tom-popup-print-btn"); if (pb) pb.addEventListener("click", () => { try { w.print(); } catch (_) {} }); } catch (_) {}
     setTimeout(() => {
       try { w.print(); } catch (_) {}
     }, 350);

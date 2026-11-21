@@ -20,11 +20,149 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&display=swap" rel="stylesheet" />
   <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Article", "headline": "The Quiet Arithmetic of Drawdowns and Treasury Cushions", "description": "Educational compounding essay showing how deep drawdowns (-40% to -60%) require nonlinear recovery gains (+66.7% to +150%), and how Treasury cushions reduce sequence risk.", "datePublished": "2026-11-20", "dateModified": "2026-11-20", "mainEntityOfPage": "https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html", "author": {"@type": "Person", "name": "Arthur Vance", "jobTitle": "Senior Portfolio Research Note"}, "publisher": {"@type": "Organization", "name": "TruthOfMarket", "url": "https://truthofmarket.com/", "logo": {"@type": "ImageObject", "url": "https://truthofmarket.com/favicon.svg"}, "sameAs": ["https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA", "https://www.instagram.com/truthofmarket/"]}}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is Sequence-of-Returns Risk?", "acceptedAnswer": {"@type": "Answer", "text": "Sequence-of-Returns Risk describes the mathematical danger of withdrawing fixed living expenses from an equity portfolio during a deep market downturn, depleting share count before recovery."}}, {"@type": "Question", "name": "How does a short-term US Treasury cushion help?", "acceptedAnswer": {"@type": "Answer", "text": "Keeping planned near-term cash reserves in short-term US Treasury bills ($SGOV or government money-market funds) insulates near-term spending from equity price swings."}}]}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "SMH × XLV Balance Simulator", "item": "https://truthofmarket.com/"}, {"@type": "ListItem", "position": 2, "name": "Editorial Notes", "item": "https://truthofmarket.com/insights/"}, {"@type": "ListItem", "position": 3, "name": "The Quiet Arithmetic of Drawdowns and Treasury Cushions", "item": "https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html"}]}]}</script>
-  <script src="/assets/csp/inline_53e5585d9965.js"></script>
+  <script>
+  window.PAYMENT_CONFIG = {
+    PROVIDER: 'whop',
+    DIVISION: 'TOM',
+    STORE_SLOT: 'FINANCE_STORE_SLOT',
+    STORE_LIVE_READY: true,
+    COMPANY_ID: 'biz_4ynqri19wFDIwm',
+    STORE_NAME: 'TruthOfMarket Research',
+    WHOP_PLAN_IDS: {
+      monthly: 'plan_xVJeNwyrDef8T',
+      annual: 'plan_9sdgFI753ucXQ'
+    },
+    WHOP_CHECKOUT_URLS: {
+      monthly: 'https://whop.com/checkout/plan_xVJeNwyrDef8T',
+      annual: 'https://whop.com/checkout/plan_9sdgFI753ucXQ'
+    },
+    WHOP_TOM_MONTHLY_URL: 'https://whop.com/checkout/plan_xVJeNwyrDef8T',
+    WHOP_TOM_ANNUAL_URL: 'https://whop.com/checkout/plan_9sdgFI753ucXQ',
+    SUPPORT_EMAIL: 'beable9489@gmail.com'
+  };
+  var COPY_MODE = 'LIVE_SHARP';
+  window.TOM_COPY_MODE = COPY_MODE;
+  </script>
   <script async defer src="https://js.whop.com/static/checkout/loader.js"></script>
   <script src="/hq_member_crm_client.js" defer></script>
   <script src="/tom_payment_waitlist.js" defer></script>
-  <script src="/assets/csp/inline_05a66d5f0f0a.js"></script>
+  <script>
+  (function(){
+    try {
+      if (typeof window === 'undefined' || typeof navigator === 'undefined') return;
+      var kst = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+      var ns = 'tom_truthofmarket';
+      window.__tomCopyEssayLink = function(btnEl) {
+        var url = (window.location && window.location.href) ? window.location.href : 'https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html';
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(function() {
+            if (btnEl) {
+              var orig = btnEl.getAttribute('data-orig') || btnEl.textContent;
+              btnEl.setAttribute('data-orig', orig);
+              btnEl.textContent = 'Copied Link';
+              setTimeout(function() { btnEl.textContent = orig; }, 2200);
+            }
+          }).catch(function(){});
+        }
+      };
+      window.__tomSubmitSubstackSubscribe = function(ev, formEl, essaySlug) {
+        if (ev && ev.preventDefault) ev.preventDefault();
+        var input = formEl ? formEl.querySelector('input[type="email"]') : null;
+        var statusEl = formEl && formEl.parentNode ? formEl.parentNode.querySelector('.substack-sub-status') : null;
+        var btnEl = formEl ? formEl.querySelector('button[type="submit"]') : null;
+        var email = input ? String(input.value || '').trim().toLowerCase() : '';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+          if (statusEl) {
+            statusEl.style.display = 'block';
+            statusEl.style.color = '#991b1b';
+            statusEl.textContent = 'Please enter a valid email address.';
+          }
+          if (input) input.focus();
+          return false;
+        }
+        if (btnEl) {
+          btnEl.disabled = true;
+          btnEl.textContent = 'Subscribing...';
+        }
+        var noteStr = 'site=truthofmarket.com/insights/ | essay=' + (essaySlug || 'rule-1-minus-9-percent-stop-loss-math.html');
+        try {
+          localStorage.setItem('tom_free_member_email', email);
+          localStorage.setItem('tom_free_member_since', kst);
+          localStorage.setItem('dc_member_TOM', JSON.stringify({
+            div: 'TOM',
+            email: email,
+            nickname: '',
+            segment: 'substack_essay_reader',
+            notes: noteStr,
+            joined_at: new Date().toISOString()
+          }));
+          fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup', { mode: 'cors', keepalive: true }).catch(function(){});
+          fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup_total', { mode: 'cors', keepalive: true }).catch(function(){});
+        } catch (_e) {}
+
+        var finishOk = function() {
+          if (btnEl) {
+            btnEl.disabled = false;
+            btnEl.textContent = 'Subscribed';
+          }
+          if (statusEl) {
+            statusEl.style.display = 'block';
+            statusEl.style.color = '#065f46';
+            statusEl.innerHTML = 'Thank you. Future morning notes will arrive quietly at <strong>' + email.replace(/[<>&"]/g, '') + '</strong> (no password needed, 1-click unsubscribe anytime).';
+          }
+        };
+
+        if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.registerMember === 'function') {
+          window.DreamCompanyCRM.registerMember({
+            div: 'TOM',
+            email: email,
+            nickname: '',
+            segment: 'substack_essay_reader',
+            lang: 'en-US',
+            notes: noteStr,
+            message: noteStr
+          }).then(finishOk).catch(finishOk);
+        } else if (typeof window.submitTomVipWaitlistOrManualEmail === 'function') {
+          window.submitTomVipWaitlistOrManualEmail({
+            email: email,
+            segment: 'substack_essay_reader',
+            lang: 'en-US',
+            notes: noteStr
+          }).then(finishOk).catch(finishOk);
+        } else {
+          finishOk();
+        }
+        return false;
+      };
+      document.addEventListener('DOMContentLoaded', function() {
+        try {
+          var saved = localStorage.getItem('tom_free_member_email');
+          if (saved) {
+            document.querySelectorAll('.substack-inline-form input[type="email"]').forEach(function(inp) {
+              if (!inp.value) inp.value = saved;
+            });
+          }
+        } catch (_e2) {}
+      });
+      if (window.__HQ_KPI_TOM__) return;
+      window.__HQ_KPI_TOM__ = true;
+      var ua = navigator.userAgent || '';
+      if (navigator.webdriver || /bot|crawl|spider|slurp|headless|lighthouse|python|curl|node|axios/i.test(ua)) return;
+      var host = (location && location.hostname) || '';
+      if (!host || host === 'localhost' || host === '127.0.0.1') return;
+      fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/pv_' + kst, { mode: 'cors', keepalive: true }).catch(function(){});
+      fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/pv_total', { mode: 'cors', keepalive: true }).catch(function(){});
+      if (localStorage.getItem('hq_uv_' + ns + '_' + kst) !== '1') {
+        localStorage.setItem('hq_uv_' + ns + '_' + kst, '1');
+        fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/uv_' + kst, { mode: 'cors', keepalive: true }).catch(function(){});
+      }
+      if (localStorage.getItem('hq_uv_ever_' + ns) !== '1') {
+        localStorage.setItem('hq_uv_ever_' + ns, '1');
+        fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/uv_total', { mode: 'cors', keepalive: true }).catch(function(){});
+      }
+    } catch (e) {}
+  })();
+  </script>
   <style>
     :root {
       --paper-bg: #fcfcfa;
@@ -314,7 +452,6 @@
       .substack-inline-form button { width: 100%; }
     }
   </style>
-  <script src="/assets/csp/csp-events.js"></script>
 </head>
 <body>
   <header class="essay-topbar">
@@ -341,7 +478,7 @@
           <div class="byline-meta">Senior Portfolio Research Note &middot; 2026-11-20 &middot; 5 min read</div>
         </div>
       </div>
-      <button type="button" class="share-copy-btn" data-csp-click="h_0a535069622b">Share / Copy Link</button>
+      <button type="button" class="share-copy-btn" onclick="window.__tomCopyEssayLink(this)">Share / Copy Link</button>
     </div>
 
     <article>
@@ -360,7 +497,7 @@
       <p class="substack-sub-desc">
         Unrushed, plain-English research notes on the $SMH &times; $XLV sector balance and public market risk indicators. Free, zero password, 1-click unsubscribe anytime.
       </p>
-      <form class="substack-inline-form" data-csp-submit="h_fcb0a3c91a03" novalidate>
+      <form class="substack-inline-form" onsubmit="return window.__tomSubmitSubstackSubscribe(event, this, 'rule-1-minus-9-percent-stop-loss-math.html');" novalidate>
         <label for="substackEmailInput" class="sr-only">Email address</label>
         <input id="substackEmailInput" type="email" required autocomplete="email" placeholder="Type your email..." />
         <button type="submit">Subscribe Free</button>

@@ -1,7 +1,45 @@
 <!DOCTYPE html>
 <html lang="en" data-tom-theme="light" data-tom-font="18">
 <head>
-  <script src="/assets/csp/inline_3a348a075946.js"></script>
+  <script>
+  window.__DEFAULT_VIEW__ = 'rightside';
+  window.PAYMENT_CONFIG = {
+    PROVIDER: 'whop',
+    DIVISION: 'TOM',
+    STORE_SLOT: 'FINANCE_STORE_SLOT',
+    STORE_LIVE_READY: true,
+    COMPANY_ID: 'biz_4ynqri19wFDIwm',
+    STORE_NAME: 'TruthOfMarket Research',
+    WHOP_PLAN_IDS: {
+      monthly: 'plan_xVJeNwyrDef8T',
+      annual: 'plan_9sdgFI753ucXQ'
+    },
+    WHOP_CHECKOUT_CONFIG_IDS: {
+      monthly: 'ch_uFPUZl9jaGdNTvH',
+      annual: 'ch_G3EyPgGXTTahfv7'
+    },
+    WHOP_CHECKOUT_URLS: {
+      monthly: 'https://whop.com/checkout/plan_xVJeNwyrDef8T',
+      annual: 'https://whop.com/checkout/plan_9sdgFI753ucXQ'
+    },
+    WHOP_REDIRECT_URLS: {
+      monthly: 'https://truthofmarket.com/?payment=success&provider=whop&plan=monthly',
+      annual: 'https://truthofmarket.com/?payment=success&provider=whop&plan=annual'
+    },
+    WHOP_TOM_MONTHLY_URL: 'https://whop.com/checkout/plan_xVJeNwyrDef8T',
+    WHOP_TOM_ANNUAL_URL: 'https://whop.com/checkout/plan_9sdgFI753ucXQ',
+    SUPPORT_EMAIL: 'hello@truthofmarket.com'
+  };
+  var COPY_MODE = 'LIVE_SHARP';
+  window.TOM_COPY_MODE = COPY_MODE;
+  try {
+    var _th = localStorage.getItem('tom_ui_theme_v2') === 'dark' ? 'dark' : 'light';
+    var _px = Number(localStorage.getItem('tom_font_px')) || 18;
+    if ([18, 20, 22].indexOf(_px) === -1) _px = 18;
+    document.documentElement.setAttribute('data-tom-theme', _th);
+    document.documentElement.setAttribute('data-tom-font', String(_px));
+  } catch (_e) {}
+  </script>
   <meta charset="UTF-8" />
   <meta name="google-site-verification" content="nAGlJMEUUPifbzSd8X4PCaBIyr3DtTwaa1a-q9zkbBc" />
   <meta name="google-site-verification" content="G99bl17UU6iKgNm5ndGcSWp0dHFpJ0MjJqBBp0Exfx0" />
@@ -84,12 +122,27 @@
   }
   </script>
   <script async defer src="https://js.whop.com/static/checkout/loader.js"></script>
-  <script src="/hq_member_crm_client.js?v=20261121c"></script>
+  <script src="/hq_member_crm_client.js" defer></script>
   <script src="/tom_payment_waitlist.js" defer></script>
   <script type="module" crossorigin src="./assets/index-BIziPp23.js?v=20261119whop"></script>
   <link rel="stylesheet" crossorigin href="./assets/index-CaOpdap3.css?v=20261119whop" />
-  <script src="/assets/csp/inline_6568f365a186.js"></script>
-  <script src="/assets/csp/csp-events.js"></script>
+  <script>
+  /* === HQ Edge Real-Human Visitor & Signup Helper (tom_truthofmarket) === */
+  (function(){
+    try {
+      if (typeof window === 'undefined' || typeof navigator === 'undefined') return;
+      var ns = 'tom_truthofmarket';
+      window.trackTomFreeSignup = function(emailAddr) {
+        try {
+          var h = (location && location.hostname) || '';
+          if (!h || h === 'localhost' || h === '127.0.0.1') return;
+          fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup', { mode: 'cors', keepalive: true }).catch(function(){});
+          fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup_total', { mode: 'cors', keepalive: true }).catch(function(){});
+        } catch (e) {}
+      };
+    } catch (e) {}
+  })();
+  </script>
 </head>
 <body class="pw-body-reset" style="background:#FBFBF9;color:#0F172A;font-size:18px;line-height:1.75;">
   <div id="app">
