@@ -108,7 +108,7 @@
     ]
   }
   </script>
-  <script src="/hq_member_crm_client.js" defer></script>
+  <script src="/hq_member_crm_client.js"></script>
   <script src="/tom_payment_waitlist.js" defer></script>
   <script>
   /* === HQ Edge Real-Human Visitor & Signup Helper (tom_truthofmarket) === */
@@ -121,8 +121,6 @@
         try {
           var h = (location && location.hostname) || '';
           if (!h || h === 'localhost' || h === '127.0.0.1') return;
-          fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup', { mode: 'cors', keepalive: true }).catch(function(){});
-          fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/signup_total', { mode: 'cors', keepalive: true }).catch(function(){});
         } catch (e) {}
       };
       document.addEventListener('click', function(ev) {
@@ -137,8 +135,6 @@
             ev.__tomPaidClickTracked = true;
             var h = (location && location.hostname) || '';
             if (!h || h === 'localhost' || h === '127.0.0.1') return;
-            fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_' + kst, { mode: 'cors', keepalive: true }).catch(function(){});
-            fetch('https://abacus.jasoncameron.dev/hit/' + ns + '/paid_click_total', { mode: 'cors', keepalive: true }).catch(function(){});
           }
         } catch (_err) {}
       }, true);
