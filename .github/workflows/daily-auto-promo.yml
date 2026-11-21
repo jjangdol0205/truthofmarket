@@ -116,15 +116,23 @@ jobs:
         run: |
           python -u -X utf8 cloud_automation/ig_token_refresher.py
 
-      - name: Commit data/promo_history.json with [skip ci] (Prevents GitHub 60-Day Schedule Disable)
+      - name: Run Weekly Autonomous Single-Variable A/B Evolution Loop (Monday 06:00 KST)
+        if: ${{ github.event.schedule == '0 21 * * 0' || github.event.inputs.mode == 'ab_evolve' }}
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          python -u -X utf8 cloud_automation/ab_evolution_engine.py
+
+      - name: Commit data/promo_history.json & data/message_matrix_5div.json with [skip ci]
         run: |
           git config user.name "DreamCompany Cloud Bot"
           git config user.email "hello@truthofmarket.com"
-          git add data/promo_history.json
+          git add data/promo_history.json data/message_matrix_5div.json
           if ! git diff --cached --quiet; then
-            git commit -m "chore(cloud-promo): update promo_history.json [skip ci]"
+            git commit -m "chore(cloud-promo): update promo_history & 5x5 A/B message matrix [skip ci]"
             git pull --rebase --autostash origin main || true
             git push origin HEAD:main
           else
-            echo "No promo_history.json diff today."
+            echo "No promo_history or message_matrix diff today."
           fi

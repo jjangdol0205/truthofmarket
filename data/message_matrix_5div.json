@@ -1,0 +1,2803 @@
+{
+  "schema_version": "2026.11.21-matrix-5x5-v1",
+  "updated_at_kst": "2026-11-21 23:52:04 KST",
+  "allocation_policy": {
+    "shorts_reels_stage_1_2_ratio": 0.8,
+    "landing_and_drip_day2_stage_3_4_ratio": 0.15,
+    "checkout_and_drip_day5_stage_5_ratio": 0.05
+  },
+  "ab_evolution_policy": {
+    "single_variable": "hook_type",
+    "min_impressions": 300,
+    "min_landing_clicks": 30,
+    "min_relative_lift_pct": 20.0,
+    "winner_weight_multiplier": 2.0,
+    "winner_new_variants": 3,
+    "loser_pause_bottom_pct": 20.0
+  },
+  "total_cells": 125,
+  "weekly_evolution_summary": {
+    "last_evaluated_at_kst": "2026-11-21 23:52:04 KST",
+    "status": "COLLECTING_SAMPLE",
+    "monday_report_line": "[이번 주 이긴 후크 TOP 1 vs 도태된 후크] 표본 수집 중 (최소 노출 300회 또는 클릭 30회 달성 시 자동 판정)",
+    "winners": [],
+    "paused_losers": []
+  },
+  "divisions": {
+    "TOM": {
+      "division": "TOM",
+      "brand_name": "Truth of Market",
+      "language": "en-US",
+      "domain": "https://truthofmarket.com/",
+      "sample_pdf": "https://truthofmarket.com/assets/downloads/tom_sample_2p.pdf",
+      "usp_one_sentence": "A 30-second historical crisis stress-test (2000–2025) showing 55+ retirees how to separate 24 months of safe Treasury cash from a calm growth-and-healthcare allocation—without daily screen stress.",
+      "storybrand_7parts": {
+        "hero_customer": "Hard-working 55–70 American workers and retirees protecting a lifetime 401(k)/IRA nest egg.",
+        "problem_3layers": {
+          "external": "One early -30% crash or 0.01% idle cash drag can quietly erase years of retirement paychecks.",
+          "internal": "Constant anxiety whenever market headlines turn red—never knowing if your savings will actually outlast you.",
+          "philosophical": "After 35 years of disciplined work and saving, you should not have to gamble your family's peace of mind on guesswork."
+        },
+        "guide_empathy_authority": "We built Truth of Market from 25 years of real US market crisis data (2000–2025)—Dot-Com, 2008, and 2022—purely as independent educational research with zero broker kickbacks.",
+        "plan_3steps": [
+          "1. Run the free 4-step 2000–2025 historical stress-test (30 seconds, no password).",
+          "2. Preview the free 2-page sample workbook PDF before spending a dollar.",
+          "3. Review your balanced allocation calmly just twice a year—live freely the other 363 days."
+        ],
+        "direct_cta": "Run My Free 30-Second 2008 Crash Stress-Test",
+        "transitional_cta": "Preview Free 2-Page Sample Workbook PDF (No Card Needed)",
+        "failure_avoided_1yr": "Leaving idle cash at 0.01% or getting caught without a 24-month Treasury buffer when the next downturn hits.",
+        "success_peaceful_life": "Waking up calmly regardless of Wall Street headlines, knowing your next 24 months of bills are ring-fenced."
+      },
+      "reassurance_stage5": "Preview the free 2-page sample PDF first. Protected by our 7-day full refund policy if unopened/undownloaded, and 1-click cancellation on recurring research passes.",
+      "matrix_count": 25,
+      "matrix": [
+        {
+          "id": "TOM_S1_LOSS",
+          "division": "TOM",
+          "stage": 1,
+          "hook_type": "loss",
+          "hook_line": "Your broker sweep may pay 0.01% on idle IRA cash—that's $10 a year on $100,000.",
+          "slide_script_body": "Most disciplined savers park safety cash in default brokerage sweeps assuming it is working safely. Because sweep yields sit near 0.01%, inflation quietly trims thousands in yearly buying power. Separating short-term US Treasury bills keeps daily liquidity without equity drama.",
+          "cta": "Run the free 30-second 2000–2025 retirement stress-test",
+          "utm_content": "TOM_S1_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S1_CURIOSITY",
+          "division": "TOM",
+          "stage": 1,
+          "hook_type": "curiosity",
+          "hook_line": "Two retirees both started with $1,000,000—why did one run dry 9 years sooner?",
+          "slide_script_body": "They earned the exact same average return over 25 years, yet their real lives diverged completely. One withdrew monthly bills directly from fallen stocks during an early downturn, permanently shrinking share count. Ring-fencing 24 months of Treasury bills removes forced bear-market sales.",
+          "cta": "Check your exact 2008 crash runway free in 30 seconds",
+          "utm_content": "TOM_S1_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S1_SELF",
+          "division": "TOM",
+          "stage": 1,
+          "hook_type": "self",
+          "hook_line": "Age 55 to 67 and within 10 years of retirement? Check this one blind spot tonight.",
+          "slide_script_body": "At 35, a -30% drop is a harmless bump—within 10 years of quitting work, that same drop changes your retirement date. Relying on a single blended fund forces you to sell down shares whenever bills come due. Splitting a 24-month Treasury cushion from balanced growth restores control.",
+          "cta": "Test your 10-year pre-retirement cushion free",
+          "utm_content": "TOM_S1_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S1_PATTERN",
+          "division": "TOM",
+          "stage": 1,
+          "hook_type": "pattern",
+          "hook_line": "Stop assuming 100% bank CDs is the 'safest' retirement choice at age 62.",
+          "slide_script_body": "Zero red days on your statement feels comforting today, until you check a 25-year horizon. At modest 3% inflation, stagnant cash loses nearly half its grocery and healthcare buying power by age 85. Pairing 24 months of safe Treasury bills with calm growth protects both sleep and longevity.",
+          "cta": "Compare cash vs 2-pillar 2000–2025 history free",
+          "utm_content": "TOM_S1_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S1_PROOF",
+          "division": "TOM",
+          "stage": 1,
+          "hook_type": "proof",
+          "hook_line": "Across 2000–2025, classic 60/40 bonds and stocks both fell together in 2022.",
+          "slide_script_body": "For decades, retirees trusted long-term bonds to cushion every equity storm—then 2022 rate hikes hit both sides at once. Ultra-short Treasury bills avoid long-duration rate shocks while defensive healthcare cushions tech volatility. Study the 25-year historical numbers yourself in 30 seconds.",
+          "cta": "Inspect the 2000–2025 historical comparison table",
+          "utm_content": "TOM_S1_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S2_LOSS",
+          "division": "TOM",
+          "stage": 2,
+          "hook_type": "loss",
+          "hook_line": "Why a 'tiny' 1% advisory fee quietly eats 28% of a 25-year nest egg.",
+          "slide_script_body": "Paying 1% sounds modest when markets rise, yet it compounds out of your account every single year—even in crash years. Over 25 years on $800,000, that silent drag exceeds $240,000. A simple 2-pillar ETF discipline reviewed twice a year keeps that compounding working for your family.",
+          "cta": "See how a 2x/year calm allocation compares free",
+          "utm_content": "TOM_S2_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S2_CURIOSITY",
+          "division": "TOM",
+          "stage": 2,
+          "hook_type": "curiosity",
+          "hook_line": "Why did high-yield 10% income funds leave many retirees poorer than they started?",
+          "slide_script_body": "Big monthly payout headlines feel reassuring when paychecks stop—until you inspect the underlying share price. Many ultra-high-yield funds return your own principal while net asset value erodes -30% to -40%. Separating safe Treasury cash from durable total-return sleeves protects principal.",
+          "cta": "Check your retirement income durability free",
+          "utm_content": "TOM_S2_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S2_SELF",
+          "division": "TOM",
+          "stage": 2,
+          "hook_type": "self",
+          "hook_line": "Still checking your 401(k) balance every morning? Read why it hurts calm retirees.",
+          "slide_script_body": "On any random trading day, markets close red nearly half the time, wiring your brain for panic right near bottoms. Checking and rebalancing on a calm June-and-December schedule removes daily noise. Pair a 24-month cash shield with clear rules so headlines stop running your week.",
+          "cta": "Build your calm 2x/year retirement checklist free",
+          "utm_content": "TOM_S2_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S2_PATTERN",
+          "division": "TOM",
+          "stage": 2,
+          "hook_type": "pattern",
+          "hook_line": "Stop blindly trusting a Target-Date 2030 fund once you actually begin withdrawals.",
+          "slide_script_body": "All-in-one target-date funds are convenient while saving, yet they lock everything inside one blended bucket. Pull $4,000 in a crash month and the fund automatically sells depressed equity shares alongside bonds. Keeping your 24-month Treasury reserve separate lets you choose what to spend.",
+          "cta": "See the 2-pillar separation math in 30 seconds",
+          "utm_content": "TOM_S2_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S2_PROOF",
+          "division": "TOM",
+          "stage": 2,
+          "hook_type": "proof",
+          "hook_line": "During the 2000–2010 lost decade, US large stocks returned near 0% for 10 straight years.",
+          "slide_script_body": "Anyone depending on smooth annual stock gains right after 2000 faced two severe drops back-to-back. Retirees who kept 24 months of safe bills plus defensive healthcare ballast survived without liquidating growth at the bottom. See how historical crisis math works on your exact numbers.",
+          "cta": "Run the 2000–2025 historical resilience check",
+          "utm_content": "TOM_S2_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S3_LOSS",
+          "division": "TOM",
+          "stage": 3,
+          "hook_type": "loss",
+          "hook_line": "3 silent gaps most free retirement calculators miss—and why they underestimate crash damage.",
+          "slide_script_body": "Generic calculators plug in a flat 7% return every year, hiding sequence-of-returns crashes, tax drag, and long-bond rate risk. Real retirement life happens in lumpy waves, not straight lines. Compare any allocation against real 2000, 2008, and 2022 drawdown math before choosing.",
+          "cta": "Compare your mix against real 2000–2025 crisis data",
+          "utm_content": "TOM_S3_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S3_CURIOSITY",
+          "division": "TOM",
+          "stage": 3,
+          "hook_type": "curiosity",
+          "hook_line": "What separates retirees who sleep calmly in -30% drops from those who panic-sell?",
+          "slide_script_body": "It is rarely a crystal ball or stock-picking skill—it is structural separation before the storm arrives. Pillar 1 pairs secular growth with non-cyclical healthcare; Pillar 2 holds 24 months of living cash in short US Treasuries. Preview our free 2-page sample workbook to see the full comparison.",
+          "cta": "Preview the free 2-page sample workbook PDF",
+          "utm_content": "TOM_S3_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S3_SELF",
+          "division": "TOM",
+          "stage": 3,
+          "hook_type": "self",
+          "hook_line": "Comparing retirement plans in your late 50s? Use these 3 objective criteria first.",
+          "slide_script_body": "Before locking into any complex strategy or costly advisor, score it on three simple tests: crisis drawdown depth, recovery months, and hours required per year. A clean 2-pillar framework takes 20 minutes twice a year and avoids long-bond duration shocks. Review the 2-page sample free.",
+          "cta": "Open the free 2-page comparison sample PDF",
+          "utm_content": "TOM_S3_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S3_PATTERN",
+          "division": "TOM",
+          "stage": 3,
+          "hook_type": "pattern",
+          "hook_line": "You don't need 25 tickers or daily chart alerts to protect a retirement portfolio.",
+          "slide_script_body": "Complexity feels sophisticated, yet makes rebalancing stressful—and leaves a surviving spouse overwhelmed. Two complementary equity sleeves plus a short Treasury cushion cover growth, defense, and liquidity cleanly. See the side-by-side 25-year study in our free 2-page sample.",
+          "cta": "Read the free 2-page historical study sample",
+          "utm_content": "TOM_S3_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S3_PROOF",
+          "division": "TOM",
+          "stage": 3,
+          "hook_type": "proof",
+          "hook_line": "2000–2025 data: how pairing growth + healthcare + Treasury cash cut crisis recovery near 17 months.",
+          "slide_script_body": "Historical backtests across Dot-Com, 2008, and 2022 show why pairing growth with non-cyclical healthcare softens severe drawdowns while short Treasuries fund monthly bills untouched. Inspect the exact annual tables in our free 2-page workbook preview—educational research only.",
+          "cta": "View the 2000–2025 sample workbook pages free",
+          "utm_content": "TOM_S3_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S4_LOSS",
+          "division": "TOM",
+          "stage": 4,
+          "hook_type": "loss",
+          "hook_line": "Why guessing your SMH × XLV + SGOV split from memory leaves real tax & drawdown gaps.",
+          "slide_script_body": "Knowing the 2-pillar idea is step one, yet placing the wrong sleeve inside a taxable vs IRA account quietly wastes thousands over retirement. Our educational workbook lays out exact 401(k)/IRA tax-location tables and semi-annual rebalancing thresholds. Preview 2 free pages first.",
+          "cta": "Inspect the free 2-page tax & allocation sample",
+          "utm_content": "TOM_S4_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S4_CURIOSITY",
+          "division": "TOM",
+          "stage": 4,
+          "hook_type": "curiosity",
+          "hook_line": "Inside the 14-page Truth of Market Workbook: the exact 3 tables retirees print and keep.",
+          "slide_script_body": "Instead of 200 pages of Wall Street fluff, you get three crisp reference sheets: the 2000–2025 crisis comparison, custom dollar-bucket worksheet, and 401(k)/Roth tax-location guide. Zero brokerage upsells, zero advisory conflicts. Open the free 2-page sample to verify the quality yourself.",
+          "cta": "Preview 2 pages of the workbook free",
+          "utm_content": "TOM_S4_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S4_SELF",
+          "division": "TOM",
+          "stage": 4,
+          "hook_type": "self",
+          "hook_line": "Built for 55–70 DIY investors who want institutional clarity without a 1% advisor fee.",
+          "slide_script_body": "If you prefer understanding your own numbers rather than handing over $10,000+ every year in AUM fees, this educational desk was built for you. Run the 30-second explorer, inspect the free 2-page sample PDF, and decide calmly on your own timeline.",
+          "cta": "Preview the free 2-page sample before deciding",
+          "utm_content": "TOM_S4_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S4_PATTERN",
+          "division": "TOM",
+          "stage": 4,
+          "hook_type": "pattern",
+          "hook_line": "Zero stock tips, zero daily hype—why Truth of Market focuses purely on 25-year allocation discipline.",
+          "slide_script_body": "Most finance newsletters sell adrenaline and noisy alerts that push you to overtrade. We publish calm historical allocation math, public market temperature context, and printable semi-annual checklists. See the tone yourself in our free 2-page sample PDF.",
+          "cta": "Read the calm 2-page sample PDF free",
+          "utm_content": "TOM_S4_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S4_PROOF",
+          "division": "TOM",
+          "stage": 4,
+          "hook_type": "proof",
+          "hook_line": "Every chart in our 14-page workbook is anchored in 2000–2025 historical crisis data—preview 2 pages free.",
+          "slide_script_body": "No cherry-picked 2-year bull-market claims and no fabricated testimonials—only documented Dot-Com, 2008, and 2022 drawdown math plus clear tax-location worksheets. Check the sample PDF first so you know exactly what is inside.",
+          "cta": "Download the free 2-page workbook sample",
+          "utm_content": "TOM_S4_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S5_LOSS",
+          "division": "TOM",
+          "stage": 5,
+          "hook_type": "loss",
+          "hook_line": "Don't decide in the dark—preview our free 2-page sample PDF before unlocking the full workbook.",
+          "slide_script_body": "You already saw your 30-second retirement stress-test; the only question left is whether the full 14-page PDF fits your planning binder. Open the 2-page sample free first, and know every purchase carries a 7-day full refund if unopened/undownloaded.",
+          "cta": "Preview 2p sample or unlock full workbook ($9 one-time)",
+          "utm_content": "TOM_S5_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S5_CURIOSITY",
+          "division": "TOM",
+          "stage": 5,
+          "hook_type": "curiosity",
+          "hook_line": "Ready to print your complete 14-page 2000–2025 Retirement Workbook in under 60 seconds?",
+          "slide_script_body": "Start simply with the one-time $9 PDF workbook—zero recurring subscription—or step into daily morning temperature notes ($29/mo, 1-click cancel anytime). Inspect the free 2-page sample first if you want a closer look.",
+          "cta": "Unlock the 14-page workbook (7-day unopened refund)",
+          "utm_content": "TOM_S5_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S5_SELF",
+          "division": "TOM",
+          "stage": 5,
+          "hook_type": "self",
+          "hook_line": "For retirees ready to put their 401(k)/IRA allocation on one clean printable page tonight.",
+          "slide_script_body": "No complex software, no password headaches—instant verified email code delivery plus 7-day full refund if unopened/undownloaded. Recurring passes cancel in 1 click anytime, no phone calls ever.",
+          "cta": "Get instant access (7-day unopened refund)",
+          "utm_content": "TOM_S5_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S5_PATTERN",
+          "division": "TOM",
+          "stage": 5,
+          "hook_type": "pattern",
+          "hook_line": "Zero subscription trap: start with the one-time $9 workbook PDF or preview 2 pages completely free.",
+          "slide_script_body": "We never lock you into hard-to-cancel plans. Preview the free 2-page sample first, start with the one-time workbook if you prefer zero recurring charges, and cancel any monthly pass in 1 click.",
+          "cta": "Check 2p free sample or unlock one-time PDF",
+          "utm_content": "TOM_S5_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "TOM_S5_PROOF",
+          "division": "TOM",
+          "stage": 5,
+          "hook_type": "proof",
+          "hook_line": "Transparent policy: free 2-page sample + 7-day unopened full refund + 1-click subscription cancel.",
+          "slide_script_body": "Everything is clear before checkout: inspect the free 2-page PDF sample, enjoy a 7-day full refund if digital download has not begun, and cancel monthly briefings in 1 click anytime.",
+          "cta": "Review 2p sample & unlock securely",
+          "utm_content": "TOM_S5_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        }
+      ]
+    },
+    "KFG": {
+      "division": "KFG",
+      "brand_name": "KISFIT Studio",
+      "language": "en-US",
+      "domain": "https://kisfitglobal.com/",
+      "sample_pdf": "https://kisfitglobal.com/assets/downloads/kfg_sample_2p.pdf",
+      "usp_one_sentence": "An automated US CDC height-percentile and bone-age lag reference calculator that helps busy parents spot sleep, nutrition, and posture bottlenecks before their child's growth window narrows.",
+      "storybrand_7parts": {
+        "hero_customer": "Caring parents of children ages 2–18 who want clarity—not internet anxiety—about how their child is growing.",
+        "problem_3layers": {
+          "external": "Conflicting online height advice, stale bone-age notes, and 10-minute annual checkups that skip annual growth pace (in/yr).",
+          "internal": "The quiet knot in your stomach wondering if late bedtimes or screen posture are quietly costing your child inches.",
+          "philosophical": "A thoughtful parent should not look back in high school wishing they had noticed simple evening habits two years earlier."
+        },
+        "guide_empathy_authority": "KISFIT Studio turns official US CDC stature reference tables and simple elapsed-time math into a calm, self-serve educational reference for families—zero affiliate ads, zero pushy supplement pitches.",
+        "plan_3steps": [
+          "1. Enter your child's current age, height, and evening habits in the free 60-second US CDC reference check.",
+          "2. Preview the free 2-page sample printable PDF guide at zero cost.",
+          "3. Log barefoot wall height once every 30 days to track steady annual growth pace calmly."
+        ],
+        "direct_cta": "Check My Child's Free 60-Second US CDC Height Curve",
+        "transitional_cta": "Preview Free 2-Page Printable Sample PDF",
+        "failure_avoided_1yr": "Letting another full school year pass with late 10:30 PM bedtimes and unmeasured growth pace while plates narrow.",
+        "success_peaceful_life": "Calm confidence every evening—knowing your child's sleep, dinner protein, and posture habits support their full natural lane."
+      },
+      "reassurance_stage5": "Inspect the free 2-page sample PDF first. 100% automated self-serve educational reference—7-day full refund if unopened/undownloaded, zero hidden subscriptions.",
+      "matrix_count": 25,
+      "matrix": [
+        {
+          "id": "KFG_S1_LOSS",
+          "division": "KFG",
+          "stage": 1,
+          "hook_type": "loss",
+          "hook_line": "If your 8-year-old sleeps past 10 PM, up to 70% of tonight's deep-sleep growth wave is cut short.",
+          "slide_script_body": "Busy weeknights push homework and tablets later without parents noticing the cost. The deepest nighttime growth-hormone surge happens in early slow-wave sleep before midnight—and weekend sleep-ins cannot fully repay it. Shifting lights-out 45 minutes earlier is the strongest free habit at home.",
+          "cta": "Check your child's free 60-second US CDC height curve",
+          "utm_content": "KFG_S1_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S1_CURIOSITY",
+          "division": "KFG",
+          "stage": 1,
+          "hook_type": "curiosity",
+          "hook_line": "Same mom and dad, yet two siblings end up 4 inches apart—why?",
+          "slide_script_body": "Most families assume parent height locks in the final number, yet roughly 20% to 30% of adult stature reflects sleep rhythm, dinner protein, and growth-plate timing. Knowing where your child tracks on the US CDC curve today turns guesswork into calm daily routines.",
+          "cta": "Run the free 60-second US CDC height check",
+          "utm_content": "KFG_S1_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S1_SELF",
+          "division": "KFG",
+          "stage": 1,
+          "hook_type": "self",
+          "hook_line": "Parents of kids ages 6 to 12: try this 10-second hallway wall check tonight.",
+          "slide_script_body": "Have your child stand barefoot with heels, hips, shoulders, and back of head touching the wall. Seven hours of school desks and tablets often pull posture forward, quietly hiding 1 to 1.5 inches of stature. Spot posture and sleep habits early while growth plates remain open.",
+          "cta": "See your child's free US CDC height lane",
+          "utm_content": "KFG_S1_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S1_PATTERN",
+          "division": "KFG",
+          "stage": 1,
+          "hook_type": "pattern",
+          "hook_line": "Stop pouring 4 cups of plain milk a day hoping for extra height inches.",
+          "slide_script_body": "It feels like classic parenting wisdom, yet over 24 ounces of plain milk daily can block iron absorption and crowd out solid dinner protein. Growing bones need complete protein, vitamin D3, and zinc—not endless dairy. Balance dinner fuel and track steady yearly pace.",
+          "cta": "Check your child's free 60-second growth profile",
+          "utm_content": "KFG_S1_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S1_PROOF",
+          "division": "KFG",
+          "stage": 1,
+          "hook_type": "proof",
+          "hook_line": "US CDC reference tables show healthy kids ages 4–10 usually grow 2.0 to 2.5 inches every year.",
+          "slide_script_body": "A single birthday height measurement rarely tells the whole story—annual growth pace matters far more. Measuring barefoot against the same wall every 3 months reveals whether your child is cruising steadily or hitting a routine bottleneck.",
+          "cta": "Plot your child on the US CDC curve free",
+          "utm_content": "KFG_S1_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S2_LOSS",
+          "division": "KFG",
+          "stage": 2,
+          "hook_type": "loss",
+          "hook_line": "Why trusting a 1-year-old wrist X-ray note can skew adult height estimates by 2 inches.",
+          "slide_script_body": "Parents often remember an old bone-age estimate and assume the clock stayed unchanged. Near pre-puberty, bone maturity can advance 18 months inside 12 calendar months, shifting the remaining growth window. Accounting for elapsed months keeps expectations grounded and clear.",
+          "cta": "Run the free time-adjusted US CDC reference check",
+          "utm_content": "KFG_S2_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S2_CURIOSITY",
+          "division": "KFG",
+          "stage": 2,
+          "hook_type": "curiosity",
+          "hook_line": "Why do some of the tallest 3rd graders suddenly stop growing first in middle school?",
+          "slide_script_body": "An unexpected early jump before age 9 looks exciting at first, yet can mean the growth clock started early—leaving fewer total years before plates fuse. Steady tracking of yearly inches per year helps parents ask smarter questions at regular checkups.",
+          "cta": "Check your child's current US CDC growth pace free",
+          "utm_content": "KFG_S2_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S2_SELF",
+          "division": "KFG",
+          "stage": 2,
+          "hook_type": "self",
+          "hook_line": "Does your child wake up with dry lips and reach straight for water every morning?",
+          "slide_script_body": "Peek quietly 30 minutes after bedtime—open-mouth sleep often fragments deep slow-wave rest all night long. Simple bedroom tweaks like 50% humidity and checking bedtime screen glare make an immediate difference in morning energy and deep rest.",
+          "cta": "Find your child's #1 evening habit bottleneck free",
+          "utm_content": "KFG_S2_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S2_PATTERN",
+          "division": "KFG",
+          "stage": 2,
+          "hook_type": "pattern",
+          "hook_line": "Stop buying $80 'grow taller' gummies before fixing tonight's 9:30 PM bedtime routine.",
+          "slide_script_body": "Flashy supplement ads promise effortless inches, yet no gummy overrides late-night insulin spikes or bright 9 PM tablet glare. Fixing lights-out timing, 10 minutes of daily jump play, and dinner protein costs $0 and delivers real habit clarity.",
+          "cta": "Run the free 60-second habit & CDC check",
+          "utm_content": "KFG_S2_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S2_PROOF",
+          "division": "KFG",
+          "stage": 2,
+          "hook_type": "proof",
+          "hook_line": "Averaging mom and dad's height alone carries a +/- 3.5 inch spread on US CDC reference charts.",
+          "slide_script_body": "Simple parent-average calculators ignore current height percentile, annual velocity, and bone-age lag. Combining official US CDC stature curves with everyday sleep and nutrition inputs gives families a far clearer educational roadmap.",
+          "cta": "Check your child's real US CDC percentile free",
+          "utm_content": "KFG_S2_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S3_LOSS",
+          "division": "KFG",
+          "stage": 3,
+          "hook_type": "loss",
+          "hook_line": "3 things a 10-minute annual checkup rarely has time to walk parents through.",
+          "slide_script_body": "Busy checkups often end with a quick 'looks fine' without explaining annualized inches-per-year pace, mid-parental target lanes, or evening sleep-insulin habits. Bringing clean logged measurements turns your next visit into a calm, prepared conversation.",
+          "cta": "Preview the free 2-page US CDC sample PDF",
+          "utm_content": "KFG_S3_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S3_CURIOSITY",
+          "division": "KFG",
+          "stage": 3,
+          "hook_type": "curiosity",
+          "hook_line": "Snapshot height vs 6-month growth pace (in/yr): why one tells the truth and one misleads.",
+          "slide_script_body": "Measuring once a year makes it easy to miss a gradual slowdown during the critical ages 8–14 window. Logging barefoot wall height every 30 days reveals real annualized velocity alongside sleep and nutrition consistency. See how it looks in our free 2-page sample PDF.",
+          "cta": "Inspect the free 2-page printable sample PDF",
+          "utm_content": "KFG_S3_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S3_SELF",
+          "division": "KFG",
+          "stage": 3,
+          "hook_type": "self",
+          "hook_line": "Comparing child growth trackers? Look for these 3 parent-friendly standards first.",
+          "slide_script_body": "Skip ad-heavy apps pushing affiliate vitamins. Look for official US CDC reference curves, elapsed-time bone-age adjustment, and printable 30-day refrigerator checklists your kids actually enjoy checking off. Preview 2 pages free first.",
+          "cta": "Open the free 2-page US CDC sample PDF",
+          "utm_content": "KFG_S3_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S3_PATTERN",
+          "division": "KFG",
+          "stage": 3,
+          "hook_type": "pattern",
+          "hook_line": "You don't need complicated spreadsheets or expensive pills to support healthy kid growth.",
+          "slide_script_body": "Three calm daily levers—lights out by 9:30 PM, 2-hour sugar buffer before bed, and 10 minutes of vertical jump play—plus monthly wall-height tracking do 90% of the heavy lifting. See our clean 1-page format in the free 2-page sample.",
+          "cta": "Preview the free 2-page refrigerator checklist",
+          "utm_content": "KFG_S3_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S3_PROOF",
+          "division": "KFG",
+          "stage": 3,
+          "hook_type": "proof",
+          "hook_line": "Built directly on official US CDC 2–18 stature reference tables—preview 2 real pages free.",
+          "slide_script_body": "Every percentile band, annualized velocity benchmark (in/yr & cm/yr), and daily macro reference is grounded in published US CDC growth tables—100% automated educational reference with zero supplement ads.",
+          "cta": "View the free 2-page US CDC sample PDF",
+          "utm_content": "KFG_S3_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S4_LOSS",
+          "division": "KFG",
+          "stage": 4,
+          "hook_type": "loss",
+          "hook_line": "Why generic parenting blogs leave you overwhelmed while a 4-page family playbook brings calm.",
+          "slide_script_body": "Bookmarking 40 conflicting articles at midnight only adds parent guilt. KISFIT Studio puts your child's US CDC lane, elapsed-time estimate, daily protein/D3 targets, and a 30-day fridge chart onto 4 crisp printable pages. Check the free 2-page sample first.",
+          "cta": "Inspect the free 2-page KISFIT sample PDF",
+          "utm_content": "KFG_S4_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S4_CURIOSITY",
+          "division": "KFG",
+          "stage": 4,
+          "hook_type": "curiosity",
+          "hook_line": "Inside KISFIT Studio's printable PDF: the 30-day fridge tracker & checkup prep sheet parents love.",
+          "slide_script_body": "Instead of vague advice, your personalized printable guide turns sleep, posture, and dinner habits into a simple visual checklist kids love ticking off—plus clean notes for your next checkup. Preview 2 free sample pages right now.",
+          "cta": "Preview 2 free pages of the KISFIT guide",
+          "utm_content": "KFG_S4_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S4_SELF",
+          "division": "KFG",
+          "stage": 4,
+          "hook_type": "self",
+          "hook_line": "Designed for busy parents who want zero affiliate ads and crystal-clear US CDC reference math.",
+          "slide_script_body": "We never promote supplements or clutter your screen with pop-ups. Start with the free 60-second US CDC check, inspect our free 2-page sample PDF, and unlock the full printable guide only if it genuinely helps your family.",
+          "cta": "Preview the free 2-page sample first",
+          "utm_content": "KFG_S4_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S4_PATTERN",
+          "division": "KFG",
+          "stage": 4,
+          "hook_type": "pattern",
+          "hook_line": "Zero supplement upsells, zero fear tactics—just calm US CDC numbers and evening family habits.",
+          "slide_script_body": "Internet height searches love scaring parents into overpriced powders. KISFIT Studio is a 100% automated, non-medical educational reference built to replace midnight worry with calm, measurable daily routines.",
+          "cta": "See the calm 2-page sample PDF free",
+          "utm_content": "KFG_S4_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S4_PROOF",
+          "division": "KFG",
+          "stage": 4,
+          "hook_type": "proof",
+          "hook_line": "Track up to 4 siblings across 6 monthly wall-height check-ins using official US CDC velocity tables.",
+          "slide_script_body": "One snapshot can't show if a child is accelerating into their peak spurt or slowing down. Our automated 6-Month Velocity Pass calculates annualized in/yr & cm/yr speed automatically after every 30-day barefoot check-in.",
+          "cta": "Preview the free 2-page sample & tracker",
+          "utm_content": "KFG_S4_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S5_LOSS",
+          "division": "KFG",
+          "stage": 5,
+          "hook_type": "loss",
+          "hook_line": "Before unlocking your child's personalized PDF, inspect our free 2-page sample at $0.",
+          "slide_script_body": "You already saw your child's free US CDC summary—take 30 seconds to preview the exact layout of our 2-page sample PDF first. Every order is backed by a 7-day full refund if unopened/undownloaded.",
+          "cta": "Preview 2p sample or unlock Single Report ($8.99)",
+          "utm_content": "KFG_S5_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S5_CURIOSITY",
+          "division": "KFG",
+          "stage": 5,
+          "hook_type": "curiosity",
+          "hook_line": "Print your child's 4-page US CDC reference guide & 30-day fridge checklist in 60 seconds.",
+          "slide_script_body": "Choose the one-time $8.99 single guide (zero subscription) or the $19.99 6-Month Velocity Pass covering up to 4 siblings. Instant verified access with a 7-day unopened full refund guarantee.",
+          "cta": "Unlock printable guide (7-day unopened refund)",
+          "utm_content": "KFG_S5_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S5_SELF",
+          "division": "KFG",
+          "stage": 5,
+          "hook_type": "self",
+          "hook_line": "Ready to replace midnight height Googling with one calm 30-day refrigerator routine tonight?",
+          "slide_script_body": "Zero recurring subscriptions, zero affiliate ads, instant verified email access—and if you have not opened or downloaded your PDF, request a full refund within 7 days effortlessly.",
+          "cta": "Get instant access ($8.99 one-time)",
+          "utm_content": "KFG_S5_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S5_PATTERN",
+          "division": "KFG",
+          "stage": 5,
+          "hook_type": "pattern",
+          "hook_line": "No recurring billing traps: one-time $8.99 guide or $19.99 6-month pass—preview 2 pages free first.",
+          "slide_script_body": "Every KISFIT Studio pass is a clean one-time purchase with zero surprise renewals. Inspect our free 2-page sample PDF first so you unlock with complete peace of mind.",
+          "cta": "Inspect 2p sample or unlock cleanly",
+          "utm_content": "KFG_S5_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFG_S5_PROOF",
+          "division": "KFG",
+          "stage": 5,
+          "hook_type": "proof",
+          "hook_line": "Clear family guarantee: free 2-page US CDC sample + 7-day unopened full refund + zero auto-renewal.",
+          "slide_script_body": "Review the exact format in our free 2-page sample PDF before paying a cent. Automated self-serve educational reference for parents—backed by our 7-day unopened full refund policy.",
+          "cta": "View 2p sample & unlock safely",
+          "utm_content": "KFG_S5_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        }
+      ]
+    },
+    "GBA": {
+      "division": "GBA",
+      "brand_name": "GetBreakAI 日本",
+      "language": "ja-JP",
+      "domain": "https://getbreakai.com/jp/",
+      "sample_pdf": "https://getbreakai.com/jp/downloads/gba_jp_sample_2p.pdf",
+      "usp_one_sentence": "新NISAの法定枠（成長投資枠1,200万円・生涯1,800万円）と2000〜2025年の過去25年統計を軸に、50〜60代が暴落の夜も眠れる資産配分を30秒で確認できる教育ワークブック。",
+      "storybrand_7parts": {
+        "hero_customer": "定年を5〜10年後に控え、新NISAと退職金の守り方を真剣に考える50〜60代の個人投資家。",
+        "problem_3layers": {
+          "external": "銀行預金のインフレ目減り、新NISA枠の無駄消費、暴落時の取り崩しによる老後資金の早期枯渇リスク。",
+          "internal": "ニュースやSNSの極端な情報に振り回され、『今の配分で本当に老後まで足りるのか』という静かな不安。",
+          "philosophical": "長年まじめに働いて家族を支えてきた世代が、老後資金の知識不足や手数料の罠で損をするべきではない。"
+        },
+        "guide_empathy_authority": "GetBreakAI 日本は2000〜2025年の25年実統計と新NISA制度の法定ルールに基づき、金融商品の勧誘を一切行わない独立教育ワークブックとして設計されています。",
+        "plan_3steps": [
+          "1. 無料4問（30秒）で新NISA枠と暴落耐性の初期バランスを過去統計で確認。",
+          "2. まずは無料2ページ・サンプルPDFでワークブックの中身と文字の見やすさを確認。",
+          "3. 個人向け国債の安全枠を整え、年2回だけ静かに点検する穏やかな習慣へ。"
+        ],
+        "direct_cta": "無料30秒・新NISA暴落耐性シミュレーターを試す",
+        "transitional_cta": "無料2ページ・サンプルPDFを先に確認する",
+        "failure_avoided_1yr": "根拠のない配分や窓口任せの高手数料商品のまま次の調整局面を迎え、底値で狼狽売却してしまう1年後。",
+        "success_peaceful_life": "相場が荒れた夜もスマホを閉じてぐっすり眠れ、ご家族とゆとりあるセカンドライフを楽しめる日常。"
+      },
+      "reassurance_stage5": "まずは無料2pサンプルPDFを事前確認いただけます。未閲覧・未ダウンロード時は7日以内全額返金、定期購読もいつでも1クリックで解約できる安心設計です。",
+      "matrix_count": 25,
+      "matrix": [
+        {
+          "id": "GBA_S1_LOSS",
+          "division": "GBA",
+          "stage": 1,
+          "hook_type": "loss",
+          "hook_line": "退職金2,000万円を銀行預金に眠らせると、年2.2%インフレで10年後に実質約400万円分の力が消えます。",
+          "slide_script_body": "減らしたくないから全額預金へ——そう考える50〜60代は少なくありません。通帳の数字は減らなくても、食料品や光熱費がじわじわ上がれば10年後の購買力は静かに目減りします。安全枠を個人向け国債で固めつつ、無理のない範囲でインフレ耐性を備える設計が大切です。",
+          "cta": "無料30秒・新NISA暴落耐性シミュレーターを試す",
+          "utm_content": "GBA_S1_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S1_CURIOSITY",
+          "division": "GBA",
+          "stage": 1,
+          "hook_type": "curiosity",
+          "hook_line": "同じ資産3,000万円で退職した2人——なぜ片方だけ老後資金が5年早く尽きたのか？",
+          "slide_script_body": "25年間の平均リターンは同じでも、退職直後の暴落中に生活費を株から取り崩した人だけ資産寿命が一気に縮みます。あらかじめ2年分の生活費を個人向け国債など安全枠に分けておけば、暴落の夜も売らずに回復を待てます。",
+          "cta": "あなたの配分の暴落耐性を30秒で無料確認",
+          "utm_content": "GBA_S1_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S1_SELF",
+          "division": "GBA",
+          "stage": 1,
+          "hook_type": "self",
+          "hook_line": "定年まであと5〜10年の50代の方へ：今夜だけ確認してほしい老後設計の盲点1つ。",
+          "slide_script_body": "30代なら暴落は買い場でも、定年直前のマイナス30%は老後計画そのものを揺るがします。成長資産と防衛資産、そして生活費2年分の円建て安全枠を分けておくだけで、相場に振り回されない穏やかな老後設計が整います。",
+          "cta": "50代からの新NISA無料4問診断を開く",
+          "utm_content": "GBA_S1_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S1_PATTERN",
+          "division": "GBA",
+          "stage": 1,
+          "hook_type": "pattern",
+          "hook_line": "新NISAの年間360万円枠、焦って満額埋めようとしないでください。",
+          "slide_script_body": "制度がお得だからと余裕資金を超えて一括投入すると、翌月の調整局面で心が折れて底値撤退しやすくなります。ご自身の安全枠（生活費2年分）を先に確保し、3〜5年で穏やかに配分する方が10年後の手残りは守れます。",
+          "cta": "無理のない配分バランスを30秒で確認",
+          "utm_content": "GBA_S1_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S1_PROOF",
+          "division": "GBA",
+          "stage": 1,
+          "hook_type": "proof",
+          "hook_line": "特定口座と新NISAでは、同じ500万円の運用益でも税金だけで約101万円の手取り差が生まれます。",
+          "slide_script_body": "特定口座の20.315%課税は長期になるほど老後キャッシュフローを静かに圧迫します。新NISAの成長投資枠1,200万円・生涯1,800万円の法定ルールを正しく活かし、年2回だけ静かに点検する設計を確認しましょう。",
+          "cta": "新NISA 1,800万円枠の無料診断を見る",
+          "utm_content": "GBA_S1_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S2_LOSS",
+          "division": "GBA",
+          "stage": 2,
+          "hook_type": "loss",
+          "hook_line": "利回り10%に飛びついた50代が、分配金以上に元本を減らしてしまう残酷な算数。",
+          "slide_script_body": "毎月分配や高利回りの文字は魅力的ですが、裏側で元本そのものが30%以上目減りしていては真の老後収入になりません。成長×ヘルスケア防衛の2軸と円建ての個人向け国債を分ける方が、元本を守りながら長く続けられます。",
+          "cta": "元本を守る2本柱の過去25年統計を見る",
+          "utm_content": "GBA_S2_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S2_CURIOSITY",
+          "division": "GBA",
+          "stage": 2,
+          "hook_type": "curiosity",
+          "hook_line": "米国株100%の50代が「株安×円高」の同時襲来で一番困る本当の理由とは？",
+          "slide_script_body": "日本で暮らす私たちの生活費は「円」で支払います。米国株マイナス30%と円高マイナス20%が重なると、円ベースの評価額は一気に約44%縮小します。だからこそ円建ての個人向け国債で2年分の盾を作る設計が効きます。",
+          "cta": "円高・暴落テストを30秒で無料試算",
+          "utm_content": "GBA_S2_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S2_SELF",
+          "division": "GBA",
+          "stage": 2,
+          "hook_type": "self",
+          "hook_line": "夜中に米国株ニュースが気になってスマホを開いてしまう50〜60代の方へ。",
+          "slide_script_body": "睡眠を削る運用は、どんな手数料よりも高いコストです。夜中に値動きが気になるなら株式比率が許容度を超えている明確なサイン。2年分の安全枠を整え、年2回だけ点検する静かなルールへ見直しましょう。",
+          "cta": "ぐっすり眠れる適正比率を無料診断",
+          "utm_content": "GBA_S2_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S2_PATTERN",
+          "division": "GBA",
+          "stage": 2,
+          "hook_type": "pattern",
+          "hook_line": "退職金が入った日に、銀行窓口の「退職金定期＋おすすめ投信セット」にサインしないでください。",
+          "slide_script_body": "最初の3ヶ月だけ高金利でも、裏で購入手数料3%・信託報酬年1.5%の投信を組めば、2,000万円なら初日に60万円が消えます。低コストETFと個人向け国債のシンプルな2本柱なら、そのコストをそのまま老後に残せます。",
+          "cta": "低コスト2本柱の過去統計を無料確認",
+          "utm_content": "GBA_S2_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S2_PROOF",
+          "division": "GBA",
+          "stage": 2,
+          "hook_type": "proof",
+          "hook_line": "新NISAで頻繁に売買すると、今年の年間投資枠360万円は売却しても当年中には復活しません。",
+          "slide_script_body": "生涯枠1,800万円の復活は翌年以降。ニュースのたびに売買するほど非課税の複利エンジンが止まり、楽天・SBIでの成行注文ミスも増えます。暴落に耐える比率を先に決め、指値注文＋年2回点検を徹底しましょう。",
+          "cta": "新NISA法定枠と安全注文ルールを確認",
+          "utm_content": "GBA_S2_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S3_LOSS",
+          "division": "GBA",
+          "stage": 3,
+          "hook_type": "loss",
+          "hook_line": "一般的な老後シミュレーションが見落とす3つの現実：暴落順序・インフレ・為替の同時揺れ。",
+          "slide_script_body": "毎年一律5%増える前提の試算では、リーマン級暴落の直後に取り崩す現実の厳しさが見えません。2000年・2008年・2022年の実データで「下落幅と回復期間」を並べて比較することが、50代からの失敗しない基準です。",
+          "cta": "無料2ページ・サンプルPDFで過去統計を見る",
+          "utm_content": "GBA_S3_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S3_CURIOSITY",
+          "division": "GBA",
+          "stage": 3,
+          "hook_type": "curiosity",
+          "hook_line": "ITバブル・リーマン・2022年の3大危機を、なぜ「成長×防衛＋国債」は穏やかに通過できたのか？",
+          "slide_script_body": "ハイテク成長だけでは下落幅が大きすぎ、現金だけでは物価上昇に負けます。半導体成長（SMH）と医療防衛（XLV）のシーソーに、円建ての個人向け国債2年分を添えた過去25年比較を無料2pサンプルで公開中です。",
+          "cta": "無料2pサンプルPDFを先に確認する",
+          "utm_content": "GBA_S3_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S3_SELF",
+          "division": "GBA",
+          "stage": 3,
+          "hook_type": "self",
+          "hook_line": "50〜60代が新NISAの資産配分を比較するとき、最初に確認すべき3つの客観基準。",
+          "slide_script_body": "①最大下落幅で夜眠れるか ②暴落時に株を売らずに済む安全枠があるか ③配偶者にもA4用紙1枚で引き継げるシンプルさか。この3基準を満たす2本柱設計を無料2pサンプルPDFでご確認ください。",
+          "cta": "3基準の比較サンプルPDF（無料2p）を見る",
+          "utm_content": "GBA_S3_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S3_PATTERN",
+          "division": "GBA",
+          "stage": 3,
+          "hook_type": "pattern",
+          "hook_line": "30銘柄も管理する必要はありません——ご家族が迷わず引き継げるシンプル2本柱という選択。",
+          "slide_script_body": "個別株や投信が20〜30本に散らばると、ご自身でも管理が煩雑になり、万が一の際に配偶者が困ってしまいます。成長投資枠の2軸ETFと個人向け国債だけの明快な設計を、無料サンプルで確かめてみてください。",
+          "cta": "シンプル2本柱の無料サンプルPDFを開く",
+          "utm_content": "GBA_S3_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S3_PROOF",
+          "division": "GBA",
+          "stage": 3,
+          "hook_type": "proof",
+          "hook_line": "2000〜2025年の25年実統計＆新NISA成長投資枠1,200万円上限に完全準拠した比較表。",
+          "slide_script_body": "SNSの感覚論や切り取りではなく、25年間の歴史的データと日本の新NISA法定上限（成長1,200万・生涯1,800万）を正確に反映。まずは無料2ページ・サンプルPDFで数値と図解の分かりやすさをお確かめください。",
+          "cta": "25年実統計の無料2pサンプルを確認",
+          "utm_content": "GBA_S3_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S4_LOSS",
+          "division": "GBA",
+          "stage": 4,
+          "hook_type": "loss",
+          "hook_line": "考え方は分かっても「楽天・SBIでの具体的な指値手順と円建て配分表」がないと手が止まる理由。",
+          "slide_script_body": "頭で理解しても、いざ新NISA口座で注文画面を開くと成行ミスや枠超過が不安で先延ばしになりがちです。当ワークブックは円建て配分シートと楽天iSPEED・SBI証券の指値注文図解まで12ページに凝縮しました。",
+          "cta": "無料2pサンプルPDFで図解品質を確認する",
+          "utm_content": "GBA_S4_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S4_CURIOSITY",
+          "division": "GBA",
+          "stage": 4,
+          "hook_type": "curiosity",
+          "hook_line": "12ページ完全版ワークブックの中身を先行公開：50代読者が印刷して手元に置く3つの表。",
+          "slide_script_body": "2000〜2025年危機比較表、新NISA1,800万円＋超過分の個人向け国債配分ワークシート、年2回リバランス点検チェック表の3点を収録。投資助言ではなく中立の教育出版物として、まず無料2pサンプルをお渡ししています。",
+          "cta": "無料2ページ・サンプルPDFを閲覧する",
+          "utm_content": "GBA_S4_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S4_SELF",
+          "division": "GBA",
+          "stage": 4,
+          "hook_type": "self",
+          "hook_line": "証券窓口の勧誘を受けず、自分のペースで静かに老後資金を整えたい50〜60代の方へ。",
+          "slide_script_body": "高額な運用手数料や頻繁な売買アドバイスは一切不要。無料30秒診断と無料2pサンプルPDFをご覧いただき、納得された方だけ手元に保存できる教育ワークブックです。",
+          "cta": "無料2pサンプルPDFを先に確認する",
+          "utm_content": "GBA_S4_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S4_PATTERN",
+          "division": "GBA",
+          "stage": 4,
+          "hook_type": "pattern",
+          "hook_line": "短期売買の煽りはゼロ——25年統計と制度ルールだけに徹する独立教育ワークブック。",
+          "slide_script_body": "「今すぐ買え・売れ」と不安を煽る配信とは正反対に、歴史的統計と落ち着いた年2回点検の規律だけをお届けします。落ち着いた文体と読みやすいレイアウトを、まず無料2pサンプルでご確認ください。",
+          "cta": "無料2pサンプルPDFで内容を確認",
+          "utm_content": "GBA_S4_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S4_PROOF",
+          "division": "GBA",
+          "stage": 4,
+          "hook_type": "proof",
+          "hook_line": "2000〜2025年統計＋楽天・SBI指値図解＋新NISA法定1,800万円設計を1冊に——まず無料2pから。",
+          "slide_script_body": "誇張や架空の口コミは一切掲載していません。実際の過去25年統計と法定制度に基づくワークブックの品質を、お申し込み前に無料2ページ・サンプルPDFでご自身の目でお確かめください。",
+          "cta": "無料2pサンプルPDFを開く",
+          "utm_content": "GBA_S4_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S5_LOSS",
+          "division": "GBA",
+          "stage": 5,
+          "hook_type": "loss",
+          "hook_line": "中身を見ずに決める必要はありません——まず無料2pサンプルPDFをお確かめください。",
+          "slide_script_body": "無料4問診断の結果をさらにご自宅の資産額へ落とし込みたい方へ。まずは無料2pサンプルPDFをご確認のうえ、未閲覧・未ダウンロード時は7日以内全額返金保証付きで安心してお選びいただけます。",
+          "cta": "無料2pサンプル確認 または ¥1,480 買い切り版を見る",
+          "utm_content": "GBA_S5_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S5_CURIOSITY",
+          "division": "GBA",
+          "stage": 5,
+          "hook_type": "curiosity",
+          "hook_line": "まずは定期購読なしの「¥1,480 買い切り12pワークブック」から静かに始めませんか？",
+          "slide_script_body": "いきなり月額プランを申し込む必要はありません。自動更新なしの買い切り版（¥1,480）で全ワークシートを保存でき、月額パス（¥4,400/月）もいつでも1クリックで解約可能です。",
+          "cta": "¥1,480 買い切り版を見る（7日未閲覧返金保証）",
+          "utm_content": "GBA_S5_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S5_SELF",
+          "division": "GBA",
+          "stage": 5,
+          "hook_type": "self",
+          "hook_line": "今週末、ご夫婦で老後資金の設計図をA4用紙1枚にすっきり整理したい方へ。",
+          "slide_script_body": "決済後すぐに認証コード付きでお手元に届き、何度でも再閲覧可能。未閲覧・未ダウンロード時は7日以内全額返金、定期プランも1クリック解約なので安心してお試しいただけます。",
+          "cta": "買い切りワークブックを確認する（無料2pあり）",
+          "utm_content": "GBA_S5_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S5_PATTERN",
+          "division": "GBA",
+          "stage": 5,
+          "hook_type": "pattern",
+          "hook_line": "自動更新の縛りはゼロ：買い切り¥1,480または無料2pサンプルから、無理なく選べます。",
+          "slide_script_body": "解約しづらい定期契約への不安をなくすため、無料2pサンプル→買い切り¥1,480→必要時のみ月額・年額という透明な階段にしました。未閲覧時は7日以内全額返金に対応しています。",
+          "cta": "無料2pサンプル＆買い切り版を確認",
+          "utm_content": "GBA_S5_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "GBA_S5_PROOF",
+          "division": "GBA",
+          "stage": 5,
+          "hook_type": "proof",
+          "hook_line": "3つの安心約束：無料2pサンプル事前確認・未閲覧7日以内全額返金・定期1クリック解約。",
+          "slide_script_body": "教育・過去統計出版物として透明性を最優先にしています。無料2pサンプルPDFをご確認いただき、ご納得のうえでお手元に保存してください。",
+          "cta": "無料2pサンプルを確認して進む",
+          "utm_content": "GBA_S5_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        }
+      ]
+    },
+    "HERO": {
+      "division": "HERO",
+      "brand_name": "김쌤의영웅라디오 · 백운호 사랑방",
+      "language": "ko-KR",
+      "domain": "https://paradise-hero.com/",
+      "sample_pdf": "https://paradise-hero.com/stream.html",
+      "usp_one_sentence": "평생 가족을 위해 애쓰신 5070 어머님·아버님께 오리지널 가상 트로트가수 백운호의 무광고 완곡과 돋보기 없는 큰글씨 사연·아침 안부카드를 평생 100% 무료로 전하는 따뜻한 사랑방.",
+      "storybrand_7parts": {
+        "hero_customer": "평생 자식과 가족을 위해 살아오신 5070 시니어 어머님·아버님과 그 가족분들.",
+        "problem_3layers": {
+          "external": "깨알 같은 작은 스마트폰 글씨, 노래 중간마다 흐름을 끊는 잦은 광고, 복잡한 회원가입 절차.",
+          "internal": "해 질 녘 조용한 거실에서 문득 밀려오는 적막함과 내 마음을 알아주는 따뜻한 말벗에 대한 그리움.",
+          "philosophical": "평생 가족을 위해 묵묵히 헌신하신 어머님·아버님이야말로 가장 편안하고 존중받는 공간에서 위로받으셔야 합니다."
+        },
+        "guide_empathy_authority": "전직 국어교사 김쌤과 오리지널 바리톤 가수 백운호가 어머님 눈이 편안한 20px 이상 큰글씨와 차분한 저녁 숨결 속도로 평생 무료 사랑방을 지킵니다.",
+        "plan_3steps": [
+          "1. 회원가입·결제 없이 1번 터치로 백운호 6대 대표곡 무료 감상관 열기.",
+          "2. 가족·친구 카톡방에 3초 만에 보내는 무료 큰글씨 아침 안부카드 만들기.",
+          "3. 화·금·일 저녁 6시 15분 보이는 라디오에서 어머님 사연 함께 나누기."
+        ],
+        "direct_cta": "광고 없는 백운호 6대 대표곡 무료 듣기",
+        "transitional_cta": "3초 만에 무료 카톡 아침 안부카드 만들기",
+        "failure_avoided_1yr": "작은 글씨에 눈 찡그리며 자극적인 영상만 넘기다 쓸쓸한 저녁을 혼자 보내는 하루하루.",
+        "success_peaceful_life": "아침엔 따뜻한 안부카드로 친구와 웃고, 저녁엔 백운호 노래와 사연 사랑방으로 마음이 든든해지는 평온한 일상."
+      },
+      "reassurance_stage5": "평생 100% 무료 사랑방이며 어떠한 유료 결제도 요구하지 않습니다. 하단 시니어 안심 준비물관은 필요하실 때만 평소 쓰시는 공식몰에서 편하게 구경하실 수 있습니다.",
+      "matrix_count": 25,
+      "matrix": [
+        {
+          "id": "HERO_S1_LOSS",
+          "division": "HERO",
+          "stage": 1,
+          "hook_type": "loss",
+          "hook_line": "스마트폰 글씨가 너무 작아 돋보기 찾다 포기하신 적 많으시죠? 10초면 2배 커집니다.",
+          "slide_script_body": "자녀에게 매번 물어보기도 미안하고 작은 글씨 억지로 보느라 눈만 침침해지셨죠. 휴대폰 설정에서 딱 세 번만 누르면 카톡도 유튜브도 한눈에 시원해집니다. 김쌤의 영웅사랑방도 처음부터 어머님 눈이 편안한 왕글씨로만 만들었습니다.",
+          "cta": "돋보기 없는 큰글씨 사랑방 무료로 열기",
+          "utm_content": "HERO_S1_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S1_CURIOSITY",
+          "division": "HERO",
+          "stage": 1,
+          "hook_type": "curiosity",
+          "hook_line": "명절 끝나고 시집간 딸이 친정 냉장고 문에 몰래 붙이고 간 3줄 쪽지의 정체.",
+          "slide_script_body": "텅 빈 부엌에서 어머님이 냉장고 문을 여시다 그 자리에 주저앉아 한참을 우셨답니다. '엄마, 나 애 키워보니 이제야 엄마 맘 알았어요.' 평생 가족 위해 애쓰신 어머님들께 백운호의 〈어머니의 봄날〉로 따뜻한 위로를 전합니다.",
+          "cta": "광고 없는 백운호 3분 완곡 무료로 듣기",
+          "utm_content": "HERO_S1_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S1_SELF",
+          "division": "HERO",
+          "stage": 1,
+          "hook_type": "self",
+          "hook_line": "평생 가족 뒷바라지하느라 정작 내 마음은 뒷전이셨던 5070 어머님·아버님께 드립니다.",
+          "slide_script_body": "남들 앞에선 늘 괜찮다 웃지만 해 질 녘 조용한 거실에 혼자 앉아 있으면 문득 마음이 허전해질 때가 있으시죠. 복잡한 가입도 비용도 전혀 없는 평생 무료 사랑방에서 백운호 노래와 따뜻한 사연으로 쉬어가세요.",
+          "cta": "평생 100% 무료 백운호 사랑방 놀러가기",
+          "utm_content": "HERO_S1_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S1_PATTERN",
+          "division": "HERO",
+          "stage": 1,
+          "hook_type": "pattern",
+          "hook_line": "예순 넘어까지 자식 걱정·남 눈치 다 끌어안고 계시지 마세요—오늘 딱 3가지만 내려놓으세요.",
+          "slide_script_body": "이미 지나간 옛 후회, 다 큰 자식 인생 걱정, 밥 한 끼 안 사주는 남 시선까지 짊어지느라 너무 애쓰셨습니다. 이제는 내가 제일 소중합니다. 따뜻한 차 한 잔과 백운호 노래로 오늘 저녁은 내 마음 먼저 안아주세요.",
+          "cta": "백운호 감동 무대 무료 감상관 열기",
+          "utm_content": "HERO_S1_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S1_PROOF",
+          "division": "HERO",
+          "stage": 1,
+          "hook_type": "proof",
+          "hook_line": "매주 화·금·일 저녁 6시! 어머님 감동 사연과 백운호 대표곡 15분 보이는 라디오가 열립니다.",
+          "slide_script_body": "짧은 1분 영상이 끝날 때마다 아쉬우셨던 영웅 가족분들을 위해 일주일에 세 번, 잔잔한 0.92배속 진행과 왕글씨 가사로 15분 풀방송을 보내드립니다. 평생 무료로 언제든 편하게 들어오세요.",
+          "cta": "화·금·일 15분 보이는 라디오 무료 보기",
+          "utm_content": "HERO_S1_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S2_LOSS",
+          "division": "HERO",
+          "stage": 2,
+          "hook_type": "loss",
+          "hook_line": "감동적인 노래 한 곡 듣는데 1분마다 광고가 끊어져서 속상하셨죠?",
+          "slide_script_body": "마음 달래려고 노래 틀어두셨는데 시끄러운 광고가 갑자기 튀어나오면 여운이 다 깨져버립니다. 백운호 사랑방 무료 감상관에서는 대표곡 6곡을 광고 끊김 없이, 돋보기 필요 없는 큰글씨 가사와 함께 편히 들으실 수 있습니다.",
+          "cta": "광고 없는 백운호 6대 대표곡 무료 듣기",
+          "utm_content": "HERO_S2_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S2_CURIOSITY",
+          "division": "HERO",
+          "stage": 2,
+          "hook_type": "curiosity",
+          "hook_line": "결혼 40년 만에 무뚝뚝한 남편이 아내 생일 식탁에 두고 간 하얀 봉투, 마지막 줄은?",
+          "slide_script_body": "'못난 나 만나 고생만 시켜 미안하오. 다음 생에도 당신 손 꼭 잡고 싶소.' 말로 다 못 전한 부부의 정이 가슴을 울립니다. 우리 가족의 소중한 사연도 비밀번호 없이 3초 만에 사랑방 편지함에 들려주세요.",
+          "cta": "3초 만에 우리 가족 사연 사랑방 열기",
+          "utm_content": "HERO_S2_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S2_SELF",
+          "division": "HERO",
+          "stage": 2,
+          "hook_type": "self",
+          "hook_line": "아침마다 친구·가족 카톡방에 어떤 따뜻한 인사를 보낼지 고민되시는 어머님께.",
+          "slide_script_body": "남들 다 돌리는 식상한 그림 대신, 백운호와 함께하는 품격 있는 큰글씨 아침 안부카드를 3초 만에 무료로 만들어 바로 카톡으로 보내실 수 있습니다. 회원가입도 앱 설치도 전혀 필요 없습니다.",
+          "cta": "무료 카톡 아침 안부카드 3초 만들기",
+          "utm_content": "HERO_S2_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S2_PATTERN",
+          "division": "HERO",
+          "stage": 2,
+          "hook_type": "pattern",
+          "hook_line": "복잡한 회원가입·비밀번호 입력? 어머님 사랑방에는 그런 번거로움이 전혀 없습니다.",
+          "slide_script_body": "아이디 만들고 비밀번호 외우다 지쳐서 좋은 노래 듣는 걸 포기하시는 분들이 정말 많습니다. 김쌤의 영웅라디오 사랑방은 버튼 한 번만 누르시면 노래 감상도, 아침 안부카드도, 사연 쓰기도 바로 열립니다.",
+          "cta": "가입 없이 1초 만에 사랑방 입장하기",
+          "utm_content": "HERO_S2_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S2_PROOF",
+          "division": "HERO",
+          "stage": 2,
+          "hook_type": "proof",
+          "hook_line": "어머님 눈이 편안한 20px 이상 큰글씨와 60px 큼직한 버튼으로만 만든 시니어 맞춤 사랑방.",
+          "slide_script_body": "작은 글씨와 헷갈리는 메뉴를 싹 비워내고, 스마트폰에서도 돋보기 없이 한눈에 읽히도록 정성껏 만들었습니다. 오늘 아침 따뜻한 물 한 잔과 함께 사랑방 출석 도장 찍고 가세요.",
+          "cta": "큰글씨 영웅 사랑방 무료 바로가기",
+          "utm_content": "HERO_S2_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S3_LOSS",
+          "division": "HERO",
+          "stage": 3,
+          "hook_type": "loss",
+          "hook_line": "어두운 방에서 작은 스마트폰 보시다 눈 침침해지고 목 칼칼해지는 시니어 습관 3가지.",
+          "slide_script_body": "저녁에 노래 들으시며 눈을 혹사하거나 찬물을 벌컥 드시면 다음 날 피로가 두 배로 쌓입니다. 큰글씨 사랑방으로 눈을 편하게 쉬어주시고, 미지근한 차 한 잔과 1분 눈 온찜질로 건강까지 함께 챙기세요.",
+          "cta": "무료 카톡 아침 안부카드 & 건강 사랑방 보기",
+          "utm_content": "HERO_S3_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S3_CURIOSITY",
+          "division": "HERO",
+          "stage": 3,
+          "hook_type": "curiosity",
+          "hook_line": "어머님들이 친구 카톡방에 보내고 '이거 어디서 만들었어?' 가장 많이 물어보신 무료 선물.",
+          "slide_script_body": "백운호 6벌 무대 의상 투샷과 큰글씨 아침 문안 인사가 담긴 맞춤 안부카드를 3초 만에 무료 저장해 카카오톡으로 바로 나누실 수 있습니다. 오늘 아침 소중한 친구분께 먼저 따뜻한 안부 건네보세요.",
+          "cta": "무료 카톡 아침 안부카드 바로 만들기",
+          "utm_content": "HERO_S3_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S3_SELF",
+          "division": "HERO",
+          "stage": 3,
+          "hook_type": "self",
+          "hook_line": "화·금·일 저녁 6시, 따뜻한 말벗과 품격 있는 트로트 라디오를 찾으시는 5070 영웅 가족님께.",
+          "slide_script_body": "자극적인 가짜 뉴스나 시끄러운 소음 대신, 전직 국어교사 김쌤의 차분한 사연 낭독과 오리지널 가상 바리톤 백운호의 창작 트로트만 정직하게 채웠습니다. 평생 무료로 함께해 주세요.",
+          "cta": "백운호 6대 대표곡 무료 감상관 열기",
+          "utm_content": "HERO_S3_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S3_PATTERN",
+          "division": "HERO",
+          "stage": 3,
+          "hook_type": "pattern",
+          "hook_line": "복잡한 회비? 후원금 요구? 김쌤의 영웅라디오 사랑방은 평생 100% 무료입니다.",
+          "slide_script_body": "어머님·아버님께 부담 드리는 회비나 비용은 단 1원도 받지 않습니다. 노래 감상, 사연 편지함, 카톡 안부카드 모두 평생 무료로 즐기시고, 하단 생활 준비물관은 정말 필요하실 때만 편히 구경하세요.",
+          "cta": "평생 무료 사랑방 & 안부카드 열기",
+          "utm_content": "HERO_S3_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S3_PROOF",
+          "division": "HERO",
+          "stage": 3,
+          "hook_type": "proof",
+          "hook_line": "백운호 오리지널 6대 대표곡 완곡 + 6벌 투샷 안부카드 + 주 3회 15분 라디오 전부 무료 공개.",
+          "slide_script_body": "〈어머니의 봄날〉, 〈백운호 연가〉 등 오리지널 창작곡 전곡과 큰글씨 가사집이 준비되어 있습니다. 오늘 가족 단톡방에 따뜻한 아침 안부카드 한 장 보내보시는 건 어떨까요?",
+          "cta": "백운호 6대 대표곡 & 안부카드 무료 열기",
+          "utm_content": "HERO_S3_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S4_LOSS",
+          "division": "HERO",
+          "stage": 4,
+          "hook_type": "loss",
+          "hook_line": "효도 공연장·나들이 갔다가 2시간 만에 허리 아프고 목 칼칼해 고생하지 않는 안심 준비물.",
+          "slide_script_body": "딱딱한 의자와 냉난방 바람 때문에 모처럼의 나들이를 중간에 포기하시는 어머님이 많습니다. 평소 쓰시는 네이버페이·쿠팡 공식관에서 가벼운 체압분산 방석과 도라지배차·눈 케어 준비물만 정직하게 골라두었습니다.",
+          "cta": "김쌤의 시니어 안심 준비물관 천천히 구경하기",
+          "utm_content": "HERO_S4_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S4_CURIOSITY",
+          "division": "HERO",
+          "stage": 4,
+          "hook_type": "curiosity",
+          "hook_line": "백운호 사랑방 어머님들이 라디오 들으실 때 가장 많이 찾으신 효도 생활템 7가지.",
+          "slide_script_body": "복잡한 광고 대신, 어머님 허리·눈·목을 실제로 편하게 지켜드리는 1~2만 원대 실속 건강식품과 효도 라디오·방석만 정선했습니다. 100% 무료 사랑방을 즐기신 뒤 필요하실 때만 참고해 보세요.",
+          "cta": "무료 사랑방 & 안심 준비물관 둘러보기",
+          "utm_content": "HERO_S4_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S4_SELF",
+          "division": "HERO",
+          "stage": 4,
+          "hook_type": "self",
+          "hook_line": "부모님께 어떤 실속 효도 선물을 드릴지 고민 중인 자녀분과 5070 어머님 모두를 위해.",
+          "slide_script_body": "과장된 광고 문구나 억지 추천 없이, 실제 공연·나들이와 저녁 라디오 청취에 꼭 필요한 안심 준비물만 깔끔하게 정리했습니다. 평소 쓰시는 네이버페이·쿠팡에서 안전하게 확인하실 수 있습니다.",
+          "cta": "김쌤의 콘서트·건강 안심 준비물관 보기",
+          "utm_content": "HERO_S4_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S4_PATTERN",
+          "division": "HERO",
+          "stage": 4,
+          "hook_type": "pattern",
+          "hook_line": "강매 없는 정직한 큐레이션: 노래와 안부카드는 평생 무료, 생활 준비물은 필요할 때만.",
+          "slide_script_body": "김쌤의 영웅사랑방은 따뜻한 소통이 먼저입니다. 무료 라디오와 카톡 안부카드로 매일 웃으시고, 목이 칼칼하거나 나들이 준비가 필요하실 때만 하단 공식 안심관을 편히 들러주세요.",
+          "cta": "무료 백운호 사랑방 바로가기",
+          "utm_content": "HERO_S4_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S4_PROOF",
+          "division": "HERO",
+          "stage": 4,
+          "hook_type": "proof",
+          "hook_line": "큰글씨 20px+ 가독성 · 무광고 완곡 6곡 · 공식 네이버페이/쿠팡 안심 연결까지 한곳에.",
+          "slide_script_body": "어머님·아버님이 낯선 사이트에서 헤매지 않으시도록 익숙한 공식 스토어만 연결했습니다. 오늘도 건강하고 포근한 저녁, 김쌤과 백운호가 함께하겠습니다.",
+          "cta": "백운호 사랑방 & 안심관 함께 보기",
+          "utm_content": "HERO_S4_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S5_LOSS",
+          "division": "HERO",
+          "stage": 5,
+          "hook_type": "loss",
+          "hook_line": "오늘 밤도 쓸쓸히 보내지 마세요—백운호 대표곡과 따뜻한 사연 사랑방이 무료로 열려 있습니다.",
+          "slide_script_body": "복잡한 로그인도 비용도 전혀 없습니다. 지금 바로 무료 감상관에서 백운호의 깊은 바리톤 한 곡 들으시고, 카톡 아침 안부카드로 소중한 가족에게 따뜻한 인사도 전해 보세요.",
+          "cta": "무료 백운호 감상관 & 카톡 안부카드 열기",
+          "utm_content": "HERO_S5_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S5_CURIOSITY",
+          "division": "HERO",
+          "stage": 5,
+          "hook_type": "curiosity",
+          "hook_line": "오늘 저녁 6시 화·금·일 15분 라디오, 어떤 감동 사연과 백운호 노래가 기다리고 있을까요?",
+          "slide_script_body": "전국의 든든한 영웅 가족분들이 남겨주신 따뜻한 안부와 백운호 명곡 무대가 준비되어 있습니다. 라디오 들으실 때 눈과 목을 지켜주는 김쌤 안심 준비물관도 하단에서 편히 둘러보세요.",
+          "cta": "무료 라디오 사랑방 & 안심 준비물관 열기",
+          "utm_content": "HERO_S5_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S5_SELF",
+          "division": "HERO",
+          "stage": 5,
+          "hook_type": "self",
+          "hook_line": "든든한 우리 영웅 가족님, 오늘 아침 친구분께 백운호 무료 안부카드 한 장 보내보실래요?",
+          "slide_script_body": "3초 만에 완성되는 큰글씨 아침 카드를 카톡방에 보내시면 친구분들이 정말 반가워하십니다. 평생 100% 무료이며 언제든 원클릭으로 편히 이용하실 수 있습니다.",
+          "cta": "무료 카톡 아침 안부카드 바로 보내기",
+          "utm_content": "HERO_S5_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S5_PATTERN",
+          "division": "HERO",
+          "stage": 5,
+          "hook_type": "pattern",
+          "hook_line": "결제 부담 0원: 평생 무료 사랑방 출석 도장 찍고, 필요할 때만 효도 준비물 구경하세요.",
+          "slide_script_body": "영웅 사랑방은 어떠한 유료 회비도 받지 않습니다. 언제든 가벼운 마음으로 놀러 오셔서 백운호 노래 들으시고, 나들이 방석·목차·효도 라디오가 필요할 때만 공식몰을 이용해 주세요.",
+          "cta": "평생 무료 사랑방 입장하기",
+          "utm_content": "HERO_S5_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "HERO_S5_PROOF",
+          "division": "HERO",
+          "stage": 5,
+          "hook_type": "proof",
+          "hook_line": "평생 무료 사랑방 · 무광고 6곡 · 화·금·일 15분 라디오 · 공식 네이버페이/쿠팡 안심 연결.",
+          "slide_script_body": "어머님·아버님의 평안한 하루를 위해 365일 열려 있습니다. 오늘도 건강하시고 따뜻한 사연 편지함에도 반가운 안부 한 줄 남겨주세요.",
+          "cta": "백운호 사랑방 바로가기",
+          "utm_content": "HERO_S5_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        }
+      ]
+    },
+    "KFK": {
+      "division": "KFK",
+      "brand_name": "키즈핏 KidsFit 소아성장 아틀리에",
+      "language": "ko-KR",
+      "domain": "https://kidsfit.co.kr/",
+      "sample_pdf": "https://kidsfit.co.kr/assets/downloads/kfk_sample_2p.pdf",
+      "usp_one_sentence": "상업성 제휴 광고 0건, 질병관리청 표준 성장도표와 뼈나이 경과 시차 보정으로 초등·중등 부모가 1분 만에 우리 아이 진짜 예상키와 생활 병목을 확인하는 성장 아틀리에.",
+      "storybrand_7parts": {
+        "hero_customer": "우리 아이가 또래보다 뒤처지거나 급성장 골든타임을 놓칠까 봐 밤마다 검색하는 초·중등 부모님.",
+        "problem_3layers": {
+          "external": "영양제 광고뿐인 블로그 정보, 1년 전 뼈나이 검사표의 시차 오차, 단순 부모 평균키 공식의 ±8cm 한계.",
+          "internal": "밤늦게까지 학원·스마트폰을 보는 아이를 보며 '내가 지금 뭔가를 놓치고 있는 건 아닐까' 하는 막막한 불안.",
+          "philosophical": "아이 키를 진심으로 아끼는 부모라면 광고성 제품에 흔들리기 전에 객관적 숫자와 생활 병목부터 정확히 볼 권리가 있습니다."
+        },
+        "guide_empathy_authority": "키즈핏은 쿠팡·영양제 제휴 링크를 1건도 넣지 않고, 질병관리청 최신 성장도표와 연간 성장속도(cm/yr) 데이터만으로 부모님께 투명한 기준표를 제공합니다.",
+        "plan_3steps": [
+          "1. 1분 무료 5단계 입력으로 질병관리청 또래 백분위와 핵심 생활 병목 확인.",
+          "2. 유료 리포트 결정 전, 2페이지 무료 샘플 PDF로 실제 구성부터 꼼꼼히 미리보기.",
+          "3. 30일 냉장고 실천표와 월간 키 기록으로 우리 아이 성장속도(cm/yr)를 차분히 추적."
+        ],
+        "direct_cta": "상업성 광고 0건 · 1분 무료 우리 아이 예상키 진단",
+        "transitional_cta": "2페이지 무료 샘플 리포트 PDF 먼저 확인하기",
+        "failure_avoided_1yr": "성장판이 빠르게 좁아지는 1년을 눈대중과 영양제 광고 사이에서 흘려보낸 뒤 뒤늦게 후회하는 1년 후.",
+        "success_peaceful_life": "근거 없는 불안을 내려놓고, 오늘 밤 통잠·단백질·바른자세 루틴을 확신 있게 챙겨주는 평온한 저녁."
+      },
+      "reassurance_stage5": "결제 전 2페이지 무료 샘플 PDF를 먼저 확인하세요. 미열람·미다운로드 시 7일 이내 100% 환불 및 제휴 광고 0건 원칙을 철저히 지킵니다.",
+      "matrix_count": 25,
+      "matrix": [
+        {
+          "id": "KFK_S1_LOSS",
+          "division": "KFK",
+          "stage": 1,
+          "hook_type": "loss",
+          "hook_line": "초등학생 밤 10시 넘어 자면 그날 밤 성장호르몬의 최대 70%가 날아갑니다.",
+          "slide_script_body": "학원 숙제와 거실 밝은 LED 불빛 때문에 취침이 11시로 밀리는 집이 정말 많습니다. 하루 성장호르몬의 대부분은 잠든 직후 밤 10시~새벽 2시 첫 깊은 수면에서 분비되며, 주말 늦잠으로도 온전히 채워지지 않습니다. 오늘 밤 45분만 일찍 불을 끄는 것이 최고의 0원 습관입니다.",
+          "cta": "상업성 광고 0건 · 1분 무료 예상키 진단하기",
+          "utm_content": "KFK_S1_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S1_CURIOSITY",
+          "division": "KFK",
+          "stage": 1,
+          "hook_type": "curiosity",
+          "hook_line": "같은 엄마 아빠 밑에서 자랐는데, 왜 형제 키가 최종 10cm까지 벌어질까요?",
+          "slide_script_body": "부모 키가 작다고 미리 포기하시는 분들이 많지만, 유전은 범위만 정할 뿐 나머지 20~30%는 수면 시간·저녁 단백질·사춘기 속도가 가릅니다. 지금 우리 아이가 또래 중 어느 궤도로 자라고 있는지 숫자부터 확인해 보세요.",
+          "cta": "질병관리청 기준 1분 무료 성장 진단 열기",
+          "utm_content": "KFK_S1_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S1_SELF",
+          "division": "KFK",
+          "stage": 1,
+          "hook_type": "self",
+          "hook_line": "초등 3~5학년 부모님만 오늘 밤 꼭 확인하세요: 벽 뒤꿈치 10초 테스트.",
+          "slide_script_body": "아이를 맨발로 벽에 세워 뒤꿈치·엉덩이·어깨·뒤통수가 편히 닿는지 확인해 보세요. 하루 6시간 책상·스마트폰 거북목만으로도 숨은 키 2~3cm가 이미 꺾여 있는 경우가 많습니다. 지금 생활 병목부터 잡으면 충분히 되찾을 수 있습니다.",
+          "cta": "우리 아이 성장 병목 1분 무료 체크하기",
+          "utm_content": "KFK_S1_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S1_PATTERN",
+          "division": "KFK",
+          "stage": 1,
+          "hook_type": "pattern",
+          "hook_line": "비싼 키성장 영양제부터 사지 마세요—소아과가 먼저 묻는 0원짜리 1순위가 따로 있습니다.",
+          "slide_script_body": "아이 키가 걱정되면 습관처럼 영양제부터 검색하게 되지만, 밤 11시 취침과 입호흡·연간 성장속도 정체를 둔 채 영양제만 먹이는 건 밑 빠진 독에 물 붓기입니다. 먼저 우리 아이 연간 성장속도(cm/yr)와 핵심 생활 병목부터 정확히 짚어보세요.",
+          "cta": "광고 없는 1분 무료 성장시계 진단 열기",
+          "utm_content": "KFK_S1_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S1_PROOF",
+          "division": "KFK",
+          "stage": 1,
+          "hook_type": "proof",
+          "hook_line": "질병관리청 표준 성장도표 기준, 만 4세~사춘기 전 정상 성장속도는 매년 5~6cm입니다.",
+          "slide_script_body": "오늘 키 숫자 하나만 봐서는 잘 크고 있는지 정체 중인지 알기 어렵습니다. 최근 12개월 동안 4cm 미만으로 자랐거나 백분위가 내려갔다면 지금 바로 수면·영양·뼈나이 시계를 점검해야 할 신호입니다.",
+          "cta": "질병관리청 도표로 우리 아이 위치 확인하기",
+          "utm_content": "KFK_S1_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S2_LOSS",
+          "division": "KFK",
+          "stage": 2,
+          "hook_type": "loss",
+          "hook_line": "작년에 찍은 뼈나이 엑스레이 그대로 믿으면 최종 예상키가 최대 5cm 틀립니다.",
+          "slide_script_body": "병원에서 1년 전 들은 예상키만 기억하고 안심하시는 부모님이 많습니다. 사춘기 초입에는 달력 1년 동안 뼈나이가 1.5년씩 점프하기도 해서, 촬영 시점과 오늘 사이의 경과 시차를 보정하지 않으면 오차가 크게 벌어집니다.",
+          "cta": "경과 시차 반영한 1분 무료 진단 확인하기",
+          "utm_content": "KFK_S2_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S2_CURIOSITY",
+          "division": "KFK",
+          "stage": 2,
+          "hook_type": "curiosity",
+          "hook_line": "초3 때 반에서 제일 크던 아이가 왜 중학교 가면 갑자기 역전될까요?",
+          "slide_script_body": "초등 저학년 때 갑자기 1년에 7~8cm씩 쑥 크면 안심하기 쉽지만, 뼈나이가 앞서가 성장판이 남들보다 1~2년 일찍 닫히는 신호일 수 있습니다. 지금 키보다 '뼈나이 시계와 연간 속도'를 함께 보는 것이 핵심입니다.",
+          "cta": "우리 아이 성장판 시계 1분 무료 체크하기",
+          "utm_content": "KFK_S2_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S2_SELF",
+          "division": "KFK",
+          "stage": 2,
+          "hook_type": "self",
+          "hook_line": "아침마다 입술이 바짝 마르고 물부터 찾는 초등 아이, 오늘 밤 30분 뒤에 확인하세요.",
+          "slide_script_body": "아이가 잠든 지 30분 뒤 입이 살짝 벌어져 있다면, 밤새 입호흡과 미세 각성으로 키 크는 깊은 서파수면이 끊기고 있을 가능성이 높습니다. 침실 습도 50%·온도 20도 세팅과 코막힘 점검만으로도 통잠의 질이 확 달라집니다.",
+          "cta": "우리 아이 야간 수면 병목 무료 점검하기",
+          "utm_content": "KFK_S2_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S2_PATTERN",
+          "division": "KFK",
+          "stage": 2,
+          "hook_type": "pattern",
+          "hook_line": "우유 하루 3~4잔 먹이면 키 큰다? 오히려 철분 흡수와 저녁 단백질 밥맛을 막습니다.",
+          "slide_script_body": "키 크라고 우유를 계속 챙겨 주지만, 하루 500ml를 넘기면 과도한 칼슘이 철분 흡수를 방해하고 배가 차서 정작 뼈 기둥을 만드는 달걀·생선·살코기 단백질을 못 먹게 됩니다. 우유는 1~2잔으로 줄이고 저녁 단백질을 주인공으로 바꾸세요.",
+          "cta": "우리 아이 식습관 병목 1분 무료 진단하기",
+          "utm_content": "KFK_S2_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S2_PROOF",
+          "division": "KFK",
+          "stage": 2,
+          "hook_type": "proof",
+          "hook_line": "엄마·아빠 키만 더하는 단순 유전 공식은 실제 최종 성인키와 최대 ±8cm까지 차이가 납니다.",
+          "slide_script_body": "인터넷 평균키 계산기는 현재 백분위, 최근 1년 성장속도, 뼈나이 경과 시차를 전혀 반영하지 못합니다. 질병관리청 최신 표준표에 현재 키와 생활 패턴을 함께 대조해야 현실적인 로드맵이 나옵니다.",
+          "cta": "질병관리청 최신 도표로 1분 무료 계산하기",
+          "utm_content": "KFK_S2_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S3_LOSS",
+          "division": "KFK",
+          "stage": 3,
+          "hook_type": "loss",
+          "hook_line": "블로그·맘카페 검색만 반복하다 초등 고학년 골든타임 1년을 놓치는 3가지 이유.",
+          "slide_script_body": "영양제 후기와 엇갈린 속설 사이에서 헤매는 동안 성장판은 매일 조금씩 좁아집니다. ①질병관리청 백분위 ②연간 성장속도(cm/yr) ③뼈나이 시차 보정—이 3가지 객관 기준부터 표로 정리해야 흔들리지 않습니다.",
+          "cta": "2페이지 무료 샘플 리포트 PDF 먼저 보기",
+          "utm_content": "KFK_S3_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S3_CURIOSITY",
+          "division": "KFK",
+          "stage": 3,
+          "hook_type": "curiosity",
+          "hook_line": "1번 측정으로 끝나는 예상키 vs 매달 30초 기록하는 6개월 성장속도(cm/yr)의 결정적 차이.",
+          "slide_script_body": "단 한 번의 키 숫자는 아이가 급성장기에 들어섰는지, 정체 중인지 보여주지 못합니다. 매달 1일 맨발 키를 30초만 입력해 연간 성장속도 추이를 그래프로 보면, 지금 생활 습관이 제대로 통하고 있는지 한눈에 확인됩니다.",
+          "cta": "2페이지 무료 샘플 PDF로 구성 확인하기",
+          "utm_content": "KFK_S3_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S3_SELF",
+          "division": "KFK",
+          "stage": 3,
+          "hook_type": "self",
+          "hook_line": "성장클리닉 가기 전·후로 우리 아이 기록을 체계적으로 남기고 싶은 초등 부모님께.",
+          "slide_script_body": "짧은 5분 진료에서 핵심을 놓치지 않으려면 최근 성장속도와 수면·자세 병목, 그리고 의사에게 물어볼 3가지 질문이 정리되어 있어야 합니다. 상업성 광고 0건 키즈핏 샘플 리포트 2페이지를 먼저 확인해 보세요.",
+          "cta": "무료 2페이지 샘플 PDF 미리보기",
+          "utm_content": "KFK_S3_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S3_PATTERN",
+          "division": "KFK",
+          "stage": 3,
+          "hook_type": "pattern",
+          "hook_line": "영양제 광고나 쇼핑 제휴 링크가 1개도 없는 소아성장 플랫폼을 찾고 계셨다면.",
+          "slide_script_body": "정보를 보려다 결국 쇼핑 링크로 끝나는 글에 지치셨을 겁니다. 키즈핏은 상업성 광고를 전면 배제하고 오직 질병관리청 표준 데이터와 실천 가능한 저녁 루틴 기준표만 투명하게 제공합니다.",
+          "cta": "광고 0건 · 2페이지 무료 샘플 PDF 보기",
+          "utm_content": "KFK_S3_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S3_PROOF",
+          "division": "KFK",
+          "stage": 3,
+          "hook_type": "proof",
+          "hook_line": "질병관리청 표준 성장도표 + 뼈나이 경과 시차 보정 + 30일 냉장고 실천표를 한눈에.",
+          "slide_script_body": "추측이나 과장 없이 공신력 있는 질병관리청 성장도표 기준을 그대로 적용했습니다. 유료 리포트를 결정하시기 전에 실제 2페이지 무료 샘플 PDF로 구성과 깊이를 먼저 확인하세요.",
+          "cta": "2페이지 무료 샘플 리포트 바로 열기",
+          "utm_content": "KFK_S3_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S4_LOSS",
+          "division": "KFK",
+          "stage": 4,
+          "hook_type": "loss",
+          "hook_line": "무료 요약만 보고 닫아버리면 내일 밤부터 다시 원래 습관으로 돌아가는 이유.",
+          "slide_script_body": "머리로 아는 것과 매일 밤 실천하는 것은 다릅니다. 4페이지 맞춤 정밀 보고서·소아과 질문지·17페이지 마스터북·냉장고 부착용 30일 달력이 손에 있어야 온 가족이 저녁 9시 30분 루틴을 꾸준히 지킵니다.",
+          "cta": "2페이지 무료 샘플 PDF 먼저 확인하기",
+          "utm_content": "KFK_S4_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S4_CURIOSITY",
+          "division": "KFK",
+          "stage": 4,
+          "hook_type": "curiosity",
+          "hook_line": "키즈핏 정밀 리포트 안에 들어 있는 3가지 핵심 도구: 소아과 질문지·예상키 시차표·30일 달력.",
+          "slide_script_body": "복잡한 이론 나열 대신 부모님이 당장 오늘 저녁 냉장고에 붙이고 실천할 수 있는 30일 체크표와 진료실 3대 질문지, 뼈나이 시차 보정 예상키 분석까지 담았습니다. 무료 2페이지 샘플에서 실제 구성을 미리 확인하세요.",
+          "cta": "무료 2페이지 샘플 PDF 미리보기",
+          "utm_content": "KFK_S4_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S4_SELF",
+          "division": "KFK",
+          "stage": 4,
+          "hook_type": "self",
+          "hook_line": "단건 점검(9,900원)부터 6개월 성장속도 추적(19,900원)까지, 우리 아이 단계에 딱 맞게.",
+          "slide_script_body": "지금 당장 뼈나이 시차 보정 예상키와 17p 마스터북이 필요하시면 단건 리포트로, 매달 30초 기록으로 6개월간 연간 성장속도(cm/yr) 변화를 추적하고 싶으시면 6개월 패스로 부담 없이 선택하실 수 있습니다.",
+          "cta": "2페이지 무료 샘플 PDF 먼저 열어보기",
+          "utm_content": "KFK_S4_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S4_PATTERN",
+          "division": "KFK",
+          "stage": 4,
+          "hook_type": "pattern",
+          "hook_line": "구독 자동결제 없음 · 제휴 광고 0건 · 1회 투명 결제로 평생 소장하는 성장 가이드.",
+          "slide_script_body": "매달 모르게 빠져나가는 구독 부담도, 영양제 강매도 전혀 없습니다. 2페이지 무료 샘플 PDF를 먼저 천천히 보시고 우리 아이에게 꼭 맞을 때만 가볍게 시작하세요.",
+          "cta": "2페이지 무료 샘플 PDF 확인하기",
+          "utm_content": "KFK_S4_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S4_PROOF",
+          "division": "KFK",
+          "stage": 4,
+          "hook_type": "proof",
+          "hook_line": "상업성 광고 0건 원칙 + 질병관리청 도표 기반 자동화 분석 — 무료 2p 샘플로 먼저 검증하세요.",
+          "slide_script_body": "허위 후기나 과장된 보장 문구는 절대 쓰지 않습니다. 실제 리포트의 정밀한 데이터 구성과 가독성을 결제 전 2페이지 무료 샘플 PDF로 직접 확인해 보세요.",
+          "cta": "2페이지 무료 샘플 리포트 열어보기",
+          "utm_content": "KFK_S4_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S5_LOSS",
+          "division": "KFK",
+          "stage": 5,
+          "hook_type": "loss",
+          "hook_line": "결제 전 30초만 투자해 2페이지 무료 샘플 PDF부터 먼저 확인해 보세요.",
+          "slide_script_body": "이미 우리 아이 1분 무료 진단을 마치셨습니다. 유료 리포트 구성이 궁금하시다면 무료 2페이지 샘플을 먼저 열어보시고, 미열람·미다운로드 시 7일 이내 100% 환불 보장으로 안심하고 결정하세요.",
+          "cta": "2p 무료 샘플 보기 또는 9,900원 정밀 리포트 열기",
+          "utm_content": "KFK_S5_LOSS_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S5_CURIOSITY",
+          "division": "KFK",
+          "stage": 5,
+          "hook_type": "curiosity",
+          "hook_line": "결제 즉시 인증코드 발송 — 오늘 밤 냉장고에 붙일 30일 성장 달력과 4p 정밀 보고서.",
+          "slide_script_body": "자동결제 없는 1회 9,900원 단건 리포트(17p 마스터북 포함) 또는 19,900원 6개월 성장속도 추적 패스 중 선택하실 수 있습니다. 미열람 시 7일 전액 환불이 보장됩니다.",
+          "cta": "정밀 리포트 열기 (미열람 7일 100% 환불)",
+          "utm_content": "KFK_S5_CURIOSITY_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S5_SELF",
+          "division": "KFK",
+          "stage": 5,
+          "hook_type": "self",
+          "hook_line": "오늘 밤부터 근거 없는 키 걱정 대신 정확한 숫자와 30일 실천표로 시작하고 싶은 부모님께.",
+          "slide_script_body": "별도 회원가입 없이 이메일 인증코드로 언제든 다시 열람 가능하며, 제휴 광고 0건과 미열람 7일 전액 환불 정책을 투명하게 지킵니다.",
+          "cta": "9,900원 단건 / 19,900원 6개월 패스 확인",
+          "utm_content": "KFK_S5_SELF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S5_PATTERN",
+          "division": "KFK",
+          "stage": 5,
+          "hook_type": "pattern",
+          "hook_line": "자동 갱신 없음 · 광고 없음 · 미열람 7일 100% 환불 — 먼저 2p 무료 샘플부터 확인하세요.",
+          "slide_script_body": "망설여지신다면 결제를 서두르지 마세요. 2페이지 무료 샘플 PDF로 실제 품질을 먼저 보시고, 만족하실 때만 가볍게 열어보시면 됩니다.",
+          "cta": "2p 무료 샘플 확인 후 결정하기",
+          "utm_content": "KFK_S5_PATTERN_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        },
+        {
+          "id": "KFK_S5_PROOF",
+          "division": "KFK",
+          "stage": 5,
+          "hook_type": "proof",
+          "hook_line": "투명한 안심 약속: 2p 무료 샘플 선열람 · 미열람 7일 100% 환불 · 자동결제 없음.",
+          "slide_script_body": "결제 전 모든 구성과 환불 기준을 100% 투명하게 안내합니다. 파일 오류나 중복 결제 시에도 즉시 100% 환불을 보장합니다.",
+          "cta": "2p 샘플 확인 & 안심 열람하기",
+          "utm_content": "KFK_S5_PROOF_v1",
+          "version": 1,
+          "status": "active",
+          "weight": 1.0,
+          "variant_of": null,
+          "stats_7d": {
+            "impressions": 0,
+            "landing_clicks": 0,
+            "quiz_completes": 0,
+            "checkout_clicks": 0,
+            "conversion_rate": 0.0
+          }
+        }
+      ]
+    }
+  }
+}

@@ -193,12 +193,14 @@ def save_history(hist: Dict[str, Any]) -> None:
     HISTORY_PATH.write_text(json.dumps(hist, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def build_utm_url(base_url: str, source: str, medium: str, campaign: str) -> str:
+def build_utm_url(base_url: str, source: str, medium: str, campaign: str, content: str = "") -> str:
     parsed = urllib.parse.urlsplit(base_url)
     qs = urllib.parse.parse_qs(parsed.query)
     qs["utm_source"] = [source]
     qs["utm_medium"] = [medium]
     qs["utm_campaign"] = [campaign]
+    if content:
+        qs["utm_content"] = [content]
     return urllib.parse.urlunsplit((parsed.scheme, parsed.netloc, parsed.path, urllib.parse.urlencode(qs, doseq=True), parsed.fragment))
 
 
@@ -345,15 +347,44 @@ def main() -> int:
     print(f"=== Dream Company 365-Day Cloud Promo Runner ({today_str} KST, dry_run={dry_run}) ===", flush=True)
     print(f"Guardrails: max_daily_yt={MAX_DAILY_YT_UPLOADS} | lyria_weekly_cap={MAX_WEEKLY_LYRIA_CALLS} (can_call={can_call_lyria_this_week(hist)}) | hero_radio_window={HERO_RADIO_MIN_SEC}-{HERO_RADIO_MAX_SEC}s", flush=True)
 
+    # Load 5x5 Message Matrix for strict Stage 1-2 (80% volume) Single-Variable A/B Hook Selection!
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    try:
+        from ab_evolution_engine import load_matrix, select_stage12_ab_cell
+        matrix_db = load_matrix(ROOT / "data" / "message_matrix_5div.json")
+    except Exception:
+        matrix_db = None
+        select_stage12_ab_cell = None  # type: ignore
+
+    day_arm = now_kst.timetuple().tm_yday % 2  # Alternates Control (Arm 0) vs Challenger (Arm 1) hook_type!
     planned = []
     for div in ["TOM", "KFG", "GBA", "HERO", "KFK"]:
         if len(planned) >= MAX_DAILY_YT_UPLOADS:
             break
-        tid, title = pick_next_topic(div, hist, today_str)
-        utm_yt = build_utm_url(DIV_CONFIGS[div]["site"], "youtube", "shorts", f"{tid}_{today_str}")
-        utm_ig = build_utm_url(DIV_CONFIGS[div]["site"], "instagram", "reels", f"{tid}_{today_str}")
-        open_loop_cta = DIV_CONFIGS[div].get("open_loop_cta", "Explore free interactive tool:")
-        desc = f"{title}\n\n{open_loop_cta}\n{utm_yt}\n"
+        tid, fallback_title = pick_next_topic(div, hist, today_str)
+        cell = select_stage12_ab_cell(matrix_db, div, today_str, arm_idx=day_arm) if (matrix_db and select_stage12_ab_cell) else None
+        if cell:
+            title = str(cell["hook_line"]).strip()[:95]
+            utm_content = str(cell["utm_content"]).strip()
+            slide_body = str(cell["slide_script_body"]).strip()
+            cta_line = str(cell["cta"]).strip()
+            matrix_meta = {
+                "matrix_id": cell["id"],
+                "stage": cell["stage"],
+                "hook_type": cell["hook_type"],
+                "utm_content": utm_content,
+                "ab_arm": "A" if day_arm == 0 else "B",
+            }
+        else:
+            title = fallback_title
+            utm_content = f"{div}_S1_LOSS_v1"
+            slide_body = DIV_CONFIGS[div].get("open_loop_cta", "")
+            cta_line = DIV_CONFIGS[div].get("open_loop_cta", "Explore free interactive tool:")
+            matrix_meta = {"matrix_id": f"{div}_S1_LOSS", "stage": 1, "hook_type": "loss", "utm_content": utm_content, "ab_arm": "A"}
+
+        utm_yt = build_utm_url(DIV_CONFIGS[div]["site"], "youtube", "shorts", f"{tid}_{today_str}", content=utm_content)
+        utm_ig = build_utm_url(DIV_CONFIGS[div]["site"], "instagram", "reels", f"{tid}_{today_str}", content=utm_content)
+        desc = f"{title}\n\n{slide_body}\n\n{cta_line}\n{utm_yt}\n"
         srt_stub = f"1\n00:00:00,000 --> 00:00:04,500\n{title}\n"
         ok_txt, errs = check_text_gate(div, title, desc, srt_stub)
         if not ok_txt:
@@ -363,14 +394,15 @@ def main() -> int:
             "div": div,
             "topic_id": tid,
             "title": title,
+            **matrix_meta,
             "utm_yt": utm_yt,
             "utm_ig": utm_ig,
-            "hero_radio_day": (div == "HERO" and weekday in (1, 4)),
+            "hero_radio_day": (div == "HERO" and weekday in (1, 4, 6)),
             "ffmpeg_profile": "ffmpeg -preset ultrafast -tune stillimage -threads 2",
             "date": today_str,
             "status": "dry_run_validated" if dry_run else "queued_or_awaiting_secrets",
         })
-        print(f"  [GATE PASS] {div:4s} | {tid} | utm_yt={utm_yt}", flush=True)
+        print(f"  [GATE PASS] {div:4s} | S{matrix_meta['stage']}/{matrix_meta['hook_type']:9s} | {utm_content} | utm_yt={utm_yt}", flush=True)
 
     hist["last_run_kst"] = now_kst.isoformat()
     if not dry_run:
