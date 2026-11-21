@@ -69,8 +69,23 @@ def main() -> int:
                 age_days = 999
 
         if age_days < 45:
-            print(f"[IG TOKEN {div}] fresh ({age_days}d < 45d cycle) -> OK", flush=True)
-            continue
+            # Lightweight FB Graph liveness check without spamming false refresh failures
+            chk_qs = urllib.parse.urlencode({"fields": "id", "access_token": tok})
+            try:
+                with urllib.request.urlopen(f"https://graph.facebook.com/v21.0/me?{chk_qs}", timeout=15) as cr:
+                    cdata = json.loads(cr.read().decode("utf-8"))
+                    if cdata.get("id"):
+                        print(f"[IG TOKEN {div}] fresh & live ({age_days}d < 45d cycle) -> OK", flush=True)
+                        continue
+            except urllib.error.HTTPError as ce:
+                eb = ce.read().decode("utf-8", errors="replace")[:200]
+                print(f"[IG TOKEN {div}] LIVE CHECK WARN HTTP {ce.code}: {eb}", flush=True)
+                if ce.code in (400, 401):
+                    alerts.append(f"{div}: Token invalid/expired (HTTP {ce.code})")
+                continue
+            except Exception:
+                print(f"[IG TOKEN {div}] fresh ({age_days}d < 45d cycle) -> OK", flush=True)
+                continue
 
         # Attempt Graph API long-lived token exchange/refresh
         if app_id and app_secret:
@@ -81,6 +96,24 @@ def main() -> int:
                 "fb_exchange_token": tok,
             })
             url = f"https://graph.facebook.com/v21.0/oauth/access_token?{qs}"
+        elif tok.startswith("EAA"):
+            # Facebook Graph long-lived page/business tokens require META_APP_SECRET to exchange; verify live validity instead of calling Basic Display endpoint
+            chk_qs = urllib.parse.urlencode({"fields": "id", "access_token": tok})
+            try:
+                with urllib.request.urlopen(f"https://graph.facebook.com/v21.0/me?{chk_qs}", timeout=15) as cr:
+                    cdata = json.loads(cr.read().decode("utf-8"))
+                    if cdata.get("id"):
+                        refreshed_map[div] = now.isoformat()
+                        print(f"[IG TOKEN {div}] FB Graph token verified LIVE (id={cdata.get('id')}) -> OK", flush=True)
+                        continue
+            except urllib.error.HTTPError as ce:
+                err_body = ce.read().decode("utf-8", errors="replace")[:200]
+                print(f"[IG TOKEN {div}] FB Graph verify FAIL HTTP {ce.code}: {err_body}", flush=True)
+                alerts.append(f"{div}: HTTP {ce.code} ({err_body})")
+                continue
+            except Exception as e:
+                alerts.append(f"{div}: {e}")
+                continue
         else:
             qs = urllib.parse.urlencode({"grant_type": "ig_refresh_token", "access_token": tok})
             url = f"https://graph.instagram.com/refresh_access_token?{qs}"
