@@ -8021,6 +8021,11 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
             </div>
           </div>
 
+          <div style="margin:14px 0 18px;padding:12px 14px;background:#F8FAFC;border:1px solid #CBD5E1;border-radius:8px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;">
+            <span style="font-size:0.88rem;color:#334155;"><strong>Reviewing retirement numbers with a spouse or friend?</strong> Share this free 4-step historical study explorer:</span>
+            <button type="button" class="pw-btn-primary" style="background:#FFFFFF;color:#0F2C22;border:1.5px solid #0F2C22;padding:8px 14px;min-height:42px;font-size:0.85rem;" data-csp-act="dc-share-site" data-share-div="TOM" data-share-url="https://truthofmarket.com/" data-share-title="TruthOfMarket — Free 2000-2025 SMH x XLV + SGOV Historical Study">Share Free Study Link &rarr;</button>
+          </div>
+
           <div id="tom-passwordless-club-signup" class="pw-save-summary-box">
             <div class="pw-kicker" style="margin-bottom:6px;">FREE MORNING RESEARCH NOTES &middot; ZERO PASSWORD</div>
             <h3 class="pw-save-summary-title">Save My Study Summary &amp; Receive Morning Research Notes (Free)</h3>
@@ -8041,64 +8046,81 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
 
       <!-- Screen 3: 2-Tier Whop Research Passes (#pricing) -->
       <section id="pricing" class="pw-tiers-section" data-pw-screen="3" style="display:none;">
-        <div class="pw-kicker">INDEPENDENT MARKET DATA &amp; EDUCATIONAL RESEARCH PASSES</div>
-        <h2 class="pw-serif-h2" id="pwPricingHeadline">Educational Market Data Newsletter + 2000&ndash;2025 Historical Statistical Workbook.</h2>
-        <p style="margin:0;color:#475569;font-size:0.95rem;" id="pwPricingSubcopy">
-          SMH &times; XLV + SGOV 2-Pillar Historical Case Study &mdash; Strictly Non-Advisory Educational Publisher. Explore daily public market temperature data notes and the complete historical statistical workbook.
+        <div class="pw-kicker">4-STEP VALUE LADDER &middot; START FREE, STEP UP AT YOUR OWN PACE</div>
+        <h2 class="pw-serif-h2" id="pwPricingHeadline">Choose Your Research Depth &mdash; From $9 Workbook to Annual Suite.</h2>
+        <p style="margin:0 0 12px;color:#475569;font-size:0.93rem;" id="pwPricingSubcopy">
+          Start with a one-time $9 workbook PDF with zero subscription, or unlock daily pre-market market-temperature briefings and full 12-month stress-test coverage.
         </p>
 
-        <div class="pw-tier-grid">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px;margin:0 0 14px;padding:12px;background:#F8FAFC;border:1px solid #CBD5E1;border-radius:8px;font-size:0.82rem;">
+          <div style="padding:6px 8px;border-radius:6px;background:#ECFDF5;border:1px solid #6EE7B7;color:#065F46;"><strong>Step 1 &middot; Free ($0)</strong><br/>4-Step Study &amp; 2p Sample ✓</div>
+          <div style="padding:6px 8px;border-radius:6px;background:#FFFFFF;border:1px solid #CBD5E1;color:#0F172A;"><strong>Step 2 &middot; Starter ($9)</strong><br/>14p Crisis Workbook PDF</div>
+          <div style="padding:6px 8px;border-radius:6px;background:#FFFFFF;border:1px solid #CBD5E1;color:#0F172A;"><strong>Step 3 &middot; Core ($29/mo)</strong><br/>Daily Regime Briefings</div>
+          <div style="padding:6px 8px;border-radius:6px;background:#FEFCE8;border:1px solid #FCD34D;color:#92400E;"><strong>Step 4 &middot; Premium ($199/yr)</strong><br/>12-Mo Suite &middot; Save 43%</div>
+        </div>
+
+        <div style="margin:0 0 16px;padding:12px 14px;background:#FFFFFF;border:1px solid #CBD5E1;border-radius:8px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;">
+          <span style="font-size:0.88rem;color:#334155;"><strong>Inspect before deciding:</strong> Review our free 2-page 2000&ndash;2025 workbook sample PDF first.</span>
+          <a href="/assets/downloads/tom_sample_2p.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;padding:8px 14px;border:1.5px solid #0F2C22;border-radius:6px;color:#0F2C22;font-weight:700;font-size:0.86rem;text-decoration:none;">Preview Free 2-Page Sample PDF &rarr;</a>
+        </div>
+
+        <div class="pw-tier-grid" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr));">
           <div class="pw-tier-card">
             <div>
-              <div class="pw-tier-kicker">TIER I &middot; MONTHLY RESEARCH PASS</div>
+              <div class="pw-tier-kicker" style="color:#0369A1;">STEP 2 &middot; LOW-TICKET STARTER</div>
+              <h3 class="pw-tier-name">2000&ndash;2025 Crisis Workbook PDF</h3>
+              <div class="pw-tier-price">$9 <span>one-time</span></div>
+              <div class="pw-tier-saving">Zero subscription &middot; Permanent PDF download</div>
+              <ul class="pw-tier-list">
+                <li><strong>Complete 14-Page 2000&ndash;2025 Historical Statistical Workbook PDF</strong> (Dot-Com, 2008 &amp; 2022 SMH &times; XLV + SGOV case studies)</li>
+                <li><strong>1:1 Custom Dollar Educational Worksheet</strong> &amp; 401(k)/IRA/Taxable bucket reference table</li>
+                <li><strong>Fidelity, Schwab &amp; Vanguard Limit-Order Illustrated Guide</strong></li>
+              </ul>
+            </div>
+            <a href="https://whop.com/checkout/plan_xIpLzFNR8SlMz" class="pw-btn-primary whop-checkout-button" data-whop-checkout data-whop-plan="starter" data-tom-paid-plan="starter" style="width:100%;background:#FFFFFF;color:#0F2C22;border:1.5px solid #0F2C22;">
+              Get 14p Workbook &mdash; $9 One-Time &rarr;
+            </a>
+          </div>
+
+          <div class="pw-tier-card">
+            <div>
+              <div class="pw-tier-kicker">STEP 3 &middot; CORE PASS</div>
               <h3 class="pw-tier-name">Monthly Research Pass</h3>
               <div class="pw-tier-price">$29 <span>/ month</span></div>
-              <div class="pw-tier-saving">Flexible month-to-month access &middot; Cancel anytime</div>
+              <div class="pw-tier-saving">Flexible month-to-month &middot; 1-click cancel anytime</div>
               <ul class="pw-tier-list">
-                <li><strong>Educational Market Data Newsletter</strong> delivered before the US market open (0&ndash;100 public sector temperature &amp; historical regime study notes)</li>
-                <li><strong>2000&ndash;2025 Historical Statistical Workbook (Monthly Edition)</strong> comparing SMH &times; XLV + SGOV historical case-study cohorts</li>
-                <li><strong>Sample Dollar-Scale Educational Worksheet</strong> illustrating tax-location concepts across 401(k), IRA, and taxable accounts</li>
+                <li><strong>Everything in Step 2 ($9 Workbook)</strong> unlocked immediately</li>
+                <li><strong>Daily Pre-Market Educational Data Newsletter</strong> (0&ndash;100 sector temperature &amp; historical regime readings)</li>
+                <li><strong>Monthly Reassurance Report Card</strong> &amp; ongoing 2000&ndash;2025 cohort updates</li>
               </ul>
             </div>
             <a href="https://whop.com/checkout/plan_xVJeNwyrDef8T" class="pw-btn-primary whop-checkout-button" data-whop-checkout data-whop-plan="monthly" data-tom-paid-plan="monthly" style="width:100%;">
-              Select Monthly Research Pass &mdash; $29/mo &rarr;
+              Start Monthly Pass &mdash; $29/mo &rarr;
             </a>
           </div>
 
           <div class="pw-tier-card is-annual">
             <div>
-              <div class="pw-tier-kicker">TIER II &middot; ANNUAL RESEARCH PASS &middot; SAVE 43%</div>
-              <h3 class="pw-tier-name">Annual Research Pass</h3>
+              <div class="pw-tier-kicker">STEP 4 &middot; PREMIUM ANNUAL &middot; SAVE 43%</div>
+              <h3 class="pw-tier-name">Annual Private Research Suite</h3>
               <div class="pw-tier-price">$199 <span>/ year</span></div>
               <div class="pw-tier-saving">Equivalent to $16.58/mo (Save 43% vs. monthly)</div>
               <ul class="pw-tier-list">
-                <li><strong>Full 12 Months of the Educational Market Data Newsletter</strong> covering daily SMH &times; XLV + SGOV public indicator readings</li>
-                <li><strong>Complete 2000&ndash;2025 Historical Statistical Workbook &amp; Reference Masterbook PDF</strong> (Dot-Com, 2008 &amp; 2022 drawdown case studies + retirement withdrawal math)</li>
-                <li><strong>Annual Household Cash-Flow &amp; Semi-Annual Review Educational Workbook</strong></li>
+                <li><strong>Full 12 Months of Daily Market Data Newsletters</strong> (SMH &times; XLV + SGOV regime tracking)</li>
+                <li><strong>Complete 2000&ndash;2025 Reference Masterbook PDF</strong> + Quarterly Rebalancing &amp; -35% Crash Stress-Test Suite</li>
+                <li><strong>Annual Household Cash-Flow Workbook</strong> + Lifetime Cross-Device Magic Restore</li>
               </ul>
             </div>
             <a href="https://whop.com/checkout/plan_9sdgFI753ucXQ" class="pw-btn-primary pw-btn-emerald whop-checkout-button" data-whop-checkout data-whop-plan="annual" data-tom-paid-plan="annual" style="width:100%;">
-              Select Annual Research Pass &mdash; $199/yr &rarr;
+              Unlock Annual Suite &mdash; $199/yr &rarr;
             </a>
           </div>
         </div>
 
-        <div style="margin-top:18px;padding:16px 18px;background:#F8FAFC;border:1px solid #CBD5E1;border-radius:10px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
-          <div style="font-size:0.9rem;color:#334155;max-width:620px;line-height:1.55;">
-            <strong style="color:#0F172A;">Inspect Before You Decide:</strong> Review our 2-page sample PDF (2000&ndash;2025 crisis comparison table + Fidelity/Schwab limit-order preview) before purchasing.
-          </div>
-          <a href="/assets/downloads/tom_sample_2p.pdf" target="_blank" rel="noopener" class="pw-btn-primary" style="background:#FFFFFF;color:#0F2C22;border:1.5px solid #0F2C22;padding:10px 18px;font-size:0.92rem;text-decoration:none;">
-            Preview Free 2-Page Sample PDF &rarr;
-          </a>
-        </div>
+        <p style="margin:12px 0 6px;text-align:center;"><a href="/archive.html" style="color:#0F2C22;font-weight:700;text-decoration:underline;">Research Archive</a></p>
         <p class="pw-mor-note" style="line-height:1.65;">
           <strong>Standard Digital Refund &amp; Cancellation Policy:</strong> (1) Full refund within 7 days if unopened/undownloaded; (2) Non-refundable for change of mind once digital PDF/content download or access begins (free 2-page sample provided above); (3) 100% refund for technical file errors or duplicate billing; (4) Cancel recurring passes anytime in 1 click. Secure Checkout via Whop.com &middot; Support: <a href="mailto:hello@truthofmarket.com" style="color:inherit;text-decoration:underline;">hello@truthofmarket.com</a>.
         </p>
-        <div style="margin-top:20px;padding:18px 20px;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:10px;">
-          <div class="pw-kicker" style="margin-bottom:6px;">EARLY READER FEEDBACK &amp; VERIFIED REVIEWS</div>
-          <p style="margin:0 0 10px;font-size:0.9rem;color:#475569;">We collect candid reader notes from self-directed retirees reviewing our 2000&ndash;2025 historical workbook. Have you tested the sample PDF or workbook? Share a 2-sentence review to help future readers.</p>
-          <a href="mailto:hello@truthofmarket.com?subject=TruthOfMarket%20Reader%20Review" style="font-size:0.88rem;font-weight:700;color:#065F46;text-decoration:underline;">Submit an Early Reader Review &rarr;</a>
-        </div>
       </section>
 
       <!-- Screen 4: Paid Research Vault, Custom Dollar SMH x XLV + SGOV Workbook PDF, Stress Test, 401k/IRA Roadmap & Monthly Report Card -->
@@ -8143,6 +8165,9 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
             </div>
           </div>
 
+          <div id="tomScreen4UpgradeCard" style="padding:14px 16px;background:#FEFCE8;border:1px solid #FCD34D;border-radius:8px;margin-bottom:14px;font-size:0.9rem;color:#78350F;">
+            <strong>Ready for the Next Step on Your Research Ladder?</strong> Starter ($9) readers can add daily pre-market regime briefings with the <a href="https://whop.com/checkout/plan_xVJeNwyrDef8T" class="whop-checkout-button" data-whop-plan="monthly" style="color:#065F46;font-weight:800;text-decoration:underline;">Monthly Pass ($29/mo)</a>, or switch to the <a href="https://whop.com/checkout/plan_9sdgFI753ucXQ" class="whop-checkout-button" data-whop-plan="annual" style="color:#065F46;font-weight:800;text-decoration:underline;">Annual Premium Suite ($199/yr &middot; Save 43%) &rarr;</a>.
+          </div>
           <div id="tomSatisfactionMount"></div>
         </div>
       </section>
