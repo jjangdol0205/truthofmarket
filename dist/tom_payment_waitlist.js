@@ -77,7 +77,7 @@
     window.PAYMENT_CONFIG.WHOP_TOM_STARTER_URL = WHOP_TOM_STARTER_URL;
     window.PAYMENT_CONFIG.WHOP_TOM_MONTHLY_URL = WHOP_TOM_MONTHLY_URL;
     window.PAYMENT_CONFIG.WHOP_TOM_ANNUAL_URL = WHOP_TOM_ANNUAL_URL;
-    window.PAYMENT_CONFIG.SUPPORT_EMAIL = window.PAYMENT_CONFIG.SUPPORT_EMAIL || "beable9489@gmail.com";
+    window.PAYMENT_CONFIG.SUPPORT_EMAIL = window.PAYMENT_CONFIG.SUPPORT_EMAIL || "hello@truthofmarket.com";
   }
 
   window.TOM_COPY_MODE = "LIVE_SHARP";
@@ -312,8 +312,8 @@
       '  <h3 id="tomWhopModalTitle" style="margin:0 0 6px;font-size:1.25rem;line-height:1.3;font-weight:800;color:#0f172a;">' +
       "    TruthOfMarket Research Pass &mdash; Secure Checkout" +
       "  </h3>" +
-      '  <p style="margin:0;font-size:14px;line-height:1.55;color:#475569;">' +
-      "    Educational Market Data Newsletter + 2000&ndash;2025 Historical Statistical Workbook (SMH &times; XLV + SGOV 2-Pillar Historical Case Study &mdash; Strictly Non-Advisory Educational Publisher)." +
+      '  <p style="margin:0;font-size:13.5px;line-height:1.5;color:#475569;">' +
+      "    Non-Advisory Educational Research &middot; 2000&ndash;2025 SMH &times; XLV + SGOV Study" +
       "  </p>" +
       '  <div class="tom-whop-plan-tabs" role="radiogroup" aria-label="Select Research Pass">' +
       '    <button type="button" class="tom-whop-tab-btn" data-whop-tab="starter">' +
@@ -339,11 +339,8 @@
       '" target="_blank" rel="noopener">Open Full-Screen Secure Checkout &rarr;</a>' +
       "  </div>" +
       '  <div id="tomWhopEmbedMount" aria-live="polite" style="margin-bottom:10px;"></div>' +
-      '  <div style="margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;font-size:12px;color:#475569;">' +
-      '    <span>Secure Checkout via Whop.com &middot; 7-Day Unopened Refund &middot; 1-Click Cancel &middot; <a href="mailto:hello@truthofmarket.com" style="color:#065f46;font-weight:700;">hello@truthofmarket.com</a></span>' +
-      '    <a id="tomWhopDirectFooterLink" data-whop-direct-tab="1" href="' +
-      WHOP_TOM_MONTHLY_URL +
-      '" target="_blank" rel="noopener" style="color:#065f46;font-weight:700;text-decoration:underline;">Open Secure Whop Checkout in New Tab &rarr;</a>' +
+      '  <div style="margin-top:8px;padding-top:8px;border-top:1px solid #e2e8f0;font-size:12px;color:#475569;text-align:center;">' +
+      '    Secure Checkout via Whop.com &middot; 7-Day Unopened Refund &middot; 1-Click Cancel &middot; <a href="mailto:hello@truthofmarket.com" style="color:#065f46;font-weight:700;">hello@truthofmarket.com</a>' +
       "  </div>" +
       "</div>";
 

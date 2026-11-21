@@ -595,7 +595,7 @@
   }
 
   /* ==========================================================================
-   * 3. Standard Digital Refund & Support Link (Replaces legacy 14-Day copy!)
+   * 3. Standard Digital Refund & Support Link (Replaces legacy 7-Day copy!)
    * ========================================================================== */
   function buildRefundSupportMailto(div, email, orderRef) {
     var d = String(div || detectDivFromHost()).toUpperCase();

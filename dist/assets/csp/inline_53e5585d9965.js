@@ -15,7 +15,7 @@ window.PAYMENT_CONFIG = {
     },
     WHOP_TOM_MONTHLY_URL: 'https://whop.com/checkout/plan_xVJeNwyrDef8T',
     WHOP_TOM_ANNUAL_URL: 'https://whop.com/checkout/plan_9sdgFI753ucXQ',
-    SUPPORT_EMAIL: 'beable9489@gmail.com'
+    SUPPORT_EMAIL: 'hello@truthofmarket.com'
   };
   var COPY_MODE = 'LIVE_SHARP';
   window.TOM_COPY_MODE = COPY_MODE;

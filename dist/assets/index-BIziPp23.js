@@ -42,7 +42,7 @@
     },
     WHOP_TOM_MONTHLY_URL: WHOP_TOM_MONTHLY_URL,
     WHOP_TOM_ANNUAL_URL: WHOP_TOM_ANNUAL_URL,
-    SUPPORT_EMAIL: "beable9489@gmail.com",
+    SUPPORT_EMAIL: "hello@truthofmarket.com",
   };
 
   if (!window.PAYMENT_CONFIG || typeof window.PAYMENT_CONFIG !== "object") {
@@ -72,7 +72,7 @@
     };
     window.PAYMENT_CONFIG.WHOP_TOM_MONTHLY_URL = WHOP_TOM_MONTHLY_URL;
     window.PAYMENT_CONFIG.WHOP_TOM_ANNUAL_URL = WHOP_TOM_ANNUAL_URL;
-    window.PAYMENT_CONFIG.SUPPORT_EMAIL = window.PAYMENT_CONFIG.SUPPORT_EMAIL || "beable9489@gmail.com";
+    window.PAYMENT_CONFIG.SUPPORT_EMAIL = window.PAYMENT_CONFIG.SUPPORT_EMAIL || "hello@truthofmarket.com";
   }
 
   window.TOM_COPY_MODE = "LIVE_SHARP";
@@ -317,7 +317,7 @@
       "  </div>" +
       '  <div id="tomWhopEmbedMount" aria-live="polite"></div>' +
       '  <div style="margin-top:12px;padding-top:10px;border-top:1px solid #e2e8f0;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;color:#475569;">' +
-      '    <span>Secure Checkout via Whop.com &middot; 14-Day Refund Policy &middot; Cancel anytime &middot; Support: <a href="mailto:beable9489@gmail.com" style="color:#1d4ed8;font-weight:700;">beable9489@gmail.com</a></span>' +
+      '    <span>Secure Checkout via Whop.com &middot; 7-Day Refund Policy &middot; Cancel anytime &middot; Support: <a href="mailto:hello@truthofmarket.com" style="color:#1d4ed8;font-weight:700;">hello@truthofmarket.com</a></span>' +
       '    <a id="tomWhopDirectFooterLink" data-whop-direct-tab="1" href="' +
       WHOP_TOM_MONTHLY_URL +
       '" target="_blank" rel="noopener" style="color:#065f46;font-weight:700;text-decoration:underline;">Open Secure Whop Checkout in New Tab &rarr;</a>' +
@@ -1239,7 +1239,7 @@ async function validateLicense(licenseKey) {
             tier: "free",
             expires_at: null,
             message:
-              "Invalid or unrecognized license key. Please check your Whop receipt or contact beable9489@gmail.com.",
+              "Invalid or unrecognized license key. Please check your Whop receipt or contact hello@truthofmarket.com.",
           };
         }
         const whopResp = await fetch(
@@ -2828,10 +2828,10 @@ function renderDoctorVipUnlockPreview(state) {
         </a>
       </div>
       <div class="doc-compliance-notice" style="margin-top:8px; font-size:0.66rem; color:var(--muted); text-align:center; font-family:var(--font-mono); line-height:1.45;">
-        🔒 Whop.com (Global Card / Apple Pay / Google Pay) · Self-Directed Educational Calculator Software · 14-Day Refund Policy
+        🔒 Whop.com (Global Card / Apple Pay / Google Pay) · Self-Directed Educational Calculator Software · 7-Day Refund Policy
       </div>
       <div style="margin-top:6px; font-size:0.7rem; color:#94a3b8; text-align:center; line-height:1.45;">
-        Support Desk: <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#93c5fd; font-weight:700; text-decoration:underline;">beable9489@gmail.com</a>
+        Support Desk: <a href="mailto:hello@truthofmarket.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#93c5fd; font-weight:700; text-decoration:underline;">hello@truthofmarket.com</a>
       </div>
     `
     : `
@@ -3765,7 +3765,7 @@ function renderChartBlindTest(state) {
                     ${copy.unlockLifetimeBtn}
                   </a>
                   <div style="width:100%; font-size:0.69rem; color:#94a3b8; line-height:1.4; margin-top:2px;">
-                    Checkout issue in your region? Join <a href="https://t.me/truthofmarketss" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">@truthofmarketss</a> or request instant Pro activation via <a href="mailto:beable9489@gmail.com?subject=Instant%20Pro%20Activation%20Request%20(TruthOfMarket)" style="color:#93c5fd; font-weight:700; text-decoration:underline;">email</a>.
+                    Checkout issue in your region? Join <a href="https://t.me/truthofmarketss" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">@truthofmarketss</a> or request instant Pro activation via <a href="mailto:hello@truthofmarket.com?subject=Instant%20Pro%20Activation%20Request%20(TruthOfMarket)" style="color:#93c5fd; font-weight:700; text-decoration:underline;">email</a>.
                   </div>
                 `
             }
@@ -6458,7 +6458,7 @@ function renderModals(state) {
         </div>
         <h3 style="font-size:1.18rem; font-weight:800; margin-top:4px; color:var(--text);">Unlock Full VIP Retiree Worksheets &amp; Tax-Bucket Reference</h3>
         <p style="color:var(--text-secondary); font-size:0.95rem; margin-top:6px; line-height:1.55;">
-          Includes Custom Nest-Egg Dollar ($) Budget Worksheet, 12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Reference, and Large-Print 1-Page Weather Action Sheet. Backed by our 14-Day Refund Policy.
+          Includes Custom Nest-Egg Dollar ($) Budget Worksheet, 12-Month Dividend Paycheck Calendar &amp; Tax-Bucket Reference, and Large-Print 1-Page Weather Action Sheet. Backed by our 7-Day Refund Policy.
         </p>
         <div style="display:grid; grid-template-columns:1fr; gap:10px; margin:14px 0 10px;">
           <a class="btn btn-primary whop-checkout-button" data-whop-checkout data-whop-plan="monthly" data-tom-paid-plan="monthly" href="${polarMonthly}" style="justify-content:center; min-height:62px; padding:12px 16px; font-size:1.02rem; font-weight:800; border-radius:12px;">
@@ -6469,10 +6469,10 @@ function renderModals(state) {
           </a>
         </div>
         <div style="margin-bottom:8px; font-size:0.78rem; color:#e2e8f0; font-weight:700; text-align:center; line-height:1.45;">
-          💳 Whop.com (Global Card / Apple Pay / Google Pay) · 1-Click Cancel Anytime · 14-Day Refund Policy
+          💳 Whop.com (Global Card / Apple Pay / Google Pay) · 1-Click Cancel Anytime · 7-Day Refund Policy
         </div>
         <div style="margin-bottom:12px; font-size:0.72rem; color:#94a3b8; text-align:center; line-height:1.45;">
-          Support Desk: <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20VIP%20Software%20Support" style="color:#93c5fd; font-weight:700; text-decoration:underline;">beable9489@gmail.com</a>
+          Support Desk: <a href="mailto:hello@truthofmarket.com?subject=TruthOfMarket%20VIP%20Software%20Support" style="color:#93c5fd; font-weight:700; text-decoration:underline;">hello@truthofmarket.com</a>
         </div>
         <div id="licenseMsg" style="font-size:0.8rem; margin-bottom:8px; min-height:1.1em;"></div>
         <details id="licenseRestoreDetails" ${state.isProUnlocked ? "open" : ""} style="background:#0b1120; border:1px solid rgba(148,163,184,0.25); border-radius:10px; padding:10px 12px;">
@@ -6705,7 +6705,7 @@ function renderModals(state) {
       </div>
     </div>
 
-    <!-- LEGAL, PRIVACY, 14-DAY REFUND POLICY & SUPPORT MODAL -->
+    <!-- LEGAL, PRIVACY, 7-DAY REFUND POLICY & SUPPORT MODAL -->
     <div class="modal-backdrop" id="legalModal">
       <div class="modal" style="max-width:740px;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
@@ -6714,13 +6714,13 @@ function renderModals(state) {
               LEGAL &amp; COMPLIANCE · Whop.com (Global Card / Apple Pay / Google Pay)
             </div>
             <h3 style="font-size:1.1rem; font-weight:800; color:#ffffff; margin-top:3px;" id="legalModalTitle">
-              Terms of Service, Privacy Policy &amp; 14-Day Refund Policy
+              Terms of Service, Privacy Policy &amp; 7-Day Refund Policy
             </h3>
           </div>
           <div style="display:flex; gap:6px; flex-wrap:wrap;">
             <a class="btn btn-sm" href="/terms.html">Terms Page ↗</a>
             <a class="btn btn-sm" href="/privacy.html">Privacy Page ↗</a>
-            <a class="btn btn-sm" href="/refund.html">14-Day Refund Page ↗</a>
+            <a class="btn btn-sm" href="/refund.html">7-Day Refund Page ↗</a>
             <button type="button" class="btn btn-sm" id="btnCloseLegalModal">Close ✕</button>
           </div>
         </div>
@@ -6738,15 +6738,15 @@ function renderModals(state) {
             </p>
           </div>
           <div data-legal-section="refund" style="border-top:1px solid var(--border); padding-top:12px; margin-top:12px;">
-            <h4 style="color:#ffffff; font-size:0.95rem; font-weight:800; margin-bottom:6px;">3. 14-Day No-Questions-Asked Refund Policy &amp; 1-Click Cancellation</h4>
+            <h4 style="color:#ffffff; font-size:0.95rem; font-weight:800; margin-bottom:6px;">3. 7-Day No-Questions-Asked Refund Policy &amp; 1-Click Cancellation</h4>
             <p style="color:var(--muted); margin-bottom:10px;">
-              Both Monthly Research Pass ($29/mo) and Annual Research Pass ($199/yr) software subscriptions are backed by a <b>14-Day No-Questions-Asked Full Refund Guarantee</b>. Email <a href="mailto:beable9489@gmail.com" style="color:#60a5fa; font-weight:700;">beable9489@gmail.com</a> within 14 calendar days of initial purchase for a 100% full refund to your original payment method. You may also cancel recurring billing anytime in 1 click via your Whop Orders Portal.
+              Both Monthly Research Pass ($29/mo) and Annual Research Pass ($199/yr) software subscriptions are backed by a <b>7-Day No-Questions-Asked Full Refund Guarantee</b>. Email <a href="mailto:hello@truthofmarket.com" style="color:#60a5fa; font-weight:700;">hello@truthofmarket.com</a> within 14 calendar days of initial purchase for a 100% full refund to your original payment method. You may also cancel recurring billing anytime in 1 click via your Whop Orders Portal.
             </p>
           </div>
           <div data-legal-section="support" style="border-top:1px solid var(--border); padding-top:12px; margin-top:12px;">
             <h4 style="color:#ffffff; font-size:0.95rem; font-weight:800; margin-bottom:6px;">4. Educational Market Data &amp; Quantitative Research Desk</h4>
             <p style="color:var(--muted);">
-              • <b>Official Support Email</b>: <a href="mailto:beable9489@gmail.com" style="color:#60a5fa; font-weight:700;">beable9489@gmail.com</a><br/>
+              • <b>Official Support Email</b>: <a href="mailto:hello@truthofmarket.com" style="color:#60a5fa; font-weight:700;">hello@truthofmarket.com</a><br/>
               • <b>Merchant of Record</b>: Whop.com (Global Card / Apple Pay / Google Pay) (<a href="https://whop.com/orders/" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;">Manage Orders &amp; Receipts ↗</a>)
             </p>
           </div>
@@ -7775,7 +7775,7 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
       <!-- Screen 0: Above-the-Fold Instant Start CTA + Live Market Temperature + Founding Note & 2000-2025 Simulation Table -->
       <section id="pwScreen0" data-pw-screen="0">
         <div class="pw-kicker">INDEPENDENT MARKET DATA &amp; EDUCATIONAL RESEARCH</div>
-        <h1 class="pw-serif-h1">Why quiet two-pillar discipline outlasts loud stock picking.</h1>
+        <h1 class="pw-serif-h1">Protect Your Retirement From Market Crashes — Without Giving Up Growth.</h1>
 
         <div class="pw-live-temp-pill" id="tomLiveTempBadge" role="status" aria-live="polite">
           <span class="pw-live-dot" aria-hidden="true"></span>
@@ -7784,9 +7784,9 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
 
         <div class="pw-primary-cta-wrap pw-above-fold-cta">
           <button type="button" class="pw-btn-primary pw-btn-emerald" id="btnStartPwStepUp" data-pw-start-stepup="1">
-            Explore Historical Sector Backtest (4 Steps) &rarr;
+            Check My Calm Retirement Mix (Free · 4 Quick Steps) &rarr;
           </button>
-          <span class="pw-cta-caption">Instant free 2000&ndash;2025 historical study ratio &amp; drawdown comparison &middot; Zero email wall</span>
+          <span class="pw-cta-caption">See how 2 simple ETFs cut worst crash losses in half (2000&ndash;2025 data) &middot; No email required</span>
         </div>
 
         <figure class="pw-editorial-figure">
@@ -7870,7 +7870,7 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
 
         <div class="pw-primary-cta-wrap">
           <button type="button" class="pw-btn-primary pw-btn-emerald" data-pw-start-stepup="1">
-            Historical Sector Backtest Explorer (4 Steps) &rarr;
+            Check My Calm Retirement Mix (Free · 4 Quick Steps) &rarr;
           </button>
           <span class="pw-cta-caption">Four brief study parameters &middot; Instant free baseline summary &middot; No brokerage login required</span>
         </div>
