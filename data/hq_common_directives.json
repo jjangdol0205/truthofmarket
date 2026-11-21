@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-19T06:52:43.802267+00:00",
+  "updatedAt": "2026-11-21T03:42:16.659410+00:00",
   "telegramDedicatedConversationId": "1921e31e-ab59-4720-9419-93cac770374d",
   "pcDirectConversationId": "876538cc-3cd8-41af-8abe-00937e093957",
   "standingDirectives": [
@@ -168,6 +168,16 @@
   ],
   "recentCommonOrders": [
     {
+      "text": "유튜브 자동 게시 되고있어?",
+      "status": "DISPATCHED",
+      "createdAt": "2026-11-21 12:42:16"
+    },
+    {
+      "text": "396409",
+      "status": "DISPATCHED",
+      "createdAt": "2026-11-20 21:13:37"
+    },
+    {
       "text": "https://youtu.be/L8V6zb1Aozs?si=OeNkwtqS2CqxfLNn",
       "status": "DISPATCHED",
       "createdAt": "2026-11-19 15:52:43"
@@ -231,16 +241,6 @@
       "text": "2사업부랑 5사업부 그냥 단계별로 스텝업 부분만 나오게 하고\n밑에 다른정보들은 하나도 안나오게 해야해 \n\n나머지 정보는 이메일 가입을 할때 일부 열어주고 유료 가입을 할때 가격 등급에 따라 열어주는 식으로 해야 됨\n\n그리고 지금은 너무 ai티가 많이 나 사람이 직접 정성스럽게 만든 홈페이지 처럼 만들어야 하고\n\n첫화면엔 왜 이 홈페이지를 만들었고 이 홈페이지는 어떤 서비스를 제공하는지 설명이 들어가서 고객들에 공감을 얻어야 해\n\n그리고 나서 버튼을 누르면 자연스럽게 본인 정보를 입력하도록 유도해야해\n\n내 요지를 이해했는지 너가 정리해서 2사업부랑 5사업부 계획 짜줘",
       "status": "DISPATCHED",
       "createdAt": "2026-11-18 13:10:12"
-    },
-    {
-      "text": "GitHub 공식 저장소 https://github.com/affaan-m/ECC.git (사칭 미러 저장소 사용 절대 금지)을 임시 폴더(_tmp_ecc)에 클론한 뒤, 현재 워크스페이스의 .agent/ 구조(.agent/rules/, .agent/workflows/, .agent/skills/) 및 안티그래비티 전역 경로(~/.gemini/antigravity/)에 맞춰 아래 기준으로 '경량·고효율 포괄 이식'을 수행하라. 중간 질문 없이 끝까지 자율 실행하라:\n\n1. [충돌 방지 및 도구 호환 대원칙 — 무인 자율 실행 보존]:\n   - ECC 원본 중 '코드 작성 전 반드시 멈춰서 사용자 확인을 기다려라(WAIT for user confirmation)' 또는 '단순 정적 페이지 수정에도 80% 단위 테스트를 강제하라'는 조항은 내 무인 자동화 파이프라인을 멈추게 하므로 제외하거나 자율 실행 모드로 재작성하라.\n   - 원본 스킬 내부에 하드코딩된 유료 외부 MCP(firecrawl, exa 등) 및 클로드 전용 도구명은 안티그래비티 기본 내장 웹 검색·파일·터미널 도구로 자동 치환하여 추가 비용과 에러 없이 작동하게 하라.\n\n2. [선별 이식할 핵심 컴포넌트 추출]:\n   - .agent/rules/ (상시 가드레일 — 정확히 아래 3개로 압축 배치):\n     * security.md (API 키·유료 Paywall 정적 파일 누수·가짜 라이선스 키 우회·민감정보 노출 원천 차단)\n     * python-js-clean.md (Python 데이터/영상 스크립트 및 프론트엔드 JS 문법·인앱 브라우저 호환 핵심 규칙)\n     * pre-deploy-gate.md (내가 별도 명령어를 안 쳐도 모든 웹 배포·푸시 직전 자동으로 페이월 누수·깨진 링크 404·빌드 에러 검수 및 푸시 후 실서버 캐시 우회 curl 반영 확인을 강제 수행)\n   - .agent/workflows/ (슬래시 명령어 — commands/에서 핵심 이식):\n     * build-fix.md (/build-fix: 빌드·배포 깨짐 최소 변경 자동 복구)\n     * code-review.md (/code-review: 배포 전 치명적 버그·모바일 UI·링크 404 전수 검수)\n     * security-scan.md (/security-scan: 페이월 우회 및 유료 정적 파일·시크릿 노출 점검)\n     * marketing-campaign.md (/marketing-campaign: 시장조사 기반 포지셔닝·랜딩 카피·숏폼 대본 일괄 기획)\n   - .agent/skills/ (평상시 토큰 소모가 0인 온디맨드 스킬 — agents/, skills/, .agents/skills/ 전체를 전수 검색하여 아래 분야의 모든 스킬을 YAML frontmatter 규격의 <skill-name>/SKILL.md 형태로 빠짐없이 이식):\n     * 마케팅·그로스·카피라이팅·브랜드 보이스·콘텐츠·시장조사·심층리서치·SEO 관련 모든 스킬\n     * UI/UX 디자인 검수·성능 최적화·빌드 복구(build-error-resolver)·코드/보안 리뷰어(code-reviewer, security-reviewer) 관련 모든 스킬\n\n3. [정리 및 보고]:\n   - 이식 완료 후 임시 클론 폴더(_tmp_ecc)는 깨끗이 삭제하고, 설치된 상시 규칙 3개·슬래시 명령어·스킬 전체 목록과 각각의 자동 발동 조건(사용법)을 표로 정리해 보고하라!",
-      "status": "DISPATCHED",
-      "createdAt": "2026-11-18 11:54:25"
-    },
-    {
-      "text": "GitHub 공식 저장소 https://github.com/affaan-m/ECC.git (사칭 미러 저장소 사용 절대 금지)을 임시 폴더(_tmp_ecc)에 클론한 뒤, 현재 워크스페이스의 .agent/ 구조(.agent/rules/, .agent/workflows/, .agent/skills/) 및 안티그래비티 전역 경로(~/.gemini/antigravity/)에 맞춰 아래 기준으로 '경량·고효율 포괄 이식'을 수행하라. 중간 질문 없이 끝까지 자율 실행하라:\n\n1. [충돌 방지 및 도구 호환 대원칙 — 무인 자율 실행 보존]:\n   - ECC 원본 중 '코드 작성 전 반드시 멈춰서 사용자 확인을 기다려라(WAIT for user confirmation)' 또는 '단순 정적 페이지 수정에도 80% 단위 테스트를 강제하라'는 조항은 내 무인 자동화 파이프라인을 멈추게 하므로 제외하거나 자율 실행 모드로 재작성하라.\n   - 원본 스킬 내부에 하드코딩된 유료 외부 MCP(firecrawl, exa 등) 및 클로드 전용 도구명은 안티그래비티 기본 내장 웹 검색·파일·터미널 도구로 자동 치환하여 추가 비용과 에러 없이 작동하게 하라.\n\n2. [선별 이식할 핵심 컴포넌트 추출]:\n   - .agent/rules/ (상시 가드레일 — 정확히 아래 3개로 압축 배치):\n     * security.md (API 키·유료 Paywall 정적 파일 누수·가짜 라이선스 키 우회·민감정보 노출 원천 차단)\n     * python-js-clean.md (Python 데이터/영상 스크립트 및 프론트엔드 JS 문법·인앱 브라우저 호환 핵심 규칙)\n     * pre-deploy-gate.md (내가 별도 명령어를 안 쳐도 모든 웹 배포·푸시 직전 자동으로 페이월 누수·깨진 링크 404·빌드 에러 검수 및 푸시 후 실서버 캐시 우회 curl 반영 확인을 강제 수행)\n   - .agent/workflows/ (슬래시 명령어 — commands/에서 핵심 이식):\n     * build-fix.md (/build-fix: 빌드·배포 깨짐 최소 변경 자동 복구)\n     * code-review.md (/code-review: 배포 전 치명적 버그·모바일 UI·링크 404 전수 검수)\n     * security-scan.md (/security-scan: 페이월 우회 및 유료 정적 파일·시크릿 노출 점검)\n     * marketing-campaign.md (/marketing-campaign: 시장조사 기반 포지셔닝·랜딩 카피·숏폼 대본 일괄 기획)\n   - .agent/skills/ (평상시 토큰 소모가 0인 온디맨드 스킬 — agents/, skills/, .agents/skills/ 전체를 전수 검색하여 아래 분야의 모든 스킬을 YAML frontmatter 규격의 <skill-name>/SKILL.md 형태로 빠짐없이 이식):\n     * 마케팅·그로스·카피라이팅·브랜드 보이스·콘텐츠·시장조사·심층리서치·SEO 관련 모든 스킬\n     * UI/UX 디자인 검수·성능 최적화·빌드 복구(build-error-resolver)·코드/보안 리뷰어(code-reviewer, security-reviewer) 관련 모든 스킬\n\n3. [정리 및 보고]:\n   - 이식 완료 후 임시 클론 폴더(_tmp_ecc)는 깨끗이 삭제하고, 설치된 상시 규칙 3개·슬래시 명령어·스킬 전체 목록과 각각의 자동 발동 조건(사용법)을 표로 정리해 보고하라!",
-      "status": "DISPATCHED",
-      "createdAt": "2026-11-18 11:52:58"
     }
   ]
 }

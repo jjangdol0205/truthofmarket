@@ -354,9 +354,9 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
           <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:14px 16px;background:#F8FAFC;border:1px solid #CBD5E1;border-radius:8px;margin-bottom:18px;">
             <label for="tomCustomDollarInput" style="font-weight:700;font-size:0.95rem;color:#0F172A;">Household Sample Scale ($ USD):</label>
             <input type="number" id="tomCustomDollarInput" min="10000" max="10000000" step="10000" value="300000" style="padding:10px 14px;border:1px solid #94A3B8;border-radius:6px;font-size:1.05rem;font-weight:700;width:180px;font-variant-numeric:tabular-nums;" />
-            <a href="/assets/downloads/tom_master_workbook_2000_2025_14p.pdf" download class="pw-btn-primary pw-btn-emerald" id="btnDownloadTomMaster14pPdf" style="text-decoration:none;">
+            <button type="button" class="pw-btn-primary pw-btn-emerald" id="btnDownloadTomMaster14pPdf">
               Download Complete 14-Page Master Workbook PDF &rarr;
-            </a>
+            </button>
             <button type="button" class="pw-btn-primary" id="btnDownloadTomCustomPdf" style="background:#FFFFFF;color:#0F2C22;border:1.5px solid #0F2C22;">
               Print Custom Dollar Worksheet &rarr;
             </button>
@@ -424,9 +424,12 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
           Enter the email address used during registration to reopen your saved SMH &times; XLV + SGOV historical study summary, or enter a Whop receipt / pass reference if applicable.
         </p>
         <form id="pwRestoreForm" novalidate style="display:flex;flex-direction:column;gap:12px;">
-          <input type="email" id="pwRestoreEmailInput" class="pw-email-input" style="min-width:180px;width:100%;box-sizing:border-box;" placeholder="Registered email address" autocomplete="email" />
-          <input type="text" id="pwRestoreLicenseInput" class="pw-email-input" style="min-width:180px;width:100%;box-sizing:border-box;" placeholder="Optional: Whop receipt or pass ID" autocomplete="off" />
-          <button type="submit" class="pw-btn-primary pw-btn-emerald" style="width:100%;">Restore Session &rarr;</button>
+          <input type="email" id="pwRestoreEmailInput" class="pw-email-input" style="min-width:180px;width:100%;box-sizing:border-box;" placeholder="Registered email address used at Whop checkout" autocomplete="email" />
+          <input type="text" id="pwRestoreLicenseInput" class="pw-email-input" style="min-width:180px;width:100%;box-sizing:border-box;" placeholder="Access code, Whop receipt ID, or 6-digit email OTP" autocomplete="one-time-code" />
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button type="submit" class="pw-btn-primary pw-btn-emerald" style="flex:1;min-width:180px;">Verify &amp; Open Vault &rarr;</button>
+            <button type="button" id="btnSendTomOtp" class="pw-btn-primary" style="background:#FFFFFF;color:#0F2C22;border:1.5px solid #0F2C22;">Email 6-Digit Code</button>
+          </div>
         </form>
         <div id="pwRestoreStatus" role="status" aria-live="polite" style="display:none;margin-top:12px;font-size:0.88rem;color:#065F46;"></div>
       </div>
@@ -998,13 +1001,25 @@ export function bindPrivateWealthSingleBreathEvents(state) {
         }
         return;
       }
+      const isSixDigitOtp = /^\d{6}$/.test(lic);
+      if (!lic || (!isSixDigitOtp && lic.length < 6)) {
+        if (stEl) {
+          stEl.style.display = "block";
+          stEl.style.color = "#991B1B";
+          stEl.textContent = "Please enter your Access Code, Whop receipt ID, or click 'Email 6-Digit Code' to verify securely.";
+        }
+        return;
+      }
       if (stEl) {
         stEl.style.display = "block";
         stEl.style.color = "#334155";
         stEl.textContent = "Verifying Whop entitlement with server...";
       }
+      const verifyPayload = isSixDigitOtp
+        ? { div: "TOM", email: em, otp: lic }
+        : { div: "TOM", email: em, access_code: lic };
       const verifyPromise = (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.verifyEntitlement === "function")
-        ? window.DreamCompanyCRM.verifyEntitlement({ div: "TOM", email: em, access_code: lic })
+        ? window.DreamCompanyCRM.verifyEntitlement(verifyPayload)
         : Promise.resolve({ authorized: false });
 
       verifyPromise.then((vres) => {
@@ -1014,17 +1029,17 @@ export function bindPrivateWealthSingleBreathEvents(state) {
         } catch (_) {}
         if (vres && vres.authorized) {
           try {
-            if (magicObj.email && magicObj.access_code && window.DreamCompanyCRM && window.DreamCompanyCRM.verifyEntitlement) { window.DreamCompanyCRM.verifyEntitlement({ div: "TOM", email: magicObj.email, access_code: magicObj.access_code, magic_restore: true }).then((vr) => { if (vr && vr.authorized) { localStorage.setItem("rsa_pro_unlocked", "true"); showScreen(4); } }); }
-            localStorage.setItem("rsa_token", vres.access_code || lic || "WHOP_VERIFIED");
+            localStorage.setItem("rsa_pro_unlocked", "true");
+            localStorage.setItem("rsa_token", isSixDigitOtp ? "OTP_VERIFIED" : lic);
             if (state) {
               state.isProUnlocked = true;
-              state.licenseKey = vres.access_code || lic;
+              state.licenseKey = isSixDigitOtp ? "OTP_VERIFIED" : lic;
             }
           } catch (_) {}
           if (stEl) {
             stEl.style.display = "block";
             stEl.style.color = "#065F46";
-            stEl.textContent = "Verified Whop Research Pass! Opening your Paid Research Vault & 14-Page PDF.";
+            stEl.textContent = "Verified Whop Research Pass! Opening your Paid Research Vault & Protected 14-Page PDF.";
           }
           setTimeout(() => {
             if (restoreModal) restoreModal.classList.remove("is-open");
@@ -1035,14 +1050,54 @@ export function bindPrivateWealthSingleBreathEvents(state) {
           if (stEl) {
             stEl.style.display = "block";
             stEl.style.color = "#991B1B";
-            stEl.textContent = "No active Whop paid pass matched this email/code yet. Opening your free historical study summary — if you just paid, please wait 30 seconds or email hello@truthofmarket.com.";
+            stEl.textContent = "No active Whop paid pass matched this email/code yet. Click 'Email 6-Digit Code' or email hello@truthofmarket.com for support.";
           }
-          setTimeout(() => {
-            if (restoreModal) restoreModal.classList.remove("is-open");
-            showScreen(2);
-          }, 950);
         }
       });
+    });
+  }
+
+  const btnSendTomOtp = document.getElementById("btnSendTomOtp");
+  if (btnSendTomOtp) {
+    btnSendTomOtp.addEventListener("click", () => {
+      const emInp = document.getElementById("pwRestoreEmailInput");
+      const stEl = document.getElementById("pwRestoreStatus");
+      const em = String(emInp ? emInp.value : "").trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)) {
+        if (stEl) {
+          stEl.style.display = "block";
+          stEl.style.color = "#991B1B";
+          stEl.textContent = "Enter your checkout email address first, then click 'Email 6-Digit Code'.";
+        }
+        return;
+      }
+      if (stEl) {
+        stEl.style.display = "block";
+        stEl.style.color = "#334155";
+        stEl.textContent = "Sending 6-digit verification code if a paid pass matches...";
+      }
+      if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.requestAuthOtp === "function") {
+        window.DreamCompanyCRM.requestAuthOtp({ div: "TOM", email: em }).then(() => {
+          if (stEl) {
+            stEl.style.display = "block";
+            stEl.style.color = "#065F46";
+            stEl.textContent = "If a verified Whop purchase matches this email, a 6-digit code has been sent (valid 10 min). Enter it above.";
+          }
+        });
+      }
+    });
+  }
+
+  const master14pBtn = document.getElementById("btnDownloadTomMaster14pPdf");
+  if (master14pBtn) {
+    master14pBtn.addEventListener("click", () => {
+      if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.openProtectedPdfDownload === "function") {
+        window.DreamCompanyCRM.openProtectedPdfDownload("TOM", "tom_master_14p", () => {
+          if (restoreModal) restoreModal.classList.add("is-open");
+        });
+      } else if (restoreModal) {
+        restoreModal.classList.add("is-open");
+      }
     });
   }
 

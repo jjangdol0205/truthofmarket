@@ -527,7 +527,7 @@
         banner.innerHTML =
           "<div><strong>Whop Checkout Confirmed &mdash; " +
           planTitle +
-          " Active.</strong> Your Paid Screen 4 Vault &amp; 1:1 Custom PDF are open below, with a 14-day refund policy (<a href='mailto:beable9489@gmail.com?subject=TOM%2014-Day%20Refund%20or%20Support' style='color:#065f46;font-weight:700;text-decoration:underline;'>1-Click Support</a>).</div>" +
+          " Active.</strong> Your Paid Screen 4 Vault &amp; Protected 14-Page PDF are open below (<a href='mailto:hello@truthofmarket.com?subject=TOM%20Support%20or%20Refund' style='color:#065f46;font-weight:700;text-decoration:underline;'>1-Click Support</a>).</div>" +
           "<button type='button' onclick='this.parentNode.remove()' style='padding:6px 12px;border-radius:6px;border:1px solid #059669;background:#ffffff;color:#064e3b;font-weight:700;cursor:pointer;'>Dismiss</button>";
         document.body.insertBefore(banner, document.body.firstChild);
       }
@@ -536,14 +536,49 @@
 
   window.unlockTomPaidScreen4 = applyWhopCheckoutUnlock;
 
+  // 3. Handle ?payment=success&provider=whop return securely (NEVER trust bare URL params without server verification!)
   function setupWhopCheckoutSuccess() {
     try {
       var searchStr = (window.location && window.location.search) || "";
       if (searchStr.indexOf("payment=success") !== -1 || searchStr.indexOf("checkout_status=succeeded") !== -1) {
         var sp = new URLSearchParams(searchStr);
         var planParam = sp.get("plan") === "annual" ? "annual" : "monthly";
-        var cid = sp.get("receipt_id") || sp.get("checkout_id") || sp.get("session_id") || ("WHOP-" + planParam.toUpperCase());
-        applyWhopCheckoutUnlock("WHOP-2026-" + cid, planParam);
+        var planTitle = planParam === "annual" ? "Annual Research Pass ($199/yr)" : "Monthly Research Pass ($29/mo)";
+        var knownEm = sp.get("email") || sp.get("customer_email") || getKnownTomMemberEmail();
+        var cid = sp.get("receipt_id") || sp.get("checkout_id") || "";
+
+        if (knownEm && cid && window.DreamCompanyCRM && typeof window.DreamCompanyCRM.verifyEntitlement === "function") {
+          window.DreamCompanyCRM.verifyEntitlement({ div: "TOM", email: knownEm, access_code: cid }).then(function (vres) {
+            if (vres && vres.authorized) {
+              applyWhopCheckoutUnlock(cid, planParam);
+              return;
+            }
+            var m = document.getElementById("pwRestoreModal");
+            if (m) m.classList.add("is-open");
+          });
+          return;
+        }
+
+        if (typeof document !== "undefined" && document.body && !document.getElementById("tomWhopReturnBanner")) {
+          var banner = document.createElement("div");
+          banner.id = "tomWhopReturnBanner";
+          banner.setAttribute("role", "status");
+          banner.style.cssText =
+            "max-width:820px;margin:16px auto 0;padding:14px 18px;border-radius:8px;background:#ecfdf5;border:1.5px solid #059669;color:#064e3b;font-family:'Inter',sans-serif;font-size:15px;line-height:1.55;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;";
+          banner.innerHTML =
+            "<div><strong>Thank you for your " +
+            planTitle +
+            " order.</strong> Check your email for your Verified Access Code (arrives within 60 seconds), or click <strong>Verify Access</strong> to unlock your Paid Vault &amp; Protected 14-Page PDF.</div>" +
+            "<button type='button' id='tomOpenVerifyFromBanner' style='padding:8px 14px;border-radius:6px;border:none;background:#0F2C22;color:#ffffff;font-weight:700;cursor:pointer;'>Verify Access &rarr;</button>";
+          document.body.insertBefore(banner, document.body.firstChild);
+          var btn = document.getElementById("tomOpenVerifyFromBanner");
+          if (btn) {
+            btn.addEventListener("click", function () {
+              var m = document.getElementById("pwRestoreModal");
+              if (m) m.classList.add("is-open");
+            });
+          }
+        }
       }
     } catch (_) {}
   }

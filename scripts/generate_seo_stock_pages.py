@@ -146,7 +146,7 @@ HEAD_BEACON_SCRIPT = """  <script>
     },
     WHOP_TOM_MONTHLY_URL: 'https://whop.com/checkout/plan_xVJeNwyrDef8T',
     WHOP_TOM_ANNUAL_URL: 'https://whop.com/checkout/plan_9sdgFI753ucXQ',
-    SUPPORT_EMAIL: 'beable9489@gmail.com'
+    SUPPORT_EMAIL: 'hello@truthofmarket.com'
   };
   </script>
   <script async defer src="https://js.whop.com/static/checkout/loader.js"></script>
@@ -352,14 +352,14 @@ def build_ticker_directory_html(
     </nav>
     <div style="margin-top:18px;padding-top:14px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:0.96rem;color:#1e293b;">
       <span><strong>Educational Market Data &amp; Quantitative Research Desk:</strong> Questions about VIP worksheets, license keys, or 14-day refunds?</span>
-      <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#1d4ed8;font-weight:800;text-decoration:none;padding:10px 16px;min-height:48px;display:inline-flex;align-items:center;border:1.5px solid #93c5fd;border-radius:8px;background:#eff6ff;font-size:0.95rem;">Support Desk (beable9489@gmail.com) &rarr;</a>
+      <a href="mailto:hello@truthofmarket.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#1d4ed8;font-weight:800;text-decoration:none;padding:10px 16px;min-height:48px;display:inline-flex;align-items:center;border:1.5px solid #93c5fd;border-radius:8px;background:#eff6ff;font-size:0.95rem;">Support Desk (hello@truthofmarket.com) &rarr;</a>
     </div>
     <div style="margin-top:14px;padding:12px 16px;border-radius:10px;background:#f8fafc;border:1px solid #cbd5e1;display:flex;flex-wrap:wrap;gap:14px;align-items:center;font-size:0.92rem;">
       <a href="{prefix}terms.html" style="color:#1d4ed8;font-weight:800;text-decoration:underline;">Terms of Service</a>
       <span style="color:#94a3b8;">&middot;</span>
       <a href="{prefix}privacy.html" style="color:#1d4ed8;font-weight:800;text-decoration:underline;">Privacy Policy</a>
       <span style="color:#94a3b8;">&middot;</span>
-      <a href="{prefix}refund.html" style="color:#047857;font-weight:800;text-decoration:underline;">14-Day Refund Policy</a>
+      <a href="{prefix}refund.html" style="color:#047857;font-weight:800;text-decoration:underline;">Digital Refund Policy Policy</a>
       <span style="color:#94a3b8;">&middot;</span>
       <a href="{prefix}contact.html" style="color:#1d4ed8;font-weight:700;text-decoration:underline;">Contact Support</a>
       <span style="color:#94a3b8;">&middot;</span>
@@ -369,7 +369,7 @@ def build_ticker_directory_html(
       <span style="color:#94a3b8;">&middot;</span>
       <a href="https://www.instagram.com/truthofmarket/" target="_blank" rel="noopener" style="color:#475569;font-weight:700;text-decoration:underline;">Instagram @truthofmarket</a>
       <span style="color:#94a3b8;">&middot;</span>
-      <a href="mailto:beable9489@gmail.com" style="color:#b45309;font-weight:800;text-decoration:underline;">beable9489@gmail.com</a>
+      <a href="mailto:hello@truthofmarket.com" style="color:#b45309;font-weight:800;text-decoration:underline;">hello@truthofmarket.com</a>
       <span style="color:#94a3b8;">&middot;</span>
       <span style="color:#334155;font-weight:700;">Whop.com (Global Card / Apple Pay / Google Pay)</span>
     </div>
@@ -435,14 +435,14 @@ def build_ticker_directory_html(
     </nav>
     <div style="margin-top:16px;padding-top:14px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:0.95rem;color:#1e293b;">
       <span>🏛️ <strong>Educational Market Data &amp; Quantitative Research Desk:</strong> Questions about software licenses or 14-day refunds?</span>
-      <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#1d4ed8;font-weight:800;text-decoration:none;padding:10px 16px;min-height:48px;display:inline-flex;align-items:center;max-width:100%;word-break:break-word;border:1px solid #93c5fd;border-radius:8px;background:#eff6ff;font-size:0.95rem;">✉️ Support Desk (beable9489@gmail.com) &rarr;</a>
+      <a href="mailto:hello@truthofmarket.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#1d4ed8;font-weight:800;text-decoration:none;padding:10px 16px;min-height:48px;display:inline-flex;align-items:center;max-width:100%;word-break:break-word;border:1px solid #93c5fd;border-radius:8px;background:#eff6ff;font-size:0.95rem;">✉️ Support Desk (hello@truthofmarket.com) &rarr;</a>
     </div>
     <div style="margin-top:14px;padding:12px 14px;border-radius:8px;background:#f8fafc;border:1px solid #cbd5e1;display:flex;flex-wrap:wrap;gap:14px;align-items:center;font-size:0.9rem;">
       <a href="{prefix}terms.html" style="color:#1d4ed8;font-weight:800;text-decoration:underline;">Terms of Service</a>
       <span style="color:#94a3b8;">&middot;</span>
       <a href="{prefix}privacy.html" style="color:#1d4ed8;font-weight:800;text-decoration:underline;">Privacy Policy</a>
       <span style="color:#94a3b8;">&middot;</span>
-      <a href="{prefix}refund.html" style="color:#047857;font-weight:800;text-decoration:underline;">14-Day Refund Policy</a>
+      <a href="{prefix}refund.html" style="color:#047857;font-weight:800;text-decoration:underline;">Digital Refund Policy Policy</a>
       <span style="color:#94a3b8;">&middot;</span>
       <a href="{prefix}contact.html" style="color:#1d4ed8;font-weight:700;text-decoration:underline;">Contact Support</a>
       <span style="color:#94a3b8;">&middot;</span>
@@ -450,7 +450,7 @@ def build_ticker_directory_html(
       <span style="color:#94a3b8;">&middot;</span>
       <a href="https://www.instagram.com/truthofmarket/" target="_blank" rel="noopener" style="color:#475569;font-weight:700;text-decoration:underline;">Instagram @truthofmarket</a>
       <span style="color:#94a3b8;">&middot;</span>
-      <a href="mailto:beable9489@gmail.com" style="color:#b45309;font-weight:800;text-decoration:underline;">Support: beable9489@gmail.com</a>
+      <a href="mailto:hello@truthofmarket.com" style="color:#b45309;font-weight:800;text-decoration:underline;">Support: hello@truthofmarket.com</a>
       <span style="color:#94a3b8;">&middot;</span>
       <span style="color:#334155;font-weight:700;">Whop.com (Global Card / Apple Pay / Google Pay)</span>
     </div>
@@ -1317,7 +1317,7 @@ def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "
 
     llms_full_txt = (
         f"# TruthOfMarket (https://truthofmarket.com) — Historical SMH × XLV Sector Balance & Market Data Corpus\n"
-        f"> Operated by: Educational Market Data & Quantitative Research Desk (beable9489@gmail.com)\n"
+        f"> Operated by: Educational Market Data & Quantitative Research Desk (hello@truthofmarket.com)\n"
         f"> Official Channels: https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA | https://www.instagram.com/truthofmarket/\n"
         f"> Updated: {as_of} | 4-Step Historical SMH × XLV + SGOV Sector Balance Simulator + 76 US Equity Factor Studies\n"
         f"> {MANDATORY_DISCLAIMER}\n\n"
