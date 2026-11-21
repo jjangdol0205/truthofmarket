@@ -1,7 +1,63 @@
 {
   "schema_version": "stage4-v1",
-  "last_run_kst": "2026-11-21T08:44:00+09:00",
-  "uploads": [],
+  "last_run_kst": "2026-11-21T16:36:56.219382+09:00",
+  "uploads": [
+    {
+      "div": "TOM",
+      "topic_id": "tom_smh_xlv_2008",
+      "title": "How 55% SMH / 35% XLV / 10% SGOV Handled 2008 & 2022 Without Panic Selling",
+      "utm_yt": "https://truthofmarket.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=tom_smh_xlv_2008_2026-11-21",
+      "utm_ig": "https://truthofmarket.com/?utm_source=instagram&utm_medium=reels&utm_campaign=tom_smh_xlv_2008_2026-11-21",
+      "hero_radio_day": false,
+      "ffmpeg_profile": "ffmpeg -preset ultrafast -tune stillimage -threads 2",
+      "date": "2026-11-21",
+      "status": "queued_or_awaiting_secrets"
+    },
+    {
+      "div": "KFG",
+      "topic_id": "kfg_cdc_velocity",
+      "title": "Reading Your Child's 6-Month Growth Velocity (in/yr) on US CDC Charts",
+      "utm_yt": "https://kisfitglobal.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=kfg_cdc_velocity_2026-11-21",
+      "utm_ig": "https://kisfitglobal.com/?utm_source=instagram&utm_medium=reels&utm_campaign=kfg_cdc_velocity_2026-11-21",
+      "hero_radio_day": false,
+      "ffmpeg_profile": "ffmpeg -preset ultrafast -tune stillimage -threads 2",
+      "date": "2026-11-21",
+      "status": "queued_or_awaiting_secrets"
+    },
+    {
+      "div": "GBA",
+      "topic_id": "gba_nisa_1800",
+      "title": "新NISA1,800万円（成長枠SMH×XLV 1,200万＋つみたて600万）＋個人向け国債の安全設計",
+      "utm_yt": "https://getbreakai.com/jp/?utm_source=youtube&utm_medium=shorts&utm_campaign=gba_nisa_1800_2026-11-21",
+      "utm_ig": "https://getbreakai.com/jp/?utm_source=instagram&utm_medium=reels&utm_campaign=gba_nisa_1800_2026-11-21",
+      "hero_radio_day": false,
+      "ffmpeg_profile": "ffmpeg -preset ultrafast -tune stillimage -threads 2",
+      "date": "2026-11-21",
+      "status": "queued_or_awaiting_secrets"
+    },
+    {
+      "div": "HERO",
+      "topic_id": "hero_spring_mom",
+      "title": "어머니의 봄날 — 새벽 부엌에서 피어난 어머님의 인생 사연과 백운호 트로트",
+      "utm_yt": "https://paradise-hero.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=hero_spring_mom_2026-11-21",
+      "utm_ig": "https://paradise-hero.com/?utm_source=instagram&utm_medium=reels&utm_campaign=hero_spring_mom_2026-11-21",
+      "hero_radio_day": false,
+      "ffmpeg_profile": "ffmpeg -preset ultrafast -tune stillimage -threads 2",
+      "date": "2026-11-21",
+      "status": "queued_or_awaiting_secrets"
+    },
+    {
+      "div": "KFK",
+      "topic_id": "kfk_bone_age_dt",
+      "title": "영양제보다 먼저 확인할 우리 아이 뼈나이 시차(Δt)와 질병관리청 성장도표",
+      "utm_yt": "https://kidsfit.co.kr/?utm_source=youtube&utm_medium=shorts&utm_campaign=kfk_bone_age_dt_2026-11-21",
+      "utm_ig": "https://kidsfit.co.kr/?utm_source=instagram&utm_medium=reels&utm_campaign=kfk_bone_age_dt_2026-11-21",
+      "hero_radio_day": false,
+      "ffmpeg_profile": "ffmpeg -preset ultrafast -tune stillimage -threads 2",
+      "date": "2026-11-21",
+      "status": "queued_or_awaiting_secrets"
+    }
+  ],
   "lyria_weekly_calls": [],
   "stage2_yt_reset_completed": true,
   "ig_tokens_last_refreshed": {}
