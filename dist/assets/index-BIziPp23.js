@@ -6,7 +6,7 @@
  * CRM Helper & 70% Scroll + 15s Dwell `read_complete` Beacon.
  */
 (function initTomUnifiedWhopCheckoutAndBeacon() {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || window.__TOM_WHOP_WAITLIST_V3_LOADED__) return;
 
   var WHOP_TOM_MONTHLY_PLAN_ID = "plan_xVJeNwyrDef8T";
   var WHOP_TOM_ANNUAL_PLAN_ID = "plan_9sdgFI753ucXQ";
