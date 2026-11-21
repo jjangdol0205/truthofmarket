@@ -380,9 +380,7 @@
     });
 
     var topDirect = document.getElementById("tomWhopDirectTopBtn");
-    var footDirect = document.getElementById("tomWhopDirectFooterLink");
     if (topDirect) topDirect.setAttribute("href", spec.purchaseUrl);
-    if (footDirect) footDirect.setAttribute("href", spec.purchaseUrl);
 
     var mount = document.getElementById("tomWhopEmbedMount");
     if (mount) {
