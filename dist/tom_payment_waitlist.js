@@ -6,17 +6,13 @@
  */
 (function initTomUnifiedWhopCheckoutAndBeacon() {
   if (typeof window === "undefined") return;
-  window.__TOM_WHOP_WAITLIST_V3_LOADED__ = true;
 
-  var WHOP_TOM_STARTER_PLAN_ID = "plan_xIpLzFNR8SlMz";
   var WHOP_TOM_MONTHLY_PLAN_ID = "plan_xVJeNwyrDef8T";
   var WHOP_TOM_ANNUAL_PLAN_ID = "plan_9sdgFI753ucXQ";
   var WHOP_TOM_MONTHLY_CH_ID = "ch_uFPUZl9jaGdNTvH";
   var WHOP_TOM_ANNUAL_CH_ID = "ch_G3EyPgGXTTahfv7";
-  var WHOP_TOM_STARTER_URL = "https://whop.com/checkout/plan_xIpLzFNR8SlMz";
   var WHOP_TOM_MONTHLY_URL = "https://whop.com/checkout/plan_xVJeNwyrDef8T";
   var WHOP_TOM_ANNUAL_URL = "https://whop.com/checkout/plan_9sdgFI753ucXQ";
-  var WHOP_TOM_STARTER_REDIRECT = "https://truthofmarket.com/?payment=success&provider=whop&plan=starter";
   var WHOP_TOM_MONTHLY_REDIRECT = "https://truthofmarket.com/?payment=success&provider=whop&plan=monthly";
   var WHOP_TOM_ANNUAL_REDIRECT = "https://truthofmarket.com/?payment=success&provider=whop&plan=annual";
 
@@ -43,10 +39,9 @@
       monthly: WHOP_TOM_MONTHLY_REDIRECT,
       annual: WHOP_TOM_ANNUAL_REDIRECT,
     },
-    WHOP_TOM_STARTER_URL: WHOP_TOM_STARTER_URL,
     WHOP_TOM_MONTHLY_URL: WHOP_TOM_MONTHLY_URL,
     WHOP_TOM_ANNUAL_URL: WHOP_TOM_ANNUAL_URL,
-    SUPPORT_EMAIL: "hello@truthofmarket.com",
+    SUPPORT_EMAIL: "beable9489@gmail.com",
   };
 
   if (!window.PAYMENT_CONFIG || typeof window.PAYMENT_CONFIG !== "object") {
@@ -74,10 +69,9 @@
       monthly: WHOP_TOM_MONTHLY_REDIRECT,
       annual: WHOP_TOM_ANNUAL_REDIRECT,
     };
-    window.PAYMENT_CONFIG.WHOP_TOM_STARTER_URL = WHOP_TOM_STARTER_URL;
     window.PAYMENT_CONFIG.WHOP_TOM_MONTHLY_URL = WHOP_TOM_MONTHLY_URL;
     window.PAYMENT_CONFIG.WHOP_TOM_ANNUAL_URL = WHOP_TOM_ANNUAL_URL;
-    window.PAYMENT_CONFIG.SUPPORT_EMAIL = window.PAYMENT_CONFIG.SUPPORT_EMAIL || "hello@truthofmarket.com";
+    window.PAYMENT_CONFIG.SUPPORT_EMAIL = window.PAYMENT_CONFIG.SUPPORT_EMAIL || "beable9489@gmail.com";
   }
 
   window.TOM_COPY_MODE = "LIVE_SHARP";
@@ -126,38 +120,26 @@
   }
 
   function resolveTomWhopPlanSpec(planKey) {
-    var k = String(planKey || "").toLowerCase();
-    if (k === "starter" || k === "low" || k === "workbook") {
-      return {
-        key: "starter",
-        planId: WHOP_TOM_STARTER_PLAN_ID,
-        checkoutConfigId: "",
-        purchaseUrl: WHOP_TOM_STARTER_URL,
-        redirectUrl: WHOP_TOM_STARTER_REDIRECT,
-        title: "2000–2025 Crisis Workbook PDF",
-        priceLabel: "$9 One-Time",
-      };
-    }
-    if (k === "annual") {
-      return {
-        key: "annual",
-        planId: WHOP_TOM_ANNUAL_PLAN_ID,
-        checkoutConfigId: WHOP_TOM_ANNUAL_CH_ID,
-        purchaseUrl: WHOP_TOM_ANNUAL_URL,
-        redirectUrl: WHOP_TOM_ANNUAL_REDIRECT,
-        title: "Annual Private Research Suite",
-        priceLabel: "$199 / year (Save 43%)",
-      };
-    }
-    return {
-      key: "monthly",
-      planId: WHOP_TOM_MONTHLY_PLAN_ID,
-      checkoutConfigId: WHOP_TOM_MONTHLY_CH_ID,
-      purchaseUrl: WHOP_TOM_MONTHLY_URL,
-      redirectUrl: WHOP_TOM_MONTHLY_REDIRECT,
-      title: "Monthly Research Pass",
-      priceLabel: "$29 / month",
-    };
+    var isAnnual = String(planKey || "").toLowerCase() === "annual";
+    return isAnnual
+      ? {
+          key: "annual",
+          planId: WHOP_TOM_ANNUAL_PLAN_ID,
+          checkoutConfigId: WHOP_TOM_ANNUAL_CH_ID,
+          purchaseUrl: WHOP_TOM_ANNUAL_URL,
+          redirectUrl: WHOP_TOM_ANNUAL_REDIRECT,
+          title: "Annual Research Pass",
+          priceLabel: "$199 / year (Save 43%)",
+        }
+      : {
+          key: "monthly",
+          planId: WHOP_TOM_MONTHLY_PLAN_ID,
+          checkoutConfigId: WHOP_TOM_MONTHLY_CH_ID,
+          purchaseUrl: WHOP_TOM_MONTHLY_URL,
+          redirectUrl: WHOP_TOM_MONTHLY_REDIRECT,
+          title: "Monthly Research Pass",
+          priceLabel: "$29 / month",
+        };
   }
 
   window.resolveTomWhopCheckoutUrl = function (planKey) {
@@ -285,14 +267,13 @@
         ".tom-whop-kicker-pill{display:inline-block;background:#ecfdf5;border:1px solid #059669;color:#065f46;padding:5px 11px;border-radius:999px;font-size:11.5px;line-height:1.35;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;}",
         "#btnCloseTomWhopModal{appearance:none;flex-shrink:0;min-height:44px;min-width:72px;padding:8px 14px;border-radius:6px;border:1px solid #94a3b8;background:#f8fafc;color:#0f172a;font-weight:700;font-size:14px;cursor:pointer;}",
         "#btnCloseTomWhopModal:hover{background:#e2e8f0;}",
-        ".tom-whop-plan-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0;}",
+        ".tom-whop-plan-tabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}",
         ".tom-whop-tab-btn{padding:12px 14px;border-radius:8px;border:1.5px solid #cbd5e1;background:#f8fafc;color:#0f172a;text-align:left;cursor:pointer;font-family:inherit;transition:all 0.15s ease;}",
         ".tom-whop-tab-btn.is-selected{border-color:#065f46;background:#ecfdf5;color:#064e3b;box-shadow:0 0 0 2px rgba(6,95,70,0.15);}",
         ".tom-whop-direct-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;margin-bottom:12px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;}",
-        ".tom-whop-direct-btn{display:inline-flex;align-items:center;justify-content:center;text-align:center;min-height:44px;padding:10px 14px;border-radius:6px;background:#065f46;color:#ffffff !important;font-size:13.5px;font-weight:700;text-decoration:none !important;white-space:normal;line-height:1.3;}",
+        ".tom-whop-direct-btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:10px 16px;border-radius:6px;background:#065f46;color:#ffffff !important;font-size:14.5px;font-weight:700;text-decoration:none !important;white-space:nowrap;}",
         ".tom-whop-direct-btn:hover{background:#047857;}",
-        "#tomWhopEmbedMount{min-height:480px;border:1px solid #e2e8f0;border-radius:8px;background:#ffffff;padding:6px;overflow:visible;}",
-        "#tomWhopEmbedMount iframe{width:100% !important;min-height:468px !important;border:0 !important;background:#ffffff !important;border-radius:6px;}",
+        "#tomWhopEmbedMount{min-height:380px;border:1px solid #e2e8f0;border-radius:8px;background:#fbfbf9;padding:6px;overflow:hidden;}",
         "@media(max-width:560px){.tom-whop-plan-tabs{grid-template-columns:1fr;}#tomWhopCheckoutDialog{padding:16px 14px;}.tom-whop-direct-btn{width:100%;}}",
       ].join("");
       document.head.appendChild(styleEl);
@@ -312,35 +293,33 @@
       '  <h3 id="tomWhopModalTitle" style="margin:0 0 6px;font-size:1.25rem;line-height:1.3;font-weight:800;color:#0f172a;">' +
       "    TruthOfMarket Research Pass &mdash; Secure Checkout" +
       "  </h3>" +
-      '  <p style="margin:0;font-size:13.5px;line-height:1.5;color:#475569;">' +
-      "    Non-Advisory Educational Research &middot; 2000&ndash;2025 SMH &times; XLV + SGOV Study" +
+      '  <p style="margin:0;font-size:14px;line-height:1.55;color:#475569;">' +
+      "    Educational Market Data Newsletter + 2000&ndash;2025 Historical Statistical Workbook (SMH &times; XLV + SGOV 2-Pillar Historical Case Study &mdash; Strictly Non-Advisory Educational Publisher)." +
       "  </p>" +
       '  <div class="tom-whop-plan-tabs" role="radiogroup" aria-label="Select Research Pass">' +
-      '    <button type="button" class="tom-whop-tab-btn" data-whop-tab="starter">' +
-      '      <div style="font-size:10.5px;font-weight:700;color:#0369a1;letter-spacing:0.04em;">STEP 2 &middot; STARTER</div>' +
-      '      <div style="font-size:16px;font-weight:800;margin:2px 0;">$9 <span style="font-size:12px;font-weight:500;color:#475569;">one-time</span></div>' +
-      '      <div style="font-size:11.5px;color:#475569;">14p Crisis Workbook PDF</div>' +
-      "    </button>" +
       '    <button type="button" class="tom-whop-tab-btn is-selected" data-whop-tab="monthly">' +
-      '      <div style="font-size:10.5px;font-weight:700;color:#065f46;letter-spacing:0.04em;">STEP 3 &middot; CORE</div>' +
-      '      <div style="font-size:16px;font-weight:800;margin:2px 0;">$29 <span style="font-size:12px;font-weight:500;color:#475569;">/ mo</span></div>' +
-      '      <div style="font-size:11.5px;color:#475569;">Daily Newsletter + Workbook</div>' +
+      '      <div style="font-size:11.5px;font-weight:700;color:#065f46;letter-spacing:0.04em;">MONTHLY RESEARCH PASS</div>' +
+      '      <div style="font-size:17px;font-weight:800;margin:2px 0;">$29 <span style="font-size:13px;font-weight:500;color:#475569;">/ month</span></div>' +
+      '      <div style="font-size:12px;color:#475569;">Morning Market Data Newsletter + Regime Workbook</div>' +
       "    </button>" +
       '    <button type="button" class="tom-whop-tab-btn" data-whop-tab="annual">' +
-      '      <div style="font-size:10.5px;font-weight:700;color:#b45309;letter-spacing:0.04em;">STEP 4 &middot; SAVE 43%</div>' +
-      '      <div style="font-size:16px;font-weight:800;margin:2px 0;">$199 <span style="font-size:12px;font-weight:500;color:#475569;">/ yr</span></div>' +
-      '      <div style="font-size:11.5px;color:#475569;">12-Mo Suite + Masterbook</div>' +
+      '      <div style="font-size:11.5px;font-weight:700;color:#b45309;letter-spacing:0.04em;">ANNUAL RESEARCH PASS &middot; SAVE 43%</div>' +
+      '      <div style="font-size:17px;font-weight:800;margin:2px 0;">$199 <span style="font-size:13px;font-weight:500;color:#475569;">/ year</span></div>' +
+      '      <div style="font-size:12px;color:#475569;">12-Month Newsletter + Complete 2000&ndash;2025 Statistical Workbook</div>' +
       "    </button>" +
       "  </div>" +
       '  <div class="tom-whop-direct-bar">' +
-      '    <span style="font-size:12.5px;color:#0f172a;font-weight:700;">Fastest on Mobile (Apple Pay &middot; Google Pay &middot; Card):</span>' +
+      '    <span style="font-size:13px;color:#334155;font-weight:600;">Using a mobile WebView or ad-blocker? Complete checkout directly in one tap:</span>' +
       '    <a id="tomWhopDirectTopBtn" class="tom-whop-direct-btn" data-whop-direct-tab="1" href="' +
       WHOP_TOM_MONTHLY_URL +
-      '" target="_blank" rel="noopener">Open Full-Screen Secure Checkout &rarr;</a>' +
+      '" target="_blank" rel="noopener">Open Secure Whop Checkout in New Tab &rarr;</a>' +
       "  </div>" +
-      '  <div id="tomWhopEmbedMount" aria-live="polite" style="margin-bottom:10px;"></div>' +
-      '  <div style="margin-top:8px;padding-top:8px;border-top:1px solid #e2e8f0;font-size:12px;color:#475569;text-align:center;">' +
-      '    Secure Checkout via Whop.com &middot; 7-Day Unopened Refund &middot; 1-Click Cancel &middot; <a href="mailto:hello@truthofmarket.com" style="color:#065f46;font-weight:700;">hello@truthofmarket.com</a>' +
+      '  <div id="tomWhopEmbedMount" aria-live="polite"></div>' +
+      '  <div style="margin-top:12px;padding-top:10px;border-top:1px solid #e2e8f0;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;color:#475569;">' +
+      '    <span>Secure Checkout via Whop.com &middot; 14-Day Refund Policy &middot; Cancel anytime &middot; Support: <a href="mailto:beable9489@gmail.com" style="color:#1d4ed8;font-weight:700;">beable9489@gmail.com</a></span>' +
+      '    <a id="tomWhopDirectFooterLink" data-whop-direct-tab="1" href="' +
+      WHOP_TOM_MONTHLY_URL +
+      '" target="_blank" rel="noopener" style="color:#065f46;font-weight:700;text-decoration:underline;">Open Secure Whop Checkout in New Tab &rarr;</a>' +
       "  </div>" +
       "</div>";
 
@@ -360,7 +339,7 @@
 
     backdrop.querySelectorAll("[data-whop-tab]").forEach(function (btn) {
       btn.addEventListener("click", function () {
-        var pk = btn.getAttribute("data-whop-tab") || "monthly";
+        var pk = btn.getAttribute("data-whop-tab") === "annual" ? "annual" : "monthly";
         mountWhopPlanInModal(pk);
       });
     });
@@ -380,7 +359,9 @@
     });
 
     var topDirect = document.getElementById("tomWhopDirectTopBtn");
+    var footDirect = document.getElementById("tomWhopDirectFooterLink");
     if (topDirect) topDirect.setAttribute("href", spec.purchaseUrl);
+    if (footDirect) footDirect.setAttribute("href", spec.purchaseUrl);
 
     var mount = document.getElementById("tomWhopEmbedMount");
     if (mount) {
@@ -401,9 +382,7 @@
 
   window.openTomWhopCheckoutModal = function (planKey) {
     var modal = ensureWhopModalDom();
-    var norm = String(planKey || "monthly").toLowerCase();
-    if (norm !== "starter" && norm !== "annual") norm = "monthly";
-    mountWhopPlanInModal(norm);
+    mountWhopPlanInModal(planKey === "annual" ? "annual" : "monthly");
     modal.style.display = "flex";
   };
   window.openTomVipWaitlistModal = window.openTomWhopCheckoutModal;
@@ -443,24 +422,30 @@
       if (!isPaidCta) return;
 
       var txt = String(el.innerText || el.textContent || "").toLowerCase();
-      var isStarter =
-        planAttr === "starter" ||
-        href.indexOf(WHOP_TOM_STARTER_PLAN_ID) !== -1 ||
-        txt.indexOf("$9") !== -1;
       var isAnnual =
         planAttr === "annual" ||
         href.indexOf(WHOP_TOM_ANNUAL_PLAN_ID) !== -1 ||
         href.indexOf("annual") !== -1 ||
         txt.indexOf("199") !== -1 ||
         txt.indexOf("annual") !== -1;
-      var planKey = isStarter ? "starter" : (isAnnual ? "annual" : "monthly");
+      var planKey = isAnnual ? "annual" : "monthly";
 
       if (!e.__tomPaidClickTracked) {
         e.__tomPaidClickTracked = true;
         try {
-          if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.trackFunnelEvent === "function") {
-            window.DreamCompanyCRM.trackFunnelEvent("TOM", "checkout_click");
-          }
+          var kst = getKstDateString();
+          fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/paid_click_" + kst, {
+            mode: "cors",
+            keepalive: true,
+          }).catch(function () {});
+          fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/paid_click_total", {
+            mode: "cors",
+            keepalive: true,
+          }).catch(function () {});
+          fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/paid_click", {
+            mode: "cors",
+            keepalive: true,
+          }).catch(function () {});
         } catch (_) {}
       }
 
@@ -491,8 +476,7 @@
 
   // 3. Handle ?payment=success&provider=whop&plan=monthly|annual cleanly on return
   function applyWhopCheckoutUnlock(orderRef, planSlug) {
-    var rawPlanLow = String(planSlug || "monthly").toLowerCase();
-    var cleanPlan = rawPlanLow === "annual" ? "annual" : (rawPlanLow === "starter" ? "starter" : "monthly");
+    var cleanPlan = String(planSlug || "monthly").toLowerCase() === "annual" ? "annual" : "monthly";
     var cleanRef = String(orderRef || ("WHOP-PASS-2026-" + cleanPlan.toUpperCase())).trim();
     try {
       localStorage.setItem("rsa_pro_unlocked", "true");
@@ -544,7 +528,7 @@
           "<div><strong>Whop Checkout Confirmed &mdash; " +
           planTitle +
           " Active.</strong> Your Paid Screen 4 Vault &amp; Protected 14-Page PDF are open below (<a href='mailto:hello@truthofmarket.com?subject=TOM%20Support%20or%20Refund' style='color:#065f46;font-weight:700;text-decoration:underline;'>1-Click Support</a>).</div>" +
-          "<button type='button' data-csp-act='remove-parent' style='padding:6px 12px;border-radius:6px;border:1px solid #059669;background:#ffffff;color:#064e3b;font-weight:700;cursor:pointer;'>Dismiss</button>";
+          "<button type='button' onclick='this.parentNode.remove()' style='padding:6px 12px;border-radius:6px;border:1px solid #059669;background:#ffffff;color:#064e3b;font-weight:700;cursor:pointer;'>Dismiss</button>";
         document.body.insertBefore(banner, document.body.firstChild);
       }
     } catch (_) {}

@@ -7,7 +7,7 @@
 - **As of Date**: 2026-11-20
 - **7-Factor Semiconductor Fear & Greed Score**: 4.9/100 (Extreme Fear)
 - **$SMH (VanEck Semiconductor ETF)**: $400.06 (-40.19% off 52-week high)
-- **$XLV (Health Care Select Sector SPDR ETF)**: $177.36
+- **$XLV (Health Care Select Sector SPDR ETF)**: $177.24
 - **$QQQ (Invesco QQQ Trust)**: $608.45
 - **Active Barbell Allocation Directive**: 80% $SMH : 20% $XLV Contrarian Barbell
 - **Interactive Terminal**: https://truthofmarket.com/semi-fear-greed.html
@@ -39,6 +39,7 @@
 - **$TSM (TSMC (ADR))**: Close $318.71 | -9% Hard Stop $290.03 | +100% Target $637.42 -> https://truthofmarket.com/stocks/tsm.html
 - **$SHOP (Shopify Inc)**: Close $123.72 | -9% Hard Stop $112.59 | +100% Target $247.44 -> https://truthofmarket.com/stocks/shop.html
 - **$PLTR (Palantir Technologies)**: Close $143.49 | -9% Hard Stop $130.58 | +100% Target $286.98 -> https://truthofmarket.com/stocks/pltr.html
+- **$UAL (United Airlines)**: Close $101.03 | -9% Hard Stop $91.94 | +100% Target $202.06 -> https://truthofmarket.com/stocks/ual.html
 - **$AVGO (Broadcom Inc)**: Close $304.41 | -9% Hard Stop $277.01 | +100% Target $608.82 -> https://truthofmarket.com/stocks/avgo.html
 - **$SBUX (Starbucks Corp)**: Close $103.13 | -9% Hard Stop $93.85 | +100% Target $206.26 -> https://truthofmarket.com/stocks/sbux.html
 - **$HOOD (Robinhood Markets)**: Close $62.17 | -9% Hard Stop $56.57 | +100% Target $124.34 -> https://truthofmarket.com/stocks/hood.html
@@ -46,4 +47,3 @@
 - **$MBLY (Mobileye Global)**: Close $4.57 | -9% Hard Stop $4.16 | +100% Target $9.14 -> https://truthofmarket.com/stocks/mbly.html
 - **$FSLR (First Solar Inc)**: Close $137.59 | -9% Hard Stop $125.21 | +100% Target $275.18 -> https://truthofmarket.com/stocks/fslr.html
 - **$UPST (Upstart Holdings)**: Close $15.66 | -9% Hard Stop $14.25 | +100% Target $31.32 -> https://truthofmarket.com/stocks/upst.html
-- **$SEDG (SolarEdge Tech)**: Close $18.27 | -9% Hard Stop $16.63 | +100% Target $36.54 -> https://truthofmarket.com/stocks/sedg.html

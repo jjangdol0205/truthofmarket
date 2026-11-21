@@ -10,7 +10,27 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
-  <script src="/assets/csp/inline_5d816bf5c0c7.js"></script>
+  <script>
+  window.PAYMENT_CONFIG = {
+    PROVIDER: 'whop',
+    DIVISION: 'TOM',
+    STORE_SLOT: 'FINANCE_STORE_SLOT',
+    STORE_LIVE_READY: true,
+    COMPANY_ID: 'biz_4ynqri19wFDIwm',
+    STORE_NAME: 'TruthOfMarket Research',
+    WHOP_PLAN_IDS: {
+      monthly: 'plan_xVJeNwyrDef8T',
+      annual: 'plan_9sdgFI753ucXQ'
+    },
+    WHOP_CHECKOUT_URLS: {
+      monthly: 'https://whop.com/checkout/plan_xVJeNwyrDef8T',
+      annual: 'https://whop.com/checkout/plan_9sdgFI753ucXQ'
+    },
+    WHOP_TOM_MONTHLY_URL: 'https://whop.com/checkout/plan_xVJeNwyrDef8T',
+    WHOP_TOM_ANNUAL_URL: 'https://whop.com/checkout/plan_9sdgFI753ucXQ',
+    SUPPORT_EMAIL: 'hello@truthofmarket.com'
+  };
+  </script>
   <script async defer src="https://js.whop.com/static/checkout/loader.js"></script>
   <script src="/hq_member_crm_client.js" defer></script>
   <script src="/tom_payment_waitlist.js" defer></script>
@@ -48,7 +68,6 @@
     .disclaimer-box { background: rgba(251, 191, 36, 0.08); border: 1.5px solid rgba(251, 191, 36, 0.45); border-radius: 10px; padding: 16px 18px; margin: 20px 0; color: #fef3c7; font-size: 0.94rem; font-weight: 600; }
     footer { max-width: 860px; margin: 40px auto 0; padding-top: 22px; border-top: 1px solid var(--border); font-size: 0.86rem; color: var(--muted); }
   </style>
-  <script src="/assets/csp/csp-events.js"></script>
 </head>
 <body>
   <header>
@@ -85,7 +104,7 @@
       <p>All paid Research Pass checkouts, receipts, and subscription management are processed securely via <strong>Whop.com (Global Card / Apple Pay / Google Pay)</strong>.</p>
 
       <h2>3. Standard Digital Refund & 1-Click Cancellation Policy</h2>
-      <p>Every Monthly Research Pass ($29/mo) and Annual Research Pass ($199/yr) purchase is protected by a <strong>7-day no-questions-asked 100% full refund policy</strong> from the initial charge date. Subscriptions can also be canceled at any time in one click without penalty. See our <a href="/refund.html">Digital Refund & Cancellation Policy</a> for complete details.</p>
+      <p>Every Monthly Research Pass ($29/mo) and Annual Research Pass ($199/yr) purchase is protected by a <strong>14-day no-questions-asked 100% full refund policy</strong> from the initial charge date. Subscriptions can also be canceled at any time in one click without penalty. See our <a href="/refund.html">Digital Refund & Cancellation Policy</a> for complete details.</p>
 
       <h2>4. Acceptable Personal Use &amp; Intellectual Property</h2>
       <p>Research Pass access is granted for personal, non-commercial educational study on up to three (3) personal devices. Automated scraping, bulk redistribution of statistical workbooks or PDF guides, or public resale of pass access is prohibited.</p>
