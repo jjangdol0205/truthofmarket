@@ -65,73 +65,78 @@ BANNED_STRINGS = [
 
 DIV_CONFIGS: Dict[str, Dict[str, Any]] = {
     "TOM": {
-        "site": "https://truthofmarket.com/",
+        "site": "https://truthofmarket.com/#tom-retirement-architect",
         "sample_pdf": "https://truthofmarket.com/assets/downloads/tom_sample_2p.pdf",
         "yt_handle": "@TruthOfMarketUS",
         "ig_handle": "@truthofmarket",
         "lang": "en",
         "forbidden_domains": ["kisfitglobal.com", "getbreakai.com", "paradise-hero.com", "kidsfit.co.kr"],
+        "open_loop_cta": "Would YOUR 401(k) survive a 2008 crash? Run the free 30-second Retirement Crash Stress Test:",
         "topics": [
-            ("tom_smh_xlv_2008", "How 55% SMH / 35% XLV / 10% SGOV Handled 2008 & 2022 Without Panic Selling"),
-            ("tom_sgov_buffer", "Why a 10-20% US Treasury Reserve (SGOV) Stops Forced Retirement Selling"),
-            ("tom_limit_order", "Fidelity & Schwab 5-Minute Limit Order Checklist for 1x Sector ETFs"),
-            ("tom_401k_roth_seq", "401(k) vs Roth IRA Tax-Location Sequencing for SMH & XLV Retirees"),
+            ("tom_1m_crash_510k", "Retiring with $1M? One 2008 Crash Cuts It to $510K — Unless You Do This"),
+            ("tom_broker_001_sweep", "Your Broker Pays 0.01% on Idle IRA Cash — That's $10 a Year on $100K"),
+            ("tom_6040_broke_2022", "Why Classic 60/40 Broke in 2022 — And the 2-ETF Seesaw Built for Age 55+"),
+            ("tom_401k_roth_seq", "One 401(k) vs Roth IRA Tax Mistake Quietly Costs Retirees Thousands"),
         ],
     },
     "KFG": {
-        "site": "https://kisfitglobal.com/",
+        "site": "https://kisfitglobal.com/#kfg-bone-age-interpreter",
         "sample_pdf": "https://kisfitglobal.com/assets/downloads/kfg_sample_2p.pdf",
         "yt_handle": "@kisfitglobal",
         "ig_handle": "@kisfitglobal",
         "lang": "en",
         "forbidden_domains": ["truthofmarket.com", "getbreakai.com", "paradise-hero.com", "kidsfit.co.kr", "iherb.com", "amazon.com"],
+        "open_loop_cta": "Where does YOUR child's real height lane land on the US CDC curve? Run the free 60-second check:",
         "topics": [
-            ("kfg_cdc_velocity", "Reading Your Child's 6-Month Growth Velocity (in/yr) on US CDC Charts"),
-            ("kfg_bone_age_lag", "Why Last Year's Wrist X-Ray Needs Elapsed-Time Adjustment Today"),
-            ("kfg_930pm_sleep", "The 9:30 PM Slow-Wave Sleep Window & 30-Day Parent Growth Checklist"),
-            ("kfg_pediatric_3qs", "3 Clear Questions to Bring to Your Child's Annual Pediatric Checkup"),
+            ("kfg_same_parents_4in", "Same Parents, 4 Inches Apart — Why Parent Height Alone Misleads Families"),
+            ("kfg_old_xray_2in", "STOP Trusting Last Year's Wrist X-Ray — It Can Miss Final Height by 2 Inches"),
+            ("kfg_10pm_70pct_gh", "If Your 8-Year-Old Sleeps Past 10 PM, 70% of Tonight's Growth Wave Is Gone"),
+            ("kfg_pediatric_3qs", "3 Questions Pediatricians Wish Parents Brought Before Growth Plates Close"),
         ],
     },
     "GBA": {
-        "site": "https://getbreakai.com/jp/",
+        "site": "https://getbreakai.com/jp/#gba-retirement-architect-jp",
         "sample_pdf": "https://getbreakai.com/jp/downloads/gba_jp_sample_2p.pdf",
         "yt_handle": "@GetBreakAI",
         "ig_handle": "@getbreakai",
         "lang": "ja",
         "forbidden_domains": ["truthofmarket.com", "kisfitglobal.com", "paradise-hero.com", "kidsfit.co.kr"],
+        "open_loop_cta": "あなたの今の配分は2008年級で何年持ちますか？30秒無料4ステップ暴落耐性診断はこちら：",
         "topics": [
-            ("gba_nisa_1800", "新NISA1,800万円（成長枠SMH×XLV 1,200万＋つみたて600万）＋個人向け国債の安全設計"),
-            ("gba_2008_2022_dd", "ITバブル・リーマン危機・2022年利上げで検証するSMH×XLV 2本柱の下落耐性"),
-            ("gba_rakuten_sbi", "楽天iSPEED・SBI証券で迷わない現物1倍ETF指値注文＆配当10%源泉徴収ガイド"),
-            ("gba_overflow_bond", "新NISA枠を超えた資産を個人向け国債（変動10年）・特定口座SGOVで守る方法"),
+            ("gba_nisa_5yr_wiped", "【警告】50代の新NISA、暴落1回で『老後5年分』が消える人の共通点"),
+            ("gba_10pct_div_trap", "【警告】利回り10%に飛びついた50代が最初に資産を減らす残酷な算数"),
+            ("gba_deposit_erosion", "【50代必見】退職金を銀行預金に眠らせると10年で購買力が2割消える理由"),
+            ("gba_rakuten_sbi_safe", "【保存版】楽天・SBIの新NISAで成行注文を出してはいけない1つの理由"),
         ],
     },
     "HERO": {
-        "site": "https://paradise-hero.com/",
+        "site": "https://paradise-hero.com/radio.html",
         "sample_pdf": "https://paradise-hero.com/stream.html",
         "yt_handle": "@김쌤의영웅라디오",
         "ig_handle": "@paradise_hero1",
         "lang": "ko",
         "forbidden_domains": ["truthofmarket.com", "kisfitglobal.com", "getbreakai.com", "kidsfit.co.kr"],
+        "open_loop_cta": "쇼츠엔 30초뿐 — 광고 없는 백운호 3분 완곡 전체 듣기와 돋보기 없는 왕글씨 가사집·사연 신청:",
         "topics": [
-            ("hero_spring_mom", "어머니의 봄날 — 새벽 부엌에서 피어난 어머님의 인생 사연과 백운호 트로트"),
-            ("hero_yeonga_walk", "백운호 연가 — 저녁 산책길 발걸음을 가볍게 해주는 따뜻한 중저음 선율"),
-            ("hero_camellia_act2", "다시 피는 동백꽃 — 찬 서리 이겨낸 6070 인생 2막 응원 라디오"),
-            ("hero_first_train", "고향역 첫차 — 삶은 달걀 쥐여주시던 친정어머니의 추억과 노래"),
+            ("hero_11pm_dark_room", "[눈물주의] 아들 앞에선 웃었지만… 밤 11시 거실 불 끄고 어머님이 틀어놓은 노래"),
+            ("hero_concert_backpain", "[시니어필수] 2시간 공연 갔다가 허리 아파 중간에 나오신 어머님들, 딱 1가지만 챙기세요"),
+            ("hero_72yo_kitchen_note", "[뭉클실화] 대구 72세 어머님이 새벽 부엌에 접어둔 편지, 백운호 노래로 답장했습니다"),
+            ("hero_yeonga_walk_20m", "[저녁산책] 무릎 부담 줄이는 저녁 20분 걷기와 백운호 〈백운호 연가〉 76 BPM 비밀"),
         ],
     },
     "KFK": {
-        "site": "https://kidsfit.co.kr/",
+        "site": "https://kidsfit.co.kr/#kfk-bone-age-interpreter",
         "sample_pdf": "https://kidsfit.co.kr/assets/downloads/kfk_sample_2p.pdf",
         "yt_handle": "@kidsfit01",
         "ig_handle": "@kids_fit1",
         "lang": "ko",
         "forbidden_domains": ["truthofmarket.com", "kisfitglobal.com", "getbreakai.com", "paradise-hero.com", "coupang.com", "cshop.naver.com"],
+        "open_loop_cta": "엄마·아빠 키만 더하면 최대 7cm 틀립니다 — 우리 아이 진짜 성인 예상키 1분 무료 진단:",
         "topics": [
-            ("kfk_bone_age_dt", "영양제보다 먼저 확인할 우리 아이 뼈나이 시차(Δt)와 질병관리청 성장도표"),
-            ("kfk_sleep_10pm", "밤 10시 전 숙면 골든타임과 저녁 2시간 무야식이 키 성장에 미치는 영향"),
-            ("kfk_velocity_cmyr", "1년에 몇 cm 커야 정상일까? 초등 시기 30일 주기 성장속도(cm/yr) 점검법"),
-            ("kfk_clinic_3qs", "소아과·성장클리닉 방문 전 부모가 꼭 챙겨야 할 필수 질문 3가지"),
+            ("kfk_milk_3cups_stop", "우유 하루 3잔 먹였는데 키가 멈춘 이유 — 100만원 영양제 전에 이것부터 보세요"),
+            ("kfk_8cm_spurt_sign", "1년에 8cm 컸다고 좋아했다가 성장판 2년 빨리 닫히는 아이 특징 1가지"),
+            ("kfk_old_bone_age_4cm", "작년 소아과 뼈나이 검사, 오늘 그대로 믿으면 예상키가 4cm 틀립니다"),
+            ("kfk_10pm_sleep_loss", "밤 10시 반 넘겨 자는 초등 아이, 매일 밤 숨은 키 7cm가 새고 있습니다"),
         ],
     },
 }
@@ -311,7 +316,8 @@ def main() -> int:
         tid, title = pick_next_topic(div, hist, today_str)
         utm_yt = build_utm_url(DIV_CONFIGS[div]["site"], "youtube", "shorts", f"{tid}_{today_str}")
         utm_ig = build_utm_url(DIV_CONFIGS[div]["site"], "instagram", "reels", f"{tid}_{today_str}")
-        desc = f"{title}\n\nExplore free guide & sample PDF: {utm_yt}\n"
+        open_loop_cta = DIV_CONFIGS[div].get("open_loop_cta", "Explore free interactive tool:")
+        desc = f"{title}\n\n{open_loop_cta}\n{utm_yt}\n"
         srt_stub = f"1\n00:00:00,000 --> 00:00:04,500\n{title}\n"
         ok_txt, errs = check_text_gate(div, title, desc, srt_stub)
         if not ok_txt:
