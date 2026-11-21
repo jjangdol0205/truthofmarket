@@ -77,6 +77,8 @@ DIV_CONFIGS: Dict[str, Dict[str, Any]] = {
             ("tom_broker_001_sweep", "Your Broker Pays 0.01% on Idle IRA Cash — That's $10 a Year on $100K"),
             ("tom_6040_broke_2022", "Why Classic 60/40 Broke in 2022 — And the 2-ETF Seesaw Built for Age 55+"),
             ("tom_401k_roth_seq", "One 401(k) vs Roth IRA Tax Mistake Quietly Costs Retirees Thousands"),
+            ("tom_down_month_2x", "STOP Selling 401(k) Shares in a Down Month — It Cuts 9 Years Off Retirement"),
+            ("tom_inflation_35pct", "3% Inflation Cuts a $4,000 Retirement Paycheck to $2,600 in 15 Years"),
         ],
     },
     "KFG": {
@@ -92,6 +94,8 @@ DIV_CONFIGS: Dict[str, Dict[str, Any]] = {
             ("kfg_old_xray_2in", "STOP Trusting Last Year's Wrist X-Ray — It Can Miss Final Height by 2 Inches"),
             ("kfg_10pm_70pct_gh", "If Your 8-Year-Old Sleeps Past 10 PM, 70% of Tonight's Growth Wave Is Gone"),
             ("kfg_pediatric_3qs", "3 Questions Pediatricians Wish Parents Brought Before Growth Plates Close"),
+            ("kfg_dry_lips_airway", "Child Wakes Up With Dry Lips? Open-Mouth Sleep Quietly Steals 2 Inches"),
+            ("kfg_milk_iron_block", "STOP Over-Pouring Milk — Too Much Plain Milk Can Quietly Slow Growth"),
         ],
     },
     "GBA": {
@@ -103,10 +107,12 @@ DIV_CONFIGS: Dict[str, Dict[str, Any]] = {
         "forbidden_domains": ["truthofmarket.com", "kisfitglobal.com", "paradise-hero.com", "kidsfit.co.kr"],
         "open_loop_cta": "あなたの今の配分は2008年級で何年持ちますか？30秒無料4ステップ暴落耐性診断はこちら：",
         "topics": [
-            ("gba_nisa_5yr_wiped", "【警告】50代の新NISA、暴落1回で『老後5年分』が消える人の共通点"),
-            ("gba_10pct_div_trap", "【警告】利回り10%に飛びついた50代が最初に資産を減らす残酷な算数"),
+            ("gba_nisa_5yr_wiped", "【50代の新NISA】暴落1回で『老後5年分』が消える人の共通点"),
+            ("gba_10pct_div_trap", "【老後の落とし穴】利回り10%に飛びついた50代が最初に資産を減らす残酷な算数"),
             ("gba_deposit_erosion", "【50代必見】退職金を銀行預金に眠らせると10年で購買力が2割消える理由"),
             ("gba_rakuten_sbi_safe", "【保存版】楽天・SBIの新NISAで成行注文を出してはいけない1つの理由"),
+            ("gba_360m_frame_burn", "【新NISAの罠】頻繁に売買すると『年間360万円の非課税枠』が一瞬で消える理由"),
+            ("gba_tokutei_20m_tax", "【知らないと損】同じ100万円の利益でも特定口座は約20万円消える残酷な差"),
         ],
     },
     "HERO": {
@@ -122,6 +128,8 @@ DIV_CONFIGS: Dict[str, Dict[str, Any]] = {
             ("hero_concert_backpain", "[시니어필수] 2시간 공연 갔다가 허리 아파 중간에 나오신 어머님들, 딱 1가지만 챙기세요"),
             ("hero_72yo_kitchen_note", "[뭉클실화] 대구 72세 어머님이 새벽 부엌에 접어둔 편지, 백운호 노래로 답장했습니다"),
             ("hero_yeonga_walk_20m", "[저녁산책] 무릎 부담 줄이는 저녁 20분 걷기와 백운호 〈백운호 연가〉 76 BPM 비밀"),
+            ("hero_rainy_night_heal", "[감동무대] 비 오는 밤 잠 못 드실 때 어머님들이 꼭 틀어두시는 백운호 1곡"),
+            ("hero_14min_radio_ep1", "[14분완곡] 어머님 감동 사연 2편과 백운호 대표곡 3곡 연속 듣기 열렸습니다"),
         ],
     },
     "KFK": {
@@ -137,6 +145,8 @@ DIV_CONFIGS: Dict[str, Dict[str, Any]] = {
             ("kfk_8cm_spurt_sign", "1년에 8cm 컸다고 좋아했다가 성장판 2년 빨리 닫히는 아이 특징 1가지"),
             ("kfk_old_bone_age_4cm", "작년 소아과 뼈나이 검사, 오늘 그대로 믿으면 예상키가 4cm 틀립니다"),
             ("kfk_10pm_sleep_loss", "밤 10시 반 넘겨 자는 초등 아이, 매일 밤 숨은 키 7cm가 새고 있습니다"),
+            ("kfk_mouth_breathe_70", "[경고] 잘 때 입 벌리고 자는 아이, 밤사이 성장호르몬 70%가 새고 있습니다"),
+            ("kfk_desk_footrest_3cm", "허리 펴라 백 번 잔소리해도 소용없는 이유 — 책상 아래 발이 숨은 키 3cm를 깎습니다"),
         ],
     },
 }
@@ -186,6 +196,12 @@ def pick_next_topic(div: str, hist: Dict[str, Any], today_str: str) -> Tuple[str
 def check_text_gate(div: str, title: str, desc: str, srt_text: str) -> Tuple[bool, List[str]]:
     errors = []
     combined = f"{title}\n{desc}\n{srt_text}"
+    if len(title.strip()) < 12 or title.strip() == "0":
+        errors.append("invalid_or_zero_title")
+    if re.search(r"[\(\【]\s*\d{1,2}[./]\d{1,2}\s*[#・]?\s*[ABC]\s*[\)\】]", title, re.I):
+        errors.append("bot_date_slot_tag_in_title")
+    if div == "GBA" and any(bad in combined for bad in ("オルカン", "1489", "VYM", "t.me", "Telegram")):
+        errors.append("gba_prohibited_term")
     for b in BANNED_STRINGS:
         if b.lower() in combined.lower():
             errors.append(f"banned_string:{b}")
