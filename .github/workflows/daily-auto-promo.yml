@@ -104,10 +104,15 @@ jobs:
           META_APP_ID: ${{ secrets.META_APP_ID }}
           META_APP_SECRET: ${{ secrets.META_APP_SECRET }}
           IG_ACCESS_TOKEN_TOM: ${{ secrets.IG_ACCESS_TOKEN_TOM }}
+          IG_USER_ID_TOM: ${{ secrets.IG_USER_ID_TOM }}
           IG_ACCESS_TOKEN_KFG: ${{ secrets.IG_ACCESS_TOKEN_KFG }}
+          IG_USER_ID_KFG: ${{ secrets.IG_USER_ID_KFG }}
           IG_ACCESS_TOKEN_GBA: ${{ secrets.IG_ACCESS_TOKEN_GBA }}
+          IG_USER_ID_GBA: ${{ secrets.IG_USER_ID_GBA }}
           IG_ACCESS_TOKEN_HERO: ${{ secrets.IG_ACCESS_TOKEN_HERO }}
+          IG_USER_ID_HERO: ${{ secrets.IG_USER_ID_HERO }}
           IG_ACCESS_TOKEN_KFK: ${{ secrets.IG_ACCESS_TOKEN_KFK }}
+          IG_USER_ID_KFK: ${{ secrets.IG_USER_ID_KFK }}
         run: |
           python -u -X utf8 cloud_automation/ig_token_refresher.py
 

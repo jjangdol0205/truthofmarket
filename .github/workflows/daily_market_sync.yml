@@ -46,5 +46,6 @@ jobs:
           git add frontend/public/ dist/ static_api/ stocks/ compare/ insights/ index.html semi-fear-greed.html rss.xml feed.xml llms.txt llms-full.txt sitemap.xml
           if ! git diff --cached --quiet; then
             git commit -m "Auto-sync daily US market close prices, 134+ SEO pages & quant insights"
-            git push
+            git pull --rebase --autostash origin main || true
+            git push origin HEAD:main
           fi

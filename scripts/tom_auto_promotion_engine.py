@@ -22,20 +22,32 @@ from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 HQ_TEXT_DIR = ROOT_DIR.parent / "text_automation_hq"
-if str(HQ_TEXT_DIR) not in sys.path:
+if HQ_TEXT_DIR.exists() and str(HQ_TEXT_DIR) not in sys.path:
     sys.path.insert(0, str(HQ_TEXT_DIR))
 
-from fandom_editor_letter_builder import (  # noqa: E402
-    compose_fandom_editor_letter_md,
-    validate_fandom_editor_letter,
-)
-from indexnow_delta_gate import (  # noqa: E402
-    ping_websub_if_feed_changed,
-    publish_daily_unique_telegraph_summary,
-    submit_delta_indexnow,
-)
-from live_web_deployer import deploy_division_live, sync_remote_before_build  # noqa: E402
-from official_api_syndicator import dispatch_zero_ban_text_bundle  # noqa: E402
+try:
+    from fandom_editor_letter_builder import (  # noqa: E402
+        compose_fandom_editor_letter_md,
+        validate_fandom_editor_letter,
+    )
+    from indexnow_delta_gate import (  # noqa: E402
+        ping_websub_if_feed_changed,
+        publish_daily_unique_telegraph_summary,
+        submit_delta_indexnow,
+    )
+    from live_web_deployer import deploy_division_live, sync_remote_before_build  # noqa: E402
+    from official_api_syndicator import dispatch_zero_ban_text_bundle  # noqa: E402
+    HAS_HQ_TEXT_MODULES = True
+except ImportError:
+    HAS_HQ_TEXT_MODULES = False
+    compose_fandom_editor_letter_md = None
+    validate_fandom_editor_letter = None
+    ping_websub_if_feed_changed = None
+    publish_daily_unique_telegraph_summary = None
+    submit_delta_indexnow = None
+    deploy_division_live = None
+    sync_remote_before_build = None
+    dispatch_zero_ban_text_bundle = None
 
 SEMI_PATH = ROOT_DIR / "static_api" / "semi_overview.json"
 STOCKS_PATH = ROOT_DIR / "static_api" / "stocks_free.json"
@@ -351,7 +363,7 @@ def run_daily_telegraph_and_syndication(semi: dict, stocks: list, dry_run: bool 
 def main():
     dry_run = "--dry-run" in sys.argv
     no_deploy = "--no-deploy" in sys.argv
-    if not no_deploy:
+    if not no_deploy and HAS_HQ_TEXT_MODULES:
         sync_remote_before_build("TOM", dry_run=dry_run)
     for k_dir in [ROOT_DIR, ROOT_DIR / "dist", ROOT_DIR / "frontend" / "public"]:
         k_dir.mkdir(parents=True, exist_ok=True)
@@ -374,6 +386,13 @@ def main():
     semi = load_json(SEMI_PATH, {})
     stocks = load_json(STOCKS_PATH, [])
     as_of = update_llms_txt(semi, stocks)
+
+    if not HAS_HQ_TEXT_MODULES:
+        print(
+            f"[TOM Zero-Ban v2] Standalone CI Mode | llms.txt({as_of}) & /insights/ refreshed cleanly "
+            "(local HQ syndication skipped on standalone runner)."
+        )
+        return
 
     deploy_res = {"status": "SKIPPED_NO_DEPLOY"} if no_deploy else deploy_division_live("TOM", dry_run=dry_run)
     tg_url, syn_res = run_daily_telegraph_and_syndication(semi, stocks, dry_run=dry_run)
