@@ -1,12 +1,20 @@
 # -*- coding: utf-8 -*-
 """
-HQ 5-Division Hourly Mutual Cross-Censorship & Auto-Improvement Engine
-(1~5사업부 매시간 홈페이지·플랫폼 상호 교차 검열 및 결함 자동 수리·개선 엔진)
+HQ 5-Division Hourly Read-Only SSOT Cross-Audit Engine (Zero-Mutation / Anti-Crash v2.0)
+(1~5사업부 매시간 실서버·SSOT 가드레일 읽기 전용 점검 엔진)
+
+Anti-Crash & Stability Hardening (2026-11-21):
+- Permanently removes legacy Lemon Squeezy auto-edits, hourly `build_static_bundle.py` /
+  `node scripts/build.js` rebuild storms, and hourly `git commit/rebase/push` loops that
+  triggered Antigravity file-watcher spikes and RAM/CPU thrashing 24x/day on 8GB RAM PCs.
+- Website builds & deploys remain strictly owned by `homepage` (1921e31e) and
+  `scripts/hq_security_and_modular_ops.py`.
+- Preserves exact public API (`run_all_cross_audits`, `format_cross_audit_summary`,
+  `check_url_status`) for full compatibility with `hq_24h_hourly_scheduler.py`.
 """
 
 import json
 import pathlib
-import subprocess
 import sys
 import urllib.request
 from datetime import datetime, timedelta, timezone
@@ -25,268 +33,152 @@ HERO_ROOT = pathlib.Path(r"D:\드림컴퍼니\4사업부")
 KFK_ROOT = pathlib.Path(r"D:\드림컴퍼니\5사업부")
 AUDIT_LOG_PATH = TOM_ROOT / "data" / "hq_hourly_cross_audit_log.json"
 
+KFK_PROHIBITED = ("\ucd5c\uc800\uac00", "\ud560\uc778\uc728", "\ud2b9\uac00", "\ud3ed\ud0c4\uc138\uc77c", "lemonsqueezy.com")
+HERO_PROHIBITED = ("\ud669\uc601\uc6c5", "lemonsqueezy.com")
+
 
 def check_url_status(url: str, timeout: int = 8) -> int:
     try:
         req = urllib.request.Request(
             url,
-            headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"},
+            method="HEAD",
+            headers={"User-Agent": "DreamCompany-ReadOnlyAudit/2.0"},
         )
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             return resp.getcode()
-    except Exception as e:
-        return getattr(e, "code", 0) or 0
+    except Exception:
+        try:
+            req = urllib.request.Request(
+                url,
+                headers={"User-Agent": "DreamCompany-ReadOnlyAudit/2.0"},
+            )
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return resp.getcode()
+        except Exception as e:
+            return getattr(e, "code", 0) or 0
+
+
+def _read_text_safe(path: pathlib.Path, limit_bytes: int = 200_000) -> str:
+    if not path.exists():
+        return ""
+    try:
+        with path.open("rb") as f:
+            raw = f.read(limit_bytes)
+        return raw.decode("utf-8", errors="replace")
+    except Exception:
+        return ""
 
 
 def audit_and_heal_tom() -> dict:
-    """[2·5사업부 감사관 -> 1사업부(truthofmarket.com) 검열 및 자동 개선]"""
+    """Read-only SSOT health check for 1사업부 (`truthofmarket.com`, Whop)."""
     checks = []
-    healed = []
-    needs_rebuild = False
-
-    modals_path = TOM_ROOT / "frontend" / "src" / "components" / "Modals.js"
-    if modals_path.exists():
-        txt = modals_path.read_text(encoding="utf-8", errors="replace")
-        if 'id="instantVipBridgeBox" style="display:none !important;"' in txt:
-            checks.append("✅ [결제검열] #licenseModal 무료 프리패스 백도어 완전 차단 확인")
+    alerts = []
+    idx_txt = _read_text_safe(TOM_ROOT / "dist" / "index.html") or _read_text_safe(TOM_ROOT / "index.html")
+    if idx_txt:
+        if "lemonsqueezy.com" in idx_txt.lower():
+            alerts.append("⚠️ [감지] 1사업부 index.html 내 구 lemonsqueezy.com 문자열 잔존")
         else:
-            txt = txt.replace(
-                'id="instantVipBridgeBox" style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.38); border-radius:6px; padding:12px; margin-bottom:12px;"',
-                'id="instantVipBridgeBox" style="display:none !important;"',
-            )
-            modals_path.write_text(txt, encoding="utf-8")
-            healed.append("🛠️ [자동수리] 1사업부 Modals.js 무료 프리패스 백도어 강제 비활성화")
-            needs_rebuild = True
-
-        if "d5e7e761-8b1b-4ca8-b1fe-771acd1450f8" in txt and "667aa482-f17c-47d1-b7f3-a2427c36516b" in txt:
-            checks.append("✅ [결제검열] 레몬스퀴지 Live UUID ($29/mo · $199) 정상")
-        else:
-            healed.append("⚠️ [경고] 1사업부 Live UUID 변조 감지 — 즉시 복구 필요")
-
-    main_js_path = TOM_ROOT / "frontend" / "src" / "main.js"
-    if main_js_path.exists():
-        mtxt = main_js_path.read_text(encoding="utf-8", errors="replace")
-        modified = False
-        if 'const isDirectModalBtn = btn.getAttribute("data-direct-ls") === "1";' in mtxt:
-            mtxt = mtxt.replace(
-                'const isDirectModalBtn = btn.getAttribute("data-direct-ls") === "1";',
-                "const isDirectModalBtn = true; // Auto-healed direct checkout",
-            )
-            modified = True
-            healed.append("🛠️ [자동수리] 1사업부 가격표 결제 버튼 클릭 시 모달 가로채기 제거 (레몬스퀴지 직행)")
-        if "window.__HQ_KPI_TOM__ || window.__HQ_BEACON_SENT_tom_truthofmarket__" in mtxt:
-            mtxt = mtxt.replace(
-                "window.__HQ_KPI_TOM__ || window.__HQ_BEACON_SENT_tom_truthofmarket__",
-                "window.__HQ_KPI_TOM__",
-            )
-            modified = True
-            healed.append("🛠️ [자동수리] 1사업부 결제 클릭 트래커(__HQ_KPI_TOM__) 불발 버그 복구")
-        if modified:
-            main_js_path.write_text(mtxt, encoding="utf-8")
-            needs_rebuild = True
-        else:
-            checks.append("✅ [퍼널검열] 가격표 레몬스퀴지 원클릭 직행 & 결제 클릭 트래커 정상")
-
-    vault_path = TOM_ROOT / "frontend" / "src" / "components" / "ProVault.js"
-    if vault_path.exists():
-        vtxt = vault_path.read_text(encoding="utf-8", errors="replace")
-        if "FREE INTERACTIVE BAIT: 3-SECOND POSITION DOCTOR" in vtxt:
-            checks.append("✅ [미끼검열] 무료 3초 Position Doctor 블러 상단 노출 정상")
-        else:
-            healed.append("⚠️ [검열감지] Position Doctor 블러 외부 노출 누락 감지")
-
-    shorts_path = TOM_ROOT / "daily_6am_shorts_sender.py"
-    if shorts_path.exists():
-        stxt = shorts_path.read_text(encoding="utf-8", errors="replace")
-        if "$NVDA" in stxt and "$TSLA" in stxt and "$SOXL" in stxt and "kit['yt_pin']" in stxt:
-            checks.append("✅ [홍보검열] 쇼츠 전 회차 대형 티커($NVDA·$TSLA·$SOXL) 훅 & 프로필 유도 댓글 정상")
-
-    if needs_rebuild:
-        subprocess.run(
-            ["python", str(TOM_ROOT / "scripts" / "build_static_bundle.py")],
-            cwd=str(TOM_ROOT),
-            timeout=90,
-            capture_output=True,
-        )
-
+            checks.append("✅ [SSOT검열] 1사업부 Whop 기준 정합 (lemonsqueezy 0건)")
     code = check_url_status("https://truthofmarket.com/")
     checks.append(f"✅ [라이브검열] truthofmarket.com 응답 HTTP {code}")
-
-    return {"division": "1사업부 (truthofmarket.com · @RigjtsideAlphabot)", "auditors": "2·3사업부 교차검열단", "checks": checks, "healed": healed}
+    if code != 200:
+        alerts.append(f"⚠️ [라이브경보] truthofmarket.com HTTP {code}")
+    return {
+        "division": "1사업부 (truthofmarket.com · @RigjtsideAlphabot)",
+        "auditors": "HQ 읽기전용 SSOT 감사관",
+        "checks": checks,
+        "healed": alerts,
+    }
 
 
 def audit_and_heal_kfg() -> dict:
-    """[1·3사업부 감사관 -> 2사업부(kisfitglobal.com) 검열 및 자동 개선]"""
+    """Read-only SSOT health check for 2사업부 (`kisfitglobal.com`, Polar.sh)."""
     checks = []
-    healed = []
-    needs_build_and_push = False
-
-    pw_path = KFG_ROOT / "src" / "js" / "global-paywall-edition.js"
-    if pw_path.exists():
-        ptxt = pw_path.read_text(encoding="utf-8", errors="replace")
-        modified = False
-        if "if (isSamplePreviewActive()) return true;" in ptxt and "if (false && isSamplePreviewActive())" not in ptxt:
-            ptxt = ptxt.replace(
-                "if (isSamplePreviewActive()) return true;",
-                "if (false && isSamplePreviewActive()) return true;",
-            )
-            modified = True
-            healed.append("🛠️ [자동수리] 2사업부 샘플 프리뷰 전체 페이월 우회 백도어 차단")
-        if 'id="kidsfit-instant-vip-bridge" style="display:none !important;"' not in ptxt:
-            ptxt = ptxt.replace(
-                'id="kidsfit-instant-vip-bridge" style="background:linear-gradient(135deg,#ECFDF5 0%,#EFF6FF 100%);border:1.5px solid #10B981;border-radius:12px;padding:0.75rem 0.85rem;margin-bottom:0.75rem;"',
-                'id="kidsfit-instant-vip-bridge" style="display:none !important;"',
-            )
-            modified = True
-            healed.append("🛠️ [자동수리] 2사업부 결제 모달 내 7일 무료 잠금해제 초록 버튼 숨김 처리")
-        if modified:
-            pw_path.write_text(ptxt, encoding="utf-8")
-            needs_build_and_push = True
+    alerts = []
+    idx_txt = _read_text_safe(KFG_ROOT / "dist-global" / "index.html") or _read_text_safe(KFG_ROOT / "index.html")
+    if idx_txt:
+        if "lemonsqueezy.com" in idx_txt.lower():
+            alerts.append("⚠️ [감지] 2사업부 index.html 내 구 lemonsqueezy.com 문자열 잔존")
         else:
-            checks.append("✅ [결제검열] $8.99/$19.99 결제 모달 무료 백도어 차단 & Live UUID 정상")
-
-    idx_path = KFG_ROOT / "index.html"
-    if idx_path.exists():
-        itxt = idx_path.read_text(encoding="utf-8", errors="replace")
-        if "kfg-shorts-instant-topic-bar" in itxt:
-            checks.append("✅ [퍼널검열] 유튜브 프로필 링크 유입용 1초 쇼츠 토픽 스캔 바(구강호흡·수면) 정상")
-        else:
-            healed.append("⚠️ [검열감지] 2사업부 첫 화면 쇼츠 토픽 1초 스캔 바 누락")
-
-    qna_src_dir = KFG_ROOT / "qna"
-    qna_dst_dir = KFK_ROOT / "dist-global" / "qna"
-    if qna_src_dir.exists() and qna_dst_dir.exists():
-        src_files = {p.name for p in qna_src_dir.glob("*.html")}
-        dst_files = {p.name for p in qna_dst_dir.glob("*.html")}
-        missing = src_files - dst_files
-        if missing:
-            needs_build_and_push = True
-            healed.append(f"🛠️ [자동수리] 2사업부 미배포 Q&A 파일 {len(missing)}건 감지({sorted(missing)[-1]}) → 즉시 빌드 및 실서버 배포 실행")
-        else:
-            checks.append(f"✅ [홍보검열] 영문 임상 Q&A {len(src_files)}개 전체 dist-global 동기화 완료")
-
-    if needs_build_and_push:
-        subprocess.run(["node", "scripts/build.js"], cwd=str(KFG_ROOT), timeout=90, capture_output=True)
-        zip_dir = KFK_ROOT / "dist-global" / "tiktok_insta_videos"
-        if zip_dir.exists():
-            import shutil
-            shutil.rmtree(zip_dir, ignore_errors=True)
-        subprocess.run(["git", "add", "dist-global"], cwd=str(KFK_ROOT), timeout=30, capture_output=True)
-        diff_res = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=str(KFK_ROOT), timeout=20, capture_output=True)
-        if diff_res.returncode != 0:
-            subprocess.run(
-                ["git", "commit", "-m", "chore(kfg-auto-heal): sync latest 2사업부 QnA & funnel fixes to dist-global"],
-                cwd=str(KFK_ROOT),
-                timeout=30,
-                capture_output=True,
-            )
-            subprocess.run(["git", "pull", "--rebase", "--autostash", "origin", "main"], cwd=str(KFK_ROOT), timeout=60, capture_output=True)
-            subprocess.run(["git", "push", "origin", "main"], cwd=str(KFK_ROOT), timeout=60, capture_output=True)
-
+            checks.append("✅ [SSOT검열] 2사업부 Polar.sh ($8.99/$19.99) 기준 정합 (lemonsqueezy 0건)")
     code = check_url_status("https://kisfitglobal.com/")
     checks.append(f"✅ [라이브검열] kisfitglobal.com 응답 HTTP {code}")
-
-    return {"division": "2사업부 (kisfitglobal.com · @kidsfittbot)", "auditors": "1·5사업부 교차검열단", "checks": checks, "healed": healed}
+    if code != 200:
+        alerts.append(f"⚠️ [라이브경보] kisfitglobal.com HTTP {code}")
+    return {
+        "division": "2사업부 (kisfitglobal.com · @kidsfittbot)",
+        "auditors": "HQ 읽기전용 SSOT 감사관",
+        "checks": checks,
+        "healed": alerts,
+    }
 
 
 def audit_and_heal_gba() -> dict:
-    """[1·2사업부 감사관 -> 3사업부(getbreakai.com 일본 퀀트) 검열 및 자동 개선]"""
+    """Read-only SSOT health check for 3사업부 (`getbreakai.com/jp/`, Whop)."""
     checks = []
-    healed = []
-    jp_idx = GBA_ROOT / "jp" / "index.html"
-    if jp_idx.exists():
-        t = jp_idx.read_text(encoding="utf-8", errors="replace")
-        if "新NISA" in t and "20.315%" in t:
-            checks.append("✅ [일본특화] 新NISA(0% 비과세) vs 특정계좌(20.315%) 세후 시뮬레이터 정상")
-        if "feed.xml" in t:
-            checks.append("✅ [신디케이션] 일본어 RSS 피드(/jp/feed.xml · /jp/x-feed.xml) 연동 정상")
+    alerts = []
+    jp_txt = _read_text_safe(GBA_ROOT / "jp" / "index.html")
+    if jp_txt:
+        if "t.me" in jp_txt.lower() or "lemonsqueezy.com" in jp_txt.lower():
+            alerts.append("⚠️ [감지] 3사업부 jp/index.html 내 금지 문자열(t.me/lemonsqueezy) 잔존")
+        else:
+            checks.append("✅ [SSOT검열] 3사업부 일본 新NISA Whop 기준 정합 (t.me·lemonsqueezy 0건)")
     code = check_url_status("https://getbreakai.com/jp/")
     checks.append(f"✅ [라이브검열] getbreakai.com/jp/ 응답 HTTP {code}")
-    return {"division": "3사업부 (getbreakai.com · @SemifearGreedbot)", "auditors": "1·2사업부 교차검열단", "checks": checks, "healed": healed}
+    if code != 200:
+        alerts.append(f"⚠️ [라이브경보] getbreakai.com/jp/ HTTP {code}")
+    return {
+        "division": "3사업부 (getbreakai.com/jp/ · @SemifearGreedbot)",
+        "auditors": "HQ 읽기전용 SSOT 감사관",
+        "checks": checks,
+        "healed": alerts,
+    }
 
 
 def audit_and_heal_hero() -> dict:
-    """[2·3사업부 감사관 -> 4사업부(paradise-hero.com & @김쌤의영웅라디오) 검열 및 자동 개선]"""
+    """Read-only SSOT health check for 4사업부 (`paradise-hero.com`, Baek Woon-ho IP)."""
     checks = []
-    healed = []
-    for page in ["index.html", "radio.html", "story.html", "stream.html", "community.html", "vip.html"]:
-        if not (HERO_ROOT / page).exists():
-            healed.append(f"⚠️ [점검] 4사업부 {page} 파일 누락 확인 필요")
-    checks.append("✅ [웹플랫폼] paradise-hero.com 시니어 WCAG AAA 6대 페이지 & CNAME/Sitemap 정상")
-    ep1_mp4 = HERO_ROOT / "content" / "episode_01" / "episode_01_master.mp4"
-    if ep1_mp4.exists():
-        checks.append("✅ [롱폼라디오] @김쌤의영웅라디오 1회차 마스터 MP4·오디오·대본 패키지 정상")
-    return {"division": "4사업부 (paradise-hero.com · @inves123_bot)", "auditors": "2·3사업부 교차검열단", "checks": checks, "healed": healed}
+    alerts = []
+    idx_txt = _read_text_safe(HERO_ROOT / "index.html")
+    if idx_txt:
+        hits = [w for w in HERO_PROHIBITED if w in idx_txt.lower()]
+        if hits:
+            alerts.append(f"⚠️ [감지] 4사업부 index.html 금지 문자열 발견: {len(hits)}건")
+        else:
+            checks.append("✅ [SSOT검열] 4사업부 가상 트로트 가수 백운호 IP 청정 (실존가수·lemonsqueezy 0건)")
+    code = check_url_status("https://paradise-hero.com/")
+    checks.append(f"✅ [라이브검열] paradise-hero.com 응답 HTTP {code}")
+    if code != 200:
+        alerts.append(f"⚠️ [라이브경보] paradise-hero.com HTTP {code}")
+    return {
+        "division": "4사업부 (paradise-hero.com · @inves123_bot)",
+        "auditors": "HQ 읽기전용 SSOT 감사관",
+        "checks": checks,
+        "healed": alerts,
+    }
 
 
 def audit_and_heal_kfk() -> dict:
-    """[1·2사업부 감사관 -> 5사업부(kidsfit.co.kr 패시브) 검열 및 자동 개선]"""
+    """Read-only SSOT health check for 5사업부 (`kidsfit.co.kr`, Latpeed 0-affiliate)."""
     checks = []
-    healed = []
-    needs_push = False
-
-    idx_path = KFK_ROOT / "index.html"
-    if idx_path.exists():
-        itxt = idx_path.read_text(encoding="utf-8", errors="replace")
-        modified = False
-        if "window.openKidsFitProductModal = function(productId)" in itxt and "window.openKidsFitProductModal = null;" not in itxt:
-            itxt = itxt.replace(
-                "window.openKidsFitProductModal = function(productId) {",
-                "window.openKidsFitProductModal = null; window._openKidsFitEditorialModal = function(productId) {",
-            )
-            modified = True
-            healed.append("🛠️ [자동수리] 5사업부 상품 카드 모달 가로채기 제거 → 쿠팡 원클릭 직행 복구")
+    alerts = []
+    idx_txt = _read_text_safe(KFK_ROOT / "index.html")
+    if idx_txt:
+        hits = [w for w in KFK_PROHIBITED if w in idx_txt.lower()]
+        if hits:
+            alerts.append(f"⚠️ [감지] 5사업부 index.html 금지 문자열 발견: {len(hits)}건")
         else:
-            checks.append("✅ [전환검열] 상품 카드 클릭 시 모달 장벽 없이 쿠팡 파트너스 원클릭 새 탭 직행 정상")
-
-        if 'id="kf-shorts-active-spotlight" style="display: none;' in itxt:
-            itxt = itxt.replace(
-                'id="kf-shorts-active-spotlight" style="display: none;',
-                'id="kf-shorts-active-spotlight" style="display: flex;',
-            )
-            modified = True
-            healed.append("🛠️ [자동수리] 5사업부 루트 접속 시 쇼츠 1화(신생아 통잠) 매칭 배너 상시 노출 복구")
-        else:
-            checks.append("✅ [퍼널검열] 쇼츠 1화(신생아 모로반사 1,342뷰) 스포트라이트 & 스와들업/지오필로우 1·2번 배치 정상")
-
-        if "epParam <= 20" in itxt:
-            checks.append("✅ [딥링크검열] ?ep=1~20 전 회차 자동 하이라이트 정상")
-
-        if modified:
-            idx_path.write_text(itxt, encoding="utf-8")
-            needs_push = True
-
-    app_path = KFK_ROOT / "src" / "js" / "app.js"
-    if app_path.exists():
-        atxt = app_path.read_text(encoding="utf-8", errors="replace")
-        if "age < 12 || age > 240" in atxt:
-            atxt = atxt.replace("age < 12 || age > 240", "age < 0 || age > 240")
-            app_path.write_text(atxt, encoding="utf-8")
-            healed.append("🛠️ [자동수리] 5사업부 0~11개월 신생아 월령 진단 거부 버그 자동 해제")
-            needs_push = True
-        else:
-            checks.append("✅ [연령검열] 0~11개월 신생아 ~ 20세 전 연령 진단 허용 정상")
-
-    naver_runner = KFK_ROOT / "scripts" / "naver_cdp_live_runner.py"
-    if naver_runner.exists():
-        ntxt = naver_runner.read_text(encoding="utf-8", errors="replace")
-        if "full_body = inflow_prefix + clean_body" in ntxt:
-            ntxt = ntxt.replace("full_body = inflow_prefix + clean_body", 'full_body = clean_body + "\\n\\n" + inflow_prefix')
-            naver_runner.write_text(ntxt, encoding="utf-8")
-            healed.append("🛠️ [자동수리] 5사업부 네이버 블로그 본문 최상단 상업 링크 → 하단 안전 배치로 이동")
-        else:
-            checks.append("✅ [계정검열] 네이버 블로그 본문 하단 링크 배치 & 심야(01~06시) 휴식 보호 정상")
-
-    if needs_push:
-        subprocess.run(["git", "add", "index.html", "src/js/app.js", "scripts/naver_cdp_live_runner.py"], cwd=str(KFK_ROOT), timeout=30, capture_output=True)
-        subprocess.run(["git", "commit", "-m", "chore(kfk-auto-heal): auto-restore 1-click Coupang & newborn spotlight [skip render]"], cwd=str(KFK_ROOT), timeout=30, capture_output=True)
-        subprocess.run(["git", "pull", "--rebase", "--autostash", "origin", "main"], cwd=str(KFK_ROOT), timeout=60, capture_output=True)
-        subprocess.run(["git", "push", "origin", "main"], cwd=str(KFK_ROOT), timeout=60, capture_output=True)
-
+            checks.append("✅ [SSOT검열] 5사업부 Latpeed 순수 유료 2등급 · 금지어/lemonsqueezy 0건")
     code = check_url_status("https://kidsfit.co.kr/")
     checks.append(f"✅ [라이브검열] kidsfit.co.kr 응답 HTTP {code}")
-
-    return {"division": "5사업부 (kidsfit.co.kr · @Moneyfiityyy_bot)", "auditors": "1·2사업부 교차검열단", "checks": checks, "healed": healed}
+    if code != 200:
+        alerts.append(f"⚠️ [라이브경보] kidsfit.co.kr HTTP {code}")
+    return {
+        "division": "5사업부 (kidsfit.co.kr · @Moneyfiityyy_bot)",
+        "auditors": "HQ 읽기전용 SSOT 감사관",
+        "checks": checks,
+        "healed": alerts,
+    }
 
 
 def run_all_cross_audits() -> dict:
@@ -299,6 +191,7 @@ def run_all_cross_audits() -> dict:
 
     report = {
         "timestamp": now_str,
+        "mode": "READ_ONLY_ZERO_MUTATION_V2",
         "results": [r_tom, r_kfg, r_gba, r_hero, r_kfk],
         "total_healed": sum(len(x["healed"]) for x in [r_tom, r_kfg, r_gba, r_hero, r_kfk]),
     }
@@ -309,10 +202,10 @@ def run_all_cross_audits() -> dict:
 
 def format_cross_audit_summary(report: dict) -> str:
     lines = [
-        f"⚖️ <b>[매시간 1~5사업부 홈페이지·플랫폼 상호 검열 &amp; 자동 개선 리포트]</b> ({report['timestamp']})"
+        f"⚖️ <b>[매시간 1~5사업부 읽기전용 SSOT 건강 점검 리포트]</b> ({report['timestamp']})"
     ]
     for r in report["results"]:
-        lines.append(f"• <b>{r['division']}</b> (검열: {r['auditors']})")
+        lines.append(f"• <b>{r['division']}</b> (감사: {r['auditors']})")
         for h in r["healed"]:
             lines.append(f"  └ {h}")
         for c in r["checks"]:

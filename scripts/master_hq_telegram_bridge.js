@@ -89,10 +89,11 @@ const HQ_COMMON_DIRECTIVES_MD = path.join(HQ_ROOT_DIR, "docs", "HQ_COMMON_DIRECT
 const LANGUAGE_SERVER_EXE = "C:\\Users\\jjang\\AppData\\Local\\Programs\\Antigravity\\resources\\bin\\language_server.exe";
 const AGENTAPI_BAT = "C:\\Users\\jjang\\.gemini\\antigravity\\bin\\agentapi.bat";
 
-// [단일 통합관제 일원화] 텔레그램 원격 작업 통합 채널(73f230e4-d0b1-4732-b378-27fedb0c9c83) vs 사장님 PC 직접 작업 채널 분리
-const MASTER_CONVERSATION_ID = "1921e31e-ab59-4720-9419-93cac770374d";
+// [단일 통합관제 일원화] 텔레그램 원격 작업 통합 채널(9522c1b0-bae8-447b-8421-e07cf7a526b7) vs 사장님 PC 직접 작업 채널 분리
+const MASTER_CONVERSATION_ID = "9522c1b0-bae8-447b-8421-e07cf7a526b7";
 const PC_DIRECT_CONVERSATION_ID = "dbc61f0a-76cb-48e3-b617-a616c069564c";
 const RETIRED_REMOTE_CONVERSATION_IDS = new Set([
+  "1921e31e-ab59-4720-9419-93cac770374d",
   "73f230e4-d0b1-4732-b378-27fedb0c9c83",
   "f2b2b95c-ed94-4be6-bc9d-28aeed49efec",
   "b25d5399-9ec2-459c-8c03-fa723a739244",
@@ -189,11 +190,9 @@ function syncCommonDirectivesMarkdown(data) {
       ``,
       `| 구분 | 안티그래비티 Conversation ID | 용도 및 운영 원칙 |`,
       `| :--- | :--- | :--- |`,
-      `| **📱 1차 수신 사령탑 (\`텔레그램\`)** | \`${MASTER_CONVERSATION_ID}\` | 텔레그램 6개 봇(\`@Allcompany1_bot\` 비서실장 + \`@RigjtsideAlphabot\`, \`@kidsfittbot\`, \`@SemifearGreedbot\`, \`@inves123_bot\`, \`@Moneyfiityyy_bot\`) 원격 지시 1차 수신 및 4대 공유실무방 배정 |`,
-      `| **🏛️ \`hq_main\` (\`모두컴퍼니 본부\`)** | \`1921e31e-ab59-4720-9419-93cac770374d\` | 1~5사업부 홈페이지 UI/UX·기능 개선·프로덕션 배포(\`/live-audit\`)·전사 본부 총괄 |`,
-      `| **🎬 \`sns_video\` (\`인스타/유튜브 자동화\`)** | \`f2b2b95c-ed94-4be6-bc9d-28aeed49efec\` | 인스타·유튜브·네이버클립·쇼츠·롱폼 라디오·Flow 영상 자동화 |`,
-      `| **📈 \`seo_monetize\` (\`수익화/SEO·서치콘솔\`)** | \`b25d5399-9ec2-459c-8c03-fa723a739244\` | 서치콘솔·네이버·일간 팬덤 에디터 레터형 SEO 칼럼·제휴 자동화 |`,
-      `| **💳 \`payment_pg\` (\`결제/레몬스퀴지\`)** | \`6340fe0a-b009-4c17-a686-97dc3a605525\` | Lemon Squeezy Store #296100 공인 Live UUID 결제·가치사다리 검증 (\`Whop.com\` 동결) |`,
+      `| **📱 1차 수신 사령탑 · 결제/보안 본부 (\`hq_command\`)** | \`${MASTER_CONVERSATION_ID}\` | 텔레그램 6개 봇(\`@Allcompany1_bot\` 비서실장 + 1~5사업부 CEO 5봇) 원격 지시 1차 수신·전담방 분산 지휘 + 결제/PG/웹훅/Private R2 보안/모듈화 직접 처리 |`,
+      `| **🏛️ \`homepage\` (\`홈페이지\`)** | \`1921e31e-ab59-4720-9419-93cac770374d\` | 1~5사업부 홈페이지 UI/UX·기능 개선·프로덕션 빌드·배포(\`/live-audit\`) 전담 |`,
+      `| **📣 \`marketing_promo\` (\`홍보·SNS·네이버·SEO\`)** | \`849c7334-f941-4e74-a2e9-6a35e2855b44\` | 유튜브·인스타·네이버(클립/블로그/카페/지식인)·SEO/서치콘솔·뉴스레터·백운호 음원/영상 전담 |`,
       `| **🔒 보호 채널 (전송 차단)** | \`876538cc-3cd8-41af-8abe-00937e093957\` | 개인 자소서/문서 방 (\`${PC_DIRECT_CONVERSATION_ID}\` 포함 원격 전송 원천 차단) |`,
       ``,
       `---`,

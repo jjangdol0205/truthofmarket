@@ -1,60 +1,52 @@
 {
-  "timestamp": "2026-11-21 16:00:05 KST",
+  "timestamp": "2026-11-21 20:21:13 KST",
+  "mode": "READ_ONLY_ZERO_MUTATION_V2",
   "results": [
     {
       "division": "1사업부 (truthofmarket.com · @RigjtsideAlphabot)",
-      "auditors": "2·3사업부 교차검열단",
+      "auditors": "HQ 읽기전용 SSOT 감사관",
       "checks": [
-        "✅ [퍼널검열] 가격표 레몬스퀴지 원클릭 직행 & 결제 클릭 트래커 정상",
-        "✅ [홍보검열] 쇼츠 전 회차 대형 티커($NVDA·$TSLA·$SOXL) 훅 & 프로필 유도 댓글 정상",
+        "✅ [SSOT검열] 1사업부 Whop 기준 정합 (lemonsqueezy 0건)",
         "✅ [라이브검열] truthofmarket.com 응답 HTTP 200"
       ],
-      "healed": [
-        "🛠️ [자동수리] 1사업부 Modals.js 무료 프리패스 백도어 강제 비활성화",
-        "⚠️ [경고] 1사업부 Live UUID 변조 감지 — 즉시 복구 필요",
-        "⚠️ [검열감지] Position Doctor 블러 외부 노출 누락 감지"
-      ]
+      "healed": []
     },
     {
       "division": "2사업부 (kisfitglobal.com · @kidsfittbot)",
-      "auditors": "1·5사업부 교차검열단",
+      "auditors": "HQ 읽기전용 SSOT 감사관",
       "checks": [
+        "✅ [SSOT검열] 2사업부 Polar.sh ($8.99/$19.99) 기준 정합 (lemonsqueezy 0건)",
         "✅ [라이브검열] kisfitglobal.com 응답 HTTP 200"
       ],
-      "healed": [
-        "🛠️ [자동수리] 2사업부 결제 모달 내 7일 무료 잠금해제 초록 버튼 숨김 처리",
-        "⚠️ [검열감지] 2사업부 첫 화면 쇼츠 토픽 1초 스캔 바 누락",
-        "🛠️ [자동수리] 2사업부 미배포 Q&A 파일 1건 감지(the-quiet-hours-when-children-actually-grow.html) → 즉시 빌드 및 실서버 배포 실행"
-      ]
+      "healed": []
     },
     {
-      "division": "3사업부 (getbreakai.com · @SemifearGreedbot)",
-      "auditors": "1·2사업부 교차검열단",
+      "division": "3사업부 (getbreakai.com/jp/ · @SemifearGreedbot)",
+      "auditors": "HQ 읽기전용 SSOT 감사관",
       "checks": [
+        "✅ [SSOT검열] 3사업부 일본 新NISA Whop 기준 정합 (t.me·lemonsqueezy 0건)",
         "✅ [라이브검열] getbreakai.com/jp/ 응답 HTTP 200"
       ],
       "healed": []
     },
     {
       "division": "4사업부 (paradise-hero.com · @inves123_bot)",
-      "auditors": "2·3사업부 교차검열단",
+      "auditors": "HQ 읽기전용 SSOT 감사관",
       "checks": [
-        "✅ [웹플랫폼] paradise-hero.com 시니어 WCAG AAA 6대 페이지 & CNAME/Sitemap 정상"
+        "✅ [SSOT검열] 4사업부 가상 트로트 가수 백운호 IP 청정 (실존가수·lemonsqueezy 0건)",
+        "✅ [라이브검열] paradise-hero.com 응답 HTTP 200"
       ],
       "healed": []
     },
     {
       "division": "5사업부 (kidsfit.co.kr · @Moneyfiityyy_bot)",
-      "auditors": "1·2사업부 교차검열단",
+      "auditors": "HQ 읽기전용 SSOT 감사관",
       "checks": [
-        "✅ [전환검열] 상품 카드 클릭 시 모달 장벽 없이 쿠팡 파트너스 원클릭 새 탭 직행 정상",
-        "✅ [퍼널검열] 쇼츠 1화(신생아 모로반사 1,342뷰) 스포트라이트 & 스와들업/지오필로우 1·2번 배치 정상",
-        "✅ [연령검열] 0~11개월 신생아 ~ 20세 전 연령 진단 허용 정상",
-        "✅ [계정검열] 네이버 블로그 본문 하단 링크 배치 & 심야(01~06시) 휴식 보호 정상",
+        "✅ [SSOT검열] 5사업부 Latpeed 순수 유료 2등급 · 금지어/lemonsqueezy 0건",
         "✅ [라이브검열] kidsfit.co.kr 응답 HTTP 200"
       ],
       "healed": []
     }
   ],
-  "total_healed": 6
+  "total_healed": 0
 }

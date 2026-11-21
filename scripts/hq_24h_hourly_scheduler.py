@@ -346,53 +346,8 @@ def run_div5_kfk(hour: int, force: bool = False) -> dict:
 
 
 def check_lemonsqueezy_store_approval() -> dict:
-    """Checks Lemon Squeezy API for Store #296100 activation status (plan: free -> fresh)."""
-    state_file = HQ_DIR / "1사업부" / "data" / "lemonsqueezy_approval_state.json"
-    env_file = HQ_DIR / "2사업부" / ".env"
-    api_key = ""
-    if env_file.exists():
-        for line in env_file.read_text(encoding="utf-8", errors="ignore").splitlines():
-            if line.startswith("LEMONSQUEEZY_API_KEY="):
-                api_key = line.split("=", 1)[1].strip().strip("'\"")
-    if not api_key:
-        return {"checked": False, "approved": False, "plan": "unknown"}
-
-    try:
-        req = urllib.request.Request(
-            "https://api.lemonsqueezy.com/v1/stores/296100",
-            headers={
-                "Authorization": f"Bearer {api_key}",
-                "Accept": "application/vnd.api+json",
-                "User-Agent": "Mozilla/5.0",
-            },
-        )
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-            attr = data.get("data", {}).get("attributes", {})
-            plan = str(attr.get("plan", "free")).lower()
-            approved = plan != "free"
-            prev_approved = False
-            if state_file.exists():
-                try:
-                    prev_approved = bool(json.loads(state_file.read_text(encoding="utf-8")).get("approved", False))
-                except Exception:
-                    pass
-            state_file.parent.mkdir(parents=True, exist_ok=True)
-            state_file.write_text(
-                json.dumps({"checked": True, "approved": approved, "plan": plan}, ensure_ascii=False),
-                encoding="utf-8",
-            )
-            if approved and not prev_approved:
-                alert_msg = (
-                    "🎉🎊 <b>[총 회장님 직접 확인 건 — Lemon Squeezy 스토어 #296100 최종 승인 완료!]</b>\n"
-                    f"• <b>스토어 상태</b>: <code>plan: {plan}</code> (Live 실결제 활성화 완료)\n"
-                    "• <b>적용 도메인</b>: truthofmarket.com · kisfitglobal.com · getbreakai.com\n"
-                    "• 이제 모든 VIP 실결제 체크아웃이 Live 모드로 정상 가동됩니다!"
-                )
-                notify_division_bot("HQ", alert_msg)
-            return {"checked": True, "approved": approved, "plan": plan}
-    except Exception as e:
-        return {"checked": False, "approved": False, "error": str(e)}
+    """Retired no-op stub (Lemon Squeezy permanently replaced by Whop / Polar.sh / Latpeed)."""
+    return {"checked": False, "approved": False, "plan": "retired", "retired": True}
 
 
 def _safe_run(name: str, fn, hour: int, force: bool, fallback: dict) -> dict:

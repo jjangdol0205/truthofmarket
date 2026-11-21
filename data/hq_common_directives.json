@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-21T03:42:16.659410+00:00",
-  "telegramDedicatedConversationId": "1921e31e-ab59-4720-9419-93cac770374d",
-  "pcDirectConversationId": "876538cc-3cd8-41af-8abe-00937e093957",
+  "updatedAt": "2026-11-21T08:23:20.646Z",
+  "telegramDedicatedConversationId": "9522c1b0-bae8-447b-8421-e07cf7a526b7",
+  "pcDirectConversationId": "dbc61f0a-76cb-48e3-b617-a616c069564c",
   "standingDirectives": [
     {
       "id": 1,
@@ -161,8 +161,8 @@
     },
     {
       "id": 27,
-      "title": "단일 대화창(hq_main) 올인원 통합 & FFmpeg 저전력(2스레드·순차) 하드웨어 보호",
-      "rule": "PC 과부하(Kernel-Power 41) 방지를 위해 텔레그램·웹·영상·글·결제 모든 기능을 단일 대화방(1921e31e-ab59-4720-9419-93cac770374d) 1곳으로 통일하고 나머지 4개 대화창은 영구 종료한다. 모든 FFmpeg 영상 인코딩은 1워커 순차 실행 및 -threads 2 (BelowNormal 우선순위)를 강제한다.",
+      "title": "3대 허브-앤-스포크 대화방 분산 지휘 & FFmpeg 저전력(2스레드·순차) 하드웨어 보호",
+      "rule": "텔레그램 사령탑·결제/보안/모듈 본부(9522c1b0-bae8-447b-8421-e07cf7a526b7)가 모든 텔레그램 6봇 지시를 1차 수신하여 즉시 조회·결제/보안/인프라 건은 직접 처리하고, 홈페이지 수정·배포 건은 홈페이지 방(1921e31e-ab59-4720-9419-93cac770374d)으로, 유튜브·인스타·네이버(클립/블로그/카페/지식인)·SEO 홍보 건은 홍보/마케팅 방(849c7334-f941-4e74-a2e9-6a35e2855b44)으로 hq_room_dispatcher.py를 통해 맞춤 분산 지시한다. 모든 FFmpeg 인코딩은 1워커 순차 실행 및 -threads 2 (BelowNormal)를 강제한다.",
       "createdAt": "2026-11-19T22:40:00+09:00"
     }
   ],
