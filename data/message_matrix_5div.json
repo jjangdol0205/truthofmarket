@@ -1,6 +1,6 @@
 {
   "schema_version": "2026.11.21-matrix-5x5-v1",
-  "updated_at_kst": "2026-11-21 23:52:04 KST",
+  "updated_at_kst": "2026-11-22 06:34:20 KST",
   "allocation_policy": {
     "shorts_reels_stage_1_2_ratio": 0.8,
     "landing_and_drip_day2_stage_3_4_ratio": 0.15,
@@ -71,7 +71,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 cinema shot of an American couple in their late 50s at a warm walnut kitchen table at sunrise, calmly reviewing paper financial statements beside a steaming mug of coffee while morning sunbeams cross the room, shallow depth of field. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S1_CURIOSITY",
@@ -92,7 +95,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 moody split-atmosphere shot of two quiet suburban driveways at dusk: one porch softly glowing warm amber with a peaceful retired couple strolling hand-in-hand, golden hour cinematography. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S1_SELF",
@@ -113,7 +119,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 close-up documentary shot of a 58-year-old American man looking thoughtfully out an office window overlooking autumn trees at golden hour, closing a leather planner with quiet resolve. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S1_PATTERN",
@@ -134,7 +143,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 cinematic shot inside a cozy American living room during rain outside; muted television glows softly across the room while a serene retired woman calmly pours hot herbal tea and opens a hardcover book. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S1_PROOF",
@@ -155,7 +167,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 overhead macro dolly shot of warm brass pocket watch ticking calmly beside neat cream notebook pages and fountain pen on an oak desk in soft morning window light. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S2_LOSS",
@@ -176,7 +191,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 dramatic yet calm shot of dark storm clouds rolling over an autumn coastal harbor while a sturdy stone lighthouse stands illuminated in warm gold, symbolizing crisis resilience. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S2_CURIOSITY",
@@ -197,7 +215,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 serene shot of an American couple in their early 60s walking calmly down a tree-lined New England autumn lane at golden hour, warm wind rustling leaves, peaceful conversation. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S2_SELF",
@@ -218,7 +239,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 intimate shot of a 62-year-old retiree sitting peacefully on a sunlit wooden porch with reading glasses and a linen notebook, looking relaxed toward a calm blue lake. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S2_PATTERN",
@@ -239,7 +263,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 close-up of a heavy vintage brass balance scale gently stabilizing into perfect equilibrium on a mahogany library desk lit by warm amber lamp light. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S2_PROOF",
@@ -260,7 +287,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 slow aerial reveal of a long winding sunlit mountain highway climbing steadily through mist toward clear blue skies, representing 25 years of steady compounding. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S3_LOSS",
@@ -281,7 +311,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 warm interior shot of an older couple comparing two simple handwritten pages on a wooden study table with warm desk lamp glow, calm clarity replacing stress. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S3_CURIOSITY",
@@ -302,7 +335,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 peaceful morning shot of an American man in his 60s brewing pour-over coffee in a bright kitchen while sunlight illuminates calm waves outside the coastal window. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S3_SELF",
@@ -323,7 +359,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 documentary shot of a 59-year-old woman smiling softly as she closes her laptop at a sunlit home desk and walks out to tend a blooming backyard garden. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S3_PATTERN",
@@ -344,7 +383,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 minimalist composition of three smooth river stones balanced serenely beside calm rippling water at sunrise, warm natural editorial aesthetic. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S3_PROOF",
@@ -365,7 +407,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 stately wide-angle shot of the classic granite pillars of a historic library courtyard bathed in clean morning gold light, timeless institutional calm. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S4_LOSS",
@@ -386,7 +431,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 crisp overhead shot of hands placing a tidy cream binder and gold-nib pen onto a clean desk next to reading glasses, warm sunlit shadows moving slowly. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S4_CURIOSITY",
@@ -407,7 +455,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 cinematic close-up of fingers turning crisp thick cream archival paper pages on a walnut table under warm morning sunlight, editorial craft detail. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S4_SELF",
@@ -428,7 +479,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 warm lifestyle portrait of a confident 64-year-old American couple laughing together over Sunday breakfast on a sunny veranda overlooking rolling green hills. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S4_PATTERN",
@@ -449,7 +503,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 peaceful dusk scene of a sailboat moored calmly in a sheltered golden bay while distant ocean waves ripple softly beyond the breakwater. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S4_PROOF",
@@ -470,7 +527,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 slow push-in on an heirloom brass compass resting on an antique wooden map table illuminated by warm late-afternoon sunlight. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S5_LOSS",
@@ -491,7 +551,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 gentle close-up of a retired gentleman opening a clean linen folder on a sunlit study desk and nodding calmly with relief. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S5_CURIOSITY",
@@ -512,7 +575,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 serene morning scene of freshly brewed espresso steaming beside a neat printed workbook on a bright oak table near open French doors. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S5_SELF",
@@ -533,7 +599,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 warm twilight shot of a retired couple relaxing by a gentle fireplace, clinking teacups calmly without a phone or screen in sight. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S5_PATTERN",
@@ -554,7 +623,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 clean sunlit desk shot of a person placing a bookmark inside a thin printed workbook and stepping outside into crisp golden afternoon light. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "TOM_S5_PROOF",
@@ -575,7 +647,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 steady sunrise timelapse over calm ocean water turning liquid gold, peaceful enduring confidence. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         }
       ]
     },
@@ -626,7 +701,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 warm ivory-toned bedroom shot at 9 PM: a loving American mother gently tucks her 8-year-old child into crisp linen sheets and dims the warm amber bedside lamp as moonlight softens the window. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S1_CURIOSITY",
@@ -647,7 +725,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 bright sunny hallway shot in an American home: two young siblings standing back-to-back giggling joyfully beside a natural oak doorway height ruler bathed in soft morning light. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S1_SELF",
@@ -668,7 +749,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 close-up sunlit lifestyle shot of an 8-year-old child standing barefoot tall and straight against a cream hallway wall while dad gently rests a wooden ruler flat atop their head. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S1_PATTERN",
@@ -689,7 +773,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 sunlit American kitchen table scene: a mother prepares a wholesome balanced dinner of grilled salmon, colorful steamed greens, avocado, and eggs on warm ceramic plates in golden light. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S1_PROOF",
@@ -710,7 +797,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 warm editorial macro shot of delicate pencil height marks and tiny dates climbing steadily upward along a painted ivory wooden doorframe in soft morning sunbeams. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S2_LOSS",
@@ -731,7 +821,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 warm morning living room scene: a thoughtful American father reviews a clean printed growth notebook with a pencil on a linen table while his elementary child plays happily in the background. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S2_CURIOSITY",
@@ -752,7 +845,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 golden-hour backyard scene: an energetic 9-year-old child jumping rope effortlessly on green grass with sun flare illuminating joyful athletic motion. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S2_SELF",
@@ -773,7 +869,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 cozy peaceful dawn bedroom shot: soft sheer curtains swaying gently as an elementary child sleeps deeply and peacefully breathing calmly through their nose on a soft cotton pillow. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S2_PATTERN",
@@ -794,7 +893,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 warm evening living room shot: parents gently turning off a glowing tablet at 8:30 PM and opening a hardcover storybook together on a cream sofa. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S2_PROOF",
@@ -815,7 +917,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 bright top-down shot of a neat linen parent journal, wooden ruler, and warm cup of chamomile tea arranged aesthetically on an ivory dining table in morning sunlight. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S3_LOSS",
@@ -836,7 +941,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 calm morning kitchen shot: an American mom calmly clipping a crisp minimalist paper checklist onto a warm cream refrigerator with a brass magnet while smiling warmly. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S3_CURIOSITY",
@@ -857,7 +965,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 slow push-in on a sunlit wooden hallway ruler showing steady upward pencil marks over four seasons as autumn and spring leaves shift softly outside the window. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S3_SELF",
@@ -878,7 +989,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 warm documentary shot of American parents sitting together at a bright breakfast island reviewing a neat printed chart and nodding calmly with relief. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S3_PATTERN",
@@ -899,7 +1013,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 vibrant afternoon park scene: a father and two kids playing joyful basketball shooting practice on a sunlit neighborhood driveway. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S3_PROOF",
@@ -920,7 +1037,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 soft-focus sunlit editorial shot of a mother holding a tidy cream folder of family notes in her sunlit entryway before stepping out calmly for the day. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S4_LOSS",
@@ -941,7 +1061,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 serene evening kitchen scene: warm pendant lights over an oak table where a mother sets out fresh berries, Greek yogurt, and boiled eggs for tomorrow's breakfast prep. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S4_CURIOSITY",
@@ -962,7 +1085,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 crisp macro shot of hands turning pages of a clean ivory boutique printed family routine guide bathed in natural window daylight. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S4_SELF",
@@ -983,7 +1109,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 joyful family morning scene: three siblings of different ages laughing together in matching bright casual outfits as parents mark their monthly doorway heights. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S4_PATTERN",
@@ -1004,7 +1133,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 peaceful minimalist bedroom aesthetic: warm dim amber reading light, wooden bookshelf, cozy quilt, and calm bedtime atmosphere without any electronic screens. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S4_PROOF",
@@ -1025,7 +1157,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 bright clean editorial shot of a wooden growth ruler standing beside a fresh potted olive tree in a warm cream-and-linen American family living room. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S5_LOSS",
@@ -1046,7 +1181,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 warm close-up of a smiling mother placing a small checkmark on a tidy printed monthly wall tracker with a brass pen in morning light. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S5_CURIOSITY",
@@ -1067,7 +1205,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 crisp sunlit shot of a clean printed 4-page ivory family booklet resting on a linen tablecloth beside a fresh sprig of eucalyptus. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S5_SELF",
@@ -1088,7 +1229,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 heartwarming evening scene of parents hugging their sleepy happy 9-year-old goodnight in a warm dimly lit nursery hallway. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S5_PATTERN",
@@ -1109,7 +1253,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 bright Sunday morning scene of a happy tall kid riding a bicycle along a sunlit tree-lined suburban sidewalk while parents cheer warmly. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFG_S5_PROOF",
@@ -1130,7 +1277,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 serene sunrise streaming across a clean ivory family dining table with fresh fruit, warm oatmeal, and a tidy family journal. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         }
       ]
     },
@@ -1181,7 +1331,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 refined cinema shot inside a tranquil Tokyo wooden study at dawn: a dignified Japanese couple in their late 50s gently pouring steamed green tea while reviewing a neat paper retirement notebook in soft morning sunlight. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S1_CURIOSITY",
@@ -1202,7 +1355,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 atmospheric golden-hour shot overlooking a serene Tokyo residential garden with autumn maple leaves drifting gently past traditional wooden shoji windows. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S1_SELF",
@@ -1223,7 +1379,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 contemplative portrait of a poised 58-year-old Japanese gentleman in a crisp cashmere cardigan standing peacefully by a wide apartment window overlooking calm morning city lights. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S1_PATTERN",
@@ -1244,7 +1403,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 serene Japanese living room scene: gentle evening rain streaks the glass while a calm 60-year-old couple enjoys quiet tea together, completely unbothered by outside rush. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S1_PROOF",
@@ -1265,7 +1427,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 refined macro dolly shot of a classic ceramic teacup, wooden abacus bead detail, and fine fountain pen resting on a smooth hinoki desk in warm morning light. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S2_LOSS",
@@ -1286,7 +1451,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 cinematic dusk view of a misty mountain lake near Mount Fuji turning tranquil mirror-calm after a passing cloud shadow, warm golden horizon. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S2_CURIOSITY",
@@ -1307,7 +1475,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 peaceful shot of a dignified 62-year-old Japanese woman writing neatly in a cream linen ledger beside a small vase of white camellia in soft afternoon sun. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S2_SELF",
@@ -1328,7 +1499,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 warm afternoon scene of a 55-year-old Japanese couple strolling calmly along a quiet stone path lined with blooming cherry blossoms in soft golden light. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S2_PATTERN",
@@ -1349,7 +1523,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 meditative close-up of clear hot water pouring smoothly from an iron tetsubin kettle into a handcrafted stoneware cup with rising steam in sunlit silence. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S2_PROOF",
@@ -1370,7 +1547,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 slow aerial glide over a peaceful Japanese coastal pine grove and calm turquoise sea shimmering under clear morning skies. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S3_LOSS",
@@ -1391,7 +1571,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 refined interior shot of a calm Japanese study desk where hands arrange two neat cream folders side-by-side under a warm brass reading lamp. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S3_CURIOSITY",
@@ -1412,7 +1595,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 tranquil shot of a stone Zen garden with neatly raked concentric sand lines bathed in crisp golden sunrise shadows. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S3_SELF",
@@ -1433,7 +1619,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 warm lifestyle portrait of a retired Japanese couple smiling quietly on a wooden engawa veranda looking out at a lush green moss garden. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S3_PATTERN",
@@ -1454,7 +1643,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 minimal artistic shot of a balanced wooden bamboo shishi-odoshi fountain resting gracefully in clear garden water, serene rhythm. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S3_PROOF",
@@ -1475,7 +1667,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 architectural slow pan of quiet sunlight illuminating cedar beams and warm tatami textures inside a classic modern Tokyo home. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S4_LOSS",
@@ -1496,7 +1691,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 overhead editorial shot of neat cream paper workbook sheets, spectacles, and a dark green fountain pen resting cleanly on a walnut desk. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S4_CURIOSITY",
@@ -1517,7 +1715,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 gentle close-up of hands smoothly turning thick archival pages of a printed planning booklet beside a warm cup of roasted hojicha tea. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S4_SELF",
@@ -1538,7 +1739,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 peaceful autumn afternoon scene of a 64-year-old Japanese couple enjoying quiet conversation at a wooden window-side cafe overlooking golden ginkgo trees. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S4_PATTERN",
@@ -1559,7 +1763,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 serene evening harbor view in Yokohama with calm deep-blue water reflecting warm steady lantern lights. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S4_PROOF",
@@ -1580,7 +1787,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 slow zoom on a precision mechanical silver desk clock ticking steadily beside fresh morning light falling across a linen notebook. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S5_LOSS",
@@ -1601,7 +1811,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 calm close-up of a dignified senior man closing a slim printed workbook with a satisfied nod and taking a peaceful sip of warm green tea. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S5_CURIOSITY",
@@ -1622,7 +1835,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 bright morning Tokyo balcony scene with coffee and a crisp printed booklet catching fresh sunlight above quiet treetops. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S5_SELF",
@@ -1643,7 +1859,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 warm twilight scene of a Japanese couple laughing gently while preparing an evening meal together in a bright minimalist kitchen. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S5_PATTERN",
@@ -1664,7 +1883,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 peaceful walk along a wooden park bridge over a reflective koi pond at golden hour, unhurried retirement freedom. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "GBA_S5_PROOF",
@@ -1685,7 +1907,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 luminous sunrise spreading gently over calm Tokyo bay and snow-capped distant mountains, enduring serenity. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         }
       ]
     },
@@ -1736,7 +1961,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Widescreen 16:9 atmospheric scene of dignified gentleman singer Baek Woon-ho from the reference images wearing his deep emerald velvet suit, singing warmly into a vintage chrome microphone inside a glowing amber late-night Korean radio studio with rain softly tapping the dark window. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "16:9",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S1_CURIOSITY",
@@ -1757,7 +1985,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Widescreen 16:9 nostalgic twilight scene of gentleman singer Baek Woon-ho from the reference images wearing a cream knit turtleneck and burgundy blazer, standing gently on a quiet Korean countryside train station platform at golden sunset as warm lantern lights flicker on. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "16:9",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S1_SELF",
@@ -1778,7 +2009,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Widescreen 16:9 heartwarming scene of gentleman singer Baek Woon-ho from the reference images in his burgundy velvet stage suit, singing soulfully with gentle eyes on an intimate golden-lit concert stage surrounded by drifting pink spring cherry blossom petals. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "16:9",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S1_PATTERN",
@@ -1799,7 +2033,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Widescreen 16:9 tranquil dawn scene of gentleman singer Baek Woon-ho from the reference images in a warm wool coat over cream turtleneck, standing near a misty blue Korean mountain lake pier as first golden morning rays shimmer across the water. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "16:9",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S1_PROOF",
@@ -1820,7 +2057,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Widescreen 16:9 cozy wooden radio booth scene of gentleman singer Baek Woon-ho from the reference images in emerald velvet jacket, softly smiling beside a glowing brass desk lamp, vintage microphone, and stack of handwritten listener postcards. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "16:9",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S2_LOSS",
@@ -1841,7 +2081,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Widescreen 16:9 poignant twilight scene of gentleman singer Baek Woon-ho from the reference images singing gently along an autumn Korean country lane lined with swaying pink and white cosmos flowers bathed in amber sunset light. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "16:9",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S2_CURIOSITY",
@@ -1862,7 +2105,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Widescreen 16:9 serene early-morning scene of gentleman singer Baek Woon-ho from the reference images waiting calmly by a nostalgic vintage dawn commuter train window as soft golden sunrise illuminates rolling Korean hills. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "16:9",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S2_SELF",
@@ -1883,7 +2129,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Widescreen 16:9 warm intimate stage scene of gentleman singer Baek Woon-ho from the reference images in burgundy velvet suit with golden camellia lapel pin, holding a classic chrome microphone while warm golden dust motes float gently in spotlight beams. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "16:9",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S2_PATTERN",
@@ -1904,7 +2153,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Widescreen 16:9 peaceful rainy evening scene inside a vintage Korean wooden teahouse where gentleman singer Baek Woon-ho from the reference images sits calmly by a misty window holding a warm ceramic teacup while amber lanterns glow softly. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "16:9",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S2_PROOF",
@@ -1925,7 +2177,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Widescreen 16:9 luminous starry night lakeside pavilion scene of gentleman singer Baek Woon-ho from the reference images in signature emerald velvet suit singing tenderly beside lanterns reflected on tranquil Baekwoon Lake. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "16:9",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S3_LOSS",
@@ -1946,7 +2201,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 cozy warm radio studio scene of gentleman singer Baek Woon-ho from the reference images in emerald velvet suit greeting viewers with a gentle warm smile beside a chrome vintage microphone and glowing amber desk lamp. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S3_CURIOSITY",
@@ -1967,7 +2225,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 golden autumn park scene of gentleman singer Baek Woon-ho from the reference images in cream turtleneck and burgundy jacket walking slowly beneath drifting golden ginkgo leaves, smiling tenderly toward camera. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S3_SELF",
@@ -1988,7 +2249,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 bright sunlit morning veranda scene of gentleman singer Baek Woon-ho from the reference images holding a warm teacup surrounded by blooming pink spring flowers, radiant comforting greeting mood. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S3_PATTERN",
@@ -2009,7 +2273,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 nostalgic twilight countryside train platform scene of gentleman singer Baek Woon-ho from the reference images standing under a warm vintage station lamp as gentle evening breeze moves his neat hair. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S3_PROOF",
@@ -2030,7 +2297,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 intimate candlelit classical concert hall scene of gentleman singer Baek Woon-ho from the reference images in burgundy velvet suit singing soulfully with hand lightly resting on a vintage stand microphone. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S4_LOSS",
@@ -2051,7 +2321,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 comforting rainy evening window scene of gentleman singer Baek Woon-ho from the reference images in warm burgundy jacket looking gently out through raindrop-streaked glass lit by soft golden indoor lamp. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S4_CURIOSITY",
@@ -2072,7 +2345,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 dreamy spring twilight lakeside scene of gentleman singer Baek Woon-ho from the reference images in emerald suit singing softly as warm lantern lights shimmer over rippling water and willow branches. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S4_SELF",
@@ -2093,7 +2369,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 serene morning mountain trail scene of gentleman singer Baek Woon-ho from the reference images in cream turtleneck walking calmly along a sunlit cedar boardwalk filled with gentle morning mist. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S4_PATTERN",
@@ -2114,7 +2393,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 joyful golden autumn cosmos field scene of gentleman singer Baek Woon-ho from the reference images smiling warmly with hands folded respectfully as sunset light wraps the hillside in amber gold. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S4_PROOF",
@@ -2135,7 +2417,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 rich classic Korean radio lounge scene of gentleman singer Baek Woon-ho from the reference images beside a glowing vintage wooden radio dial and warm desk lamp, calm trustworthy presence. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S5_LOSS",
@@ -2156,7 +2441,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 tender golden-hour harbor pier scene of gentleman singer Baek Woon-ho from the reference images in burgundy blazer gazing warmly across calm sunset ripples, peaceful heartfelt closure. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S5_CURIOSITY",
@@ -2177,7 +2465,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 glowing festive evening acoustic stage scene of gentleman singer Baek Woon-ho from the reference images in emerald velvet suit bowing gently with heartfelt gratitude amid warm amber bokeh. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S5_SELF",
@@ -2198,7 +2489,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 bright sunlit flower garden scene of gentleman singer Baek Woon-ho from the reference images offering a warm respectful nod amid soft pastel camellias and morning sunbeams. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S5_PATTERN",
@@ -2219,7 +2513,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 quiet snowy winter evening streetlamp scene of gentleman singer Baek Woon-ho from the reference images in warm coat and scarf smiling serenely as soft snowflakes drift through golden lantern light. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": true
         },
         {
           "id": "HERO_S5_PROOF",
@@ -2240,7 +2537,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 warm timber studio close-up of gentleman singer Baek Woon-ho from the reference images singing softly into a silver vintage microphone with soft cherry petals floating in amber spotlight. Korean sentimental webtoon watercolor illustration style, strictly consistent face matching the reference images of dignified middle-aged Korean gentleman trot singer Baek Woon-ho, strictly zero text, zero captions, zero watermarks, seamless gentle looping motion.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": true
         }
       ]
     },
@@ -2291,7 +2591,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 warm evening shot inside a clean Korean apartment bedroom at 9:30 PM: a loving Korean mother gently switches off the bright ceiling light, leaves a soft warm amber nightlight glowing, and tucks her 9-year-old child under a cozy cotton duvet. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S1_CURIOSITY",
@@ -2312,7 +2615,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 bright sunlit Korean apartment hallway: two elementary Korean siblings standing side-by-side giggling happily next to a minimalist wooden wall height ruler in warm morning daylight. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S1_SELF",
@@ -2333,7 +2639,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 realistic sunlit Korean home living room shot: an 10-year-old Korean elementary child standing barefoot against a cream wall while mom checks posture gently with a wooden ruler. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S1_PATTERN",
@@ -2354,7 +2663,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 bright Korean home dinner table in warm evening light: mom serves a wholesome balanced meal of steamed rice, grilled mackerel, soft tofu stew, egg roll, and colorful vegetables with zero packaged bottles. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S1_PROOF",
@@ -2375,7 +2687,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 crisp editorial close-up of neat pencil height lines rising month-by-month on a wooden Korean doorway frame bathed in clean morning window sunlight. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S2_LOSS",
@@ -2396,7 +2711,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 warm sunlit Korean study table: a thoughtful Korean mother carefully notes monthly child growth numbers inside a clean cream linen planner beside a warm cup of barley tea. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S2_CURIOSITY",
@@ -2417,7 +2735,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 vibrant golden-hour Korean neighborhood park: an energetic 9-year-old Korean boy jumping rope rhythmically in warm sunlight with joyful motion and crisp shadows. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S2_SELF",
@@ -2438,7 +2759,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 calm early-morning Korean bedroom scene: soft daylight filtering through white linen curtains while an elementary child sleeps peacefully and deeply breathing quietly. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S2_PATTERN",
@@ -2459,7 +2783,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 realistic Korean living room at 8:45 PM: parents warmly place a tablet face-down on a wooden shelf and sit together reading a book with their elementary child under cozy warm lamp light. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S2_PROOF",
@@ -2480,7 +2807,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 serene top-down shot of a tidy Korean mom's notebook, wooden ruler, and neat printed reference folder arranged on a bright oak dining table in morning sunlight. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S3_LOSS",
@@ -2501,7 +2831,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 bright clean Korean kitchen morning: a smiling mother places a neat minimalist 30-day paper habit tracker onto a cream refrigerator door with a small wooden magnet. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S3_CURIOSITY",
@@ -2522,7 +2855,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 sunlit Korean apartment balcony and living room: slow push-in on a tidy wooden height chart beside lush indoor green plants swaying gently in warm afternoon breeze. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S3_SELF",
@@ -2543,7 +2879,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 comforting morning documentary shot: a Korean mother and father talking calmly over coffee at a sunlit dining table while reviewing a clean printed growth guide. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S3_PATTERN",
@@ -2564,7 +2903,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 energetic late-afternoon Korean elementary playground: two smiling kids doing playful vertical jumping stretches and light basketball tosses in golden sunlight. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S3_PROOF",
@@ -2585,7 +2927,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 calm crisp scene inside a sunny Korean entryway: a composed mother slips a tidy cream folder of organized growth notes into her canvas tote bag before stepping out for a routine checkup. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S4_LOSS",
@@ -2606,7 +2951,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 warm Korean kitchen evening prep: hands slicing fresh seasonal fruit, boiled eggs, and roasted anchovies neatly onto clean ceramic dishes under soft golden lighting. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S4_CURIOSITY",
@@ -2627,7 +2975,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 editorial macro shot of hands turning crisp pages of a clean cream printed family growth workbook on a sunlit oak table. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S4_SELF",
@@ -2648,7 +2999,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 joyful Korean family weekend morning: smiling parents measuring their two elementary children barefoot against the hallway doorway chart with bright natural laughter. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S4_PATTERN",
@@ -2669,7 +3023,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 tidy Korean child desk setup in natural daylight: an elementary student sitting upright with feet firmly supported on a clean wooden footrest while studying calmly. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S4_PROOF",
@@ -2690,7 +3047,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 clean sunlit minimalist Korean dining table with fresh morning breakfast (eggs, warm soup, greens) beside an open calm family journal. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S5_LOSS",
@@ -2711,7 +3071,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 gentle sunlit close-up of a Korean mother ticking off a daily box on a clean printed paper checklist on the fridge with a warm smile. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S5_CURIOSITY",
@@ -2732,7 +3095,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 clean aesthetic shot of a slim ivory printed growth workbook resting on a bright linen tablecloth beside warm sunlight shadows. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S5_SELF",
@@ -2753,7 +3119,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 tender Korean evening family moment: mom and dad high-fiving their happy 9-year-old child after finishing a calm evening stretching routine together. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S5_PATTERN",
@@ -2774,7 +3143,10 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 radiant sunny Korean riverside park path: a tall happy elementary student jogging and skipping lightly beside smiling parents under clear blue sky. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         },
         {
           "id": "KFK_S5_PROOF",
@@ -2795,9 +3167,13 @@
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
-          }
+          },
+          "flow_visual_prompt": "Vertical 9:16 serene morning sunrise pouring over a tidy Korean apartment living room with an open wooden growth planner ready for the new month. Strictly zero text, zero captions, zero watermarks, zero logos, smooth cinema camera motion, photorealistic natural lighting.",
+          "flow_aspect_ratio": "9:16",
+          "flow_uses_hero_refs": false
         }
       ]
     }
-  }
+  },
+  "flow_prompts_mapped": 125
 }

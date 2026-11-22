@@ -8073,7 +8073,7 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
               <div class="pw-tier-saving">Zero subscription &middot; Permanent PDF download</div>
               <ul class="pw-tier-list">
                 <li><strong>Complete 14-Page 2000&ndash;2025 Historical Statistical Workbook PDF</strong> (Dot-Com, 2008 &amp; 2022 SMH &times; XLV + SGOV case studies)</li>
-                <li><strong>1:1 Custom Dollar Educational Worksheet</strong> &amp; 401(k)/IRA/Taxable bucket reference table</li>
+                <li><strong>Self-Serve Custom Dollar Educational Worksheet</strong> &amp; 401(k)/IRA/Taxable bucket reference table</li>
                 <li><strong>Fidelity, Schwab &amp; Vanguard Limit-Order Illustrated Guide</strong></li>
               </ul>
             </div>
@@ -8129,7 +8129,7 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
           <div class="pw-kicker" style="color:#065F46;">PAID RESEARCH VAULT &middot; PERMANENT CROSS-DEVICE EDITION</div>
           <h2 class="pw-serif-h2" id="tomScreen4Headline">Custom Dollar SMH &times; XLV + SGOV Historical Workbook &amp; Stress-Test Edition</h2>
           <p style="margin:0 0 16px;color:#475569;font-size:0.95rem;">
-            Adjust your household sample dollar scale below to update your 1:1 educational worksheet, -35% market-crash stress test, 401(k)/IRA tax-location study roadmap, and large-print Fidelity/Schwab/Vanguard 5-minute limit-order guide.
+            Adjust your household sample dollar scale below to update your Self-Serve educational worksheet, -35% market-crash stress test, 401(k)/IRA tax-location study roadmap, and large-print Fidelity/Schwab/Vanguard 5-minute limit-order guide.
           </p>
 
           <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:14px 16px;background:#F8FAFC;border:1px solid #CBD5E1;border-radius:8px;margin-bottom:18px;">
@@ -8538,10 +8538,10 @@ function bindPrivateWealthSingleBreathEvents(state) {
       return;
     }
     w.document.write(
-      `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>TruthOfMarket 1:1 Custom SMH x XLV + SGOV Workbook PDF</title>` +
+      `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>TruthOfMarket Self-Serve Custom SMH x XLV + SGOV Workbook PDF</title>` +
       `<style>body{font-family:Georgia,serif;max-width:780px;margin:24px auto;padding:0 20px;color:#0f172a;font-size:16px;line-height:1.65;}h1,h2,h3{font-family:Inter,Arial,sans-serif;}table{width:100%;border-collapse:collapse;margin:12px 0;font-family:Inter,Arial,sans-serif;font-size:14px;}th,td{border:1px solid #cbd5e1;padding:9px 10px;text-align:left;}th{background:#f1f5f9;}.page-break{page-break-before:always;margin-top:28px;padding-top:18px;border-top:2px solid #0f172a;}@media print{.no-print{display:none;}}</style></head><body>` +
       `<div class="no-print" style="padding:12px;background:#ecfdf5;border:1px solid #059669;border-radius:8px;margin-bottom:18px;font-family:Arial,sans-serif;"><strong>Ready to Save as PDF:</strong> Choose <em>Save as PDF</em> in the print dialog. <button onclick="window.print()" style="margin-left:12px;padding:8px 16px;background:#065f46;color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer;">Save / Print PDF</button></div>` +
-      `<h1>TruthOfMarket &mdash; 1:1 Custom SMH &times; XLV + SGOV Educational Workbook</h1>` +
+      `<h1>TruthOfMarket &mdash; Self-Serve Custom SMH &times; XLV + SGOV Educational Workbook</h1>` +
       `<p style="font-size:13px;color:#475569;">Independent Market Data &amp; Educational Research Publisher (Strictly Non-Advisory Historical Statistics &middot; Support: hello@truthofmarket.com)</p>` +
       `<div>${dollarHtml}</div><div style="margin-top:18px;">${stressHtml}</div>` +
       `<div class="page-break">${taxHtml}</div><div class="page-break">${brokerHtml}</div><div class="page-break">${monthlyHtml}</div>` +
