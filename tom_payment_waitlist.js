@@ -1,18 +1,22 @@
 /**
  * TruthOfMarket (Division 1) — Whop (@whop/checkout) Live PAYMENT_CONFIG,
- * Embedded Whop Checkout Modal + 1-Tap Direct Checkout Fallback,
+ * Direct 1-Tap Whop Checkout ($9 / $29 / $199) + Email Prefill,
  * ?payment=success&provider=whop&plan=monthly|annual Return Handler,
  * CRM Helper & 70% Scroll + 15s Dwell `read_complete` Beacon.
  */
 (function initTomUnifiedWhopCheckoutAndBeacon() {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined" || window.__TOM_WHOP_WAITLIST_V3_LOADED__) return;
+  window.__TOM_WHOP_WAITLIST_V3_LOADED__ = true;
 
+  var WHOP_TOM_STARTER_PLAN_ID = "plan_xIpLzFNR8SlMz";
   var WHOP_TOM_MONTHLY_PLAN_ID = "plan_xVJeNwyrDef8T";
   var WHOP_TOM_ANNUAL_PLAN_ID = "plan_9sdgFI753ucXQ";
   var WHOP_TOM_MONTHLY_CH_ID = "ch_uFPUZl9jaGdNTvH";
   var WHOP_TOM_ANNUAL_CH_ID = "ch_G3EyPgGXTTahfv7";
+  var WHOP_TOM_STARTER_URL = "https://whop.com/checkout/plan_xIpLzFNR8SlMz";
   var WHOP_TOM_MONTHLY_URL = "https://whop.com/checkout/plan_xVJeNwyrDef8T";
   var WHOP_TOM_ANNUAL_URL = "https://whop.com/checkout/plan_9sdgFI753ucXQ";
+  var WHOP_TOM_STARTER_REDIRECT = "https://truthofmarket.com/?payment=success&provider=whop&plan=starter";
   var WHOP_TOM_MONTHLY_REDIRECT = "https://truthofmarket.com/?payment=success&provider=whop&plan=monthly";
   var WHOP_TOM_ANNUAL_REDIRECT = "https://truthofmarket.com/?payment=success&provider=whop&plan=annual";
 
@@ -24,6 +28,7 @@
     COMPANY_ID: "biz_4ynqri19wFDIwm",
     STORE_NAME: "TruthOfMarket Research",
     WHOP_PLAN_IDS: {
+      starter: WHOP_TOM_STARTER_PLAN_ID,
       monthly: WHOP_TOM_MONTHLY_PLAN_ID,
       annual: WHOP_TOM_ANNUAL_PLAN_ID,
     },
@@ -32,13 +37,16 @@
       annual: WHOP_TOM_ANNUAL_CH_ID,
     },
     WHOP_CHECKOUT_URLS: {
+      starter: WHOP_TOM_STARTER_URL,
       monthly: WHOP_TOM_MONTHLY_URL,
       annual: WHOP_TOM_ANNUAL_URL,
     },
     WHOP_REDIRECT_URLS: {
+      starter: WHOP_TOM_STARTER_REDIRECT,
       monthly: WHOP_TOM_MONTHLY_REDIRECT,
       annual: WHOP_TOM_ANNUAL_REDIRECT,
     },
+    WHOP_TOM_STARTER_URL: WHOP_TOM_STARTER_URL,
     WHOP_TOM_MONTHLY_URL: WHOP_TOM_MONTHLY_URL,
     WHOP_TOM_ANNUAL_URL: WHOP_TOM_ANNUAL_URL,
     SUPPORT_EMAIL: "beable9489@gmail.com",
@@ -54,6 +62,7 @@
     window.PAYMENT_CONFIG.COMPANY_ID = "biz_4ynqri19wFDIwm";
     window.PAYMENT_CONFIG.STORE_NAME = "TruthOfMarket Research";
     window.PAYMENT_CONFIG.WHOP_PLAN_IDS = {
+      starter: WHOP_TOM_STARTER_PLAN_ID,
       monthly: WHOP_TOM_MONTHLY_PLAN_ID,
       annual: WHOP_TOM_ANNUAL_PLAN_ID,
     };
@@ -62,13 +71,16 @@
       annual: WHOP_TOM_ANNUAL_CH_ID,
     };
     window.PAYMENT_CONFIG.WHOP_CHECKOUT_URLS = {
+      starter: WHOP_TOM_STARTER_URL,
       monthly: WHOP_TOM_MONTHLY_URL,
       annual: WHOP_TOM_ANNUAL_URL,
     };
     window.PAYMENT_CONFIG.WHOP_REDIRECT_URLS = {
+      starter: WHOP_TOM_STARTER_REDIRECT,
       monthly: WHOP_TOM_MONTHLY_REDIRECT,
       annual: WHOP_TOM_ANNUAL_REDIRECT,
     };
+    window.PAYMENT_CONFIG.WHOP_TOM_STARTER_URL = WHOP_TOM_STARTER_URL;
     window.PAYMENT_CONFIG.WHOP_TOM_MONTHLY_URL = WHOP_TOM_MONTHLY_URL;
     window.PAYMENT_CONFIG.WHOP_TOM_ANNUAL_URL = WHOP_TOM_ANNUAL_URL;
     window.PAYMENT_CONFIG.SUPPORT_EMAIL = window.PAYMENT_CONFIG.SUPPORT_EMAIL || "beable9489@gmail.com";
@@ -120,7 +132,19 @@
   }
 
   function resolveTomWhopPlanSpec(planKey) {
-    var isAnnual = String(planKey || "").toLowerCase() === "annual";
+    var norm = String(planKey || "").toLowerCase();
+    if (norm === "starter" || norm === "low" || norm === "workbook" || norm === "plan_xiplzfnr8slmz") {
+      return {
+        key: "starter",
+        planId: WHOP_TOM_STARTER_PLAN_ID,
+        checkoutConfigId: "",
+        purchaseUrl: WHOP_TOM_STARTER_URL,
+        redirectUrl: WHOP_TOM_STARTER_REDIRECT,
+        title: "14-Page Historical Workbook ($9 One-Time)",
+        priceLabel: "$9 one-time",
+      };
+    }
+    var isAnnual = norm === "annual" || norm === "premium" || norm === "plan_9sdgfi753ucxq";
     return isAnnual
       ? {
           key: "annual",
@@ -302,17 +326,34 @@
       if (!isPaidCta) return;
 
       var txt = String(el.innerText || el.textContent || "").toLowerCase();
+      var isStarter =
+        planAttr === "starter" ||
+        planAttr === "low" ||
+        planAttr === "workbook" ||
+        href.indexOf(WHOP_TOM_STARTER_PLAN_ID) !== -1 ||
+        href.indexOf("starter") !== -1 ||
+        /(?:^|[^0-9])\$9(?:\.00)?(?:[^0-9]|$)/.test(txt);
       var isAnnual =
-        planAttr === "annual" ||
-        href.indexOf(WHOP_TOM_ANNUAL_PLAN_ID) !== -1 ||
-        href.indexOf("annual") !== -1 ||
-        txt.indexOf("199") !== -1 ||
-        txt.indexOf("annual") !== -1;
-      var planKey = isAnnual ? "annual" : "monthly";
+        !isStarter &&
+        (planAttr === "annual" ||
+          planAttr === "premium" ||
+          href.indexOf(WHOP_TOM_ANNUAL_PLAN_ID) !== -1 ||
+          href.indexOf("annual") !== -1 ||
+          txt.indexOf("199") !== -1 ||
+          txt.indexOf("annual") !== -1);
+      var planKey = isStarter ? "starter" : isAnnual ? "annual" : "monthly";
 
       if (!e.__tomPaidClickTracked) {
         e.__tomPaidClickTracked = true;
         try {
+          if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.trackEvent === "function") {
+            window.DreamCompanyCRM.trackEvent({
+              div: "TOM",
+              event_type: "checkout_click",
+              funnel_step: planKey === "starter" ? "step2_low" : planKey === "annual" ? "step4_premium" : "step3_core",
+              plan_tier: planKey,
+            });
+          }
           var kst = getKstDateString();
           fetch("https://abacus.jasoncameron.dev/hit/tom_truthofmarket/paid_click_" + kst, {
             mode: "cors",
@@ -344,19 +385,11 @@
     true
   );
 
-  // 2. Escape key closes Whop Checkout Modal
-  window.addEventListener("keydown", function (ev) {
-    if (ev.key === "Escape") {
-      var wl = document.getElementById("tomWhopCheckoutModal");
-      if (wl && wl.style.display === "flex") {
-        wl.style.display = "none";
-      }
-    }
-  });
-
-  // 3. Handle ?payment=success&provider=whop&plan=monthly|annual cleanly on return
+  // 2. Direct Whop Checkout active — embedded iframe modal removed
+// 3. Handle ?payment=success&provider=whop&plan=starter|monthly|annual cleanly on return
   function applyWhopCheckoutUnlock(orderRef, planSlug) {
-    var cleanPlan = String(planSlug || "monthly").toLowerCase() === "annual" ? "annual" : "monthly";
+    var rawPlan = String(planSlug || "monthly").toLowerCase();
+    var cleanPlan = rawPlan === "annual" ? "annual" : rawPlan === "starter" ? "starter" : "monthly";
     var cleanRef = String(orderRef || ("WHOP-PASS-2026-" + cleanPlan.toUpperCase())).trim();
     try {
       localStorage.setItem("rsa_pro_unlocked", "true");
@@ -376,6 +409,13 @@
       }
     } catch (_) {}
 
+    var planLabel =
+      cleanPlan === "annual"
+        ? "Annual Research Pass ($199/yr)"
+        : cleanPlan === "starter"
+          ? "14-Page Historical Workbook ($9 One-Time)"
+          : "Monthly Research Pass ($29/mo)";
+
     try {
       var knownEm = getKnownTomMemberEmail();
       var savedAns = {};
@@ -386,7 +426,7 @@
         window.DreamCompanyCRM.deliverPaidMagicPack({
           div: "TOM",
           email: knownEm,
-          plan_tier: cleanPlan === "annual" ? "Annual Research Pass ($199/yr)" : "Monthly Research Pass ($29/mo)",
+          plan_tier: planLabel,
           order_ref: cleanRef,
           base_url: "https://truthofmarket.com/",
           hash_anchor: "tomPaidScreen4Vault",
@@ -398,7 +438,6 @@
 
     try {
       if (typeof document !== "undefined" && document.body && !document.getElementById("tomWhopReturnBanner")) {
-        var planTitle = cleanPlan === "annual" ? "Annual Research Pass ($199/yr)" : "Monthly Research Pass ($29/mo)";
         var banner = document.createElement("div");
         banner.id = "tomWhopReturnBanner";
         banner.setAttribute("role", "status");
@@ -406,10 +445,16 @@
           "max-width:820px;margin:16px auto 0;padding:14px 18px;border-radius:8px;background:#ecfdf5;border:1.5px solid #059669;color:#064e3b;font-family:'Inter',sans-serif;font-size:15px;line-height:1.55;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;";
         banner.innerHTML =
           "<div><strong>Whop Checkout Confirmed &mdash; " +
-          planTitle +
-          " Active.</strong> Your Paid Screen 4 Vault &amp; Protected 14-Page PDF are open below (<a href='mailto:hello@truthofmarket.com?subject=TOM%20Support%20or%20Refund' style='color:#065f46;font-weight:700;text-decoration:underline;'>1-Click Support</a>).</div>" +
-          "<button type='button' onclick='this.parentNode.remove()' style='padding:6px 12px;border-radius:6px;border:1px solid #059669;background:#ffffff;color:#064e3b;font-weight:700;cursor:pointer;'>Dismiss</button>";
+          planLabel +
+          " Active.</strong> Your Paid Screen 4 Vault &amp; Protected 14-Page PDF are open below (<a href='mailto:beable9489@gmail.com?subject=TOM%207-Day%20Support%20or%20Refund' style='color:#065f46;font-weight:700;text-decoration:underline;'>1-Click Support</a>).</div>" +
+          "<button type='button' id='tomDismissReturnBanner' style='padding:6px 12px;border-radius:6px;border:1px solid #059669;background:#ffffff;color:#064e3b;font-weight:700;cursor:pointer;'>Dismiss</button>";
         document.body.insertBefore(banner, document.body.firstChild);
+        var dismissBtn = document.getElementById("tomDismissReturnBanner");
+        if (dismissBtn) {
+          dismissBtn.addEventListener("click", function () {
+            if (banner.parentNode) banner.parentNode.removeChild(banner);
+          });
+        }
       }
     } catch (_) {}
   }
@@ -422,8 +467,14 @@
       var searchStr = (window.location && window.location.search) || "";
       if (searchStr.indexOf("payment=success") !== -1 || searchStr.indexOf("checkout_status=succeeded") !== -1) {
         var sp = new URLSearchParams(searchStr);
-        var planParam = sp.get("plan") === "annual" ? "annual" : "monthly";
-        var planTitle = planParam === "annual" ? "Annual Research Pass ($199/yr)" : "Monthly Research Pass ($29/mo)";
+        var rawParam = String(sp.get("plan") || "monthly").toLowerCase();
+        var planParam = rawParam === "annual" ? "annual" : rawParam === "starter" ? "starter" : "monthly";
+        var planTitle =
+          planParam === "annual"
+            ? "Annual Research Pass ($199/yr)"
+            : planParam === "starter"
+              ? "14-Page Historical Workbook ($9 One-Time)"
+              : "Monthly Research Pass ($29/mo)";
         var knownEm = sp.get("email") || sp.get("customer_email") || getKnownTomMemberEmail();
         var cid = sp.get("receipt_id") || sp.get("checkout_id") || "";
 
