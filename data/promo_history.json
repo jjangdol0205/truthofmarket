@@ -1,6 +1,6 @@
 {
   "schema_version": "stage4-v1",
-  "last_run_kst": "2026-11-21T16:36:56.219382+09:00",
+  "last_run_kst": "2026-11-22T11:00:55.764625+09:00",
   "uploads": [
     {
       "div": "TOM",
@@ -56,9 +56,95 @@
       "ffmpeg_profile": "ffmpeg -preset ultrafast -tune stillimage -threads 2",
       "date": "2026-11-21",
       "status": "queued_or_awaiting_secrets"
+    },
+    {
+      "div": "TOM",
+      "topic_id": "tom_1m_crash_510k",
+      "title": "Age 55 to 67 and within 10 years of retirement? Check this one blind spot tonight.",
+      "matrix_id": "TOM_S1_SELF",
+      "stage": 1,
+      "hook_type": "self",
+      "utm_content": "TOM_S1_SELF_v1",
+      "ab_arm": "A",
+      "utm_yt": "https://truthofmarket.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=tom_1m_crash_510k_2026-11-22&utm_content=TOM_S1_SELF_v1#tom-retirement-architect",
+      "utm_ig": "https://truthofmarket.com/?utm_source=instagram&utm_medium=reels&utm_campaign=tom_1m_crash_510k_2026-11-22&utm_content=TOM_S1_SELF_v1#tom-retirement-architect",
+      "hero_radio_day": false,
+      "ffmpeg_profile": "ffmpeg -preset ultrafast -tune stillimage -threads 2",
+      "date": "2026-11-22",
+      "status": "queued_or_awaiting_secrets"
+    },
+    {
+      "div": "KFG",
+      "topic_id": "kfg_same_parents_4in",
+      "title": "Parents of kids ages 6 to 12: try this 10-second hallway wall check tonight.",
+      "matrix_id": "KFG_S1_SELF",
+      "stage": 1,
+      "hook_type": "self",
+      "utm_content": "KFG_S1_SELF_v1",
+      "ab_arm": "A",
+      "utm_yt": "https://kisfitglobal.com/?utm_source=youtube&utm_medium=shorts&utm_campaign=kfg_same_parents_4in_2026-11-22&utm_content=KFG_S1_SELF_v1#kfg-bone-age-interpreter",
+      "utm_ig": "https://kisfitglobal.com/?utm_source=instagram&utm_medium=reels&utm_campaign=kfg_same_parents_4in_2026-11-22&utm_content=KFG_S1_SELF_v1#kfg-bone-age-interpreter",
+      "hero_radio_day": false,
+      "ffmpeg_profile": "ffmpeg -preset ultrafast -tune stillimage -threads 2",
+      "date": "2026-11-22",
+      "status": "queued_or_awaiting_secrets"
+    },
+    {
+      "div": "GBA",
+      "topic_id": "gba_nisa_5yr_wiped",
+      "title": "米国株100%の50代が「株安×円高」の同時襲来で一番困る本当の理由とは？",
+      "matrix_id": "GBA_S2_CURIOSITY",
+      "stage": 2,
+      "hook_type": "curiosity",
+      "utm_content": "GBA_S2_CURIOSITY_v1",
+      "ab_arm": "A",
+      "utm_yt": "https://getbreakai.com/jp/?utm_source=youtube&utm_medium=shorts&utm_campaign=gba_nisa_5yr_wiped_2026-11-22&utm_content=GBA_S2_CURIOSITY_v1#gba-retirement-architect-jp",
+      "utm_ig": "https://getbreakai.com/jp/?utm_source=instagram&utm_medium=reels&utm_campaign=gba_nisa_5yr_wiped_2026-11-22&utm_content=GBA_S2_CURIOSITY_v1#gba-retirement-architect-jp",
+      "hero_radio_day": false,
+      "ffmpeg_profile": "ffmpeg -preset ultrafast -tune stillimage -threads 2",
+      "date": "2026-11-22",
+      "status": "queued_or_awaiting_secrets"
+    },
+    {
+      "div": "HERO",
+      "topic_id": "hero_11pm_dark_room",
+      "title": "예순 넘어까지 자식 걱정·남 눈치 다 끌어안고 계시지 마세요—오늘 딱 3가지만 내려놓으세요.",
+      "matrix_id": "HERO_S1_PATTERN",
+      "stage": 1,
+      "hook_type": "pattern",
+      "utm_content": "HERO_S1_PATTERN_v1",
+      "ab_arm": "A",
+      "utm_yt": "https://paradise-hero.com/radio.html?utm_source=youtube&utm_medium=shorts&utm_campaign=hero_11pm_dark_room_2026-11-22&utm_content=HERO_S1_PATTERN_v1",
+      "utm_ig": "https://paradise-hero.com/radio.html?utm_source=instagram&utm_medium=reels&utm_campaign=hero_11pm_dark_room_2026-11-22&utm_content=HERO_S1_PATTERN_v1",
+      "hero_radio_day": true,
+      "ffmpeg_profile": "ffmpeg -preset ultrafast -tune stillimage -threads 2",
+      "date": "2026-11-22",
+      "status": "queued_or_awaiting_secrets"
+    },
+    {
+      "div": "KFK",
+      "topic_id": "kfk_milk_3cups_stop",
+      "title": "초등 3~5학년 부모님만 오늘 밤 꼭 확인하세요: 벽 뒤꿈치 10초 테스트.",
+      "matrix_id": "KFK_S1_SELF",
+      "stage": 1,
+      "hook_type": "self",
+      "utm_content": "KFK_S1_SELF_v1",
+      "ab_arm": "A",
+      "utm_yt": "https://kidsfit.co.kr/?utm_source=youtube&utm_medium=shorts&utm_campaign=kfk_milk_3cups_stop_2026-11-22&utm_content=KFK_S1_SELF_v1#kfk-bone-age-interpreter",
+      "utm_ig": "https://kidsfit.co.kr/?utm_source=instagram&utm_medium=reels&utm_campaign=kfk_milk_3cups_stop_2026-11-22&utm_content=KFK_S1_SELF_v1#kfk-bone-age-interpreter",
+      "hero_radio_day": false,
+      "ffmpeg_profile": "ffmpeg -preset ultrafast -tune stillimage -threads 2",
+      "date": "2026-11-22",
+      "status": "queued_or_awaiting_secrets"
     }
   ],
   "lyria_weekly_calls": [],
   "stage2_yt_reset_completed": true,
-  "ig_tokens_last_refreshed": {}
+  "ig_tokens_last_refreshed": {
+    "TOM": "2026-11-22T02:00:55.830635+00:00",
+    "KFG": "2026-11-22T02:00:55.830635+00:00",
+    "GBA": "2026-11-22T02:00:55.830635+00:00",
+    "HERO": "2026-11-22T02:00:55.830635+00:00",
+    "KFK": "2026-11-22T02:00:55.830635+00:00"
+  }
 }
