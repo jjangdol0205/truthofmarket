@@ -74,6 +74,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           R2_BUCKET_NAME: dreamcompany-reels-staging
+          R2_VAULT_BUCKET: dreamcompany-flow-vault
           R2_PUBLIC_BASE: https://pub-c1592ad8d860431c9bf3d4dd12c228ef.r2.dev
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
@@ -124,15 +125,15 @@ jobs:
         run: |
           python -u -X utf8 cloud_automation/ab_evolution_engine.py
 
-      - name: Commit data/promo_history.json & data/message_matrix_5div.json with [skip ci]
+      - name: Commit data/promo_history.json, message_matrix & flow_vault_manifest with [skip ci]
         run: |
           git config user.name "DreamCompany Cloud Bot"
           git config user.email "hello@truthofmarket.com"
-          git add data/promo_history.json data/message_matrix_5div.json
+          git add data/promo_history.json data/message_matrix_5div.json data/flow_vault_manifest.json || true
           if ! git diff --cached --quiet; then
-            git commit -m "chore(cloud-promo): update promo_history & 5x5 A/B message matrix [skip ci]"
+            git commit -m "chore(cloud-promo): update promo_history, 5x5 matrix & flow_vault_manifest [skip ci]"
             git pull --rebase --autostash origin main || true
             git push origin HEAD:main
           else
-            echo "No promo_history or message_matrix diff today."
+            echo "No promo_history, message_matrix, or flow_vault_manifest diff today."
           fi

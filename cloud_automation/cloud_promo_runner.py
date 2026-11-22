@@ -41,6 +41,10 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
 HISTORY_PATH = ROOT / "data" / "promo_history.json"
+FLOW_MANIFEST_CANDIDATES = [
+    ROOT / "flow_vault" / "manifest.json",
+    ROOT / "data" / "flow_vault_manifest.json",
+]
 CACHE_DIR = Path(__file__).resolve().parent / ".cache"
 WORK_DIR = CACHE_DIR / "work"
 
@@ -271,6 +275,75 @@ def can_call_lyria_this_week(hist: Dict[str, Any]) -> bool:
     return len(recent) < MAX_WEEKLY_LYRIA_CALLS
 
 
+def load_flow_vault_manifest() -> Tuple[Optional[Path], Dict[str, Any]]:
+    for p in FLOW_MANIFEST_CANDIDATES:
+        if p.exists():
+            try:
+                return p, json.loads(p.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+    return None, {"clips": []}
+
+
+def fetch_flow_vault_clip_from_r2(r2_key: str, dest_path: Path, bucket: str = "") -> Optional[Path]:
+    """Downloads a permanent 1080p/4K Flow Vault MP4 from Cloudflare R2 (`dreamcompany-flow-vault`)."""
+    acct = os.getenv("CLOUDFLARE_ACCOUNT_ID", "").strip()
+    tok = os.getenv("CLOUDFLARE_API_TOKEN", "").strip()
+    bkt = (bucket or os.getenv("R2_VAULT_BUCKET", "dreamcompany-flow-vault")).strip()
+    if not (acct and tok and r2_key):
+        return None
+    if dest_path.exists() and dest_path.stat().st_size > 100_000:
+        return dest_path
+    safe_key = re.sub(r"[^A-Za-z0-9._/-]", "_", r2_key)
+    api_url = f"https://api.cloudflare.com/client/v4/accounts/{acct}/r2/buckets/{bkt}/objects/{safe_key}"
+    req = urllib.request.Request(
+        api_url,
+        method="GET",
+        headers={"Authorization": f"Bearer {tok}", "User-Agent": "DreamCompany-CloudPromo/1.0"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=90) as r:
+            if r.status == 200:
+                dest_path.parent.mkdir(parents=True, exist_ok=True)
+                dest_path.write_bytes(r.read())
+                return dest_path
+    except Exception as e:
+        print(f"[R2 VAULT FETCH ERR] {safe_key}: {e}", flush=True)
+    return None
+
+
+def select_flow_vault_clip(
+    manifest: Dict[str, Any],
+    div: str,
+    stage: int,
+    hook_type: str,
+    aspect_ratio: str = "9:16",
+    ab_arm: Optional[str] = None,
+    increment: bool = False,
+) -> Optional[Dict[str, Any]]:
+    """Selects least-used matching 1080p/4K Flow Vault clip as #1 priority motion background."""
+    div_u = div.upper()
+    ht_l = str(hook_type or "loss").lower()
+    pool = [c for c in (manifest.get("clips") or []) if c.get("division") == div_u and c.get("aspect_ratio") == aspect_ratio]
+    if not pool:
+        pool = [c for c in (manifest.get("clips") or []) if c.get("division") == div_u]
+    if not pool:
+        return None
+
+    def _rank(c: Dict[str, Any]) -> Tuple[int, int, int, int, str]:
+        arm_miss = 0 if (ab_arm and c.get("ab_arm") == ab_arm) else (1 if ab_arm else 0)
+        ht_miss = 0 if str(c.get("hook_type", "")).lower() == ht_l else 1
+        st_miss = 0 if int(c.get("stage", 0)) == int(stage) else (1 if int(c.get("stage", 0)) in (1, 2) else 2)
+        return (int(c.get("used_count", 0)), arm_miss, ht_miss, st_miss, str(c.get("clip_id", "")))
+
+    pool.sort(key=_rank)
+    chosen = pool[0]
+    if increment:
+        chosen["used_count"] = int(chosen.get("used_count", 0)) + 1
+        chosen["last_used_kst"] = dt.datetime.now(KST).strftime("%Y-%m-%d %H:%M:%S KST")
+    return chosen
+
+
 def stage_reel_to_cloudflare_r2(mp4_path: Path, ascii_key: str) -> Optional[str]:
     """Uploads rendered reel `.mp4` to Cloudflare R2 bucket (24h Auto-Delete Lifecycle) and returns ASCII HTTPS URL."""
     acct = os.getenv("CLOUDFLARE_ACCOUNT_ID", "").strip()
@@ -356,6 +429,9 @@ def main() -> int:
         matrix_db = None
         select_stage12_ab_cell = None  # type: ignore
 
+    flow_manifest_path, flow_manifest = load_flow_vault_manifest()
+    flow_manifest_dirty = False
+
     day_arm = now_kst.timetuple().tm_yday % 2  # Alternates Control (Arm 0) vs Challenger (Arm 1) hook_type!
     planned = []
     for div in ["TOM", "KFG", "GBA", "HERO", "KFK"]:
@@ -390,19 +466,52 @@ def main() -> int:
         if not ok_txt:
             print(f"[AUTO-GATE BLOCKED TEXT] {div} {tid}: {errs}", flush=True)
             continue
+
+        # Select #1 priority 1080p/4K Flow Vault background clip (prefers matching hook_type & A/B arm!)
+        hero_radio_day = (div == "HERO" and weekday in (1, 4, 6))
+        target_aspect = "16:9" if hero_radio_day else "9:16"
+        vault_clip = select_flow_vault_clip(
+            flow_manifest,
+            div=div,
+            stage=int(matrix_meta["stage"]),
+            hook_type=str(matrix_meta["hook_type"]),
+            aspect_ratio=target_aspect,
+            ab_arm=str(matrix_meta["ab_arm"]),
+            increment=(not dry_run),
+        )
+        flow_bg_meta: Dict[str, Any] = {"flow_clip_id": None, "flow_r2_key": None, "flow_resolution": None, "flow_source": "static_fallback"}
+        if vault_clip:
+            if not dry_run:
+                flow_manifest_dirty = True
+                local_p = Path(str(vault_clip.get("local_path", "")))
+                if not local_p.exists() and vault_clip.get("r2_key"):
+                    fetch_flow_vault_clip_from_r2(
+                        str(vault_clip["r2_key"]),
+                        WORK_DIR / "flow_vault_cache" / f"{vault_clip['clip_id']}.mp4",
+                        bucket=str(vault_clip.get("r2_bucket", "")),
+                    )
+            flow_bg_meta = {
+                "flow_clip_id": vault_clip.get("clip_id"),
+                "flow_r2_key": vault_clip.get("r2_key"),
+                "flow_resolution": vault_clip.get("resolution"),
+                "flow_aspect_ratio": vault_clip.get("aspect_ratio"),
+                "flow_source": "flow_vault_r2_master",
+            }
+
         planned.append({
             "div": div,
             "topic_id": tid,
             "title": title,
             **matrix_meta,
+            **flow_bg_meta,
             "utm_yt": utm_yt,
             "utm_ig": utm_ig,
-            "hero_radio_day": (div == "HERO" and weekday in (1, 4, 6)),
-            "ffmpeg_profile": "ffmpeg -preset ultrafast -tune stillimage -threads 2",
+            "hero_radio_day": hero_radio_day,
+            "ffmpeg_profile": "ffmpeg -i <flow_vault_1080p.mp4> -c:v libx264 -preset fast -threads 2" if vault_clip else "ffmpeg -preset ultrafast -tune stillimage -threads 2",
             "date": today_str,
             "status": "dry_run_validated" if dry_run else "queued_or_awaiting_secrets",
         })
-        print(f"  [GATE PASS] {div:4s} | S{matrix_meta['stage']}/{matrix_meta['hook_type']:9s} | {utm_content} | utm_yt={utm_yt}", flush=True)
+        print(f"  [GATE PASS] {div:4s} | S{matrix_meta['stage']}/{matrix_meta['hook_type']:9s} | {utm_content} | flow_bg={flow_bg_meta['flow_clip_id']} ({flow_bg_meta['flow_resolution']}) | utm_yt={utm_yt}", flush=True)
 
     hist["last_run_kst"] = now_kst.isoformat()
     if not dry_run:
@@ -414,6 +523,9 @@ def main() -> int:
                 hist.setdefault("uploads", []).append(item)
         hist["uploads"] = hist["uploads"][-180:]
         save_history(hist)
+        if flow_manifest_dirty and flow_manifest_path:
+            flow_manifest["updated_at_kst"] = now_kst.strftime("%Y-%m-%d %H:%M:%S KST")
+            flow_manifest_path.write_text(json.dumps(flow_manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"=== Completed Cloud Promo Plan ({len(planned)} validated slots, 0 gate violations) ===", flush=True)
     return 0
 
