@@ -1,0 +1,15 @@
+{
+  "indexnow_key": "dc7a91e4f28b4c6ea513d809b7c2f418",
+  "created_at_kst": "2026-11-23 21:07:19 KST",
+  "endpoints": [
+    "https://api.indexnow.org/indexnow",
+    "https://searchadvisor.naver.com/indexnow"
+  ],
+  "hosts": [
+    "truthofmarket.com",
+    "kisfitglobal.com",
+    "getbreakai.com",
+    "paradise-hero.com",
+    "kidsfit.co.kr"
+  ]
+}

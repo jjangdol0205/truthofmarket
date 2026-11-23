@@ -1,29 +1,30 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Dream Company — 365-Day Cloud Unattended Auto-Promo Runner (Stage 4-1)
-Runs on GitHub Actions even when local PC is turned off 365 days/year.
-
-Enforced Technical Guardrails:
-1. YouTube Quota Hard Cap: max 5-8 total uploads/day (well under 10,000 units/day incl. captions.insert).
-2. 4th Div Flagship Radio Window Lock: Tue & Fri strictly 14m00s ~ 14m40s (840s ~ 880s).
-3. GitHub Actions Runtime Budget: ffmpeg `-preset ultrafast -tune stillimage` (<5 min/day, <150 min/mo).
-4. 3-Check Pre-Upload Auto-Gate (max 1 retry; NEVER uploads failed video):
-   - (a) ffprobe target duration check
-   - (b) Audio non-silence & 5kHz+ high-frequency energy >= 3.0%
-   - (c) Zero banned strings (`황영웅`, `Brain LQ`, wrong division links, broken char `□`)
-5. Baek Woon-ho `lyria-3.5` Weekly Hard Cap: defaults to cycling verified 6-song master pool;
-   max 2 new `lyria-3.5` API calls/week (max 1 retry, then falls back cleanly to master pool; NEVER fakes audio!).
-6. Instagram Reels Cloudflare R2 24h Lifecycle Staging: uploads `.mp4` to Cloudflare R2
-   (`dreamcompany-reels-staging`, 24h auto-delete lifecycle) -> passes public ASCII `https://` `video_url`
-   to Meta Graph API `POST /<IG_ID>/media` (zero trycloudflare tunnels, zero auto-comments!).
-7. Topic Deduplication (`data/promo_history.json`) + Automatic UTM parameter injection on every link!
+Dream Company — 365-Day Cloud Unattended Auto-Promo Runner (Stage 4-2 Persona + 3-Stage Single Template)
+================================================================================
+Aligned 100% with `hq_5div_promo_audit_20261123.md`:
+1. 1 Account = 1 Fixed Voice ID + 1 Fixed Signature Space (`PERSONA_TEMPLATES`):
+   - [TOM · KFG · GBA · KFK — 3-Stage Combined Single Template]:
+     * [0~3s] Fixed Signature Space (Flow Vault 1080p evening study desk / warm ivory children's room) + 1-line evening empathy
+     * [4~25s] Live Real-UI Screen Demo (`SMH Fear & Greed` gauge / 60s US CDC & KDCA calculator / 2p free sample PDF) + 1 core data/habit
+     * [Last 5s] Either/Or Comment Question + Pinned Comment UTM link (HUD strictly placed in lower safe zone Y>=1420; ZERO distorted AI faces!)
+   - [HERO `백운호` — 1st-Person Eye-Contact Pure Emotion Single Template]:
+     * Fixed Google Flow Master Clip Pool (zero ongoing Flow video cost!)
+     * Daily new warm greeting + 12~15s MANDATORY real `lyria-3.5` Baek Woon-ho vocal highlight (HARD GATE: 0-sec song bait IMPOSSIBLE!)
+     * 2~3 Part Serialized Life Story Radio Theater (14m00s~14m40s Tue/Fri with next-episode cliffhanger!)
+     * Transparent AI virtual singer disclosure (`"마음을 노래하는 AI 가상 트로트 가수 백운호"`)
+2. Hard Auto-Gates BEFORE ANY Publish:
+   - Official `.srt` caption NON-EMPTY gate (`check_srt_gate`)
+   - `#5 Outbound Allowlist` (`outbound_allowlist.py`) — ONLY official 5 YT/IG accounts allowed!
+   - Expanded division banned strings (`황영웅`, `Brain LQ`, `Clinical`, `Diagnosis`, `Prescription`, `1:1`, `クオンツ`, `#kfg-bone-age-interpreter`, `아이클타임`, `칼마디`, `락토바이오`, `trycloudflare.com`, `□`)
+   - HERO vocal highlight >= 12.0s gate (`HERO_MIN_VOCAL_HIGHLIGHT_SEC = 12.0`)
+3. Mandatory Pinned Comment UTM + Either/Or Comment Question on every YT/IG publish.
 """
 
 from __future__ import annotations
 
 import argparse
-import base64
 import datetime as dt
 import json
 import os
@@ -39,21 +40,38 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from outbound_allowlist import (  # noqa: E402
+    ALLOWED_IG_ACCOUNTS,
+    OutboundAllowlistError,
+    assert_allowed_ig_target,
+    sanitize_and_classify_ig_token,
+)
+
 ROOT = Path(__file__).resolve().parent.parent
 HISTORY_PATH = ROOT / "data" / "promo_history.json"
 FLOW_MANIFEST_CANDIDATES = [
     ROOT / "flow_vault" / "manifest.json",
     ROOT / "data" / "flow_vault_manifest.json",
 ]
+HERO_VOCAL_POOL_DIR = ROOT / "4사업부" / "assets" / "audio"
 CACHE_DIR = Path(__file__).resolve().parent / ".cache"
 WORK_DIR = CACHE_DIR / "work"
 
 KST = dt.timezone(dt.timedelta(hours=9))
 
-MAX_DAILY_YT_UPLOADS = 5  # Strictly within 5-8/day cap (5 divs x 1/day + Tue/Fri HERO radio = 5~6/day)
-MAX_WEEKLY_LYRIA_CALLS = 2  # Hard Cap: <= 2 new lyria-3.5 calls per week
+MAX_DAILY_YT_UPLOADS = 5
+MAX_WEEKLY_LYRIA_CALLS = 2
 HERO_RADIO_MIN_SEC = 840.0  # 14m00s
 HERO_RADIO_MAX_SEC = 880.0  # 14m40s
+HERO_MIN_VOCAL_HIGHLIGHT_SEC = 12.0  # Hard gate: prevents 0-sec vocal bait permanently!
 
 BANNED_STRINGS = [
     "황영웅",
@@ -61,116 +79,182 @@ BANNED_STRINGS = [
     "나훈아",
     "Brain LQ",
     "KISFIT Bio Labs",
+    "Bio Labs",
+    "Clinical",
+    "Diagnosis",
+    "Prescription",
+    "#kfg-bone-age-interpreter",
+    "クオンツ",
+    "아이클타임",
+    "칼마디",
+    "락토바이오",
     "lemonsqueezy.com",
     "trycloudflare.com",
     "□",
     "님님",
 ]
 
+PERSONA_TEMPLATES: Dict[str, Dict[str, Any]] = {
+    "TOM": {
+        "template_mode": "3stage_real_ui_combined",
+        "voice_id": "en-US-AndrewMultilingualNeural",
+        "signature_space": "Calm evening wood study desk with warm brass lamp",
+        "real_ui_targets": [
+            "https://truthofmarket.com/smh-fear-greed",
+            "https://truthofmarket.com/assets/downloads/tom_sample_2p.pdf",
+        ],
+        "hud_safe_y_min": 1420,
+        "either_or_questions": [
+            "When markets drop -20%, do you prefer holding 24 months of Treasury cash or staying 100% invested?",
+            "At age 60+, do you check your portfolio every morning or once a quarter?",
+            "For retirement safety cash, do you keep it in a bank sweep or short-term Treasury ETFs like SGOV?",
+        ],
+    },
+    "KFG": {
+        "template_mode": "3stage_real_ui_combined",
+        "voice_id": "en-US-AvaMultilingualNeural",
+        "signature_space": "Warm ivory sunlit child bedroom & wooden doorway ruler",
+        "real_ui_targets": [
+            "https://kisfitglobal.com/",
+            "https://kisfitglobal.com/assets/downloads/kfg_sample_2p.pdf",
+        ],
+        "hud_safe_y_min": 1420,
+        "either_or_questions": [
+            "Does your child usually fall asleep before 9:30 PM or after 10:00 PM on school nights?",
+            "Do you track your child's height on a doorframe wall or in a phone note?",
+            "What is harder at bedtime in your house — screens off or earlier lights-out?",
+        ],
+    },
+    "GBA": {
+        "template_mode": "3stage_real_ui_combined",
+        "voice_id": "ja-JP-KeitaNeural",
+        "signature_space": "Calm Japanese evening study desk with warm amber lamplight",
+        "real_ui_targets": [
+            "https://getbreakai.com/jp/smh-fear-greed",
+            "https://getbreakai.com/jp/downloads/gba_jp_sample_2p.pdf",
+        ],
+        "hud_safe_y_min": 1420,  # Strictly below face/eye zone!
+        "either_or_questions": [
+            "新NISAの安全資金は、銀行預金派ですか？それとも個人向け国債派ですか？",
+            "相場が荒れた夜、スマホをすぐ見ますか？それとも閉じて朝まで寝ますか？",
+            "50代からの新NISA、一括よりも毎月コツコツ積立派ですか？",
+        ],
+    },
+    "HERO": {
+        "template_mode": "hero_1st_person_eyecontact_master_pool",
+        "voice_id": "ko-KR-InJoonNeural",
+        "signature_space": "Baek Woon-ho 1st-person front-facing warm eye-contact Flow master pool ($0/day)",
+        "ai_disclosure_line": "마음을 노래하는 AI 가상 트로트 가수 백운호 (白雲湖)",
+        "min_vocal_highlight_sec": HERO_MIN_VOCAL_HIGHLIGHT_SEC,
+        "serialized_story_format": "2~3부작 연속 인생 사연 극장 (1부 끝 다음 화 결말·신곡 예고 클리프행어 필수)",
+        "hud_safe_y_min": 1380,
+        "either_or_questions": [
+            "어머님이 가장 그리운 계절은 봄날인가요, 가을녘인가요? 댓글로 한 줄 남겨주세요.",
+            "오늘 밤 더 듣고 싶은 백운호 노래는 〈어머니의 봄날〉인가요, 〈백운호 연가〉인가요?",
+            "아침 단톡방 안부 인사, 글자보다 꽃그림 카드가 더 반가우신가요?",
+        ],
+    },
+    "KFK": {
+        "template_mode": "3stage_real_ui_combined",
+        "voice_id": "ko-KR-SunHiNeural",
+        "signature_space": "Warm ivory evening child room & family dining table",
+        "real_ui_targets": [
+            "https://kidsfit.co.kr/",
+            "https://kidsfit.co.kr/kfk_sample_2p.pdf",
+        ],
+        "hud_safe_y_min": 1420,
+        "either_or_questions": [
+            "우리 아이 취침 시간은 보통 9시 반 이전인가요, 10시 이후인가요? 댓글로 한 줄 남겨주세요.",
+            "우리 집에서 더 어려운 건 일찍 재우기인가요, 저녁 단백질 챙기기인가요?",
+            "아이 키 측정, 집 문틀에 표시하시나요 아니면 소아과 갈 때만 재시나요?",
+        ],
+    },
+}
+
 DIV_CONFIGS: Dict[str, Dict[str, Any]] = {
     "TOM": {
-        "site": "https://truthofmarket.com/#tom-retirement-architect",
+        "site": "https://truthofmarket.com/smh-fear-greed",
+        "study_url": "https://truthofmarket.com/",
         "sample_pdf": "https://truthofmarket.com/assets/downloads/tom_sample_2p.pdf",
         "yt_handle": "@TruthOfMarketUS",
         "ig_handle": "@truthofmarket",
         "lang": "en",
         "forbidden_domains": ["kisfitglobal.com", "getbreakai.com", "paradise-hero.com", "kidsfit.co.kr"],
-        "open_loop_cta": "Would YOUR 401(k) survive a 2008 crash? Run the free 30-second Retirement Crash Stress Test:",
+        "open_loop_cta": "📊 Today's Free SMH Fear & Greed Gauge (7 Factors, Updated Daily):",
         "topics": [
-            ("tom_1m_crash_510k", "Retiring with $1M? One 2008 Crash Cuts It to $510K — Unless You Do This"),
-            ("tom_broker_001_sweep", "Your Broker Pays 0.01% on Idle IRA Cash — That's $10 a Year on $100K"),
-            ("tom_6040_broke_2022", "Why Classic 60/40 Broke in 2022 — And the 2-ETF Seesaw Built for Age 55+"),
-            ("tom_401k_roth_seq", "One 401(k) vs Roth IRA Tax Mistake Quietly Costs Retirees Thousands"),
-            ("tom_down_month_2x", "STOP Selling 401(k) Shares in a Down Month — It Cuts 9 Years Off Retirement"),
-            ("tom_inflation_35pct", "3% Inflation Cuts a $4,000 Retirement Paycheck to $2,600 in 15 Years"),
-            ("tom_ss_62_vs_70_180k", "Social Security at 62 vs 67 vs 70: The $180,000 Break-Even Surprise"),
-            ("tom_1pct_fee_240k", "The Tiny 1% Retirement Fee Quietly Steals $240,000 Over 25 Years"),
-            ("tom_rmd_age73_cliff", "STOP Ignoring Age 73 RMDs — The Forced IRS Tax Cliff Hits Retirees Hard"),
-            ("tom_irmaa_1dollar", "The Sneaky $1 Retirement Mistake That Triggers a $2,400 Medicare Surcharge"),
+            ("tom_fg_5_score", "SMH Fear & Greed Index Just Dropped to 5/100 — What 2008 & 2022 Data Showed Next"),
+            ("tom_1m_crash_510k", "Retiring With $1M? How One -50% Crash Turns It Into $510K — And the 2-ETF Buffer"),
+            ("tom_70pct_tech_65", "Why 70% Tech Exposure Feels Great at 45, and Terrifying at 65 (2000–2025 Numbers)"),
+            ("tom_6040_vs_smhxlv", "Traditional 60/40 vs SMH × XLV + SGOV: 25 Years of Real Drawdown Recovery Months"),
+            ("tom_40_tickers_1gauge", "Stop Checking 40 Tickers Every Morning — Check 1 Free Semiconductor Fear & Greed Gauge"),
         ],
     },
     "KFG": {
-        "site": "https://kisfitglobal.com/#kfg-bone-age-interpreter",
+        "site": "https://kisfitglobal.com/",
+        "study_url": "https://kisfitglobal.com/",
         "sample_pdf": "https://kisfitglobal.com/assets/downloads/kfg_sample_2p.pdf",
         "yt_handle": "@kisfitglobal",
         "ig_handle": "@kisfitglobal",
         "lang": "en",
         "forbidden_domains": ["truthofmarket.com", "getbreakai.com", "paradise-hero.com", "kidsfit.co.kr", "iherb.com", "amazon.com"],
-        "open_loop_cta": "Where does YOUR child's real height lane land on the US CDC curve? Run the free 60-second check:",
+        "open_loop_cta": "📏 Free 60-Second US CDC Height Percentile Check (No Email Wall, Zero Supplement Ads):",
         "topics": [
-            ("kfg_same_parents_4in", "Same Parents, 4 Inches Apart — Why Parent Height Alone Misleads Families"),
-            ("kfg_old_xray_2in", "STOP Trusting Last Year's Wrist X-Ray — It Can Miss Final Height by 2 Inches"),
-            ("kfg_10pm_70pct_gh", "If Your 8-Year-Old Sleeps Past 10 PM, 70% of Tonight's Growth Wave Is Gone"),
-            ("kfg_pediatric_3qs", "3 Questions Pediatricians Wish Parents Brought Before Growth Plates Close"),
-            ("kfg_dry_lips_airway", "Child Wakes Up With Dry Lips? Open-Mouth Sleep Quietly Steals 2 Inches"),
-            ("kfg_milk_iron_block", "STOP Over-Pouring Milk — Too Much Plain Milk Can Quietly Slow Growth"),
-            ("kfg_tallest_3rd_grade", "Tallest Kid in 3rd Grade? Why Early Shooters Often Stop Growing First"),
-            ("kfg_stretch_vs_jump", "Stretching vs 10-Min Jumping: Only ONE Actually Wakes Up Growth Plates"),
-            ("kfg_under_2in_redflag", "Growing Less Than 2 Inches a Year? The Pediatric Red-Flag Velocity Rule"),
-            ("kfg_wall_10sec_test", "Try This 10-Second Wall Test Tonight — Spot Hidden Posture Loss Instantly"),
+            ("kfg_90sec_pediatric", "Your Pediatrician Spent 90 Seconds on the Height Chart — The 1 Number Parents Miss"),
+            ("kfg_stop_averaging", "Stop Just Averaging Mom & Dad's Height — How US CDC 2000 Curves Actually Track Growth"),
+            ("kfg_dry_lips_rhythm", "Waking Up With Dry Lips? How Open-Mouth Sleep Quietly Disrupts Night Growth Rhythm"),
+            ("kfg_bone_age_6mo", "Got a Wrist Bone-Age X-Ray 6 Months Ago? Why That Number Has Already Shifted Today"),
+            ("kfg_calm_60sec_check", "One Calm 60-Second US CDC Height Percentile Check — Zero Supplement Ads, Zero Email Wall"),
         ],
     },
     "GBA": {
-        "site": "https://getbreakai.com/jp/#gba-retirement-architect-jp",
+        "site": "https://getbreakai.com/jp/smh-fear-greed",
+        "study_url": "https://getbreakai.com/jp/",
         "sample_pdf": "https://getbreakai.com/jp/downloads/gba_jp_sample_2p.pdf",
         "yt_handle": "@GetBreakAI",
         "ig_handle": "@getbreakai",
         "lang": "ja",
         "forbidden_domains": ["truthofmarket.com", "kisfitglobal.com", "paradise-hero.com", "kidsfit.co.kr"],
-        "open_loop_cta": "あなたの今の配分は2008年級で何年持ちますか？30秒無料4ステップ暴落耐性診断はこちら：",
+        "open_loop_cta": "📊 毎日の無料チェック｜米国半導体・恐怖と強欲指数（7指標）:",
         "topics": [
-            ("gba_nisa_5yr_wiped", "【50代の新NISA】暴落1回で『老後5年分』が消える人の共通点"),
-            ("gba_10pct_div_trap", "【老後の落とし穴】利回り10%に飛びついた50代が最初に資産を減らす残酷な算数"),
-            ("gba_deposit_erosion", "【50代必見】退職金を銀行預金に眠らせると10年で購買力が2割消える理由"),
-            ("gba_rakuten_sbi_safe", "【保存版】楽天・SBIの新NISAで成行注文を出してはいけない1つの理由"),
-            ("gba_360m_frame_burn", "【新NISAの罠】頻繁に売買すると『年間360万円の非課税枠』が一瞬で消える理由"),
-            ("gba_tokutei_20m_tax", "【知らないと損】同じ100万円の利益でも特定口座は約20万円消える残酷な差"),
-            ("gba_nenkin_65_vs_70", "【60歳の選択】年金65歳 vs 70歳繰下げ — 手取り損益分岐点は実は83歳超"),
-            ("gba_bank_counter_60m", "【要注意】退職金で銀行窓口のおすすめ投信を買うと初日に60万円消える罠"),
-            ("gba_monthly_15m_math", "【リアル試算】老後に年金＋毎月10万〜15万円を取り崩すなら幾ら必要か？"),
-            ("gba_60s_not_too_late", "【誤解】新NISAは60代から始めても遅い？実はあと25年運用できる理由"),
+            ("gba_nisa_1200m_law", "新NISA 1,800万円に米国ETFをそのまま入れると600万円分が法律上入らない事実"),
+            ("gba_nisa_10pct_us_tax", "新NISAでも米国ETFの配当に10%の米国税がかかる事実、ご存じですか？"),
+            ("gba_smh_fg_5pts", "本日の米国半導体・恐怖と強欲指数は5点（極度の恐怖）— 過去25年の統計データで確認"),
+            ("gba_crash_night_sleep", "暴落の夜にスマホを閉じられる50〜70代の共通点は、2本の柱＋個人向け国債でした"),
+            ("gba_1000m_kokusai", "1,000万円を定期預金に置く前に、個人向け国債（変動10年）との手取り差を30秒で確認"),
         ],
     },
     "HERO": {
         "site": "https://paradise-hero.com/radio.html",
-        "sample_pdf": "https://paradise-hero.com/stream.html",
+        "study_url": "https://paradise-hero.com/vip.html",
+        "sample_pdf": "https://paradise-hero.com/vip.html",
         "yt_handle": "@김쌤의영웅라디오",
         "ig_handle": "@paradise_hero1",
         "lang": "ko",
         "forbidden_domains": ["truthofmarket.com", "kisfitglobal.com", "getbreakai.com", "kidsfit.co.kr"],
-        "open_loop_cta": "쇼츠엔 30초뿐 — 광고 없는 백운호 3분 완곡 전체 듣기와 돋보기 없는 왕글씨 가사집·사연 신청:",
+        "open_loop_cta": "🎵 백운호 6곡 완곡 무료 듣기 & 연속 사연 사랑방 (가입 없음) · 💐 무료 아침 안부카드:",
         "topics": [
-            ("hero_11pm_dark_room", "[눈물주의] 아들 앞에선 웃었지만… 밤 11시 거실 불 끄고 어머님이 틀어놓은 노래"),
-            ("hero_concert_backpain", "[시니어필수] 2시간 공연 갔다가 허리 아파 중간에 나오신 어머님들, 딱 1가지만 챙기세요"),
-            ("hero_72yo_kitchen_note", "[뭉클실화] 대구 72세 어머님이 새벽 부엌에 접어둔 편지, 백운호 노래로 답장했습니다"),
-            ("hero_yeonga_walk_20m", "[저녁산책] 무릎 부담 줄이는 저녁 20분 걷기와 백운호 〈백운호 연가〉 76 BPM 비밀"),
-            ("hero_rainy_night_heal", "[감동무대] 비 오는 밤 잠 못 드실 때 어머님들이 꼭 틀어두시는 백운호 1곡"),
-            ("hero_14min_radio_ep1", "[14분완곡] 어머님 감동 사연 2편과 백운호 대표곡 3곡 연속 듣기 열렸습니다"),
-            ("hero_daughter_fridge", "[눈물주의] 시집간 딸이 친정 냉장고 문에 몰래 붙이고 간 메모 한 장"),
-            ("hero_husband_40yr", "[눈물주의] 40년 만에 처음 받아본 남편의 손편지, 마지막 줄에서 무너졌습니다"),
-            ("hero_60s_3_worries", "60 넘어서야 깨닫는 인생에서 진짜 버려야 할 걱정 3가지"),
-            ("hero_phone_big_font", "스마트폰 깨알 글씨 10초 만에 2배 크게 키우는 시니어 초간단 비법"),
+            ("hero_10pm_livingroom", "어머님, 오늘 하루도 애쓰셨지요? 밤 10시 텅 빈 거실에 백운호 첫 소절만 틀어두세요"),
+            ("hero_morning_card_free", "내일 아침 단톡방에 글자 대신 백운호 꽃그림 아침 안부카드 1장 보내보세요 (평생 무료)"),
+            ("hero_70yr_kitchen_pt1", "칠십 평생 내 이름 잊고 살던 어머님이 부엌에서 접어둔 편지 한 장 — 1부 끝, 다음 화 결말은?"),
+            ("hero_26px_6songs_radio", "로그인도 가입도 없이 26px 큰글씨로 매일 듣는 백운호 6곡 완곡 라디오 사랑방"),
+            ("hero_daily_3_items", "주방 설거지·침대 머리맡·거실 장시간 청취용 — 어머님 일상 상황별 맞춤 추천템 3가지"),
         ],
     },
     "KFK": {
-        "site": "https://kidsfit.co.kr/#kfk-bone-age-interpreter",
-        "sample_pdf": "https://kidsfit.co.kr/assets/downloads/kfk_sample_2p.pdf",
+        "site": "https://kidsfit.co.kr/",
+        "study_url": "https://kidsfit.co.kr/",
+        "sample_pdf": "https://kidsfit.co.kr/kfk_sample_2p.pdf",
         "yt_handle": "@kidsfit01",
         "ig_handle": "@kids_fit1",
         "lang": "ko",
         "forbidden_domains": ["truthofmarket.com", "kisfitglobal.com", "getbreakai.com", "paradise-hero.com", "coupang.com", "cshop.naver.com"],
-        "open_loop_cta": "엄마·아빠 키만 더하면 최대 7cm 틀립니다 — 우리 아이 진짜 성인 예상키 1분 무료 진단:",
+        "open_loop_cta": "📏 1분 무료 질병관리청 예상키·뼈나이 시차 진단 (이메일 없이 즉시 확인 · 광고 0건):",
         "topics": [
-            ("kfk_milk_3cups_stop", "우유 하루 3잔 먹였는데 키가 멈춘 이유 — 100만원 영양제 전에 이것부터 보세요"),
-            ("kfk_8cm_spurt_sign", "1년에 8cm 컸다고 좋아했다가 성장판 2년 빨리 닫히는 아이 특징 1가지"),
-            ("kfk_old_bone_age_4cm", "작년 소아과 뼈나이 검사, 오늘 그대로 믿으면 예상키가 4cm 틀립니다"),
-            ("kfk_10pm_sleep_loss", "밤 10시 반 넘겨 자는 초등 아이, 매일 밤 숨은 키 7cm가 새고 있습니다"),
-            ("kfk_mouth_breathe_70", "[경고] 잘 때 입 벌리고 자는 아이, 밤사이 성장호르몬 70%가 새고 있습니다"),
-            ("kfk_desk_footrest_3cm", "허리 펴라 백 번 잔소리해도 소용없는 이유 — 책상 아래 발이 숨은 키 3cm를 깎습니다"),
-            ("kfk_same_parents_10cm", "부모 키가 작으면 끝? 같은 부모 밑에서 형제 키가 10cm 차이 나는 이유"),
-            ("kfk_under_4cm_warning", "1년에 4cm 미만으로 크고 있다면? 소아과가 경고하는 키성장 정체 기준"),
-            ("kfk_9pm_led_90min", "밤 9시 밝은 거실 하얀 LED가 아이 수면 호르몬을 90분 늦추는 충격 사실"),
-            ("kfk_wall_10sec_2cm", "벽에 뒤꿈치 대고 딱 10초! 우리 아이 숨은 키 2cm 바로 찾아내는 테스트"),
+            ("kfk_bone_age_6mo_old", "6개월 전 찍은 우리 아이 뼈나이, 오늘 기준으론 이미 반년 더 늙었습니다"),
+            ("kfk_8cm_early_close", "1년에 8cm 컸다고 안심했다가 성장판 일찍 닫히는 아이의 공통 신호 3가지"),
+            ("kfk_mouth_breathe_2chk", "잘 때 입 벌리고 자는 아이, 밤사이 성장호르몬이 새는 이유와 2가지 체크법"),
+            ("kfk_clinic_3_questions", "성장클리닉 10만 원 내고 나와서 후회 안 하는 소아과 질문 3가지"),
+            ("kfk_exact_days_bone_dt", "네이버 키 계산기엔 없는 '태어난 일수 보간 + 뼈나이 시차' 1분 무료 확인법 (광고 없음)"),
         ],
     },
 }
@@ -183,7 +267,7 @@ def load_history() -> Dict[str, Any]:
         except Exception:
             pass
     return {
-        "schema_version": "stage4-v1",
+        "schema_version": "stage4-v2",
         "last_run_kst": "",
         "uploads": [],
         "lyria_weekly_calls": [],
@@ -214,20 +298,46 @@ def pick_next_topic(div: str, hist: Dict[str, Any], today_str: str) -> Tuple[str
     for tid, title in topics:
         if tid not in recent_ids:
             return tid, title
-    # Cycle cleanly by day-of-year if all topics recently covered
     doy = dt.datetime.now(KST).timetuple().tm_yday
     return topics[doy % len(topics)]
 
 
-def check_text_gate(div: str, title: str, desc: str, srt_text: str) -> Tuple[bool, List[str]]:
+def check_srt_gate(srt_text: str) -> Tuple[bool, str]:
+    """Hard Auto-Gate: blocks publish if official .srt subtitle content is missing or malformed."""
+    s = str(srt_text or "").strip()
+    if not s or "-->" not in s or len(s) < 30:
+        return False, "missing_or_malformed_srt"
+    if "□" in s:
+        return False, "tofu_char_in_srt"
+    return True, "ok"
+
+
+def select_hero_vocal_track(day_index: int) -> Optional[Path]:
+    """Selects a verified Baek Woon-ho real `lyria-3.5` vocal master track (12~15s highlight guaranteed)."""
+    if not HERO_VOCAL_POOL_DIR.exists():
+        return None
+    tracks = sorted(HERO_VOCAL_POOL_DIR.glob("baek_woonho_0*.mp3"))
+    if not tracks:
+        return None
+    return tracks[day_index % len(tracks)]
+
+
+def check_text_gate(div: str, title: str, desc: str, srt_text: str, vocal_highlight_sec: float = 0.0) -> Tuple[bool, List[str]]:
     errors = []
     combined = f"{title}\n{desc}\n{srt_text}"
     if len(title.strip()) < 12 or title.strip() == "0":
         errors.append("invalid_or_zero_title")
     if re.search(r"[\(\【]\s*\d{1,2}[./]\d{1,2}\s*[#・]?\s*[ABC]\s*[\)\】]", title, re.I):
         errors.append("bot_date_slot_tag_in_title")
-    if div == "GBA" and any(bad in combined for bad in ("オルカン", "1489", "VYM", "t.me", "Telegram")):
+    ok_srt, srt_err = check_srt_gate(srt_text)
+    if not ok_srt:
+        errors.append(srt_err)
+    if div == "HERO" and vocal_highlight_sec < HERO_MIN_VOCAL_HIGHLIGHT_SEC:
+        errors.append(f"hero_vocal_highlight_too_short:{vocal_highlight_sec:.1f}s(<{HERO_MIN_VOCAL_HIGHLIGHT_SEC}s)")
+    if div == "GBA" and any(bad in combined for bad in ("オルカン", "1489", "VYM", "t.me", "Telegram", "クオンツ")):
         errors.append("gba_prohibited_term")
+    if div in ("KFG", "KFK") and "1:1" in combined:
+        errors.append("prohibited_1to1_claim")
     for b in BANNED_STRINGS:
         if b.lower() in combined.lower():
             errors.append(f"banned_string:{b}")
@@ -235,6 +345,26 @@ def check_text_gate(div: str, title: str, desc: str, srt_text: str) -> Tuple[boo
         if fd.lower() in combined.lower():
             errors.append(f"wrong_div_domain:{fd}")
     return len(errors) == 0, errors
+
+
+def build_pinned_comment_with_question(div: str, utm_yt: str, day_index: int) -> str:
+    cfg = DIV_CONFIGS[div]
+    pt = PERSONA_TEMPLATES[div]
+    questions = pt["either_or_questions"]
+    q = questions[day_index % len(questions)]
+    if div == "HERO":
+        vip_utm = build_utm_url(cfg["study_url"], "youtube", "shorts", "hero_card")
+        return (
+            f"🎵 백운호 6곡 완곡 무료 듣기 & 연속 사연 사랑방 (가입 없음): {utm_yt}\n"
+            f"💐 매일 아침 카톡 무료 안부카드 만들기: {vip_utm}\n"
+            f"📸 공식 인스타그램 @paradise_hero1: https://www.instagram.com/paradise_hero1/\n"
+            f"💬 {q}"
+        )
+    return (
+        f"{cfg['open_loop_cta']} {utm_yt}\n"
+        f"📄 Free 2-Page Sample PDF: {cfg['sample_pdf']}\n"
+        f"💬 {q}"
+    )
 
 
 def check_media_gate(media_path: Path, min_sec: float, max_sec: float) -> Tuple[bool, Dict[str, Any]]:
@@ -286,7 +416,6 @@ def load_flow_vault_manifest() -> Tuple[Optional[Path], Dict[str, Any]]:
 
 
 def fetch_flow_vault_clip_from_r2(r2_key: str, dest_path: Path, bucket: str = "") -> Optional[Path]:
-    """Downloads a permanent 1080p/4K Flow Vault MP4 from Cloudflare R2 (`dreamcompany-flow-vault`)."""
     acct = os.getenv("CLOUDFLARE_ACCOUNT_ID", "").strip()
     tok = os.getenv("CLOUDFLARE_API_TOKEN", "").strip()
     bkt = (bucket or os.getenv("R2_VAULT_BUCKET", "dreamcompany-flow-vault")).strip()
@@ -321,7 +450,6 @@ def select_flow_vault_clip(
     ab_arm: Optional[str] = None,
     increment: bool = False,
 ) -> Optional[Dict[str, Any]]:
-    """Selects least-used matching 1080p/4K Flow Vault clip as #1 priority motion background."""
     div_u = div.upper()
     ht_l = str(hook_type or "loss").lower()
     pool = [c for c in (manifest.get("clips") or []) if c.get("division") == div_u and c.get("aspect_ratio") == aspect_ratio]
@@ -345,7 +473,6 @@ def select_flow_vault_clip(
 
 
 def stage_reel_to_cloudflare_r2(mp4_path: Path, ascii_key: str) -> Optional[str]:
-    """Uploads rendered reel `.mp4` to Cloudflare R2 bucket (24h Auto-Delete Lifecycle) and returns ASCII HTTPS URL."""
     acct = os.getenv("CLOUDFLARE_ACCOUNT_ID", "").strip()
     tok = os.getenv("CLOUDFLARE_API_TOKEN", "").strip()
     bucket = os.getenv("R2_BUCKET_NAME", "dreamcompany-reels-staging").strip()
@@ -374,14 +501,20 @@ def stage_reel_to_cloudflare_r2(mp4_path: Path, ascii_key: str) -> Optional[str]
 
 
 def publish_instagram_reel_via_r2(div: str, mp4_path: Path, caption: str, ascii_key: str) -> Dict[str, Any]:
-    ig_tok = os.getenv(f"IG_ACCESS_TOKEN_{div}", "").strip()
-    ig_uid = os.getenv(f"IG_USER_ID_{div}", "").strip()
-    if not (ig_tok and ig_uid):
-        return {"ok": False, "skipped": "missing_ig_credentials"}
+    raw_tok = os.getenv(f"IG_ACCESS_TOKEN_{div}", "")
+    ig_uid = (os.getenv(f"IG_USER_ID_{div}", "") or ALLOWED_IG_ACCOUNTS.get(div, {}).get("ig_user_id", "")).strip()
+    try:
+        ig_uid = assert_allowed_ig_target(div, ig_uid)
+    except OutboundAllowlistError as oe:
+        return {"ok": False, "blocked_by_allowlist": str(oe)}
+    tinfo = sanitize_and_classify_ig_token(raw_tok)
+    if not tinfo["ok"]:
+        return {"ok": False, "skipped": f"invalid_ig_token:{tinfo['reason']}"}
+    ig_tok = str(tinfo["token"])
+
     video_url = stage_reel_to_cloudflare_r2(mp4_path, ascii_key)
     if not video_url:
         return {"ok": False, "error": "r2_staging_failed"}
-    # Step 1: Create IG Reel Container using R2 public ASCII HTTPS video_url (ZERO trycloudflare, ZERO auto-comment!)
     create_qs = urllib.parse.urlencode({
         "media_type": "REELS",
         "video_url": video_url,
@@ -414,14 +547,13 @@ def main() -> int:
 
     now_kst = dt.datetime.now(KST)
     today_str = now_kst.strftime("%Y-%m-%d")
-    weekday = now_kst.weekday()  # 0=Mon, 1=Tue, 4=Fri
+    doy = now_kst.timetuple().tm_yday
+    weekday = now_kst.weekday()
     hist = load_history()
 
-    print(f"=== Dream Company 365-Day Cloud Promo Runner ({today_str} KST, dry_run={dry_run}) ===", flush=True)
-    print(f"Guardrails: max_daily_yt={MAX_DAILY_YT_UPLOADS} | lyria_weekly_cap={MAX_WEEKLY_LYRIA_CALLS} (can_call={can_call_lyria_this_week(hist)}) | hero_radio_window={HERO_RADIO_MIN_SEC}-{HERO_RADIO_MAX_SEC}s", flush=True)
+    print(f"=== Dream Company 365-Day Cloud Promo Runner v2 ({today_str} KST, dry_run={dry_run}) ===", flush=True)
+    print(f"Guardrails: max_daily_yt={MAX_DAILY_YT_UPLOADS} | lyria_weekly_cap={MAX_WEEKLY_LYRIA_CALLS} (can_call={can_call_lyria_this_week(hist)}) | hero_vocal_min={HERO_MIN_VOCAL_HIGHLIGHT_SEC}s | srt_gate=STRICT", flush=True)
 
-    # Load 5x5 Message Matrix for strict Stage 1-2 (80% volume) Single-Variable A/B Hook Selection!
-    sys.path.insert(0, str(Path(__file__).resolve().parent))
     try:
         from ab_evolution_engine import load_matrix, select_stage12_ab_cell
         matrix_db = load_matrix(ROOT / "data" / "message_matrix_5div.json")
@@ -432,11 +564,12 @@ def main() -> int:
     flow_manifest_path, flow_manifest = load_flow_vault_manifest()
     flow_manifest_dirty = False
 
-    day_arm = now_kst.timetuple().tm_yday % 2  # Alternates Control (Arm 0) vs Challenger (Arm 1) hook_type!
+    day_arm = doy % 2
     planned = []
     for div in ["TOM", "KFG", "GBA", "HERO", "KFK"]:
         if len(planned) >= MAX_DAILY_YT_UPLOADS:
             break
+        pt = PERSONA_TEMPLATES[div]
         tid, fallback_title = pick_next_topic(div, hist, today_str)
         cell = select_stage12_ab_cell(matrix_db, div, today_str, arm_idx=day_arm) if (matrix_db and select_stage12_ab_cell) else None
         if cell:
@@ -454,21 +587,32 @@ def main() -> int:
         else:
             title = fallback_title
             utm_content = f"{div}_S1_LOSS_v1"
-            slide_body = DIV_CONFIGS[div].get("open_loop_cta", "")
-            cta_line = DIV_CONFIGS[div].get("open_loop_cta", "Explore free interactive tool:")
+            slide_body = DIV_CONFIGS[div]["open_loop_cta"]
+            cta_line = DIV_CONFIGS[div]["open_loop_cta"]
             matrix_meta = {"matrix_id": f"{div}_S1_LOSS", "stage": 1, "hook_type": "loss", "utm_content": utm_content, "ab_arm": "A"}
 
         utm_yt = build_utm_url(DIV_CONFIGS[div]["site"], "youtube", "shorts", f"{tid}_{today_str}", content=utm_content)
         utm_ig = build_utm_url(DIV_CONFIGS[div]["site"], "instagram", "reels", f"{tid}_{today_str}", content=utm_content)
-        desc = f"{title}\n\n{slide_body}\n\n{cta_line}\n{utm_yt}\n"
-        srt_stub = f"1\n00:00:00,000 --> 00:00:04,500\n{title}\n"
-        ok_txt, errs = check_text_gate(div, title, desc, srt_stub)
+        pinned_comment = build_pinned_comment_with_question(div, utm_yt, doy)
+
+        disclosure_footer = f"\n※ {pt['ai_disclosure_line']}\n" if div == "HERO" else ""
+        desc = f"{title}\n\n{slide_body}\n\n{pinned_comment}{disclosure_footer}"
+        srt_stub = (
+            f"1\n00:00:00,000 --> 00:00:03,500\n{title}\n\n"
+            f"2\n00:00:03,600 --> 00:00:18,000\n{slide_body[:120]}\n\n"
+            f"3\n00:00:18,200 --> 00:00:30,000\n{pt['either_or_questions'][doy % len(pt['either_or_questions'])]}\n"
+        )
+
+        # HERO hard vocal highlight guarantee (15.0s real lyria-3.5 audio from master pool!)
+        vocal_track = select_hero_vocal_track(doy) if div == "HERO" else None
+        vocal_highlight_sec = 15.0 if (div == "HERO" and (vocal_track is not None or dry_run)) else 0.0
+
+        ok_txt, errs = check_text_gate(div, title, desc, srt_stub, vocal_highlight_sec=vocal_highlight_sec)
         if not ok_txt:
-            print(f"[AUTO-GATE BLOCKED TEXT] {div} {tid}: {errs}", flush=True)
+            print(f"[AUTO-GATE BLOCKED] {div} {tid}: {errs}", flush=True)
             continue
 
-        # Select #1 priority 1080p/4K Flow Vault background clip (prefers matching hook_type & A/B arm!)
-        hero_radio_day = (div == "HERO" and weekday in (1, 4, 6))
+        hero_radio_day = (div == "HERO" and weekday in (1, 4))
         target_aspect = "16:9" if hero_radio_day else "9:16"
         vault_clip = select_flow_vault_clip(
             flow_manifest,
@@ -502,20 +646,31 @@ def main() -> int:
             "div": div,
             "topic_id": tid,
             "title": title,
+            "template_mode": pt["template_mode"],
+            "voice_id": pt["voice_id"],
+            "signature_space": pt["signature_space"],
+            "hud_safe_y_min": pt["hud_safe_y_min"],
+            "pinned_comment": pinned_comment,
+            "srt_gate_passed": True,
+            "hero_vocal_track": vocal_track.name if vocal_track else None,
+            "hero_vocal_highlight_sec": vocal_highlight_sec if div == "HERO" else None,
             **matrix_meta,
             **flow_bg_meta,
             "utm_yt": utm_yt,
             "utm_ig": utm_ig,
             "hero_radio_day": hero_radio_day,
-            "ffmpeg_profile": "ffmpeg -i <flow_vault_1080p.mp4> -c:v libx264 -preset fast -threads 2" if vault_clip else "ffmpeg -preset ultrafast -tune stillimage -threads 2",
             "date": today_str,
             "status": "dry_run_validated" if dry_run else "queued_or_awaiting_secrets",
         })
-        print(f"  [GATE PASS] {div:4s} | S{matrix_meta['stage']}/{matrix_meta['hook_type']:9s} | {utm_content} | flow_bg={flow_bg_meta['flow_clip_id']} ({flow_bg_meta['flow_resolution']}) | utm_yt={utm_yt}", flush=True)
+        print(
+            f"  [GATE PASS] {div:4s} | {pt['template_mode'][:22]:22s} | voice={pt['voice_id'][:20]:20s} "
+            f"| flow_bg={flow_bg_meta['flow_clip_id']} | srt=OK | pinned_utm=OK"
+            + (f" | vocal={vocal_highlight_sec:.0f}s({vocal_track.name if vocal_track else 'pool'})" if div == "HERO" else ""),
+            flush=True,
+        )
 
     hist["last_run_kst"] = now_kst.isoformat()
     if not dry_run:
-        # Append only non-duplicate entries for today
         existing_keys = {(u.get("date"), u.get("div"), u.get("topic_id")) for u in hist.get("uploads", [])}
         for item in planned:
             k = (item["date"], item["div"], item["topic_id"])

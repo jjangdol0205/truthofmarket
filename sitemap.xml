@@ -1044,4 +1044,34 @@
     <changefreq>daily</changefreq>
     <priority>0.88</priority>
   </url>
+  <url>
+    <loc>https://truthofmarket.com/insights/smh-xlv-vs-60-40-retirement-2000-2025.html</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://truthofmarket.com/insights/sgov-vs-bank-sweep-001-ira-cash.html</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://truthofmarket.com/insights/smh-fear-greed-index-guide-2026.html</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://truthofmarket.com/insights/tom-s2-proof-2026-11-23.html</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://truthofmarket.com/smh-fear-greed</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
 </urlset>
