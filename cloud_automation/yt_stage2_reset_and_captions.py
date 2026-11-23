@@ -40,7 +40,7 @@ ROOT = Path(__file__).resolve().parent.parent
 HISTORY_PATH = ROOT / "data" / "promo_history.json"
 
 DEFECTIVE_PRIVATE_IDS: Dict[str, List[str]] = {
-    "TOM": ["kjtL4OAvbQ8", "FdmxF-fPQ8w", "iuRVSQtyKpk"],
+    "TOM": ["kjtL4OAvbQ8", "FdmxF-fPQ8w", "iuRVSQtyKpk", "LzLcU12N8v4"],
     "KFG": ["o7XO_XksJpU", "DJzxxrqCpNE", "YNaKhN197AQ", "VMrGLwF4bUI"],
     "GBA": ["IbvoEICoOJ0", "v1jJEZRasug"],
     "HERO": ["3ijh-XwUUMA", "PwYOnWhIec4"],

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMH Fear &amp; Greed Index (Live 7-Factor Gauge) | Truth of Market</title>
+  <meta name="description" content="Free daily SMH Semiconductor Fear &amp; Greed Index (0-100) across 7 public ETF structure factors: 125-day momentum, 52-week drawdown, SMH/XLV rotation, 14-day RSI, volatility, QQQ leadership, and 50/50 weight drift. Educational statistics only." />
+  <link rel="canonical" href="https://truthofmarket.com/smh-fear-greed" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root { --bg:#FAF7F2; --surface:#FFFFFF; --ink:#111827; --muted:#4B5563; --brand:#0F2C22; --line:#E5E0D5; --gold:#B45309; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; line-height:1.65; }
+    .fg-header { background:var(--surface); border-bottom:1px solid var(--line); padding:14px 20px; position:sticky; top:0; z-index:40; }
+    .fg-header-in { max-width:1040px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; }
+    .fg-brand { font-family:'Newsreader',Georgia,serif; font-size:1.25rem; font-weight:700; color:var(--brand); text-decoration:none; }
+    .fg-nav { display:flex; gap:16px; align-items:center; flex-wrap:wrap; font-size:0.92rem; }
+    .fg-nav a { color:var(--muted); text-decoration:none; font-weight:600; }
+    .fg-nav a:hover { color:var(--brand); }
+    .fg-nav .fg-nav-cta { background:var(--brand); color:#FFFFFF; padding:8px 14px; border-radius:8px; }
+    .fg-wrap { max-width:1040px; margin:0 auto; padding:32px 20px 64px; }
+    .fg-eyebrow { display:inline-block; font-size:0.78rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--brand); background:#ECFDF5; border:1px solid #A7F3D0; padding:4px 10px; border-radius:999px; margin-bottom:12px; }
+    h1 { font-family:'Newsreader',Georgia,serif; font-size:clamp(1.9rem,4vw,2.7rem); line-height:1.2; margin:0 0 10px; color:var(--brand); }
+    .fg-lead { font-size:1.05rem; color:var(--muted); max-width:740px; margin:0 0 24px; }
+    .fg-hero-card { background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:28px 24px; box-shadow:0 8px 28px rgba(15,44,34,0.05); margin-bottom:28px; text-align:center; }
+    .fg-zone-pill { display:inline-block; margin-top:10px; padding:8px 18px; border-radius:999px; border:1.5px solid var(--brand); font-weight:800; font-size:1.05rem; font-variant-numeric:tabular-nums; }
+    .fg-asof { margin-top:8px; font-size:0.86rem; color:var(--muted); }
+    .fg-compare-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin-top:22px; }
+    .fg-stat-pill { background:#FAF7F2; border:1px solid var(--line); border-radius:10px; padding:12px; }
+    .fg-stat-k { display:block; font-size:0.78rem; color:var(--muted); font-weight:600; }
+    .fg-stat-v { display:block; font-size:1.15rem; font-weight:800; color:var(--ink); margin-top:3px; font-variant-numeric:tabular-nums; }
+    .fg-section-title { font-family:'Newsreader',Georgia,serif; font-size:1.55rem; color:var(--brand); margin:34px 0 8px; }
+    .fg-section-sub { color:var(--muted); font-size:0.95rem; margin:0 0 16px; }
+    .fg-factors-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px; }
+    .fg-factor-card { background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:16px 18px; }
+    .fg-factor-head { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .fg-factor-num { width:24px; height:24px; border-radius:50%; background:#F1F5F9; color:var(--brand); font-weight:800; font-size:0.8rem; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .fg-factor-head h3 { font-size:0.98rem; margin:0; flex:1; color:var(--ink); }
+    .fg-factor-score { font-size:0.9rem; font-weight:800; padding:3px 9px; border-radius:999px; font-variant-numeric:tabular-nums; }
+    .fg-bar-track { height:7px; background:#EDE8DD; border-radius:999px; overflow:hidden; margin-bottom:8px; }
+    .fg-bar-fill { height:100%; border-radius:999px; }
+    .fg-factor-raw { font-size:0.86rem; font-weight:700; color:var(--brand); margin-bottom:5px; font-variant-numeric:tabular-nums; }
+    .fg-factor-desc { font-size:0.85rem; color:var(--muted); margin:0; }
+    .fg-card { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:22px; margin-top:16px; overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; font-size:0.92rem; }
+    th, td { text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); }
+    th { background:#FAF7F2; color:var(--brand); font-weight:700; }
+    td.num { font-variant-numeric:tabular-nums; font-weight:700; white-space:nowrap; }
+    .fg-bridge { background:#0F2C22; color:#FFFFFF; border-radius:16px; padding:28px 24px; margin-top:34px; }
+    .fg-bridge h2 { font-family:'Newsreader',Georgia,serif; font-size:1.6rem; margin:0 0 10px; color:#FFFFFF; }
+    .fg-bridge p { color:#D1FAE5; margin:0 0 18px; max-width:720px; }
+    .fg-alert-form { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:16px; }
+    .fg-alert-form input { flex:1 1 260px; padding:13px 14px; border-radius:8px; border:1px solid #34D399; font-size:1rem; background:#FFFFFF; color:#111827; }
+    .fg-alert-form button { padding:13px 22px; border-radius:8px; border:none; background:#F59E0B; color:#111827; font-weight:800; font-size:0.98rem; cursor:pointer; }
+    .fg-bridge-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.18); }
+    .fg-btn-light { display:inline-block; padding:12px 18px; border-radius:8px; background:#FFFFFF; color:#0F2C22; font-weight:800; text-decoration:none; font-size:0.95rem; }
+    .fg-btn-outline { display:inline-block; padding:12px 18px; border-radius:8px; border:1.5px solid #A7F3D0; color:#ECFDF5; font-weight:700; text-decoration:none; font-size:0.95rem; }
+    .fg-disclaimer { margin-top:28px; font-size:0.82rem; color:var(--muted); border-top:1px solid var(--line); padding-top:16px; }
+  </style>
+</head>
+<body>
+  <header class="fg-header">
+    <div class="fg-header-in">
+      <a class="fg-brand" href="/">Truth of Market</a>
+      <nav class="fg-nav" aria-label="Primary">
+        <a href="/">4-Step Retirement Study</a>
+        <a href="/smh-fear-greed" style="color:#0F2C22;text-decoration:underline;">SMH Fear &amp; Greed</a>
+        <a href="/assets/downloads/tom_sample_2p.pdf" target="_blank" rel="noopener">Free 2p Sample PDF</a>
+        <a class="fg-nav-cta" href="/?utm_source=smh_fg&amp;utm_medium=nav">Run Free 60s Check &rarr;</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="fg-wrap" id="smhFgApp" data-lang="en" data-json="/data/smh_fg_latest.json">
+    <span class="fg-eyebrow">100% Free Daily Market Structure Gauge &middot; Zero Login Wall</span>
+    <h1>SMH Semiconductor Fear &amp; Greed Index</h1>
+    <p class="fg-lead">
+      Updated automatically after every US market close using 7 public ETF structure indicators (SMH, XLV, QQQ).
+      Built for calm, long-term reference — zero trade timing commands, zero popups, zero email gate.
+    </p>
+
+    <section class="fg-hero-card" aria-label="Today's SMH Fear and Greed Score">
+      <div id="smhFgGaugeMount"></div>
+      <div id="smhFgZoneBadge" class="fg-zone-pill">Loading latest US close...</div>
+      <div id="smhFgAsOf" class="fg-asof"></div>
+      <div id="smhFgCompareRow" class="fg-compare-row"></div>
+    </section>
+
+    <h2 class="fg-section-title">7 Public Market-Structure Factors</h2>
+    <p class="fg-section-sub">Equal-weighted average of 7 objective public ETF metrics scaled from 0 (Extreme Fear) to 100 (Extreme Greed).</p>
+    <section id="smhFgFactorsGrid" class="fg-factors-grid" aria-label="7 Factor Breakdown"></section>
+
+    <h2 class="fg-section-title">180-Trading-Day Historical Trend</h2>
+    <p class="fg-section-sub">Shaded bands mark Extreme Greed (75&ndash;100) and Extreme Fear (0&ndash;25) statistical zones.</p>
+    <section class="fg-card">
+      <div id="smhFgHistoryMount"></div>
+    </section>
+
+    <h2 class="fg-section-title">2000&ndash;2025 Historical Regime Reference (Educational Study)</h2>
+    <p class="fg-section-sub">Historical drawdown comparison across SMH alone vs. a balanced SMH &times; XLV + Treasury study mix during past fear and greed regimes.</p>
+    <section class="fg-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Index Zone</th>
+            <th>Time in Zone</th>
+            <th>Median SMH Drawdown</th>
+            <th>Median Balanced Mix DD</th>
+            <th>Historical Statistical Context</th>
+          </tr>
+        </thead>
+        <tbody id="smhFgRegimeTableBody"></tbody>
+      </table>
+    </section>
+
+    <section class="fg-bridge" aria-label="Free Extreme Alert and Retirement Study Bridge">
+      <h2>Get a Quiet Free Alert Only When Extreme Fear (&le;20) or Extreme Greed (&ge;80) Hits</h2>
+      <p>
+        Stop checking 40 noisy headlines every morning. Enter your email once for zero-noise extreme regime notices — or jump straight into our free 4-step 2000&ndash;2025 SMH &times; XLV + SGOV retirement balance study (14-page workbook $9 one-time, optional monthly $29 / annual $199 passes).
+      </p>
+      <form id="smhFgAlertForm" class="fg-alert-form">
+        <input type="email" id="smhFgAlertEmail" required placeholder="Enter your email for free extreme alerts..." aria-label="Email for extreme alerts" />
+        <button type="submit">Notify Me at Extremes (Free) &rarr;</button>
+      </form>
+      <div id="smhFgAlertStatus" role="status" aria-live="polite" style="display:none;background:#FFFFFF;padding:10px 14px;border-radius:8px;font-weight:700;font-size:0.92rem;"></div>
+
+      <div class="fg-bridge-actions">
+        <a class="fg-btn-light" href="/?utm_source=smh_fg&amp;utm_medium=bridge&amp;utm_campaign=tom_fg">Run Free 4-Step Retirement Balance Study &rarr;</a>
+        <a class="fg-btn-outline" href="/assets/downloads/tom_sample_2p.pdf" target="_blank" rel="noopener">Preview Free 2-Page 2000&ndash;2025 Sample PDF &rarr;</a>
+      </div>
+    </section>
+
+    <footer class="fg-disclaimer">
+      <strong>Independent Educational Publisher Notice:</strong> Truth of Market publishes public ETF historical statistics solely for general educational reference. Nothing on this page constitutes personalized investment advice, fiduciary guidance, or buy/sell trade signals.
+      &middot; <a href="/terms.html">Terms</a> &middot; <a href="/privacy.html">Privacy</a> &middot; <a href="/refund.html">Refund Policy</a> &middot; <a href="mailto:hello@truthofmarket.com">hello@truthofmarket.com</a>
+    </footer>
+  </main>
+
+  <script defer src="/hq_member_crm_client.js"></script>
+  <script defer src="/assets/smh-fear-greed.js?v=20261123"></script>
+</body>
+</html>
