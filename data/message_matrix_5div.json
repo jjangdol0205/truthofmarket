@@ -1,6 +1,6 @@
 {
   "schema_version": "2026.11.21-matrix-5x5-v1",
-  "updated_at_kst": "2026-11-22 06:34:20 KST",
+  "updated_at_kst": "2026-11-23 10:29:03 KST",
   "allocation_policy": {
     "shorts_reels_stage_1_2_ratio": 0.8,
     "landing_and_drip_day2_stage_3_4_ratio": 0.15,
@@ -17,9 +17,9 @@
   },
   "total_cells": 125,
   "weekly_evolution_summary": {
-    "last_evaluated_at_kst": "2026-11-21 23:52:04 KST",
+    "last_evaluated_at_kst": "2026-11-23 10:29:03 KST",
     "status": "COLLECTING_SAMPLE",
-    "monday_report_line": "[이번 주 이긴 후크 TOP 1 vs 도태된 후크] 표본 수집 중 (최소 노출 300회 또는 클릭 30회 달성 시 자동 판정)",
+    "monday_report_line": "[이번 주 이긴 후크 TOP 1 vs 도태된 후크] 표본 수집 중 (노출 300회 또는 클릭 30회 + 상대 격차 20% 이상 달성 시 자동 확정)",
     "winners": [],
     "paused_losers": []
   },
@@ -139,7 +139,7 @@
           "variant_of": null,
           "stats_7d": {
             "impressions": 0,
-            "landing_clicks": 0,
+            "landing_clicks": 4,
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
@@ -163,7 +163,7 @@
           "variant_of": null,
           "stats_7d": {
             "impressions": 0,
-            "landing_clicks": 0,
+            "landing_clicks": 3,
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
@@ -745,7 +745,7 @@
           "variant_of": null,
           "stats_7d": {
             "impressions": 0,
-            "landing_clicks": 0,
+            "landing_clicks": 2,
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
@@ -793,7 +793,7 @@
           "variant_of": null,
           "stats_7d": {
             "impressions": 0,
-            "landing_clicks": 0,
+            "landing_clicks": 2,
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
@@ -889,7 +889,7 @@
           "variant_of": null,
           "stats_7d": {
             "impressions": 0,
-            "landing_clicks": 0,
+            "landing_clicks": 2,
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
@@ -1351,7 +1351,7 @@
           "variant_of": null,
           "stats_7d": {
             "impressions": 0,
-            "landing_clicks": 0,
+            "landing_clicks": 4,
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
@@ -1375,7 +1375,7 @@
           "variant_of": null,
           "stats_7d": {
             "impressions": 0,
-            "landing_clicks": 0,
+            "landing_clicks": 3,
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
@@ -1399,7 +1399,7 @@
           "variant_of": null,
           "stats_7d": {
             "impressions": 0,
-            "landing_clicks": 0,
+            "landing_clicks": 3,
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
@@ -2755,7 +2755,7 @@
           "variant_of": null,
           "stats_7d": {
             "impressions": 0,
-            "landing_clicks": 0,
+            "landing_clicks": 2,
             "quiz_completes": 0,
             "checkout_clicks": 0,
             "conversion_rate": 0.0
