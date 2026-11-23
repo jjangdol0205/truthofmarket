@@ -955,7 +955,14 @@ async function fetchStockDetail(ticker) {
   );
 }
 async function fetchBacktestSummary() {
-  return null;
+  return fetchJsonWithFallback(
+    "/api/backtest",
+    { headers: { Accept: "application/json" } },
+    async () => {
+      const r = await fetch("/static_api/backtest.json");
+      return r.json();
+    }
+  );
 }
 async function fetchResearchList() {
   return fetchJsonWithFallback(
@@ -7693,7 +7700,7 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
           <span class="pw-wordmark">TRUTH OF MARKET</span>
           <span class="pw-submark">Independent Market Data &amp; Educational Research</span>
         </button>
-        <div style="display:flex;gap:14px;align-items:center;"><a href="/smh-fear-greed" class="pw-signin-link" style="text-decoration:none;color:#0F2C22;font-weight:700;">SMH Fear &amp; Greed</a><a href="/archive.html" class="pw-signin-link" style="text-decoration:none;">Research Archive</a><button type="button" class="pw-signin-link" id="btnOpenPwRestoreModal">Member Sign-In / Restore</button></div>
+        <div style="display:flex;gap:14px;align-items:center;"><a href="/archive.html" class="pw-signin-link" style="text-decoration:none;">Research Archive</a><button type="button" class="pw-signin-link" id="btnOpenPwRestoreModal">Member Sign-In / Restore</button></div>
       </header>
 
       <!-- Screen 0: Above-the-Fold Instant Start CTA + Live Market Temperature + Founding Note & 2000-2025 Simulation Table -->
@@ -8111,7 +8118,7 @@ const PW_HTML_TEMPLATE = `    <main id="tom-retirement-architect" class="pw-shel
           <input type="text" id="pwRestoreLicenseInput" class="pw-email-input" style="min-width:180px;width:100%;box-sizing:border-box;" placeholder="Access code, Whop receipt ID, or 6-digit email OTP" autocomplete="one-time-code" />
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
             <button type="submit" class="pw-btn-primary pw-btn-emerald" style="flex:1;min-width:180px;">Verify &amp; Open Vault &rarr;</button>
-            <button type="button" id="btnSendTomOtp" class="pw-btn-secondary" style="background:#0F2C22;color:#FFFFFF;border:1.5px solid #0F2C22;padding:12px 18px;border-radius:8px;font-weight:700;cursor:pointer;">Email 6-Digit Code</button>
+            <button type="button" id="btnSendTomOtp" class="pw-btn-primary" style="background:#FFFFFF;color:#0F2C22;border:1.5px solid #0F2C22;">Email 6-Digit Code</button>
           </div>
         </form>
         <div id="pwRestoreStatus" role="status" aria-live="polite" style="display:none;margin-top:12px;font-size:0.88rem;color:#065F46;"></div>
