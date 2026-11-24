@@ -1,14 +1,14 @@
 # RightSideAlpha × SemiFearGreed (https://truthofmarket.com)
 
 > Institutional US Equity Post-Washout Right-Side Ignition (PW-RSI) Terminal & 7-Factor Semiconductor ($SMH × $XLV) Fear & Greed Index.
-> Live Daily Closing Snapshot as of 2026-11-23 | 26.8-Year Empirical Backtest (2000–2026): PW-RSI 24.48% CAGR (349.3x vs QQQ 14.3x).
+> Live Daily Closing Snapshot as of 2026-11-24 | 26.8-Year Empirical Backtest (2000–2026): PW-RSI 24.48% CAGR (349.3x vs QQQ 14.3x).
 
 ## 1. Live Macro & Semiconductor Fear & Greed Snapshot
-- **As of Date**: 2026-11-23
-- **7-Factor Semiconductor Fear & Greed Score**: 12.9/100 (Extreme Fear)
-- **$SMH (VanEck Semiconductor ETF)**: $460.18 (-31.2% off 52-week high)
-- **$XLV (Health Care Select Sector SPDR ETF)**: $179.42
-- **$QQQ (Invesco QQQ Trust)**: $651.03
+- **As of Date**: 2026-11-24
+- **7-Factor Semiconductor Fear & Greed Score**: 6.3/100 (Extreme Fear)
+- **$SMH (VanEck Semiconductor ETF)**: $426.75 (-36.2% off 52-week high)
+- **$XLV (Health Care Select Sector SPDR ETF)**: $184.72
+- **$QQQ (Invesco QQQ Trust)**: $638.1
 - **Active Barbell Allocation Directive**: 80% $SMH : 20% $XLV Contrarian Barbell
 - **Interactive Terminal**: https://truthofmarket.com/semi-fear-greed.html
 - **Daily Editorial Quant Journal**: https://truthofmarket.com/insights/daily-us-quant-regime-brief.html
@@ -22,28 +22,28 @@
 - Main Screener & Position Doctor: https://truthofmarket.com/
 - Quant Insights Archive: https://truthofmarket.com/insights/index.html
 - Live Telegram Quant Channel: https://t.me/truthofmarketss
-- **$CELH (Celsius Holdings)**: Close $28.78 | -9% Hard Stop $26.19 | +100% Target $57.56 -> https://truthofmarket.com/stocks/celh.html
-- **$TSLA (Tesla Inc)**: Close $385.46 | -9% Hard Stop $350.77 | +100% Target $770.92 -> https://truthofmarket.com/stocks/tsla.html
-- **$KLAC (KLA Corp)**: Close $145.85 | -9% Hard Stop $132.72 | +100% Target $291.7 -> https://truthofmarket.com/stocks/klac.html
-- **$QCOM (Qualcomm Inc)**: Close $165.38 | -9% Hard Stop $150.5 | +100% Target $330.76 -> https://truthofmarket.com/stocks/qcom.html
-- **$UAL (United Airlines)**: Close $108.71 | -9% Hard Stop $98.93 | +100% Target $217.42 -> https://truthofmarket.com/stocks/ual.html
-- **$DIS (Walt Disney Co)**: Close $120.27 | -9% Hard Stop $109.45 | +100% Target $240.54 -> https://truthofmarket.com/stocks/dis.html
-- **$SBUX (Starbucks Corp)**: Close $106.36 | -9% Hard Stop $96.79 | +100% Target $212.72 -> https://truthofmarket.com/stocks/sbux.html
-- **$LULU (Lululemon Athletica)**: Close $104.63 | -9% Hard Stop $95.21 | +100% Target $209.26 -> https://truthofmarket.com/stocks/lulu.html
-- **$SMCI (Super Micro Computer)**: Close $24.53 | -9% Hard Stop $22.32 | +100% Target $49.06 -> https://truthofmarket.com/stocks/smci.html
-- **$SNAP (Snap Inc)**: Close $4.92 | -9% Hard Stop $4.48 | +100% Target $9.84 -> https://truthofmarket.com/stocks/snap.html
-- **$AFRM (Affirm Holdings)**: Close $58.41 | -9% Hard Stop $53.15 | +100% Target $116.82 -> https://truthofmarket.com/stocks/afrm.html
-- **$FLNC (Fluence Energy)**: Close $3.8 | -9% Hard Stop $3.46 | +100% Target $7.6 -> https://truthofmarket.com/stocks/flnc.html
-- **$MPWR (Monolithic Power Systems)**: Close $1333.88 | -9% Hard Stop $1213.83 | +100% Target $2667.76 -> https://truthofmarket.com/stocks/mpwr.html
-- **$AMZN (Amazon.com Inc)**: Close $255.39 | -9% Hard Stop $232.4 | +100% Target $510.78 -> https://truthofmarket.com/stocks/amzn.html
-- **$ZS (Zscaler Inc)**: Close $229.24 | -9% Hard Stop $208.61 | +100% Target $458.48 -> https://truthofmarket.com/stocks/zs.html
-- **$META (Meta Platforms Inc)**: Close $597.6 | -9% Hard Stop $543.82 | +100% Target $1195.2 -> https://truthofmarket.com/stocks/meta.html
-- **$TSM (TSMC (ADR))**: Close $363.6 | -9% Hard Stop $330.88 | +100% Target $727.2 -> https://truthofmarket.com/stocks/tsm.html
-- **$NVDA (NVIDIA Corp)**: Close $165.05 | -9% Hard Stop $150.2 | +100% Target $330.1 -> https://truthofmarket.com/stocks/nvda.html
-- **$OXY (Occidental Petroleum)**: Close $52.7 | -9% Hard Stop $47.96 | +100% Target $105.4 -> https://truthofmarket.com/stocks/oxy.html
-- **$ON (ON Semiconductor)**: Close $66.77 | -9% Hard Stop $60.76 | +100% Target $133.54 -> https://truthofmarket.com/stocks/on.html
-- **$APP (AppLovin Corp)**: Close $373.92 | -9% Hard Stop $340.27 | +100% Target $747.84 -> https://truthofmarket.com/stocks/app.html
-- **$AVGO (Broadcom Inc)**: Close $313.55 | -9% Hard Stop $285.33 | +100% Target $627.1 -> https://truthofmarket.com/stocks/avgo.html
-- **$HOOD (Robinhood Markets)**: Close $67.37 | -9% Hard Stop $61.31 | +100% Target $134.74 -> https://truthofmarket.com/stocks/hood.html
-- **$DECK (Deckers Outdoor)**: Close $81.54 | -9% Hard Stop $74.2 | +100% Target $163.08 -> https://truthofmarket.com/stocks/deck.html
-- **$UPST (Upstart Holdings)**: Close $16.98 | -9% Hard Stop $15.45 | +100% Target $33.96 -> https://truthofmarket.com/stocks/upst.html
+- **$CELH (Celsius Holdings)**: Close $28.51 | -9% Hard Stop $25.94 | +100% Target $57.02 -> https://truthofmarket.com/stocks/celh.html
+- **$TSLA (Tesla Inc)**: Close $384.68 | -9% Hard Stop $350.06 | +100% Target $769.36 -> https://truthofmarket.com/stocks/tsla.html
+- **$LULU (Lululemon Athletica)**: Close $106.05 | -9% Hard Stop $96.51 | +100% Target $212.1 -> https://truthofmarket.com/stocks/lulu.html
+- **$QCOM (Qualcomm Inc)**: Close $164.96 | -9% Hard Stop $150.11 | +100% Target $329.92 -> https://truthofmarket.com/stocks/qcom.html
+- **$DIS (Walt Disney Co)**: Close $122.51 | -9% Hard Stop $111.48 | +100% Target $245.02 -> https://truthofmarket.com/stocks/dis.html
+- **$SBUX (Starbucks Corp)**: Close $106.38 | -9% Hard Stop $96.81 | +100% Target $212.76 -> https://truthofmarket.com/stocks/sbux.html
+- **$KLAC (KLA Corp)**: Close $133.65 | -9% Hard Stop $121.62 | +100% Target $267.3 -> https://truthofmarket.com/stocks/klac.html
+- **$UAL (United Airlines)**: Close $107.8 | -9% Hard Stop $98.1 | +100% Target $215.6 -> https://truthofmarket.com/stocks/ual.html
+- **$SMCI (Super Micro Computer)**: Close $22.62 | -9% Hard Stop $20.58 | +100% Target $45.24 -> https://truthofmarket.com/stocks/smci.html
+- **$SNAP (Snap Inc)**: Close $4.89 | -9% Hard Stop $4.45 | +100% Target $9.78 -> https://truthofmarket.com/stocks/snap.html
+- **$FLNC (Fluence Energy)**: Close $4.1 | -9% Hard Stop $3.73 | +100% Target $8.2 -> https://truthofmarket.com/stocks/flnc.html
+- **$NVDA (NVIDIA Corp)**: Close $155.38 | -9% Hard Stop $141.4 | +100% Target $310.76 -> https://truthofmarket.com/stocks/nvda.html
+- **$ON (ON Semiconductor)**: Close $61.49 | -9% Hard Stop $55.96 | +100% Target $122.98 -> https://truthofmarket.com/stocks/on.html
+- **$PINS (Pinterest Inc)**: Close $18.5 | -9% Hard Stop $16.84 | +100% Target $37.0 -> https://truthofmarket.com/stocks/pins.html
+- **$LRCX (Lam Research Corp)**: Close $196.16 | -9% Hard Stop $178.51 | +100% Target $392.32 -> https://truthofmarket.com/stocks/lrcx.html
+- **$AMAT (Applied Materials)**: Close $323.76 | -9% Hard Stop $294.62 | +100% Target $647.52 -> https://truthofmarket.com/stocks/amat.html
+- **$ZS (Zscaler Inc)**: Close $231.62 | -9% Hard Stop $210.77 | +100% Target $463.24 -> https://truthofmarket.com/stocks/zs.html
+- **$DECK (Deckers Outdoor)**: Close $84.29 | -9% Hard Stop $76.7 | +100% Target $168.58 -> https://truthofmarket.com/stocks/deck.html
+- **$NFLX (Netflix Inc)**: Close $58.87 | -9% Hard Stop $53.57 | +100% Target $117.74 -> https://truthofmarket.com/stocks/nflx.html
+- **$META (Meta Platforms Inc)**: Close $589.82 | -9% Hard Stop $536.74 | +100% Target $1179.64 -> https://truthofmarket.com/stocks/meta.html
+- **$MPWR (Monolithic Power Systems)**: Close $1190.16 | -9% Hard Stop $1083.05 | +100% Target $2380.32 -> https://truthofmarket.com/stocks/mpwr.html
+- **$TSM (TSMC (ADR))**: Close $349.2 | -9% Hard Stop $317.77 | +100% Target $698.4 -> https://truthofmarket.com/stocks/tsm.html
+- **$OXY (Occidental Petroleum)**: Close $53.38 | -9% Hard Stop $48.58 | +100% Target $106.76 -> https://truthofmarket.com/stocks/oxy.html
+- **$ASML (ASML Holding N.V.)**: Close $1336.06 | -9% Hard Stop $1215.81 | +100% Target $2672.12 -> https://truthofmarket.com/stocks/asml.html
+- **$AMZN (Amazon.com Inc)**: Close $252.29 | -9% Hard Stop $229.58 | +100% Target $504.58 -> https://truthofmarket.com/stocks/amzn.html
