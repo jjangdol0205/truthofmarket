@@ -70,6 +70,8 @@ jobs:
           R2_PUBLIC_BASE: https://pub-c1592ad8d860431c9bf3d4dd12c228ef.r2.dev
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_CLIENT_ID_2: ${{ secrets.YT_CLIENT_ID_2 }}
+          YT_CLIENT_SECRET_2: ${{ secrets.YT_CLIENT_SECRET_2 }}
           YT_REFRESH_TOKEN_TOM: ${{ secrets.YT_REFRESH_TOKEN_TOM }}
           YT_REFRESH_TOKEN_KFG: ${{ secrets.YT_REFRESH_TOKEN_KFG }}
           YT_REFRESH_TOKEN_GBA: ${{ secrets.YT_REFRESH_TOKEN_GBA }}
@@ -100,6 +102,8 @@ jobs:
           R2_VAULT_BUCKET: dreamcompany-flow-vault
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_CLIENT_ID_2: ${{ secrets.YT_CLIENT_ID_2 }}
+          YT_CLIENT_SECRET_2: ${{ secrets.YT_CLIENT_SECRET_2 }}
           YT_REFRESH_TOKEN_TOM: ${{ secrets.YT_REFRESH_TOKEN_TOM }}
           YT_REFRESH_TOKEN_KFG: ${{ secrets.YT_REFRESH_TOKEN_KFG }}
           YT_REFRESH_TOKEN_GBA: ${{ secrets.YT_REFRESH_TOKEN_GBA }}

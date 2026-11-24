@@ -928,9 +928,19 @@ def render_cloud_short_mp4(
 
 
 def _refresh_yt_token(div: str) -> Optional[str]:
-    cid = os.getenv("YT_CLIENT_ID", "").strip()
-    csec = os.getenv("YT_CLIENT_SECRET", "").strip()
-    rtok = os.getenv(f"YT_REFRESH_TOKEN_{div}", "").strip()
+    div_u = div.upper()
+    use_proj2 = div_u in ("HERO", "KFK")
+    cid = (
+        os.getenv(f"YT_CLIENT_ID_{div_u}", "").strip()
+        or (os.getenv("YT_CLIENT_ID_2", "").strip() if use_proj2 else "")
+        or os.getenv("YT_CLIENT_ID", "").strip()
+    )
+    csec = (
+        os.getenv(f"YT_CLIENT_SECRET_{div_u}", "").strip()
+        or (os.getenv("YT_CLIENT_SECRET_2", "").strip() if use_proj2 else "")
+        or os.getenv("YT_CLIENT_SECRET", "").strip()
+    )
+    rtok = os.getenv(f"YT_REFRESH_TOKEN_{div_u}", "").strip()
     if not (cid and csec and rtok):
         return None
     data = urllib.parse.urlencode({
@@ -1210,14 +1220,17 @@ def main() -> int:
     flow_manifest_dirty = False
 
     # Build quota-safe idempotency sets:
-    # - YouTube: STRICTLY max 1 Short/div/day (5 x 1,600 = 8,000 units < 10,000 daily quota!)
-    #   If SLOT_A succeeded on YT, SLOT_B skips YT and only posts IG #2; if SLOT_A missed YT, SLOT_B catches up!
-    # - Instagram: max 1 Reel/div/slot (max 2/day, 8h gap enforced in publish_instagram_reel_via_r2)
-    yt_done_today = {
-        (u.get("date"), u.get("div"))
-        for u in hist.get("uploads", [])
-        if u.get("yt_video_id")
-    }
+    # - Single GCP project (10k/day): max 1 Short/div/day (5 x 1,600 = 8,000u)
+    # - Dual GCP project (`YT_CLIENT_ID_2` set for HERO/KFK -> 20k/day): auto-unlocks 2 Shorts/div/day (10/day = SLOT_A + SLOT_B)!
+    has_proj2 = bool(os.getenv("YT_CLIENT_ID_2", "").strip() and os.getenv("YT_CLIENT_SECRET_2", "").strip())
+    max_yt_per_div = 2 if has_proj2 else 1
+    yt_count_today: Dict[str, int] = {}
+    yt_done_slot = set()
+    for u in hist.get("uploads", []):
+        if u.get("date") == today_str and u.get("yt_video_id"):
+            d0 = str(u.get("div") or "").upper()
+            yt_count_today[d0] = yt_count_today.get(d0, 0) + 1
+            yt_done_slot.add((u.get("date"), u.get("slot", "SLOT_A"), d0))
     ig_done_slot = {
         (u.get("date"), u.get("slot", "SLOT_A"), u.get("div"))
         for u in hist.get("uploads", [])
@@ -1233,7 +1246,7 @@ def main() -> int:
     for div in ["TOM", "KFG", "GBA", "HERO", "KFK"]:
         if len(planned) >= MAX_DAILY_YT_UPLOADS:
             break
-        yt_already = (today_str, div) in yt_done_today
+        yt_already = (yt_count_today.get(div, 0) >= max_yt_per_div) or ((today_str, slot_id, div) in yt_done_slot)
         ig_already = (today_str, slot_id, div) in ig_done_slot
         if (not dry_run) and yt_already and ig_already:
             print(f"  [IDEMPOTENT SKIP] {div:4s} already published YT (today) & IG ({slot_id})", flush=True)
