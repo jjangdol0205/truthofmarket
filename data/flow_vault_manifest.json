@@ -1,6 +1,6 @@
 {
   "schema_version": "flow-vault-manifest-v1",
-  "updated_at_kst": "2026-11-24 11:44:54 KST",
+  "updated_at_kst": "2026-11-25 05:43:43 KST",
   "r2_bucket": "dreamcompany-flow-vault",
   "starting_credits": 18385,
   "remaining_credits": 0,
@@ -1908,8 +1908,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_AB10_PROOF_B.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 12:31:46 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 12:31:46 KST",
+      "last_used_kst": "2026-11-25 05:45:06 KST"
     },
     {
       "clip_id": "GBA_Q01",
@@ -2717,8 +2718,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_AB04_CURIOSITY_B.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 15:01:59 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 15:01:59 KST",
+      "last_used_kst": "2026-11-25 05:47:12 KST"
     },
     {
       "clip_id": "GBA_AB05_SELF_A",
@@ -3618,9 +3620,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_AB04_CURIOSITY_B.mp4",
       "r2_synced": true,
-      "used_count": 1,
+      "used_count": 2,
       "downloaded_at_kst": "2026-11-24 00:14:42 KST",
-      "last_used_kst": "2026-11-24 04:31:08 KST"
+      "last_used_kst": "2026-11-25 05:48:00 KST"
     },
     {
       "clip_id": "HERO_AB01_LOSS_A",
@@ -4774,8 +4776,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_AB10_PROOF_B.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 11:28:36 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 11:28:36 KST",
+      "last_used_kst": "2026-11-25 05:48:40 KST"
     },
     {
       "clip_id": "TOM_TAIL_01",
@@ -4797,8 +4800,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_TAIL_01.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 11:44:47 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 11:44:47 KST",
+      "last_used_kst": "2026-11-25 05:43:43 KST"
     },
     {
       "clip_id": "KFG_TAIL_01",
