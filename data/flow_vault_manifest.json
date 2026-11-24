@@ -1,9 +1,9 @@
 {
   "schema_version": "flow-vault-manifest-v1",
-  "updated_at_kst": "2026-11-24 02:02:35 KST",
+  "updated_at_kst": "2026-11-24 11:44:54 KST",
   "r2_bucket": "dreamcompany-flow-vault",
   "starting_credits": 18385,
-  "remaining_credits": 1785,
+  "remaining_credits": 0,
   "clips": [
     {
       "clip_id": "TOM_Q01",
@@ -25,8 +25,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q01.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 06:47:14 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 06:47:14 KST",
+      "last_used_kst": "2026-11-24 02:30:05 KST"
     },
     {
       "clip_id": "TOM_Q02",
@@ -48,8 +49,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q02.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 06:47:16 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 06:47:16 KST",
+      "last_used_kst": "2026-11-24 02:16:43 KST"
     },
     {
       "clip_id": "TOM_Q03",
@@ -94,8 +96,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q04.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 07:08:24 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 07:08:24 KST",
+      "last_used_kst": "2026-11-24 02:03:01 KST"
     },
     {
       "clip_id": "TOM_Q05",
@@ -117,8 +120,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q05.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 07:08:25 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 07:08:25 KST",
+      "last_used_kst": "2026-11-24 02:16:43 KST"
     },
     {
       "clip_id": "TOM_Q06",
@@ -140,8 +144,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q06.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 07:08:28 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 07:08:28 KST",
+      "last_used_kst": "2026-11-24 02:30:05 KST"
     },
     {
       "clip_id": "TOM_Q07",
@@ -163,8 +168,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q07.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 07:08:31 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 07:08:31 KST",
+      "last_used_kst": "2026-11-24 02:03:02 KST"
     },
     {
       "clip_id": "TOM_Q08",
@@ -186,8 +192,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q08.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 07:08:33 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 07:08:33 KST",
+      "last_used_kst": "2026-11-24 02:30:05 KST"
     },
     {
       "clip_id": "TOM_Q09",
@@ -209,8 +216,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q09.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 07:08:35 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 07:08:35 KST",
+      "last_used_kst": "2026-11-24 02:03:01 KST"
     },
     {
       "clip_id": "TOM_Q10",
@@ -232,8 +240,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q10.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 07:08:37 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 07:08:37 KST",
+      "last_used_kst": "2026-11-24 02:16:43 KST"
     },
     {
       "clip_id": "TOM_Q11",
@@ -255,8 +264,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q11.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 07:08:40 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 07:08:40 KST",
+      "last_used_kst": "2026-11-24 02:30:05 KST"
     },
     {
       "clip_id": "TOM_Q12",
@@ -278,8 +288,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q12.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 07:08:42 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 07:08:42 KST",
+      "last_used_kst": "2026-11-24 02:16:43 KST"
     },
     {
       "clip_id": "TOM_Q13",
@@ -301,8 +312,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q13.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 07:43:38 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 07:43:38 KST",
+      "last_used_kst": "2026-11-24 02:30:05 KST"
     },
     {
       "clip_id": "TOM_Q14",
@@ -324,8 +336,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q14.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 07:43:40 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 07:43:40 KST",
+      "last_used_kst": "2026-11-24 02:03:01 KST"
     },
     {
       "clip_id": "TOM_Q15",
@@ -347,8 +360,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q15.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 07:43:43 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 07:43:43 KST",
+      "last_used_kst": "2026-11-24 02:16:43 KST"
     },
     {
       "clip_id": "TOM_Q16",
@@ -370,8 +384,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q16.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 07:43:44 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 07:43:44 KST",
+      "last_used_kst": "2026-11-24 02:30:05 KST"
     },
     {
       "clip_id": "TOM_Q17",
@@ -393,8 +408,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q17.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 07:43:45 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 07:43:45 KST",
+      "last_used_kst": "2026-11-24 02:30:05 KST"
     },
     {
       "clip_id": "TOM_Q18",
@@ -439,8 +455,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q19.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 07:43:49 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 07:43:49 KST",
+      "last_used_kst": "2026-11-24 02:03:01 KST"
     },
     {
       "clip_id": "TOM_Q20",
@@ -462,8 +479,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q20.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 07:43:50 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 07:43:50 KST",
+      "last_used_kst": "2026-11-24 02:16:43 KST"
     },
     {
       "clip_id": "TOM_Q21",
@@ -485,8 +503,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q21.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 07:43:53 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 07:43:53 KST",
+      "last_used_kst": "2026-11-24 02:30:05 KST"
     },
     {
       "clip_id": "TOM_Q22",
@@ -554,8 +573,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q24.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 08:17:26 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 08:17:26 KST",
+      "last_used_kst": "2026-11-24 02:03:01 KST"
     },
     {
       "clip_id": "TOM_Q25",
@@ -577,8 +597,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q25.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 08:17:28 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 08:17:28 KST",
+      "last_used_kst": "2026-11-24 02:16:43 KST"
     },
     {
       "clip_id": "TOM_Q26",
@@ -600,8 +621,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q26.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 08:17:31 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 08:17:31 KST",
+      "last_used_kst": "2026-11-24 02:30:05 KST"
     },
     {
       "clip_id": "TOM_Q27",
@@ -646,8 +668,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q28.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 08:17:37 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 08:17:37 KST",
+      "last_used_kst": "2026-11-24 02:03:01 KST"
     },
     {
       "clip_id": "TOM_Q29",
@@ -669,8 +692,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q29.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 08:17:39 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 08:17:39 KST",
+      "last_used_kst": "2026-11-24 02:03:01 KST"
     },
     {
       "clip_id": "TOM_Q30",
@@ -692,8 +716,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q30.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 08:17:41 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 08:17:41 KST",
+      "last_used_kst": "2026-11-24 02:16:43 KST"
     },
     {
       "clip_id": "TOM_AB03_CURIOSITY_A",
@@ -738,8 +763,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_AB06_SELF_B.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 08:49:39 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 08:49:39 KST",
+      "last_used_kst": "2026-11-24 02:03:02 KST"
     },
     {
       "clip_id": "TOM_AB07_PATTERN_A",
@@ -761,8 +787,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_AB07_PATTERN_A.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 08:49:43 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 08:49:43 KST",
+      "last_used_kst": "2026-11-24 02:03:01 KST"
     },
     {
       "clip_id": "TOM_AB09_PROOF_A",
@@ -784,8 +811,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_AB09_PROOF_A.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 08:49:51 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 08:49:51 KST",
+      "last_used_kst": "2026-11-24 02:16:43 KST"
     },
     {
       "clip_id": "TOM_AB01_LOSS_A",
@@ -807,8 +835,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_AB01_LOSS_A.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 09:08:46 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 09:08:46 KST",
+      "last_used_kst": "2026-11-24 02:16:43 KST"
     },
     {
       "clip_id": "TOM_AB02_LOSS_B",
@@ -830,8 +859,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_AB02_LOSS_B.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 09:42:11 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 09:42:11 KST",
+      "last_used_kst": "2026-11-24 02:30:05 KST"
     },
     {
       "clip_id": "TOM_AB04_CURIOSITY_B",
@@ -853,8 +883,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_AB04_CURIOSITY_B.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 09:42:18 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 09:42:18 KST",
+      "last_used_kst": "2026-11-24 02:30:05 KST"
     },
     {
       "clip_id": "TOM_AB05_SELF_A",
@@ -899,8 +930,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_AB08_PATTERN_B.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 09:42:22 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 09:42:22 KST",
+      "last_used_kst": "2026-11-24 02:03:01 KST"
     },
     {
       "clip_id": "TOM_AB10_PROOF_B",
@@ -922,8 +954,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_AB10_PROOF_B.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 09:42:26 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 09:42:26 KST",
+      "last_used_kst": "2026-11-24 02:16:43 KST"
     },
     {
       "clip_id": "KFG_Q01",
@@ -968,8 +1001,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q02.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 10:20:00 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 10:20:00 KST",
+      "last_used_kst": "2026-11-24 02:41:54 KST"
     },
     {
       "clip_id": "KFG_Q03",
@@ -991,8 +1025,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q03.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 10:20:05 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 10:20:05 KST",
+      "last_used_kst": "2026-11-24 02:53:50 KST"
     },
     {
       "clip_id": "KFG_Q04",
@@ -1014,8 +1049,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q04.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 10:20:08 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 10:20:08 KST",
+      "last_used_kst": "2026-11-24 03:05:48 KST"
     },
     {
       "clip_id": "KFG_Q05",
@@ -1060,8 +1096,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q06.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 10:20:12 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 10:20:12 KST",
+      "last_used_kst": "2026-11-24 02:53:50 KST"
     },
     {
       "clip_id": "KFG_Q07",
@@ -1083,8 +1120,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q07.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 10:20:15 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 10:20:15 KST",
+      "last_used_kst": "2026-11-24 02:41:54 KST"
     },
     {
       "clip_id": "KFG_Q08",
@@ -1106,8 +1144,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q08.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 10:20:17 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 10:20:17 KST",
+      "last_used_kst": "2026-11-24 02:53:50 KST"
     },
     {
       "clip_id": "KFG_Q09",
@@ -1129,8 +1168,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q09.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 10:20:20 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 10:20:20 KST",
+      "last_used_kst": "2026-11-24 03:05:48 KST"
     },
     {
       "clip_id": "KFG_Q10",
@@ -1175,8 +1215,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q11.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 11:07:46 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 11:07:46 KST",
+      "last_used_kst": "2026-11-24 03:05:48 KST"
     },
     {
       "clip_id": "KFG_Q12",
@@ -1198,8 +1239,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q12.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 11:07:48 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 11:07:48 KST",
+      "last_used_kst": "2026-11-24 02:41:54 KST"
     },
     {
       "clip_id": "KFG_Q13",
@@ -1221,8 +1263,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q13.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 11:07:50 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 11:07:50 KST",
+      "last_used_kst": "2026-11-24 02:53:50 KST"
     },
     {
       "clip_id": "KFG_Q14",
@@ -1244,8 +1287,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q14.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 11:07:54 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 11:07:54 KST",
+      "last_used_kst": "2026-11-24 03:05:48 KST"
     },
     {
       "clip_id": "KFG_Q15",
@@ -1267,8 +1311,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q15.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 11:07:56 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 11:07:56 KST",
+      "last_used_kst": "2026-11-24 02:53:50 KST"
     },
     {
       "clip_id": "KFG_Q16",
@@ -1313,8 +1358,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q17.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 11:08:01 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 11:08:01 KST",
+      "last_used_kst": "2026-11-24 02:41:54 KST"
     },
     {
       "clip_id": "KFG_Q18",
@@ -1336,8 +1382,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q18.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 11:08:04 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 11:08:04 KST",
+      "last_used_kst": "2026-11-24 02:53:50 KST"
     },
     {
       "clip_id": "KFG_Q19",
@@ -1359,8 +1406,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q19.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 11:08:05 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 11:08:05 KST",
+      "last_used_kst": "2026-11-24 03:05:48 KST"
     },
     {
       "clip_id": "KFG_Q20",
@@ -1382,8 +1430,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q20.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 11:08:07 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 11:08:07 KST",
+      "last_used_kst": "2026-11-24 02:41:54 KST"
     },
     {
       "clip_id": "KFG_Q21",
@@ -1405,8 +1454,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q21.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 11:43:48 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 11:43:48 KST",
+      "last_used_kst": "2026-11-24 03:05:48 KST"
     },
     {
       "clip_id": "KFG_Q22",
@@ -1428,8 +1478,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q22.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 11:44:05 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 11:44:05 KST",
+      "last_used_kst": "2026-11-24 02:41:54 KST"
     },
     {
       "clip_id": "KFG_Q23",
@@ -1451,8 +1502,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q23.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 11:44:07 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 11:44:07 KST",
+      "last_used_kst": "2026-11-24 02:53:50 KST"
     },
     {
       "clip_id": "KFG_Q24",
@@ -1474,8 +1526,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q24.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 11:44:10 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 11:44:10 KST",
+      "last_used_kst": "2026-11-24 03:05:48 KST"
     },
     {
       "clip_id": "KFG_Q25",
@@ -1497,8 +1550,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q25.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 11:44:12 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 11:44:12 KST",
+      "last_used_kst": "2026-11-24 02:53:50 KST"
     },
     {
       "clip_id": "KFG_Q26",
@@ -1520,8 +1574,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q26.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 11:44:14 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 11:44:14 KST",
+      "last_used_kst": "2026-11-24 02:41:54 KST"
     },
     {
       "clip_id": "KFG_Q27",
@@ -1543,8 +1598,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q27.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 11:44:17 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 11:44:17 KST",
+      "last_used_kst": "2026-11-24 02:41:54 KST"
     },
     {
       "clip_id": "KFG_Q28",
@@ -1566,8 +1622,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q28.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 11:44:18 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 11:44:18 KST",
+      "last_used_kst": "2026-11-24 02:41:54 KST"
     },
     {
       "clip_id": "KFG_Q29",
@@ -1589,8 +1646,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q29.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 11:44:21 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 11:44:21 KST",
+      "last_used_kst": "2026-11-24 03:05:48 KST"
     },
     {
       "clip_id": "KFG_Q30",
@@ -1658,8 +1716,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_AB02_LOSS_B.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 12:07:19 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 12:07:19 KST",
+      "last_used_kst": "2026-11-24 02:53:50 KST"
     },
     {
       "clip_id": "KFG_AB03_CURIOSITY_A",
@@ -1681,8 +1740,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_AB03_CURIOSITY_A.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 12:07:24 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 12:07:24 KST",
+      "last_used_kst": "2026-11-24 02:41:54 KST"
     },
     {
       "clip_id": "KFG_AB04_CURIOSITY_B",
@@ -1704,8 +1764,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_AB04_CURIOSITY_B.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 12:07:29 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 12:07:29 KST",
+      "last_used_kst": "2026-11-24 02:41:54 KST"
     },
     {
       "clip_id": "KFG_AB05_SELF_A",
@@ -1727,8 +1788,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_AB05_SELF_A.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 12:07:33 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 12:07:33 KST",
+      "last_used_kst": "2026-11-24 02:53:50 KST"
     },
     {
       "clip_id": "KFG_AB06_SELF_B",
@@ -1750,8 +1812,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_AB06_SELF_B.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 12:31:33 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 12:31:33 KST",
+      "last_used_kst": "2026-11-24 02:53:50 KST"
     },
     {
       "clip_id": "KFG_AB07_PATTERN_A",
@@ -1773,8 +1836,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_AB07_PATTERN_A.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 12:31:37 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 12:31:37 KST",
+      "last_used_kst": "2026-11-24 03:05:48 KST"
     },
     {
       "clip_id": "KFG_AB08_PATTERN_B",
@@ -1796,8 +1860,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_AB08_PATTERN_B.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 12:31:40 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 12:31:40 KST",
+      "last_used_kst": "2026-11-24 03:05:48 KST"
     },
     {
       "clip_id": "KFG_AB09_PROOF_A",
@@ -1819,8 +1884,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_AB09_PROOF_A.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 12:31:43 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 12:31:43 KST",
+      "last_used_kst": "2026-11-24 03:05:48 KST"
     },
     {
       "clip_id": "KFG_AB10_PROOF_B",
@@ -1865,8 +1931,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q01.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 13:03:36 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 13:03:36 KST",
+      "last_used_kst": "2026-11-24 03:19:52 KST"
     },
     {
       "clip_id": "GBA_Q02",
@@ -1888,8 +1955,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q02.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 13:03:39 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 13:03:39 KST",
+      "last_used_kst": "2026-11-24 03:45:32 KST"
     },
     {
       "clip_id": "GBA_Q03",
@@ -1911,8 +1979,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q03.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 13:03:41 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 13:03:41 KST",
+      "last_used_kst": "2026-11-24 03:19:51 KST"
     },
     {
       "clip_id": "GBA_Q04",
@@ -1934,8 +2003,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q04.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 13:03:44 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 13:03:44 KST",
+      "last_used_kst": "2026-11-24 03:19:52 KST"
     },
     {
       "clip_id": "GBA_Q05",
@@ -1957,8 +2027,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q05.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 13:03:45 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 13:03:45 KST",
+      "last_used_kst": "2026-11-24 03:45:32 KST"
     },
     {
       "clip_id": "GBA_Q06",
@@ -1980,8 +2051,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q06.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 13:03:47 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 13:03:47 KST",
+      "last_used_kst": "2026-11-24 03:45:32 KST"
     },
     {
       "clip_id": "GBA_Q07",
@@ -2003,8 +2075,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q07.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 13:03:49 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 13:03:49 KST",
+      "last_used_kst": "2026-11-24 03:45:32 KST"
     },
     {
       "clip_id": "GBA_Q08",
@@ -2026,8 +2099,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q08.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 13:03:53 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 13:03:53 KST",
+      "last_used_kst": "2026-11-24 03:19:51 KST"
     },
     {
       "clip_id": "GBA_Q09",
@@ -2049,8 +2123,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q09.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 13:03:54 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 13:03:54 KST",
+      "last_used_kst": "2026-11-24 03:33:07 KST"
     },
     {
       "clip_id": "GBA_Q10",
@@ -2072,8 +2147,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q10.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 13:03:59 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 13:03:59 KST",
+      "last_used_kst": "2026-11-24 03:33:07 KST"
     },
     {
       "clip_id": "GBA_Q11",
@@ -2095,8 +2171,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q11.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 13:32:50 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 13:32:50 KST",
+      "last_used_kst": "2026-11-24 03:45:32 KST"
     },
     {
       "clip_id": "GBA_Q12",
@@ -2118,8 +2195,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q12.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 13:32:53 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 13:32:53 KST",
+      "last_used_kst": "2026-11-24 03:19:52 KST"
     },
     {
       "clip_id": "GBA_Q13",
@@ -2141,8 +2219,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q13.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 13:32:55 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 13:32:55 KST",
+      "last_used_kst": "2026-11-24 03:19:51 KST"
     },
     {
       "clip_id": "GBA_Q15",
@@ -2164,8 +2243,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q15.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 13:34:07 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 13:34:07 KST",
+      "last_used_kst": "2026-11-24 03:45:32 KST"
     },
     {
       "clip_id": "GBA_Q16",
@@ -2233,8 +2313,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q18.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 13:34:16 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 13:34:16 KST",
+      "last_used_kst": "2026-11-24 03:19:51 KST"
     },
     {
       "clip_id": "GBA_Q19",
@@ -2256,8 +2337,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q19.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 13:34:20 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 13:34:20 KST",
+      "last_used_kst": "2026-11-24 03:33:07 KST"
     },
     {
       "clip_id": "GBA_Q20",
@@ -2279,8 +2361,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q20.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 13:34:22 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 13:34:22 KST",
+      "last_used_kst": "2026-11-24 03:33:07 KST"
     },
     {
       "clip_id": "GBA_Q14",
@@ -2302,8 +2385,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q14.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 14:22:12 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 14:22:12 KST",
+      "last_used_kst": "2026-11-24 03:33:07 KST"
     },
     {
       "clip_id": "GBA_Q21",
@@ -2371,8 +2455,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q23.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 14:22:20 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 14:22:20 KST",
+      "last_used_kst": "2026-11-24 03:19:51 KST"
     },
     {
       "clip_id": "GBA_Q24",
@@ -2394,8 +2479,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q24.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 14:22:26 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 14:22:26 KST",
+      "last_used_kst": "2026-11-24 03:33:07 KST"
     },
     {
       "clip_id": "GBA_Q25",
@@ -2417,8 +2503,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q25.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 14:22:28 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 14:22:28 KST",
+      "last_used_kst": "2026-11-24 03:45:32 KST"
     },
     {
       "clip_id": "GBA_Q26",
@@ -2463,8 +2550,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q27.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 14:22:34 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 14:22:34 KST",
+      "last_used_kst": "2026-11-24 03:33:07 KST"
     },
     {
       "clip_id": "GBA_Q28",
@@ -2486,8 +2574,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q28.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 14:22:36 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 14:22:36 KST",
+      "last_used_kst": "2026-11-24 03:19:52 KST"
     },
     {
       "clip_id": "GBA_Q29",
@@ -2509,8 +2598,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q29.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 14:22:38 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 14:22:38 KST",
+      "last_used_kst": "2026-11-24 03:33:07 KST"
     },
     {
       "clip_id": "GBA_Q30",
@@ -2532,8 +2622,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q30.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 14:22:39 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 14:22:39 KST",
+      "last_used_kst": "2026-11-24 03:45:32 KST"
     },
     {
       "clip_id": "GBA_AB01_LOSS_A",
@@ -2555,8 +2646,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_AB01_LOSS_A.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 15:01:46 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 15:01:46 KST",
+      "last_used_kst": "2026-11-24 03:45:32 KST"
     },
     {
       "clip_id": "GBA_AB02_LOSS_B",
@@ -2578,8 +2670,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_AB02_LOSS_B.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 15:01:50 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 15:01:50 KST",
+      "last_used_kst": "2026-11-24 03:33:07 KST"
     },
     {
       "clip_id": "GBA_AB03_CURIOSITY_A",
@@ -2647,8 +2740,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_AB05_SELF_A.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 15:02:02 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 15:02:02 KST",
+      "last_used_kst": "2026-11-24 03:19:51 KST"
     },
     {
       "clip_id": "GBA_AB06_SELF_B",
@@ -2670,8 +2764,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_AB06_SELF_B.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 15:29:56 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 15:29:56 KST",
+      "last_used_kst": "2026-11-24 03:19:52 KST"
     },
     {
       "clip_id": "GBA_AB07_PATTERN_A",
@@ -2693,8 +2788,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_AB07_PATTERN_A.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 15:29:59 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 15:29:59 KST",
+      "last_used_kst": "2026-11-24 03:33:07 KST"
     },
     {
       "clip_id": "GBA_AB08_PATTERN_B",
@@ -2716,8 +2812,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_AB08_PATTERN_B.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 15:30:05 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 15:30:05 KST",
+      "last_used_kst": "2026-11-24 03:33:07 KST"
     },
     {
       "clip_id": "GBA_AB09_PROOF_A",
@@ -2739,8 +2836,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_AB09_PROOF_A.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 15:30:11 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 15:30:11 KST",
+      "last_used_kst": "2026-11-24 03:45:32 KST"
     },
     {
       "clip_id": "GBA_AB10_PROOF_B",
@@ -2762,8 +2860,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_AB10_PROOF_B.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 15:30:15 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 15:30:15 KST",
+      "last_used_kst": "2026-11-24 03:45:32 KST"
     },
     {
       "clip_id": "HERO_Q01",
@@ -3015,8 +3114,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_Q11.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-23 21:46:14 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-23 21:46:14 KST",
+      "last_used_kst": "2026-11-24 04:15:10 KST"
     },
     {
       "clip_id": "HERO_Q12",
@@ -3038,8 +3138,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_Q12.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-23 21:46:17 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-23 21:46:17 KST",
+      "last_used_kst": "2026-11-24 04:31:08 KST"
     },
     {
       "clip_id": "HERO_Q13",
@@ -3061,8 +3162,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_Q13.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-23 21:46:19 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-23 21:46:19 KST",
+      "last_used_kst": "2026-11-24 04:31:08 KST"
     },
     {
       "clip_id": "HERO_Q14",
@@ -3084,8 +3186,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_Q14.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-23 21:46:21 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-23 21:46:21 KST",
+      "last_used_kst": "2026-11-24 03:58:51 KST"
     },
     {
       "clip_id": "HERO_Q15",
@@ -3107,8 +3210,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_Q15.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-23 21:46:23 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-23 21:46:23 KST",
+      "last_used_kst": "2026-11-24 03:58:51 KST"
     },
     {
       "clip_id": "HERO_Q16",
@@ -3130,8 +3234,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_Q16.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-23 23:10:58 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-23 23:10:58 KST",
+      "last_used_kst": "2026-11-24 03:58:51 KST"
     },
     {
       "clip_id": "HERO_Q17",
@@ -3153,8 +3258,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_Q17.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-23 23:11:00 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-23 23:11:00 KST",
+      "last_used_kst": "2026-11-24 04:15:10 KST"
     },
     {
       "clip_id": "HERO_Q18",
@@ -3176,8 +3282,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_Q18.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-23 23:11:04 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-23 23:11:04 KST",
+      "last_used_kst": "2026-11-24 04:15:10 KST"
     },
     {
       "clip_id": "HERO_Q19",
@@ -3199,8 +3306,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_Q19.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-23 23:11:06 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-23 23:11:06 KST",
+      "last_used_kst": "2026-11-24 03:58:51 KST"
     },
     {
       "clip_id": "HERO_Q20",
@@ -3222,8 +3330,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_Q20.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-23 23:11:12 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-23 23:11:12 KST",
+      "last_used_kst": "2026-11-24 04:15:10 KST"
     },
     {
       "clip_id": "HERO_Q21",
@@ -3245,8 +3354,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_Q21.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-23 23:32:56 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-23 23:32:56 KST",
+      "last_used_kst": "2026-11-24 03:58:51 KST"
     },
     {
       "clip_id": "HERO_Q22",
@@ -3268,8 +3378,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_Q22.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-23 23:32:59 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-23 23:32:59 KST",
+      "last_used_kst": "2026-11-24 04:15:10 KST"
     },
     {
       "clip_id": "HERO_Q23",
@@ -3291,8 +3402,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_Q23.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-23 23:33:01 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-23 23:33:01 KST",
+      "last_used_kst": "2026-11-24 04:15:10 KST"
     },
     {
       "clip_id": "HERO_Q24",
@@ -3314,8 +3426,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_Q24.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-23 23:33:04 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-23 23:33:04 KST",
+      "last_used_kst": "2026-11-24 03:58:51 KST"
     },
     {
       "clip_id": "HERO_Q25",
@@ -3337,8 +3450,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_Q25.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-23 23:33:07 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-23 23:33:07 KST",
+      "last_used_kst": "2026-11-24 03:58:51 KST"
     },
     {
       "clip_id": "HERO_Q26",
@@ -3360,8 +3474,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_Q26.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-23 23:52:31 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-23 23:52:31 KST",
+      "last_used_kst": "2026-11-24 04:31:08 KST"
     },
     {
       "clip_id": "HERO_Q27",
@@ -3383,8 +3498,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_Q27.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-23 23:52:34 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-23 23:52:34 KST",
+      "last_used_kst": "2026-11-24 04:31:08 KST"
     },
     {
       "clip_id": "HERO_Q28",
@@ -3406,8 +3522,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_Q28.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-23 23:52:36 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-23 23:52:36 KST",
+      "last_used_kst": "2026-11-24 04:15:10 KST"
     },
     {
       "clip_id": "HERO_Q29",
@@ -3429,8 +3546,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_Q29.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-23 23:52:39 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-23 23:52:39 KST",
+      "last_used_kst": "2026-11-24 03:58:51 KST"
     },
     {
       "clip_id": "HERO_Q30",
@@ -3452,8 +3570,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_Q30.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-23 23:52:41 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-23 23:52:41 KST",
+      "last_used_kst": "2026-11-24 04:15:10 KST"
     },
     {
       "clip_id": "HERO_AB02_LOSS_B",
@@ -3475,8 +3594,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_AB02_LOSS_B.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 00:14:40 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 00:14:40 KST",
+      "last_used_kst": "2026-11-24 04:31:08 KST"
     },
     {
       "clip_id": "HERO_AB04_CURIOSITY_B",
@@ -3498,8 +3618,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_AB04_CURIOSITY_B.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 00:14:42 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 00:14:42 KST",
+      "last_used_kst": "2026-11-24 04:31:08 KST"
     },
     {
       "clip_id": "HERO_AB01_LOSS_A",
@@ -3521,8 +3642,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_AB01_LOSS_A.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 01:00:57 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 01:00:57 KST",
+      "last_used_kst": "2026-11-24 04:31:08 KST"
     },
     {
       "clip_id": "HERO_AB03_CURIOSITY_A",
@@ -3544,8 +3666,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_AB03_CURIOSITY_A.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 01:00:59 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 01:00:59 KST",
+      "last_used_kst": "2026-11-24 03:58:51 KST"
     },
     {
       "clip_id": "HERO_AB05_SELF_A",
@@ -3567,8 +3690,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_AB05_SELF_A.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 01:01:02 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 01:01:02 KST",
+      "last_used_kst": "2026-11-24 04:31:08 KST"
     },
     {
       "clip_id": "HERO_AB06_SELF_B",
@@ -3590,8 +3714,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_AB06_SELF_B.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 01:01:05 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 01:01:05 KST",
+      "last_used_kst": "2026-11-24 04:15:10 KST"
     },
     {
       "clip_id": "HERO_AB07_PATTERN_A",
@@ -3613,8 +3738,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_AB07_PATTERN_A.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 01:01:07 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 01:01:07 KST",
+      "last_used_kst": "2026-11-24 03:58:51 KST"
     },
     {
       "clip_id": "HERO_AB08_PATTERN_B",
@@ -3636,8 +3762,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_AB08_PATTERN_B.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 01:01:10 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 01:01:10 KST",
+      "last_used_kst": "2026-11-24 03:58:51 KST"
     },
     {
       "clip_id": "HERO_AB09_PROOF_A",
@@ -3659,8 +3786,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_AB09_PROOF_A.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 01:01:12 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 01:01:12 KST",
+      "last_used_kst": "2026-11-24 04:15:10 KST"
     },
     {
       "clip_id": "HERO_AB10_PROOF_B",
@@ -3682,8 +3810,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_AB10_PROOF_B.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 01:01:16 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 01:01:16 KST",
+      "last_used_kst": "2026-11-24 04:15:10 KST"
     },
     {
       "clip_id": "HERO_Q02_4K",
@@ -3728,8 +3857,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_Q01.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 01:28:38 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 01:28:38 KST",
+      "last_used_kst": "2026-11-24 04:44:13 KST"
     },
     {
       "clip_id": "KFK_Q02",
@@ -3751,8 +3881,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_Q02.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 01:28:40 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 01:28:40 KST",
+      "last_used_kst": "2026-11-24 04:44:13 KST"
     },
     {
       "clip_id": "KFK_Q03",
@@ -3774,8 +3905,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_Q03.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 01:28:41 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 01:28:41 KST",
+      "last_used_kst": "2026-11-24 04:44:13 KST"
     },
     {
       "clip_id": "KFK_Q04",
@@ -3797,8 +3929,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_Q04.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 01:28:43 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 01:28:43 KST",
+      "last_used_kst": "2026-11-24 04:57:37 KST"
     },
     {
       "clip_id": "KFK_Q05",
@@ -3820,8 +3953,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_Q05.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 01:28:44 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 01:28:44 KST",
+      "last_used_kst": "2026-11-24 04:44:13 KST"
     },
     {
       "clip_id": "KFK_Q06",
@@ -3843,8 +3977,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_Q06.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 01:28:46 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 01:28:46 KST",
+      "last_used_kst": "2026-11-24 04:44:13 KST"
     },
     {
       "clip_id": "KFK_Q07",
@@ -3866,8 +4001,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_Q07.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 01:28:48 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 01:28:48 KST",
+      "last_used_kst": "2026-11-24 04:44:13 KST"
     },
     {
       "clip_id": "KFK_Q08",
@@ -3889,8 +4025,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_Q08.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 01:28:50 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 01:28:50 KST",
+      "last_used_kst": "2026-11-24 04:57:37 KST"
     },
     {
       "clip_id": "KFK_Q09",
@@ -3912,8 +4049,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_Q09.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 01:28:52 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 01:28:52 KST",
+      "last_used_kst": "2026-11-24 04:57:37 KST"
     },
     {
       "clip_id": "KFK_Q10",
@@ -3935,8 +4073,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_Q10.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 01:28:53 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 01:28:53 KST",
+      "last_used_kst": "2026-11-24 04:57:37 KST"
     },
     {
       "clip_id": "KFK_Q11",
@@ -3958,8 +4097,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_Q11.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 02:02:20 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 02:02:20 KST",
+      "last_used_kst": "2026-11-24 04:44:13 KST"
     },
     {
       "clip_id": "KFK_Q12",
@@ -3981,8 +4121,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_Q12.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 02:02:22 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 02:02:22 KST",
+      "last_used_kst": "2026-11-24 04:57:37 KST"
     },
     {
       "clip_id": "KFK_Q13",
@@ -4004,8 +4145,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_Q13.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 02:02:23 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 02:02:23 KST",
+      "last_used_kst": "2026-11-24 04:57:37 KST"
     },
     {
       "clip_id": "KFK_Q14",
@@ -4027,8 +4169,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_Q14.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 02:02:25 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 02:02:25 KST",
+      "last_used_kst": "2026-11-24 04:57:37 KST"
     },
     {
       "clip_id": "KFK_Q15",
@@ -4050,8 +4193,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_Q15.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 02:02:27 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 02:02:27 KST",
+      "last_used_kst": "2026-11-24 04:57:37 KST"
     },
     {
       "clip_id": "KFK_Q16",
@@ -4073,8 +4217,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_Q16.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 02:02:28 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 02:02:28 KST",
+      "last_used_kst": "2026-11-24 04:44:13 KST"
     },
     {
       "clip_id": "KFK_Q17",
@@ -4096,8 +4241,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_Q17.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 02:02:30 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 02:02:30 KST",
+      "last_used_kst": "2026-11-24 04:44:13 KST"
     },
     {
       "clip_id": "KFK_Q18",
@@ -4119,8 +4265,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_Q18.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 02:02:32 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 02:02:32 KST",
+      "last_used_kst": "2026-11-24 04:44:13 KST"
     },
     {
       "clip_id": "KFK_Q19",
@@ -4142,8 +4289,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_Q19.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 02:02:33 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 02:02:33 KST",
+      "last_used_kst": "2026-11-24 04:44:13 KST"
     },
     {
       "clip_id": "KFK_Q20",
@@ -4165,8 +4313,584 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_Q20.mp4",
       "r2_synced": true,
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 02:02:35 KST",
+      "last_used_kst": "2026-11-24 04:57:37 KST"
+    },
+    {
+      "clip_id": "KFK_Q21",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 5,
+      "hook_type": "loss",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "M",
+      "matrix_id": "KFK_S5_LOSS",
+      "utm_content": "KFK_S5_LOSS_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 7.85,
+      "size_bytes": 2919612,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_Q21.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_Q21.mp4",
+      "r2_synced": true,
       "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 02:02:35 KST"
+      "downloaded_at_kst": "2026-11-24 10:56:13 KST"
+    },
+    {
+      "clip_id": "KFK_Q22",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 5,
+      "hook_type": "curiosity",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "M",
+      "matrix_id": "KFK_S5_CURIOSITY",
+      "utm_content": "KFK_S5_CURIOSITY_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 7.85,
+      "size_bytes": 2806259,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_Q22.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_Q22.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 10:56:15 KST"
+    },
+    {
+      "clip_id": "KFK_Q23",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 5,
+      "hook_type": "self",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "M",
+      "matrix_id": "KFK_S5_SELF",
+      "utm_content": "KFK_S5_SELF_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 7.85,
+      "size_bytes": 3379647,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_Q23.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_Q23.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 10:56:16 KST"
+    },
+    {
+      "clip_id": "KFK_Q24",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 5,
+      "hook_type": "pattern",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "M",
+      "matrix_id": "KFK_S5_PATTERN",
+      "utm_content": "KFK_S5_PATTERN_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 7.85,
+      "size_bytes": 3488695,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_Q24.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_Q24.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 10:56:17 KST"
+    },
+    {
+      "clip_id": "KFK_Q25",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 5,
+      "hook_type": "proof",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "M",
+      "matrix_id": "KFK_S5_PROOF",
+      "utm_content": "KFK_S5_PROOF_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 7.85,
+      "size_bytes": 3003407,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_Q25.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_Q25.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 10:56:19 KST"
+    },
+    {
+      "clip_id": "KFK_Q26",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 1,
+      "hook_type": "loss",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "M",
+      "matrix_id": "KFK_S1_LOSS",
+      "utm_content": "KFK_S1_LOSS_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 7.85,
+      "size_bytes": 3218276,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_Q26.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_Q26.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 10:56:21 KST"
+    },
+    {
+      "clip_id": "KFK_Q27",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 1,
+      "hook_type": "curiosity",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "M",
+      "matrix_id": "KFK_S1_CURIOSITY",
+      "utm_content": "KFK_S1_CURIOSITY_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 7.85,
+      "size_bytes": 5599200,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_Q27.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_Q27.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 10:56:23 KST"
+    },
+    {
+      "clip_id": "KFK_Q28",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 2,
+      "hook_type": "self",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "M",
+      "matrix_id": "KFK_S2_SELF",
+      "utm_content": "KFK_S2_SELF_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 7.85,
+      "size_bytes": 4590120,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_Q28.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_Q28.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 10:56:25 KST"
+    },
+    {
+      "clip_id": "KFK_Q29",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 2,
+      "hook_type": "pattern",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "M",
+      "matrix_id": "KFK_S2_PATTERN",
+      "utm_content": "KFK_S2_PATTERN_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 7.85,
+      "size_bytes": 3250820,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_Q29.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_Q29.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 10:56:27 KST"
+    },
+    {
+      "clip_id": "KFK_Q30",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 2,
+      "hook_type": "proof",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "M",
+      "matrix_id": "KFK_S2_PROOF",
+      "utm_content": "KFK_S2_PROOF_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 7.85,
+      "size_bytes": 2751836,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_Q30.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_Q30.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 10:56:28 KST"
+    },
+    {
+      "clip_id": "KFK_AB01_LOSS_A",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 1,
+      "hook_type": "loss",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "A",
+      "matrix_id": "KFK_S1_LOSS",
+      "utm_content": "KFK_S1_LOSS_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 14.93,
+      "size_bytes": 5636604,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_AB01_LOSS_A.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_AB01_LOSS_A.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 11:13:55 KST"
+    },
+    {
+      "clip_id": "KFK_AB02_LOSS_B",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 1,
+      "hook_type": "loss",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "B",
+      "matrix_id": "KFK_S1_LOSS",
+      "utm_content": "KFK_S1_LOSS_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 14.93,
+      "size_bytes": 5195847,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_AB02_LOSS_B.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_AB02_LOSS_B.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 11:13:57 KST"
+    },
+    {
+      "clip_id": "KFK_AB03_CURIOSITY_A",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 1,
+      "hook_type": "curiosity",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "A",
+      "matrix_id": "KFK_S1_CURIOSITY",
+      "utm_content": "KFK_S1_CURIOSITY_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 14.93,
+      "size_bytes": 9416932,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_AB03_CURIOSITY_A.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_AB03_CURIOSITY_A.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 11:13:59 KST"
+    },
+    {
+      "clip_id": "KFK_AB04_CURIOSITY_B",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 1,
+      "hook_type": "curiosity",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "B",
+      "matrix_id": "KFK_S1_CURIOSITY",
+      "utm_content": "KFK_S1_CURIOSITY_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 14.93,
+      "size_bytes": 8717614,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_AB04_CURIOSITY_B.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_AB04_CURIOSITY_B.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 11:14:03 KST"
+    },
+    {
+      "clip_id": "KFK_AB05_SELF_A",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 1,
+      "hook_type": "self",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "A",
+      "matrix_id": "KFK_S1_SELF",
+      "utm_content": "KFK_S1_SELF_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 14.93,
+      "size_bytes": 9016459,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_AB05_SELF_A.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_AB05_SELF_A.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 11:14:06 KST"
+    },
+    {
+      "clip_id": "KFK_AB06_SELF_B",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 1,
+      "hook_type": "self",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "B",
+      "matrix_id": "KFK_S1_SELF",
+      "utm_content": "KFK_S1_SELF_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 14.93,
+      "size_bytes": 8384772,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_AB06_SELF_B.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_AB06_SELF_B.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 11:28:28 KST"
+    },
+    {
+      "clip_id": "KFK_AB07_PATTERN_A",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 2,
+      "hook_type": "pattern",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "A",
+      "matrix_id": "KFK_S2_PATTERN",
+      "utm_content": "KFK_S2_PATTERN_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 14.93,
+      "size_bytes": 6773575,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_AB07_PATTERN_A.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_AB07_PATTERN_A.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 11:28:30 KST"
+    },
+    {
+      "clip_id": "KFK_AB08_PATTERN_B",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 2,
+      "hook_type": "pattern",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "B",
+      "matrix_id": "KFK_S2_PATTERN",
+      "utm_content": "KFK_S2_PATTERN_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 14.93,
+      "size_bytes": 5824686,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_AB08_PATTERN_B.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_AB08_PATTERN_B.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 11:28:32 KST"
+    },
+    {
+      "clip_id": "KFK_AB09_PROOF_A",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 2,
+      "hook_type": "proof",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "A",
+      "matrix_id": "KFK_S2_PROOF",
+      "utm_content": "KFK_S2_PROOF_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 14.93,
+      "size_bytes": 7118857,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_AB09_PROOF_A.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_AB09_PROOF_A.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 11:28:34 KST"
+    },
+    {
+      "clip_id": "KFK_AB10_PROOF_B",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 2,
+      "hook_type": "proof",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "B",
+      "matrix_id": "KFK_S2_PROOF",
+      "utm_content": "KFK_S2_PROOF_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 14.93,
+      "size_bytes": 7567746,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_AB10_PROOF_B.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_AB10_PROOF_B.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 11:28:36 KST"
+    },
+    {
+      "clip_id": "TOM_TAIL_01",
+      "division": "TOM",
+      "div_dir": "div_1",
+      "stage": 1,
+      "hook_type": "loss",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "M",
+      "matrix_id": "TOM_S1_LOSS",
+      "utm_content": "TOM_S1_LOSS_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 7.85,
+      "size_bytes": 3335746,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_1\\TOM_TAIL_01.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_1/TOM_TAIL_01.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 11:44:47 KST"
+    },
+    {
+      "clip_id": "KFG_TAIL_01",
+      "division": "KFG",
+      "div_dir": "div_2",
+      "stage": 1,
+      "hook_type": "curiosity",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "M",
+      "matrix_id": "KFG_S1_CURIOSITY",
+      "utm_content": "KFG_S1_CURIOSITY_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 7.85,
+      "size_bytes": 3858275,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_2\\KFG_TAIL_01.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_2/KFG_TAIL_01.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 11:44:49 KST"
+    },
+    {
+      "clip_id": "GBA_TAIL_01",
+      "division": "GBA",
+      "div_dir": "div_3",
+      "stage": 1,
+      "hook_type": "self",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "M",
+      "matrix_id": "GBA_S1_SELF",
+      "utm_content": "GBA_S1_SELF_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 7.85,
+      "size_bytes": 2524807,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_3\\GBA_TAIL_01.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_3/GBA_TAIL_01.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 11:44:50 KST"
+    },
+    {
+      "clip_id": "KFK_TAIL_01",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 2,
+      "hook_type": "pattern",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "M",
+      "matrix_id": "KFK_S2_PATTERN",
+      "utm_content": "KFK_S2_PATTERN_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 7.85,
+      "size_bytes": 2011309,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_TAIL_01.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_TAIL_01.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 11:44:52 KST"
+    },
+    {
+      "clip_id": "KFK_TAIL_02",
+      "division": "KFK",
+      "div_dir": "div_5",
+      "stage": 2,
+      "hook_type": "proof",
+      "aspect_ratio": "9:16",
+      "model": "Veo 3.1 - Quality",
+      "ab_arm": "M",
+      "matrix_id": "KFK_S2_PROOF",
+      "utm_content": "KFK_S2_PROOF_v1",
+      "width": 1080,
+      "height": 1920,
+      "resolution": "1080p",
+      "duration_sec": 7.85,
+      "size_bytes": 3441674,
+      "local_path": "D:\\드림컴퍼니\\flow_vault\\div_5\\KFK_TAIL_02.mp4",
+      "r2_bucket": "dreamcompany-flow-vault",
+      "r2_key": "flow_vault/div_5/KFK_TAIL_02.mp4",
+      "r2_synced": true,
+      "used_count": 0,
+      "downloaded_at_kst": "2026-11-24 11:44:54 KST"
     }
   ]
 }
