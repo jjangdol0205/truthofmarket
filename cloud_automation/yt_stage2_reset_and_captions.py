@@ -236,6 +236,180 @@ def upload_srt_caption(token: str, video_id: str, language: str, name: str, srt_
         return False
 
 
+def fetch_r2_bytes(r2_key: str, timeout: int = 120) -> Optional[bytes]:
+    acct = os.getenv("CLOUDFLARE_ACCOUNT_ID", "").strip()
+    tok = os.getenv("CLOUDFLARE_API_TOKEN", "").strip()
+    bkt = os.getenv("R2_VAULT_BUCKET", "dreamcompany-flow-vault").strip()
+    if not (acct and tok and r2_key):
+        return None
+    url = f"https://api.cloudflare.com/client/v4/accounts/{acct}/r2/buckets/{bkt}/objects/{r2_key}"
+    req = urllib.request.Request(url, method="GET", headers={"Authorization": f"Bearer {tok}", "User-Agent": "DreamCompany-YTStage2/1.0"})
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            if r.status == 200:
+                return r.read()
+    except Exception as e:
+        print(f"  [R2 FETCH ERR] {r2_key}: {e}", flush=True)
+    return None
+
+
+def sync_channel_banner_from_r2(token: str, div: str, ch_id: str, cur_branding: Dict[str, Any]) -> bool:
+    """Uploads clean 2560x1440 banner via official YouTube Data API v3 channelBanners.insert + channels.update."""
+    r2_key = f"brand_kits_20261123/{div.lower()}_yt_banner_2560x1440.png"
+    png_bytes = fetch_r2_bytes(r2_key, timeout=60)
+    if not png_bytes:
+        return False
+    req = urllib.request.Request(
+        "https://www.googleapis.com/upload/youtube/v3/channelBanners/insert?uploadType=media",
+        data=png_bytes,
+        method="POST",
+        headers={"Authorization": f"Bearer {token}", "Content-Type": "image/png"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            banner_url = json.loads(r.read().decode("utf-8")).get("url", "")
+        if not banner_url:
+            return False
+        ch_settings = dict((cur_branding or {}).get("channel") or {})
+        ch_settings["description"] = DIV_CLEAN_CHANNEL_BIO[div]
+        res = yt_api("PUT", "/channels?part=brandingSettings", token, {
+            "id": ch_id,
+            "brandingSettings": {
+                "channel": ch_settings,
+                "image": {"bannerExternalUrl": banner_url},
+            },
+        })
+        ok = bool(res and not res.get("_quota_exceeded") and res.get("id") == ch_id)
+        print(f"  [YT BANNER SYNC {div}] ok={ok}", flush=True)
+        return ok
+    except urllib.error.HTTPError as e:
+        print(f"  [YT BANNER ERR {div}] HTTP {e.code} {e.read().decode('utf-8', errors='replace')[:200]}", flush=True)
+        return False
+    except Exception as e:
+        print(f"  [YT BANNER ERR {div}] {e}", flush=True)
+        return False
+
+
+def upload_video_thumbnail_v3(token: str, video_id: str, png_bytes: bytes) -> bool:
+    req = urllib.request.Request(
+        f"https://www.googleapis.com/upload/youtube/v3/thumbnails/set?videoId={video_id}&uploadType=media",
+        data=png_bytes,
+        method="POST",
+        headers={"Authorization": f"Bearer {token}", "Content-Type": "image/png"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=45) as r:
+            print(f"  [THUMBNAIL SET OK] {video_id} -> HTTP {r.status}", flush=True)
+            return r.status in (200, 201)
+    except Exception as e:
+        print(f"  [THUMBNAIL SET WARN] {video_id}: {e}", flush=True)
+        return False
+
+
+def ensure_hero_ep1_14m09s_live(token: str, ch_id: str, hist: Dict[str, Any]) -> Optional[str]:
+    """Ensures HERO 14m09s Ep 1 is live with clean 2026-11-23 metadata, thumbnail, .srt, and synthetic media flag."""
+    if hist.get("hero_ep1_14m09s_synced_20261123"):
+        return str(hist.get("hero_ep1_14m09s_video_id") or "")
+    meta_bytes = fetch_r2_bytes("hero_ep1_upload/youtube_metadata.json", timeout=30)
+    if not meta_bytes:
+        return None
+    meta = json.loads(meta_bytes.decode("utf-8"))
+    thumb_bytes = fetch_r2_bytes("hero_ep1_upload/hero_ep1_flagship_thumb_1280x720.png", timeout=45)
+    srt_bytes = fetch_r2_bytes("hero_ep1_upload/hero_ep1_flagship_20min.srt", timeout=30)
+
+    # Check if existing 14m09s Ep 1 (`lUQWTtVW3PM`) is already live on @김쌤의영웅라디오
+    existing_vid = ""
+    check = yt_api("GET", "/videos?part=snippet,status&id=lUQWTtVW3PM", token)
+    if check and check.get("items"):
+        st = check["items"][0].get("status", {})
+        if st.get("privacyStatus") == "public":
+            existing_vid = "lUQWTtVW3PM"
+
+    if existing_vid:
+        yt_api("PUT", "/videos?part=snippet,status", token, {
+            "id": existing_vid,
+            "snippet": {
+                "title": meta["title"][:100],
+                "description": meta["description"][:4900],
+                "tags": meta.get("tags", []),
+                "categoryId": str(meta.get("categoryId", "24")),
+                "defaultLanguage": "ko",
+                "defaultAudioLanguage": "ko",
+            },
+            "status": {
+                "privacyStatus": "public",
+                "selfDeclaredMadeForKids": False,
+                "containsSyntheticMedia": True,
+            },
+        })
+        if thumb_bytes:
+            upload_video_thumbnail_v3(token, existing_vid, thumb_bytes)
+        if srt_bytes:
+            upload_srt_caption(token, existing_vid, "ko", "공식 한국어 큰글씨 자막", srt_bytes.decode("utf-8", errors="replace"))
+        hist["hero_ep1_14m09s_video_id"] = existing_vid
+        hist["hero_ep1_14m09s_synced_20261123"] = True
+        print(f"  [HERO EP1 UPDATED EXISTING] https://youtu.be/{existing_vid}", flush=True)
+        return existing_vid
+
+    # Otherwise download 246 MB MP4 from R2 and upload via resumable videos.insert
+    mp4_bytes = fetch_r2_bytes("hero_ep1_upload/hero_ep1_14m09s_yt_upload.mp4", timeout=240)
+    if not mp4_bytes:
+        return None
+    init_body = json.dumps({
+        "snippet": {
+            "title": meta["title"][:100],
+            "description": meta["description"][:4900],
+            "tags": meta.get("tags", []),
+            "categoryId": str(meta.get("categoryId", "24")),
+            "defaultLanguage": "ko",
+            "defaultAudioLanguage": "ko",
+        },
+        "status": {
+            "privacyStatus": "public",
+            "selfDeclaredMadeForKids": False,
+            "containsSyntheticMedia": True,
+        },
+    }, ensure_ascii=False).encode("utf-8")
+    init_req = urllib.request.Request(
+        "https://www.googleapis.com/upload/youtube/v3/videos?uploadType=resumable&part=snippet,status",
+        data=init_body,
+        method="POST",
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json; charset=UTF-8",
+            "X-Upload-Content-Length": str(len(mp4_bytes)),
+            "X-Upload-Content-Type": "video/mp4",
+        },
+    )
+    try:
+        with urllib.request.urlopen(init_req, timeout=30) as ir:
+            upload_url = ir.headers.get("Location")
+        if not upload_url:
+            return None
+        put_req = urllib.request.Request(
+            upload_url,
+            data=mp4_bytes,
+            method="PUT",
+            headers={"Content-Type": "video/mp4", "Content-Length": str(len(mp4_bytes))},
+        )
+        with urllib.request.urlopen(put_req, timeout=300) as pr:
+            new_vid = json.loads(pr.read().decode("utf-8")).get("id", "")
+        if new_vid:
+            if thumb_bytes:
+                upload_video_thumbnail_v3(token, new_vid, thumb_bytes)
+            if srt_bytes:
+                upload_srt_caption(token, new_vid, "ko", "공식 한국어 큰글씨 자막", srt_bytes.decode("utf-8", errors="replace"))
+            if meta.get("pinned_comment"):
+                post_top_comment(token, ch_id, new_vid, meta["pinned_comment"])
+            hist["hero_ep1_14m09s_video_id"] = new_vid
+            hist["hero_ep1_14m09s_synced_20261123"] = True
+            print(f"  [HERO EP1 UPLOADED LIVE] https://youtu.be/{new_vid}", flush=True)
+            return new_vid
+    except Exception as e:
+        print(f"  [HERO EP1 UPLOAD ERR] {e}", flush=True)
+    return None
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--once-if-pending", action="store_true")
@@ -243,8 +417,10 @@ def main() -> int:
     args = parser.parse_args()
 
     hist = json.loads(HISTORY_PATH.read_text(encoding="utf-8")) if HISTORY_PATH.exists() else {}
-    if args.once_if_pending and not args.force and hist.get("stage2_yt_audit_20261123_completed"):
-        print("[YT STAGE2 AUDIT] Already completed 2026-11-23 remediation -> skipping.", flush=True)
+    banners_done = hist.get("banners_synced_20261123") or {}
+    all_banners_done = all(banners_done.get(d) for d in ("TOM", "KFG", "GBA", "HERO", "KFK"))
+    if args.once_if_pending and not args.force and hist.get("stage2_yt_audit_20261123_completed") and all_banners_done and hist.get("hero_ep1_14m09s_synced_20261123"):
+        print("[YT STAGE2 AUDIT] Already completed 2026-11-23 remediation + 5 banners + HERO Ep1 -> skipping.", flush=True)
         return 0
 
     cid = os.getenv("YT_CLIENT_ID", "").strip()
@@ -285,7 +461,13 @@ def main() -> int:
 
         print(f"[YT {div}] Allowlist verified ({ch_id}). Running 2026-11-23 remediation...", flush=True)
 
-        # 0. Update clean channel bio if needed
+        # 0. Sync clean 2560x1440 banner from R2 & clean channel bio
+        cur_branding = item0.get("brandingSettings") or {}
+        if not (hist.get("banners_synced_20261123") or {}).get(div):
+            if sync_channel_banner_from_r2(atok, div, ch_id, cur_branding):
+                hist.setdefault("banners_synced_20261123", {})[div] = True
+            else:
+                completed_all_divs = False
         cur_bio = item0.get("snippet", {}).get("description", "")
         target_bio = DIV_CLEAN_CHANNEL_BIO[div]
         if any(bad in cur_bio for bad in ("Bio Labs", "Brain LQ", "Clinical", "Diagnosis", "クオンツ", "황영웅")) or (
@@ -295,6 +477,10 @@ def main() -> int:
                 "id": ch_id,
                 "brandingSettings": {"channel": {"description": target_bio}},
             })
+
+        # 0b. Ensure HERO 14m09s Ep 1 is live & synced
+        if div == "HERO" and not hist.get("hero_ep1_14m09s_synced_20261123"):
+            ensure_hero_ep1_14m09s_live(atok, ch_id, hist)
 
         # 1. Flip defective / legacy / bait videos to private
         for bad_id in DEFECTIVE_PRIVATE_IDS.get(div, []):
@@ -387,9 +573,12 @@ def main() -> int:
     if completed_all_divs and not quota_hit:
         hist["stage2_yt_reset_completed"] = True
         hist["stage2_yt_audit_20261123_completed"] = True
+        HISTORY_PATH.parent.mkdir(parents=True, exist_ok=True)
         HISTORY_PATH.write_text(json.dumps(hist, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         print("=== YT STAGE2 2026-11-23 REMEDIATION 100% COMPLETE ===", flush=True)
     else:
+        HISTORY_PATH.parent.mkdir(parents=True, exist_ok=True)
+        HISTORY_PATH.write_text(json.dumps(hist, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         print("=== YT STAGE2 2026-11-23 REMEDIATION PARTIAL/QUEUED (re-runs automatically at next quota reset) ===", flush=True)
     return 0
 

@@ -25,10 +25,12 @@ Aligned 100% with `hq_5div_promo_audit_20261123.md`:
 from __future__ import annotations
 
 import argparse
+import asyncio
 import datetime as dt
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -39,6 +41,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
+from PIL import Image, ImageDraw, ImageFont
 
 if hasattr(sys.stdout, "reconfigure"):
     try:
@@ -52,6 +55,7 @@ from outbound_allowlist import (  # noqa: E402
     ALLOWED_IG_ACCOUNTS,
     OutboundAllowlistError,
     assert_allowed_ig_target,
+    assert_allowed_yt_channel,
     sanitize_and_classify_ig_token,
 )
 
@@ -500,7 +504,431 @@ def stage_reel_to_cloudflare_r2(mp4_path: Path, ascii_key: str) -> Optional[str]
     return None
 
 
-def publish_instagram_reel_via_r2(div: str, mp4_path: Path, caption: str, ascii_key: str) -> Dict[str, Any]:
+HERO_R2_VOCAL_KEYS: List[str] = [
+    "brand_kits_20261123/hero_vocals/baek_woonho_01_mothers_spring.mp3",
+    "brand_kits_20261123/hero_vocals/baek_woonho_02_yeonga.mp3",
+    "brand_kits_20261123/hero_vocals/baek_woonho_03_harbor_light.mp3",
+    "brand_kits_20261123/hero_vocals/baek_woonho_04_camellia.mp3",
+    "brand_kits_20261123/hero_vocals/baek_woonho_05_hometown_train.mp3",
+    "brand_kits_20261123/hero_vocals/baek_woonho_06_golden_sunset.mp3",
+]
+
+DIV_LANG_MAP: Dict[str, str] = {"TOM": "en", "KFG": "en", "GBA": "ja", "HERO": "ko", "KFK": "ko"}
+
+
+def _pick_cjk_font(size: int) -> ImageFont.FreeTypeFont:
+    candidates = [
+        "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
+        "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+        "/usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc",
+        "/usr/share/fonts/noto-cjk/NotoSansCJK-Bold.ttc",
+        r"C:\Windows\Fonts\malgunbd.ttf",
+        r"C:\Windows\Fonts\meiryob.ttc",
+        r"C:\Windows\Fonts\arialbd.ttf",
+    ]
+    for fp in candidates:
+        if Path(fp).exists():
+            try:
+                return ImageFont.truetype(fp, size=size)
+            except Exception:
+                continue
+    return ImageFont.load_default()
+
+
+def _wrap_text_pixels(draw: ImageDraw.ImageDraw, text: str, font: ImageFont.ImageFont, max_w: int) -> List[str]:
+    clean = re.sub(r"\s+", " ", (text or "").strip())
+    if not clean:
+        return []
+    lines: List[str] = []
+    cur = ""
+    tokens = clean.split(" ") if " " in clean and len(clean.split(" ")) > 2 else list(clean)
+    sep = " " if " " in clean and len(clean.split(" ")) > 2 else ""
+    for tok in tokens:
+        cand = f"{cur}{sep}{tok}".strip() if cur else tok
+        bbox = draw.textbbox((0, 0), cand, font=font, stroke_width=6)
+        if (bbox[2] - bbox[0]) <= max_w:
+            cur = cand
+        else:
+            if cur:
+                lines.append(cur)
+            cur = tok
+    if cur:
+        lines.append(cur)
+    return lines[:4]
+
+
+def _render_safezone_subtitle_png(div: str, headline: str, body: str, cta: str, out_png: Path) -> Path:
+    """Renders 1080x1920 transparent overlay with crisp safe-zone subtitles (Y=1360..1680, ZERO eye-blocking top HUD!)."""
+    img = Image.new("RGBA", (1080, 1920), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+    # Soft bottom readability gradient ONLY below Y=1180 so faces/eyes in upper 2/3 stay 100% clear
+    for y in range(1180, 1920):
+        alpha = int(min(205, ((y - 1180) / 740.0) * 205))
+        draw.line([(0, y), (1080, y)], fill=(12, 16, 22, alpha))
+
+    f_head = _pick_cjk_font(54 if div == "HERO" else 48)
+    f_body = _pick_cjk_font(44 if div == "HERO" else 38)
+    f_cta = _pick_cjk_font(36)
+
+    y_cur = 1310
+    for line in _wrap_text_pixels(draw, headline, f_head, 940)[:2]:
+        bb = draw.textbbox((0, 0), line, font=f_head, stroke_width=8)
+        x = (1080 - (bb[2] - bb[0])) // 2
+        draw.text((x, y_cur), line, font=f_head, fill=(255, 245, 200, 255), stroke_width=8, stroke_fill=(10, 14, 20, 255))
+        y_cur += (bb[3] - bb[1]) + 16
+
+    y_cur = max(y_cur + 10, 1455)
+    for line in _wrap_text_pixels(draw, body, f_body, 940)[:2]:
+        bb = draw.textbbox((0, 0), line, font=f_body, stroke_width=7)
+        x = (1080 - (bb[2] - bb[0])) // 2
+        draw.text((x, y_cur), line, font=f_body, fill=(255, 255, 255, 255), stroke_width=7, stroke_fill=(10, 14, 20, 255))
+        y_cur += (bb[3] - bb[1]) + 14
+
+    if cta:
+        cta_lines = _wrap_text_pixels(draw, cta, f_cta, 920)[:1]
+        if cta_lines:
+            line = cta_lines[0]
+            bb = draw.textbbox((0, 0), line, font=f_cta, stroke_width=6)
+            x = (1080 - (bb[2] - bb[0])) // 2
+            draw.text((x, 1645), line, font=f_cta, fill=(175, 240, 205, 255), stroke_width=6, stroke_fill=(10, 14, 20, 255))
+
+    out_png.parent.mkdir(parents=True, exist_ok=True)
+    img.save(out_png)
+    return out_png
+
+
+def _probe_media_duration(path: Path) -> float:
+    ffprobe = shutil.which("ffprobe")
+    if ffprobe and path.exists():
+        try:
+            out = subprocess.check_output(
+                [ffprobe, "-v", "error", "-show_entries", "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", str(path)],
+                stderr=subprocess.DEVNULL,
+                text=True,
+                timeout=15,
+            ).strip()
+            return max(0.0, float(out))
+        except Exception:
+            pass
+    return 0.0
+
+
+def synthesize_edge_tts_mp3(text: str, voice_id: str, out_mp3: Path) -> Optional[Path]:
+    try:
+        import edge_tts  # type: ignore
+    except Exception as e:
+        print(f"[TTS SKIP] edge_tts unavailable: {e}", flush=True)
+        return None
+    out_mp3.parent.mkdir(parents=True, exist_ok=True)
+    clean_text = re.sub(r"https?://\S+|#\S+", "", text or "").strip()
+    if not clean_text:
+        return None
+
+    async def _gen() -> None:
+        comm = edge_tts.Communicate(clean_text, voice=voice_id, rate="+0%")
+        await comm.save(str(out_mp3))
+
+    for attempt in range(2):
+        try:
+            asyncio.run(_gen())
+            if out_mp3.exists() and out_mp3.stat().st_size > 2000:
+                return out_mp3
+        except Exception as e:
+            print(f"[TTS RETRY {attempt+1}] {voice_id}: {e}", flush=True)
+            time.sleep(1.5)
+    return None
+
+
+def ensure_hero_vocal_track(doy: int) -> Optional[Path]:
+    local = select_hero_vocal_track(doy)
+    if local and local.exists():
+        return local
+    idx = doy % len(HERO_R2_VOCAL_KEYS)
+    r2_key = HERO_R2_VOCAL_KEYS[idx]
+    dest = WORK_DIR / "hero_vocals_cache" / Path(r2_key).name
+    fetched = fetch_flow_vault_clip_from_r2(r2_key, dest)
+    if fetched and fetched.exists():
+        return fetched
+    # Fallback to track 01 if numbered track not yet uploaded
+    return fetch_flow_vault_clip_from_r2(HERO_R2_VOCAL_KEYS[0], WORK_DIR / "hero_vocals_cache" / "baek_woonho_01_mothers_spring.mp3")
+
+
+def render_cloud_short_mp4(
+    div: str,
+    bg_mp4: Optional[Path],
+    tts_mp3: Optional[Path],
+    vocal_mp3: Optional[Path],
+    title: str,
+    slide_body: str,
+    cta_line: str,
+    out_mp4: Path,
+) -> Tuple[Optional[Path], float]:
+    """Renders 1080x1920 clean vertical Short MP4 with -threads 2, -0.5 dBFS limiter, and mandatory HERO 14s vocal highlight."""
+    ffmpeg = shutil.which("ffmpeg")
+    if not ffmpeg:
+        try:
+            import imageio_ffmpeg  # type: ignore
+            ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
+        except Exception:
+            print("[RENDER SKIP] ffmpeg not found", flush=True)
+            return None, 0.0
+
+    out_mp4.parent.mkdir(parents=True, exist_ok=True)
+    overlay_png = out_mp4.with_suffix(".overlay.png")
+    _render_safezone_subtitle_png(div, title, slide_body, cta_line, overlay_png)
+
+    tts_dur = _probe_media_duration(tts_mp3) if (tts_mp3 and tts_mp3.exists()) else 12.0
+    if tts_dur < 3.0:
+        tts_dur = 12.0
+
+    # Build master audio track (HERO: narration + 14.0s real Baek Woon-ho vocal highlight!)
+    audio_wav = out_mp4.with_suffix(".master.m4a")
+    total_dur = tts_dur + 0.6
+    if div == "HERO" and vocal_mp3 and vocal_mp3.exists():
+        vocal_slice_sec = 14.0
+        total_dur = tts_dur + vocal_slice_sec + 0.5
+        if tts_mp3 and tts_mp3.exists():
+            cmd_a = [
+                ffmpeg, "-y", "-threads", "2",
+                "-i", str(tts_mp3),
+                "-ss", "18", "-t", f"{vocal_slice_sec:.2f}", "-i", str(vocal_mp3),
+                "-filter_complex",
+                "[0:a]aresample=44100,aformat=channel_layouts=stereo[a0];"
+                "[1:a]aresample=44100,aformat=channel_layouts=stereo,afade=t=in:st=0:d=0.6,afade=t=out:st=12.8:d=1.2[a1];"
+                "[a0][a1]concat=n=2:v=0:a=1,alimiter=limit=0.944[aout]",
+                "-map", "[aout]", "-c:a", "aac", "-b:a", "192k", str(audio_wav),
+            ]
+        else:
+            cmd_a = [
+                ffmpeg, "-y", "-threads", "2",
+                "-ss", "18", "-t", f"{vocal_slice_sec:.2f}", "-i", str(vocal_mp3),
+                "-af", "aresample=44100,afade=t=in:st=0:d=0.5,afade=t=out:st=12.8:d=1.2,alimiter=limit=0.944",
+                "-c:a", "aac", "-b:a", "192k", str(audio_wav),
+            ]
+            total_dur = vocal_slice_sec + 0.4
+    elif tts_mp3 and tts_mp3.exists():
+        cmd_a = [
+            ffmpeg, "-y", "-threads", "2",
+            "-i", str(tts_mp3),
+            "-af", "aresample=44100,apad=pad_dur=0.6,alimiter=limit=0.944",
+            "-t", f"{total_dur:.2f}", "-c:a", "aac", "-b:a", "160k", str(audio_wav),
+        ]
+    else:
+        cmd_a = [
+            ffmpeg, "-y", "-threads", "2",
+            "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo",
+            "-t", f"{total_dur:.2f}", "-c:a", "aac", "-b:a", "128k", str(audio_wav),
+        ]
+
+    ra = subprocess.run(cmd_a, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, timeout=120)
+    if ra.returncode != 0 or not audio_wav.exists():
+        print(f"[AUDIO RENDER ERR] {div}: {ra.stderr[-260:]}", flush=True)
+        return None, 0.0
+
+    # Composite video (loop Flow Vault 1080p MP4 smoothly, fallback to clean dark navy/ivory matte)
+    bg_color = "0x101826" if div in ("TOM", "GBA") else ("0x1B2B24" if div == "HERO" else "0xF4EFE6")
+    if bg_mp4 and bg_mp4.exists() and bg_mp4.stat().st_size > 50_000:
+        cmd_v = [
+            ffmpeg, "-y", "-threads", "2",
+            "-stream_loop", "-1", "-i", str(bg_mp4),
+            "-i", str(overlay_png),
+            "-i", str(audio_wav),
+            "-filter_complex",
+            "[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,fps=30,format=yuv420p[bg];"
+            "[bg][1:v]overlay=0:0:shortest=0,format=yuv420p[vout]",
+            "-map", "[vout]", "-map", "2:a",
+            "-t", f"{min(total_dur, 58.0):.2f}",
+            "-c:v", "libx264", "-preset", "fast", "-crf", "23", "-movflags", "+faststart",
+            "-c:a", "copy", str(out_mp4),
+        ]
+    else:
+        cmd_v = [
+            ffmpeg, "-y", "-threads", "2",
+            "-f", "lavfi", "-i", f"color=c={bg_color}:s=1080x1920:r=30",
+            "-i", str(overlay_png),
+            "-i", str(audio_wav),
+            "-filter_complex", "[0:v][1:v]overlay=0:0,format=yuv420p[vout]",
+            "-map", "[vout]", "-map", "2:a",
+            "-t", f"{min(total_dur, 58.0):.2f}",
+            "-c:v", "libx264", "-preset", "fast", "-crf", "23", "-movflags", "+faststart",
+            "-c:a", "copy", str(out_mp4),
+        ]
+
+    rv = subprocess.run(cmd_v, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, timeout=240)
+    try:
+        overlay_png.unlink(missing_ok=True)
+        audio_wav.unlink(missing_ok=True)
+    except Exception:
+        pass
+    if rv.returncode != 0 or not out_mp4.exists() or out_mp4.stat().st_size < 20_000:
+        print(f"[VIDEO RENDER ERR] {div}: {rv.stderr[-260:]}", flush=True)
+        return None, 0.0
+    return out_mp4, min(total_dur, 58.0)
+
+
+def _refresh_yt_token(div: str) -> Optional[str]:
+    cid = os.getenv("YT_CLIENT_ID", "").strip()
+    csec = os.getenv("YT_CLIENT_SECRET", "").strip()
+    rtok = os.getenv(f"YT_REFRESH_TOKEN_{div}", "").strip()
+    if not (cid and csec and rtok):
+        return None
+    data = urllib.parse.urlencode({
+        "client_id": cid, "client_secret": csec, "refresh_token": rtok, "grant_type": "refresh_token",
+    }).encode("utf-8")
+    req = urllib.request.Request("https://oauth2.googleapis.com/token", data=data, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=20) as r:
+            return json.loads(r.read().decode("utf-8")).get("access_token")
+    except Exception as e:
+        print(f"[YT OAUTH ERR {div}] {e}", flush=True)
+        return None
+
+
+def upload_youtube_short_v3(
+    div: str,
+    mp4_path: Path,
+    title: str,
+    desc: str,
+    srt_text: str,
+    pinned_comment: str,
+) -> Dict[str, Any]:
+    """Official YouTube Data API v3 Resumable Short Upload + Official .srt Caption + UTM Either/Or Comment."""
+    atok = _refresh_yt_token(div)
+    if not atok:
+        return {"ok": False, "skipped": "missing_yt_oauth_secrets"}
+
+    # 1. Verify official channel against #5 Outbound Allowlist BEFORE uploading
+    try:
+        creq = urllib.request.Request(
+            "https://www.googleapis.com/youtube/v3/channels?part=id&mine=true",
+            headers={"Authorization": f"Bearer {atok}"},
+        )
+        with urllib.request.urlopen(creq, timeout=20) as cr:
+            citems = json.loads(cr.read().decode("utf-8")).get("items") or []
+        ch_id = str(citems[0]["id"]) if citems else ""
+        assert_allowed_yt_channel(div, ch_id)
+    except OutboundAllowlistError as oe:
+        return {"ok": False, "blocked_by_allowlist": str(oe)}
+    except urllib.error.HTTPError as e:
+        body = e.read().decode("utf-8", errors="replace")[:260]
+        if e.code == 403 and "quotaExceeded" in body:
+            return {"ok": False, "quota_exceeded": True}
+        return {"ok": False, "http_error": e.code, "body": body}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+    # 2. Initiate Resumable Video Upload
+    lang = DIV_LANG_MAP.get(div, "en")
+    meta = {
+        "snippet": {
+            "title": (f"{title[:88]} #Shorts" if "#shorts" not in title.lower() else title[:98]),
+            "description": desc[:4900],
+            "categoryId": "24" if div == "HERO" else "27",
+            "defaultLanguage": lang,
+            "defaultAudioLanguage": lang,
+        },
+        "status": {
+            "privacyStatus": "public",
+            "selfDeclaredMadeForKids": False,
+            **({"containsSyntheticMedia": True} if div == "HERO" else {}),
+        },
+    }
+    raw_bytes = mp4_path.read_bytes()
+    init_req = urllib.request.Request(
+        "https://www.googleapis.com/upload/youtube/v3/videos?uploadType=resumable&part=snippet,status",
+        data=json.dumps(meta, ensure_ascii=False).encode("utf-8"),
+        method="POST",
+        headers={
+            "Authorization": f"Bearer {atok}",
+            "Content-Type": "application/json; charset=UTF-8",
+            "X-Upload-Content-Length": str(len(raw_bytes)),
+            "X-Upload-Content-Type": "video/mp4",
+        },
+    )
+    try:
+        with urllib.request.urlopen(init_req, timeout=30) as ir:
+            upload_url = ir.headers.get("Location")
+        if not upload_url:
+            return {"ok": False, "error": "missing_resumable_location"}
+        put_req = urllib.request.Request(
+            upload_url,
+            data=raw_bytes,
+            method="PUT",
+            headers={"Content-Type": "video/mp4", "Content-Length": str(len(raw_bytes))},
+        )
+        with urllib.request.urlopen(put_req, timeout=180) as pr:
+            vid = json.loads(pr.read().decode("utf-8")).get("id", "")
+        if not vid:
+            return {"ok": False, "error": "empty_video_id"}
+    except urllib.error.HTTPError as e:
+        body = e.read().decode("utf-8", errors="replace")[:260]
+        if e.code == 403 and "quotaExceeded" in body:
+            return {"ok": False, "quota_exceeded": True}
+        return {"ok": False, "http_error": e.code, "body": body}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+    # 3. Upload Official .srt Caption (non-fatal if quota tight)
+    srt_ok = False
+    try:
+        boundary = "----DreamCompanyCloudSRT2026"
+        cmeta = json.dumps({"snippet": {"videoId": vid, "language": lang, "name": f"Official {lang.upper()}", "isDraft": False}})
+        cbody = (
+            f"--{boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n{cmeta}\r\n"
+            f"--{boundary}\r\nContent-Type: application/octet-stream\r\n\r\n{srt_text}\r\n"
+            f"--{boundary}--\r\n"
+        ).encode("utf-8")
+        sreq = urllib.request.Request(
+            "https://www.googleapis.com/upload/youtube/v3/captions?part=snippet&uploadType=multipart",
+            data=cbody,
+            method="POST",
+            headers={"Authorization": f"Bearer {atok}", "Content-Type": f"multipart/related; boundary={boundary}"},
+        )
+        with urllib.request.urlopen(sreq, timeout=30) as sr:
+            srt_ok = sr.status in (200, 201)
+    except Exception as se:
+        print(f"  [YT SRT WARN {div} {vid}] {se}", flush=True)
+
+    # 4. Post Top UTM + Either/Or Engagement Comment
+    cmt_ok = False
+    try:
+        payload = json.dumps({
+            "snippet": {"channelId": ch_id, "videoId": vid, "topLevelComment": {"snippet": {"textOriginal": pinned_comment}}}
+        }, ensure_ascii=False).encode("utf-8")
+        treq = urllib.request.Request(
+            "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet",
+            data=payload,
+            method="POST",
+            headers={"Authorization": f"Bearer {atok}", "Content-Type": "application/json"},
+        )
+        with urllib.request.urlopen(treq, timeout=25) as tr:
+            cmt_ok = tr.status in (200, 201)
+    except Exception as ce:
+        print(f"  [YT COMMENT WARN {div} {vid}] {ce}", flush=True)
+
+    return {"ok": True, "video_id": vid, "url": f"https://youtube.com/shorts/{vid}", "srt_ok": srt_ok, "comment_ok": cmt_ok}
+
+
+def send_hq_telegram_alert(text: str) -> None:
+    btok = os.getenv("HQ_TELEGRAM_BOT_TOKEN", "").strip()
+    cid = os.getenv("HQ_TELEGRAM_CHAT_ID", "").strip()
+    if not (btok and cid):
+        return
+    try:
+        data = urllib.parse.urlencode({"chat_id": cid, "text": text[:3900]}).encode("utf-8")
+        req = urllib.request.Request(f"https://api.telegram.org/bot{btok}/sendMessage", data=data, method="POST")
+        urllib.request.urlopen(req, timeout=12).read()
+    except Exception:
+        pass
+
+
+def publish_instagram_reel_via_r2(
+    div: str,
+    mp4_path: Path,
+    caption: str,
+    ascii_key: str,
+    hist: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
     raw_tok = os.getenv(f"IG_ACCESS_TOKEN_{div}", "")
     ig_uid = (os.getenv(f"IG_USER_ID_{div}", "") or ALLOWED_IG_ACCOUNTS.get(div, {}).get("ig_user_id", "")).strip()
     try:
@@ -512,13 +940,23 @@ def publish_instagram_reel_via_r2(div: str, mp4_path: Path, caption: str, ascii_
         return {"ok": False, "skipped": f"invalid_ig_token:{tinfo['reason']}"}
     ig_tok = str(tinfo["token"])
 
+    # Meta 4-Rule Safety: respect 12h automatic OAuthException cooldown & 8h same-account minimum gap!
+    now_ts = time.time()
+    if hist is not None:
+        cool_until = float((hist.get("ig_cooldown_until") or {}).get(div, 0) or 0)
+        if cool_until > now_ts:
+            return {"ok": False, "skipped": f"meta_12h_cooldown_active(rem={int((cool_until - now_ts)/60)}m)"}
+        last_pub = float((hist.get("ig_last_publish_ts") or {}).get(div, 0) or 0)
+        if last_pub and (now_ts - last_pub) < 8 * 3600:
+            return {"ok": False, "skipped": f"meta_8h_gap_guard(elapsed={int((now_ts - last_pub)/60)}m)"}
+
     video_url = stage_reel_to_cloudflare_r2(mp4_path, ascii_key)
     if not video_url:
         return {"ok": False, "error": "r2_staging_failed"}
     create_qs = urllib.parse.urlencode({
         "media_type": "REELS",
         "video_url": video_url,
-        "caption": caption,
+        "caption": caption[:2100],
         "access_token": ig_tok,
     }).encode("utf-8")
     try:
@@ -527,14 +965,33 @@ def publish_instagram_reel_via_r2(div: str, mp4_path: Path, caption: str, ascii_
             cid = json.loads(r.read().decode("utf-8")).get("id")
         if not cid:
             return {"ok": False, "error": "no_container_id"}
-        time.sleep(15)
+        # Poll container processing cleanly up to 90s instead of blind sleep
+        status_code = "IN_PROGRESS"
+        for _ in range(18):
+            time.sleep(5)
+            sreq = urllib.request.Request(
+                f"https://graph.facebook.com/v21.0/{cid}?fields=status_code&access_token={urllib.parse.quote(ig_tok)}"
+            )
+            with urllib.request.urlopen(sreq, timeout=20) as sr:
+                status_code = str(json.loads(sr.read().decode("utf-8")).get("status_code", ""))
+            if status_code == "FINISHED":
+                break
+            if status_code in ("ERROR", "EXPIRED"):
+                return {"ok": False, "error": f"ig_container_{status_code}"}
+        if status_code != "FINISHED":
+            return {"ok": False, "error": f"ig_container_timeout({status_code})"}
         pub_qs = urllib.parse.urlencode({"creation_id": cid, "access_token": ig_tok}).encode("utf-8")
         preq = urllib.request.Request(f"https://graph.facebook.com/v21.0/{ig_uid}/media_publish", data=pub_qs, method="POST")
         with urllib.request.urlopen(preq, timeout=30) as pr:
             mid = json.loads(pr.read().decode("utf-8")).get("id")
+        if hist is not None:
+            hist.setdefault("ig_last_publish_ts", {})[div] = time.time()
         return {"ok": True, "media_id": mid, "r2_url": video_url}
     except urllib.error.HTTPError as e:
-        return {"ok": False, "http_error": e.code, "body": e.read().decode("utf-8", errors="replace")[:240]}
+        body = e.read().decode("utf-8", errors="replace")[:260]
+        if hist is not None and ("OAuthException" in body or e.code in (400, 401, 403)):
+            hist.setdefault("ig_cooldown_until", {})[div] = time.time() + 12 * 3600
+        return {"ok": False, "http_error": e.code, "body": body}
     except Exception as e:
         return {"ok": False, "error": str(e)}
 
@@ -547,11 +1004,12 @@ def main() -> int:
 
     now_kst = dt.datetime.now(KST)
     today_str = now_kst.strftime("%Y-%m-%d")
+    slot_id = "SLOT_A" if now_kst.hour < 14 else "SLOT_B"
     doy = now_kst.timetuple().tm_yday
     weekday = now_kst.weekday()
     hist = load_history()
 
-    print(f"=== Dream Company 365-Day Cloud Promo Runner v2 ({today_str} KST, dry_run={dry_run}) ===", flush=True)
+    print(f"=== Dream Company 365-Day Cloud Promo Runner v3 ({today_str} {slot_id} KST, dry_run={dry_run}) ===", flush=True)
     print(f"Guardrails: max_daily_yt={MAX_DAILY_YT_UPLOADS} | lyria_weekly_cap={MAX_WEEKLY_LYRIA_CALLS} (can_call={can_call_lyria_this_week(hist)}) | hero_vocal_min={HERO_MIN_VOCAL_HIGHLIGHT_SEC}s | srt_gate=STRICT", flush=True)
 
     try:
@@ -564,11 +1022,22 @@ def main() -> int:
     flow_manifest_path, flow_manifest = load_flow_vault_manifest()
     flow_manifest_dirty = False
 
-    day_arm = doy % 2
+    # Build set of already-published (date, slot, div) so 2x/day runs are 100% idempotent
+    done_slots = {
+        (u.get("date"), u.get("slot", "SLOT_A"), u.get("div"))
+        for u in hist.get("uploads", [])
+        if u.get("yt_video_id") or u.get("ig_media_id")
+    }
+
+    day_arm = (doy + (1 if slot_id == "SLOT_B" else 0)) % 2
     planned = []
+    alerts: List[str] = []
     for div in ["TOM", "KFG", "GBA", "HERO", "KFK"]:
         if len(planned) >= MAX_DAILY_YT_UPLOADS:
             break
+        if (not dry_run) and (today_str, slot_id, div) in done_slots:
+            print(f"  [IDEMPOTENT SKIP] {div:4s} already published for {today_str} {slot_id}", flush=True)
+            continue
         pt = PERSONA_TEMPLATES[div]
         tid, fallback_title = pick_next_topic(div, hist, today_str)
         cell = select_stage12_ab_cell(matrix_db, div, today_str, arm_idx=day_arm) if (matrix_db and select_stage12_ab_cell) else None
@@ -591,29 +1060,31 @@ def main() -> int:
             cta_line = DIV_CONFIGS[div]["open_loop_cta"]
             matrix_meta = {"matrix_id": f"{div}_S1_LOSS", "stage": 1, "hook_type": "loss", "utm_content": utm_content, "ab_arm": "A"}
 
-        utm_yt = build_utm_url(DIV_CONFIGS[div]["site"], "youtube", "shorts", f"{tid}_{today_str}", content=utm_content)
-        utm_ig = build_utm_url(DIV_CONFIGS[div]["site"], "instagram", "reels", f"{tid}_{today_str}", content=utm_content)
-        pinned_comment = build_pinned_comment_with_question(div, utm_yt, doy)
+        utm_yt = build_utm_url(DIV_CONFIGS[div]["site"], "youtube", "shorts", f"{tid}_{today_str}_{slot_id}", content=utm_content)
+        utm_ig = build_utm_url(DIV_CONFIGS[div]["site"], "instagram", "reels", f"{tid}_{today_str}_{slot_id}", content=utm_content)
+        pinned_comment = build_pinned_comment_with_question(div, utm_yt, doy + (1 if slot_id == "SLOT_B" else 0))
 
         disclosure_footer = f"\n※ {pt['ai_disclosure_line']}\n" if div == "HERO" else ""
         desc = f"{title}\n\n{slide_body}\n\n{pinned_comment}{disclosure_footer}"
+        either_or_q = pt["either_or_questions"][(doy + (1 if slot_id == "SLOT_B" else 0)) % len(pt["either_or_questions"])]
         srt_stub = (
-            f"1\n00:00:00,000 --> 00:00:03,500\n{title}\n\n"
-            f"2\n00:00:03,600 --> 00:00:18,000\n{slide_body[:120]}\n\n"
-            f"3\n00:00:18,200 --> 00:00:30,000\n{pt['either_or_questions'][doy % len(pt['either_or_questions'])]}\n"
+            f"1\n00:00:00,000 --> 00:00:04,500\n{title}\n\n"
+            f"2\n00:00:04,600 --> 00:00:18,000\n{slide_body[:130]}\n\n"
+            f"3\n00:00:18,200 --> 00:00:28,000\n{either_or_q}\n"
         )
 
-        # HERO hard vocal highlight guarantee (15.0s real lyria-3.5 audio from master pool!)
-        vocal_track = select_hero_vocal_track(doy) if div == "HERO" else None
-        vocal_highlight_sec = 15.0 if (div == "HERO" and (vocal_track is not None or dry_run)) else 0.0
+        # HERO hard vocal highlight guarantee (14.0s real lyria-3.5 audio from local or R2 pool!)
+        vocal_track = (select_hero_vocal_track(doy) if dry_run else ensure_hero_vocal_track(doy)) if div == "HERO" else None
+        vocal_highlight_sec = 14.0 if (div == "HERO" and (vocal_track is not None or dry_run)) else 0.0
 
         ok_txt, errs = check_text_gate(div, title, desc, srt_stub, vocal_highlight_sec=vocal_highlight_sec)
         if not ok_txt:
             print(f"[AUTO-GATE BLOCKED] {div} {tid}: {errs}", flush=True)
+            alerts.append(f"{div} gate blocked: {errs}")
             continue
 
         hero_radio_day = (div == "HERO" and weekday in (1, 4))
-        target_aspect = "16:9" if hero_radio_day else "9:16"
+        target_aspect = "9:16"
         vault_clip = select_flow_vault_clip(
             flow_manifest,
             div=div,
@@ -623,13 +1094,16 @@ def main() -> int:
             ab_arm=str(matrix_meta["ab_arm"]),
             increment=(not dry_run),
         )
+        bg_local_path: Optional[Path] = None
         flow_bg_meta: Dict[str, Any] = {"flow_clip_id": None, "flow_r2_key": None, "flow_resolution": None, "flow_source": "static_fallback"}
         if vault_clip:
             if not dry_run:
                 flow_manifest_dirty = True
                 local_p = Path(str(vault_clip.get("local_path", "")))
-                if not local_p.exists() and vault_clip.get("r2_key"):
-                    fetch_flow_vault_clip_from_r2(
+                if local_p.exists():
+                    bg_local_path = local_p
+                elif vault_clip.get("r2_key"):
+                    bg_local_path = fetch_flow_vault_clip_from_r2(
                         str(vault_clip["r2_key"]),
                         WORK_DIR / "flow_vault_cache" / f"{vault_clip['clip_id']}.mp4",
                         bucket=str(vault_clip.get("r2_bucket", "")),
@@ -642,8 +1116,62 @@ def main() -> int:
                 "flow_source": "flow_vault_r2_master",
             }
 
+        yt_res: Dict[str, Any] = {}
+        ig_res: Dict[str, Any] = {}
+        status = "dry_run_validated"
+        rendered_dur = 0.0
+
+        if not dry_run:
+            spoken_script = f"{title}. {slide_body}. {either_or_q}"
+            tts_mp3 = synthesize_edge_tts_mp3(spoken_script, pt["voice_id"], WORK_DIR / f"{div}_{today_str}_{slot_id}.tts.mp3")
+            out_mp4 = WORK_DIR / f"{div}_{today_str}_{slot_id}.mp4"
+            rendered_mp4, rendered_dur = render_cloud_short_mp4(
+                div=div,
+                bg_mp4=bg_local_path,
+                tts_mp3=tts_mp3,
+                vocal_mp3=vocal_track,
+                title=title,
+                slide_body=slide_body,
+                cta_line=either_or_q,
+                out_mp4=out_mp4,
+            )
+            if rendered_mp4 and rendered_mp4.exists():
+                yt_res = upload_youtube_short_v3(div, rendered_mp4, title, desc, srt_stub, pinned_comment)
+                ig_caption = f"{title}\n\n{slide_body}\n\n{either_or_q}\n\n🔗 {utm_ig}{disclosure_footer}"
+                ig_res = publish_instagram_reel_via_r2(
+                    div,
+                    rendered_mp4,
+                    ig_caption,
+                    f"reels/{today_str}/{div}_{slot_id}_{int(time.time())}.mp4",
+                    hist=hist,
+                )
+                try:
+                    rendered_mp4.unlink(missing_ok=True)
+                    if tts_mp3:
+                        tts_mp3.unlink(missing_ok=True)
+                except Exception:
+                    pass
+                yt_ok = bool(yt_res.get("ok"))
+                ig_ok = bool(ig_res.get("ok"))
+                if yt_ok and ig_ok:
+                    status = "published_live_yt_ig"
+                elif yt_ok or ig_ok:
+                    status = "published_partial"
+                elif yt_res.get("quota_exceeded"):
+                    status = "yt_quota_deferred"
+                else:
+                    status = "queued_or_awaiting_secrets"
+                if (not yt_ok) and (not yt_res.get("skipped")) and (not yt_res.get("quota_exceeded")):
+                    alerts.append(f"YT {div}: {yt_res}")
+                if (not ig_ok) and (not ig_res.get("skipped")):
+                    alerts.append(f"IG {div}: {ig_res}")
+            else:
+                status = "render_failed"
+                alerts.append(f"RENDER {div}: failed to compose mp4")
+
         planned.append({
             "div": div,
+            "slot": slot_id,
             "topic_id": tid,
             "title": title,
             "template_mode": pt["template_mode"],
@@ -654,34 +1182,44 @@ def main() -> int:
             "srt_gate_passed": True,
             "hero_vocal_track": vocal_track.name if vocal_track else None,
             "hero_vocal_highlight_sec": vocal_highlight_sec if div == "HERO" else None,
+            "rendered_duration_sec": round(rendered_dur, 2),
+            "yt_video_id": yt_res.get("video_id"),
+            "yt_srt_ok": yt_res.get("srt_ok"),
+            "yt_comment_ok": yt_res.get("comment_ok"),
+            "yt_status": "ok" if yt_res.get("ok") else (yt_res.get("skipped") or ("quota" if yt_res.get("quota_exceeded") else yt_res.get("error") or yt_res.get("http_error"))),
+            "ig_media_id": ig_res.get("media_id"),
+            "ig_status": "ok" if ig_res.get("ok") else (ig_res.get("skipped") or ig_res.get("error") or ig_res.get("http_error")),
             **matrix_meta,
             **flow_bg_meta,
             "utm_yt": utm_yt,
             "utm_ig": utm_ig,
             "hero_radio_day": hero_radio_day,
             "date": today_str,
-            "status": "dry_run_validated" if dry_run else "queued_or_awaiting_secrets",
+            "status": status,
         })
         print(
-            f"  [GATE PASS] {div:4s} | {pt['template_mode'][:22]:22s} | voice={pt['voice_id'][:20]:20s} "
-            f"| flow_bg={flow_bg_meta['flow_clip_id']} | srt=OK | pinned_utm=OK"
+            f"  [GATE PASS] {div:4s} | status={status} | flow_bg={flow_bg_meta['flow_clip_id']} "
+            f"| yt={yt_res.get('video_id') or yt_res.get('skipped') or yt_res.get('http_error') or 'dry'} "
+            f"| ig={ig_res.get('media_id') or ig_res.get('skipped') or ig_res.get('http_error') or 'dry'}"
             + (f" | vocal={vocal_highlight_sec:.0f}s({vocal_track.name if vocal_track else 'pool'})" if div == "HERO" else ""),
             flush=True,
         )
 
     hist["last_run_kst"] = now_kst.isoformat()
     if not dry_run:
-        existing_keys = {(u.get("date"), u.get("div"), u.get("topic_id")) for u in hist.get("uploads", [])}
+        existing_keys = {(u.get("date"), u.get("slot", "SLOT_A"), u.get("div"), u.get("topic_id")) for u in hist.get("uploads", [])}
         for item in planned:
-            k = (item["date"], item["div"], item["topic_id"])
+            k = (item["date"], item["slot"], item["div"], item["topic_id"])
             if k not in existing_keys:
                 hist.setdefault("uploads", []).append(item)
-        hist["uploads"] = hist["uploads"][-180:]
+        hist["uploads"] = hist["uploads"][-240:]
         save_history(hist)
         if flow_manifest_dirty and flow_manifest_path:
             flow_manifest["updated_at_kst"] = now_kst.strftime("%Y-%m-%d %H:%M:%S KST")
             flow_manifest_path.write_text(json.dumps(flow_manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"=== Completed Cloud Promo Plan ({len(planned)} validated slots, 0 gate violations) ===", flush=True)
+        if alerts:
+            send_hq_telegram_alert(f"[Cloud Promo Watchdog {today_str} {slot_id}]\n" + "\n".join(alerts[:6]))
+    print(f"=== Completed Cloud Promo Runner ({len(planned)} processed slots, alerts={len(alerts)}) ===", flush=True)
     return 0
 
 

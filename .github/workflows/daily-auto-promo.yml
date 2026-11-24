@@ -2,14 +2,17 @@ name: Dream Company 365-Day Cloud Auto-Promo & Watchdog
 
 on:
   schedule:
-    # Daily 07:00 KST (22:00 UTC) — Runs staggered 5-div Shorts/Reels + Tue/Fri 14m00s-14m40s HERO Radio
-    - cron: "0 22 * * *"
-    # Weekly Monday 06:00 KST (Sunday 21:00 UTC) — 45-day IG token refresh + [skip ci] keepalive commit
-    - cron: "0 21 * * 0"
+    # Off-peak minute crons to avoid :00 UTC GitHub Actions queue congestion!
+    # Morning Slot A: 07:17 KST (22:17 UTC) — 5-div Shorts/Reels + SEO/IndexNow + IG 5-Slide Carousels
+    - cron: "17 22 * * *"
+    # Evening Slot B: 19:23 KST (10:23 UTC) — Runs 2h AFTER 17:00 KST YouTube quota reset for guaranteed catch-up + Slot B!
+    - cron: "23 10 * * *"
+    # Weekly Monday 06:11 KST (Sunday 21:11 UTC) — Single-Variable A/B Evolution + 45-day IG token refresh
+    - cron: "11 21 * * 0"
   workflow_dispatch:
     inputs:
       mode:
-        description: "Run mode (daily | stage2_yt_reset | token_refresh | dry_run)"
+        description: "Run mode (daily | stage2_yt_reset | token_refresh | written_promo | ab_evolve | dry_run)"
         required: false
         default: "daily"
 
@@ -23,7 +26,7 @@ concurrency:
 jobs:
   cloud-auto-promo:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 45
 
     steps:
       - name: Checkout workspace
@@ -41,9 +44,9 @@ jobs:
           path: |
             ~/.cache/pip
             cloud_automation/.cache
-          key: dc-promo-v1-${{ runner.os }}-${{ hashFiles('cloud_automation/requirements.txt') }}
+          key: dc-promo-v2-${{ runner.os }}-${{ hashFiles('cloud_automation/requirements.txt') }}
           restore-keys: |
-            dc-promo-v1-${{ runner.os }}-
+            dc-promo-v2-${{ runner.os }}-
 
       - name: Install lightweight dependencies & FFmpeg
         run: |
@@ -51,9 +54,14 @@ jobs:
           python -m pip install --upgrade pip -q
           pip install -q -r cloud_automation/requirements.txt
 
-      - name: Run Stage 2 YouTube Reset / Captions Sync (if secrets configured)
-        if: ${{ github.event.inputs.mode == 'stage2_yt_reset' || github.event_name == 'schedule' }}
+      - name: Run Stage 2 YouTube Reset, R2 5-Banner Sync, HERO Ep1 & Captions
+        id: yt_stage2
+        continue-on-error: true
+        if: ${{ github.event.inputs.mode == 'stage2_yt_reset' || github.event_name == 'schedule' || github.event.inputs.mode == 'daily' }}
         env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          R2_VAULT_BUCKET: dreamcompany-flow-vault
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
           YT_REFRESH_TOKEN_TOM: ${{ secrets.YT_REFRESH_TOKEN_TOM }}
@@ -64,8 +72,10 @@ jobs:
         run: |
           python -u -X utf8 cloud_automation/yt_stage2_reset_and_captions.py --once-if-pending
 
-      - name: Run Daily 5-Div Cloud Promo Pipeline (Auto-Gate + R2 24h Staging + Lyria Cap <=2/wk)
-        if: ${{ github.event.inputs.mode != 'token_refresh' }}
+      - name: Run 24/7 Cloud 5-Div Video Render + YouTube Shorts + IG Reels Pipeline
+        id: video_promo
+        continue-on-error: true
+        if: ${{ github.event.inputs.mode != 'token_refresh' && github.event.inputs.mode != 'ab_evolve' }}
         env:
           RUN_MODE: ${{ github.event.inputs.mode || 'daily' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -98,7 +108,9 @@ jobs:
         run: |
           python -u -X utf8 cloud_automation/cloud_promo_runner.py
 
-      - name: Refresh Instagram Long-Lived Tokens (45-Day Auto Renewal + Expiry Alert)
+      - name: Refresh Instagram Long-Lived Tokens (45-Day Auto Renewal + Prefix-Safe Watchdog)
+        id: ig_token_refresh
+        continue-on-error: true
         env:
           BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
           HQ_MASTER_EMAIL: ${{ secrets.HQ_MASTER_EMAIL || 'beable9489@gmail.com' }}
@@ -118,7 +130,9 @@ jobs:
           python -u -X utf8 cloud_automation/ig_token_refresher.py
 
       - name: Run Written Promotion Engine (Ch1 SEO+IndexNow 2x/wk · Ch2 IG 5-Slide Carousel 3x/wk · ZERO Threads/LINE)
-        if: ${{ github.event.inputs.mode != 'token_refresh' }}
+        id: written_promo
+        continue-on-error: true
+        if: ${{ github.event.inputs.mode != 'token_refresh' && github.event.inputs.mode != 'ab_evolve' }}
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -137,33 +151,50 @@ jobs:
           IG_USER_ID_KFK: ${{ secrets.IG_USER_ID_KFK }}
         run: |
           DOW=$(TZ=Asia/Seoul date +%u)
-          # Channel 1: High-Density SEO Column + IndexNow (2x/week: Mon=1, Thu=4)
-          if [ "$DOW" = "1" ] || [ "$DOW" = "4" ] || [ "${{ github.event.inputs.mode }}" = "written_promo" ]; then
-            python -u -X utf8 cloud_automation/written_promo_engine.py --publish-seo --ping-indexnow
-          fi
-          # Channel 2: Instagram 5-Slide Slippery-Slide Text Carousel (3x/week: Mon=1, Wed=3, Fri=5; ZERO Threads/LINE!)
-          if [ "$DOW" = "1" ] || [ "$DOW" = "3" ] || [ "$DOW" = "5" ] || [ "${{ github.event.inputs.mode }}" = "written_promo" ]; then
-            python -u -X utf8 cloud_automation/ig_carousel_publisher.py
+          HOUR=$(TZ=Asia/Seoul date +%H)
+          # Run SEO + Carousel in Morning Slot (or manual dispatch) so evening slot never double-posts carousels
+          if [ "$HOUR" -lt "14" ] || [ "${{ github.event.inputs.mode }}" = "written_promo" ]; then
+            if [ "$DOW" = "1" ] || [ "$DOW" = "4" ] || [ "${{ github.event.inputs.mode }}" = "written_promo" ]; then
+              python -u -X utf8 cloud_automation/written_promo_engine.py --publish-seo --ping-indexnow || true
+            fi
+            if [ "$DOW" = "1" ] || [ "$DOW" = "3" ] || [ "$DOW" = "5" ] || [ "${{ github.event.inputs.mode }}" = "written_promo" ]; then
+              python -u -X utf8 cloud_automation/ig_carousel_publisher.py || true
+            fi
           fi
 
-      - name: Run Weekly Autonomous Single-Variable A/B Evolution Loop (Monday 06:00 KST)
-        if: ${{ github.event.schedule == '0 21 * * 0' || github.event.inputs.mode == 'ab_evolve' }}
+      - name: Run Weekly Autonomous Single-Variable A/B Evolution Loop (Monday 06:11 KST)
+        id: ab_evolve
+        continue-on-error: true
+        if: ${{ github.event.schedule == '11 21 * * 0' || github.event.inputs.mode == 'ab_evolve' }}
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
-          python -u -X utf8 cloud_automation/ab_evolution_engine.py
-          python -u -X utf8 cloud_automation/written_promo_engine.py --evolve-ab --ping-indexnow
+          python -u -X utf8 cloud_automation/ab_evolution_engine.py || true
+          python -u -X utf8 cloud_automation/written_promo_engine.py --evolve-ab --ping-indexnow || true
 
-      - name: Commit data/promo_history.json, message_matrix & flow_vault_manifest with [skip ci]
+      - name: Always Commit State & Keepalive (Fault-Isolated Nonstop Persistence)
+        if: always()
         run: |
           git config user.name "DreamCompany Cloud Bot"
           git config user.email "hello@truthofmarket.com"
-          git add data/promo_history.json data/message_matrix_5div.json data/flow_vault_manifest.json data/written_promo_ledger.json data/threads_ab_queue.json data/indexnow_config.json || true
+          git add data/promo_history.json data/message_matrix_5div.json data/flow_vault_manifest.json data/written_promo_ledger.json data/indexnow_config.json insights/ sitemap.xml rss.xml || true
           if ! git diff --cached --quiet; then
-            git commit -m "chore(cloud-promo): update promo_history, 5x5 matrix, written promo & flow_vault [skip ci]"
+            git commit -m "chore(cloud-promo): update nonstop promo state, matrix & flow_vault [skip ci]"
             git pull --rebase --autostash origin main || true
             git push origin HEAD:main
           else
-            echo "No promo_history, message_matrix, or written promo diff today."
+            echo "No state diff to commit."
+          fi
+
+      - name: Report Step Outcomes (Fail Job ONLY if All Active Channels Failed)
+        if: always()
+        run: |
+          echo "yt_stage2=${{ steps.yt_stage2.outcome }}"
+          echo "video_promo=${{ steps.video_promo.outcome }}"
+          echo "ig_token_refresh=${{ steps.ig_token_refresh.outcome }}"
+          echo "written_promo=${{ steps.written_promo.outcome }}"
+          echo "ab_evolve=${{ steps.ab_evolve.outcome }}"
+          if [ "${{ steps.video_promo.outcome }}" = "failure" ] && [ "${{ steps.written_promo.outcome }}" = "failure" ]; then
+            exit 1
           fi
