@@ -1056,4 +1056,10 @@
     <changefreq>daily</changefreq>
     <priority>0.88</priority>
   </url>
+  <url>
+    <loc>https://truthofmarket.com/insights/tom-s2-proof-2026-11-25.html</loc>
+    <lastmod>2026-11-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>

@@ -331,6 +331,34 @@ def run_div5_kfk(hour: int, force: bool = False) -> dict:
         encoding="utf-8",
         errors="replace",
     )
+    # Daily 09:00 KST Div 5 Naver Blog editorial auto-publish (fault-isolated, anti-duplicate guarded, OG link cards!)
+    naver_blog_note = ""
+    if hour == 9 or force:
+        try:
+            today_d = datetime.now(KST).strftime("%Y-%m-%d")
+            cur_p = DIV5_DIR / "logs" / "naver_blog_daily_cursor.json"
+            cur_d = _read_json(cur_p, {})
+            if cur_d.get("lastPublishedDate") != today_d:
+                nav_runner = DIV5_DIR / "scripts" / "naver_cdp_live_runner.py"
+                if nav_runner.exists():
+                    nr = subprocess.run(
+                        [sys.executable, "-X", "utf8", str(nav_runner), "--blog"],
+                        cwd=str(DIV5_DIR),
+                        timeout=240,
+                        capture_output=True,
+                        text=True,
+                        encoding="utf-8",
+                        errors="replace",
+                    )
+                    naver_blog_note = f"naver_blog_rc={nr.returncode}"
+                    if nr.returncode == 0 and "RESULT_JSON=" in (nr.stdout or ""):
+                        cur_d["lastPublishedDate"] = today_d
+                        cur_p.parent.mkdir(parents=True, exist_ok=True)
+                        cur_p.write_text(json.dumps(cur_d, ensure_ascii=False, indent=2), encoding="utf-8")
+            else:
+                naver_blog_note = "naver_blog_already_done_today"
+        except Exception as nb_exc:
+            naver_blog_note = f"naver_blog_warn={nb_exc}"
     st = _read_json(DIV5_DIR / "logs" / "kfk_hourly_promo_status.json", {})
     return {
         "div": "KFK",
@@ -340,7 +368,7 @@ def run_div5_kfk(hour: int, force: bool = False) -> dict:
         "telegraph_url": st.get("telegraph_url", last_url),
         "index_urls": st.get("canonical_url_count", 78),
         "guardrails": st.get("guardrails", {}),
-        "naver_status": st.get("naver_status", ""),
+        "naver_status": naver_blog_note or st.get("naver_status", ""),
         "stdout": (res.stdout or "").strip().splitlines()[-1] if (res.stdout or "").strip() else "",
     }
 
@@ -451,6 +479,27 @@ def execute_hourly_cycle(hour: int, notify: bool = True, force_all: bool = False
                 daytime_mailing_ok = (mr.returncode == 0)
         except Exception as e:
             print(f"[DaytimeMailingCRM Warning] {e}", file=sys.stderr)
+
+    # Mon & Thu 07:00 KST (2x/wk) Automated 5-Div Written SEO Column + Cloudflare Pages Deploy + IndexNow!
+    seo_pages_deployed = False
+    if (hour == 7 and kst_now.weekday() in (0, 3)) or force_all:
+        try:
+            today_str = kst_now.strftime("%Y-%m-%d")
+            w_ledger = _read_json(HQ_DIR / "data" / "written_promo_ledger.json", {})
+            already_today = any(a.get("date_str") == today_str for a in (w_ledger.get("articles") or []))
+            if not already_today:
+                wp_py = HQ_DIR / "cloud_automation" / "written_promo_engine.py"
+                ops_py = HQ_DIR / "scripts" / "hq_security_and_modular_ops.py"
+                if wp_py.exists() and ops_py.exists():
+                    r1 = subprocess.run([sys.executable, "-X", "utf8", str(wp_py), "--publish-seo"], cwd=str(HQ_DIR), timeout=180, capture_output=True)
+                    if r1.returncode == 0:
+                        r2 = subprocess.run([sys.executable, "-X", "utf8", str(ops_py), "deploy-pages"], cwd=str(HQ_DIR), timeout=360, capture_output=True)
+                        if r2.returncode == 0:
+                            subprocess.run([sys.executable, "-X", "utf8", str(wp_py), "--ping-indexnow"], cwd=str(HQ_DIR), timeout=90, capture_output=True)
+                            seo_pages_deployed = True
+                            _append_exec_log(f"SEO_5DIV_CLOUDFLARE_PAGES_DEPLOYED_AND_INDEXNOW_PINGED ({today_str})")
+        except Exception as seo_exc:
+            print(f"[5DivSEOPagesDeploy Warning] {seo_exc}", file=sys.stderr)
 
     # Daytime Smart SEO Hub Slot (14:00 KST): Zero-Browser, Zero-Noise 5-Corp Charter SEO Hub & Rubric Refresh
     daytime_hub_ok = False
