@@ -344,6 +344,56 @@
       "ffmpeg_profile": "ffmpeg -preset ultrafast -tune stillimage -threads 2",
       "date": "2026-11-23",
       "status": "queued_or_awaiting_secrets"
+    },
+    {
+      "div": "HERO",
+      "slot": "SLOT_B",
+      "topic_id": "2026-11-24_HERO_SLOT_B",
+      "title": "♪ 백운호 〈백운호 연가〉 고요한 호숫가 산책길에 듣기 좋은 중저음 트로트 #백운호 #트로트 #Shorts",
+      "date": "2026-11-24",
+      "yt_video_id": "9ezGwkLDTT8",
+      "yt_status": "ok",
+      "status": "published_live_yt_api_v3"
+    },
+    {
+      "div": "GBA",
+      "slot": "SLOT_B",
+      "topic_id": "2026-11-24_GBA_SLOT_A",
+      "title": "【手取り逆転】利回り5%だけで選んだ株が老後資金を削る本当の理由 💡 #高配当株 #新NISA #Shorts",
+      "date": "2026-11-24",
+      "yt_video_id": "LmPlwmFNHu8",
+      "yt_status": "ok",
+      "status": "published_live_yt_api_v3"
+    },
+    {
+      "div": "KFG",
+      "slot": "SLOT_B",
+      "topic_id": "2026-11-24_KFG_SLOT_A",
+      "title": "Child Wakes Up With Dry Lips? Open-Mouth Sleep Quietly Slows Growth 📋📏 #ChildGrowth #Shorts",
+      "date": "2026-11-24",
+      "yt_video_id": "CP9VUFutQKA",
+      "yt_status": "ok",
+      "status": "published_live_yt_api_v3"
+    },
+    {
+      "div": "KFK",
+      "slot": "SLOT_B",
+      "topic_id": "2026-11-24_KFK_SLOT_A",
+      "title": "'어릴 때 찐 살은 다 키로 간다'는 말, 진짜일까요 착각일까요? #Shorts",
+      "date": "2026-11-24",
+      "yt_video_id": "FZXVCgTzPrE",
+      "yt_status": "ok",
+      "status": "published_live_yt_api_v3"
+    },
+    {
+      "div": "TOM",
+      "slot": "SLOT_B",
+      "topic_id": "2026-11-24_TOM_SLOT_A",
+      "title": "Will $1,000,000 Actually Cover 30 Years of Retirement? Exact Math #Shorts",
+      "date": "2026-11-24",
+      "yt_video_id": "S8F1dqPkQLw",
+      "yt_status": "ok",
+      "status": "published_live_yt_api_v3"
     }
   ],
   "lyria_weekly_calls": [],

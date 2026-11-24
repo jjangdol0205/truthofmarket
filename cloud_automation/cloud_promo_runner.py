@@ -1113,6 +1113,30 @@ def publish_instagram_reel_via_r2(
         if last_pub and (now_ts - last_pub) < 8 * 3600:
             return {"ok": False, "skipped": f"meta_8h_gap_guard(elapsed={int((now_ts - last_pub)/60)}m)"}
 
+    # Live cross-system Meta cap guard (prevents local PC daemon + GHA from ever exceeding 2/day or <8h gap!)
+    try:
+        mreq = urllib.request.Request(
+            f"https://graph.facebook.com/v21.0/{ig_uid}/media?fields=timestamp&limit=5&access_token={urllib.parse.quote(ig_tok)}"
+        )
+        with urllib.request.urlopen(mreq, timeout=15) as mr:
+            recent = json.loads(mr.read().decode("utf-8")).get("data") or []
+        now_utc = dt.datetime.now(dt.timezone.utc)
+        last24 = 0
+        for item in recent:
+            ts_str = str(item.get("timestamp") or "")
+            if not ts_str:
+                continue
+            pub_dt = dt.datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+            age_sec = (now_utc - pub_dt).total_seconds()
+            if age_sec < 7.5 * 3600:
+                return {"ok": False, "skipped": f"meta_live_8h_gap_guard(age={int(age_sec/60)}m)"}
+            if age_sec < 24 * 3600:
+                last24 += 1
+        if last24 >= 2:
+            return {"ok": False, "skipped": f"meta_live_2per24h_cap(count={last24})"}
+    except Exception:
+        pass
+
     video_url = stage_reel_to_cloudflare_r2(mp4_path, ascii_key)
     if not video_url:
         return {"ok": False, "error": "r2_staging_failed"}
