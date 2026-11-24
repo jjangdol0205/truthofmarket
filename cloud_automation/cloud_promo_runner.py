@@ -639,7 +639,169 @@ def synthesize_edge_tts_mp3(text: str, voice_id: str, out_mp3: Path) -> Optional
     return None
 
 
-def ensure_hero_vocal_track(doy: int) -> Optional[Path]:
+HERO_R2_CATALOG_KEY = "brand_kits_20261123/hero_vocals/baek_woonho_6songs_mv_catalog.json"
+
+
+def load_hero_trot_mv_catalog() -> Optional[Dict[str, Any]]:
+    for cand in [
+        ROOT / "4사업부" / "data" / "baek_woonho_6songs_mv_catalog.json",
+        ROOT / "data" / "baek_woonho_6songs_mv_catalog.json",
+        WORK_DIR / "hero_vocals_cache" / "baek_woonho_6songs_mv_catalog.json",
+    ]:
+        if cand.exists():
+            try:
+                return json.loads(cand.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+    fetched = fetch_flow_vault_clip_from_r2(HERO_R2_CATALOG_KEY, WORK_DIR / "hero_vocals_cache" / "baek_woonho_6songs_mv_catalog.json")
+    if fetched and fetched.exists():
+        try:
+            return json.loads(fetched.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    return None
+
+
+def _fmt_srt_ts(sec: float) -> str:
+    s = max(0.0, float(sec))
+    h, m, r = int(s // 3600), int((s % 3600) // 60), int(s % 60)
+    ms = int(round((s - int(s)) * 1000)) % 1000
+    return f"{h:02d}:{m:02d}:{r:02d},{ms:03d}"
+
+
+def render_hero_trot_music_short_mp4(
+    song: Dict[str, Any],
+    sl: Dict[str, Any],
+    bg_clips: List[Path],
+    song_mp3: Path,
+    out_mp4: Path,
+) -> Tuple[Optional[Path], float]:
+    """Renders 1080x1920 Music-First Baek Woon-ho Trot Singing Short MV (0.0s immediate singing + synced gold/white karaoke lyrics)."""
+    ffmpeg = shutil.which("ffmpeg")
+    if not ffmpeg:
+        try:
+            import imageio_ffmpeg  # type: ignore
+            ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
+        except Exception:
+            return None, 0.0
+
+    dur = float(sl.get("duration_sec", 34.0))
+    start_s = float(sl.get("start_sec", 41.0))
+    cues = [(float(a), float(b), str(c), str(d)) for a, b, c, d in (sl.get("cues") or [])]
+    out_mp4.parent.mkdir(parents=True, exist_ok=True)
+    aud_m4a = out_mp4.with_suffix(".trot.m4a")
+    ra = subprocess.run(
+        [
+            ffmpeg, "-y", "-threads", "2",
+            "-ss", f"{start_s:.2f}", "-t", f"{dur:.2f}", "-i", str(song_mp3),
+            "-af", f"aresample=44100,afade=t=in:st=0:d=0.6,afade=t=out:st={max(1.0, dur-1.6):.2f}:d=1.6,alimiter=limit=0.944",
+            "-c:a", "aac", "-b:a", "192k", str(aud_m4a),
+        ],
+        stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, timeout=90,
+    )
+    if ra.returncode != 0 or not aud_m4a.exists():
+        print(f"[HERO TROT AUDIO ERR] {ra.stderr[-220:]}", flush=True)
+        return None, 0.0
+
+    # Build looped multi-clip or single-clip background
+    valid_bgs = [p for p in bg_clips if p and p.exists() and p.stat().st_size > 50_000]
+    tmp_pngs: List[Path] = []
+    bg_arg: List[str] = []
+    if valid_bgs:
+        bg_arg = ["-stream_loop", "-1", "-i", str(valid_bgs[0])]
+        bg_scale = "[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,fps=30,format=yuv420p[bg0]"
+    else:
+        bg_arg = ["-f", "lavfi", "-i", "color=c=0x11251E:s=1080x1920:r=30"]
+        bg_scale = "[0:v]format=yuv420p[bg0]"
+
+    inputs = [*bg_arg, "-i", str(aud_m4a)]
+    filter_parts = [bg_scale]
+    last_v = "bg0"
+    f_pill = _pick_cjk_font(34)
+    f_l1 = _pick_cjk_font(64)
+    f_l2 = _pick_cjk_font(60)
+    f_cta = _pick_cjk_font(34)
+
+    for idx, (t0, t1, l1, l2) in enumerate(cues):
+        is_last = idx == (len(cues) - 1)
+        im = Image.new("RGBA", (1080, 1920), (0, 0, 0, 0))
+        dr = ImageDraw.Draw(im)
+        for y in range(1190, 1920):
+            a = int(min(215, ((y - 1190) / 730.0) * 215))
+            dr.line([(0, y), (1080, y)], fill=(8, 22, 18, a))
+        pill = f"♪ 백운호 〈{song['title']}〉 · {song['badge']} (AI 가상 트로트 가수)"
+        pbb = dr.textbbox((0, 0), pill, font=f_pill)
+        pw, ph = pbb[2] - pbb[0] + 40, pbb[3] - pbb[1] + 20
+        px = max(20, (1080 - pw) // 2)
+        dr.rounded_rectangle([px, 72, px + pw, 72 + ph], radius=ph // 2, fill=(10, 38, 30, 205), outline=(212, 175, 55, 240), width=3)
+        dr.text((px + 20, 81), pill, font=f_pill, fill=(255, 242, 195, 255))
+
+        for line_txt, fnt, yy, col in [
+            (l1, f_l1, 1325, (255, 226, 118, 255)),
+            (l2, f_l2, 1418, (255, 255, 255, 255)),
+        ]:
+            if line_txt:
+                bb = dr.textbbox((0, 0), line_txt, font=fnt, stroke_width=8)
+                xx = max(24, (1080 - (bb[2] - bb[0])) // 2)
+                dr.text((xx, yy), line_txt, font=fnt, fill=col, stroke_width=8, stroke_fill=(8, 16, 14, 255))
+        if is_last:
+            cta_t = "프로필 눌러 백운호 6곡 무료 듣기 → paradise-hero.com"
+            cta_sz = 32
+            f_cta_fit = _pick_cjk_font(cta_sz)
+            while cta_sz >= 22:
+                f_cta_fit = _pick_cjk_font(cta_sz)
+                cbb = dr.textbbox((0, 0), cta_t, font=f_cta_fit)
+                if (cbb[2] - cbb[0]) <= 940:
+                    break
+                cta_sz -= 2
+            cbb = dr.textbbox((0, 0), cta_t, font=f_cta_fit)
+            cw, ch = cbb[2] - cbb[0] + 44, cbb[3] - cbb[1] + 22
+            cx = max(20, (1080 - cw) // 2)
+            dr.rounded_rectangle([cx, 1605, cx + cw, 1605 + ch], radius=16, fill=(14, 58, 44, 235), outline=(245, 208, 90, 255), width=3)
+            dr.text((cx + 22, 1615), cta_t, font=f_cta_fit, fill=(255, 250, 230, 255))
+        png_p = out_mp4.with_name(f"{out_mp4.stem}_cue{idx}.png")
+        im.save(png_p)
+        tmp_pngs.append(png_p)
+        inp_idx = idx + 2
+        inputs.extend(["-i", str(png_p)])
+        out_v = f"hv{idx}"
+        filter_parts.append(f"[{last_v}][{inp_idx}:v]overlay=0:0:enable='between(t,{t0:.2f},{t1:.2f})'[{out_v}]")
+        last_v = out_v
+
+    rv = subprocess.run(
+        [
+            ffmpeg, "-y", "-threads", "2",
+            *inputs,
+            "-filter_complex", ";".join(filter_parts) + f";[{last_v}]format=yuv420p[vout]",
+            "-map", "[vout]", "-map", "1:a",
+            "-t", f"{dur:.2f}",
+            "-c:v", "libx264", "-preset", "fast", "-crf", "22", "-movflags", "+faststart",
+            "-c:a", "copy", str(out_mp4),
+        ],
+        stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, timeout=240,
+    )
+    try:
+        aud_m4a.unlink(missing_ok=True)
+        for tp in tmp_pngs:
+            tp.unlink(missing_ok=True)
+    except Exception:
+        pass
+    if rv.returncode != 0 or not out_mp4.exists():
+        print(f"[HERO TROT VIDEO ERR] {rv.stderr[-240:]}", flush=True)
+        return None, 0.0
+    return out_mp4, dur
+
+
+def ensure_hero_vocal_track(doy: int, r2_key_override: Optional[str] = None, filename_override: Optional[str] = None) -> Optional[Path]:
+    if filename_override:
+        cand = HERO_VOCAL_POOL_DIR / filename_override
+        if cand.exists():
+            return cand
+    if r2_key_override:
+        dest = WORK_DIR / "hero_vocals_cache" / Path(r2_key_override).name
+        fetched = fetch_flow_vault_clip_from_r2(r2_key_override, dest)
+        if fetched and fetched.exists():
+            return fetched
     local = select_hero_vocal_track(doy)
     if local and local.exists():
         return local
@@ -649,7 +811,6 @@ def ensure_hero_vocal_track(doy: int) -> Optional[Path]:
     fetched = fetch_flow_vault_clip_from_r2(r2_key, dest)
     if fetched and fetched.exists():
         return fetched
-    # Fallback to track 01 if numbered track not yet uploaded
     return fetch_flow_vault_clip_from_r2(HERO_R2_VOCAL_KEYS[0], WORK_DIR / "hero_vocals_cache" / "baek_woonho_01_mothers_spring.mp3")
 
 
@@ -1073,9 +1234,49 @@ def main() -> int:
             f"3\n00:00:18,200 --> 00:00:28,000\n{either_or_q}\n"
         )
 
-        # HERO hard vocal highlight guarantee (14.0s real lyria-3.5 audio from local or R2 pool!)
-        vocal_track = (select_hero_vocal_track(doy) if dry_run else ensure_hero_vocal_track(doy)) if div == "HERO" else None
-        vocal_highlight_sec = 14.0 if (div == "HERO" and (vocal_track is not None or dry_run)) else 0.0
+        # HERO Music-First Trot MV Mode: 0.0s immediate Baek Woon-ho singing (34s chorus/verse) + synced karaoke lyrics!
+        hero_mv_song: Optional[Dict[str, Any]] = None
+        hero_mv_slice: Optional[Dict[str, Any]] = None
+        vocal_track: Optional[Path] = None
+        vocal_highlight_sec = 0.0
+        if div == "HERO":
+            hero_cat = load_hero_trot_mv_catalog()
+            if hero_cat and hero_cat.get("songs"):
+                songs_list = hero_cat["songs"]
+                rot_idx = doy * 2 + (1 if slot_id == "SLOT_B" else 0)
+                hero_mv_song = songs_list[rot_idx % len(songs_list)]
+                slices_list = hero_mv_song.get("slices") or []
+                hero_mv_slice = slices_list[(rot_idx // len(songs_list)) % len(slices_list)] if slices_list else None
+                if hero_mv_song and hero_mv_slice:
+                    tid = f"hero_mv_{hero_mv_song['song_id']}_{hero_mv_slice['slice_id']}"
+                    title = f"♪ 백운호 〈{hero_mv_song['title']}〉 {hero_mv_song['hook_headline']} #백운호 #트로트"[:95]
+                    slide_body = f"마음을 노래하는 AI 가상 트로트 가수 『백운호』의 {hero_mv_song['badge']} 〈{hero_mv_song['title']}〉 ({hero_mv_slice['label']})"
+                    either_or_q = str(hero_mv_song.get("either_or_question") or either_or_q)
+                    utm_yt = build_utm_url(DIV_CONFIGS[div]["site"], "youtube", "shorts", f"{tid}_{today_str}_{slot_id}", content=f"HERO_MV_T{hero_mv_song['track_no']}")
+                    utm_ig = build_utm_url(DIV_CONFIGS[div]["site"], "instagram", "reels", f"{tid}_{today_str}_{slot_id}", content=f"HERO_MV_T{hero_mv_song['track_no']}")
+                    pinned_comment = (
+                        f"🎵 백운호 〈{hero_mv_song['title']}〉 포함 6곡 완곡 무료 라디오 (가입 없음): {utm_yt}\n"
+                        f"💐 매일 아침 카톡 무료 안부카드 만들기: https://paradise-hero.com/vip.html\n"
+                        f"📸 공식 인스타그램 @paradise_hero1: https://www.instagram.com/paradise_hero1/\n"
+                        f"💬 {either_or_q}"
+                    )
+                    desc = f"{title}\n\n{slide_body}\n\n{pinned_comment}{disclosure_footer}"
+                    cues_srt = []
+                    for ci, (a, b, l1, l2) in enumerate(hero_mv_slice.get("cues") or [], start=1):
+                        cues_srt.append(f"{ci}\n{_fmt_srt_ts(float(a))} --> {_fmt_srt_ts(float(b))}\n{l1}\n{l2}\n")
+                    srt_stub = "\n".join(cues_srt) or srt_stub
+                    vocal_track = (
+                        (HERO_VOCAL_POOL_DIR / hero_mv_song["filename"])
+                        if (dry_run and (HERO_VOCAL_POOL_DIR / hero_mv_song["filename"]).exists())
+                        else ensure_hero_vocal_track(doy, r2_key_override=hero_mv_song.get("r2_key"), filename_override=hero_mv_song.get("filename"))
+                    )
+                    vocal_highlight_sec = float(hero_mv_slice.get("duration_sec", 34.0)) if (vocal_track is not None or dry_run) else 0.0
+            if vocal_track is None and not dry_run:
+                vocal_track = ensure_hero_vocal_track(doy)
+                vocal_highlight_sec = 14.0 if vocal_track is not None else 0.0
+            elif vocal_highlight_sec == 0.0 and dry_run:
+                vocal_track = select_hero_vocal_track(doy)
+                vocal_highlight_sec = 34.0
 
         ok_txt, errs = check_text_gate(div, title, desc, srt_stub, vocal_highlight_sec=vocal_highlight_sec)
         if not ok_txt:
@@ -1122,19 +1323,29 @@ def main() -> int:
         rendered_dur = 0.0
 
         if not dry_run:
-            spoken_script = f"{title}. {slide_body}. {either_or_q}"
-            tts_mp3 = synthesize_edge_tts_mp3(spoken_script, pt["voice_id"], WORK_DIR / f"{div}_{today_str}_{slot_id}.tts.mp3")
             out_mp4 = WORK_DIR / f"{div}_{today_str}_{slot_id}.mp4"
-            rendered_mp4, rendered_dur = render_cloud_short_mp4(
-                div=div,
-                bg_mp4=bg_local_path,
-                tts_mp3=tts_mp3,
-                vocal_mp3=vocal_track,
-                title=title,
-                slide_body=slide_body,
-                cta_line=either_or_q,
-                out_mp4=out_mp4,
-            )
+            tts_mp3: Optional[Path] = None
+            if div == "HERO" and hero_mv_song and hero_mv_slice and vocal_track and vocal_track.exists():
+                rendered_mp4, rendered_dur = render_hero_trot_music_short_mp4(
+                    song=hero_mv_song,
+                    sl=hero_mv_slice,
+                    bg_clips=[bg_local_path] if bg_local_path else [],
+                    song_mp3=vocal_track,
+                    out_mp4=out_mp4,
+                )
+            else:
+                spoken_script = f"{title}. {slide_body}. {either_or_q}"
+                tts_mp3 = synthesize_edge_tts_mp3(spoken_script, pt["voice_id"], WORK_DIR / f"{div}_{today_str}_{slot_id}.tts.mp3")
+                rendered_mp4, rendered_dur = render_cloud_short_mp4(
+                    div=div,
+                    bg_mp4=bg_local_path,
+                    tts_mp3=tts_mp3,
+                    vocal_mp3=vocal_track,
+                    title=title,
+                    slide_body=slide_body,
+                    cta_line=either_or_q,
+                    out_mp4=out_mp4,
+                )
             if rendered_mp4 and rendered_mp4.exists():
                 yt_res = upload_youtube_short_v3(div, rendered_mp4, title, desc, srt_stub, pinned_comment)
                 ig_caption = f"{title}\n\n{slide_body}\n\n{either_or_q}\n\n🔗 {utm_ig}{disclosure_footer}"

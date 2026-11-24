@@ -410,6 +410,66 @@ def ensure_hero_ep1_14m09s_live(token: str, ch_id: str, hist: Dict[str, Any]) ->
     return None
 
 
+def ensure_hero_flagship_mv_live(token: str, ch_id: str, hist: Dict[str, Any]) -> Optional[str]:
+    """Uploads Baek Woon-ho flagship 16:9 full official MV (〈어머니의 봄날〉) once from R2 via official YouTube API v3."""
+    if hist.get("hero_flagship_mv_01_synced"):
+        return str(hist.get("hero_flagship_mv_01_video_id") or "")
+    meta_bytes = fetch_r2_bytes("hero_mv_library/hero_full_mv_01_mothers_spring_16x9_metadata.json", timeout=30)
+    mp4_bytes = fetch_r2_bytes("hero_mv_library/hero_full_mv_01_mothers_spring_16x9.mp4", timeout=240) if meta_bytes else None
+    if not (meta_bytes and mp4_bytes):
+        return None
+    meta = json.loads(meta_bytes.decode("utf-8"))
+    thumb_bytes = fetch_r2_bytes("hero_mv_library/hero_full_mv_01_mothers_spring_16x9_thumb_1280x720.png", timeout=45)
+    srt_bytes = fetch_r2_bytes("hero_mv_library/hero_full_mv_01_mothers_spring_16x9.srt", timeout=30)
+    init_body = json.dumps({
+        "snippet": {
+            "title": meta["yt_title"][:100],
+            "description": meta["description"][:4900],
+            "categoryId": "10",
+            "defaultLanguage": "ko",
+            "defaultAudioLanguage": "ko",
+        },
+        "status": {
+            "privacyStatus": "public",
+            "selfDeclaredMadeForKids": False,
+            "containsSyntheticMedia": True,
+        },
+    }, ensure_ascii=False).encode("utf-8")
+    try:
+        init_req = urllib.request.Request(
+            "https://www.googleapis.com/upload/youtube/v3/videos?uploadType=resumable&part=snippet,status",
+            data=init_body,
+            method="POST",
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json; charset=UTF-8",
+                "X-Upload-Content-Length": str(len(mp4_bytes)),
+                "X-Upload-Content-Type": "video/mp4",
+            },
+        )
+        with urllib.request.urlopen(init_req, timeout=30) as ir:
+            upload_url = ir.headers.get("Location")
+        if not upload_url:
+            return None
+        put_req = urllib.request.Request(upload_url, data=mp4_bytes, method="PUT", headers={"Content-Type": "video/mp4", "Content-Length": str(len(mp4_bytes))})
+        with urllib.request.urlopen(put_req, timeout=300) as pr:
+            new_vid = json.loads(pr.read().decode("utf-8")).get("id", "")
+        if new_vid:
+            if thumb_bytes:
+                upload_video_thumbnail_v3(token, new_vid, thumb_bytes)
+            if srt_bytes:
+                upload_srt_caption(token, new_vid, "ko", "공식 한국어 왕글씨 가사 자막", srt_bytes.decode("utf-8", errors="replace"))
+            if meta.get("pinned_comment"):
+                post_top_comment(token, ch_id, new_vid, meta["pinned_comment"])
+            hist["hero_flagship_mv_01_video_id"] = new_vid
+            hist["hero_flagship_mv_01_synced"] = True
+            print(f"  [HERO FLAGSHIP MV 16:9 LIVE] https://youtu.be/{new_vid}", flush=True)
+            return new_vid
+    except Exception as e:
+        print(f"  [HERO FLAGSHIP MV ERR] {e}", flush=True)
+    return None
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--once-if-pending", action="store_true")
@@ -419,8 +479,8 @@ def main() -> int:
     hist = json.loads(HISTORY_PATH.read_text(encoding="utf-8")) if HISTORY_PATH.exists() else {}
     banners_done = hist.get("banners_synced_20261123") or {}
     all_banners_done = all(banners_done.get(d) for d in ("TOM", "KFG", "GBA", "HERO", "KFK"))
-    if args.once_if_pending and not args.force and hist.get("stage2_yt_audit_20261123_completed") and all_banners_done and hist.get("hero_ep1_14m09s_synced_20261123"):
-        print("[YT STAGE2 AUDIT] Already completed 2026-11-23 remediation + 5 banners + HERO Ep1 -> skipping.", flush=True)
+    if args.once_if_pending and not args.force and hist.get("stage2_yt_audit_20261123_completed") and all_banners_done and hist.get("hero_ep1_14m09s_synced_20261123") and hist.get("hero_flagship_mv_01_synced"):
+        print("[YT STAGE2 AUDIT] Already completed 2026-11-23 remediation + 5 banners + HERO Ep1 + Flagship MV -> skipping.", flush=True)
         return 0
 
     cid = os.getenv("YT_CLIENT_ID", "").strip()
@@ -478,9 +538,11 @@ def main() -> int:
                 "brandingSettings": {"channel": {"description": target_bio}},
             })
 
-        # 0b. Ensure HERO 14m09s Ep 1 is live & synced
+        # 0b. Ensure HERO 14m09s Ep 1 & Flagship 16:9 Trot MV are live & synced
         if div == "HERO" and not hist.get("hero_ep1_14m09s_synced_20261123"):
             ensure_hero_ep1_14m09s_live(atok, ch_id, hist)
+        if div == "HERO" and not hist.get("hero_flagship_mv_01_synced"):
+            ensure_hero_flagship_mv_live(atok, ch_id, hist)
 
         # 1. Flip defective / legacy / bait videos to private
         for bad_id in DEFECTIVE_PRIVATE_IDS.get(div, []):
