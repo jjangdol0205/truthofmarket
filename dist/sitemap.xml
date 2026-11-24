@@ -295,12 +295,6 @@
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://truthofmarket.com/stocks/para.html</loc>
-    <lastmod>2026-11-23</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
     <loc>https://truthofmarket.com/stocks/regn.html</loc>
     <lastmod>2026-11-23</lastmod>
     <changefreq>daily</changefreq>
@@ -410,6 +404,12 @@
   </url>
   <url>
     <loc>https://truthofmarket.com/stocks/u.html</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://truthofmarket.com/stocks/para.html</loc>
     <lastmod>2026-11-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
