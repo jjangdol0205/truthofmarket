@@ -159,7 +159,11 @@ jobs:
           # Run SEO + Carousel in Morning Slot (or manual dispatch) so evening slot never double-posts carousels
           if [ "$HOUR" -lt "14" ] || [ "${{ github.event.inputs.mode }}" = "written_promo" ]; then
             if [ "$DOW" = "1" ] || [ "$DOW" = "4" ] || [ "${{ github.event.inputs.mode }}" = "written_promo" ]; then
-              python -u -X utf8 cloud_automation/written_promo_engine.py --publish-seo --ping-indexnow || true
+              python -u -X utf8 cloud_automation/written_promo_engine.py --publish-seo || true
+              if [ -d "dist" ] && [ -n "$CLOUDFLARE_API_TOKEN" ]; then
+                npx --yes wrangler pages deploy dist --project-name tom-pages --branch main --commit-dirty=true || true
+              fi
+              python -u -X utf8 cloud_automation/written_promo_engine.py --ping-indexnow || true
             fi
             if [ "$DOW" = "1" ] || [ "$DOW" = "3" ] || [ "$DOW" = "5" ] || [ "${{ github.event.inputs.mode }}" = "written_promo" ]; then
               python -u -X utf8 cloud_automation/ig_carousel_publisher.py || true

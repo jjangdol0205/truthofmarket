@@ -38,6 +38,7 @@ from outbound_allowlist import OutboundAllowlistError, assert_allowed_yt_channel
 
 ROOT = Path(__file__).resolve().parent.parent
 HISTORY_PATH = ROOT / "data" / "promo_history.json"
+QUOTA_HIT = False
 
 DEFECTIVE_PRIVATE_IDS: Dict[str, List[str]] = {
     "TOM": ["kjtL4OAvbQ8", "FdmxF-fPQ8w", "iuRVSQtyKpk", "LzLcU12N8v4"],
@@ -160,9 +161,11 @@ def yt_api(method: str, path: str, token: str, payload: Optional[Dict[str, Any]]
         with urllib.request.urlopen(req, timeout=25) as r:
             return json.loads(r.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
+        global QUOTA_HIT
         body = e.read().decode("utf-8", errors="replace")[:260]
         print(f"[YT API {method} {path}] HTTP {e.code}: {body}", flush=True)
         if e.code == 403 and "quotaExceeded" in body:
+            QUOTA_HIT = True
             return {"_quota_exceeded": True}
         return None
 
@@ -232,7 +235,11 @@ def upload_srt_caption(token: str, video_id: str, language: str, name: str, srt_
             print(f"  [CAPTION INSERT OK] {video_id} ({language}) -> HTTP {r.status}", flush=True)
             return True
     except urllib.error.HTTPError as e:
-        print(f"  [CAPTION INSERT ERR] {video_id}: HTTP {e.code} {e.read().decode('utf-8', errors='replace')[:200]}", flush=True)
+        global QUOTA_HIT
+        err_body = e.read().decode("utf-8", errors="replace")[:200]
+        print(f"  [CAPTION INSERT ERR] {video_id}: HTTP {e.code} {err_body}", flush=True)
+        if e.code == 403 and "quotaExceeded" in err_body:
+            QUOTA_HIT = True
         return False
 
 
@@ -483,8 +490,12 @@ def main() -> int:
         print("[YT STAGE2 AUDIT] Already completed 2026-11-23 remediation + 5 banners + HERO Ep1 + Flagship MV -> skipping.", flush=True)
         return 0
 
+    global QUOTA_HIT
+    QUOTA_HIT = False
     cid = os.getenv("YT_CLIENT_ID", "").strip()
     csec = os.getenv("YT_CLIENT_SECRET", "").strip()
+    cid2 = os.getenv("YT_CLIENT_ID_2", "").strip()
+    csec2 = os.getenv("YT_CLIENT_SECRET_2", "").strip()
     if not (cid and csec):
         print("[YT STAGE2 AUDIT] YT_CLIENT_ID / YT_CLIENT_SECRET not set -> waiting for secrets.", flush=True)
         return 0
@@ -493,14 +504,16 @@ def main() -> int:
     quota_hit = False
 
     for div in ["TOM", "KFG", "GBA", "HERO", "KFK"]:
-        if quota_hit:
+        if quota_hit or QUOTA_HIT:
+            quota_hit = True
             completed_all_divs = False
             break
         rtok = os.getenv(f"YT_REFRESH_TOKEN_{div}", "").strip()
         if not rtok:
             completed_all_divs = False
             continue
-        atok = refresh_access_token(cid, csec, rtok)
+        use_cid, use_csec = (cid2, csec2) if (div in ("HERO", "KFK") and cid2 and csec2) else (cid, csec)
+        atok = refresh_access_token(use_cid, use_csec, rtok)
         if not atok:
             completed_all_divs = False
             continue
@@ -553,13 +566,25 @@ def main() -> int:
         if not uploads_pl:
             continue
         pl = yt_api("GET", f"/playlistItems?part=snippet&maxResults=25&playlistId={uploads_pl}", atok)
+        if QUOTA_HIT or not pl or pl.get("_quota_exceeded"):
+            quota_hit = True
+            completed_all_divs = False
+            break
         vids = [it["snippet"]["resourceId"]["videoId"] for it in (pl or {}).get("items", [])]
         if not vids:
             continue
         vinfo = yt_api("GET", f"/videos?part=snippet,status,statistics&id={','.join(vids[:25])}", atok)
+        if QUOTA_HIT or not vinfo or vinfo.get("_quota_exceeded"):
+            quota_hit = True
+            completed_all_divs = False
+            break
         srt_uploaded = 0
         cmt_posted = 0
         for item in (vinfo or {}).get("items", []):
+            if QUOTA_HIT:
+                quota_hit = True
+                completed_all_divs = False
+                break
             vid = item["id"]
             if item.get("status", {}).get("privacyStatus") != "public":
                 continue
@@ -615,14 +640,18 @@ def main() -> int:
 
             # Post UTM + either/or top comment on public videos with 0 comments (max 4/div/run to protect quota)
             cmts = int(item.get("statistics", {}).get("commentCount", 0) or 0)
-            if cmts == 0 and cmt_posted < 4:
+            if cmts == 0 and cmt_posted < 4 and not QUOTA_HIT:
                 if post_top_comment(atok, ch_id, vid, DIV_PINNED_UTM_COMMENTS[div]):
                     cmt_posted += 1
+            if QUOTA_HIT:
+                quota_hit = True
+                completed_all_divs = False
+                break
 
             # Upload missing official .srt caption (max 3/div/run to stay well under 10k/day quota)
-            if srt_uploaded < 3:
+            if srt_uploaded < 3 and not QUOTA_HIT:
                 caps = yt_api("GET", f"/captions?part=snippet&videoId={vid}", atok)
-                if caps and caps.get("_quota_exceeded"):
+                if QUOTA_HIT or (caps and caps.get("_quota_exceeded")):
                     quota_hit = True
                     completed_all_divs = False
                     break
@@ -631,6 +660,10 @@ def main() -> int:
                     srt_txt = build_clean_srt_from_metadata(title, desc)
                     if upload_srt_caption(atok, vid, DIV_LANG[div], f"Official {DIV_LANG[div].upper()}", srt_txt):
                         srt_uploaded += 1
+                    if QUOTA_HIT:
+                        quota_hit = True
+                        completed_all_divs = False
+                        break
 
     if completed_all_divs and not quota_hit:
         hist["stage2_yt_reset_completed"] = True

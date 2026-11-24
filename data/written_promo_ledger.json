@@ -15,15 +15,16 @@
       "utm_content_b": "TOM_S1_CURIOSITY_vB",
       "visible_chars": 5522,
       "written_paths": [
-        "D:\\드림컴퍼니\\1사업부\\insights\\tom-s2-proof-2026-11-23.html"
+        "D:\\드림컴퍼니\\1사업부\\insights\\tom-s2-proof-2026-11-23.html",
+        "D:\\드림컴퍼니\\1사업부\\dist\\insights\\tom-s2-proof-2026-11-23.html"
       ],
       "indexnow": {
         "ok": true,
-        "dry_run": true,
         "host": "truthofmarket.com",
-        "urls": [
-          "https://truthofmarket.com/insights/tom-s2-proof-2026-11-23.html"
-        ],
+        "results": {
+          "https://api.indexnow.org/indexnow": 200,
+          "https://searchadvisor.naver.com/indexnow": 200
+        },
         "keyLocation": "https://truthofmarket.com/dc7a91e4f28b4c6ea513d809b7c2f418.txt"
       },
       "winner_swapped": false
@@ -44,16 +45,17 @@
       "visible_chars": 5314,
       "written_paths": [
         "D:\\드림컴퍼니\\2사업부\\.gh-pages-kisfitglobal\\qna\\kfg-s2-proof-2026-11-23.html",
+        "D:\\드림컴퍼니\\2사업부\\dist\\qna\\kfg-s2-proof-2026-11-23.html",
         "D:\\드림컴퍼니\\2사업부\\dist-global\\qna\\kfg-s2-proof-2026-11-23.html",
         "D:\\드림컴퍼니\\2사업부\\qna\\kfg-s2-proof-2026-11-23.html"
       ],
       "indexnow": {
         "ok": true,
-        "dry_run": true,
         "host": "kisfitglobal.com",
-        "urls": [
-          "https://kisfitglobal.com/qna/kfg-s2-proof-2026-11-23.html"
-        ],
+        "results": {
+          "https://api.indexnow.org/indexnow": 200,
+          "https://searchadvisor.naver.com/indexnow": 200
+        },
         "keyLocation": "https://kisfitglobal.com/dc7a91e4f28b4c6ea513d809b7c2f418.txt"
       },
       "winner_swapped": false
@@ -74,15 +76,16 @@
       "visible_chars": 2502,
       "written_paths": [
         "D:\\드림컴퍼니\\3사업부\\jp\\column\\gba-s2-proof-2026-11-23.html",
-        "D:\\드림컴퍼니\\3사업부\\dist\\jp\\column\\gba-s2-proof-2026-11-23.html"
+        "D:\\드림컴퍼니\\3사업부\\dist\\jp\\column\\gba-s2-proof-2026-11-23.html",
+        "D:\\드림컴퍼니\\3사업부\\cf_dist\\jp\\column\\gba-s2-proof-2026-11-23.html"
       ],
       "indexnow": {
         "ok": true,
-        "dry_run": true,
         "host": "getbreakai.com",
-        "urls": [
-          "https://getbreakai.com/jp/column/gba-s2-proof-2026-11-23.html"
-        ],
+        "results": {
+          "https://api.indexnow.org/indexnow": 200,
+          "https://searchadvisor.naver.com/indexnow": 200
+        },
         "keyLocation": "https://getbreakai.com/dc7a91e4f28b4c6ea513d809b7c2f418.txt"
       },
       "winner_swapped": false
@@ -102,15 +105,16 @@
       "utm_content_b": "HERO_S1_CURIOSITY_vB",
       "visible_chars": 3012,
       "written_paths": [
-        "D:\\드림컴퍼니\\4사업부\\story\\hero-s2-proof-2026-11-23.html"
+        "D:\\드림컴퍼니\\4사업부\\story\\hero-s2-proof-2026-11-23.html",
+        "D:\\드림컴퍼니\\4사업부\\cf_dist\\story\\hero-s2-proof-2026-11-23.html"
       ],
       "indexnow": {
         "ok": true,
-        "dry_run": true,
         "host": "paradise-hero.com",
-        "urls": [
-          "https://paradise-hero.com/story/hero-s2-proof-2026-11-23.html"
-        ],
+        "results": {
+          "https://api.indexnow.org/indexnow": 200,
+          "https://searchadvisor.naver.com/indexnow": 200
+        },
         "keyLocation": "https://paradise-hero.com/dc7a91e4f28b4c6ea513d809b7c2f418.txt"
       },
       "winner_swapped": false
@@ -135,15 +139,163 @@
       ],
       "indexnow": {
         "ok": true,
-        "dry_run": true,
         "host": "kidsfit.co.kr",
-        "urls": [
-          "https://kidsfit.co.kr/qna/kfk-s2-proof-2026-11-23.html"
-        ],
+        "results": {
+          "https://api.indexnow.org/indexnow": 200,
+          "https://searchadvisor.naver.com/indexnow": 200
+        },
+        "keyLocation": "https://kidsfit.co.kr/dc7a91e4f28b4c6ea513d809b7c2f418.txt"
+      },
+      "winner_swapped": false
+    },
+    {
+      "division": "TOM",
+      "slug": "tom-s2-proof-2026-11-25.html",
+      "canonical_url": "https://truthofmarket.com/insights/tom-s2-proof-2026-11-25.html",
+      "date_str": "2026-11-25",
+      "matrix_id_a": "TOM_S2_PROOF",
+      "matrix_id_b": "TOM_S1_CURIOSITY",
+      "hook_type_a": "proof",
+      "hook_type_b": "curiosity",
+      "headline_a": "During the 2000–2010 lost decade, US large stocks returned near 0% for 10 straight years.",
+      "headline_b": "Two retirees both started with $1,000,000—why did one run dry 9 years sooner?",
+      "utm_content_a": "TOM_S2_PROOF_vA",
+      "utm_content_b": "TOM_S1_CURIOSITY_vB",
+      "visible_chars": 5522,
+      "written_paths": [
+        "D:\\드림컴퍼니\\1사업부\\insights\\tom-s2-proof-2026-11-25.html",
+        "D:\\드림컴퍼니\\1사업부\\dist\\insights\\tom-s2-proof-2026-11-25.html"
+      ],
+      "indexnow": {
+        "ok": true,
+        "host": "truthofmarket.com",
+        "results": {
+          "https://api.indexnow.org/indexnow": 200,
+          "https://searchadvisor.naver.com/indexnow": 200
+        },
+        "keyLocation": "https://truthofmarket.com/dc7a91e4f28b4c6ea513d809b7c2f418.txt"
+      },
+      "winner_swapped": false
+    },
+    {
+      "division": "KFG",
+      "slug": "kfg-s2-proof-2026-11-25.html",
+      "canonical_url": "https://kisfitglobal.com/qna/kfg-s2-proof-2026-11-25.html",
+      "date_str": "2026-11-25",
+      "matrix_id_a": "KFG_S2_PROOF",
+      "matrix_id_b": "KFG_S1_CURIOSITY",
+      "hook_type_a": "proof",
+      "hook_type_b": "curiosity",
+      "headline_a": "Averaging mom and dad's height alone carries a +/- 3.5 inch spread on US CDC reference charts.",
+      "headline_b": "Same mom and dad, yet two siblings end up 4 inches apart—why?",
+      "utm_content_a": "KFG_S2_PROOF_vA",
+      "utm_content_b": "KFG_S1_CURIOSITY_vB",
+      "visible_chars": 5314,
+      "written_paths": [
+        "D:\\드림컴퍼니\\2사업부\\.gh-pages-kisfitglobal\\qna\\kfg-s2-proof-2026-11-25.html",
+        "D:\\드림컴퍼니\\2사업부\\dist\\qna\\kfg-s2-proof-2026-11-25.html",
+        "D:\\드림컴퍼니\\2사업부\\dist-global\\qna\\kfg-s2-proof-2026-11-25.html",
+        "D:\\드림컴퍼니\\2사업부\\qna\\kfg-s2-proof-2026-11-25.html"
+      ],
+      "indexnow": {
+        "ok": true,
+        "host": "kisfitglobal.com",
+        "results": {
+          "https://api.indexnow.org/indexnow": 200,
+          "https://searchadvisor.naver.com/indexnow": 200
+        },
+        "keyLocation": "https://kisfitglobal.com/dc7a91e4f28b4c6ea513d809b7c2f418.txt"
+      },
+      "winner_swapped": false
+    },
+    {
+      "division": "GBA",
+      "slug": "gba-s2-proof-2026-11-25.html",
+      "canonical_url": "https://getbreakai.com/jp/column/gba-s2-proof-2026-11-25.html",
+      "date_str": "2026-11-25",
+      "matrix_id_a": "GBA_S2_PROOF",
+      "matrix_id_b": "GBA_S1_CURIOSITY",
+      "hook_type_a": "proof",
+      "hook_type_b": "curiosity",
+      "headline_a": "新NISAで頻繁に売買すると、今年の年間投資枠360万円は売却しても当年中には復活しません。",
+      "headline_b": "同じ資産3,000万円で退職した2人——なぜ片方だけ老後資金が5年早く尽きたのか？",
+      "utm_content_a": "GBA_S2_PROOF_vA",
+      "utm_content_b": "GBA_S1_CURIOSITY_vB",
+      "visible_chars": 2502,
+      "written_paths": [
+        "D:\\드림컴퍼니\\3사업부\\jp\\column\\gba-s2-proof-2026-11-25.html",
+        "D:\\드림컴퍼니\\3사업부\\dist\\jp\\column\\gba-s2-proof-2026-11-25.html",
+        "D:\\드림컴퍼니\\3사업부\\cf_dist\\jp\\column\\gba-s2-proof-2026-11-25.html"
+      ],
+      "indexnow": {
+        "ok": true,
+        "host": "getbreakai.com",
+        "results": {
+          "https://api.indexnow.org/indexnow": 200,
+          "https://searchadvisor.naver.com/indexnow": 200
+        },
+        "keyLocation": "https://getbreakai.com/dc7a91e4f28b4c6ea513d809b7c2f418.txt"
+      },
+      "winner_swapped": false
+    },
+    {
+      "division": "HERO",
+      "slug": "hero-s2-proof-2026-11-25.html",
+      "canonical_url": "https://paradise-hero.com/story/hero-s2-proof-2026-11-25.html",
+      "date_str": "2026-11-25",
+      "matrix_id_a": "HERO_S2_PROOF",
+      "matrix_id_b": "HERO_S1_CURIOSITY",
+      "hook_type_a": "proof",
+      "hook_type_b": "curiosity",
+      "headline_a": "어머님 눈이 편안한 20px 이상 큰글씨와 60px 큼직한 버튼으로만 만든 시니어 맞춤 사랑방.",
+      "headline_b": "명절 끝나고 시집간 딸이 친정 냉장고 문에 몰래 붙이고 간 3줄 쪽지의 정체.",
+      "utm_content_a": "HERO_S2_PROOF_vA",
+      "utm_content_b": "HERO_S1_CURIOSITY_vB",
+      "visible_chars": 3012,
+      "written_paths": [
+        "D:\\드림컴퍼니\\4사업부\\story\\hero-s2-proof-2026-11-25.html",
+        "D:\\드림컴퍼니\\4사업부\\cf_dist\\story\\hero-s2-proof-2026-11-25.html"
+      ],
+      "indexnow": {
+        "ok": true,
+        "host": "paradise-hero.com",
+        "results": {
+          "https://api.indexnow.org/indexnow": 200,
+          "https://searchadvisor.naver.com/indexnow": 200
+        },
+        "keyLocation": "https://paradise-hero.com/dc7a91e4f28b4c6ea513d809b7c2f418.txt"
+      },
+      "winner_swapped": false
+    },
+    {
+      "division": "KFK",
+      "slug": "kfk-s2-proof-2026-11-25.html",
+      "canonical_url": "https://kidsfit.co.kr/qna/kfk-s2-proof-2026-11-25.html",
+      "date_str": "2026-11-25",
+      "matrix_id_a": "KFK_S2_PROOF",
+      "matrix_id_b": "KFK_S1_CURIOSITY",
+      "hook_type_a": "proof",
+      "hook_type_b": "curiosity",
+      "headline_a": "엄마·아빠 키만 더하는 단순 유전 공식은 실제 최종 성인키와 최대 ±8cm까지 차이가 납니다.",
+      "headline_b": "같은 엄마 아빠 밑에서 자랐는데, 왜 형제 키가 최종 10cm까지 벌어질까요?",
+      "utm_content_a": "KFK_S2_PROOF_vA",
+      "utm_content_b": "KFK_S1_CURIOSITY_vB",
+      "visible_chars": 2848,
+      "written_paths": [
+        "D:\\드림컴퍼니\\5사업부\\qna\\kfk-s2-proof-2026-11-25.html",
+        "D:\\드림컴퍼니\\5사업부\\dist\\qna\\kfk-s2-proof-2026-11-25.html"
+      ],
+      "indexnow": {
+        "ok": true,
+        "host": "kidsfit.co.kr",
+        "results": {
+          "https://api.indexnow.org/indexnow": 200,
+          "https://searchadvisor.naver.com/indexnow": 200
+        },
         "keyLocation": "https://kidsfit.co.kr/dc7a91e4f28b4c6ea513d809b7c2f418.txt"
       },
       "winner_swapped": false
     }
   ],
-  "updated_at_kst": "2026-11-23 21:12:25 KST"
+  "updated_at_kst": "2026-11-25 07:00:41 KST"
 }
