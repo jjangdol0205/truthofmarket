@@ -952,6 +952,7 @@ def upload_youtube_short_v3(
     desc: str,
     srt_text: str,
     pinned_comment: str,
+    upload_srt: bool = True,
 ) -> Dict[str, Any]:
     """Official YouTube Data API v3 Resumable Short Upload + Official .srt Caption + UTM Either/Or Comment."""
     atok = _refresh_yt_token(div)
@@ -1029,26 +1030,27 @@ def upload_youtube_short_v3(
     except Exception as e:
         return {"ok": False, "error": str(e)}
 
-    # 3. Upload Official .srt Caption (non-fatal if quota tight)
+    # 3. Upload Official .srt Caption (quota-budgeted: 400 units each; HERO always prioritized!)
     srt_ok = False
-    try:
-        boundary = "----DreamCompanyCloudSRT2026"
-        cmeta = json.dumps({"snippet": {"videoId": vid, "language": lang, "name": f"Official {lang.upper()}", "isDraft": False}})
-        cbody = (
-            f"--{boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n{cmeta}\r\n"
-            f"--{boundary}\r\nContent-Type: application/octet-stream\r\n\r\n{srt_text}\r\n"
-            f"--{boundary}--\r\n"
-        ).encode("utf-8")
-        sreq = urllib.request.Request(
-            "https://www.googleapis.com/upload/youtube/v3/captions?part=snippet&uploadType=multipart",
-            data=cbody,
-            method="POST",
-            headers={"Authorization": f"Bearer {atok}", "Content-Type": f"multipart/related; boundary={boundary}"},
-        )
-        with urllib.request.urlopen(sreq, timeout=30) as sr:
-            srt_ok = sr.status in (200, 201)
-    except Exception as se:
-        print(f"  [YT SRT WARN {div} {vid}] {se}", flush=True)
+    if upload_srt:
+        try:
+            boundary = "----DreamCompanyCloudSRT2026"
+            cmeta = json.dumps({"snippet": {"videoId": vid, "language": lang, "name": f"Official {lang.upper()}", "isDraft": False}})
+            cbody = (
+                f"--{boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n{cmeta}\r\n"
+                f"--{boundary}\r\nContent-Type: application/octet-stream\r\n\r\n{srt_text}\r\n"
+                f"--{boundary}--\r\n"
+            ).encode("utf-8")
+            sreq = urllib.request.Request(
+                "https://www.googleapis.com/upload/youtube/v3/captions?part=snippet&uploadType=multipart",
+                data=cbody,
+                method="POST",
+                headers={"Authorization": f"Bearer {atok}", "Content-Type": f"multipart/related; boundary={boundary}"},
+            )
+            with urllib.request.urlopen(sreq, timeout=30) as sr:
+                srt_ok = sr.status in (200, 201)
+        except Exception as se:
+            print(f"  [YT SRT WARN {div} {vid}] {se}", flush=True)
 
     # 4. Post Top UTM + Either/Or Engagement Comment
     cmt_ok = False
@@ -1183,12 +1185,23 @@ def main() -> int:
     flow_manifest_path, flow_manifest = load_flow_vault_manifest()
     flow_manifest_dirty = False
 
-    # Build set of already-published (date, slot, div) so 2x/day runs are 100% idempotent
-    done_slots = {
+    # Build quota-safe idempotency sets:
+    # - YouTube: STRICTLY max 1 Short/div/day (5 x 1,600 = 8,000 units < 10,000 daily quota!)
+    #   If SLOT_A succeeded on YT, SLOT_B skips YT and only posts IG #2; if SLOT_A missed YT, SLOT_B catches up!
+    # - Instagram: max 1 Reel/div/slot (max 2/day, 8h gap enforced in publish_instagram_reel_via_r2)
+    yt_done_today = {
+        (u.get("date"), u.get("div"))
+        for u in hist.get("uploads", [])
+        if u.get("yt_video_id")
+    }
+    ig_done_slot = {
         (u.get("date"), u.get("slot", "SLOT_A"), u.get("div"))
         for u in hist.get("uploads", [])
-        if u.get("yt_video_id") or u.get("ig_media_id")
+        if u.get("ig_media_id")
     }
+    # Rotate captions.insert (400 units each): HERO always gets .srt + 1 rotating peer (800 units total -> 9,055/10,000 safe cap!)
+    non_hero_divs = ["TOM", "KFG", "GBA", "KFK"]
+    srt_partner_today = non_hero_divs[doy % len(non_hero_divs)]
 
     day_arm = (doy + (1 if slot_id == "SLOT_B" else 0)) % 2
     planned = []
@@ -1196,8 +1209,10 @@ def main() -> int:
     for div in ["TOM", "KFG", "GBA", "HERO", "KFK"]:
         if len(planned) >= MAX_DAILY_YT_UPLOADS:
             break
-        if (not dry_run) and (today_str, slot_id, div) in done_slots:
-            print(f"  [IDEMPOTENT SKIP] {div:4s} already published for {today_str} {slot_id}", flush=True)
+        yt_already = (today_str, div) in yt_done_today
+        ig_already = (today_str, slot_id, div) in ig_done_slot
+        if (not dry_run) and yt_already and ig_already:
+            print(f"  [IDEMPOTENT SKIP] {div:4s} already published YT (today) & IG ({slot_id})", flush=True)
             continue
         pt = PERSONA_TEMPLATES[div]
         tid, fallback_title = pick_next_topic(div, hist, today_str)
@@ -1347,15 +1362,22 @@ def main() -> int:
                     out_mp4=out_mp4,
                 )
             if rendered_mp4 and rendered_mp4.exists():
-                yt_res = upload_youtube_short_v3(div, rendered_mp4, title, desc, srt_stub, pinned_comment)
-                ig_caption = f"{title}\n\n{slide_body}\n\n{either_or_q}\n\n🔗 {utm_ig}{disclosure_footer}"
-                ig_res = publish_instagram_reel_via_r2(
-                    div,
-                    rendered_mp4,
-                    ig_caption,
-                    f"reels/{today_str}/{div}_{slot_id}_{int(time.time())}.mp4",
-                    hist=hist,
-                )
+                if yt_already:
+                    yt_res = {"ok": False, "skipped": "yt_daily_1per_div_already_done"}
+                else:
+                    do_srt = (div == "HERO") or (div == srt_partner_today)
+                    yt_res = upload_youtube_short_v3(div, rendered_mp4, title, desc, srt_stub, pinned_comment, upload_srt=do_srt)
+                if ig_already:
+                    ig_res = {"ok": False, "skipped": "ig_slot_already_done"}
+                else:
+                    ig_caption = f"{title}\n\n{slide_body}\n\n{either_or_q}\n\n🔗 {utm_ig}{disclosure_footer}"
+                    ig_res = publish_instagram_reel_via_r2(
+                        div,
+                        rendered_mp4,
+                        ig_caption,
+                        f"reels/{today_str}/{div}_{slot_id}_{int(time.time())}.mp4",
+                        hist=hist,
+                    )
                 try:
                     rendered_mp4.unlink(missing_ok=True)
                     if tts_mp3:
