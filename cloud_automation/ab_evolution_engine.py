@@ -111,10 +111,11 @@ def _load_runtime_env() -> Dict[str, str]:
                     if not s or s.startswith("#") or "=" not in s:
                         continue
                     k, v = s.split("=", 1)
-                    merged.setdefault(k.strip(), v.strip().strip('"').strip("'"))
+                    val = v.strip().strip('"').strip("'")
+                    if val:
+                        merged.setdefault(k.strip(), val)
             except Exception:
                 pass
-            break
     # Process environment (GitHub Actions secrets) always overrides local .env
     for k, v in os.environ.items():
         if v is not None and str(v).strip() != "":
@@ -412,7 +413,7 @@ def collect_instagram_14d(
     except Exception:
         return []
 
-    base_host = "https://graph.instagram.com" if tinfo.get("family") == "IGAA" else "https://graph.facebook.com/v21.0"
+    base_host = "https://graph.instagram.com/v22.0" if tinfo.get("family") == "IGAA" else "https://graph.facebook.com/v22.0"
     items: List[Dict[str, Any]] = []
     try:
         m_url = (
@@ -420,7 +421,7 @@ def collect_instagram_14d(
             f"?fields=id,caption,media_type,media_product_type,timestamp,like_count,comments_count"
             f"&limit=20&access_token={urllib.parse.quote(ig_tok)}"
         )
-        with urllib.request.urlopen(urllib.request.Request(m_url, headers={"User-Agent": "DC-AB-IG/1.0"}), timeout=20) as r:
+        with urllib.request.urlopen(urllib.request.Request(m_url, headers={"User-Agent": "DC-AB-IG/2.2"}), timeout=20) as r:
             media_list = json.loads(r.read().decode("utf-8")).get("data") or []
     except urllib.error.HTTPError as e:
         body = e.read().decode("utf-8", errors="replace")[:160]
@@ -432,7 +433,12 @@ def collect_instagram_14d(
 
     now_u = dt.datetime.now(UTC)
     cutoff = now_u - dt.timedelta(days=days)
-    oauth_stopped = False
+    insights_blocked = False
+    scope_warn_logged = False
+    # v22 canonical metric chain: `views` replaced deprecated `plays` in Graph API v22!
+    # Fallback cleanly to `ig_reels_aggregated_all_plays_count` / `reach` ONLY on metric deprecation (never on code 10/190 auth!).
+    preferred_reel_metrics = ["views,reach,saved,shares", "ig_reels_aggregated_all_plays_count,reach,saved,shares", "reach,saved,shares"]
+    active_metric_idx = 0
 
     for m in media_list[:15]:
         ts_str = str(m.get("timestamp") or "")
@@ -451,37 +457,63 @@ def collect_instagram_14d(
 
         likes = int(m.get("like_count") or 0)
         comments = int(m.get("comments_count") or 0)
-        plays = 0
+        views_v22 = 0
+        plays_agg = 0
         reach = 0
         saves = 0
         shares = 0
 
-        if not oauth_stopped:
-            metrics_q = "reach,saved,shares" if platform == "instagram_carousel" else "plays,reach,saved,shares"
-            ins_url = f"{base_host}/{mid_str}/insights?metric={metrics_q}&access_token={urllib.parse.quote(ig_tok)}"
-            try:
-                with urllib.request.urlopen(urllib.request.Request(ins_url, headers={"User-Agent": "DC-AB-IG/1.0"}), timeout=12) as ir:
-                    ins_data = json.loads(ir.read().decode("utf-8")).get("data") or []
-                for entry in ins_data:
-                    nm = str(entry.get("name") or "")
-                    vals = entry.get("values") or [{}]
-                    v0 = int((vals[0] or {}).get("value") or 0)
-                    if nm == "plays":
-                        plays = v0
-                    elif nm == "reach":
-                        reach = v0
-                    elif nm == "saved":
-                        saves = v0
-                    elif nm == "shares":
-                        shares = v0
-            except urllib.error.HTTPError as e:
-                err_b = e.read().decode("utf-8", errors="replace")
-                if "OAuthException" in err_b or e.code in (401, 403):
-                    oauth_stopped = True
-            except Exception:
-                pass
+        if not insights_blocked:
+            cand_list = ["views,reach,saved,shares", "reach,saved,shares"] if platform == "instagram_carousel" else preferred_reel_metrics[active_metric_idx:]
+            for offset_i, metrics_q in enumerate(cand_list):
+                ins_url = f"{base_host}/{mid_str}/insights?metric={metrics_q}&access_token={urllib.parse.quote(ig_tok)}"
+                try:
+                    with urllib.request.urlopen(urllib.request.Request(ins_url, headers={"User-Agent": "DC-AB-IG/2.2"}), timeout=12) as ir:
+                        ins_data = json.loads(ir.read().decode("utf-8")).get("data") or []
+                    for entry in ins_data:
+                        nm = str(entry.get("name") or "")
+                        vals = entry.get("values") or [{}]
+                        v0 = int((vals[0] or {}).get("value") or 0)
+                        if nm == "views":
+                            views_v22 = v0
+                        elif nm in ("ig_reels_aggregated_all_plays_count", "plays"):
+                            plays_agg = v0
+                        elif nm == "reach":
+                            reach = v0
+                        elif nm == "saved":
+                            saves = v0
+                        elif nm == "shares":
+                            shares = v0
+                    if platform == "instagram_reels" and offset_i > 0:
+                        active_metric_idx = min(len(preferred_reel_metrics) - 1, active_metric_idx + offset_i)
+                    break
+                except urllib.error.HTTPError as e:
+                    err_b = e.read().decode("utf-8", errors="replace")
+                    err_code = 0
+                    try:
+                        err_code = int((json.loads(err_b).get("error") or {}).get("code") or 0)
+                    except Exception:
+                        pass
+                    # Code 10 = missing `instagram_manage_insights` permission; Code 190/401/403 = token/auth.
+                    # Honor Meta 4-Rule Safety: stop insights immediately for this division (ZERO retry storm!).
+                    if err_code in (10, 190, 200) or e.code in (401, 403) or "does not have permission" in err_b.lower():
+                        insights_blocked = True
+                        if not scope_warn_logged:
+                            scope_warn_logged = True
+                            print(
+                                f"  [IG INSIGHTS SCOPE MISSING {div_u}] code={err_code} (add 'instagram_manage_insights' to Meta token; likes/comments still collected)",
+                                flush=True,
+                            )
+                        break
+                    # Metric-specific deprecation (code 100 / unsupported metric) -> try next fallback metric once
+                    if err_code == 100 or "metric" in err_b.lower() or "no longer supported" in err_b.lower():
+                        continue
+                    insights_blocked = True
+                    break
+                except Exception:
+                    break
 
-        views = plays if plays > 0 else reach
+        views = views_v22 if views_v22 > 0 else (plays_agg if plays_agg > 0 else reach)
         age_days = max(0.5, (now_u - pub_dt).total_seconds() / 86400.0)
         ht, mat_id = infer_hook_type_and_matrix(div_u, first_line or cap[:120], matrix_db, ig_hist_map.get(mid_str))
         items.append({

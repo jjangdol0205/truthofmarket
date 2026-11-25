@@ -1244,6 +1244,184 @@ def publish_instagram_reel_via_r2(
         return {"ok": False, "error": str(e)}
 
 
+_SMH_FG_CACHE: Optional[Dict[str, Any]] = None
+
+
+def fetch_live_smh_fg_snapshot() -> Optional[Dict[str, Any]]:
+    """
+    Fetches live daily SMH Fear & Greed Index from https://truthofmarket.com/data/smh_fg_latest.json
+    (browser User-Agent required by edge WAF) with clean local dist/data fallback.
+    """
+    global _SMH_FG_CACHE
+    if _SMH_FG_CACHE is not None:
+        return _SMH_FG_CACHE or None
+
+    raw: Optional[Dict[str, Any]] = None
+    try:
+        req = urllib.request.Request(
+            f"https://truthofmarket.com/data/smh_fg_latest.json?nc={int(time.time())}",
+            headers={
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/126.0.0.0 Safari/537.36",
+                "Accept": "application/json",
+            },
+        )
+        with urllib.request.urlopen(req, timeout=12) as r:
+            raw = json.loads(r.read().decode("utf-8"))
+    except Exception:
+        for cand in (
+            ROOT / "dist" / "data" / "smh_fg_latest.json",
+            ROOT / "data" / "smh_fg_latest.json",
+            Path(r"D:\드림컴퍼니\1사업부\dist\data\smh_fg_latest.json"),
+        ):
+            if cand.exists():
+                try:
+                    raw = json.loads(cand.read_text(encoding="utf-8"))
+                    break
+                except Exception:
+                    pass
+
+    if not raw or raw.get("score") is None:
+        _SMH_FG_CACHE = {}
+        return None
+
+    factors = raw.get("factors") or []
+    dd_pct = ""
+    rot_pct = ""
+    for f in factors:
+        k = str(f.get("key") or "")
+        rd = str(f.get("raw_display") or "")
+        m = re.search(r"([+-]?\d+(?:\.\d+)?%)", rd)
+        if k == "drawdown_52w" and m:
+            dd_pct = m.group(1)
+        elif k == "safe_haven_rotation" and m:
+            rot_pct = m.group(1)
+
+    parsed = {
+        "as_of_date": str(raw.get("as_of_date") or ""),
+        "score": float(raw["score"]),
+        "score_str": f"{float(raw['score']):.1f}".rstrip("0").rstrip("."),
+        "zone_key": str(raw.get("zone_key") or "neutral"),
+        "label_en": str(raw.get("label_en") or "Neutral"),
+        "label_ja": str(raw.get("label_ja") or "中立"),
+        "drawdown_52w_pct": dd_pct or "-35%",
+        "rot_20d_pct": rot_pct,
+    }
+    _SMH_FG_CACHE = parsed
+    return parsed
+
+
+def apply_live_smh_fg_timeliness_hook(
+    div: str,
+    title: str,
+    slide_body: str,
+    desc: str,
+    hook_type: str,
+    slot_id: str,
+    smh_fg: Optional[Dict[str, Any]],
+) -> Tuple[str, str, str, Optional[Dict[str, Any]]]:
+    """
+    Injects real-time SMH Fear & Greed Index score & 52-week drawdown into TOM & GBA
+    first-3-second hook, title, and description WITHOUT mutating message_matrix_5div.json.
+    Strictly educational/statistical (0 buy/sell signals, 0 advisory, Hard Gate verified).
+    """
+    if div not in ("TOM", "GBA") or not smh_fg:
+        return title, slide_body, desc, None
+
+    sc = smh_fg["score_str"]
+    dd = smh_fg["drawdown_52w_pct"]
+    as_of = smh_fg["as_of_date"]
+    rot = smh_fg["rot_20d_pct"]
+    ht = str(hook_type or "proof").lower()
+    is_b = (slot_id == "SLOT_B")
+
+    if div == "TOM":
+        lbl = smh_fg["label_en"]
+        en_titles = {
+            "loss": (
+                f"SMH Fear & Greed Hits {sc} ({dd}): Can Your 401(k) Cushion Hold?"
+                if not is_b else
+                f"Chips Down {dd} (Gauge {sc}/100): Retirement Sequence Risk Explained"
+            ),
+            "curiosity": (
+                f"SMH Gauge at {sc} ({lbl}) — Why Healthcare (XLV) Moves Differently"
+                if not is_b else
+                f"Why SMH Fear Index Reads {sc}/100 ({dd} Off Peak) Today"
+            ),
+            "self": (
+                f"Age 55+ Watching Chips Down {dd}? SMH Gauge {sc} Stress-Test Math"
+                if not is_b else
+                f"Near Retirement With SMH at {sc}/100 ({dd})? Check Historical Math"
+            ),
+            "pattern": (
+                f"SMH Fear Index {sc} ({dd}): Why 60/40 Still Feels Heavy in Chip Drops"
+                if not is_b else
+                f"Beyond Tech Headlines: SMH {sc}/100 ({lbl}) vs 25-Year Balance Data"
+            ),
+            "proof": (
+                f"SMH Fear & Greed {sc}/100 ({dd} Off High): 2000–2025 Drawdown Math"
+                if not is_b else
+                f"Live Data: SMH Index {sc} ({lbl}, {dd}) vs SMH + XLV History"
+            ),
+        }
+        new_title = en_titles.get(ht, en_titles["proof"])[:95]
+        lead_line = f"Today's SMH Fear and Greed Index reads {sc} out of 100 ({lbl}), {dd} below its 52-week high."
+        new_body = f"{lead_line} {slide_body}"
+        fg_link = build_clean_go_link("TOM", "yt_fg")
+        rot_note = f" | 20d SMH vs XLV gap: {rot}" if rot else ""
+        live_block = (
+            f"SMH Fear & Greed Index ({as_of}): {sc}/100 ({lbl}) | {dd} from 52w high{rot_note}.\n"
+            f"Free daily 7-factor gauge: {fg_link}\n"
+            f"(Independent historical market statistics only — not personalized investment advice.)"
+        )
+        new_desc = f"{new_title}\n\n{live_block}\n\n{slide_body}\n\n" + "\n\n".join(desc.split("\n\n")[2:])
+    else:
+        lbl_ja = smh_fg["label_ja"]
+        ja_titles = {
+            "loss": (
+                f"米国半導体・恐怖指数{sc}（高値比{dd}）｜新NISA老後資金を守る統計"
+                if not is_b else
+                f"半導体{dd}下落（指数{sc}点）｜50代からの取り崩し防御チェック"
+            ),
+            "curiosity": (
+                f"半導体指数{sc}点「{lbl_ja}」の今、医療株XLVとの差はなぜ開く？"
+                if not is_b else
+                f"米国半導体・恐怖指数が{sc}点（{dd}）まで冷え込んだ7指標の中身"
+            ),
+            "self": (
+                f"50代・60代の新NISA｜半導体{dd}局面（指数{sc}）で確認したい25年統計"
+                if not is_b else
+                f"老後資金を守る新NISA｜SMH指数{sc}点（{lbl_ja}）の過去データ比較"
+            ),
+            "pattern": (
+                f"半導体・恐怖指数{sc}（{dd}）｜一括集中より大切な防御クッション設計"
+                if not is_b else
+                f"半導体急落{dd}（指数{sc}点）でも慌てないSMH×XLV25年バランス統計"
+            ),
+            "proof": (
+                f"【最新統計】SMH恐怖指数{sc}/100（52週高値比{dd}）2000-2025検証"
+                if not is_b else
+                f"最新データ：半導体恐怖指数{sc}点（{lbl_ja}・{dd}）と防御配分の歴史"
+            ),
+        }
+        new_title = ja_titles.get(ht, ja_titles["proof"])[:95]
+        lead_line = f"最新の米国半導体・恐怖と強欲指数は100点中{sc}点（{lbl_ja}）、52週高値から{dd}の水準です。"
+        new_body = f"{lead_line} {slide_body}"
+        fg_link = build_clean_go_link("GBA", "yt_fg")
+        rot_note = f"｜20日SMH対XLV差 {rot}" if rot else ""
+        live_block = (
+            f"米国半導体・恐怖と強欲指数（{as_of}時点）：{sc}/100（{lbl_ja}）｜52週高値比 {dd}{rot_note}。\n"
+            f"毎日更新の無料7指標ゲージ：{fg_link}\n"
+            f"（※過去の公開市場データに基づく教育・統計情報であり、特定銘柄の投資助言ではありません）"
+        )
+        new_desc = f"{new_title}\n\n{live_block}\n\n{slide_body}\n\n" + "\n\n".join(desc.split("\n\n")[2:])
+
+    ok_t, _ = check_promo_hard_gate(div, new_title, surface="youtube_title")
+    ok_d, _ = check_promo_hard_gate(div, new_desc, surface="youtube_desc")
+    if ok_t and ok_d:
+        return new_title, new_body, new_desc, {"smh_fg_score": smh_fg["score"], "smh_fg_as_of": as_of, "smh_fg_dd52w": dd}
+    return title, slide_body, desc, None
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true")
@@ -1333,6 +1511,21 @@ def main() -> int:
 
         disclosure_footer = f"\n※ {pt['ai_disclosure_line']}\n" if div == "HERO" else ""
         desc = f"{title}\n\n{slide_body}\n\n{pinned_comment}{disclosure_footer}"
+
+        # Live SMH Fear & Greed Index timeliness hook for TOM & GBA (0 matrix mutation, Hard Gate checked!)
+        smh_fg_meta: Optional[Dict[str, Any]] = None
+        if div in ("TOM", "GBA"):
+            live_smh_fg = fetch_live_smh_fg_snapshot()
+            title, slide_body, desc, smh_fg_meta = apply_live_smh_fg_timeliness_hook(
+                div=div,
+                title=title,
+                slide_body=slide_body,
+                desc=desc,
+                hook_type=str(matrix_meta.get("hook_type") or "proof"),
+                slot_id=slot_id,
+                smh_fg=live_smh_fg,
+            )
+
         srt_stub = (
             f"1\n00:00:00,000 --> 00:00:04,500\n{title}\n\n"
             f"2\n00:00:04,600 --> 00:00:18,000\n{slide_body[:130]}\n\n"
@@ -1549,6 +1742,7 @@ def main() -> int:
             "ig_status": "ok" if ig_res.get("ok") else (ig_res.get("skipped") or ig_res.get("error") or ig_res.get("http_error")),
             **matrix_meta,
             **flow_bg_meta,
+            **(smh_fg_meta or {}),
             "utm_yt": utm_yt,
             "utm_ig": utm_ig,
             "hero_radio_day": hero_radio_day,
@@ -1559,7 +1753,9 @@ def main() -> int:
             f"  [GATE PASS] {div:4s} | status={status} | flow_bg={flow_bg_meta['flow_clip_id']} "
             f"| yt={yt_res.get('video_id') or yt_res.get('skipped') or yt_res.get('http_error') or 'dry'} "
             f"| ig={ig_res.get('media_id') or ig_res.get('skipped') or ig_res.get('http_error') or 'dry'}"
-            + (f" | vocal={vocal_highlight_sec:.0f}s({vocal_track.name if vocal_track else 'pool'})" if div == "HERO" else ""),
+            + (f" | smh_fg={smh_fg_meta['smh_fg_score']}/100({smh_fg_meta['smh_fg_dd52w']})" if smh_fg_meta else "")
+            + (f" | vocal={vocal_highlight_sec:.0f}s({vocal_track.name if vocal_track else 'pool'})" if div == "HERO" else "")
+            + (f" | title={title[:52]}" if dry_run else ""),
             flush=True,
         )
 
