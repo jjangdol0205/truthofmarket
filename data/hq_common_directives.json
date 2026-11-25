@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-25T12:02:01.257Z",
+  "updatedAt": "2026-11-25T13:19:50.089500+00:00",
   "telegramDedicatedConversationId": "9522c1b0-bae8-447b-8421-e07cf7a526b7",
-  "pcDirectConversationId": "dbc61f0a-76cb-48e3-b617-a616c069564c",
+  "pcDirectConversationId": "876538cc-3cd8-41af-8abe-00937e093957",
   "standingDirectives": [
     {
       "id": 1,
@@ -174,6 +174,11 @@
   ],
   "recentCommonOrders": [
     {
+      "text": "각 사업부 홍보 실적에 대한 자가학습이 필요할거 같은데 어떻게 생각해?",
+      "status": "DISPATCHED",
+      "createdAt": "2026-11-25 22:19:50"
+    },
+    {
       "text": "첨부 파일(hq_5div_promo_breakthrough_20261125.md)의 지침을 정독해 분석하고 해당 전담방에 반영해줘\n[📎 텔레그램 첨부파일 자동 저장 완료]\n• 로컬 경로: D:\\드림컴퍼니\\data\\telegram_uploads\\20261125_205917_hq_5div_promo_breakthrough_20261125.md\n• 원본 파일명: hq_5div_promo_breakthrough_20261125.md (26,263 bytes)\n※ 위 로컬 파일을 직접 read_file로 열어 전체 내용을 확인한 뒤, 지침에 맞춰 실행 및 전담방 분산 지시를 수행하세요.",
       "status": "DISPATCHED",
       "createdAt": "2026-11-25 20:59:19"
@@ -242,11 +247,6 @@
       "text": "GitHub 공식 저장소 https://github.com/affaan-m/ECC.git (사칭 미러 저장소 사용 절대 금지)을 임시 폴더(_tmp_ecc)에 클론한 뒤, 현재 워크스페이스의 .agent/ 구조(.agent/rules/, .agent/workflows/, .agent/skills/) 및 안티그래비티 전역 경로(~/.gemini/antigravity/)에 맞춰 아래 기준으로 '경량·고효율 포괄 이식'을 수행하라. 중간 질문 없이 끝까지 자율 실행하라:\n\n1. [충돌 방지 및 도구 호환 대원칙 — 무인 자율 실행 보존]:\n   - ECC 원본 중 '코드 작성 전 반드시 멈춰서 사용자 확인을 기다려라(WAIT for user confirmation)' 또는 '단순 정적 페이지 수정에도 80% 단위 테스트를 강제하라'는 조항은 내 무인 자동화 파이프라인을 멈추게 하므로 제외하거나 자율 실행 모드로 재작성하라.\n   - 원본 스킬 내부에 하드코딩된 유료 외부 MCP(firecrawl, exa 등) 및 클로드 전용 도구명은 안티그래비티 기본 내장 웹 검색·파일·터미널 도구로 자동 치환하여 추가 비용과 에러 없이 작동하게 하라.\n\n2. [선별 이식할 핵심 컴포넌트 추출]:\n   - .agent/rules/ (상시 가드레일 — 정확히 아래 3개로 압축 배치):\n     * security.md (API 키·유료 Paywall 정적 파일 누수·가짜 라이선스 키 우회·민감정보 노출 원천 차단)\n     * python-js-clean.md (Python 데이터/영상 스크립트 및 프론트엔드 JS 문법·인앱 브라우저 호환 핵심 규칙)\n     * pre-deploy-gate.md (내가 별도 명령어를 안 쳐도 모든 웹 배포·푸시 직전 자동으로 페이월 누수·깨진 링크 404·빌드 에러 검수 및 푸시 후 실서버 캐시 우회 curl 반영 확인을 강제 수행)\n   - .agent/workflows/ (슬래시 명령어 — commands/에서 핵심 이식):\n     * build-fix.md (/build-fix: 빌드·배포 깨짐 최소 변경 자동 복구)\n     * code-review.md (/code-review: 배포 전 치명적 버그·모바일 UI·링크 404 전수 검수)\n     * security-scan.md (/security-scan: 페이월 우회 및 유료 정적 파일·시크릿 노출 점검)\n     * marketing-campaign.md (/marketing-campaign: 시장조사 기반 포지셔닝·랜딩 카피·숏폼 대본 일괄 기획)\n   - .agent/skills/ (평상시 토큰 소모가 0인 온디맨드 스킬 — agents/, skills/, .agents/skills/ 전체를 전수 검색하여 아래 분야의 모든 스킬을 YAML frontmatter 규격의 <skill-name>/SKILL.md 형태로 빠짐없이 이식):\n     * 마케팅·그로스·카피라이팅·브랜드 보이스·콘텐츠·시장조사·심층리서치·SEO 관련 모든 스킬\n     * UI/UX 디자인 검수·성능 최적화·빌드 복구(build-error-resolver)·코드/보안 리뷰어(code-reviewer, security-reviewer) 관련 모든 스킬\n\n3. [정리 및 보고]:\n   - 이식 완료 후 임시 클론 폴더(_tmp_ecc)는 깨끗이 삭제하고, 설치된 상시 규칙 3개·슬래시 명령어·스킬 전체 목록과 각각의 자동 발동 조건(사용법)을 표로 정리해 보고하라!\n\n이거 적용해줘",
       "status": "DISPATCHED",
       "createdAt": "2026-11-18 20:10:22"
-    },
-    {
-      "text": "⚡ 👑 [그룹 비서실장 수명 ➜ 1~5사업부 CEO 전파 가동] ()\n━━━━━━━━━━━━━━━━━━━━\n• 지시 내용: \"🚨 [그룹 비서실장 보고 — 총 회장님 직접 확인 필요 (2건)]\n━━━━━━━━━━━━━━━━━━━━\n• 🔴 [실서버·결제 점검 필요] [5사업부 (KFK)] kidsfit.co.kr (HTTP 200):  ❌ 쿠팡/제휴링크 잔존: 230건 검출\n• 🔴 [실서버·결제 점검 필요] [5대 법인 밸류래더 점검] ## [5-COMPANY VALUE LADDER & PAYMENT AUDIT] Ve\"\n• 지휘 체계: 총 회장님 ➜ 그룹 비서실장() ➜ 사업부 CEO ➜ 기능별 공유실무방\n• 작업 폴더: D:\\드림컴퍼니 | 워커 PID: 2952\n• 실시간 제어: /all_status | /kill_all\n\n🚨 [그룹 비서실장 보고 — 총 회장님 직접 확인 필요 (3건)]\n━━━━━━━━━━━━━━━━━━━━\n• 🔴 [실서버·결제 점검 필요] [5사업부 (KFK)] kidsfit.co.kr (HTTP 200):  ❌ 쿠팡/제휴링크 잔존: 230건 검출\n• 🔴 [실서버·결제 점검 필요] [5대 법인 밸류래더 점검] ## [5-COMPANY VALUE LADDER & PAYMENT AUDIT] Verdict: ❌ FAIL (4/5) | | 5사업부 (KFK) | kidsfit.co.kr | 200 | Wed, 18 Nov 2026 00:03:13 GMT | FAIL ❌ | Affiliate shopping link/ID still exposed in kidsfit.co.kr main HTML (expected 0) | | FINAL_VERDICT: FAIL (4/5)\n• 🔴 [고객·환불·제휴 메일 1건 도착] beable9489@gmail.com 확인 ('[영웅라디오 큰글씨 우편함] 2026-11-18 가상 트로트 가수 백운호 사연 소')\n━━━━━━━━━━━━━━━━━━━━\n💡 비서실 조치 지시: 이 방에 바로 말씀해주시면 즉시 수행합니다.\n\n처리해줘",
-      "status": "DISPATCHED",
-      "createdAt": "2026-11-18 15:11:25"
     }
   ]
 }
