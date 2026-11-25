@@ -173,13 +173,33 @@ jobs:
             fi
           fi
 
-      - name: Run Weekly Autonomous Single-Variable A/B Evolution Loop (Monday 06:11 KST)
+      - name: Run Weekly 3-Tier 2-Phase Promo Learning Engine (Monday 06:11 KST — Shadow 14d -> Active 70:30)
         id: ab_evolve
         continue-on-error: true
         if: ${{ github.event.schedule == '11 21 * * 0' || github.event.inputs.mode == 'ab_evolve' }}
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          WATCHDOG_ADMIN_TOKEN: ${{ secrets.WATCHDOG_ADMIN_TOKEN }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_CLIENT_ID_2: ${{ secrets.YT_CLIENT_ID_2 }}
+          YT_CLIENT_SECRET_2: ${{ secrets.YT_CLIENT_SECRET_2 }}
+          YT_REFRESH_TOKEN_TOM: ${{ secrets.YT_REFRESH_TOKEN_TOM }}
+          YT_REFRESH_TOKEN_KFG: ${{ secrets.YT_REFRESH_TOKEN_KFG }}
+          YT_REFRESH_TOKEN_GBA: ${{ secrets.YT_REFRESH_TOKEN_GBA }}
+          YT_REFRESH_TOKEN_HERO: ${{ secrets.YT_REFRESH_TOKEN_HERO }}
+          YT_REFRESH_TOKEN_KFK: ${{ secrets.YT_REFRESH_TOKEN_KFK }}
+          IG_ACCESS_TOKEN_TOM: ${{ secrets.IG_ACCESS_TOKEN_TOM }}
+          IG_USER_ID_TOM: ${{ secrets.IG_USER_ID_TOM }}
+          IG_ACCESS_TOKEN_KFG: ${{ secrets.IG_ACCESS_TOKEN_KFG }}
+          IG_USER_ID_KFG: ${{ secrets.IG_USER_ID_KFG }}
+          IG_ACCESS_TOKEN_GBA: ${{ secrets.IG_ACCESS_TOKEN_GBA }}
+          IG_USER_ID_GBA: ${{ secrets.IG_USER_ID_GBA }}
+          IG_ACCESS_TOKEN_HERO: ${{ secrets.IG_ACCESS_TOKEN_HERO }}
+          IG_USER_ID_HERO: ${{ secrets.IG_USER_ID_HERO }}
+          IG_ACCESS_TOKEN_KFK: ${{ secrets.IG_ACCESS_TOKEN_KFK }}
+          IG_USER_ID_KFK: ${{ secrets.IG_USER_ID_KFK }}
         run: |
           python -u -X utf8 cloud_automation/ab_evolution_engine.py || true
           python -u -X utf8 cloud_automation/written_promo_engine.py --evolve-ab --ping-indexnow || true
@@ -189,7 +209,7 @@ jobs:
         run: |
           git config user.name "DreamCompany Cloud Bot"
           git config user.email "hello@truthofmarket.com"
-          git add data/promo_history.json data/message_matrix_5div.json data/flow_vault_manifest.json data/written_promo_ledger.json data/indexnow_config.json insights/ sitemap.xml rss.xml || true
+          git add data/promo_history.json data/message_matrix_5div.json data/flow_vault_manifest.json data/written_promo_ledger.json data/indexnow_config.json data/promo_learning_snapshot.json insights/ sitemap.xml rss.xml || true
           if ! git diff --cached --quiet; then
             git commit -m "chore(cloud-promo): update nonstop promo state, matrix & flow_vault [skip ci]"
             git pull --rebase --autostash origin main || true

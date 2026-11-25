@@ -28,6 +28,11 @@ if sys.platform == "win32":
     except Exception:
         pass
 
+# Standing Directive #29 (2026-11-25): Retired in favor of unified 5-division cloud engine
+# (`cloud_automation/ab_evolution_engine.py` — 3-tier YT/IG + D1 /go/ + funnel_events, Phase 1 Shadow 14d -> Phase 2 Active).
+# Prevents legacy `@rightsidealpha` handle & Div3->KFK mis-mapping from running locally in duplicate.
+LEGACY_RETIRED_USE_CLOUD_AB_EVOLUTION = True
+
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
     "Accept-Language": "en-US,en;q=0.9,ko;q=0.8",
@@ -249,6 +254,16 @@ def run_single_division_rl(div):
 
 
 def main():
+    if LEGACY_RETIRED_USE_CLOUD_AB_EVOLUTION:
+        msg = {
+            "ok": True,
+            "retired": True,
+            "LEGACY_RETIRED_USE_CLOUD_AB_EVOLUTION": True,
+            "replacement": "cloud_automation/ab_evolution_engine.py",
+            "reason": "Standing Directive #29: unified 5-division 3-tier 2-phase cloud learning engine supersedes legacy local RL script.",
+        }
+        print(json.dumps(msg, ensure_ascii=False, indent=2))
+        return
     notify = "--notify" in sys.argv
     now_kst = datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M:%S KST")
 
