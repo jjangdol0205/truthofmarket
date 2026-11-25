@@ -1,6 +1,6 @@
 {
   "schema_version": "flow-vault-manifest-v1",
-  "updated_at_kst": "2026-11-25 13:53:43 KST",
+  "updated_at_kst": "2026-11-26 04:59:54 KST",
   "r2_bucket": "dreamcompany-flow-vault",
   "starting_credits": 18385,
   "remaining_credits": 0,
@@ -908,8 +908,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_AB05_SELF_A.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 09:42:20 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 09:42:20 KST",
+      "last_used_kst": "2026-11-26 04:59:54 KST"
     },
     {
       "clip_id": "TOM_AB08_PATTERN_B",
@@ -1694,8 +1695,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_AB01_LOSS_A.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 12:07:12 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 12:07:12 KST",
+      "last_used_kst": "2026-11-26 05:01:40 KST"
     },
     {
       "clip_id": "KFG_AB02_LOSS_B",
@@ -2529,8 +2531,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q26.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 14:22:30 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 14:22:30 KST",
+      "last_used_kst": "2026-11-26 05:03:27 KST"
     },
     {
       "clip_id": "GBA_Q27",
@@ -3742,9 +3745,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_AB07_PATTERN_A.mp4",
       "r2_synced": true,
-      "used_count": 1,
+      "used_count": 2,
       "downloaded_at_kst": "2026-11-24 01:01:07 KST",
-      "last_used_kst": "2026-11-24 03:58:51 KST"
+      "last_used_kst": "2026-11-26 05:04:57 KST"
     },
     {
       "clip_id": "HERO_AB08_PATTERN_B",
@@ -4710,8 +4713,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_AB07_PATTERN_A.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 11:28:30 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 11:28:30 KST",
+      "last_used_kst": "2026-11-26 05:05:40 KST"
     },
     {
       "clip_id": "KFK_AB08_PATTERN_B",
