@@ -788,6 +788,31 @@ def main() -> None:
         'href="https://truthofmarket.com/feed.xml" rel="self"',
     )
 
+
+    # PRESERVE_STRICT_CSP_INDEX_V20261125:
+    # Never overwrite our Strict CSP + 4-Step Value Ladder index.html with legacy inline-script template.
+    # Instead, if frontend/public/index.html already contains Strict CSP csp-events.js + plan_xIpLzFNR8SlMz,
+    # refresh only the live SMH Fear & Greed badge text from smh_fg_latest.json!
+    _fg_json_path = ROOT / "data" / "smh_fg_latest.json"
+    _fg_as_of, _fg_sc_str, _fg_lbl = as_of_date, f"{fg_int}", reg_badge_str
+    if _fg_json_path.exists():
+        try:
+            _fgd = json.loads(_fg_json_path.read_text(encoding="utf-8"))
+            _fg_as_of = str(_fgd.get("as_of_date") or _fg_as_of)
+            _fg_sc_str = f"{float(_fgd.get('score')):.1f}"
+            _fg_lbl = str(_fgd.get("label_en") or _fg_lbl)
+        except Exception:
+            pass
+    if (PUB / "index.html").exists():
+        _existing_idx = (PUB / "index.html").read_text(encoding="utf-8")
+        if "csp-events.js" in _existing_idx and "plan_xIpLzFNR8SlMz" in _existing_idx:
+            index_html = re.sub(
+                r'(<span id="tomLiveTempText">)[^<]*(</span>)',
+                f'\\1Data As Of: {_fg_as_of} &middot; SMH Fear &amp; Greed: {_fg_sc_str} / 100 ({_fg_lbl}) &rarr;\\2',
+                _existing_idx,
+                count=1,
+            )
+
     (PUB / "index.html").write_text(index_html, encoding="utf-8")
     (PUB / "rss.xml").write_text(rss_xml, encoding="utf-8")
     (PUB / "feed.xml").write_text(feed_xml, encoding="utf-8")
@@ -834,7 +859,8 @@ def main() -> None:
             for orphan in list(assets_d.glob("index-*")):
                 if orphan.name not in (js_name, css_name):
                     orphan.unlink()
-        (assets_d / js_name).write_text(bundled_js, encoding="utf-8")
+        if not ((assets_d / js_name).exists() and "plan_xIpLzFNR8SlMz" in (assets_d / js_name).read_text(encoding="utf-8", errors="ignore")):
+            (assets_d / js_name).write_text(bundled_js, encoding="utf-8")
         (assets_d / css_name).write_text(css_raw, encoding="utf-8")
         for item in PUB.iterdir():
             if item.name in ("index.html", "instagram_us_setup.html"):

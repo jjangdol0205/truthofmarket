@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-21T08:23:20.646Z",
+  "updatedAt": "2026-11-25T12:02:01.257Z",
   "telegramDedicatedConversationId": "9522c1b0-bae8-447b-8421-e07cf7a526b7",
   "pcDirectConversationId": "dbc61f0a-76cb-48e3-b617-a616c069564c",
   "standingDirectives": [
@@ -164,9 +164,30 @@
       "title": "3대 허브-앤-스포크 대화방 분산 지휘 & FFmpeg 저전력(2스레드·순차) 하드웨어 보호",
       "rule": "텔레그램 사령탑·결제/보안/모듈 본부(9522c1b0-bae8-447b-8421-e07cf7a526b7)가 모든 텔레그램 6봇 지시를 1차 수신하여 즉시 조회·결제/보안/인프라 건은 직접 처리하고, 홈페이지 수정·배포 건은 홈페이지 방(1921e31e-ab59-4720-9419-93cac770374d)으로, 유튜브·인스타·네이버(클립/블로그/카페/지식인)·SEO 홍보 건은 홍보/마케팅 방(849c7334-f941-4e74-a2e9-6a35e2855b44)으로 hq_room_dispatcher.py를 통해 맞춤 분산 지시한다. 모든 FFmpeg 인코딩은 1워커 순차 실행 및 -threads 2 (BelowNormal)를 강제한다.",
       "createdAt": "2026-11-19T22:40:00+09:00"
+    },
+    {
+      "id": 28,
+      "title": "[2026-11-25 총 회장님 확정] 1~5사업부 홍보 바닥 돌파 통합 지침 (수동 0분 · AI/자동화 티 0% · /go/ 중앙 D1 · pSEO 40~60p · 네이버 블로그/클립 동결)",
+      "rule": "근거 문서: D:\\드림컴퍼니\\docs\\HQ_5DIV_PROMO_BREAKTHROUGH_20261125.md. ① [글·영상 AI 티 0% & 자동화 티 0% Hard Gate]: 1·2·3·5사업부 영상에서 AI 얼굴·손·깨진 글자·정적 삽화·3문단 글자벽·로봇 생 TTS를 전면 금지하고, 0~3초 사전 캐싱 무료 4K 실사 스톡(10~15개, 얼굴 없음) + 4~20초 Playwright 모바일 세로(390×844 @2x, 30fps) 실화면 녹화(녹화 전 <main> > 200자 Auto-Gate) + 2.5초 컷 + 1줄(10~14자) 안전구역 자막 + 진짜 .srt + 구어체 SSML <break> + 무료 SFX 3종 + BGM -26dB 덕킹으로 교체한다. 4사업부 백운호는 자연 미소·조명 Google Flow 마스터 클립 5~8개 풀(추가비 0원) + lyria-3.5 실제 보컬 유지. 댓글·설명란 `_SLOT_A`/`_v1` 초장문 봇 UTM 전면 금지 -> 각 도메인 짧은 `/go/yt` 리다이렉트(302 지연 0ms + 중앙 D1 `POST https://api.truthofmarket.com/api/track-go` 비동기 집계)만 노출. GitHub Actions `sleep` 대기 절대 금지 -> YouTube API `status.publishAt` 타겟 골든타임 ±17~43분 랜덤 예약 공개. 한·영·일 챗GPT 상투어 + Polar/Whop 금지어 Regex Auto-Gate 0건 통과 필수. ② [무인 검색·공유 유입 엔진]: 1·2·3·5사업부 도구형 고품질 pSEO 총 40~60p(`/guides/`, `/cdc-height-chart/`, `/jp/guides/`, `/growth-chart/`) + `/llms.txt` + `sitemap.xml` + `IndexNow` + 클라이언트 Canvas 요약 공유 카드 1장 PNG + 1·2·3·5사업부 대표 롱폼 각 1편(2사업부 최우선). ③ [Playwright 2-모드 스모크 & 월요일 워치독 3줄]: 배포 후 신규+재방문 스모크(`<main>` > 200자 + `dc-ux-addons` 실렌더링) 강제, 월요일 9시 워치독에 Playwright 5사이트 PASS/FAIL · D1 `/go/` 주간 클릭수 · pSEO HTTP 200/오가닉 요약 3줄 자동 포함. ④ [명시적 제외 & 네이버 동결]: 5사업부 수동 네이버 블로그(`expertise333`)·클립 및 맘카페/Reddit/note 수동·비공식 봇 포스팅 전면 동결(자체 pSEO로 대체), Pinterest API 1차 제외, YouTube API 미지원 기능(쇼츠 Related Video API 연결·API 기반 containsSyntheticMedia 강제) 제외.",
+      "createdAt": "2026-11-25T21:00:00+09:00"
     }
   ],
   "recentCommonOrders": [
+    {
+      "text": "첨부 파일(hq_5div_promo_breakthrough_20261125.md)의 지침을 정독해 분석하고 해당 전담방에 반영해줘\n[📎 텔레그램 첨부파일 자동 저장 완료]\n• 로컬 경로: D:\\드림컴퍼니\\data\\telegram_uploads\\20261125_205917_hq_5div_promo_breakthrough_20261125.md\n• 원본 파일명: hq_5div_promo_breakthrough_20261125.md (26,263 bytes)\n※ 위 로컬 파일을 직접 read_file로 열어 전체 내용을 확인한 뒤, 지침에 맞춰 실행 및 전담방 분산 지시를 수행하세요.",
+      "status": "DISPATCHED",
+      "createdAt": "2026-11-25 20:59:19"
+    },
+    {
+      "text": "방금 메일 다시 보냈어",
+      "status": "DISPATCHED",
+      "createdAt": "2026-11-25 18:03:57"
+    },
+    {
+      "text": "beable9489@gmail.com 들어가서 지금 방금 들어왔던 파일 다운받아서 안티그래비티에 그 지침에 맞춰 홍보방안 변경해줘",
+      "status": "DISPATCHED",
+      "createdAt": "2026-11-25 17:41:12"
+    },
     {
       "text": "유튜브 자동 게시 되고있어?",
       "status": "DISPATCHED",
@@ -226,21 +247,6 @@
       "text": "⚡ 👑 [그룹 비서실장 수명 ➜ 1~5사업부 CEO 전파 가동] ()\n━━━━━━━━━━━━━━━━━━━━\n• 지시 내용: \"🚨 [그룹 비서실장 보고 — 총 회장님 직접 확인 필요 (2건)]\n━━━━━━━━━━━━━━━━━━━━\n• 🔴 [실서버·결제 점검 필요] [5사업부 (KFK)] kidsfit.co.kr (HTTP 200):  ❌ 쿠팡/제휴링크 잔존: 230건 검출\n• 🔴 [실서버·결제 점검 필요] [5대 법인 밸류래더 점검] ## [5-COMPANY VALUE LADDER & PAYMENT AUDIT] Ve\"\n• 지휘 체계: 총 회장님 ➜ 그룹 비서실장() ➜ 사업부 CEO ➜ 기능별 공유실무방\n• 작업 폴더: D:\\드림컴퍼니 | 워커 PID: 2952\n• 실시간 제어: /all_status | /kill_all\n\n🚨 [그룹 비서실장 보고 — 총 회장님 직접 확인 필요 (3건)]\n━━━━━━━━━━━━━━━━━━━━\n• 🔴 [실서버·결제 점검 필요] [5사업부 (KFK)] kidsfit.co.kr (HTTP 200):  ❌ 쿠팡/제휴링크 잔존: 230건 검출\n• 🔴 [실서버·결제 점검 필요] [5대 법인 밸류래더 점검] ## [5-COMPANY VALUE LADDER & PAYMENT AUDIT] Verdict: ❌ FAIL (4/5) | | 5사업부 (KFK) | kidsfit.co.kr | 200 | Wed, 18 Nov 2026 00:03:13 GMT | FAIL ❌ | Affiliate shopping link/ID still exposed in kidsfit.co.kr main HTML (expected 0) | | FINAL_VERDICT: FAIL (4/5)\n• 🔴 [고객·환불·제휴 메일 1건 도착] beable9489@gmail.com 확인 ('[영웅라디오 큰글씨 우편함] 2026-11-18 가상 트로트 가수 백운호 사연 소')\n━━━━━━━━━━━━━━━━━━━━\n💡 비서실 조치 지시: 이 방에 바로 말씀해주시면 즉시 수행합니다.\n\n처리해줘",
       "status": "DISPATCHED",
       "createdAt": "2026-11-18 15:11:25"
-    },
-    {
-      "text": "🚨 [그룹 비서실장 보고 — 총 회장님 직접 확인 필요 (2건)]\n━━━━━━━━━━━━━━━━━━━━\n• 🔴 [실서버·결제 점검 필요] [5사업부 (KFK)] kidsfit.co.kr (HTTP 200):  ❌ 쿠팡/제휴링크 잔존: 230건 검출\n• 🔴 [실서버·결제 점검 필요] [5대 법인 밸류래더 점검] ## [5-COMPANY VALUE LADDER & PAYMENT AUDIT] Verdict: ❌ FAIL (4/5) | | 5사업부 (KFK) | kidsfit.co.kr | 200 | Wed, 18 Nov 2026 00:03:13 GMT | FAIL ❌ | Affiliate shopping link/ID still exposed in kidsfit.co.kr main HTML (expected 0) | | FINAL_VERDICT: FAIL (4/5)\n━━━━━━━━━━━━━━━━━━━━\n💡 비서실 조치 지시: 이 방에 바로 말씀해주시면 즉시 수행합니다.\n\n이거 해결해",
-      "status": "DISPATCHED",
-      "createdAt": "2026-11-18 14:32:08"
-    },
-    {
-      "text": "https://www.instagram.com/jaewajju.bubu?bqrl=ajkzOXNheG1nY3Ft\n\n1사업부랑 3사업부 이런 영상으로 제작하는거 어때? 지금 영상은 조회수 자체가 약해",
-      "status": "DISPATCHED",
-      "createdAt": "2026-11-18 13:28:28"
-    },
-    {
-      "text": "2사업부랑 5사업부 그냥 단계별로 스텝업 부분만 나오게 하고\n밑에 다른정보들은 하나도 안나오게 해야해 \n\n나머지 정보는 이메일 가입을 할때 일부 열어주고 유료 가입을 할때 가격 등급에 따라 열어주는 식으로 해야 됨\n\n그리고 지금은 너무 ai티가 많이 나 사람이 직접 정성스럽게 만든 홈페이지 처럼 만들어야 하고\n\n첫화면엔 왜 이 홈페이지를 만들었고 이 홈페이지는 어떤 서비스를 제공하는지 설명이 들어가서 고객들에 공감을 얻어야 해\n\n그리고 나서 버튼을 누르면 자연스럽게 본인 정보를 입력하도록 유도해야해\n\n내 요지를 이해했는지 너가 정리해서 2사업부랑 5사업부 계획 짜줘",
-      "status": "DISPATCHED",
-      "createdAt": "2026-11-18 13:10:12"
     }
   ]
 }
