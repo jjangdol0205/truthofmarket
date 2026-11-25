@@ -1342,6 +1342,16 @@ def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "
     default_lastmod = as_of if len(as_of) == 10 else datetime.now(timezone.utc).strftime("%Y-%m-%d")
     seen_locs: set[str] = set()
     url_blocks: List[str] = []
+    # Preserve tool-type pSEO (/guides/*) and /smh-fear-greed in canonical sitemap.xml
+    dist_guides_dir = ROOT / "dist" / "guides"
+    if (ROOT / "dist" / "smh-fear-greed.html").exists():
+        sitemap_urls.append(("https://truthofmarket.com/smh-fear-greed", "0.95", "daily", default_lastmod))
+    if dist_guides_dir.exists():
+        sitemap_urls.append(("https://truthofmarket.com/guides/", "0.90", "weekly", default_lastmod))
+        for gp in sorted(dist_guides_dir.glob("*.html")):
+            if gp.name != "index.html":
+                sitemap_urls.append((f"https://truthofmarket.com/guides/{gp.name}", "0.85", "weekly", default_lastmod))
+
     for sm_item in sitemap_urls:
         raw_loc, prio, freq = sm_item[0], sm_item[1], sm_item[2]
         item_lastmod = sm_item[3] if len(sm_item) >= 4 and sm_item[3] else default_lastmod
