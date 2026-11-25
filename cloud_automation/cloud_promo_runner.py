@@ -973,16 +973,28 @@ def upload_youtube_short_v3(
     if not atok:
         return {"ok": False, "skipped": "missing_yt_oauth_secrets"}
 
-    # 1. Verify official channel against #5 Outbound Allowlist BEFORE uploading
+    # 1. Verify official channel against #5 Outbound Allowlist BEFORE uploading + check recent 10 titles for dedup!
+    recent_norm_titles = set()
     try:
         creq = urllib.request.Request(
-            "https://www.googleapis.com/youtube/v3/channels?part=id&mine=true",
+            "https://www.googleapis.com/youtube/v3/channels?part=id,contentDetails&mine=true",
             headers={"Authorization": f"Bearer {atok}"},
         )
         with urllib.request.urlopen(creq, timeout=20) as cr:
             citems = json.loads(cr.read().decode("utf-8")).get("items") or []
         ch_id = str(citems[0]["id"]) if citems else ""
         assert_allowed_yt_channel(div, ch_id)
+        up_pl = ((citems[0].get("contentDetails") or {}).get("relatedPlaylists") or {}).get("uploads", "") if citems else ""
+        if up_pl:
+            preq = urllib.request.Request(
+                f"https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=10&playlistId={up_pl}",
+                headers={"Authorization": f"Bearer {atok}"},
+            )
+            with urllib.request.urlopen(preq, timeout=15) as pr:
+                for pit in (json.loads(pr.read().decode("utf-8")).get("items") or []):
+                    rt = re.sub(r"#\S+|\s+", "", str((pit.get("snippet") or {}).get("title") or "")).lower()
+                    if rt:
+                        recent_norm_titles.add(rt[:28])
     except OutboundAllowlistError as oe:
         return {"ok": False, "blocked_by_allowlist": str(oe)}
     except urllib.error.HTTPError as e:
@@ -992,6 +1004,40 @@ def upload_youtube_short_v3(
         return {"ok": False, "http_error": e.code, "body": body}
     except Exception as e:
         return {"ok": False, "error": str(e)}
+
+    # Deduplicate title against recent 10 channel uploads (differs within first 28 normalized chars too!)
+    def _norm28(s: str) -> str:
+        return re.sub(r"#\S+|\s+", "", str(s or "")).lower()[:28]
+
+    if _norm28(title) and _norm28(title) in recent_norm_titles:
+        base_no_tags = re.sub(r"\s*#\S+", "", title).strip()
+        if div == "HERO":
+            hero_variants = ["하이라이트 무대", "오늘의 헌정 클립", "실황 감동 구간", "바리톤 절정 무대"]
+            if "〉" in base_no_tags:
+                head, tail = base_no_tags.split("〉", 1)
+                for hv in hero_variants:
+                    cand = f"{head}〉 {hv} · {tail.strip()}"[:82]
+                    if _norm28(cand) not in recent_norm_titles:
+                        title = f"{cand} #백운호 #트로트"[:92]
+                        break
+            else:
+                for hv in hero_variants:
+                    cand = f"[{hv}] {base_no_tags}"[:82]
+                    if _norm28(cand) not in recent_norm_titles:
+                        title = f"{cand} #백운호 #트로트"[:92]
+                        break
+        else:
+            alt_prefixes = {
+                "TOM": ["Live Check: ", "Data View: ", "2026 Brief: "],
+                "KFG": ["CDC Check: ", "Parent View: ", "Growth Brief: "],
+                "GBA": ["【最新統計】", "【新NISA確認】", "【データ検証】"],
+                "KFK": ["[무료 확인] ", "[성장 체크] ", "[핵심 비교] "],
+            }.get(div, ["Update: ", "Check: ", "Brief: "])
+            for pref in alt_prefixes:
+                cand = f"{pref}{base_no_tags}"[:88]
+                if _norm28(cand) not in recent_norm_titles:
+                    title = cand
+                    break
 
     # 2. Initiate Resumable Video Upload (Zero GHA sleep! Uses `status.publishAt` golden-time ±17~43m jitter; ZERO unsupported API fields!)
     lang = DIV_LANG_MAP.get(div, "en")
@@ -1308,7 +1354,20 @@ def main() -> int:
                 hero_mv_slice = slices_list[(rot_idx // len(songs_list)) % len(slices_list)] if slices_list else None
                 if hero_mv_song and hero_mv_slice:
                     tid = f"hero_mv_{hero_mv_song['song_id']}_{hero_mv_slice['slice_id']}"
-                    title = f"♪ 백운호 〈{hero_mv_song['title']}〉 {hero_mv_song['hook_headline']} #백운호 #트로트"[:95]
+                    # Slice-unique lyric hook + section label so all 18 (6 songs x 3 slices) MVs NEVER share a duplicate title!
+                    cues_raw = hero_mv_slice.get("cues") or []
+                    first_lyric = f"{cues_raw[0][2]} {cues_raw[0][3]}".strip() if cues_raw else hero_mv_song["hook_headline"]
+                    sl_id = str(hero_mv_slice.get("slice_id") or "")
+                    if sl_id == "chorus1":
+                        title = f"♪ 백운호 〈{hero_mv_song['title']}〉 {hero_mv_song['hook_headline']} #백운호 #트로트"[:95]
+                    elif sl_id == "verse1":
+                        title = f"♪ 백운호 〈{hero_mv_song['title']}〉 \"{first_lyric}\" 1절 첫 소절 무대 #백운호 #트로트"[:95]
+                    else:
+                        title = f"♪ 백운호 〈{hero_mv_song['title']}〉 \"{first_lyric}\" {hero_mv_slice['label']} #백운호 #트로트"[:95]
+                    # Also guard against any recent local/cloud history title collision
+                    recent_hero_t = {re.sub(r"#\S+|\s+", "", str(u.get("title") or "")).lower()[:28] for u in hist.get("uploads", [])[-25:] if u.get("div") == "HERO"}
+                    if re.sub(r"#\S+|\s+", "", title).lower()[:28] in recent_hero_t:
+                        title = f"♪ 백운호 〈{hero_mv_song['title']}〉 {hero_mv_slice['label']} · {first_lyric} #백운호 #트로트"[:95]
                     slide_body = f"마음을 노래하는 AI 가상 트로트 가수 백운호의 {hero_mv_song['badge']} 〈{hero_mv_song['title']}〉 ({hero_mv_slice['label']})"
                     either_or_q = pick_rotating_comment_question("HERO", rot_idx)
                     utm_yt = build_clean_go_link("HERO", "yt")
