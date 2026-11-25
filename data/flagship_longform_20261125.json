@@ -1,0 +1,75 @@
+{
+  "videos": {
+    "KFG": {
+      "division": "KFG",
+      "duration_sec": 138.21,
+      "size_bytes": 15301754,
+      "mp4": "D:\\드림컴퍼니\\cloud_automation\\.cache\\flagship_longform_20261125\\KFG\\KFG_flagship_20261125_16x9_30fps.mp4",
+      "thumb": "D:\\드림컴퍼니\\cloud_automation\\.cache\\flagship_longform_20261125\\KFG\\KFG_thumb_1280x720.png",
+      "gate_main_len": 1953,
+      "youtube": {
+        "ok": true,
+        "video_id": "gnik5sB7Qmw",
+        "url": "https://youtu.be/gnik5sB7Qmw",
+        "thumb_ok": false,
+        "srt_ok": true,
+        "comment_ok": true
+      },
+      "created_at_kst": "2026-11-25 21:49:53 KST"
+    },
+    "TOM": {
+      "division": "TOM",
+      "duration_sec": 129.65,
+      "size_bytes": 16476437,
+      "mp4": "D:\\드림컴퍼니\\cloud_automation\\.cache\\flagship_longform_20261125\\TOM\\TOM_flagship_20261125_16x9_30fps.mp4",
+      "thumb": "D:\\드림컴퍼니\\cloud_automation\\.cache\\flagship_longform_20261125\\TOM\\TOM_thumb_1280x720.png",
+      "gate_main_len": 3582,
+      "youtube": {
+        "ok": true,
+        "video_id": "lNVzQu_K-eA",
+        "url": "https://youtu.be/lNVzQu_K-eA",
+        "thumb_ok": true,
+        "srt_ok": true,
+        "comment_ok": true
+      },
+      "created_at_kst": "2026-11-25 22:03:54 KST"
+    },
+    "KFK": {
+      "division": "KFK",
+      "duration_sec": 133.29,
+      "size_bytes": 16217405,
+      "mp4": "D:\\드림컴퍼니\\cloud_automation\\.cache\\flagship_longform_20261125\\KFK\\KFK_flagship_20261125_16x9_30fps.mp4",
+      "thumb": "D:\\드림컴퍼니\\cloud_automation\\.cache\\flagship_longform_20261125\\KFK\\KFK_thumb_1280x720.png",
+      "gate_main_len": 1762,
+      "youtube": {
+        "ok": true,
+        "video_id": "xSn43NIFEPU",
+        "url": "https://youtu.be/xSn43NIFEPU",
+        "thumb_ok": false,
+        "srt_ok": true,
+        "comment_ok": true
+      },
+      "created_at_kst": "2026-11-25 22:25:28 KST"
+    },
+    "GBA": {
+      "division": "GBA",
+      "duration_sec": 127.36,
+      "size_bytes": 14907439,
+      "mp4": "D:\\드림컴퍼니\\cloud_automation\\.cache\\flagship_longform_20261125\\GBA\\GBA_flagship_20261125_16x9_30fps.mp4",
+      "thumb": "D:\\드림컴퍼니\\cloud_automation\\.cache\\flagship_longform_20261125\\GBA\\GBA_thumb_1280x720.png",
+      "gate_main_len": 1994,
+      "youtube": {
+        "ok": true,
+        "video_id": "6yEMDG7ZC9Y",
+        "url": "https://youtu.be/6yEMDG7ZC9Y",
+        "thumb_ok": false,
+        "srt_ok": true,
+        "comment_ok": true
+      },
+      "created_at_kst": "2026-11-25 22:39:50 KST"
+    }
+  },
+  "errors": {
+    "GBA": "[HARD GATE BLOCKED LONGFORM CH3] GBA: ['div_GBA_banned:jp_trade_timing']"
+  }
+}
