@@ -40,6 +40,9 @@ if hasattr(sys.stdout, "reconfigure"):
     except Exception:
         pass
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from promo_hard_gate import check_promo_hard_gate  # noqa: E402
+
 KST = dt.timezone(dt.timedelta(hours=9))
 ROOT = Path(__file__).resolve().parent.parent
 MATRIX_PATH = ROOT / "data" / "message_matrix_5div.json"
@@ -345,6 +348,13 @@ def check_written_auto_gate(div: str, title: str, html_doc: str, plain_text: str
 
     if len(title.strip()) < 14:
         errors.append("title_too_short")
+
+    # 2026-11-25 Shared Hard Gate (KO/EN/JA AI clichés + Polar/Whop/Legal banned terms)
+    hg_ok, hg_errs = check_promo_hard_gate(div_u, comb, surface="seo_article" if is_seo_article else "ig_caption")
+    if not hg_ok:
+        for e in hg_errs:
+            if e not in errors:
+                errors.append(e)
 
     # Reject AI clichés & textbook intros
     for cl in AI_CLICHE_BANNED:

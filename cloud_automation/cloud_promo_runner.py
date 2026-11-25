@@ -58,6 +58,23 @@ from outbound_allowlist import (  # noqa: E402
     assert_allowed_yt_channel,
     sanitize_and_classify_ig_token,
 )
+from promo_hard_gate import (  # noqa: E402
+    build_clean_go_link,
+    build_clean_social_comment,
+    check_promo_hard_gate,
+    compute_yt_publish_at_iso,
+    pick_rotating_comment_question,
+    strip_unsupported_yt_api_fields,
+)
+from real_ui_mobile_recorder import (  # noqa: E402
+    RealUIAutoGateError,
+    record_html_motion_chart_clip,
+    record_mobile_real_ui_clip,
+)
+from zero_ai_video_composer import (  # noqa: E402
+    compose_zero_ai_short,
+    get_cached_faceless_stock_clip,
+)
 
 ROOT = Path(__file__).resolve().parent.parent
 HISTORY_PATH = ROOT / "data" / "promo_history.json"
@@ -331,8 +348,10 @@ def check_text_gate(div: str, title: str, desc: str, srt_text: str, vocal_highli
     combined = f"{title}\n{desc}\n{srt_text}"
     if len(title.strip()) < 12 or title.strip() == "0":
         errors.append("invalid_or_zero_title")
-    if re.search(r"[\(\【]\s*\d{1,2}[./]\d{1,2}\s*[#・]?\s*[ABC]\s*[\)\】]", title, re.I):
-        errors.append("bot_date_slot_tag_in_title")
+    # 2026-11-25 Shared Fail-Closed Hard Gate (KO/EN/JA clichés + Polar/Whop + bot UTM leak + SRT check)
+    ok_hg, hg_errs = check_promo_hard_gate(div, f"{title}\n{desc}", surface="youtube_desc", srt_text=srt_text)
+    if not ok_hg:
+        errors.extend(hg_errs)
     ok_srt, srt_err = check_srt_gate(srt_text)
     if not ok_srt:
         errors.append(srt_err)
@@ -348,27 +367,12 @@ def check_text_gate(div: str, title: str, desc: str, srt_text: str, vocal_highli
     for fd in DIV_CONFIGS[div]["forbidden_domains"]:
         if fd.lower() in combined.lower():
             errors.append(f"wrong_div_domain:{fd}")
-    return len(errors) == 0, errors
+    return len(errors) == 0, list(dict.fromkeys(errors))
 
 
 def build_pinned_comment_with_question(div: str, utm_yt: str, day_index: int) -> str:
-    cfg = DIV_CONFIGS[div]
-    pt = PERSONA_TEMPLATES[div]
-    questions = pt["either_or_questions"]
-    q = questions[day_index % len(questions)]
-    if div == "HERO":
-        vip_utm = build_utm_url(cfg["study_url"], "youtube", "shorts", "hero_card")
-        return (
-            f"🎵 백운호 6곡 완곡 무료 듣기 & 연속 사연 사랑방 (가입 없음): {utm_yt}\n"
-            f"💐 매일 아침 카톡 무료 안부카드 만들기: {vip_utm}\n"
-            f"📸 공식 인스타그램 @paradise_hero1: https://www.instagram.com/paradise_hero1/\n"
-            f"💬 {q}"
-        )
-    return (
-        f"{cfg['open_loop_cta']} {utm_yt}\n"
-        f"📄 Free 2-Page Sample PDF: {cfg['sample_pdf']}\n"
-        f"💬 {q}"
-    )
+    """2026-11-25 Hard Gate: Clean `/go/yt` short link + 20-pattern rotating human question (ZERO long UTM!)."""
+    return build_clean_social_comment(div, index_seed=day_index)
 
 
 def check_media_gate(media_path: Path, min_sec: float, max_sec: float) -> Tuple[bool, Dict[str, Any]]:
@@ -745,7 +749,7 @@ def render_hero_trot_music_short_mp4(
                 xx = max(24, (1080 - (bb[2] - bb[0])) // 2)
                 dr.text((xx, yy), line_txt, font=fnt, fill=col, stroke_width=8, stroke_fill=(8, 16, 14, 255))
         if is_last:
-            cta_t = "프로필 눌러 백운호 6곡 무료 듣기 → paradise-hero.com"
+            cta_t = "프로필 눌러 백운호 6곡 무료 듣기 → paradise-hero.com/go/yt"
             cta_sz = 32
             f_cta_fit = _pick_cjk_font(cta_sz)
             while cta_sz >= 22:
@@ -989,22 +993,23 @@ def upload_youtube_short_v3(
     except Exception as e:
         return {"ok": False, "error": str(e)}
 
-    # 2. Initiate Resumable Video Upload
+    # 2. Initiate Resumable Video Upload (Zero GHA sleep! Uses `status.publishAt` golden-time ±17~43m jitter; ZERO unsupported API fields!)
     lang = DIV_LANG_MAP.get(div, "en")
-    meta = {
+    publish_at_iso = compute_yt_publish_at_iso(div, seed_key=title[:40])
+    meta = strip_unsupported_yt_api_fields({
         "snippet": {
             "title": (f"{title[:88]} #Shorts" if "#shorts" not in title.lower() else title[:98]),
             "description": desc[:4900],
-            "categoryId": "24" if div == "HERO" else "27",
+            "categoryId": "10" if div == "HERO" else "27",
             "defaultLanguage": lang,
             "defaultAudioLanguage": lang,
         },
         "status": {
-            "privacyStatus": "public",
+            "privacyStatus": "private",
+            "publishAt": publish_at_iso,
             "selfDeclaredMadeForKids": False,
-            **({"containsSyntheticMedia": True} if div == "HERO" else {}),
         },
-    }
+    })
     raw_bytes = mp4_path.read_bytes()
     init_req = urllib.request.Request(
         "https://www.googleapis.com/upload/youtube/v3/videos?uploadType=resumable&part=snippet,status",
@@ -1273,20 +1278,22 @@ def main() -> int:
             cta_line = DIV_CONFIGS[div]["open_loop_cta"]
             matrix_meta = {"matrix_id": f"{div}_S1_LOSS", "stage": 1, "hook_type": "loss", "utm_content": utm_content, "ab_arm": "A"}
 
-        utm_yt = build_utm_url(DIV_CONFIGS[div]["site"], "youtube", "shorts", f"{tid}_{today_str}_{slot_id}", content=utm_content)
-        utm_ig = build_utm_url(DIV_CONFIGS[div]["site"], "instagram", "reels", f"{tid}_{today_str}_{slot_id}", content=utm_content)
-        pinned_comment = build_pinned_comment_with_question(div, utm_yt, doy + (1 if slot_id == "SLOT_B" else 0))
+        # 2026-11-25 Hard Gate: Clean short `/go/yt` & `/go/ig` links ONLY + 20-pattern rotating human questions!
+        utm_yt = build_clean_go_link(div, "yt")
+        utm_ig = build_clean_go_link(div, "ig")
+        rot_q_seed = doy * 2 + (1 if slot_id == "SLOT_B" else 0)
+        either_or_q = pick_rotating_comment_question(div, rot_q_seed)
+        pinned_comment = build_clean_social_comment(div, index_seed=rot_q_seed)
 
         disclosure_footer = f"\n※ {pt['ai_disclosure_line']}\n" if div == "HERO" else ""
         desc = f"{title}\n\n{slide_body}\n\n{pinned_comment}{disclosure_footer}"
-        either_or_q = pt["either_or_questions"][(doy + (1 if slot_id == "SLOT_B" else 0)) % len(pt["either_or_questions"])]
         srt_stub = (
             f"1\n00:00:00,000 --> 00:00:04,500\n{title}\n\n"
             f"2\n00:00:04,600 --> 00:00:18,000\n{slide_body[:130]}\n\n"
             f"3\n00:00:18,200 --> 00:00:28,000\n{either_or_q}\n"
         )
 
-        # HERO Music-First Trot MV Mode: 0.0s immediate Baek Woon-ho singing (34s chorus/verse) + synced karaoke lyrics!
+        # HERO Music-First Trot MV Mode: natural smile/lighting Google Flow master clip pool + real `lyria-3.5` singing + synced lyrics!
         hero_mv_song: Optional[Dict[str, Any]] = None
         hero_mv_slice: Optional[Dict[str, Any]] = None
         vocal_track: Optional[Path] = None
@@ -1302,15 +1309,14 @@ def main() -> int:
                 if hero_mv_song and hero_mv_slice:
                     tid = f"hero_mv_{hero_mv_song['song_id']}_{hero_mv_slice['slice_id']}"
                     title = f"♪ 백운호 〈{hero_mv_song['title']}〉 {hero_mv_song['hook_headline']} #백운호 #트로트"[:95]
-                    slide_body = f"마음을 노래하는 AI 가상 트로트 가수 『백운호』의 {hero_mv_song['badge']} 〈{hero_mv_song['title']}〉 ({hero_mv_slice['label']})"
-                    either_or_q = str(hero_mv_song.get("either_or_question") or either_or_q)
-                    utm_yt = build_utm_url(DIV_CONFIGS[div]["site"], "youtube", "shorts", f"{tid}_{today_str}_{slot_id}", content=f"HERO_MV_T{hero_mv_song['track_no']}")
-                    utm_ig = build_utm_url(DIV_CONFIGS[div]["site"], "instagram", "reels", f"{tid}_{today_str}_{slot_id}", content=f"HERO_MV_T{hero_mv_song['track_no']}")
+                    slide_body = f"마음을 노래하는 AI 가상 트로트 가수 백운호의 {hero_mv_song['badge']} 〈{hero_mv_song['title']}〉 ({hero_mv_slice['label']})"
+                    either_or_q = pick_rotating_comment_question("HERO", rot_idx)
+                    utm_yt = build_clean_go_link("HERO", "yt")
+                    utm_ig = build_clean_go_link("HERO", "ig")
                     pinned_comment = (
-                        f"🎵 백운호 〈{hero_mv_song['title']}〉 포함 6곡 완곡 무료 라디오 (가입 없음): {utm_yt}\n"
-                        f"💐 매일 아침 카톡 무료 안부카드 만들기: https://paradise-hero.com/vip.html\n"
-                        f"📸 공식 인스타그램 @paradise_hero1: https://www.instagram.com/paradise_hero1/\n"
-                        f"💬 {either_or_q}"
+                        f"백운호 〈{hero_mv_song['title']}〉 포함 6곡 무료 라디오 & 카톡 아침 안부카드:\n"
+                        f"{utm_yt}\n\n"
+                        f"{either_or_q}"
                     )
                     desc = f"{title}\n\n{slide_body}\n\n{pinned_comment}{disclosure_footer}"
                     cues_srt = []
@@ -1377,6 +1383,7 @@ def main() -> int:
         if not dry_run:
             out_mp4 = WORK_DIR / f"{div}_{today_str}_{slot_id}.mp4"
             tts_mp3: Optional[Path] = None
+            rendered_mp4: Optional[Path] = None
             if div == "HERO" and hero_mv_song and hero_mv_slice and vocal_track and vocal_track.exists():
                 rendered_mp4, rendered_dur = render_hero_trot_music_short_mp4(
                     song=hero_mv_song,
@@ -1386,18 +1393,36 @@ def main() -> int:
                     out_mp4=out_mp4,
                 )
             else:
-                spoken_script = f"{title}. {slide_body}. {either_or_q}"
-                tts_mp3 = synthesize_edge_tts_mp3(spoken_script, pt["voice_id"], WORK_DIR / f"{div}_{today_str}_{slot_id}.tts.mp3")
-                rendered_mp4, rendered_dur = render_cloud_short_mp4(
-                    div=div,
-                    bg_mp4=bg_local_path,
-                    tts_mp3=tts_mp3,
-                    vocal_mp3=vocal_track,
-                    title=title,
-                    slide_body=slide_body,
-                    cta_line=either_or_q,
-                    out_mp4=out_mp4,
-                )
+                # 2026-11-25 HARD GATE: 1·2·3·5사업부 Zero-AI-Tell Real-UI 30fps Pipeline!
+                # 0~3s pre-cached faceless real stock + Playwright 390x844@2x 30fps Real-UI (<main>>200자 Auto-Gate!)
+                # + HTML motion chart + 2.5s cuts + 1-line safe-zone accent captions + true .srt + SFX 3종 + -26dB ducked BGM
+                try:
+                    stock_clip = get_cached_faceless_stock_clip(div, seed_idx=doy + (1 if slot_id == "SLOT_B" else 0))
+                    ui_mp4 = WORK_DIR / f"{div}_{today_str}_{slot_id}.real_ui.mp4"
+                    chart_mp4 = WORK_DIR / f"{div}_{today_str}_{slot_id}.chart.mp4"
+                    record_mobile_real_ui_clip(div, ui_mp4, duration_sec=11.0)
+                    record_html_motion_chart_clip(div, chart_mp4, aspect="9:16", duration_sec=4.5)
+                    spoken_script = f"{title}. {slide_body}. {either_or_q}"
+                    rendered_mp4, rendered_dur, srt_stub = compose_zero_ai_short(
+                        div=div,
+                        lang=DIV_LANG_MAP.get(div, "en"),
+                        voice_id=pt["voice_id"],
+                        spoken_script=spoken_script,
+                        faceless_stock_mp4=stock_clip,
+                        real_ui_mp4=ui_mp4,
+                        motion_chart_mp4=chart_mp4,
+                        out_mp4=out_mp4,
+                    )
+                    ui_mp4.unlink(missing_ok=True)
+                    chart_mp4.unlink(missing_ok=True)
+                except RealUIAutoGateError as gate_err:
+                    print(f"[REAL-UI AUTO-GATE ABORT] {div}: {gate_err}", flush=True)
+                    alerts.append(f"REAL_UI_GATE_BLOCKED {div}: {gate_err}")
+                    rendered_mp4 = None
+                except Exception as comp_err:
+                    print(f"[ZERO-AI COMPOSER ERR] {div}: {comp_err}", flush=True)
+                    alerts.append(f"COMPOSE_ERR {div}: {comp_err}")
+                    rendered_mp4 = None
             if rendered_mp4 and rendered_mp4.exists():
                 if yt_already:
                     yt_res = {"ok": False, "skipped": "yt_daily_1per_div_already_done"}
@@ -1407,14 +1432,18 @@ def main() -> int:
                 if ig_already:
                     ig_res = {"ok": False, "skipped": "ig_slot_already_done"}
                 else:
-                    ig_caption = f"{title}\n\n{slide_body}\n\n{either_or_q}\n\n🔗 {utm_ig}{disclosure_footer}"
-                    ig_res = publish_instagram_reel_via_r2(
-                        div,
-                        rendered_mp4,
-                        ig_caption,
-                        f"reels/{today_str}/{div}_{slot_id}_{int(time.time())}.mp4",
-                        hist=hist,
-                    )
+                    ig_caption = f"{title}\n\n{slide_body}\n\n{either_or_q}\n\n{utm_ig}{disclosure_footer}"
+                    ok_ig_c, ig_c_errs = check_promo_hard_gate(div, ig_caption, surface="ig_caption")
+                    if not ok_ig_c:
+                        ig_res = {"ok": False, "error": f"ig_caption_hard_gate_blocked:{ig_c_errs}"}
+                    else:
+                        ig_res = publish_instagram_reel_via_r2(
+                            div,
+                            rendered_mp4,
+                            ig_caption,
+                            f"reels/{today_str}/{div}_{slot_id}_{int(time.time())}.mp4",
+                            hist=hist,
+                        )
                 try:
                     rendered_mp4.unlink(missing_ok=True)
                     if tts_mp3:

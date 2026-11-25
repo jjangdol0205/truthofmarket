@@ -51,6 +51,11 @@ from outbound_allowlist import (
     assert_allowed_ig_target,
     sanitize_and_classify_ig_token,
 )
+from promo_hard_gate import (
+    build_clean_go_link,
+    check_promo_hard_gate,
+    pick_rotating_comment_question,
+)
 from written_promo_engine import (
     DIV_WEB_CONFIG,
     DIVISION_DEEP_DATA,
@@ -260,16 +265,20 @@ def render_5slide_carousel(div: str, matrix_db: Dict[str, Any], date_str: str, w
         png_paths.append(str(p))
 
     bip_note = CAROUSEL_BIP_NOTE.get(div_u, "")
-    q_line = CAROUSEL_EITHER_OR_Q.get(div_u, "")
+    q_line = pick_rotating_comment_question(div_u, week_seed + dt.datetime.now(KST).timetuple().tm_yday)
+    go_ig_short = build_clean_go_link(div_u, "ig").replace("https://", "")
     # 30% Build-in-Public mix (triggered cleanly on week_seed % 3 == 0 or HERO)
     include_bip = (div_u == "HERO") or (week_seed % 3 == 0)
     parts = [hook, arm_a["slide_script_body"]]
     if include_bip and bip_note:
         parts.append(bip_note)
-    parts.append(f"→ {wcfg['host']} (Link in bio · {utm_content})")
+    parts.append(f"→ {go_ig_short}")
     if q_line:
         parts.append(q_line)
     caption = "\n\n".join(parts)
+    cap_ok, cap_errs = check_promo_hard_gate(div_u, caption, surface="ig_caption")
+    if not cap_ok:
+        raise RuntimeError(f"Hard Gate blocked IG Carousel caption {div_u}: {cap_errs}")
     return {
         "ok": True,
         "division": div_u,

@@ -38,21 +38,24 @@ jobs:
           python-version: "3.12"
           cache: "pip"
 
-      - name: Cache FFmpeg & static TTS/font assets (protects 2,000 min/mo limit)
+      - name: Cache FFmpeg, Playwright Chromium & static assets (protects 2,000 min/mo limit)
         uses: actions/cache@v4
         with:
           path: |
             ~/.cache/pip
+            ~/.cache/ms-playwright
             cloud_automation/.cache
-          key: dc-promo-v2-${{ runner.os }}-${{ hashFiles('cloud_automation/requirements.txt') }}
+          key: dc-promo-v3-${{ runner.os }}-${{ hashFiles('cloud_automation/requirements.txt') }}
           restore-keys: |
-            dc-promo-v2-${{ runner.os }}-
+            dc-promo-v3-${{ runner.os }}-
 
-      - name: Install lightweight dependencies & FFmpeg
+      - name: Install lightweight dependencies, FFmpeg & Playwright Chromium (30fps Real-UI)
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-noto-cjk > /dev/null
           python -m pip install --upgrade pip -q
           pip install -q -r cloud_automation/requirements.txt
+          playwright install chromium
+          playwright install-deps chromium > /dev/null 2>&1 || true
 
       - name: Run 24/7 Cloud 5-Div Video Render + YouTube Shorts + IG Reels Pipeline
         id: video_promo

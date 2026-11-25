@@ -1,0 +1,143 @@
+{
+  "schema_version": "faceless-stock-v1",
+  "clips": [
+    {
+      "clip_id": "stock_rain_window",
+      "div_hint": "TOM",
+      "local_rel": "cloud_automation/assets/faceless_stock/stock_rain_window_9x16_30fps.mp4",
+      "r2_key": "faceless_stock_4k/stock_rain_window_9x16_30fps.mp4",
+      "r2_synced": true,
+      "size_bytes": 1873498,
+      "fps": 30,
+      "duration_sec": 4.0,
+      "source": "mixkit_free_real_camera_faceless_cached_once"
+    },
+    {
+      "clip_id": "stock_coffee_cup",
+      "div_hint": "TOM",
+      "local_rel": "cloud_automation/assets/faceless_stock/stock_coffee_cup_9x16_30fps.mp4",
+      "r2_key": "faceless_stock_4k/stock_coffee_cup_9x16_30fps.mp4",
+      "r2_synced": true,
+      "size_bytes": 2170138,
+      "fps": 30,
+      "duration_sec": 4.0,
+      "source": "mixkit_free_real_camera_faceless_cached_once"
+    },
+    {
+      "clip_id": "stock_city_sunset",
+      "div_hint": "TOM",
+      "local_rel": "cloud_automation/assets/faceless_stock/stock_city_sunset_9x16_30fps.mp4",
+      "r2_key": "faceless_stock_4k/stock_city_sunset_9x16_30fps.mp4",
+      "r2_synced": true,
+      "size_bytes": 1306449,
+      "fps": 30,
+      "duration_sec": 4.0,
+      "source": "mixkit_free_real_camera_faceless_cached_once"
+    },
+    {
+      "clip_id": "stock_sunlight_trees",
+      "div_hint": "KFG",
+      "local_rel": "cloud_automation/assets/faceless_stock/stock_sunlight_trees_9x16_30fps.mp4",
+      "r2_key": "faceless_stock_4k/stock_sunlight_trees_9x16_30fps.mp4",
+      "r2_synced": true,
+      "size_bytes": 1763024,
+      "fps": 30,
+      "duration_sec": 4.0,
+      "source": "mixkit_free_real_camera_faceless_cached_once"
+    },
+    {
+      "clip_id": "stock_morning_clouds",
+      "div_hint": "KFG",
+      "local_rel": "cloud_automation/assets/faceless_stock/stock_morning_clouds_9x16_30fps.mp4",
+      "r2_key": "faceless_stock_4k/stock_morning_clouds_9x16_30fps.mp4",
+      "r2_synced": true,
+      "size_bytes": 2332230,
+      "fps": 30,
+      "duration_sec": 4.0,
+      "source": "mixkit_free_real_camera_faceless_cached_once"
+    },
+    {
+      "clip_id": "stock_wooden_floor",
+      "div_hint": "KFG",
+      "local_rel": "cloud_automation/assets/faceless_stock/stock_wooden_floor_9x16_30fps.mp4",
+      "r2_key": "faceless_stock_4k/stock_wooden_floor_9x16_30fps.mp4",
+      "r2_synced": true,
+      "size_bytes": 1954853,
+      "fps": 30,
+      "duration_sec": 4.0,
+      "source": "mixkit_free_real_camera_faceless_cached_once"
+    },
+    {
+      "clip_id": "stock_rain_glass",
+      "div_hint": "GBA",
+      "local_rel": "cloud_automation/assets/faceless_stock/stock_rain_glass_9x16_30fps.mp4",
+      "r2_key": "faceless_stock_4k/stock_rain_glass_9x16_30fps.mp4",
+      "r2_synced": true,
+      "size_bytes": 4027855,
+      "fps": 30,
+      "duration_sec": 4.0,
+      "source": "mixkit_free_real_camera_faceless_cached_once"
+    },
+    {
+      "clip_id": "stock_zen_water",
+      "div_hint": "GBA",
+      "local_rel": "cloud_automation/assets/faceless_stock/stock_zen_water_9x16_30fps.mp4",
+      "r2_key": "faceless_stock_4k/stock_zen_water_9x16_30fps.mp4",
+      "r2_synced": true,
+      "size_bytes": 1340309,
+      "fps": 30,
+      "duration_sec": 4.0,
+      "source": "mixkit_free_real_camera_faceless_cached_once"
+    },
+    {
+      "clip_id": "stock_books_shelf",
+      "div_hint": "GBA",
+      "local_rel": "cloud_automation/assets/faceless_stock/stock_books_shelf_9x16_30fps.mp4",
+      "r2_key": "faceless_stock_4k/stock_books_shelf_9x16_30fps.mp4",
+      "r2_synced": true,
+      "size_bytes": 1616699,
+      "fps": 30,
+      "duration_sec": 4.0,
+      "source": "mixkit_free_real_camera_faceless_cached_once"
+    },
+    {
+      "clip_id": "stock_autumn_leaves",
+      "div_hint": "KFK",
+      "local_rel": "cloud_automation/assets/faceless_stock/stock_autumn_leaves_9x16_30fps.mp4",
+      "r2_key": "faceless_stock_4k/stock_autumn_leaves_9x16_30fps.mp4",
+      "r2_synced": true,
+      "size_bytes": 4385173,
+      "fps": 30,
+      "duration_sec": 4.0,
+      "source": "mixkit_free_real_camera_faceless_cached_once"
+    },
+    {
+      "clip_id": "stock_forest_sun",
+      "div_hint": "KFK",
+      "local_rel": "cloud_automation/assets/faceless_stock/stock_forest_sun_9x16_30fps.mp4",
+      "r2_key": "faceless_stock_4k/stock_forest_sun_9x16_30fps.mp4",
+      "r2_synced": true,
+      "size_bytes": 4402436,
+      "fps": 30,
+      "duration_sec": 4.0,
+      "source": "mixkit_free_real_camera_faceless_cached_once"
+    },
+    {
+      "clip_id": "stock_calm_ocean",
+      "div_hint": "KFK",
+      "local_rel": "cloud_automation/assets/faceless_stock/stock_calm_ocean_9x16_30fps.mp4",
+      "r2_key": "faceless_stock_4k/stock_calm_ocean_9x16_30fps.mp4",
+      "r2_synced": true,
+      "size_bytes": 2748939,
+      "fps": 30,
+      "duration_sec": 4.0,
+      "source": "mixkit_free_real_camera_faceless_cached_once"
+    }
+  ],
+  "audio_kit": {
+    "click": "click.wav",
+    "paper": "paper.wav",
+    "pop": "pop.wav",
+    "bgm": "calm_bgm.mp3"
+  }
+}

@@ -35,13 +35,14 @@ if hasattr(sys.stdout, "reconfigure"):
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from outbound_allowlist import OutboundAllowlistError, assert_allowed_yt_channel  # noqa: E402
+from promo_hard_gate import build_clean_social_comment, strip_unsupported_yt_api_fields  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 HISTORY_PATH = ROOT / "data" / "promo_history.json"
 QUOTA_HIT = False
 
 DEFECTIVE_PRIVATE_IDS: Dict[str, List[str]] = {
-    "TOM": ["kjtL4OAvbQ8", "FdmxF-fPQ8w", "iuRVSQtyKpk", "LzLcU12N8v4"],
+    "TOM": ["kjtL4OAvbQ8", "FdmxF-fPQ8w", "iuRVSQtyKpk", "LzLcU12N8v4", "xo4G1OgSZaI", "xQ4CPvVDG04", "VL4BAymWBtM"],
     "KFG": ["o7XO_XksJpU", "DJzxxrqCpNE", "YNaKhN197AQ", "VMrGLwF4bUI"],
     "GBA": ["IbvoEICoOJ0", "v1jJEZRasug"],
     "HERO": ["3ijh-XwUUMA", "PwYOnWhIec4"],
@@ -346,7 +347,6 @@ def ensure_hero_ep1_14m09s_live(token: str, ch_id: str, hist: Dict[str, Any]) ->
             "status": {
                 "privacyStatus": "public",
                 "selfDeclaredMadeForKids": False,
-                "containsSyntheticMedia": True,
             },
         })
         if thumb_bytes:
@@ -374,7 +374,6 @@ def ensure_hero_ep1_14m09s_live(token: str, ch_id: str, hist: Dict[str, Any]) ->
         "status": {
             "privacyStatus": "public",
             "selfDeclaredMadeForKids": False,
-            "containsSyntheticMedia": True,
         },
     }, ensure_ascii=False).encode("utf-8")
     init_req = urllib.request.Request(
@@ -439,7 +438,6 @@ def ensure_hero_flagship_mv_live(token: str, ch_id: str, hist: Dict[str, Any]) -
         "status": {
             "privacyStatus": "public",
             "selfDeclaredMadeForKids": False,
-            "containsSyntheticMedia": True,
         },
     }, ensure_ascii=False).encode("utf-8")
     try:
@@ -638,32 +636,19 @@ def main() -> int:
                     "snippet": {"title": title[:100], "description": desc[:4900], "categoryId": cat},
                 })
 
-            # Post UTM + either/or top comment on public videos with 0 comments (max 4/div/run to protect quota)
+            # Post clean /go/yt + 20-pattern rotating question comment on public videos with 0 comments (max 4/div/run)
             cmts = int(item.get("statistics", {}).get("commentCount", 0) or 0)
             if cmts == 0 and cmt_posted < 4 and not QUOTA_HIT:
-                if post_top_comment(atok, ch_id, vid, DIV_PINNED_UTM_COMMENTS[div]):
+                clean_cmt = build_clean_social_comment(div, index_seed=abs(hash(vid)) % 20)
+                if post_top_comment(atok, ch_id, vid, clean_cmt):
                     cmt_posted += 1
             if QUOTA_HIT:
                 quota_hit = True
                 completed_all_divs = False
                 break
 
-            # Upload missing official .srt caption (max 3/div/run to stay well under 10k/day quota)
-            if srt_uploaded < 3 and not QUOTA_HIT:
-                caps = yt_api("GET", f"/captions?part=snippet&videoId={vid}", atok)
-                if QUOTA_HIT or (caps and caps.get("_quota_exceeded")):
-                    quota_hit = True
-                    completed_all_divs = False
-                    break
-                kinds = [c["snippet"].get("trackKind") for c in (caps or {}).get("items", [])]
-                if "standard" not in kinds:
-                    srt_txt = build_clean_srt_from_metadata(title, desc)
-                    if upload_srt_caption(atok, vid, DIV_LANG[div], f"Official {DIV_LANG[div].upper()}", srt_txt):
-                        srt_uploaded += 1
-                    if QUOTA_HIT:
-                        quota_hit = True
-                        completed_all_divs = False
-                        break
+            # NOTE (2026-11-25 Hard Gate): NEVER fabricate .srt captions from video descriptions/URLs!
+            # Only true speech/lyrics timestamp-synced .srt files generated at render time may be uploaded.
 
     if completed_all_divs and not quota_hit:
         hist["stage2_yt_reset_completed"] = True
