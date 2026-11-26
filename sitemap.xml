@@ -445,6 +445,12 @@
     <priority>0.80</priority>
   </url>
   <url>
+    <loc>https://truthofmarket.com/stocks/xom.html</loc>
+    <lastmod>2026-11-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
     <loc>https://truthofmarket.com/stocks/alb.html</loc>
     <lastmod>2026-11-25</lastmod>
     <changefreq>daily</changefreq>
@@ -464,12 +470,6 @@
   </url>
   <url>
     <loc>https://truthofmarket.com/stocks/intc.html</loc>
-    <lastmod>2026-11-25</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>https://truthofmarket.com/stocks/xom.html</loc>
     <lastmod>2026-11-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
