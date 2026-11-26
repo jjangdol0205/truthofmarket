@@ -542,7 +542,7 @@ def generate_semi_fear_greed_page(semi: Dict[str, Any], stocks: List[Dict[str, A
         f"Self-directed educational Market Weather & Sector Sentiment Gauge ({fg_score:.1f}/100 {regime_en} as of {as_of}), "
         f"$SMH (${smh_close:.2f}, {smh_dd:.2f}% 52W DD) vs $XLV (${xlv_close:.2f}) {smh_w}:{xlv_w} periodic weight calculator."
     )
-    canonical = "https://truthofmarket.com/semi-fear-greed.html"
+    canonical = "https://truthofmarket.com/semi-fear-greed"
 
     faq_ld = {
         "@context": "https://schema.org",
@@ -704,7 +704,7 @@ def generate_single_stock_page(
             if is_bluechip
             else ""
         )
-    canonical = f"https://truthofmarket.com/stocks/{tkr_lower}.html"
+    canonical = f"https://truthofmarket.com/stocks/{tkr_lower}"
 
     if is_vip_locked:
         exec_summary_text = (
@@ -926,7 +926,7 @@ def generate_comparison_page(
         f"Side-by-side educational market data comparison: ${ta} ({na}) vs ${tb} ({nb}) as of {as_of}. "
         f"Compare Factor Score ({sa} vs {sb}), 14D RSI ({ra:.1f} vs {rb:.1f}), 10D Volume ({va:.2f}x vs {vb:.2f}x), and 52-week drawdown bands."
     )
-    canonical = f"https://truthofmarket.com/compare/{slug}"
+    canonical = f"https://truthofmarket.com/compare/{slug[:-5] if slug.endswith('.html') else slug}"
 
     faq_ld = {
         "@context": "https://schema.org",
@@ -1077,7 +1077,9 @@ def _normalize_canonical_sitemap_loc(raw_loc: str) -> str:
     loc = raw_loc.strip()
     if loc.endswith("/index.html"):
         loc = loc[: -len("index.html")]
-    if loc in ("https://truthofmarket.com", "https://truthofmarket.com/insights", "https://truthofmarket.com/stocks", "https://truthofmarket.com/compare"):
+    elif loc.endswith(".html"):
+        loc = loc[:-5]
+    if loc in ("https://truthofmarket.com", "https://truthofmarket.com/insights", "https://truthofmarket.com/guides", "https://truthofmarket.com/stocks", "https://truthofmarket.com/compare"):
         loc = loc + "/"
     return loc
 
@@ -1250,12 +1252,11 @@ def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "
 
     sitemap_urls: List[tuple[str, str, str]] = [
         ("https://truthofmarket.com/", "1.0", "daily"),
-        ("https://truthofmarket.com/semi-fear-greed.html", "0.95", "daily"),
-        ("https://truthofmarket.com/pro-swing.html", "0.90", "daily"),
-        ("https://truthofmarket.com/terms.html", "0.60", "monthly"),
-        ("https://truthofmarket.com/privacy.html", "0.60", "monthly"),
-        ("https://truthofmarket.com/refund.html", "0.65", "monthly"),
-        ("https://truthofmarket.com/contact.html", "0.60", "monthly"),
+        ("https://truthofmarket.com/semi-fear-greed", "0.95", "daily"),
+        ("https://truthofmarket.com/terms", "0.60", "monthly"),
+        ("https://truthofmarket.com/privacy", "0.60", "monthly"),
+        ("https://truthofmarket.com/refund", "0.65", "monthly"),
+        ("https://truthofmarket.com/contact", "0.60", "monthly"),
     ]
 
     for item in combined:
@@ -1350,7 +1351,7 @@ def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "
         sitemap_urls.append(("https://truthofmarket.com/guides/", "0.90", "weekly", default_lastmod))
         for gp in sorted(dist_guides_dir.glob("*.html")):
             if gp.name != "index.html":
-                sitemap_urls.append((f"https://truthofmarket.com/guides/{gp.name}", "0.85", "weekly", default_lastmod))
+                sitemap_urls.append((f"https://truthofmarket.com/guides/{gp.stem}", "0.85", "weekly", default_lastmod))
 
     for sm_item in sitemap_urls:
         raw_loc, prio, freq = sm_item[0], sm_item[1], sm_item[2]

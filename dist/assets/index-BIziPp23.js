@@ -50,7 +50,7 @@
     WHOP_TOM_STARTER_URL: WHOP_TOM_STARTER_URL,
     WHOP_TOM_MONTHLY_URL: WHOP_TOM_MONTHLY_URL,
     WHOP_TOM_ANNUAL_URL: WHOP_TOM_ANNUAL_URL,
-    SUPPORT_EMAIL: "beable9489@gmail.com",
+    SUPPORT_EMAIL: "hello@truthofmarket.com",
   };
 
   if (!window.PAYMENT_CONFIG || typeof window.PAYMENT_CONFIG !== "object") {
@@ -84,7 +84,7 @@
     window.PAYMENT_CONFIG.WHOP_TOM_STARTER_URL = WHOP_TOM_STARTER_URL;
     window.PAYMENT_CONFIG.WHOP_TOM_MONTHLY_URL = WHOP_TOM_MONTHLY_URL;
     window.PAYMENT_CONFIG.WHOP_TOM_ANNUAL_URL = WHOP_TOM_ANNUAL_URL;
-    window.PAYMENT_CONFIG.SUPPORT_EMAIL = window.PAYMENT_CONFIG.SUPPORT_EMAIL || "beable9489@gmail.com";
+    window.PAYMENT_CONFIG.SUPPORT_EMAIL = window.PAYMENT_CONFIG.SUPPORT_EMAIL || "hello@truthofmarket.com";
   }
 
   window.TOM_COPY_MODE = "LIVE_SHARP";
@@ -447,7 +447,7 @@
         banner.innerHTML =
           "<div><strong>Whop Checkout Confirmed &mdash; " +
           planLabel +
-          " Active.</strong> Your Paid Screen 4 Vault &amp; Protected 14-Page PDF are open below (<a href='mailto:beable9489@gmail.com?subject=TOM%207-Day%20Support%20or%20Refund' style='color:#065f46;font-weight:700;text-decoration:underline;'>1-Click Support</a>).</div>" +
+          " Active.</strong> Your Paid Screen 4 Vault &amp; Protected 14-Page PDF are open below (<a href='mailto:hello@truthofmarket.com?subject=TOM%207-Day%20Support%20or%20Refund' style='color:#065f46;font-weight:700;text-decoration:underline;'>1-Click Support</a>).</div>" +
           "<button type='button' id='tomDismissReturnBanner' style='padding:6px 12px;border-radius:6px;border:1px solid #059669;background:#ffffff;color:#064e3b;font-weight:700;cursor:pointer;'>Dismiss</button>";
         document.body.insertBefore(banner, document.body.firstChild);
         var dismissBtn = document.getElementById("tomDismissReturnBanner");
@@ -1163,7 +1163,7 @@ async function validateLicense(licenseKey) {
             tier: "free",
             expires_at: null,
             message:
-              "Invalid or unrecognized license key. Please check your Whop receipt or contact beable9489@gmail.com.",
+              "Invalid or unrecognized license key. Please check your Whop receipt or contact hello@truthofmarket.com.",
           };
         }
         const whopResp = await fetch(
@@ -2755,7 +2755,7 @@ function renderDoctorVipUnlockPreview(state) {
         🔒 Whop.com (Global Card / Apple Pay / Google Pay) · Self-Directed Educational Calculator Software · 14-Day Refund Policy
       </div>
       <div style="margin-top:6px; font-size:0.7rem; color:#94a3b8; text-align:center; line-height:1.45;">
-        Support Desk: <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#93c5fd; font-weight:700; text-decoration:underline;">beable9489@gmail.com</a>
+        Support Desk: <a href="mailto:hello@truthofmarket.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#93c5fd; font-weight:700; text-decoration:underline;">hello@truthofmarket.com</a>
       </div>
     `
     : `
@@ -3689,7 +3689,7 @@ function renderChartBlindTest(state) {
                     ${copy.unlockLifetimeBtn}
                   </a>
                   <div style="width:100%; font-size:0.69rem; color:#94a3b8; line-height:1.4; margin-top:2px;">
-                    Checkout issue in your region? Join <a href="https://t.me/truthofmarketss" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">@truthofmarketss</a> or request instant Pro activation via <a href="mailto:beable9489@gmail.com?subject=Instant%20Pro%20Activation%20Request%20(TruthOfMarket)" style="color:#93c5fd; font-weight:700; text-decoration:underline;">email</a>.
+                    Checkout issue in your region? Join <a href="https://t.me/truthofmarketss" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">@truthofmarketss</a> or request instant Pro activation via <a href="mailto:hello@truthofmarket.com?subject=Instant%20Pro%20Activation%20Request%20(TruthOfMarket)" style="color:#93c5fd; font-weight:700; text-decoration:underline;">email</a>.
                   </div>
                 `
             }
@@ -6396,7 +6396,7 @@ function renderModals(state) {
           💳 Whop.com (Global Card / Apple Pay / Google Pay) · 1-Click Cancel Anytime · 14-Day Refund Policy
         </div>
         <div style="margin-bottom:12px; font-size:0.72rem; color:#94a3b8; text-align:center; line-height:1.45;">
-          Support Desk: <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20VIP%20Software%20Support" style="color:#93c5fd; font-weight:700; text-decoration:underline;">beable9489@gmail.com</a>
+          Support Desk: <a href="mailto:hello@truthofmarket.com?subject=TruthOfMarket%20VIP%20Software%20Support" style="color:#93c5fd; font-weight:700; text-decoration:underline;">hello@truthofmarket.com</a>
         </div>
         <div id="licenseMsg" style="font-size:0.8rem; margin-bottom:8px; min-height:1.1em;"></div>
         <details id="licenseRestoreDetails" ${state.isProUnlocked ? "open" : ""} style="background:#0b1120; border:1px solid rgba(148,163,184,0.25); border-radius:10px; padding:10px 12px;">
@@ -6664,13 +6664,13 @@ function renderModals(state) {
           <div data-legal-section="refund" style="border-top:1px solid var(--border); padding-top:12px; margin-top:12px;">
             <h4 style="color:#ffffff; font-size:0.95rem; font-weight:800; margin-bottom:6px;">3. 14-Day No-Questions-Asked Refund Policy &amp; 1-Click Cancellation</h4>
             <p style="color:var(--muted); margin-bottom:10px;">
-              Both Monthly Research Pass ($29/mo) and Annual Research Pass ($199/yr) software subscriptions are backed by a <b>14-Day No-Questions-Asked Full Refund Guarantee</b>. Email <a href="mailto:beable9489@gmail.com" style="color:#60a5fa; font-weight:700;">beable9489@gmail.com</a> within 14 calendar days of initial purchase for a 100% full refund to your original payment method. You may also cancel recurring billing anytime in 1 click via your Whop Orders Portal.
+              Both Monthly Research Pass ($29/mo) and Annual Research Pass ($199/yr) software subscriptions are backed by a <b>14-Day No-Questions-Asked Full Refund Guarantee</b>. Email <a href="mailto:hello@truthofmarket.com" style="color:#60a5fa; font-weight:700;">hello@truthofmarket.com</a> within 14 calendar days of initial purchase for a 100% full refund to your original payment method. You may also cancel recurring billing anytime in 1 click via your Whop Orders Portal.
             </p>
           </div>
           <div data-legal-section="support" style="border-top:1px solid var(--border); padding-top:12px; margin-top:12px;">
             <h4 style="color:#ffffff; font-size:0.95rem; font-weight:800; margin-bottom:6px;">4. Educational Market Data &amp; Quantitative Research Desk</h4>
             <p style="color:var(--muted);">
-              • <b>Official Support Email</b>: <a href="mailto:beable9489@gmail.com" style="color:#60a5fa; font-weight:700;">beable9489@gmail.com</a><br/>
+              • <b>Official Support Email</b>: <a href="mailto:hello@truthofmarket.com" style="color:#60a5fa; font-weight:700;">hello@truthofmarket.com</a><br/>
               • <b>Merchant of Record</b>: Whop.com (Global Card / Apple Pay / Google Pay) (<a href="https://whop.com/orders/" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;">Manage Orders &amp; Receipts ↗</a>)
             </p>
           </div>

@@ -67,7 +67,7 @@ def _beacon_script(slug: str = "hub") -> str:
     }},
     WHOP_TOM_MONTHLY_URL: '{WHOP_M_URL}',
     WHOP_TOM_ANNUAL_URL: '{WHOP_A_URL}',
-    SUPPORT_EMAIL: 'beable9489@gmail.com'
+    SUPPORT_EMAIL: 'hello@truthofmarket.com'
   }};
   var COPY_MODE = 'LIVE_SHARP';
   window.TOM_COPY_MODE = COPY_MODE;
@@ -230,7 +230,7 @@ def _footer_legal_html() -> str:
         <a href="/contact.html">Contact</a> &middot;
         <a href="https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA" target="_blank" rel="noopener">YouTube @TruthOfMarketUS</a> &middot;
         <a href="https://www.instagram.com/truthofmarket/" target="_blank" rel="noopener">Instagram @truthofmarket</a> &middot;
-        <a href="mailto:beable9489@gmail.com">beable9489@gmail.com</a>
+        <a href="mailto:hello@truthofmarket.com">hello@truthofmarket.com</a>
       </div>
       <p class="essay-disclaimer">{html.escape(MANDATORY_DISCLAIMER)}</p>
       <p class="essay-copy">&copy; 2026 TruthOfMarket Research &middot; Independent Market Data &amp; Educational Research &middot; Billing via Whop.com.</p>

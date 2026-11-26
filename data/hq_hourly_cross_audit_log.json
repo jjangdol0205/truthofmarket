@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-11-25 22:01:33 KST",
+  "timestamp": "2026-11-27 08:00:37 KST",
   "mode": "READ_ONLY_ZERO_MUTATION_V2",
   "results": [
     {
@@ -15,11 +15,10 @@
       "division": "2사업부 (kisfitglobal.com · @kidsfittbot)",
       "auditors": "HQ 읽기전용 SSOT 감사관",
       "checks": [
+        "✅ [SSOT검열] 2사업부 Polar.sh ($8.99/$19.99) 기준 정합 (lemonsqueezy 0건)",
         "✅ [라이브검열] kisfitglobal.com 응답 HTTP 200"
       ],
-      "healed": [
-        "⚠️ [감지] 2사업부 index.html 내 구 lemonsqueezy.com 문자열 잔존"
-      ]
+      "healed": []
     },
     {
       "division": "3사업부 (getbreakai.com/jp/ · @SemifearGreedbot)",
@@ -49,5 +48,5 @@
       "healed": []
     }
   ],
-  "total_healed": 1
+  "total_healed": 0
 }

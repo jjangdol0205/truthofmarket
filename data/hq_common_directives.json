@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-25T13:19:50.089500+00:00",
+  "updatedAt": "2026-11-26T22:43:54.280314+00:00",
   "telegramDedicatedConversationId": "9522c1b0-bae8-447b-8421-e07cf7a526b7",
   "pcDirectConversationId": "876538cc-3cd8-41af-8abe-00937e093957",
   "standingDirectives": [
@@ -170,83 +170,125 @@
       "title": "[2026-11-25 총 회장님 확정] 1~5사업부 홍보 바닥 돌파 통합 지침 (수동 0분 · AI/자동화 티 0% · /go/ 중앙 D1 · pSEO 40~60p · 네이버 블로그/클립 동결)",
       "rule": "근거 문서: D:\\드림컴퍼니\\docs\\HQ_5DIV_PROMO_BREAKTHROUGH_20261125.md. ① [글·영상 AI 티 0% & 자동화 티 0% Hard Gate]: 1·2·3·5사업부 영상에서 AI 얼굴·손·깨진 글자·정적 삽화·3문단 글자벽·로봇 생 TTS를 전면 금지하고, 0~3초 사전 캐싱 무료 4K 실사 스톡(10~15개, 얼굴 없음) + 4~20초 Playwright 모바일 세로(390×844 @2x, 30fps) 실화면 녹화(녹화 전 <main> > 200자 Auto-Gate) + 2.5초 컷 + 1줄(10~14자) 안전구역 자막 + 진짜 .srt + 구어체 SSML <break> + 무료 SFX 3종 + BGM -26dB 덕킹으로 교체한다. 4사업부 백운호는 자연 미소·조명 Google Flow 마스터 클립 5~8개 풀(추가비 0원) + lyria-3.5 실제 보컬 유지. 댓글·설명란 `_SLOT_A`/`_v1` 초장문 봇 UTM 전면 금지 -> 각 도메인 짧은 `/go/yt` 리다이렉트(302 지연 0ms + 중앙 D1 `POST https://api.truthofmarket.com/api/track-go` 비동기 집계)만 노출. GitHub Actions `sleep` 대기 절대 금지 -> YouTube API `status.publishAt` 타겟 골든타임 ±17~43분 랜덤 예약 공개. 한·영·일 챗GPT 상투어 + Polar/Whop 금지어 Regex Auto-Gate 0건 통과 필수. ② [무인 검색·공유 유입 엔진]: 1·2·3·5사업부 도구형 고품질 pSEO 총 40~60p(`/guides/`, `/cdc-height-chart/`, `/jp/guides/`, `/growth-chart/`) + `/llms.txt` + `sitemap.xml` + `IndexNow` + 클라이언트 Canvas 요약 공유 카드 1장 PNG + 1·2·3·5사업부 대표 롱폼 각 1편(2사업부 최우선). ③ [Playwright 2-모드 스모크 & 월요일 워치독 3줄]: 배포 후 신규+재방문 스모크(`<main>` > 200자 + `dc-ux-addons` 실렌더링) 강제, 월요일 9시 워치독에 Playwright 5사이트 PASS/FAIL · D1 `/go/` 주간 클릭수 · pSEO HTTP 200/오가닉 요약 3줄 자동 포함. ④ [명시적 제외 & 네이버 동결]: 5사업부 수동 네이버 블로그(`expertise333`)·클립 및 맘카페/Reddit/note 수동·비공식 봇 포스팅 전면 동결(자체 pSEO로 대체), Pinterest API 1차 제외, YouTube API 미지원 기능(쇼츠 Related Video API 연결·API 기반 containsSyntheticMedia 강제) 제외.",
       "createdAt": "2026-11-25T21:00:00+09:00"
+    },
+    {
+      "id": 29,
+      "title": "[2026-11-25 총 회장님 확정 · 안 A] 5대 사업부 홍보 실적 3계층 통합 · 2단계 안전 자가학습(Self-Learning) 헌장",
+      "rule": "① [3계층 실적 통합 수집 -> D1 promo_performance_ledger]: 매주 월요일 06:11 KST GitHub Actions(cloud_automation/ab_evolution_engine.py)가 5대 사업부 YouTube Data API v3(조회수·조회속도·좋아요·댓글) + Instagram Graph Insights(도달·저장·공유) + 중앙 D1 /go/ 클릭(go_clicks) + D1 funnel_events(설문·가입·결제)를 통합 수집해 POST https://api.truthofmarket.com/api/admin/promo-learning-ingest(Bearer 인증)로 D1에 적재한다(구 로컬 hq_dawn_rl_self_improver.py는 퇴역하고 클라우드 단일 엔진으로 통폐합). ② [2단계 안전 가동 원칙 — 14일 Shadow 관찰 -> 자동 진화]: 1단계(2026-11-25~12-08, Day 1~14 shadow_14d)는 11/25 신형 포맷을 흔들지 않고 순수 실적 수집·점수화·로그 적재만 수행한다(message_matrix_5div.json 변형 0건). 2단계(2026-12-09~, Day 15+ active_evolve)부터 최소 표본 게이트(사업부별 영상 10편+ & 누적 500조회+ 또는 /go/ 클릭 20건+)를 통과한 사업부만 사업부별 보상함수(1·2·3·5사업부: 조회·참여 40% + /go/·사이트 클릭 30% + 설문·가입·결제 30% / 4사업부: 조회·시청지속 35% + 댓글·사연 35% + 카톡카드·준비물관 30%)로 탐색 30% : 활용 70% 단일변수 후크 진화를 적용한다. ③ [Hard Gate 잠금 & 월요일 워치독 #11]: 자동 진화 후보 카피·변형은 반드시 cloud_automation/promo_hard_gate.py(AI 상투어·금지어·기계적 접두사 0건)를 통과한 건만 반영하며, 매주 월요일 09:00 KST hq-watchdog-worker 리포트 #11 항목에 Shadow 진행률 또는 사업부별 승자/도태 패턴 1줄을 자동 보고한다.",
+      "createdAt": "2026-11-25T22:40:00+09:00"
+    },
+    {
+      "id": 30,
+      "title": "[2026-11-26 총 회장님 확정] 무타자 음성 지휘(Glossary) · 단일 상전 라우터 · 사고 0% 1클릭 CS 승인 패널 · 영구 오답노트(Hermes) 헌장",
+      "rule": "① [무타자 음성 지휘 + 전사 고유명사 사전(data/hq_glossary.json)]: 총 회장이 텔레그램(@Allcompany1_bot 등 6봇)에 음성 메시지(Voice Note)를 보내면 telegram_5bot_hub/voice_glossary_transcriber.py가 Gemini Audio 전사 + data/hq_glossary.json 문맥/정규식 교정(배군호·백은호->백운호, 트루스오브마켓->TruthOfMarket, 키즈핏 글로벌->KISFIT Studio, 겟브레이크->GetBreakAI, 에스엠에이치->SMH, 엑스엘브이->XLV, 에스지오브이->SGOV, 신니사->신NISA(新NISA), 래피드->Latpeed(래피드), 리리아3.5->Lyria 3.5, 님님->님)을 적용해 '🎙️ 인식된 지시: ...' 1줄 즉시 회신 후 자동 실행 큐로 전달한다. ② [단일 상전 라우터(Master Dispatcher)]: hq_room_dispatcher.py(--analyze / --auto-dispatch)가 일상 말투 한 줄만으로 대상 사업부(TOM/KFG/GBA/HERO/KFK/HQ)와 담당 실행방(homepage 1921e31e / marketing_promo 849c7334 / payment_security 9522c1b0)을 자동 판별·배정한다. ③ [사고 0% 도장 찍기 — 중요 CS·환불·제휴 1클릭 승인 패널]: 단순 다운로드 링크 재발송은 공식 도메인(DIV_META[div].senderEmail)으로 무인 자동 처리하되, 환불·결제 분쟁·비즈니스 제휴 메일은 절대 임의 자동 발송하지 않고 hq-api-worker(inboundEmail.js + csApproval.js)가 D1 결제·다운로드 이력을 조회한 뒤 해당 국가 언어(EN/JA/KO) 답장 초안과 텔레그램 3버튼 인라인 패널([✅ 이대로 발송 승인] · [💸 즉시 환불+답장 승인] · [✏️ 말로 수정 지시])을 띄워 총 회장의 1클릭 승인 후에만 Brevo 공식 도메인으로 발송한다(개인 지메일 발신 0건). ④ [영구 오답노트(.agent/LESSONS_LEARNED.md) & 사전 열람 규칙(.agent/rules/hermes-self-evolution.md)]: 모든 에이전트는 새 작업 전 .agent/INTENT_5DIV.md와 .agent/LESSONS_LEARNED.md를 먼저 읽고, 빌드 에러·심사 금지어 검출·총 회장의 수정 지적 발생 시 반드시 [발생일 | 잘못한 행동 | 근본 원인 | 재발 방지 코드/검수 규칙] 1줄을 .agent/LESSONS_LEARNED.md에 영구 누적한다.",
+      "createdAt": "2026-11-26T06:50:00+09:00"
+    },
+    {
+      "id": 31,
+      "title": "[2026-11-26 총 회장님 확정] 매일 08:00 KST 24/7 클라우드 모닝 브리핑(SMH Fear & Greed + 오늘의 사업 할 일 + UV) & 5도메인 /go/yt 302 상시감시",
+      "rule": "Cloudflare Worker(hq-watchdog-worker, cron '0 23 * * *' == 매일 08:00 KST, PC 전원 OFF 상태에서도 100% 무인 발송)가 ① Yahoo Finance 실시간 7팩터 SMH Fear & Greed Index(SMH/XLV/QQQ 최신 종가·전일/1주/1개월 비교·52주 고점비·125일선·RSI·비중 드리프트, 장애 시 truthofmarket.com/data/smh_fg_latest.json 폴백), ② 오늘 총 회장이 직접 처리할 사업 할 일(CS 미결재 건수·D1 chairman_todo_items 대기 목록·장애/유입 누수 여부·요일별 WIP=1 집중 축·Shadow 14일 숙성 보호), ③ 전일·최근 7일 전사 실 UV·/go/ 클릭·신규 회원·실결제 현황을 통합 작성해 @Allcompany1_bot(chat_id 755033799)으로 매일 아침 08:00 KST 1통 멱등 발송한다. 아울러 hq-watchdog-worker 6시간 감시에 5개 도메인 /go/yt 무리다이렉트 HTTP 302 검증을 상시 탑재해 정적 배포로 인한 uses_fn=False 404 유입 누수를 즉시 탐지·경보한다.",
+      "createdAt": "2026-11-26T08:30:00+09:00"
+    },
+    {
+      "id": 32,
+      "title": "[2026-11-26 총 회장님 확정] AI 최대 자동화 & 총 회장님 불가피 전결 전용 원칙 (AI-First Autonomous / Chairman-Only Gate)",
+      "rule": "① [AI 전량 자율 처리 (총 회장님 할 일에 절대 상정 금지)]: 홈페이지 수정·빌드·배포·/go/yt 302 복구·IndexNow·SMH 지수 갱신·유튜브/인스타 자동 제작 및 예약 발행·뉴스레터/드립/단순 링크 재발송·이메일 결제 폴백·기술 장애 1차 자동 복구 및 요일별 WIP=1 루틴 점검은 100% AI 에이전트(사령탑·홈페이지방·홍보방·Cloudflare Workers)가 자율 완결하고 결과만 보고한다. ② [총 회장님 전결 전용 4대 예외 (AI가 물리적·법적·권한상 진짜 못 할 때만 요청)]: 오직 (a) 외부 대시보드 본인인증·2FA·로그인 클릭(예: Latpeed 플랜/상품 저장, Meta OAuth 권한 승인, PG 신분증/계좌 심사), (b) 실제 금전·대외 평판 최종 도장(환불·결제 분쟁·브랜드 협찬 1클릭 CS 승인 패널), (c) 최상위 가격·전략·유료결제 의사결정, (d) AI 2회 자동 복구 실패 후 남는 물리 장애(PC 전원·API 키 만료 재발급) 딱 4가지만 모닝 브리핑 '회장님만 하실 일' 섹션에 올리며, 해당 건이 0건이면 '🎉 오늘 회장님이 직접 하실 일: 0건'만 보고한다.",
+      "createdAt": "2026-11-26T08:45:00+09:00"
+    },
+    {
+      "id": 33,
+      "title": "[2026-11-26 총 회장님 확정] Antigravity 글로벌 플러그인 `interview-me` & 텔레그램 6봇 리버스 프롬프팅 의도 확정 모드",
+      "rule": "① [글로벌 플러그인 표준]: %USERPROFILE%\\.gemini\\config\\plugins\\interview-me\\(plugin.json, README.md, assets/logo.svg, rules/AGENTS.md, skills/interview-me/SKILL.md, references/intent-template.md) 6개 파일을 전사 표준으로 유지한다. 단순·명확한 지시는 질문 없이 즉시 실행하되, Why/Who/Success/Constraints 중 핵심이 빠져 방향이 크게 갈릴 수 있는 모호한 기획·제작 요청은 계획·코드 작성 전 1턴 1질문 + 구체적 가설 + 확신도(%)로 인터뷰하여 95% 확신 시 Why + Out of scope 포함 의도 확정서를 D:\\드림컴퍼니\\docs\\intent\\YYYYMMDD-<topic>.md에 저장하고 턴을 즉시 종료(STOP RULE)한다. ② [텔레그램 6봇 네이티브 연동]: telegram_5bot_hub/interview_me_router.py 및 watchdog에 /interview, /인터뷰, /의도, '인터뷰해 줘', '질문 먼저 해 줘', /interview_cancel 및 음성 지시 자동 연동을 탑재해, 모바일에서도 라운드별 1질문 답변으로 의도를 확정한 뒤 다음 지시에서 잡음 없이 실행할 수 있게 한다.",
+      "createdAt": "2026-11-26T09:50:00+09:00"
+    },
+    {
+      "id": 34,
+      "title": "[2026-11-26 총 회장님 확정] AI 신뢰성 5대 통제 프레임워크 — `ai-reliability` 글로벌 플러그인 & Level 1~3 위험도 차등 자진보고·월요일 감사증적",
+      "rule": "근거 의도서: D:\\드림컴퍼니\\docs\\intent\\20261126-ai-reliability-track1-track5.md. ① [글로벌 플러그인]: %USERPROFILE%\\.gemini\\config\\plugins\\ai-reliability\\(6개 파일 원문)를 기존 interview-me(Phase 0)와 충돌 0%로 공존 운영한다(Phase 1~3 실행·검증·완료 전담). ② [위험도 Level 1~3 차등 자진보고 — '깜깜이 반영 완료' 원천 차단]: Level 1(단순 조회·브리핑·오타)은 자진보고 생략(불확실 시 1줄만), Level 2(일반 웹·코드·홍보 수정)는 외부 도구 실측 증적 + 간결 자진보고 4항목(검증증적·미수행/미검증·가정·추가확인), Level 3(결제·약관·전면 배포·자동화 변경)는 착수 전 Pre-mortem + Playwright(신규+재방문 2모드)/Regex Auto-Gate 0건 실측 + 완전 자진보고 6항목(미수행·미열람/미검증·가정/폴백·임의생략·오류가능구간·총회장최종확인)을 필수 첨부한다. ③ [월요일 워치독 감사증적 #12]: 기존 hq-watchdog-worker 및 기존 D1(reliability_audit_events, POST /reliability-audit)에 금지어·상투어 Regex 위반 건수 및 전주 미해결 자진보고 잔여 건수를 자동 집계·보고한다(유료 API 0원·신규 워커/DB 0건).",
+      "createdAt": "2026-11-26T14:05:00+09:00"
+    },
+    {
+      "id": 35,
+      "title": "[2026-11-27 총 회장님 확정] Andrew Ng Context Hub(`@aisuite/chub`) · API 실전 주석 영구 고정 · 이진 YES/NO Eval · AI Slop 2단계 세탁 파이프라인",
+      "rule": "규칙 파일: D:\\드림컴퍼니\\.agent\\rules\\context-hub-and-binary-eval.md. ① [Context Hub(`chub`) & `.agent/api-notes/` 의무 조회]: 외부 API(Gemini lyria-3.5, Polar, Whop, Brevo, Cloudflare Workers/Pages/D1/R2, YouTube/Instagram Graph API, Latpeed) 코드 작성·수정 전 반드시 `.agent/skills/get-api-docs/SKILL.md` 절차(`chub search` / `chub get`)와 `chub annotate --list` + `.agent/api-notes/` 실전 주의사항을 먼저 조회하고, 새로 겪은 API 제약은 즉시 영구 등록한다. ② [아부성 완료 보고 금지 — 기계적 이진(YES/NO) Eval 의무화]: 완료 보고 전 반드시 `python D:\\드림컴퍼니\\scripts\\verify_binary_eval_gate.py --all`을 실행해 금지어(`clinical|1:1|1対1|황영웅|님님|beable9489`) 0건(YES/NO) 및 배포 실도메인 `HTTP 200` + Playwright `<main>` > 200자(YES/NO) 전 항목 YES일 때만 완료 보고한다. ③ [AI Slop 2단계 세탁 파이프라인]: pSEO·뉴스레터 원고는 ① 핵심 수치·개요 확정 ➔ ② 초안 작성 ➔ ③ AI 버릇(엠대시 '—' >2회, '단지/단순히 A가 아니라 B'/'not just A, but B' 허세 대조문, 기계적 3단 나열, 영문 delve/nuanced/unlock) 제거 교정 패스 + `--slop` 통과 후에만 발행한다.",
+      "createdAt": "2026-11-27T07:54:00+09:00"
     }
   ],
   "recentCommonOrders": [
     {
-      "text": "각 사업부 홍보 실적에 대한 자가학습이 필요할거 같은데 어떻게 생각해?",
+      "text": "직전에 정리해 둔 Polar $49 \"clinical\" 삭제 & 래피드 Pro Lite(월 0원) 상태 확인",
       "status": "DISPATCHED",
-      "createdAt": "2026-11-25 22:19:50"
+      "createdAt": "2026-11-27 07:43:54"
     },
     {
-      "text": "첨부 파일(hq_5div_promo_breakthrough_20261125.md)의 지침을 정독해 분석하고 해당 전담방에 반영해줘\n[📎 텔레그램 첨부파일 자동 저장 완료]\n• 로컬 경로: D:\\드림컴퍼니\\data\\telegram_uploads\\20261125_205917_hq_5div_promo_breakthrough_20261125.md\n• 원본 파일명: hq_5div_promo_breakthrough_20261125.md (26,263 bytes)\n※ 위 로컬 파일을 직접 read_file로 열어 전체 내용을 확인한 뒤, 지침에 맞춰 실행 및 전담방 분산 지시를 수행하세요.",
+      "text": "[긴급 SEO 패치] 어제(11/26 23시) Google Search Console에서 kisfitglobal.com, getbreakai.com, paradise-hero.com, kidsfit.co.kr 4개 도메인에 대해 \"사이트맵에 리디렉션이 포함된 페이지 / 적절한 표준 태그가 포함된 대체 페이지\" 색인 경고가 도착했다.\n1) 5개 사이트 sitemap.xml 안의 모든 URL에서 Cloudflare Pages가 308 리다이렉트시키는 .html 확장자(또는 불일치 슬래시)를 제거하고 **최종 HTTP 200 도착 URL(Clean URL)** 만 남겨라.\n2) 각 페이지의 <link rel=\"canonical\"> 주소가 sitemap.xml에 적힌 최종 URL과 글자 하나까지 100% 일치하도록 통일(특히 getbreakai.com/jp/ 하위 페이지가 루트 /를 canonical로 잘못 가리키지 않게 자기 자신 URL로 수정)한 뒤 재배포하라.",
       "status": "DISPATCHED",
-      "createdAt": "2026-11-25 20:59:19"
+      "createdAt": "2026-11-27 07:43:25"
     },
     {
-      "text": "방금 메일 다시 보냈어",
+      "text": "https://youtube.com/shorts/FSSRKYAkP98?si=rOc4t0KJmlxWcEvp\n\n노래가사랑 자막 싱크가 안맞아",
       "status": "DISPATCHED",
-      "createdAt": "2026-11-25 18:03:57"
+      "createdAt": "2026-11-26 18:11:10"
     },
     {
-      "text": "beable9489@gmail.com 들어가서 지금 방금 들어왔던 파일 다운받아서 안티그래비티에 그 지침에 맞춰 홍보방안 변경해줘",
+      "text": "이 의도 확정서대로 실행해줘",
       "status": "DISPATCHED",
-      "createdAt": "2026-11-25 17:41:12"
+      "createdAt": "2026-11-26 14:01:56"
     },
     {
-      "text": "유튜브 자동 게시 되고있어?",
+      "text": "텔레그램에서도 이런식으로 진행하면 더 명확하게 지시할수있을거 같아",
       "status": "DISPATCHED",
-      "createdAt": "2026-11-21 12:42:16"
+      "createdAt": "2026-11-26 09:47:27"
     },
     {
-      "text": "396409",
+      "text": "첨부 파일(interview-me-antigravity-install.md)의 지침을 정독해 분석하고 해당 전담방에 반영해줘\n[📎 텔레그램 첨부파일 자동 저장 완료]\n• 로컬 경로: D:\\드림컴퍼니\\data\\telegram_uploads\\20261126_094644_interview-me-antigravity-install.md\n• 원본 파일명: interview-me-antigravity-install.md (20,719 bytes)\n※ 위 로컬 파일을 직접 read_file로 열어 전체 내용을 확인한 뒤, 지침에 맞춰 실행 및 전담방 분산 지시를 수행하세요.",
       "status": "DISPATCHED",
-      "createdAt": "2026-11-20 21:13:37"
+      "createdAt": "2026-11-26 09:46:45"
     },
     {
-      "text": "https://youtu.be/L8V6zb1Aozs?si=OeNkwtqS2CqxfLNn",
+      "text": "방금 beable9489@gmail.com에 interview-me-antigravity-install.md로 보낸거 다운 받아서 메일 글에 있는 지시글로 진행해주고\n\n텔레그램도 그 방식으로 명령 넣을수있게 진행해줘",
       "status": "DISPATCHED",
-      "createdAt": "2026-11-19 15:52:43"
+      "createdAt": "2026-11-26 09:11:46"
     },
     {
-      "text": "beable9489@gmail.com 들어가서 hq_5div_improvement_plan_20261119.md 처리해줘",
+      "text": "사업 할 일은 최대한 너가 자동화를 해야하고 내가 하는건 너가 진짜 못할때 요구하는걸로 정의해줘",
       "status": "DISPATCHED",
-      "createdAt": "2026-11-19 09:42:05"
+      "createdAt": "2026-11-26 08:44:58"
     },
     {
-      "text": "🚨 [그룹 비서실장 보고 — 총 회장님 직접 확인 필요 (1건)]\n━━━━━━━━━━━━━━━━━━━━\n• 🔴 [실서버·결제 점검 필요] [밸류래더 점검 예외] Command '['C:\\\\Users\\\\jjang\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python314\\\\python.exe', '-X', 'utf8', 'D:\\\\드림컴퍼니\\\\telegram_5bot_hub\\\\verify_5company_value_ladder.py']' timed out after 120 seconds\n━━━━━━━━━━━━━━━━━━━━\n💡 비서실 조치 지시: 이 방에 바로 말씀해주시면 즉시 수행합니다.\n\n해결해줘",
+      "text": "내가 지금 밖에 있어서 래피드.클릭을.못해\n\n그리고 smh fear and greed index를 매일 내가 보고 받고 또 내가 오늘 사업에 대해 해야할일 뭔지 브리핑 받고 싶어\n\nUV가 많이 부진한데 개선방안도 마련해줘",
       "status": "DISPATCHED",
-      "createdAt": "2026-11-19 07:57:06"
+      "createdAt": "2026-11-26 08:17:24"
     },
     {
-      "text": "한국 남자 트로트 노래 유명한 100곡을 학습해봐",
+      "text": "# ⚡ [총 회장 위임 특명] 외부 대시보드 2건(Latpeed · Polar) 직접 조치 + 11/26 아침 적발 5대 누락 버그 일괄 수리\n\n총 회장이 직접 대시보드에 들어가지 않도록, 네가 보유한 **API 키(.env)와 브라우저 자동화 권한을 사용해 아래 대시보드 조치 2건과 실측 누락 버그 5건을 논스톱으로 일괄 완수**하고 증빙 스크린샷·실측 로그로 보고하라:\n\n## A. [외부 플랫폼 대시보드 직접 조치 2건]\n\n1. **[Polar $49 상품 설명 내 \"clinical\" 금지어 즉시 삭제 (API 우선 ➔ 브라우저 보조)]**\n   - 먼저 .env의 POLAR_ACCESS_TOKEN으로 Polar API(GET /v1/products ➔ PATCH https://api.polar.sh/v1/products/{product_id})를 호출해 2사업부(kisfit-global) $49 상품 설명에 남아 있는 \"clinical\" 단어를 즉시 제거하고 \"100% Automated Self-Serve US CDC Growth Percentile Calculator & Printable Reference PDF for Adult Parents (18+, Non-Medical Educational Tool)\" 기준 문구로 저장하라(API 권한 부족 시 브라우저로 https://polar.sh 대시보드에 접속해 직접 수정 저장).\n   - 수정 직후 실제 $49 Polar 체크아웃 URL을 열어 페이지 내 \"clinical\" 검색 결과 **0건**임을 확인하고 스크린샷을 찍어 보고하라(겸사겸사 로고 이미지가 깨져 있으면 정식 KISFIT Studio 로고 파일도 업로드할 것).\n\n2. **[래피드(Latpeed) 요금제 Pro Lite(월 0원) 상태 확인 및 전환 (유료 결제 절대 금지)]**\n   - 금일(11/26 00:00) 래피드 키즈핏 소아성장 연구소 스페이스(space_id=6afb01794dc38334ffb033b0)의 유료 Pro 플랜이 종료되었다.\n   - 브라우저로 https://latpeed.com 대시보드 요금제/설정 화면에 접속해 현재 플랜이 **월 고정비 0원인 Pro Lite(판매수수료 4.6% 모델) 로 정상 유지·적용되어 있는지 확인하고, 만약 선택 버튼 클릭이 필요하면 Pro Lite(월 0원)** 로 전환 저장하라.\n   - 주의: 월 정액 카드 결제가 발생하는 유료 Pro 재구독 버튼은 절대 누르지 마라(카카오/이메일 2단계 로그인 인증번호가 뜨면 해당 화면에서만 대기 후 번호 요청).\n   - 아울러 daMaP·_5Nq4 상품 설명 최상단에 \"결제 후 kidsfit.co.kr에서 아이 이름 4p 맞춤 PDF 즉시 발급 안내(이메일·6자리 코드 인증)\" 3줄이 들어가 있는지 함께 확인해 저장하라.",
       "status": "DISPATCHED",
-      "createdAt": "2026-11-19 07:11:09"
+      "createdAt": "2026-11-26 07:38:30"
     },
     {
-      "text": "트로트 느낌이 전혀 안난다 어머니의 봄날 이 노래",
+      "text": "# 🚨 [11/26 아침 실측 추가 적발 — 트랙 A 실행 시 아래 5가지 누락 사고를 최우선 동시 수리하라]\n\n기존 11/25 홍보 바닥 돌파 지시서(트랙 A + 트랙 B)를 그대로 실행하되, 금일(11/26) 아침 실제 유튜브 오디오·지메일 발송함·GitHub 알림에서 적발된 아래 5가지 누락 결함을 빠짐없이 함께 고쳐라:\n\n1. **[4사업부 라디오 1화(-1rd13J5enM) '동일 곡 3번 중복 재생' 사고 수정 & 푸터 정리]**\n   - -1rd13J5enM 영상에서 멘트만 2번째 곡(백운호 연가, 08:50)·3번째 곡(다시 피는 동백꽃, 12:55)으로 소개하고, **실제 삽입된 오디오는 3번 모두 1번 곡(어머니의 봄날)이 중복 재생**되는 치명적 트랙 매핑 버그가 발생했다!\n   - 라디오 렌더링 스크립트가 곡별 고유 MP3 파일을 정확히 불러오도록 수정해 재업로드(구 중복 본편은 일부공개 전환)하고, 배군노·박공기 자동자막 오타가 뜨지 않게 공식 .srt 자막 업로드를 강제하라. 또한 paradise-hero.com 푸터에 아직 남아 있는 & Dream Company 4사업부 문구를 즉시 삭제하라.\n\n2. **[뉴스레터 크론의 beable9489@gmail.com 발송 및 어머님님 오타 즉시 중단]**\n   - 어제(11/25) 발송된 1·2·4·5사업부 데일리 뉴스레터가 전부 아직도 개인 지메일(beable9489@gmail.com)에서 발송되었고, 4사업부 우편함에 또 \"반갑습니다, 서울 테스트 어머님님\" 오타가 찍혔다!\n   - 데일리 뉴스레터 발송 워크플로/스크립트를 찾아 Gmail SMTP를 완전히 걷어내고 Brevo API + 5개 공식 도메인 발신 주소로 즉시 교체하며, 호칭 중복 제거(replace(/님+$/, '') + '님')와 테스트 더미 수신자(@example.com) 발송 제외 처리를 즉시 커밋하라.\n\n3. **[5사업부 래피드 Pro 종료 대응 — 이메일 파싱 자동 개통 폴백 점검]**\n   - 금일(11/26 00:00) 래피드 유료 Pro 플랜이 종료되었다. 총 회장이 무료 Pro Lite로 전환하기 전이라도 결제 개통이 1초도 끊기지 않도록, 래피드 판매 알림 메일 수신 시 Cloudflare Email Worker가 즉시 D1 인증코드를 개통시키는 폴백 로직이 정상 가동 중인지 실측 검증하라.\n\n4. **[5사업부 @kidsfit01 11월 초 구 제휴 쇼츠 4편 추가 비공개]**\n   - 11/17~18 영상 외에 11/04~08에 올라간 교구·육아템 홍보 쇼츠 4편(-5xkuIpbNSc, 8lOCQHSkH9I, g0pFi569FcU, LI8J-NUExX4)이 아직 공개 상태다. '광고 없는 성장 연구소' 신뢰를 위해 4편 모두 즉시 unlisted/비공개 처리하라.\n\n5. [GitHub Actions 실패 크론 2건 즉시 수리·삭제]\n   - 매일 실패 메일이 오는 jjangdol0205/getbreakai의 GetBreakAI Japan US-Stock Autopilot 에러를 수리하고, Cloudflare로 이미 이관된 jjangdol0205/kidsfit의 구 Deploy KidsFit Growth Studio to Pages 워크플로 파일을 완전히 삭제하라.",
       "status": "DISPATCHED",
-      "createdAt": "2026-11-19 06:26:43"
+      "createdAt": "2026-11-26 07:13:41"
     },
     {
-      "text": "유료 결제와 수동 클릭이 필요한 Suno는 쓰지 않는다.\n새로 키울 버추얼 트로트 가수 '백운호(중후하고 따뜻한 중저음 정통 트로트 신사)'의 모든 곡이 100% 동일한 목소리(고유 성대)로 나오도록, 내 로컬 PC와 보유 API만 활용한 무인 음원 파이프라인(baek_woonho_music_studio.py)을 구축하라:\n\n1. [1단계 — 무료 한국어 트로트 작곡·가창 생성]:\n   - 로컬 GPU 기반 오픈소스 ACE-Step 1.5 (github.com/ace-step/ACE-Step-1.5, 또는 보유 중인 GEMINI_API_KEY 기반 Lyria 3.5 폴백)를 세팅하여 한국어 7·5조 트로트 가사(사연 맞춤형 가사)와 정통 트로트 편곡(Korean sentimental trot ballad, warm baritone vocal, emotional vibrato, accordion, brass, nylon guitar, 76 BPM)으로 완곡 오디오를 생성하라.\n\n2. [2단계 — '백운호 고유 목소리' 100% 고정 (보컬 분리 + Seed-VC 가창 음색 변환)]:\n   - 곡마다 가수 목소리가 달라지는 문제를 막기 위해 오픈소스 음원 분리(demucs)와 무학습 가창 음색 변환 모델 Seed-VC (github.com/Plachtaa/seed-vc, 44.1kHz singing voice conversion 모드)를 연동하라.\n   - 초기 테스트로 중후하고 호소력 짙은 남성 바리톤 레퍼런스 음성(assets/voice/baek_woonho_ref.wav, 20~30초, 실존 유명 가수의 초상·음성권 침해 없는 순수 합성 마스터 보이스) 1종을 생성·고정한 뒤, 앞으로 생성되는 모든 트로트 보컬 트랙을 Seed-VC로 변환 후 반주(MR)와 재합성(리버브·마스터링 포함)하여 어떤 곡을 불러도 100% 똑같은 '백운호 목소리'가 나오게 고정하라.\n\n3. [3단계 — 유튜브 수익정지(양산형 판정) 회피용 '사연+헌정곡' 패키지 출력]:\n   - 정지 사진 1장짜리 단순 음원 영상이 아니라, [전반부 45초: 어머님 사연 소개 내레이션 + 후반부 2분 30초: 사연 주인공에게 바치는 백운호의 신곡 무대(부드러운 줌/조명 파티클 + 105pt 왕글씨 가사 자막)] 구조로 자동 합성되도록 연결하라.\n   - 유튜브 업로드 API 설정 시 합성 음원 투명성 규정에 맞춰 status.containsSyntheticMedia = True 플래그가 자동 체크되도록 반영하라.\n\n지금 바로 내 PC의 GPU 환경을 확인해 위 파이프라인을 설치하고, '백운호 데뷔 샘플 트로트 1곡(MP3 + 큰글씨 가사 무대 영상 MP4)'을 생성해 검수용으로 보고하라!",
+      "text": "어제(11월 25일 오전 11:49)가 Google Flow 18,385 크레딧 초기화 마감이었는데, 그사이에 안티그래비티가 영상 비축과 홈페이지 수리를 잘 마쳤는지도 한 번 확인해줘",
       "status": "DISPATCHED",
-      "createdAt": "2026-11-19 03:26:46"
+      "createdAt": "2026-11-26 07:05:24"
     },
     {
-      "text": "3사업부도 앞페이지에 2,5사업부 처럼 어울리는 이미지 하나 자연스럽게 넣으면 좋을거 같아",
+      "text": "⚠️ [음성 전사 실패] gemini-2.0-flash:HTTP_404:{\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.",
       "status": "DISPATCHED",
-      "createdAt": "2026-11-18 20:47:56"
+      "createdAt": "2026-11-26 06:54:22"
     },
     {
-      "text": "1사업부도 앞페이지에 2,5사업부 처럼 어울리는 이미지 하나 자연스럽게 넣으면 좋을거 같아",
+      "text": "# 🎙️ [총 회장 '무타자 음성 지휘 & 자가 진화' 시스템 구축 지시서] 음성 단어장 · 단일 상전 라우터 · 원클릭 승인 패널 · 영구 오답노트\n\nhq_main 및 sns_video는 총 회장이 타이핑이나 여러 세션 창을 뒤질 필요 없이 말 한마디와 버튼 클릭 한 번으로 5개 사업부 전체를 지휘하고, 에이전트가 실수를 반복하지 않고 스스로 진화하도록 아래 4대 기능을 구축하라:\n\n## 1. [무타자 음성 지시 + 전사 전용 단어장(Glossary) 교정기] (hq-watchdog-worker 텔레그램 봇 확장)\n총 회장이 스마트폰 텔레그램 봇에서 키보드 타이핑 대신 음성 메시지(Voice Note)로 대충 말해도 100% 정확히 알아듣고 실행하도록 Gemini Audio 전사 + 전사 고유명사 사전(Glossary) 문맥 교정 파이프라인을 연결하라:\n- **data/hq_glossary.json 필수 등록 단어**:\n  - 브랜드·인물: TruthOfMarket(트루스오브마켓), KISFIT Studio(키즈핏 글로벌), GetBreakAI(겟브레이크AI), 백운호(배군호·백은호 오인식 자동 교정), 김쌤의영웅라디오, paradise-hero, kidsfit.co.kr\n  - 상품·기술 용어: SMH, XLV, SGOV, 신NISA(新NISA), 성장투자부문(成長投資枠), 특정계좌(特定口座), Whop, Polar, Latpeed(래피드), Lyria 3.5, Cloudflare Pages, D1, R2\n- 음성 메시지가 인입되면 즉시 교정된 텍스트(\"🎙️ 인식된 지시: ...\")를 1줄로 보여준 뒤 해당 사업부 작업 큐(promo_directives / 실행 스크립트)로 자동 전달하라.\n\n## 2. [세션 찾기 제로 — '단일 상전 라우터(Master Dispatcher)' 일원화]\n총 회장이 어느 사업부 폴더나 어느 하위 에이전트 세션인지 구분해 시키지 않아도, 텔레그램이나 메인 창에 **일상 말투로 한 줄만 던지면 비서실장 라우터가 알아서 대상 사업부(1~5사업부)와 담당 모듈(hq_main 웹/결제 vs sns_video 영상/음원)을 판별해 배정**하고 완료 결과만 한 줄로 묶어 보고하라.\n\n## 3. [사고 0% 도장 찍기 — 중요 CS·환불·제휴 '1클릭 승인 패널' (Inline Keyboard)]\n단순 다운로드 링크 재발송은 무인 자동 처리하되, 돈이나 대외 평판이 걸린 환불 요청 · 결제 분쟁 · 비즈니스 제휴 문의 메일이 수신되면 멋대로 발송하지 말고 아래 '도장 찍기' 흐름으로 작동하라:\n1. 메일 수신 즉시 고객의 결제·다운로드 이력(D1 조회)을 확인하고, 해당 국가 언어(영·일·국문)와 정중한 대표 톤에 맞춘 완성형 답장 초안을 작성한다.\n2. 총 회장 텔레그램으로 [사업부명 / 고객 요지 2줄 / AI 작성 답장 초안]과 함께 **[✅ 이대로 발송 승인] · [💸 즉시 환불+답장 승인] · [✏️ 말로 수정 지시] 인라인 버튼 3개**를 띄운다.\n3. 총 회장이 버튼 하나만 누르면 그 즉시 Brevo 공식 도메인 메일로 발송을 끝내고 D1 상태를 업데이트한다.\n\n## 4. [한 번 혼난 실수는 두 번 다시 안 하는 '자가 개선 메모리' (.agent/LESSONS_LEARNED.md)]\n에이전트가 같은 실수를 반복하지 않고 매주 더 똑똑해지도록 헤르메스식 자가 진화 규칙을 .agent/rules/에 심어라:\n- 작업 중 빌드 에러, 심사 금지어 검출, 총 회장의 수정 지적을 받을 때마다 그 자리만 땜질하고 끝내지 말고, 반드시 **.agent/LESSONS_LEARNED.md에 [발생일 | 잘못한 행동 | 근본 원인 | 재발 방지 코드/검수 규칙]을 1줄씩 누적 기록**하라.\n- 초기 필수 등재 오답 5건: ① 님님 호칭 중복 ② 2사업부 Polar 1:1/Clinical/iHerb 잔재 및 $49➔$8.99 오연결 ③ 1사업부 깨진 Whop 모달 iframe ④ 4사업부 노래 0초 낚시 쇼츠 및 가짜 사인파 오디오 ⑤ 개인 지메일(beable9489@gmail.com) 발신 잔재.\n- 모든 에이전트는 새 작업을 시작하기 전 .agent/INTENT_5DIV.md와 .agent/LESSONS_LEARNED.md를 먼저 읽고 동일 유형의 실수를 사전 차단하라.",
       "status": "DISPATCHED",
-      "createdAt": "2026-11-18 20:47:45"
+      "createdAt": "2026-11-26 06:36:26"
     },
     {
-      "text": "GitHub 공식 저장소 https://github.com/affaan-m/ECC.git (사칭 미러 저장소 사용 절대 금지)을 임시 폴더(_tmp_ecc)에 클론한 뒤, 현재 워크스페이스의 .agent/ 구조(.agent/rules/, .agent/workflows/, .agent/skills/) 및 안티그래비티 전역 경로(~/.gemini/antigravity/)에 맞춰 아래 기준으로 '경량·고효율 포괄 이식'을 수행하라. 중간 질문 없이 끝까지 자율 실행하라:\n\n1. [충돌 방지 및 도구 호환 대원칙 — 무인 자율 실행 보존]:\n   - ECC 원본 중 '코드 작성 전 반드시 멈춰서 사용자 확인을 기다려라(WAIT for user confirmation)' 또는 '단순 정적 페이지 수정에도 80% 단위 테스트를 강제하라'는 조항은 내 무인 자동화 파이프라인을 멈추게 하므로 제외하거나 자율 실행 모드로 재작성하라.\n   - 원본 스킬 내부에 하드코딩된 유료 외부 MCP(firecrawl, exa 등) 및 클로드 전용 도구명은 안티그래비티 기본 내장 웹 검색·파일·터미널 도구로 자동 치환하여 추가 비용과 에러 없이 작동하게 하라.\n\n2. [선별 이식할 핵심 컴포넌트 추출]:\n   - .agent/rules/ (상시 가드레일 — 정확히 아래 3개로 압축 배치):\n     * security.md (API 키·유료 Paywall 정적 파일 누수·가짜 라이선스 키 우회·민감정보 노출 원천 차단)\n     * python-js-clean.md (Python 데이터/영상 스크립트 및 프론트엔드 JS 문법·인앱 브라우저 호환 핵심 규칙)\n     * pre-deploy-gate.md (내가 별도 명령어를 안 쳐도 모든 웹 배포·푸시 직전 자동으로 페이월 누수·깨진 링크 404·빌드 에러 검수 및 푸시 후 실서버 캐시 우회 curl 반영 확인을 강제 수행)\n   - .agent/workflows/ (슬래시 명령어 — commands/에서 핵심 이식):\n     * build-fix.md (/build-fix: 빌드·배포 깨짐 최소 변경 자동 복구)\n     * code-review.md (/code-review: 배포 전 치명적 버그·모바일 UI·링크 404 전수 검수)\n     * security-scan.md (/security-scan: 페이월 우회 및 유료 정적 파일·시크릿 노출 점검)\n     * marketing-campaign.md (/marketing-campaign: 시장조사 기반 포지셔닝·랜딩 카피·숏폼 대본 일괄 기획)\n   - .agent/skills/ (평상시 토큰 소모가 0인 온디맨드 스킬 — agents/, skills/, .agents/skills/ 전체를 전수 검색하여 아래 분야의 모든 스킬을 YAML frontmatter 규격의 <skill-name>/SKILL.md 형태로 빠짐없이 이식):\n     * 마케팅·그로스·카피라이팅·브랜드 보이스·콘텐츠·시장조사·심층리서치·SEO 관련 모든 스킬\n     * UI/UX 디자인 검수·성능 최적화·빌드 복구(build-error-resolver)·코드/보안 리뷰어(code-reviewer, security-reviewer) 관련 모든 스킬\n\n3. [정리 및 보고]:\n   - 이식 완료 후 임시 클론 폴더(_tmp_ecc)는 깨끗이 삭제하고, 설치된 상시 규칙 3개·슬래시 명령어·스킬 전체 목록과 각각의 자동 발동 조건(사용법)을 표로 정리해 보고하라!\n\n이거 적용해줘",
+      "text": "안 A로 진행해",
       "status": "DISPATCHED",
-      "createdAt": "2026-11-18 20:10:22"
+      "createdAt": "2026-11-25 22:34:14"
     }
   ]
 }
