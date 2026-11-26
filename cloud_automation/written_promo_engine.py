@@ -41,7 +41,22 @@ if hasattr(sys.stdout, "reconfigure"):
         pass
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from promo_hard_gate import check_promo_hard_gate  # noqa: E402
+from promo_hard_gate import check_ai_slop_gate, check_promo_hard_gate, scrub_ai_slop  # noqa: E402
+
+
+def to_clean_url(url: str) -> str:
+    """Normalizes Cloudflare Pages URLs to final HTTP 200 Clean URLs (strips `/index.html` and `.html`)."""
+    raw = str(url or "").strip()
+    if not raw:
+        return raw
+    base, frag = (raw.split("#", 1) + [""])[:2]
+    path_part, query = (base.split("?", 1) + [""])[:2]
+    if path_part.endswith("/index.html"):
+        path_part = path_part[: -len("index.html")]
+    elif path_part.endswith(".html"):
+        path_part = path_part[:-5]
+    rebuilt = path_part + (f"?{query}" if query else "") + (f"#{frag}" if frag else "")
+    return rebuilt
 
 KST = dt.timezone(dt.timedelta(hours=9))
 ROOT = Path(__file__).resolve().parent.parent
@@ -90,7 +105,7 @@ DIV_WEB_CONFIG: Dict[str, Dict[str, Any]] = {
         "diag_label": "Run the Free 30-Second Retirement Crash Stress-Test",
         "sample_url": "https://truthofmarket.com/assets/downloads/tom_sample_2p.pdf",
         "sample_label": "Preview the Free 2-Page 2000–2025 Sample Workbook PDF",
-        "disclaimer": "Educational retirement & historical allocation research only — not individualized investment advice.",
+        "disclaimer": "Educational retirement and historical allocation research only (not individualized investment advice).",
     },
     "KFG": {
         "host": "kisfitglobal.com",
@@ -176,28 +191,28 @@ DIVISION_DEEP_DATA: Dict[str, Dict[str, Any]] = {
         "table_rows": [
             ["100% Brokerage Sweep Cash (~0.01%)", "0% nominal / -35% real over 15 yrs", "Never recovers inflation purchasing power", "High nominal, erodes silently"],
             ["Classic 60/40 (Long Bonds + Stocks)", "-18% to -32% (both fell in 2022)", "28–42 months in rate-shock regimes", "Exposed to bond duration risk"],
-            ["100% Single-Sector Tech Growth", "-45% to -70% in deep cycles", "48–72+ months (sequence risk)", "None — forces selling at lows"],
+            ["100% Single-Sector Tech Growth", "-45% to -70% in deep cycles", "48–72+ months (sequence risk)", "None: forces selling at lows"],
             ["SMH × XLV + 24-Mo SGOV Cushion", "Cut severe drawdowns nearly in half", "~17 months historical calm recovery", "Ring-fenced 24 months of bills"],
         ],
         "checklist_title": "Your 3-Step Calm Retirement Stress-Check (Zero Complex Spreadsheets)",
         "checklist_items": [
             "Ring-fence 24 months of net living expenses outside equities in short-term US Treasury liquidity (SGOV) so a bad quarter never forces a share sale.",
             "Pair secular semiconductor compounding (SMH) with non-cyclical healthcare resilience (XLV) instead of leaning on long-duration bonds that broke in 2022.",
-            "Write down your semi-annual rebalancing calendar and 401(k)/IRA tax-location rules once — then stop checking daily headlines the other 363 days.",
+            "Write down your semi-annual rebalancing calendar and 401(k)/IRA tax-location rules once, then stop checking daily headlines the other 363 days.",
         ],
         "why_old_fails": (
             "Walk into almost any retirement workshop or open a standard online retirement calculator, and you will notice the exact same blind spot. "
             "Nearly every free tool assumes a neat, flat seven percent return marching upward in a straight line every single year. "
-            "Real retirement life never arrives in straight lines. It arrives in lumpy waves like 2000, 2008, and 2022 — and the order in which those waves strike matters more than the 25-year average.\n\n"
+            "Real retirement life never arrives in straight lines. It arrives in lumpy waves like 2000, 2008, and 2022, and the order in which those waves strike matters more than the 25-year average.\n\n"
             "When a retiree withdraws monthly living bills directly from fallen equity shares during an early downturn, those sold shares are gone forever and can never rebound when markets recover. "
-            "Meanwhile, the opposite extreme — leaving six figures sitting in a default 0.01% brokerage sweep account — feels calm on Monday morning yet quietly surrenders tens of thousands of dollars in real buying power over a single decade. "
+            "Meanwhile, the opposite extreme (leaving six figures sitting in a default 0.01% brokerage sweep account) feels calm on Monday morning yet quietly surrenders tens of thousands of dollars in real buying power over a single decade. "
             "Neither extreme respects the thirty years of disciplined work it took to build that nest egg."
         ),
         "mechanism_deep": (
             "That is why serious independent retirement design separates two completely different jobs instead of forcing one crowded portfolio to do everything at once. "
             "Job One is sleeping calmly through a two-year storm: ring-fencing 24 months of real household cash flow inside short-duration US Treasuries (SGOV) so Wall Street headlines cannot touch next month's grocery or property-tax check.\n\n"
             "Job Two is outrunning 25 years of living-cost inflation without gambling on speculative stories: balancing structural semiconductor productivity (SMH) alongside non-cyclical healthcare demand (XLV). "
-            "Across the documented 2000–2025 public market record — covering the Dot-Com bust, the 2008 Global Financial Crisis, and the 2022 simultaneous stock-and-bond shock — separating liquidity from a growth-plus-defense core removed forced bear-market liquidation while keeping semi-annual upkeep under twenty minutes."
+            "Across the documented 2000–2025 public market record (covering the Dot-Com bust, the 2008 Global Financial Crisis, and the 2022 simultaneous stock-and-bond shock), separating liquidity from a growth-plus-defense core removed forced bear-market liquidation while keeping semi-annual upkeep under twenty minutes."
         ),
         "faqs": [
             ("Why did the classic 60/40 portfolio struggle so sharply in 2022?", "Long-duration bonds fell sharply alongside equities when interest rates rose rapidly in 2022, leaving retirees without a stable liquidity sleeve for monthly withdrawals."),
@@ -209,10 +224,10 @@ DIVISION_DEEP_DATA: Dict[str, Dict[str, Any]] = {
         "table_caption": "Official US CDC Stature Velocity & Bone-Age Elapsed-Lag Reference (Ages 4–14)",
         "table_headers": ["Parent Check Method", "Typical Blind Spot", "US CDC Velocity Benchmark", "Actionable Clarity"],
         "table_rows": [
-            ["Parent Height Average Alone", "+/- 3.5 inch error band", "Ignores current percentile lane", "Low — misses routine bottlenecks"],
+            ["Parent Height Average Alone", "+/- 3.5 inch error band", "Ignores current percentile lane", "Low: misses routine bottlenecks"],
             ["Annual Birthday Wall Mark Only", "Misses 12 months of pace slowdown", "Normal ages 4–10: 2.0–2.5 in/yr", "Delayed by a full year"],
             ["1-Year-Old Wrist Bone-Age Note", "Can drift 1.5–2.0 in during pre-puberty", "Must adjust for elapsed months (Δt)", "Outdated without lag adjustment"],
-            ["Monthly Barefoot Wall + CDC Velocity", "Spots slowing pace within 60–90 days", "Tracks true in/yr & bedtime/protein levers", "High — calm checkup preparation"],
+            ["Monthly Barefoot Wall + CDC Velocity", "Spots slowing pace within 60–90 days", "Tracks true in/yr & bedtime/protein levers", "High: calm checkup preparation"],
         ],
         "checklist_title": "3 Calm Evening & Measurement Habits Parents Can Start Tonight ($0)",
         "checklist_items": [
@@ -229,7 +244,7 @@ DIVISION_DEEP_DATA: Dict[str, Dict[str, Any]] = {
         ),
         "mechanism_deep": (
             "Calm parenting starts when guesswork gives way to clean, verifiable public reference math. "
-            "Published US CDC 2–18 growth tables show that healthy school-age children generally grow 2.0 to 2.5 inches per year before their adolescent spurt — meaning annual pace tells far more truth than a single snapshot.\n\n"
+            "Published US CDC 2–18 growth tables show that healthy school-age children generally grow 2.0 to 2.5 inches per year before their adolescent spurt, meaning annual pace tells far more truth than a single snapshot.\n\n"
             "Instead of pushing affiliate supplements or overwhelming families with jargon, KISFIT Studio pairs official US CDC percentile curves with elapsed-time bone-age adjustment and three realistic home habits: consistent lights-out timing, solid dinner protein, and playful vertical movement. "
             "In sixty seconds you see where your child tracks today, spot the single evening bottleneck worth fixing first, and can preview a free 2-page sample PDF before ever deciding whether you want the full printable family log."
         ),
@@ -304,10 +319,10 @@ DIVISION_DEEP_DATA: Dict[str, Dict[str, Any]] = {
         "table_caption": "질병관리청 소아청소년 성장도표 기준 초등 성장 점검 방식별 정확도 비교",
         "table_headers": ["성장 확인 방법", "가장 흔한 놓침 포인트", "질병관리청 핵심 기준", "부모 실천 명확도"],
         "table_rows": [
-            ["엄마·아빠 키 평균 계산만 확인", "최대 ±7cm 오차 발생", "현재 백분위·성장속도 미반영", "낮음 — 습관 병목 파악 불가"],
+            ["엄마·아빠 키 평균 계산만 확인", "최대 ±7cm 오차 발생", "현재 백분위·성장속도 미반영", "낮음: 습관 병목 파악 불가"],
             ["1년에 1번 학교 신체검사만 확인", "성장 정체(연 4cm 미만) 1년 뒤 인지", "초등 평균 연 5~6cm 성장", "골든타임 대응 지연"],
             ["작년 뼈나이 결과 그대로 신뢰", "촬영 경과 시차(Δt)로 예상키 4cm 오차", "경과 개월수(Δt) 보정 필수", "시차 미보정 시 오판 위험"],
-            ["월 1회 맨발 키 기록 + Δt 보정", "60~90일 내 속도 변화 즉시 포착", "연간 성장속도(cm/년) 자동 판독", "높음 — 수면·식단·진료질문 정리"],
+            ["월 1회 맨발 키 기록 + Δt 보정", "60~90일 내 속도 변화 즉시 포착", "연간 성장속도(cm/년) 자동 판독", "높음: 수면·식단·진료질문 정리"],
         ],
         "checklist_title": "비싼 영양제보다 먼저 오늘 밤 집에서 바꾸는 3가지 무료 성장 세팅",
         "checklist_items": [
@@ -448,8 +463,8 @@ def select_article_ab_pair(matrix_db: Dict[str, Any], div: str, week_seed: int =
     return arm_a, arm_b
 
 
-def build_seo_article_html(div: str, matrix_db: Dict[str, Any], date_str: str, week_seed: int = 0) -> Dict[str, Any]:
-    div_u = div.upper()
+def _pass1_lock_seo_outline(div_u: str, matrix_db: Dict[str, Any], date_str: str, week_seed: int = 0) -> Dict[str, Any]:
+    """Pass 1: Lock primary verified numbers, single thesis, scene hook, and Clean URL canonical."""
     wcfg = DIV_WEB_CONFIG[div_u]
     d_obj = matrix_db["divisions"][div_u]
     sb = d_obj["storybrand_7parts"]
@@ -459,11 +474,72 @@ def build_seo_article_html(div: str, matrix_db: Dict[str, Any], date_str: str, w
     headline = str(arm_a["hook_line"]).strip()
     challenger_headline = str(arm_b["hook_line"]).strip()
     matrix_id = str(arm_a["id"])
-    utm_a = f"{matrix_id}_vA"
-    utm_b = f"{arm_b['id']}_vB"
     slug = _slugify(div_u, matrix_id, date_str)
-    canonical_url = f"{wcfg['base_url']}{wcfg['article_url_prefix']}{slug}"
+    clean_slug = slug[:-5] if slug.endswith(".html") else slug
+    canonical_url = to_clean_url(f"{wcfg['base_url']}{wcfg['article_url_prefix']}{clean_slug}")
 
+    return {
+        "div_u": div_u,
+        "wcfg": wcfg,
+        "sb": sb,
+        "deep": deep,
+        "arm_a": arm_a,
+        "arm_b": arm_b,
+        "headline": headline,
+        "challenger_headline": challenger_headline,
+        "matrix_id": matrix_id,
+        "utm_a": f"{matrix_id}_vA",
+        "utm_b": f"{arm_b['id']}_vB",
+        "slug": slug,
+        "canonical_url": canonical_url,
+        "date_str": date_str,
+        "locked_evidence_rows": len(deep["table_rows"]),
+    }
+
+
+def _pass3_wash_and_verify_seo(
+    div_u: str,
+    headline: str,
+    draft_html: str,
+    lang: str,
+    canonical_url: str,
+) -> Tuple[str, str, bool, List[str], Dict[str, Any]]:
+    """Pass 3: Dedicated AI Slop wash pass + Fail-Closed Hard Gate & Clean URL verification."""
+    washed_html, scrub_report = scrub_ai_slop(draft_html, lang=lang, max_em_dashes=2, is_html=True)
+    plain_text = re.sub(r"<script.*?</script>|<style.*?</style>|<[^>]+>", " ", washed_html, flags=re.S)
+    plain_text = _html.unescape(re.sub(r"\s+", " ", plain_text)).strip()
+
+    ok, errs = check_written_auto_gate(div_u, headline, washed_html, plain_text, is_seo_article=True)
+    slop_ok, slop_errs = check_ai_slop_gate(washed_html, max_em_dashes=2, is_html=True)
+    if not slop_ok:
+        ok = False
+        for e in slop_errs:
+            if e not in errs:
+                errs.append(e)
+    if canonical_url.endswith(".html"):
+        ok = False
+        errs.append("canonical_url_has_html_extension")
+    return washed_html, plain_text, ok, errs, scrub_report
+
+
+def build_seo_article_html(div: str, matrix_db: Dict[str, Any], date_str: str, week_seed: int = 0) -> Dict[str, Any]:
+    div_u = div.upper()
+    # Pass 1: Lock verified evidence numbers, outline & Clean URL
+    outline = _pass1_lock_seo_outline(div_u, matrix_db, date_str=date_str, week_seed=week_seed)
+    wcfg = outline["wcfg"]
+    sb = outline["sb"]
+    deep = outline["deep"]
+    arm_a = outline["arm_a"]
+    arm_b = outline["arm_b"]
+    headline = outline["headline"]
+    challenger_headline = outline["challenger_headline"]
+    matrix_id = outline["matrix_id"]
+    utm_a = outline["utm_a"]
+    utm_b = outline["utm_b"]
+    slug = outline["slug"]
+    canonical_url = outline["canonical_url"]
+
+    # Pass 2: Compose complete Slippery-Slide HTML draft
     esc = _html.escape
 
     # Build verified real-data table HTML
@@ -677,9 +753,10 @@ def build_seo_article_html(div: str, matrix_db: Dict[str, Any], date_str: str, w
 </html>
 """
 
-    plain_text = re.sub(r"<script.*?</script>|<style.*?</style>|<[^>]+>", " ", html_doc, flags=re.S)
-    plain_text = _html.unescape(re.sub(r"\s+", " ", plain_text)).strip()
-    ok, errs = check_written_auto_gate(div_u, headline, html_doc, plain_text, is_seo_article=True)
+    # Pass 3: Dedicated AI Slop wash + Fail-Closed Hard Gate verification
+    washed_html, plain_text, ok, errs, scrub_report = _pass3_wash_and_verify_seo(
+        div_u, headline, html_doc, lang=wcfg["lang"], canonical_url=canonical_url
+    )
     return {
         "ok": ok,
         "errors": errs,
@@ -695,18 +772,30 @@ def build_seo_article_html(div: str, matrix_db: Dict[str, Any], date_str: str, w
         "utm_content_a": utm_a,
         "utm_content_b": utm_b,
         "visible_chars": len(plain_text),
-        "html": html_doc,
+        "html": washed_html,
         "date_str": date_str,
+        "pipeline_3pass": {
+            "pass1_locked_evidence_rows": outline["locked_evidence_rows"],
+            "pass2_draft_composed": True,
+            "pass3_scrub": scrub_report,
+        },
     }
 
 
 def _append_to_sitemap_and_rss(web_root: Path, base_url: str, brand: str, url: str, title: str, desc: str, date_str: str) -> None:
-    # 1. Sitemap update (idempotent)
+    # Normalize to Cloudflare Pages HTTP 200 Clean URL (zero 308 .html redirects in sitemap/RSS!)
+    url = to_clean_url(url)
+    # 1. Sitemap update (idempotent; also upgrades legacy .html loc if present)
     sm_path = web_root / "sitemap.xml"
     url_block = f"  <url>\n    <loc>{url}</loc>\n    <lastmod>{date_str}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n"
     if sm_path.exists():
         raw = sm_path.read_text(encoding="utf-8", errors="ignore")
-        if url not in raw and "</urlset>" in raw:
+        legacy_loc = f"<loc>{url}.html</loc>"
+        clean_loc = f"<loc>{url}</loc>"
+        if legacy_loc in raw:
+            raw = raw.replace(legacy_loc, clean_loc)
+            sm_path.write_text(raw, encoding="utf-8")
+        elif clean_loc not in raw and "</urlset>" in raw:
             sm_path.write_text(raw.replace("</urlset>", url_block + "</urlset>"), encoding="utf-8")
     else:
         sm_path.write_text(

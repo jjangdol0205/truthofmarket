@@ -19,6 +19,7 @@ import argparse
 import datetime as dt
 import html as _html
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any, Dict, List
@@ -31,6 +32,7 @@ if hasattr(sys.stdout, "reconfigure"):
         pass
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from promo_hard_gate import check_ai_slop_gate, scrub_ai_slop  # noqa: E402
 from written_promo_engine import (  # noqa: E402
     DIV_WEB_CONFIG,
     KST,
@@ -38,6 +40,7 @@ from written_promo_engine import (  # noqa: E402
     check_written_auto_gate,
     ensure_indexnow_key,
     ping_indexnow,
+    to_clean_url,
 )
 
 PAGES_15: Dict[str, List[Dict[str, Any]]] = {
@@ -47,7 +50,7 @@ PAGES_15: Dict[str, List[Dict[str, Any]]] = {
             "title": "Traditional 60/40 vs SMH x XLV + SGOV: 25 Years of Retirement Drawdown Recovery",
             "meta_desc": "Compare traditional 60/40 long-bond portfolios against a 2-pillar SMH x XLV + 24-month SGOV cash buffer across 2000, 2008, and 2022.",
             "lead": "Most retirees in their 60s were promised that a classic 60/40 stock-and-long-bond mix would cushion every storm. Then 2022 arrived and stocks and long-duration bonds fell together in the very same year.",
-            "p2": "When you are still working at 42, a bad year is just a line on a screen. When you are drawing monthly living expenses at 64, selling depressed shares or fallen 20-year bonds locks in permanent retirement loss—often quietly trimming years off a nest egg you spent three decades building.",
+            "p2": "When you are still working at 42, a bad year is just a line on a screen. When you are drawing monthly living expenses at 64, selling depressed shares or fallen 20-year bonds locks in permanent retirement loss, often quietly trimming years off a nest egg you spent three decades building.",
             "p3": "Looking calmly at 2000–2025 historical data, separating 24 months of near-zero-duration Treasury bills (SGOV) from a balanced growth-plus-defensive core (SMH semiconductor secular growth paired with XLV healthcare stability) changed the retirement experience. Instead of praying interest rates drop, your short-term spending bucket stays steady while the growth pillar has years to recover.",
             "table_headers": ["Historical Stress Period", "Classic 60/40 Long Bonds", "SMH x XLV + 24-Mo SGOV Buffer"],
             "rows": [
@@ -64,15 +67,15 @@ PAGES_15: Dict[str, List[Dict[str, Any]]] = {
             "cta_url": "https://truthofmarket.com/smh-fear-greed?utm_source=seo&utm_medium=seo_article&utm_campaign=tom_vs_6040",
             "cta_label": "Check Today's Free SMH Fear & Greed Gauge →",
             "faq": [
-                ("Does Truth of Market tell me when to buy or sell?", "No. Truth of Market publishes independent historical education and public regime statistics only—zero buy/sell advice."),
+                ("Does Truth of Market tell me when to buy or sell?", "No. Truth of Market publishes independent historical education and public regime statistics only, with zero buy/sell advice."),
                 ("Can I inspect the workbook before paying $9?", "Yes. Open the free 2-page 2000–2025 sample PDF with zero email wall before choosing the one-time $9 14-page edition."),
             ],
         },
         {
             "slug": "sgov-vs-bank-sweep-001-ira-cash.html",
             "title": "Broker 0.01% Idle Cash Sweep vs SGOV Treasury Buffer for Age 55+ Retirees",
-            "meta_desc": "Why leaving $100,000 in a default 0.01% brokerage sweep pays $10 a year—and how retirees structure a calm 24-month SGOV Treasury safety bucket.",
-            "lead": "Open your IRA statement tonight and look at the tiny line labeled 'core cash sweep.' On many major brokerages, default uninvested cash still earns roughly 0.01%—just $10 a year on $100,000.",
+            "meta_desc": "Why leaving $100,000 in a default 0.01% brokerage sweep pays $10 a year, and how retirees structure a calm 24-month SGOV Treasury safety bucket.",
+            "lead": "Open your IRA statement tonight and look at the tiny line labeled 'core cash sweep.' On many major brokerages, default uninvested cash still earns roughly 0.01%, or just $10 a year on $100,000.",
             "p2": "Retirees hold cash for a noble reason: protecting sleep and avoiding forced stock sales during a downturn. Yet leaving two full years of retirement expenses sitting in a 0.01% bank sweep quietly bleeds purchasing power to groceries, property taxes, and Medicare premiums every single month.",
             "p3": "That is why our 2000–2025 Retirement Study models a dedicated 24-month ultra-short U.S. Treasury bill buffer (SGOV, 0–3 month T-bills) alongside the SMH x XLV core. Because short-term T-bills carry minimal duration risk compared to 20-year bond funds, retirees keep daily liquidity while letting their safety bucket actually pull its weight.",
             "table_headers": ["Comparison Criterion", "Default 0.01% Bank/Broker Sweep", "0–3 Month U.S. T-Bill ETF (SGOV)"],
@@ -98,8 +101,8 @@ PAGES_15: Dict[str, List[Dict[str, Any]]] = {
             "slug": "smh-fear-greed-index-guide-2026.html",
             "title": "How Retirees Use One Free SMH Fear & Greed Gauge Instead of Watching 40 Tickers",
             "meta_desc": "A calm 10-second guide to reading our 7-factor daily Semiconductor Fear & Greed Index for 50–70+ long-term ETF discipline.",
-            "lead": "Checking forty flashing tickers before breakfast never made anyone wealthier—it only raises blood pressure and tempts emotional decisions at the worst possible hour.",
-            "p2": "Most investors approaching retirement know they should ignore noisy financial television, yet when semiconductor headlines swing wildly, curiosity pulls them back to their phone ten times a day. The hidden cost isn't just time; it is decision fatigue.",
+            "lead": "Checking forty flashing tickers before breakfast never made anyone wealthier. It only raises blood pressure and tempts emotional decisions at the worst possible hour.",
+            "p2": "Most investors approaching retirement know they should ignore noisy financial television, yet when semiconductor headlines swing wildly, curiosity pulls them back to their phone ten times a day. The hidden cost is decision fatigue alongside wasted time.",
             "p3": "We built the free daily SMH Fear & Greed Index (0–100 across 7 transparent historical factors) so disciplined retirees can check the broader semiconductor temperature once in 10 seconds, put the phone away, and measure any emotion against 25 years of real SMH x XLV + SGOV context.",
             "table_headers": ["Morning Habit", "Watching 40 Tickers & News Alerts", "Checking 1 Free 7-Factor SMH Gauge"],
             "rows": [
@@ -109,7 +112,7 @@ PAGES_15: Dict[str, List[Dict[str, Any]]] = {
             ],
             "steps": [
                 "Bookmark truthofmarket.com/smh-fear-greed for a quiet 10-second public sentiment glance.",
-                "Compare today's 0–100 regime reading against 2008 and 2022 historical context—never react to a single headline.",
+                "Compare today's 0–100 regime reading against 2008 and 2022 historical context rather than reacting to a single headline.",
                 "Pair the free daily gauge with our free 2-page PDF sample or optional daily pre-market research letter.",
             ],
             "cta_url": "https://truthofmarket.com/smh-fear-greed?utm_source=seo&utm_medium=seo_article&utm_campaign=tom_fg_guide",
@@ -124,16 +127,16 @@ PAGES_15: Dict[str, List[Dict[str, Any]]] = {
         {
             "slug": "cdc-growth-velocity-vs-parent-height-average.html",
             "title": "US CDC Growth Velocity vs Mid-Parental Height Average: Why Siblings Differ by 3+ Inches",
-            "meta_desc": "Why simply averaging Mom and Dad's height misleads parents—and how official US CDC 2000 percentile curves and annual growth velocity clarify the real trend.",
+            "meta_desc": "Why simply averaging Mom and Dad's height misleads parents, and how official US CDC 2000 percentile curves and annual growth velocity clarify the real trend.",
             "lead": "Every parent has typed Mom's height and Dad's height into a free web box, hit calculate, and stared at one stiff number wondering why their two children are already tracking inches apart.",
-            "p2": "A mid-parental formula only estimates a broad genetic neighborhood—often spanning plus or minus 3 to 4 inches. It tells you nothing about whether your child is currently accelerating, holding steady on their US CDC percentile lane, or quietly drifting downward because of late nights or uneven evening nutrition.",
-            "p3": "That is why KISFIT Studio pairs official US CDC 2000 age-in-days curves with annual growth velocity (inches per year) and everyday household sleep, posture, and protein benchmarks—with zero supplement ads and zero recurring fee required for your first calm check.",
+            "p2": "A mid-parental formula only estimates a broad genetic neighborhood (often spanning plus or minus 3 to 4 inches). It tells you nothing about whether your child is currently accelerating, holding steady on their US CDC percentile lane, or quietly drifting downward because of late nights or uneven evening nutrition.",
+            "p3": "That is why KISFIT Studio pairs official US CDC 2000 age-in-days curves with annual growth velocity (inches per year) and everyday household sleep, posture, and protein benchmarks, with zero supplement ads and zero recurring fee required for your first calm check.",
             "table_headers": ["What Parents Compare", "Simple Mid-Parental Average", "KISFIT Studio US CDC Velocity Check"],
             "rows": [
                 ["Age Precision", "Whole years only", "Exact birth-date interpolation against US CDC 2000"],
-                ["Tracks Speed (in/yr)", "No—single static guess", "Yes—tracks monthly & 6-month velocity trajectory"],
+                ["Tracks Speed (in/yr)", "No: single static guess", "Yes: tracks monthly & 6-month velocity trajectory"],
                 ["Bone-Age Time Shift", "Ignored completely", "Accounts for months elapsed since last wrist X-ray"],
-                ["Supplement Ads", "Common in generic sites", "Zero supplement ads—100% independent educational tool"],
+                ["Supplement Ads", "Common in generic sites", "Zero supplement ads (100% independent educational tool)"],
             ],
             "steps": [
                 "Measure your child barefoot against a flat wall first thing in the morning.",
@@ -150,9 +153,9 @@ PAGES_15: Dict[str, List[Dict[str, Any]]] = {
         {
             "slug": "wrist-bone-age-6-months-ago-time-shift-guide.html",
             "title": "Got a Wrist Bone-Age X-Ray 6 Months Ago? Why That Number Has Already Shifted Today",
-            "meta_desc": "Understand how elapsed months since a routine wrist bone-age reading affect height reference tracking—and how to organize notes calmly before your next checkup.",
-            "lead": "Six months ago, a quick wrist X-ray gave you a bone-age number that you saved in a photo on your phone. Today, your child is half a year older—yet most parents still plug that old number unchanged into online tables.",
-            "p2": "In childhood, six months is an entire season of growth. If your child grew briskly—or slowed down during a stressful school term with late bedtimes—relying on an outdated snapshot creates unnecessary confusion and anxiety before your next annual well-child visit.",
+            "meta_desc": "Understand how elapsed months since a routine wrist bone-age reading affect height reference tracking, and how to organize notes calmly before your next checkup.",
+            "lead": "Six months ago, a quick wrist X-ray gave you a bone-age number that you saved in a photo on your phone. Today, your child is half a year older, yet most parents still plug that old number unchanged into online tables.",
+            "p2": "In childhood, six months is an entire season of growth. If your child grew briskly (or slowed down during a stressful school term with late bedtimes), relying on an outdated snapshot creates unnecessary confusion and anxiety before your next annual well-child visit.",
             "p3": "KISFIT Studio automatically adjusts for elapsed months since your recorded check and helps parents pair height-lane math with calm, verifiable daily routines: earlier lights-out, morning sunlight, protein-rich dinners, and upright desk posture.",
             "table_headers": ["Tracking Approach", "Static Old X-Ray Snapshot", "Time-Adjusted US CDC Reference Log"],
             "rows": [
@@ -168,7 +171,7 @@ PAGES_15: Dict[str, List[Dict[str, Any]]] = {
             "cta_url": "https://kisfitglobal.com/assets/downloads/kfg_sample_2p.pdf",
             "cta_label": "Preview Free 2-Page US CDC Sample PDF →",
             "faq": [
-                ("What if we never took a wrist bone-age X-ray?", "No problem at all—our free US CDC height percentile and velocity tracker works seamlessly using birth date and barefoot height alone."),
+                ("What if we never took a wrist bone-age X-ray?", "No problem at all. Our free US CDC height percentile and velocity tracker works seamlessly using birth date and barefoot height alone."),
                 ("Do you sell height pills or supplements?", "Never. KISFIT Studio carries zero affiliate links and zero supplement promotions."),
             ],
         },
@@ -178,7 +181,7 @@ PAGES_15: Dict[str, List[Dict[str, Any]]] = {
             "meta_desc": "Pediatricians often spend just 90 seconds on the height chart. Bring these 3 simple questions and a clean barefoot growth log to your next routine checkup.",
             "lead": "Routine well-child appointments move fast. The nurse measures your child with shoes half-untying, the chart flashes on a screen for ninety seconds, and you only remember your real question in the parking lot.",
             "p2": "Parents do not need complicated medical jargon to be great advocates for their kids. What helps most is walking in with three steady numbers: barefoot height taken at home on the same wall, six-month annual pace in inches per year, and honest bedtime/sleep-breathing notes.",
-            "p3": "Our printable 2-page sample PDF and $8.99 single reference report organize those exact points onto a clean kitchen-ready sheet—so checkups feel collaborative, calm, and completely free of guesswork.",
+            "p3": "Our printable 2-page sample PDF and $8.99 single reference report organize those exact points onto a clean kitchen-ready sheet so checkups feel collaborative, calm, and completely free of guesswork.",
             "table_headers": ["Checkup Topic", "What Parents Usually Forget to Ask", "What to Bring on 1 Clean Sheet"],
             "rows": [
                 ["Percentile Lane", "Did our child cross a major US CDC line?", "Last 3 barefoot morning heights with dates"],
@@ -294,7 +297,7 @@ PAGES_15: Dict[str, List[Dict[str, Any]]] = {
                 "듣고 싶으신 노래 제목을 한 번만 톡 누르시면 105pt 왕글씨 가사와 함께 흘러나옵니다.",
                 "마음에 드신다면 다음 화 연속 사연 예고도 보시고 친구분께 카톡으로 나눠 보세요.",
             ],
-            "cta_url": "https://paradise-hero.com/radio.html?utm_source=seo&utm_medium=seo_article&utm_campaign=hero_radio_guide",
+            "cta_url": "https://paradise-hero.com/radio?utm_source=seo&utm_medium=seo_article&utm_campaign=hero_radio_guide",
             "cta_label": "🎵 백운호 6곡 완곡 무료 라디오 바로 듣기 →",
             "faq": [
                 ("정말 끝까지 무료로 들을 수 있나요?", "네, 백운호 라디오와 카톡 아침 안부카드는 평생 100% 무료이며 비용 부담 없이 마음 편히 들으실 수 있습니다."),
@@ -319,7 +322,7 @@ PAGES_15: Dict[str, List[Dict[str, Any]]] = {
                 "마음에 드는 꽃그림 배경과 인사 문구를 고르고 보내는 분 성함을 적어 주세요.",
                 "저장 버튼을 누르신 뒤 가족·친구 단톡방에 따뜻한 아침 인사를 전해 보세요.",
             ],
-            "cta_url": "https://paradise-hero.com/vip.html?utm_source=seo&utm_medium=seo_article&utm_campaign=hero_card_guide",
+            "cta_url": "https://paradise-hero.com/vip?utm_source=seo&utm_medium=seo_article&utm_campaign=hero_card_guide",
             "cta_label": "💐 백운호 무료 카톡 아침 안부카드 만들기 →",
             "faq": [
                 ("카드를 여러 장 만들어도 무료인가요?", "네, 매일 아침 몇 장을 만드시든 회원가입 없이 평생 무료입니다."),
@@ -328,7 +331,7 @@ PAGES_15: Dict[str, List[Dict[str, Any]]] = {
         },
         {
             "slug": "senior-radio-listening-guide-kitchen-bedside-livingroom.html",
-            "title": "주방 설거지·침대 머리맡·거실 청취용 — 어머님 일상 상황별 라디오 청취 준비물 가이드",
+            "title": "주방 설거지·침대 머리맡·거실 청취용: 어머님 일상 상황별 라디오 청취 준비물 가이드",
             "meta_desc": "백운호 14분 연속 사연 라디오를 주방·침실·거실에서 눈과 목이 편안하게 즐기실 수 있도록 정리한 어머님 일상 상황별 맞춤 안내.",
             "lead": "라디오 사연과 백운호 노래를 매일 들으시다 보면, 주방에서 설거지하실 때나 밤늦게 침대 머리맡에서 들으실 때 소리·눈 피로·목 건조함이 은근히 신경 쓰이시지요.",
             "p2": "인터넷에 너무 많은 물건이 쏟아져 무엇을 골라야 할지 헷갈려 하시는 어머님들을 위해, 김쌤의 영웅라디오 사랑방은 꼭 필요한 7가지 실속 준비물만 일상 상황 3가지로 나누어 차분하게 정리했습니다.",
@@ -373,7 +376,7 @@ PAGES_15: Dict[str, List[Dict[str, Any]]] = {
                 "결제 전 2페이지 무료 샘플 PDF로 소아과 질문지와 30일 냉장고 달력 구성을 먼저 눈으로 확인해 보세요.",
             ],
             "cta_url": "https://kidsfit.co.kr/?utm_source=seo&utm_medium=seo_article&utm_campaign=kfk_vs_naver_calc",
-            "cta_label": "📏 이메일 없이 1분 무료 예상키·뼈나이 진단하기 →",
+            "cta_label": "이메일 없이 1분 무료 예상키·뼈나이 진단하기 →",
             "faq": [
                 ("뼈나이 검사를 아직 안 받았는데도 무료 진단이 되나요?", "네, 뼈나이 기록이 없어도 아이 생년월일과 현재 키·몸무게만으로 질병관리청 기준 또래 백분위와 생활 병목을 바로 확인하실 수 있어요."),
                 ("영양제 판매나 제휴 광고가 있나요?", "전혀 없어요. 키즈핏은 상업성 제휴 광고 0건 원칙을 지키는 순수 소아성장 분석 아틀리에예요."),
@@ -398,7 +401,7 @@ PAGES_15: Dict[str, List[Dict[str, Any]]] = {
                 "매달 자동 성장속도 추적과 6개월 졸업장 앨범이 필요하시다면 2p 무료 샘플 확인 후 19,900원 6개월 패스를 살펴보세요.",
             ],
             "cta_url": "https://kidsfit.co.kr/kfk_sample_2p.pdf",
-            "cta_label": "📄 결제 전 2페이지 무료 샘플 PDF 먼저 보기 →",
+            "cta_label": "결제 전 2페이지 무료 샘플 PDF 먼저 보기 →",
             "faq": [
                 ("9,900원 단건과 19,900원 6개월 패스의 차이는 무엇인가요?", "9,900원 단건은 현재 정밀 리포트+17p 마스터북+소아과 질문지+30일 달력을 제공하며, 19,900원 패스는 6개월간 매월 30일 키 재측정 성장속도 자동 판독까지 포함해요."),
                 ("결제 후 마음에 안 들면 환불이 되나요?", "미열람·미다운로드 시 결제 후 7일 이내 전액 환불되며 파일 오류나 중복 결제 시 100% 환불해 드려요."),
@@ -423,7 +426,7 @@ PAGES_15: Dict[str, List[Dict[str, Any]]] = {
                 "진료 후 받아온 뼈나이 수치를 입력해 시차(Δt) 보정 예상키와 저녁 수면 루틴을 꾸준히 관리해 보세요.",
             ],
             "cta_url": "https://kidsfit.co.kr/?utm_source=seo&utm_medium=seo_article&utm_campaign=kfk_clinic_3qs",
-            "cta_label": "📏 소아과 가기 전 1분 무료 성장 진단해 보기 →",
+            "cta_label": "소아과 가기 전 1분 무료 성장 진단해 보기 →",
             "faq": [
                 ("형제자매가 둘 이상인데 같이 관리할 수 있나요?", "네, 39,000원 12개월 가족 마스터 패스는 최대 4명 형제자매의 사계절 성장속도와 소아과 브리핑 PDF를 한 번에 관리할 수 있어요."),
                 ("질병관리청 성장도표는 몇 년 기준인가요?", "대한민국 질병관리청(KDCA) 2017 공식 소아청소년 성장도표 기준을 엄격히 사용해요."),
@@ -434,7 +437,7 @@ PAGES_15: Dict[str, List[Dict[str, Any]]] = {
 
 
 def _share_bar_html(div: str, canonical_url: str, title: str) -> str:
-    """Active-channel 1-click referral share loops ONLY (ZERO LINE, ZERO Threads!)."""
+    """Active-channel 1-click referral share loops ONLY (ZERO LINE, ZERO Threads, ZERO emoji clutter)."""
     esc_url = _html.escape(canonical_url)
     esc_title = _html.escape(title)
     if div in ("TOM", "GBA"):
@@ -443,8 +446,8 @@ def _share_bar_html(div: str, canonical_url: str, title: str) -> str:
         mail_href = f"mailto:?subject={_html.escape(title)}&body={esc_url}"
         return (
             f'<div class="share-bar" style="margin:24px 0;padding:16px;border:1px solid #D1D5DB;border-radius:10px;background:#F9FAFB;display:flex;flex-wrap:wrap;gap:10px;align-items:center;">'
-            f'<a href="{mail_href}" style="padding:10px 16px;background:#0F2C22;color:#FFF;text-decoration:none;border-radius:8px;font-weight:700;">✉️ {lbl}</a>'
-            f'<button type="button" onclick="navigator.clipboard&&navigator.clipboard.writeText(location.href);this.textContent=\'Copied ✓\'" style="padding:10px 16px;background:#FFF;color:#0F2C22;border:1.5px solid #0F2C22;border-radius:8px;font-weight:700;cursor:pointer;">🔗 {copy_lbl}</button>'
+            f'<a href="{mail_href}" style="padding:10px 16px;background:#0F2C22;color:#FFF;text-decoration:none;border-radius:8px;font-weight:700;">{lbl}</a>'
+            f'<button type="button" onclick="navigator.clipboard&&navigator.clipboard.writeText(location.href);this.textContent=\'Copied\'" style="padding:10px 16px;background:#FFF;color:#0F2C22;border:1.5px solid #0F2C22;border-radius:8px;font-weight:700;cursor:pointer;">{copy_lbl}</button>'
             f'</div>'
         )
     if div == "KFG":
@@ -452,9 +455,9 @@ def _share_bar_html(div: str, canonical_url: str, title: str) -> str:
         sms_href = f"sms:?body={esc_title}%20{esc_url}"
         return (
             f'<div class="share-bar" style="margin:24px 0;padding:16px;border:1px solid #D1D5DB;border-radius:10px;background:#F9FAFB;display:flex;flex-wrap:wrap;gap:10px;">'
-            f'<a href="{sms_href}" style="padding:10px 16px;background:#1B4332;color:#FFF;text-decoration:none;border-radius:8px;font-weight:700;">💬 Text to a Parent Friend</a>'
-            f'<a href="{mail_href}" style="padding:10px 16px;background:#FFF;color:#1B4332;border:1.5px solid #1B4332;text-decoration:none;border-radius:8px;font-weight:700;">✉️ Email Guide</a>'
-            f'<button type="button" onclick="navigator.clipboard&&navigator.clipboard.writeText(location.href);this.textContent=\'Copied ✓\'" style="padding:10px 16px;background:#FFF;color:#1B4332;border:1.5px solid #1B4332;border-radius:8px;font-weight:700;cursor:pointer;">🔗 Copy Link</button>'
+            f'<a href="{sms_href}" style="padding:10px 16px;background:#1B4332;color:#FFF;text-decoration:none;border-radius:8px;font-weight:700;">Text to a Parent Friend</a>'
+            f'<a href="{mail_href}" style="padding:10px 16px;background:#FFF;color:#1B4332;border:1.5px solid #1B4332;text-decoration:none;border-radius:8px;font-weight:700;">Email Guide</a>'
+            f'<button type="button" onclick="navigator.clipboard&&navigator.clipboard.writeText(location.href);this.textContent=\'Copied\'" style="padding:10px 16px;background:#FFF;color:#1B4332;border:1.5px solid #1B4332;border-radius:8px;font-weight:700;cursor:pointer;">Copy Link</button>'
             f'</div>'
         )
     # HERO & KFK (Korean active channels: Web Share / Kakao / SMS / Copy — ZERO LINE, ZERO Threads)
@@ -463,19 +466,65 @@ def _share_bar_html(div: str, canonical_url: str, title: str) -> str:
     fs = "19px" if div == "HERO" else "16px"
     return (
         f'<div class="share-bar" style="margin:24px 0;padding:16px;border:1.5px solid {bg};border-radius:12px;background:#FFFDF5;display:flex;flex-wrap:wrap;gap:10px;">'
-        f'<button type="button" onclick="if(navigator.share){{navigator.share({{title:document.title,url:location.href}})}}else{{navigator.clipboard&&navigator.clipboard.writeText(location.href);this.textContent=\'링크 복사 완료 ✓\'}}" style="padding:12px 18px;background:{bg};color:#FFF;border:none;border-radius:10px;font-weight:800;font-size:{fs};cursor:pointer;">💛 카톡·문자로 바로 나누기</button>'
-        f'<a href="{sms_href}" style="padding:12px 18px;background:#FFF;color:{bg};border:1.5px solid {bg};text-decoration:none;border-radius:10px;font-weight:800;font-size:{fs};">📱 문자로 보내기</a>'
-        f'<button type="button" onclick="navigator.clipboard&&navigator.clipboard.writeText(location.href);this.textContent=\'주소 복사 완료 ✓\'" style="padding:12px 18px;background:#FFF;color:{bg};border:1.5px solid {bg};border-radius:10px;font-weight:800;font-size:{fs};cursor:pointer;">🔗 링크 복사</button>'
+        f'<button type="button" onclick="if(navigator.share){{navigator.share({{title:document.title,url:location.href}})}}else{{navigator.clipboard&&navigator.clipboard.writeText(location.href);this.textContent=\'링크 복사 완료\'}}" style="padding:12px 18px;background:{bg};color:#FFF;border:none;border-radius:10px;font-weight:800;font-size:{fs};cursor:pointer;">카톡·문자로 바로 나누기</button>'
+        f'<a href="{sms_href}" style="padding:12px 18px;background:#FFF;color:{bg};border:1.5px solid {bg};text-decoration:none;border-radius:10px;font-weight:800;font-size:{fs};">문자로 보내기</a>'
+        f'<button type="button" onclick="navigator.clipboard&&navigator.clipboard.writeText(location.href);this.textContent=\'주소 복사 완료\'" style="padding:12px 18px;background:#FFF;color:{bg};border:1.5px solid {bg};border-radius:10px;font-weight:800;font-size:{fs};cursor:pointer;">링크 복사</button>'
         f'</div>'
     )
 
 
-def render_page_html(div: str, spec: Dict[str, Any], date_str: str) -> Dict[str, Any]:
+def _pass1_lock_3intent_outline(div: str, spec: Dict[str, Any], date_str: str) -> Dict[str, Any]:
+    """Pass 1: Lock Clean URL canonical (zero .html), verified table rows, 3 steps, and FAQs."""
     wcfg = DIV_WEB_CONFIG[div]
-    canonical = f"{wcfg['base_url']}{wcfg['article_url_prefix']}{spec['slug']}"
+    raw_slug = str(spec["slug"])
+    clean_slug = raw_slug[:-5] if raw_slug.endswith(".html") else raw_slug
+    canonical = to_clean_url(f"{wcfg['base_url']}{wcfg['article_url_prefix']}{clean_slug}")
+    return {
+        "div": div,
+        "wcfg": wcfg,
+        "spec": spec,
+        "date_str": date_str,
+        "canonical": canonical,
+        "locked_evidence_rows": len(spec.get("rows") or []),
+    }
+
+
+def _pass3_wash_and_verify_3intent(
+    div: str,
+    title: str,
+    draft_html: str,
+    lang: str,
+    canonical: str,
+) -> tuple[str, bool, List[str], Dict[str, Any]]:
+    """Pass 3: Dedicated AI Slop wash pass + Fail-Closed Hard Gate & Clean URL verification."""
+    washed_html, scrub_report = scrub_ai_slop(draft_html, lang=lang, max_em_dashes=2, is_html=True)
+    plain_blocks = re.sub(r"<(script|style)[^>]*>.*?</\1>", "\n", washed_html, flags=re.IGNORECASE | re.DOTALL)
+    plain_blocks = re.sub(r"</(?:p|div|li|tr|h[1-6]|section|aside|footer)>", "\n", plain_blocks, flags=re.IGNORECASE)
+    plain_blocks = _html.unescape(re.sub(r"<[^>]+>", " ", plain_blocks))
+    plain = "\n".join(re.sub(r"[ \t]+", " ", ln).strip() for ln in plain_blocks.splitlines() if ln.strip())
+    ok, errs = check_written_auto_gate(div, title, washed_html, plain, is_seo_article=False)
+    slop_ok, slop_errs = check_ai_slop_gate(washed_html, max_em_dashes=2, is_html=True)
+    if not slop_ok:
+        ok = False
+        for e in slop_errs:
+            if e not in errs:
+                errs.append(e)
+    if canonical.endswith(".html"):
+        ok = False
+        errs.append("canonical_url_has_html_extension")
+    return washed_html, ok, errs, scrub_report
+
+
+def render_page_html(div: str, spec: Dict[str, Any], date_str: str) -> Dict[str, Any]:
+    # Pass 1: Lock Clean URL & verified evidence outline
+    outline = _pass1_lock_3intent_outline(div, spec, date_str)
+    wcfg = outline["wcfg"]
+    canonical = outline["canonical"]
     accent = wcfg["accent"]
     bg = wcfg["bg"]
     fsize = wcfg["body_font_px"]
+
+    # Pass 2: Compose HTML draft
 
     ths = "".join(f"<th>{_html.escape(h)}</th>" for h in spec["table_headers"])
     trs = "".join(
@@ -574,8 +623,10 @@ def render_page_html(div: str, spec: Dict[str, Any], date_str: str) -> Dict[str,
 </body>
 </html>
 """
-    plain = f"{spec['title']}\n{spec['lead']}\n{spec['p2']}\n{spec['p3']}\n" + "\n".join(spec["steps"]) + "\n" + "\n".join(f"{q} {a}" for q, a in spec["faq"])
-    ok, errs = check_written_auto_gate(div, spec["title"], html_doc, plain, is_seo_article=False)
+    # Pass 3: Dedicated AI Slop wash + Fail-Closed Hard Gate verification
+    washed_html, ok, errs, scrub_report = _pass3_wash_and_verify_3intent(
+        div, spec["title"], html_doc, lang=wcfg["lang"], canonical=canonical
+    )
     return {
         "ok": ok,
         "errors": errs,
@@ -584,7 +635,12 @@ def render_page_html(div: str, spec: Dict[str, Any], date_str: str) -> Dict[str,
         "canonical_url": canonical,
         "title": spec["title"],
         "meta_desc": spec["meta_desc"],
-        "html": html_doc,
+        "html": washed_html,
+        "pipeline_3pass": {
+            "pass1_locked_evidence_rows": outline["locked_evidence_rows"],
+            "pass2_draft_composed": True,
+            "pass3_scrub": scrub_report,
+        },
     }
 
 
@@ -592,11 +648,15 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--ping-indexnow", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--out-dir", type=str, default="", help="Optional staging dir for zero-conflict HTML export & eval")
     args = parser.parse_args()
 
     today = dt.datetime.now(KST).strftime("%Y-%m-%d")
     key = ensure_indexnow_key()
     results = []
+    stage_dir = Path(args.out_dir) if args.out_dir else None
+    if stage_dir:
+        stage_dir.mkdir(parents=True, exist_ok=True)
 
     for div, specs in PAGES_15.items():
         wcfg = DIV_WEB_CONFIG[div]
@@ -606,7 +666,13 @@ def main() -> int:
             if not page["ok"]:
                 raise RuntimeError(f"3-Intent SEO Gate BLOCKED {div}/{spec['slug']}: {page['errors']}")
             written = []
-            if not args.dry_run:
+            if stage_dir is not None:
+                div_stage = stage_dir / div
+                div_stage.mkdir(parents=True, exist_ok=True)
+                sfp = div_stage / spec["slug"]
+                sfp.write_text(page["html"], encoding="utf-8")
+                written.append(str(sfp))
+            elif not args.dry_run:
                 for wroot in wcfg["local_roots"]:
                     if not wroot.exists():
                         continue
@@ -621,9 +687,9 @@ def main() -> int:
                         page["canonical_url"], page["title"], page["meta_desc"], today,
                     )
             div_urls.append(page["canonical_url"])
-            results.append({"division": div, "url": page["canonical_url"], "written_count": len(written)})
+            results.append({"division": div, "url": page["canonical_url"], "written_count": len(written), "pass3_scrub": page["pipeline_3pass"]["pass3_scrub"]})
 
-        if args.ping_indexnow and not args.dry_run:
+        if args.ping_indexnow and not args.dry_run and stage_dir is None:
             ping = ping_indexnow(wcfg["host"], div_urls, key, dry_run=False)
             print(f"[INDEXNOW {div}] {ping}", flush=True)
 

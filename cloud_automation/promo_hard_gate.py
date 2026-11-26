@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import datetime as dt
 import hashlib
+import html as _html_lib
 import random
 import re
 from typing import Any, Dict, List, Optional, Tuple
@@ -99,9 +100,12 @@ AI_CLICHE_REGEXES: Tuple[Tuple[str, str], ...] = (
     ("ko_summary_cliche", r"총정리|란\s*무엇인가"),
     # English
     ("en_fast_paced_world", r"in\s+today['’]?s\s+fast[- ]paced\s+world"),
-    ("en_delve_into", r"\bdelve\s+into\b"),
+    ("en_delve", r"\bdelve(?:s|d|ing)?\b"),
+    ("en_nuanced", r"\bnuanced\b"),
     ("en_unlock", r"\bunlock(?:ing|ed|s)?\b"),
     ("en_game_changer", r"\bgame[- ]changer\b"),
+    ("en_tapestry", r"\btapestry\b"),
+    ("en_embark", r"\bembark(?:s|ed|ing)?\b"),
     ("en_navigating", r"\bnavigating\b"),
     ("en_crucial", r"\bcrucial\b"),
     ("en_comprehensive_guide", r"\bcomprehensive\s+guide\b"),
@@ -111,6 +115,14 @@ AI_CLICHE_REGEXES: Tuple[Tuple[str, str], ...] = (
     ("ja_how_was_it", r"いかがでしたでしょうか"),
     ("ja_thorough_explain", r"徹底解説"),
     ("ja_us_stock_quant", r"米国株クオンツ|クオンツ"),
+)
+
+# 1b. AI Slop Structural Tells (Standing Directive #35 — Context Hub & Binary Eval)
+AI_SLOP_STRUCTURE_REGEXES: Tuple[Tuple[str, str, int], ...] = (
+    ("ko_not_just_but", r"(?:단지|단순히|단순한)\s+[^.!?\n]{1,45}?(?:이|가|을|를|은|는|만)?\s*아니라", 0),
+    ("en_not_just_but", r"\b(?:not\s+just|more\s+than\s+just)\s+[^.!?\n]{1,45}?,?\s+but\b", re.IGNORECASE),
+    ("ja_not_just_but", r"単なる[^。！？\n]{1,35}?ではなく", 0),
+    ("ko_mechanical_triad", r"첫째[\s,:].{1,250}둘째[\s,:].{1,250}셋째[\s,:]", re.DOTALL),
 )
 
 # 2. Global + Division Banned Terms (Polar / Whop / Legal / Brand Guardrails)
@@ -171,6 +183,301 @@ _EMOJI_RE = re.compile(
 )
 
 
+_HTML_BLOCK_DETECT_RE = re.compile(
+    r"</(?:p|div|html|body|td|th|li|span|h[1-6]|section|article|main|aside|footer|header)>",
+    re.IGNORECASE,
+)
+_HTML_TOKEN_SPLIT_RE = re.compile(
+    r"(<(?:script|style|noscript|svg)[^>]*>.*?</(?:script|style|noscript|svg)>|<[^>]+>)",
+    re.IGNORECASE | re.DOTALL,
+)
+
+
+def _strip_html_for_slop_check(raw: str, is_html: Optional[bool] = None) -> str:
+    txt = str(raw or "")
+    treat_as_html = bool(is_html) if is_html is not None else bool(_HTML_BLOCK_DETECT_RE.search(txt))
+    if treat_as_html:
+        txt = re.sub(r"<(script|style|noscript|svg)[^>]*>.*?</\1>", " ", txt, flags=re.IGNORECASE | re.DOTALL)
+        txt = re.sub(r"<[^>]+>", " ", txt)
+        txt = _html_lib.unescape(txt)
+    return re.sub(r"\s+", " ", txt).strip()
+
+
+def check_ai_slop_gate(
+    text: str,
+    max_em_dashes: int = 2,
+    is_html: Optional[bool] = None,
+) -> Tuple[bool, List[str]]:
+    """
+    Fail-Closed AI Slop Gate (Standing Directive #35, aligned with verify_binary_eval_gate.py --slop):
+      - Em-dash (`—`) count > `max_em_dashes` (default 2) -> FAIL
+      - Pretentious contrast (`단지/단순히/단순한 ... 아니라`, `not just ... but`, `単なる...ではなく`) -> FAIL
+      - Mechanical Korean 3-part triad (`첫째... 둘째... 셋째...`) -> FAIL
+      - KO / EN / JA AI buzzwords & clichés (`delve`, `nuanced`, `unlock`, `game-changer`, `tapestry`, `embark`, etc.) -> FAIL
+    """
+    plain = _strip_html_for_slop_check(text, is_html=is_html)
+    errors: List[str] = []
+    if not plain:
+        return True, []
+
+    em_count = plain.count("—")
+    if em_count > max_em_dashes:
+        errors.append(f"ai_slop:em_dash_overuse({em_count}>{max_em_dashes})")
+
+    for code, pat, flags in AI_SLOP_STRUCTURE_REGEXES:
+        if re.search(pat, plain, flags=flags):
+            errors.append(f"ai_slop:{code}")
+
+    for code, pat in AI_CLICHE_REGEXES:
+        if re.search(pat, plain, flags=re.IGNORECASE):
+            errors.append(f"ai_cliche:{code}")
+
+    return len(errors) == 0, errors
+
+
+def _preserve_case_replace(match_text: str, replacement: str) -> str:
+    if not match_text:
+        return replacement
+    if match_text.isupper():
+        return replacement.upper()
+    if match_text[0].isupper():
+        return replacement[0].upper() + replacement[1:]
+    return replacement
+
+
+def _scrub_plain_slop_phrases(segment: str, lang: str, applied: List[str]) -> str:
+    s = segment
+    if not s:
+        return s
+
+    # Normalize HTML em-dash entities inside text nodes so counts match rendered DOM
+    if "&mdash;" in s or "&#8212;" in s:
+        s = s.replace("&mdash;", "—").replace("&#8212;", "—")
+
+    # 1. Pretentious contrast patterns (KO / EN / JA)
+    def _ko_contrast(m: re.Match[str]) -> str:
+        applied.append("ko_not_just_but")
+        core = re.sub(r"(?:뿐만|이|가|을|를|은|는|만)+$", "", m.group(1).strip()).strip()
+        return f"{core}을 넘어 " if core else ""
+
+    s = re.sub(
+        r"(?:단지|단순히|단순한)\s+([^.!?\n]{1,45}?)(?:이|가|을|를|은|는|만)?\s*아니라\s*,?\s*",
+        _ko_contrast,
+        s,
+    )
+
+    def _en_contrast(m: re.Match[str]) -> str:
+        applied.append("en_not_just_but")
+        core = m.group(1).strip().rstrip(",")
+        lead = _preserve_case_replace(m.group(0), "both")
+        return f"{lead} {core} and "
+
+    s = re.sub(
+        r"\b(?:not\s+just|more\s+than\s+just)\s+([^.!?\n]{1,45}?),?\s+but\s+(?:also\s+)?",
+        _en_contrast,
+        s,
+        flags=re.IGNORECASE,
+    )
+
+    def _ja_contrast(m: re.Match[str]) -> str:
+        applied.append("ja_not_just_but")
+        return f"{m.group(1).strip()}にとどまらず、"
+
+    s = re.sub(r"単なる([^。！？\n]{1,35}?)ではなく(?:、)?", _ja_contrast, s)
+
+    # 2. English AI buzzwords & clichés
+    en_word_swaps: Tuple[Tuple[str, str, str], ...] = (
+        ("en_fast_paced_world", r"\bin\s+today['’]?s\s+fast[- ]paced\s+world\b", "today"),
+        ("en_delve_into", r"\bdelve(?:s|d|ing)?\s+into\b", "examine"),
+        ("en_delve", r"\bdelve(?:s|d|ing)?\b", "look closely"),
+        ("en_nuanced", r"\bnuanced\b", "detailed"),
+        ("en_unlock_ing", r"\bunlocking\b", "opening"),
+        ("en_unlock_ed", r"\bunlocked\b", "opened"),
+        ("en_unlock_s", r"\bunlocks\b", "opens"),
+        ("en_unlock", r"\bunlock\b", "open"),
+        ("en_game_changer", r"\bgame[- ]changer\b", "turning point"),
+        ("en_tapestry", r"\btapestry\b", "blend"),
+        ("en_embark_on", r"\bembark(?:s|ed|ing)?\s+(?:on|upon)\b", "start"),
+        ("en_embark", r"\bembark(?:s|ed|ing)?\b", "begin"),
+        ("en_navigating", r"\bnavigating\b", "handling"),
+        ("en_crucial", r"\bcrucial\b", "essential"),
+        ("en_comprehensive_guide", r"\bcomprehensive\s+guide\b", "practical guide"),
+    )
+    for tag, pat, repl in en_word_swaps:
+        def _en_repl(m: re.Match[str], _tag: str = tag, _repl: str = repl) -> str:
+            applied.append(_tag)
+            return _preserve_case_replace(m.group(0), _repl)
+        s = re.sub(pat, _en_repl, s, flags=re.IGNORECASE)
+
+    # 3. Korean & Japanese AI clichés
+    cjk_swaps: Tuple[Tuple[str, str, str], ...] = (
+        ("ko_about_to_explore", r"에\s*대해\s*알아보겠습니다", "을 차분히 살펴봅니다"),
+        ("ko_explore", r"알아보겠습니다", "살펴봅니다"),
+        ("ko_in_conclusion", r"결론적으로\s*,?\s*", "정리하면 "),
+        ("ko_very_important", r"매우\s*중요합니다", "핵심 기준입니다"),
+        ("ko_key_points_are", r"핵심은\s*다음과\s*같습니다", "핵심 기준은 이렇습니다"),
+        ("ko_summary_cliche", r"총정리", "핵심 정리"),
+        ("ko_what_is", r"란\s*무엇인가", "의 핵심 기준"),
+        ("ja_how_was_it", r"いかがでしたでしょうか[。？?]?", "お役に立てば幸いです。"),
+        ("ja_thorough_explain", r"徹底解説", "実務整理"),
+        ("ja_in_conclusion", r"結論として[、,]?", "要点を整理すると、"),
+        ("ja_very_important", r"することが非常に重要です", "することが大切です"),
+    )
+    for tag, pat, repl in cjk_swaps:
+        if re.search(pat, s):
+            applied.append(tag)
+            s = re.sub(pat, repl, s)
+
+    return s
+
+
+def _soften_em_dashes_in_segments(
+    segments: List[Tuple[bool, str]],
+    lang: str,
+    max_em_dashes: int,
+    applied: List[str],
+) -> List[Tuple[bool, str]]:
+    """Reduces visible em-dashes (`—`) across text segments to <= `max_em_dashes` naturally."""
+    total_em = sum(seg.count("—") for is_tag, seg in segments if not is_tag)
+    if total_em <= max_em_dashes:
+        return segments
+
+    out = list(segments)
+
+    # Pass A: Convert paired parenthetical em-dashes (` — ... — ` or `—...—`) into parentheses
+    if total_em > max_em_dashes:
+        open_p, close_p = ("（", "）") if lang == "ja" else (" (", ")")
+        new_out: List[Tuple[bool, str]] = []
+        for is_tag, seg in out:
+            if not is_tag and "—" in seg and total_em > max_em_dashes:
+                def _pair_repl(m: re.Match[str]) -> str:
+                    nonlocal total_em
+                    if total_em <= max_em_dashes:
+                        return m.group(0)
+                    inner = m.group(1).strip()
+                    total_em -= 2
+                    applied.append("em_dash_pair_to_parens")
+                    lead = "" if lang == "ja" else " "
+                    trail = "" if lang == "ja" else " "
+                    return f"{lead}{open_p.strip()}{inner}{close_p}{trail}"
+                seg = re.sub(r"\s*—\s*([^—\n]{4,110}?)\s*—\s*", _pair_repl, seg)
+                seg = re.sub(r"[ \t]{2,}", " ", seg)
+                seg = re.sub(r"\s+([,.;:!?])", r"\1", seg)
+            new_out.append((is_tag, seg))
+        out = new_out
+
+    # Pass B: Convert short label prefixes (`Low — ...`, `GREEN — ...`, `낮음 — ...`) to colons
+    if total_em > max_em_dashes:
+        label_pat = re.compile(
+            r"\b(Low|High|None|No|Yes|GREEN|AMBER(?:-DEFENSIVE)?|RED|Caution|Defensive|Balanced|낮음|높음)\s*—\s*"
+        )
+        new_out = []
+        for is_tag, seg in out:
+            if not is_tag and "—" in seg and total_em > max_em_dashes:
+                def _lbl_repl(m: re.Match[str]) -> str:
+                    nonlocal total_em
+                    if total_em <= max_em_dashes:
+                        return m.group(0)
+                    total_em -= 1
+                    applied.append("em_dash_label_to_colon")
+                    return f"{m.group(1)}: "
+                seg = label_pat.sub(_lbl_repl, seg)
+            new_out.append((is_tag, seg))
+        out = new_out
+
+    # Pass C: Soften remaining excess em-dashes to natural commas or periods
+    if total_em > max_em_dashes:
+        kept = 0
+        new_out = []
+        for is_tag, seg in out:
+            if not is_tag and "—" in seg:
+                def _rem_repl(m: re.Match[str]) -> str:
+                    nonlocal kept
+                    if kept < max_em_dashes:
+                        kept += 1
+                        return m.group(0)
+                    applied.append("em_dash_to_comma_or_period")
+                    after = m.group(1) or ""
+                    if lang == "ja":
+                        return f"、{after}"
+                    if after and after[0].isupper():
+                        return f". {after}"
+                    return f", {after}" if after else ","
+                seg = re.sub(r"\s*—\s*(\S?)", _rem_repl, seg)
+                seg = re.sub(r",\s*,", ",", seg)
+                seg = re.sub(r"[ \t]{2,}", " ", seg)
+            new_out.append((is_tag, seg))
+        out = new_out
+
+    return out
+
+
+def scrub_ai_slop(
+    text: str,
+    lang: str = "auto",
+    max_em_dashes: int = 2,
+    is_html: Optional[bool] = None,
+) -> Tuple[str, Dict[str, Any]]:
+    """
+    Pass 3 AI Slop Dedicated Wash Function (Standing Directive #35):
+      - HTML-safe: never mutates `<script>`, `<style>`, tags, or URLs.
+      - Removes pretentious contrasts (`단지/단순히/단순한 ... 아니라`, `not just ... but`, `単なる...ではなく`),
+        mechanical Korean 3-part triads (`첫째... 둘째... 셋째...`), EN/KO/JA AI buzzwords,
+        and excess em-dashes (`—` strictly reduced to <= `max_em_dashes`).
+      - Returns `(scrubbed_text, audit_report)`.
+    """
+    raw = str(text or "")
+    treat_as_html = bool(is_html) if is_html is not None else bool(_HTML_BLOCK_DETECT_RE.search(raw))
+    plain_before = _strip_html_for_slop_check(raw, is_html=treat_as_html)
+    em_before = plain_before.count("—")
+    applied: List[str] = []
+
+    if treat_as_html:
+        tokens = _HTML_TOKEN_SPLIT_RE.split(raw)
+        segments: List[Tuple[bool, str]] = [
+            (bool(tok.startswith("<") and tok.endswith(">")), tok)
+            for tok in tokens
+            if tok != ""
+        ]
+    else:
+        segments = [(False, raw)]
+
+    # 1. Phrase-level scrub on text nodes
+    segments = [
+        (is_tag, seg if is_tag else _scrub_plain_slop_phrases(seg, lang, applied))
+        for is_tag, seg in segments
+    ]
+
+    # 2. Cross-paragraph mechanical Korean 3-part triad check (`첫째... 둘째... 셋째...`)
+    joined_plain_mid = _strip_html_for_slop_check("".join(s for _, s in segments), is_html=treat_as_html)
+    if re.search(r"첫째[\s,:].{1,250}둘째[\s,:].{1,250}셋째[\s,:]", joined_plain_mid, flags=re.DOTALL):
+        triad_swaps = ((r"첫째[\s,:]+", "우선 "), (r"둘째[\s,:]+", "여기에 더해 "), (r"셋째[\s,:]+", "마지막으로 "))
+        new_segs: List[Tuple[bool, str]] = []
+        for is_tag, seg in segments:
+            if not is_tag:
+                for pat, repl in triad_swaps:
+                    if re.search(pat, seg):
+                        seg = re.sub(pat, repl, seg)
+                        applied.append("ko_mechanical_triad")
+            new_segs.append((is_tag, seg))
+        segments = new_segs
+
+    # 3. Em-dash softener (strictly <= max_em_dashes)
+    segments = _soften_em_dashes_in_segments(segments, lang, max_em_dashes, applied)
+
+    scrubbed = "".join(seg for _, seg in segments)
+    plain_after = _strip_html_for_slop_check(scrubbed, is_html=treat_as_html)
+    ok_after, remaining = check_ai_slop_gate(scrubbed, max_em_dashes=max_em_dashes, is_html=treat_as_html)
+    return scrubbed, {
+        "em_dashes_before": em_before,
+        "em_dashes_after": plain_after.count("—"),
+        "replacements_count": len(applied),
+        "replacements_applied": sorted(set(applied)),
+        "passed_after_scrub": ok_after,
+        "remaining_issues": remaining,
+    }
+
+
 def build_clean_go_link(div: str, kind: str = "yt") -> str:
     cfg = DIV_GO_LINKS[div.upper()]
     return cfg.get(kind) or cfg["yt"]
@@ -181,12 +488,13 @@ def check_promo_hard_gate(
     text: str,
     surface: str = "youtube_desc",
     srt_text: str = "",
+    max_em_dashes: int = 2,
 ) -> Tuple[bool, List[str]]:
     """
     Fail-Closed Hard Gate (`AI 티 0%` & `자동화 티 0%`).
     surface:
       - 'youtube_title' | 'youtube_desc' | 'youtube_comment' | 'ig_caption' -> blocks bot tags & long UTMs + emoji spam
-      - 'seo_article' | 'pseo_page' -> allows internal site href UTMs, still blocks AI clichés + banned terms
+      - 'seo_article' | 'pseo_page' | 'newsletter' -> allows internal site href UTMs, enforces AI Slop gate + banned terms
       - 'srt' -> additionally blocks URLs and emojis so CC tracks never show links or icons
     """
     div_u = div.upper()
@@ -196,10 +504,12 @@ def check_promo_hard_gate(
     if not combined:
         return False, ["empty_content"]
 
-    # 1. AI Clichés
-    for code, pat in AI_CLICHE_REGEXES:
-        if re.search(pat, combined, flags=re.I):
-            errors.append(f"ai_cliche:{code}")
+    # 1. AI Clichés & AI Slop Structural Gate (em-dash <= 2, contrast clichés, mechanical triad, EN buzzwords)
+    slop_ok, slop_errs = check_ai_slop_gate(combined, max_em_dashes=max_em_dashes)
+    if not slop_ok:
+        for e in slop_errs:
+            if e not in errors:
+                errors.append(e)
 
     # 2. Global + Division Banned Terms
     for code, pat in GLOBAL_BANNED_REGEXES:
@@ -647,6 +957,12 @@ if __name__ == "__main__":
     bad_cases = [
         ("KFK", "오늘은 키 성장에 대해 알아보겠습니다.", "youtube_desc"),
         ("TOM", "Delve into this game-changer ETF!", "youtube_desc"),
+        ("TOM", "This nuanced tapestry helps you embark on retirement.", "seo_article"),
+        ("TOM", "It is not just cash, but calm peace of mind.", "seo_article"),
+        ("TOM", "One — two — three — four em-dashes in one note.", "seo_article"),
+        ("KFK", "이건 단순히 키가 아니라 자신감의 문제입니다.", "seo_article"),
+        ("KFK", "첫째: 수면. 둘째: 단백질. 셋째: 운동.", "seo_article"),
+        ("GBA", "単なる預金ではなく老後の防衛です。", "seo_article"),
         ("GBA", "結論として、米国株クオンツの買い時です。", "youtube_desc"),
         ("KFG", "Clinical diagnosis for Brain LQ 1:1 coaching.", "youtube_desc"),
         ("TOM", "Check https://truthofmarket.com/?utm_source=youtube&utm_campaign=x_SLOT_A", "youtube_comment"),
@@ -655,6 +971,24 @@ if __name__ == "__main__":
     for d, bad, surf in bad_cases:
         ok, errs = check_promo_hard_gate(d, bad, surface=surf)
         assert not ok, f"Hard Gate FAILED to block bad case ({d}/{surf}): {bad}"
+
+    # Pass-3 scrub_ai_slop() positive self-test (HTML-safe + zero residual slop)
+    slop_html = (
+        '<article><p>In today\'s fast-paced world, we delve into a nuanced tapestry — not just numbers, but calm — '
+        'to unlock a game-changer plan — and embark on steady habits — every year.</p>'
+        '<script>var keep = "delve — — —";</script></article>'
+    )
+    cleaned_en, rep_en = scrub_ai_slop(slop_html, lang="en", max_em_dashes=2, is_html=True)
+    assert rep_en["passed_after_scrub"], f"EN scrub failed: {rep_en}"
+    assert 'var keep = "delve — — —";' in cleaned_en, "HTML <script> was mutated!"
+
+    slop_ko = "<p>이건 단순히 숫자가 아니라 습관입니다. 첫째, 일찍 자고 둘째, 잘 먹고 셋째, 기록하세요. 결론적으로 매우 중요합니다.</p>"
+    cleaned_ko, rep_ko = scrub_ai_slop(slop_ko, lang="ko", max_em_dashes=2, is_html=True)
+    assert rep_ko["passed_after_scrub"], f"KO scrub failed: {rep_ko}"
+
+    slop_ja = "<p>単なる預金ではなく安心の設計です。徹底解説しました。いかがでしたでしょうか？</p>"
+    cleaned_ja, rep_ja = scrub_ai_slop(slop_ja, lang="ja", max_em_dashes=2, is_html=True)
+    assert rep_ja["passed_after_scrub"], f"JA scrub failed: {rep_ja}"
 
     # Negative Fail-Closed Lyric-Sync Hard Gate tests (unverified + copy-paste + vocal-free outro)
     bad_cat_copypaste = {
