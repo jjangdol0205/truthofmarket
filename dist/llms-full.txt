@@ -18,8 +18,8 @@
 | $DECK | Deckers Outdoor | $85.56 | 90/100 | 53.1 | 1.37x | $77.86 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/deck.html |
 | $F | Ford Motor Co | $12.17 | 84/100 | 55.0 | 1.32x | $11.07 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/f.html |
 | $LULU | Lululemon Athletica | $107.44 | 84/100 | 53.1 | 1.34x | $97.77 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/lulu.html |
+| $QCOM | Qualcomm Inc | $168.66 | 84/100 | 49.6 | 1.51x | $153.48 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/qcom.html |
 | $PINS | Pinterest Inc | $19.71 | 84/100 | 53.3 | 1.81x | $17.94 | RIGHT-SIDE IGNITION | https://truthofmarket.com/stocks/pins.html |
-| $QCOM | Qualcomm Inc | $164.96 | 80/100 | 47.0 | 1.51x | $150.11 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/qcom.html |
 | $SNAP | Snap Inc | $5.04 | 80/100 | 44.6 | 1.65x | $4.59 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/snap.html |
 | $FLNC | Fluence Energy | $4.72 | 80/100 | 45.3 | 4.27x | $4.30 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/flnc.html |
 | $DIS | Walt Disney Co | $125.60 | 75/100 | 68.9 | 2.33x | $114.30 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/dis.html |
@@ -46,7 +46,7 @@
 | $COIN | Coinbase Global | $103.72 | 55/100 | 28.7 | 1.54x | $94.39 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/coin.html |
 | $UBER | Uber Technologies | $66.35 | 55/100 | 45.3 | 1.50x | $60.38 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/uber.html |
 | $VRTX | Vertex Pharmaceuticals | $564.12 | 55/100 | 62.2 | 1.12x | $513.35 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/vrtx.html |
-| $MBLY | Mobileye Global | $4.49 | 55/100 | 28.2 | 1.67x | $4.09 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/mbly.html |
+| $MBLY | Mobileye Global | $4.49 | 55/100 | 28.2 | 1.66x | $4.09 | DOWNTREND · KNIFE | https://truthofmarket.com/stocks/mbly.html |
 | $ZS | Zscaler Inc | $230.86 | 50/100 | 59.6 | 6.08x | $210.08 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/zs.html |
 | $ROKU | Roku Inc | $160.52 | 50/100 | 61.0 | 3.44x | $146.07 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/roku.html |
 | $UPST | Upstart Holdings | $17.26 | 50/100 | 35.3 | 1.09x | $15.71 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/upst.html |
@@ -81,11 +81,11 @@
 | $DAL | Delta Air Lines | $82.95 | 22/100 | 48.0 | 1.20x | $75.48 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/dal.html |
 | $OXY | Occidental Petroleum | $53.95 | 20/100 | 36.0 | 1.75x | $49.09 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/oxy.html |
 | $LLY | Eli Lilly & Co | $1392.22 | 20/100 | 56.3 | 1.12x | $1266.92 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/lly.html |
-| $XOM | Exxon Mobil Corp | $158.08 | 20/100 | 36.2 | 1.39x | $143.85 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/xom.html |
 | $ALB | Albemarle Corp | $81.50 | 15/100 | 32.0 | 1.54x | $74.17 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/alb.html |
 | $PFE | Pfizer Inc | $28.46 | 15/100 | 48.1 | 1.11x | $25.90 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/pfe.html |
 | $BA | Boeing Co | $164.53 | 15/100 | 39.6 | 1.03x | $149.72 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/ba.html |
 | $INTC | Intel Corp | $54.47 | 15/100 | 35.9 | 1.36x | $49.57 | VALUE TRAP · EXCLUDED | https://truthofmarket.com/stocks/intc.html |
+| $XOM | Exxon Mobil Corp | $158.08 | 12/100 | 36.2 | 1.25x | $143.85 | WASHOUT BASE · WATCH | https://truthofmarket.com/stocks/xom.html |
 | $VOO | Vanguard S&P 500 ETF | $548.60 | 96/100 | 58.4 | 1.28x | $499.23 | RETIREMENT BUCKET 3 · S&P 500 CORE | https://truthofmarket.com/stocks/voo.html |
 | $SCHD | Schwab US Dividend Equity ETF | $29.45 | 95/100 | 56.8 | 1.28x | $26.80 | RETIREMENT BUCKET 2 · DIVIDEND GROWTH | https://truthofmarket.com/stocks/schd.html |
 | $JEPI | JPMorgan Equity Premium Income ETF | $59.18 | 94/100 | 54.9 | 1.28x | $53.85 | RETIREMENT BUCKET 2 · MONTHLY PAYCHECK | https://truthofmarket.com/stocks/jepi.html |
@@ -157,10 +157,10 @@
 - $V vs $MA (Global Payment Network Margin Comparison): Higher Factor Score=$V | $V=90/100 (1.28x Vol) vs $MA=89/100 (1.28x Vol) -> https://truthofmarket.com/compare/v-vs-ma.html
 - $COST vs $WMT (Membership Warehouse vs Value Retail Dividend): Higher Factor Score=$WMT | $COST=91/100 (1.28x Vol) vs $WMT=92/100 (1.28x Vol) -> https://truthofmarket.com/compare/cost-vs-wmt.html
 - $BA vs $LMT (Commercial Aerospace vs Defense Cashflow): Higher Factor Score=$LMT | $BA=15/100 (1.03x Vol) vs $LMT=86/100 (1.28x Vol) -> https://truthofmarket.com/compare/ba-vs-lmt.html
-- $XOM vs $CVX (Integrated Energy Dividend & Cashflow Study): Higher Factor Score=$CVX | $XOM=20/100 (1.39x Vol) vs $CVX=87/100 (1.28x Vol) -> https://truthofmarket.com/compare/xom-vs-cvx.html
+- $XOM vs $CVX (Integrated Energy Dividend & Cashflow Study): Higher Factor Score=$CVX | $XOM=12/100 (1.25x Vol) vs $CVX=87/100 (1.28x Vol) -> https://truthofmarket.com/compare/xom-vs-cvx.html
 - $ENPH vs $FSLR (Residential Solar Inverter vs Utility Solar): Higher Factor Score=$FSLR | $ENPH=35/100 (0.83x Vol) vs $FSLR=35/100 (1.06x Vol) -> https://truthofmarket.com/compare/enph-vs-fslr.html
 - $ABNB vs $BKNG (Alternative Lodging Platform vs Global Travel): Higher Factor Score=$ABNB | $ABNB=78/100 (1.30x Vol) vs $BKNG=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/abnb-vs-bkng.html
-- $INTC vs $QCOM (Foundry Restructuring vs Mobile/Edge Silicon): Higher Factor Score=$QCOM | $INTC=15/100 (1.36x Vol) vs $QCOM=80/100 (1.51x Vol) -> https://truthofmarket.com/compare/intc-vs-qcom.html
+- $INTC vs $QCOM (Foundry Restructuring vs Mobile/Edge Silicon): Higher Factor Score=$QCOM | $INTC=15/100 (1.36x Vol) vs $QCOM=84/100 (1.51x Vol) -> https://truthofmarket.com/compare/intc-vs-qcom.html
 - $ORCL vs $CRM (Enterprise Cloud Database vs Enterprise SaaS): Higher Factor Score=$ORCL | $ORCL=78/100 (1.30x Vol) vs $CRM=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/orcl-vs-crm.html
 - $PYPL vs $SQ (Digital Checkout Cashflow vs Merchant Ecosystem): Higher Factor Score=$SQ | $PYPL=40/100 (1.56x Vol) vs $SQ=74/100 (1.15x Vol) -> https://truthofmarket.com/compare/pypl-vs-sq.html
 - $DKNG vs $HOOD (Consumer Digital Platform Volatility Study): Higher Factor Score=$DKNG | $DKNG=78/100 (1.30x Vol) vs $HOOD=55/100 (1.41x Vol) -> https://truthofmarket.com/compare/dkng-vs-hood.html
