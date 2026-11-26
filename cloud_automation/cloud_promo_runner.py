@@ -61,6 +61,7 @@ from outbound_allowlist import (  # noqa: E402
 from promo_hard_gate import (  # noqa: E402
     build_clean_go_link,
     build_clean_social_comment,
+    check_hero_lyric_sync_catalog_gate,
     check_promo_hard_gate,
     compute_yt_publish_at_iso,
     pick_rotating_comment_question,
@@ -647,6 +648,7 @@ HERO_R2_CATALOG_KEY = "brand_kits_20261123/hero_vocals/baek_woonho_6songs_mv_cat
 
 
 def load_hero_trot_mv_catalog() -> Optional[Dict[str, Any]]:
+    cat: Optional[Dict[str, Any]] = None
     for cand in [
         ROOT / "4사업부" / "data" / "baek_woonho_6songs_mv_catalog.json",
         ROOT / "data" / "baek_woonho_6songs_mv_catalog.json",
@@ -654,16 +656,22 @@ def load_hero_trot_mv_catalog() -> Optional[Dict[str, Any]]:
     ]:
         if cand.exists():
             try:
-                return json.loads(cand.read_text(encoding="utf-8"))
+                cat = json.loads(cand.read_text(encoding="utf-8"))
+                break
             except Exception:
                 pass
-    fetched = fetch_flow_vault_clip_from_r2(HERO_R2_CATALOG_KEY, WORK_DIR / "hero_vocals_cache" / "baek_woonho_6songs_mv_catalog.json")
-    if fetched and fetched.exists():
-        try:
-            return json.loads(fetched.read_text(encoding="utf-8"))
-        except Exception:
-            pass
-    return None
+    if cat is None:
+        fetched = fetch_flow_vault_clip_from_r2(HERO_R2_CATALOG_KEY, WORK_DIR / "hero_vocals_cache" / "baek_woonho_6songs_mv_catalog.json")
+        if fetched and fetched.exists():
+            try:
+                cat = json.loads(fetched.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+    if cat is not None:
+        ok_sync, sync_errs = check_hero_lyric_sync_catalog_gate(cat)
+        if not ok_sync:
+            raise RuntimeError(f"HERO_LYRIC_SYNC_HARD_GATE_BLOCKED: {sync_errs}")
+    return cat
 
 
 def _fmt_srt_ts(sec: float) -> str:
@@ -1538,7 +1546,12 @@ def main() -> int:
         vocal_track: Optional[Path] = None
         vocal_highlight_sec = 0.0
         if div == "HERO":
-            hero_cat = load_hero_trot_mv_catalog()
+            try:
+                hero_cat = load_hero_trot_mv_catalog()
+            except RuntimeError as sync_err:
+                print(f"[AUTO-GATE BLOCKED] HERO lyric sync gate: {sync_err}", flush=True)
+                alerts.append(f"HERO sync gate blocked: {sync_err}")
+                continue
             if hero_cat and hero_cat.get("songs"):
                 songs_list = hero_cat["songs"]
                 rot_idx = doy * 2 + (1 if slot_id == "SLOT_B" else 0)
@@ -1572,8 +1585,11 @@ def main() -> int:
                     )
                     desc = f"{title}\n\n{slide_body}\n\n{pinned_comment}{disclosure_footer}"
                     cues_srt = []
+                    _srt_sym_re = re.compile(r"[\U0001F300-\U0001FAFF\U00002600-\U000027BF]")
                     for ci, (a, b, l1, l2) in enumerate(hero_mv_slice.get("cues") or [], start=1):
-                        cues_srt.append(f"{ci}\n{_fmt_srt_ts(float(a))} --> {_fmt_srt_ts(float(b))}\n{l1}\n{l2}\n")
+                        c1 = _srt_sym_re.sub("", re.sub(r"https?://\S+", "", str(l1 or ""))).strip()
+                        c2 = _srt_sym_re.sub("", re.sub(r"https?://\S+", "", str(l2 or ""))).strip()
+                        cues_srt.append(f"{ci}\n{_fmt_srt_ts(float(a))} --> {_fmt_srt_ts(float(b))}\n{c1}\n{c2}\n")
                     srt_stub = "\n".join(cues_srt) or srt_stub
                     vocal_track = (
                         (HERO_VOCAL_POOL_DIR / hero_mv_song["filename"])

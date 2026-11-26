@@ -566,6 +566,71 @@ def build_synced_srt(timed_cues: List[Tuple[float, float, str]]) -> str:
     return "\n".join(blocks)
 
 
+def check_hero_lyric_sync_catalog_gate(catalog: Dict[str, Any]) -> Tuple[bool, List[str]]:
+    """
+    Fail-Closed Lyric-Audio Sync Hard Gate for Div 4 (HERO) Baek Woon-ho MV Catalog:
+      1. Requires `sync_verified == True` at catalog & song level.
+      2. Blocks copy-pasted uniform templates (>= 3 songs sharing identical start_sec + cue timings).
+      3. Blocks lyric cues placed on vocal-free instrumental tail (beyond `vocal_end_rel_sec + 0.8s`)
+         or with `min_cue_vocal_ratio < 0.35` or out-of-bounds / overlapping cue times.
+    """
+    errs: List[str] = []
+    if not isinstance(catalog, dict) or not catalog.get("songs"):
+        return False, ["hero_catalog_empty"]
+
+    if catalog.get("sync_verified") is not True:
+        errs.append("hero_catalog_sync_unverified")
+
+    songs = catalog.get("songs") or []
+    sig_counts: Dict[Tuple[Any, ...], int] = {}
+
+    for s in songs:
+        sid_name = str(s.get("song_id") or s.get("track_no") or "unknown")
+        if s.get("sync_verified") is not True:
+            errs.append(f"song_sync_unverified:{sid_name}")
+
+        for sl in s.get("slices") or []:
+            sl_id = str(sl.get("slice_id") or "unknown")
+            dur = float(sl.get("duration_sec") or 0.0)
+            st = float(sl.get("start_sec") or 0.0)
+            cues = sl.get("cues") or []
+            if dur < 12.0 or len(cues) < 2:
+                errs.append(f"invalid_slice_bounds:{sid_name}:{sl_id}")
+                continue
+
+            # Anti-copy-paste fingerprint across songs
+            c0 = cues[0]
+            fp = (sl_id, round(st, 1), round(float(c0[0]), 1), round(float(c0[1]), 1))
+            sig_counts[fp] = sig_counts.get(fp, 0) + 1
+
+            # Min vocal active ratio check
+            min_vr = sl.get("min_cue_vocal_ratio")
+            if min_vr is not None and float(min_vr) < 0.35:
+                errs.append(f"low_vocal_ratio:{sid_name}:{sl_id}:{min_vr}")
+
+            voc_end = sl.get("vocal_end_rel_sec")
+            prev_t1 = -0.01
+            for ci, cue in enumerate(cues):
+                t0, t1 = float(cue[0]), float(cue[1])
+                l1 = str(cue[2] or "").strip()
+                if t0 < 0.0 or t1 <= t0 or t1 > dur + 0.15:
+                    errs.append(f"cue_out_of_bounds:{sid_name}:{sl_id}:c{ci}")
+                if t0 < prev_t1 - 0.05:
+                    errs.append(f"cue_overlap:{sid_name}:{sl_id}:c{ci}")
+                prev_t1 = t1
+                # Non-lyric outro/title cards begin with '♪'; sung lyric cues must NOT sit on vocal-free tail
+                is_non_lyric_card = l1.startswith("♪")
+                if (voc_end is not None) and (not is_non_lyric_card) and (t1 > float(voc_end) + 0.8):
+                    errs.append(f"lyric_on_nonvocal_outro:{sid_name}:{sl_id}:c{ci}({t1:.1f}>{float(voc_end):.1f})")
+
+    if len(songs) >= 3:
+        for fp, cnt in sig_counts.items():
+            if cnt >= 3:
+                errs.append(f"copypaste_template_detected:{fp[0]}:x{cnt}")
+
+    return len(errs) == 0, errs
+
+
 if __name__ == "__main__":
     # Self-test all 100 comment questions & Hard Gate fail-closed checks
     passed_q = 0
@@ -591,4 +656,25 @@ if __name__ == "__main__":
         ok, errs = check_promo_hard_gate(d, bad, surface=surf)
         assert not ok, f"Hard Gate FAILED to block bad case ({d}/{surf}): {bad}"
 
-    print(f"PROMO_HARD_GATE SELF-TEST PASS: {passed_q}/100 comments verified, {len(bad_cases)}/{len(bad_cases)} bad cases Fail-Closed blocked.")
+    # Negative Fail-Closed Lyric-Sync Hard Gate tests (unverified + copy-paste + vocal-free outro)
+    bad_cat_copypaste = {
+        "sync_verified": True,
+        "songs": [
+            {
+                "song_id": f"s{i}",
+                "sync_verified": True,
+                "slices": [{
+                    "slice_id": "chorus2", "start_sec": 119.0, "duration_sec": 34.0,
+                    "vocal_end_rel_sec": 24.0, "min_cue_vocal_ratio": 0.8,
+                    "cues": [[0.5, 8.2, "가사1", "가사2"], [8.3, 33.5, "무보컬후주가사", "차단대상"]],
+                }],
+            }
+            for i in range(3)
+        ],
+    }
+    ok_sync, sync_errs = check_hero_lyric_sync_catalog_gate(bad_cat_copypaste)
+    assert not ok_sync, "Sync Hard Gate failed to block copy-paste + non-vocal outro catalog!"
+    assert any("copypaste_template_detected" in e for e in sync_errs), f"Missing copypaste error: {sync_errs}"
+    assert any("lyric_on_nonvocal_outro" in e for e in sync_errs), f"Missing nonvocal outro error: {sync_errs}"
+
+    print(f"PROMO_HARD_GATE SELF-TEST PASS: {passed_q}/100 comments verified, {len(bad_cases)}/{len(bad_cases)} text + sync bad cases Fail-Closed blocked.")
