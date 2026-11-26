@@ -23,6 +23,7 @@
 - Quant Insights Archive: https://truthofmarket.com/insights/index.html
 - Live Telegram Quant Channel: https://t.me/truthofmarketss
 - **$CELH (Celsius Holdings)**: Close $29.04 | -9% Hard Stop $26.43 | +100% Target $58.08 -> https://truthofmarket.com/stocks/celh.html
+- **$QCOM (Qualcomm Inc)**: Close $164.96 | -9% Hard Stop $150.11 | +100% Target $329.92 -> https://truthofmarket.com/stocks/qcom.html
 - **$SNAP (Snap Inc)**: Close $5.04 | -9% Hard Stop $4.59 | +100% Target $10.08 -> https://truthofmarket.com/stocks/snap.html
 - **$FLNC (Fluence Energy)**: Close $4.72 | -9% Hard Stop $4.3 | +100% Target $9.44 -> https://truthofmarket.com/stocks/flnc.html
 - **$DIS (Walt Disney Co)**: Close $125.6 | -9% Hard Stop $114.3 | +100% Target $251.2 -> https://truthofmarket.com/stocks/dis.html
@@ -46,4 +47,3 @@
 - **$APP (AppLovin Corp)**: Close $378.95 | -9% Hard Stop $344.84 | +100% Target $757.9 -> https://truthofmarket.com/stocks/app.html
 - **$AVGO (Broadcom Inc)**: Close $300.86 | -9% Hard Stop $273.78 | +100% Target $601.72 -> https://truthofmarket.com/stocks/avgo.html
 - **$HOOD (Robinhood Markets)**: Close $65.78 | -9% Hard Stop $59.86 | +100% Target $131.56 -> https://truthofmarket.com/stocks/hood.html
-- **$COIN (Coinbase Global)**: Close $103.72 | -9% Hard Stop $94.39 | +100% Target $207.44 -> https://truthofmarket.com/stocks/coin.html
