@@ -1,6 +1,6 @@
 {
   "schema_version": "flow-vault-manifest-v1",
-  "updated_at_kst": "2026-11-27 13:14:48 KST",
+  "updated_at_kst": "2026-11-28 04:32:55 KST",
   "r2_bucket": "dreamcompany-flow-vault",
   "starting_credits": 18385,
   "remaining_credits": 0,
@@ -648,8 +648,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q27.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 08:17:34 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 08:17:34 KST",
+      "last_used_kst": "2026-11-28 04:32:56 KST"
     },
     {
       "clip_id": "TOM_Q28",
@@ -1678,8 +1679,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_Q30.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 11:44:23 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 11:44:23 KST",
+      "last_used_kst": "2026-11-28 04:34:57 KST"
     },
     {
       "clip_id": "KFG_AB01_LOSS_A",
@@ -3681,9 +3683,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_AB03_CURIOSITY_A.mp4",
       "r2_synced": true,
-      "used_count": 1,
+      "used_count": 2,
       "downloaded_at_kst": "2026-11-24 01:00:59 KST",
-      "last_used_kst": "2026-11-24 03:58:51 KST"
+      "last_used_kst": "2026-11-28 04:36:16 KST"
     },
     {
       "clip_id": "HERO_AB05_SELF_A",
@@ -4629,8 +4631,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_AB03_CURIOSITY_A.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 11:13:59 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 11:13:59 KST",
+      "last_used_kst": "2026-11-28 04:36:53 KST"
     },
     {
       "clip_id": "KFK_AB04_CURIOSITY_B",
