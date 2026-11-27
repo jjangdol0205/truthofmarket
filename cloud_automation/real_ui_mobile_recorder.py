@@ -321,6 +321,7 @@ def record_html_motion_chart_clip(
         html_path.write_text(html, encoding="utf-8")
         with sync_playwright() as p:
             browser = p.chromium.launch(headless=True)
+            t_ctx0 = time.monotonic()
             ctx = browser.new_context(
                 viewport={"width": vp_w, "height": vp_h},
                 device_scale_factor=2 if is_vert else 1,
@@ -329,11 +330,14 @@ def record_html_motion_chart_clip(
             )
             page = ctx.new_page()
             page.goto(html_path.as_uri(), wait_until="load", timeout=15000)
-            page.wait_for_timeout(int(duration_sec * 1000))
+            page.wait_for_timeout(350)
+            # Trim Chromium initial `about:blank` white frames before HTML chart painted!
+            t_ready = max(0.35, time.monotonic() - t_ctx0)
+            page.wait_for_timeout(int((duration_sec + 0.6) * 1000))
             video = page.video
             ctx.close()
             browser.close()
-            _transcode_webm_to_mp4(Path(video.path()), out_mp4, width=out_w, height=out_h, fps=30, max_sec=duration_sec)
+            _transcode_webm_to_mp4(Path(video.path()), out_mp4, width=out_w, height=out_h, fps=30, max_sec=duration_sec, trim_start_sec=t_ready)
     return out_mp4
 
 

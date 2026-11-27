@@ -52,6 +52,7 @@ from promo_hard_gate import (  # noqa: E402
     build_synced_srt,
     check_promo_hard_gate,
     normalize_japanese_tts_text,
+    normalize_korean_tts_text,
     pick_highlight_token,
     split_to_short_subtitle_lines,
 )
@@ -207,22 +208,33 @@ def synthesize_chunked_speech_with_pauses(
     work_dir.mkdir(parents=True, exist_ok=True)
 
     # Group short subtitle lines back into complete sentences for natural prosody
+    # Strictly avoid splitting on trailing digits+period (`3.`) or decimal boundaries!
     sentences: List[Tuple[str, List[str]]] = []
     cur_cues: List[str] = []
     for ln in lines:
         cur_cues.append(ln)
-        if re.search(r"[.?!。？！]$", ln.strip()):
-            sentences.append((" ".join(cur_cues) if lang == "en" else " ".join(cur_cues), list(cur_cues)))
+        if re.search(r"(?<!\d)[.?!。？！]$", ln.strip()):
+            join_sep = " " if lang == "en" else ("" if lang == "ja" else " ")
+            sentences.append((join_sep.join(cur_cues), list(cur_cues)))
             cur_cues = []
     if cur_cues:
-        sentences.append((" ".join(cur_cues), list(cur_cues)))
+        join_sep = " " if lang == "en" else ("" if lang == "ja" else " ")
+        sentences.append((join_sep.join(cur_cues), list(cur_cues)))
 
     async def _gen_all() -> List[Tuple[Path, str, List[str]]]:
         out: List[Tuple[Path, str, List[str]]] = []
         is_ja = (lang == "ja") or str(voice_id or "").startswith("ja-")
+        is_ko = (lang == "ko") or str(voice_id or "").startswith("ko-")
         for idx, (sent_txt, cues) in enumerate(sentences):
             p = work_dir / f"sent_{idx:03d}.mp3"
-            spoken_in = normalize_japanese_tts_text(sent_txt) if is_ja else sent_txt
+            if is_ja:
+                spoken_in = normalize_japanese_tts_text(sent_txt)
+            elif is_ko:
+                spoken_in = normalize_korean_tts_text(sent_txt)
+            else:
+                spoken_in = sent_txt
+            if not spoken_in:
+                continue
             for attempt in range(2):
                 try:
                     comm = edge_tts.Communicate(spoken_in, voice=voice_id, rate="+0%")
@@ -600,13 +612,16 @@ def compose_zero_ai_short(
         if not ok_srt:
             raise ValueError(f"[HARD GATE BLOCKED SRT] {div_u}: {srt_errs}")
 
-        # Build 2.5s visual rhythm segments — 2026-11-27 Chairman Directive:
-        # TOM, GBA, KFG, KFK open at 0.0s directly on mobile real-UI recording (ZERO unrelated stock filler!)
+        # Build 2.5s visual rhythm segments — HARD LOCK (2026-11-27 Chairman Directive):
+        # TOM, KFG, GBA, KFK NEVER insert any 0~2.5s intro stock clip even if `faceless_stock_mp4` is passed!
+        # Frame 1 (0.0s) opens DIRECTLY on Playwright 390x844@2x mobile real-UI recording!
         ui_dur = max(3.0, _probe_dur(real_ui_mp4))
         seg_paths: List[Path] = []
         cut_times: List[float] = []
         elapsed = 0.0
         direct_ui_divs = {"TOM", "GBA", "KFG", "KFK"}
+        if div_u in direct_ui_divs:
+            faceless_stock_mp4 = None
 
         if (div_u not in direct_ui_divs) and faceless_stock_mp4 and faceless_stock_mp4.exists():
             s0 = wdir / "vseg_00.mp4"

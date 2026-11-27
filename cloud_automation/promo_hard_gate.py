@@ -106,32 +106,72 @@ ENDING_CTA_BY_DIV: Dict[str, str] = {
 }
 
 HERO_DJ_OUTRO_SPOKEN_KO = (
-    "어머님, 이 노래 3분 완곡과 무료 카톡 꽃카드는 "
-    "화면 아래 동그란 백운호 얼굴 누르시고 맨 위 파란 주소를 누르시면 바로 열립니다."
+    "어머님, 완곡과 꽃카드는 아래 백운호 얼굴 누르고 파란 주소를 누르세요."
 )
 
 
 def normalize_japanese_tts_text(text: str) -> str:
     """
     Preprocesses Japanese text BEFORE Edge-TTS (`ja-JP-KeitaNeural` / `ja-JP-NanamiNeural`):
-      1. Strips thousands-separator commas inside numbers (`2,000万円` -> `2000万円`, `1,200,000` -> `1200000`)
-         so Edge-TTS NEVER misreads `2,000万円` as `"ニ、レレレマンエン"`!
-      2. Strictly preserves decimal points (`1.5%`, `3.7`, `0.01%`) intact.
-      3. Strips raw URLs/hashtags/emojis so speech stays clean and human.
+      1. Strips URLs, hashtags, emojis, and thousands-separator commas inside numbers
+         (`2,000万円` -> `2000万円`, `1,200,000` -> `1200000`) so Edge-TTS never says "ニ、レレレ".
+      2. Replaces vertical pipes `｜`, `|` with natural Japanese pause `、` (zero "pipe" pronunciation).
+      3. Replaces `・`/`·` between numeric/age/year ranges (`50代・60代`, `30代・40代`) with `と`,
+         and all remaining `・`/`·`/`•` with `、`.
+      4. Replaces brackets `【...】`, `（...）`, `(...)` with smooth pause punctuation `、`.
+      5. Converts negative numbers (`-36.8%`, `−36.8%`) to `マイナス36点8%` and ALL decimal numbers
+         `(\\d+)\\.(\\d+)` to `\\1点\\2` (`36.8` -> `36点8`, `3.7` -> `3点7`, `1.5%` -> `1点5%`)
+         so Edge-TTS NEVER treats `.` as a sentence break! (On-screen PNG/.srt keep visual `36.8%`/`3.7`.)
     """
     s = str(text or "")
     if not s:
         return ""
     s = re.sub(r"https?://\S+|#\S+", "", s)
     s = _EMOJI_RE.sub("", s)
-    # Remove thousands commas inside digits repeatedly (handles 1,200,000 and 2,000万円 cleanly)
+    # 1. Remove thousands commas inside digits repeatedly (1,200,000 -> 1200000, 2,000万円 -> 2000万円)
     prev = None
     while prev != s:
         prev = s
         s = re.sub(r"(?<=\d),(?=\d{3}(?!\d))", "", s)
-    # Also collapse any ASCII comma immediately between digits (e.g. malformed numeric grouping)
     s = re.sub(r"(?<=\d),(?=\d)", "", s)
-    return re.sub(r"\s+", " ", s).strip()
+    # 2. Pipes -> Japanese pause
+    s = re.sub(r"\s*[｜|]\s*", "、", s)
+    # 3. Age / year / numeric middle-dot -> と (`50代・60代` -> `50代と60代`), remaining middle-dots -> 、
+    s = re.sub(r"(\d+(?:代|年|歳|ヶ月|か月|％|%|万円|円))\s*[・·]\s*(\d+)", r"\1と\2", s)
+    s = re.sub(r"\s*[・·•]\s*", "、", s)
+    # 4. Brackets -> natural pauses
+    s = re.sub(r"【\s*([^】]+?)\s*】", r"\1、", s)
+    s = re.sub(r"（\s*([^）]+?)\s*）", r"、\1、", s)
+    s = re.sub(r"\(\s*([^)]+?)\s*\)", r"、\1、", s)
+    # 5. Negative sign before digit -> マイナス
+    s = re.sub(r"(?<![A-Za-z0-9])[-−－](\d)", r"マイナス\1", s)
+    # 6. Decimal point between digits -> 点 (`36.8` -> `36点8`, `3.7` -> `3点7`, `1.5%` -> `1点5%`)
+    s = re.sub(r"(\d+)\.(\d+)", r"\1点\2", s)
+    # 7. Strip any stray ASCII periods inside JA text so Edge-TTS never pauses unnaturally
+    s = s.replace(".", "。")
+    # 8. Collapse duplicate pauses & clean spacing
+    s = re.sub(r"[、,]{2,}", "、", s)
+    s = re.sub(r"、+([。！？])", r"\1", s)
+    s = re.sub(r"\s+", " ", s).strip()
+    return s.strip("、, ")
+
+
+def normalize_korean_tts_text(text: str) -> str:
+    """
+    Preprocesses Korean text BEFORE Edge-TTS (`ko-KR-SunHiNeural` / `ko-KR-InJoonNeural`):
+      - Strips URLs, hashtags, emojis.
+      - Replaces middle-dots & pipes (`·`, `・`, `•`, `｜`, `|`) with `, ` so Edge-TTS inserts
+        a clean natural micro-pause instead of slurring words together (e.g. `습도 50%·온도 20도` -> `습도 50%, 온도 20도`).
+    """
+    s = str(text or "")
+    if not s:
+        return ""
+    s = re.sub(r"https?://\S+|#\S+", "", s)
+    s = _EMOJI_RE.sub("", s)
+    s = re.sub(r"\s*[·・•｜|]\s*", ", ", s)
+    s = re.sub(r",\s*,+", ", ", s)
+    s = re.sub(r"\s+", " ", s).strip()
+    return s.strip(", ")
 
 # 1. AI Clichés (KO / EN / JA) — Fail-Closed Regex Patterns
 AI_CLICHE_REGEXES: Tuple[Tuple[str, str], ...] = (
@@ -1082,10 +1122,15 @@ if __name__ == "__main__":
     assert any("copypaste_template_detected" in e for e in sync_errs), f"Missing copypaste error: {sync_errs}"
     assert any("lyric_on_nonvocal_outro" in e for e in sync_errs), f"Missing nonvocal outro error: {sync_errs}"
 
-    # Japanese TTS Preprocessor & Decimal Non-Split Unit Tests (2026-11-27 Pain Point 1)
+    # Japanese & Korean TTS Preprocessor & Decimal Non-Split Unit Tests (2026-11-27 12:00 KST Final Patch)
     assert normalize_japanese_tts_text("2,000万円") == "2000万円"
     assert normalize_japanese_tts_text("1,200,000") == "1200000"
-    assert normalize_japanese_tts_text("新NISAの1,800万円枠、利回り1.5%と指数3.7点。") == "新NISAの1800万円枠、利回り1.5%と指数3.7点。"
+    assert normalize_japanese_tts_text("新NISAの1,800万円枠、利回り1.5%と指数3.7点。") == "新NISAの1800万円枠、利回り1点5%と指数3点7点。"
+    ja_pipe_test = normalize_japanese_tts_text("50代・60代の新NISA｜半導体-36.8%（指数3.7）")
+    for bad_ch in ("｜", "|", "・", "."):
+        assert bad_ch not in ja_pipe_test, f"Banned TTS char {bad_ch!r} leaked in: {ja_pipe_test}"
+    assert "50代と60代" in ja_pipe_test and "マイナス36点8%" in ja_pipe_test and "3点7" in ja_pipe_test, f"Unexpected JA TTS: {ja_pipe_test}"
+    assert normalize_korean_tts_text("습도 50%·온도 20도｜수면체크") == "습도 50%, 온도 20도, 수면체크"
     ja_split = split_to_short_subtitle_lines("老後2,000万円問題、利回り1.5%と指数3.7点の現実。", lang="ja")
     assert any("2,000万円" in x for x in ja_split), f"2,000万円 was split! {ja_split}"
     assert any("1.5%" in x for x in ja_split), f"1.5% was split! {ja_split}"
@@ -1093,4 +1138,4 @@ if __name__ == "__main__":
     for d_cta, txt_cta in ENDING_CTA_BY_DIV.items():
         assert not re.search(r"related\s*video|관련\s*동영상|関連動画", txt_cta, re.I), f"Dead Related Video in {d_cta}: {txt_cta}"
 
-    print(f"PROMO_HARD_GATE SELF-TEST PASS: {passed_q}/100 comments verified, {len(bad_cases)}/{len(bad_cases)} text + sync bad cases + JA TTS/decimal tests PASS.")
+    print(f"PROMO_HARD_GATE SELF-TEST PASS: {passed_q}/100 comments verified, {len(bad_cases)}/{len(bad_cases)} text + sync bad cases + JA/KO TTS & decimal tests PASS.")

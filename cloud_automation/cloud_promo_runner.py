@@ -68,6 +68,7 @@ from promo_hard_gate import (  # noqa: E402
     check_promo_hard_gate,
     compute_yt_publish_at_iso,
     normalize_japanese_tts_text,
+    normalize_korean_tts_text,
     pick_rotating_comment_question,
     strip_unsupported_yt_api_fields,
 )
@@ -635,6 +636,8 @@ def synthesize_edge_tts_mp3(text: str, voice_id: str, out_mp3: Path, rate: str =
     clean_text = re.sub(r"https?://\S+|#\S+", "", text or "").strip()
     if str(voice_id or "").startswith("ja-"):
         clean_text = normalize_japanese_tts_text(clean_text)
+    elif str(voice_id or "").startswith("ko-"):
+        clean_text = normalize_korean_tts_text(clean_text)
     if not clean_text:
         return None
 
@@ -729,9 +732,9 @@ def render_hero_trot_music_short_mp4(
     dj_mp3 = out_mp4.with_suffix(".dj_outro.mp3")
     dj_wav = out_mp4.with_suffix(".dj_outro.wav")
 
-    outro_dur = 6.0
+    outro_dur = 5.8
     dj_voice_ready = False
-    got_dj = synthesize_edge_tts_mp3(HERO_DJ_OUTRO_SPOKEN_KO, "ko-KR-InJoonNeural", dj_mp3, rate="-4%")
+    got_dj = synthesize_edge_tts_mp3(HERO_DJ_OUTRO_SPOKEN_KO, "ko-KR-InJoonNeural", dj_mp3, rate="+4%")
     if got_dj and got_dj.exists():
         rd = subprocess.run(
             [ffmpeg, "-y", "-threads", "2", "-i", str(got_dj), "-ar", "44100", "-ac", "2", "-c:a", "pcm_s16le", str(dj_wav)],
@@ -740,7 +743,8 @@ def render_hero_trot_music_short_mp4(
         if rd.returncode == 0 and dj_wav.exists():
             with wave.open(str(dj_wav), "rb") as wf:
                 raw_dj_sec = wf.getnframes() / float(wf.getframerate())
-            outro_dur = round(max(5.5, min(9.5, raw_dj_sec + 0.55)), 2)
+            # Guarantee seg_dur >= tts_dur + 0.22s (0.40s breath cushion, compact ~5.6~6.3s outro!)
+            outro_dur = round(max(5.0, raw_dj_sec + 0.40), 2)
             dj_voice_ready = True
 
     dur = round(sing_dur + outro_dur, 2)
@@ -1650,6 +1654,63 @@ def apply_live_smh_fg_timeliness_hook(
     return title, slide_body, desc, None
 
 
+def build_natural_spoken_hook(
+    div: str,
+    title: str,
+    slide_body: str,
+    smh_fg_meta: Optional[Dict[str, Any]] = None,
+    either_or_q: str = "",
+) -> str:
+    """
+    2026-11-27 12:00 KST Patch: NEVER feeds raw YouTube SEO titles containing pipes/brackets
+    (`｜`, `|`, `・`, `【...】`, `（...）`) directly into Edge-TTS!
+    Builds a natural, conversational spoken script from `slide_body` + a clean 1-sentence
+    conversational hook (when not already embedded) + `either_or_q`.
+    Note: preserves clean visual decimals (`3.7`, `-36.8%`) for on-screen PNG/`.srt` while
+    `zero_ai_video_composer` converts them phonetically (`3点7`, `マイナス36点8%`) right before TTS!
+    """
+    div_u = div.upper()
+    body = re.sub(r"\s+", " ", (slide_body or "").strip())
+    q = re.sub(r"\s+", " ", (either_or_q or "").strip())
+
+    # Clean any raw title metadata tokens just in case a fallback hook is needed
+    clean_t = re.sub(r"#\S+", "", title or "")
+    clean_t = re.sub(r"【[^】]*】|\[[^\]]*\]", " ", clean_t)
+    clean_t = re.sub(r"\s*[｜|]\s*", "、" if div_u == "GBA" else ", ", clean_t)
+    clean_t = re.sub(r"\s+", " ", clean_t).strip(" 、,.-")
+
+    if div_u == "GBA":
+        # `apply_live_smh_fg_timeliness_hook` ALREADY prepends the natural live spoken lead to `slide_body`!
+        if body.startswith("最新の米国半導体"):
+            parts = [body, q]
+        elif smh_fg_meta and smh_fg_meta.get("smh_fg_score") is not None:
+            sc_s = f"{float(smh_fg_meta['smh_fg_score']):.1f}".rstrip("0").rstrip(".")
+            dd_s = str(smh_fg_meta.get("smh_fg_dd52w") or "-35%")
+            hook = f"最新の米国半導体・恐怖と強欲指数は100点中{sc_s}点、52週高値から{dd_s}の水準です。"
+            parts = [hook, body, q]
+        else:
+            hook = f"{clean_t}。" if clean_t and clean_t[:12] not in body else ""
+            parts = [hook, body, q]
+        return " ".join(p for p in parts if p).strip()
+
+    if div_u == "KFK":
+        # Avoid reading bracketed/piped YT title or duplicating slide_body's opening hook
+        norm_t = normalize_korean_tts_text(clean_t)
+        if body and (not norm_t or norm_t[:10] in body or len(body) >= 45):
+            parts = [body, q]
+        else:
+            parts = [f"{norm_t}." if norm_t and not re.search(r"[.?!]$", norm_t) else norm_t, body, q]
+        return " ".join(p for p in parts if p).strip()
+
+    # KFG (English) & fallback: Matrix `slide_body` already opens with a human conversational hook
+    if body and (not clean_t or clean_t[:14].lower() in body.lower() or len(body) >= 55):
+        parts = [body, q]
+    else:
+        hook_en = f"{clean_t}." if clean_t and not re.search(r"[.?!]$", clean_t) else clean_t
+        parts = [hook_en, body, q]
+    return " ".join(p for p in parts if p).strip()
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true")
@@ -1926,7 +1987,7 @@ def main() -> int:
                     spoken_script = (
                         tom_brief_pkg["spoken_script"]
                         if (div == "TOM" and tom_brief_pkg)
-                        else f"{title}. {slide_body}. {either_or_q}"
+                        else build_natural_spoken_hook(div, title, slide_body, smh_fg_meta, either_or_q)
                     )
                     rendered_mp4, rendered_dur, srt_stub = compose_zero_ai_short(
                         div=div,
