@@ -37,10 +37,10 @@ GHA_SLEEP_JITTER_FORBIDDEN = True
 YT_UNSUPPORTED_API_FIELDS = ("containsSyntheticMedia", "relatedVideo", "related_video")
 
 # Clean Short Redirect Endpoints (/go/yt, /go/yt-a, /go/yt-b, /go/yt-fg, /go/yt-fg-a, /go/ig, /go/ig-b)
-# Live probe (2026-11-27): /go/yt-a, /go/yt-b, /go/ig-b all return HTTP 302 to division root on all 5 domains.
-# Note: TOM /go/yt-fg-a currently falls through wildcard to `/` instead of `/smh-fear-greed`; keep
-# `TOM_YT_FG_A_ROUTE_LIVE = False` until `homepage` room deploys dedicated `/go/yt-fg-a -> /smh-fear-greed` mapping!
-TOM_YT_FG_A_ROUTE_LIVE = False
+# Live probe verified (2026-11-27 18:21 KST post-2ee4e4b):
+#   - TOM /go/yt-fg-a -> HTTP 302 https://truthofmarket.com/smh-fear-greed?utm_source=youtube&utm_medium=video&utm_campaign=go_yt_fg&utm_content=slot_a_realui
+#   - All 5 divs /go/yt-a, /go/yt-b, /go/ig-b -> HTTP 302 with utm_content=slot_a_realui / slot_b_flowchar!
+TOM_YT_FG_A_ROUTE_LIVE = True
 
 DIV_GO_LINKS: Dict[str, Dict[str, str]] = {
     "TOM": {
