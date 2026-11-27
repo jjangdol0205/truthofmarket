@@ -37,6 +37,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+import wave
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -59,11 +60,14 @@ from outbound_allowlist import (  # noqa: E402
     sanitize_and_classify_ig_token,
 )
 from promo_hard_gate import (  # noqa: E402
+    ENDING_CTA_BY_DIV,
+    HERO_DJ_OUTRO_SPOKEN_KO,
     build_clean_go_link,
     build_clean_social_comment,
     check_hero_lyric_sync_catalog_gate,
     check_promo_hard_gate,
     compute_yt_publish_at_iso,
+    normalize_japanese_tts_text,
     pick_rotating_comment_question,
     strip_unsupported_yt_api_fields,
 )
@@ -74,6 +78,7 @@ from real_ui_mobile_recorder import (  # noqa: E402
 )
 from zero_ai_video_composer import (  # noqa: E402
     compose_zero_ai_short,
+    draw_safezone_ending_cta_box,
     get_cached_faceless_stock_clip,
 )
 
@@ -590,12 +595,14 @@ def _render_safezone_subtitle_png(div: str, headline: str, body: str, cta: str, 
         y_cur += (bb[3] - bb[1]) + 14
 
     if cta:
-        cta_lines = _wrap_text_pixels(draw, cta, f_cta, 920)[:1]
-        if cta_lines:
-            line = cta_lines[0]
-            bb = draw.textbbox((0, 0), line, font=f_cta, stroke_width=6)
-            x = (1080 - (bb[2] - bb[0])) // 2
-            draw.text((x, 1645), line, font=f_cta, fill=(175, 240, 205, 255), stroke_width=6, stroke_fill=(10, 14, 20, 255))
+        draw_safezone_ending_cta_box(
+            draw,
+            div,
+            DIV_LANG_MAP.get(div.upper(), "en"),
+            width=1080,
+            height=1920,
+            cta_text_override=ENDING_CTA_BY_DIV.get(div.upper(), cta),
+        )
 
     out_png.parent.mkdir(parents=True, exist_ok=True)
     img.save(out_png)
@@ -618,7 +625,7 @@ def _probe_media_duration(path: Path) -> float:
     return 0.0
 
 
-def synthesize_edge_tts_mp3(text: str, voice_id: str, out_mp3: Path) -> Optional[Path]:
+def synthesize_edge_tts_mp3(text: str, voice_id: str, out_mp3: Path, rate: str = "+0%") -> Optional[Path]:
     try:
         import edge_tts  # type: ignore
     except Exception as e:
@@ -626,11 +633,13 @@ def synthesize_edge_tts_mp3(text: str, voice_id: str, out_mp3: Path) -> Optional
         return None
     out_mp3.parent.mkdir(parents=True, exist_ok=True)
     clean_text = re.sub(r"https?://\S+|#\S+", "", text or "").strip()
+    if str(voice_id or "").startswith("ja-"):
+        clean_text = normalize_japanese_tts_text(clean_text)
     if not clean_text:
         return None
 
     async def _gen() -> None:
-        comm = edge_tts.Communicate(clean_text, voice=voice_id, rate="+0%")
+        comm = edge_tts.Communicate(clean_text, voice=voice_id, rate=rate)
         await comm.save(str(out_mp3))
 
     for attempt in range(2):
@@ -687,8 +696,15 @@ def render_hero_trot_music_short_mp4(
     bg_clips: List[Path],
     song_mp3: Path,
     out_mp4: Path,
+    srt_cues_out: Optional[List[Tuple[float, float, str, str]]] = None,
 ) -> Tuple[Optional[Path], float]:
-    """Renders 1080x1920 Music-First Baek Woon-ho Trot Singing Short MV (0.0s immediate singing + synced gold/white karaoke lyrics)."""
+    """
+    Renders 1080x1920 Music-First Baek Woon-ho Trot Singing Short MV:
+      - `0 ~ sing_dur` (~26.0s): Immediate Baek Woon-ho singing + Demucs-synced gold/white karaoke lyrics.
+      - Final `5.5 ~ 6.0s` (`sing_dur ~ total_dur`): Accompaniment smoothly ducks to `volume=0.22` while
+        DJ Kim-ssaem (`ko-KR-InJoonNeural`) gives warm voice guidance paired with centered safe-zone
+        (`Y=1100~1250`, `bottom: 35%~42%`) golden-yellow big-font CTA box + downward arrow!
+    """
     ffmpeg = shutil.which("ffmpeg")
     if not ffmpeg:
         try:
@@ -697,23 +713,80 @@ def render_hero_trot_music_short_mp4(
         except Exception:
             return None, 0.0
 
-    dur = float(sl.get("duration_sec", 34.0))
+    raw_dur = float(sl.get("duration_sec", 34.0))
     start_s = float(sl.get("start_sec", 41.0))
-    cues = [(float(a), float(b), str(c), str(d)) for a, b, c, d in (sl.get("cues") or [])]
+    raw_cues = [(float(a), float(b), str(c), str(d)) for a, b, c, d in (sl.get("cues") or [])]
+    voc_end_raw = float(sl.get("vocal_end_rel_sec") or 26.0)
+    sing_dur = round(min(26.5, max(20.0, min(raw_dur - 5.5, voc_end_raw))), 2)
+    cues: List[Tuple[float, float, str, str]] = []
+    for t0, t1, l1, l2 in raw_cues:
+        if t0 >= sing_dur - 0.4:
+            continue
+        cues.append((t0, min(t1, sing_dur - 0.05), l1, l2))
+
     out_mp4.parent.mkdir(parents=True, exist_ok=True)
     aud_m4a = out_mp4.with_suffix(".trot.m4a")
-    ra = subprocess.run(
-        [
+    dj_mp3 = out_mp4.with_suffix(".dj_outro.mp3")
+    dj_wav = out_mp4.with_suffix(".dj_outro.wav")
+
+    outro_dur = 6.0
+    dj_voice_ready = False
+    got_dj = synthesize_edge_tts_mp3(HERO_DJ_OUTRO_SPOKEN_KO, "ko-KR-InJoonNeural", dj_mp3, rate="-4%")
+    if got_dj and got_dj.exists():
+        rd = subprocess.run(
+            [ffmpeg, "-y", "-threads", "2", "-i", str(got_dj), "-ar", "44100", "-ac", "2", "-c:a", "pcm_s16le", str(dj_wav)],
+            stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, timeout=60,
+        )
+        if rd.returncode == 0 and dj_wav.exists():
+            with wave.open(str(dj_wav), "rb") as wf:
+                raw_dj_sec = wf.getnframes() / float(wf.getframerate())
+            outro_dur = round(max(5.5, min(9.5, raw_dj_sec + 0.55)), 2)
+            dj_voice_ready = True
+
+    dur = round(sing_dur + outro_dur, 2)
+    fade_duck_s = 0.45
+    vol_expr = (
+        f"if(lt(t,{sing_dur:.2f}),1.0,"
+        f"if(lt(t,{sing_dur + fade_duck_s:.2f}),1.0-0.78*(t-{sing_dur:.2f})/{fade_duck_s:.2f},0.22))"
+    )
+    if dj_voice_ready:
+        delay_ms = int(round((sing_dur + 0.15) * 1000))
+        cmd_a = [
+            ffmpeg, "-y", "-threads", "2",
+            "-ss", f"{start_s:.2f}", "-t", f"{dur:.2f}", "-i", str(song_mp3),
+            "-i", str(dj_wav),
+            "-filter_complex",
+            f"[0:a]aresample=44100,aformat=channel_layouts=stereo,"
+            f"afade=t=in:st=0:d=0.5,volume='{vol_expr}':eval=frame,"
+            f"afade=t=out:st={max(1.0, dur - 1.2):.2f}:d=1.2[songduck];"
+            f"[1:a]aresample=44100,aformat=channel_layouts=stereo,volume=1.18,adelay={delay_ms}|{delay_ms}[dj];"
+            f"[songduck][dj]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.944[aout]",
+            "-map", "[aout]", "-t", f"{dur:.2f}",
+            "-c:a", "aac", "-b:a", "192k", str(aud_m4a),
+        ]
+    else:
+        cmd_a = [
             ffmpeg, "-y", "-threads", "2",
             "-ss", f"{start_s:.2f}", "-t", f"{dur:.2f}", "-i", str(song_mp3),
             "-af", f"aresample=44100,afade=t=in:st=0:d=0.6,afade=t=out:st={max(1.0, dur-1.6):.2f}:d=1.6,alimiter=limit=0.944",
             "-c:a", "aac", "-b:a", "192k", str(aud_m4a),
-        ],
-        stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, timeout=90,
-    )
+        ]
+    ra = subprocess.run(cmd_a, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True, timeout=90)
     if ra.returncode != 0 or not aud_m4a.exists():
         print(f"[HERO TROT AUDIO ERR] {ra.stderr[-220:]}", flush=True)
         return None, 0.0
+
+    # Append final DJ Kim-ssaem safe-zone CTA visual cue (`sing_dur .. dur`)
+    cues.append((
+        sing_dur,
+        dur - 0.05,
+        "3분 완곡 · 무료 카톡 꽃카드 안내",
+        "아래 백운호 얼굴 → 맨 위 파란 주소!",
+    ))
+    if srt_cues_out is not None:
+        srt_cues_out.clear()
+        srt_cues_out.extend(cues[:-1])
+        srt_cues_out.append((sing_dur + 0.15, dur - 0.10, HERO_DJ_OUTRO_SPOKEN_KO, ""))
 
     # Build looped multi-clip or single-clip background
     valid_bgs = [p for p in bg_clips if p and p.exists() and p.stat().st_size > 50_000]
@@ -732,7 +805,6 @@ def render_hero_trot_music_short_mp4(
     f_pill = _pick_cjk_font(34)
     f_l1 = _pick_cjk_font(64)
     f_l2 = _pick_cjk_font(60)
-    f_cta = _pick_cjk_font(34)
 
     for idx, (t0, t1, l1, l2) in enumerate(cues):
         is_last = idx == (len(cues) - 1)
@@ -757,20 +829,14 @@ def render_hero_trot_music_short_mp4(
                 xx = max(24, (1080 - (bb[2] - bb[0])) // 2)
                 dr.text((xx, yy), line_txt, font=fnt, fill=col, stroke_width=8, stroke_fill=(8, 16, 14, 255))
         if is_last:
-            cta_t = "프로필 눌러 백운호 6곡 무료 듣기 → paradise-hero.com/go/yt"
-            cta_sz = 32
-            f_cta_fit = _pick_cjk_font(cta_sz)
-            while cta_sz >= 22:
-                f_cta_fit = _pick_cjk_font(cta_sz)
-                cbb = dr.textbbox((0, 0), cta_t, font=f_cta_fit)
-                if (cbb[2] - cbb[0]) <= 940:
-                    break
-                cta_sz -= 2
-            cbb = dr.textbbox((0, 0), cta_t, font=f_cta_fit)
-            cw, ch = cbb[2] - cbb[0] + 44, cbb[3] - cbb[1] + 22
-            cx = max(20, (1080 - cw) // 2)
-            dr.rounded_rectangle([cx, 1605, cx + cw, 1605 + ch], radius=16, fill=(14, 58, 44, 235), outline=(245, 208, 90, 255), width=3)
-            dr.text((cx + 22, 1615), cta_t, font=f_cta_fit, fill=(255, 250, 230, 255))
+            draw_safezone_ending_cta_box(
+                dr,
+                "HERO",
+                "ko",
+                width=1080,
+                height=1920,
+                cta_text_override=ENDING_CTA_BY_DIV["HERO"],
+            )
         png_p = out_mp4.with_name(f"{out_mp4.stem}_cue{idx}.png")
         im.save(png_p)
         tmp_pngs.append(png_p)
@@ -794,6 +860,8 @@ def render_hero_trot_music_short_mp4(
     )
     try:
         aud_m4a.unlink(missing_ok=True)
+        dj_mp3.unlink(missing_ok=True)
+        dj_wav.unlink(missing_ok=True)
         for tp in tmp_pngs:
             tp.unlink(missing_ok=True)
     except Exception:
@@ -1295,6 +1363,9 @@ def fetch_live_smh_fg_snapshot() -> Optional[Dict[str, Any]]:
     factors = raw.get("factors") or []
     dd_pct = ""
     rot_pct = ""
+    vol_raw = ""
+    rsi_raw = ""
+    qqq_gap = ""
     for f in factors:
         k = str(f.get("key") or "")
         rd = str(f.get("raw_display") or "")
@@ -1303,7 +1374,15 @@ def fetch_live_smh_fg_snapshot() -> Optional[Dict[str, Any]]:
             dd_pct = m.group(1)
         elif k == "safe_haven_rotation" and m:
             rot_pct = m.group(1)
+        elif k == "volatility":
+            vol_raw = rd
+        elif k == "rsi_14":
+            rsi_raw = rd
+        elif k == "qqq_leadership" and m:
+            qqq_gap = m.group(1)
 
+    prices = raw.get("prices") or {}
+    comps = raw.get("comparisons") or {}
     parsed = {
         "as_of_date": str(raw.get("as_of_date") or ""),
         "score": float(raw["score"]),
@@ -1313,9 +1392,150 @@ def fetch_live_smh_fg_snapshot() -> Optional[Dict[str, Any]]:
         "label_ja": str(raw.get("label_ja") or "中立"),
         "drawdown_52w_pct": dd_pct or "-35%",
         "rot_20d_pct": rot_pct,
+        "qqq_20d_pct": qqq_gap,
+        "vol_display": vol_raw,
+        "rsi_display": rsi_raw,
+        "prices": {
+            "SMH": prices.get("SMH"),
+            "XLV": prices.get("XLV"),
+            "QQQ": prices.get("QQQ"),
+            "VIX": prices.get("VIX"),
+        },
+        "prev_1d": comps.get("prev_1d"),
+        "prev_1w": comps.get("prev_1w"),
+        "prev_1m": comps.get("prev_1m"),
     }
     _SMH_FG_CACHE = parsed
     return parsed
+
+
+def build_tom_daily_smh_fg_briefing_package(
+    smh_fg: Optional[Dict[str, Any]],
+    slot_id: str = "SLOT_A",
+    rot_q_seed: int = 0,
+) -> Dict[str, Any]:
+    """
+    2026-11-27 Chairman Directive: Transforms EVERY Div 1 (`TOM` · `@TruthOfMarketUS`) Short & Reel
+    from textbook lectures into a 30-second Daily Live SMH Fear & Greed Market Briefing:
+      - `0.0s` Frame 1: Direct mobile `/smh-fear-greed` live UI + yesterday's real close (`SMH`, `XLV`, `QQQ`, `VIX` if present).
+      - `0~3s`: Live score + regime hook (100% public historical statistics, ZERO buy/sell timing — Whop compliant!).
+      - `4~24s`: 7-factor gauge walkthrough + `SMH` solo vs `SMH x XLV + SGOV` 2000-2025 drawdown recovery math.
+      - `25~32s`: Centered safe-zone (`bottom: 38%`, `Y=1100~1250`) CTA pointing to `truthofmarket.com/go/yt-fg`.
+    """
+    snap = smh_fg or {
+        "as_of_date": dt.datetime.now(KST).strftime("%Y-%m-%d"),
+        "score": 10.0,
+        "score_str": "10",
+        "label_en": "Extreme Fear",
+        "drawdown_52w_pct": "-35%",
+        "rot_20d_pct": "-25%",
+        "prices": {},
+    }
+    sc = str(snap.get("score_str") or "10")
+    sc_val = float(snap.get("score") or 10.0)
+    lbl = str(snap.get("label_en") or "Extreme Fear")
+    dd = str(snap.get("drawdown_52w_pct") or "-35%")
+    rot = str(snap.get("rot_20d_pct") or "")
+    as_of = str(snap.get("as_of_date") or "")
+    px = snap.get("prices") or {}
+    smh_px = px.get("SMH")
+    xlv_px = px.get("XLV")
+    qqq_px = px.get("QQQ")
+    vix_px = px.get("VIX")
+    is_b = (str(slot_id).upper() == "SLOT_B")
+
+    # Build top live market close ribbon (strictly real verified numbers from smh_fg_latest.json!)
+    px_parts: List[str] = [f"SMH F&G {sc}/100 ({lbl})"]
+    if smh_px is not None:
+        px_parts.append(f"SMH ${float(smh_px):.2f}")
+    if xlv_px is not None:
+        px_parts.append(f"XLV ${float(xlv_px):.2f}")
+    if qqq_px is not None:
+        px_parts.append(f"QQQ ${float(qqq_px):.2f}")
+    if vix_px is not None:
+        px_parts.append(f"VIX {float(vix_px):.1f}")
+    top_live_banner = " · ".join(px_parts)
+
+    # 0~3s Hook (strictly historical statistics — zero trade timing signals!)
+    if sc_val < 10.0:
+        hook_spoken = (
+            f"SMH Fear and Greed just hit {sc}, {lbl}, after yesterday's swing. "
+            f"Here is what happened every time it dropped below 10 since 2000."
+            if not is_b else
+            f"SMH Fear and Greed sits at {sc} out of 100 today, {dd} below its 52-week high. "
+            f"Here is how a balanced cushion held up in past sub-10 shocks."
+        )
+        yt_title = (
+            f"SMH Fear & Greed Just Hit {sc} ({lbl}): What Happened Below 10 Since 2000 #Shorts"
+            if not is_b else
+            f"SMH Gauge {sc}/100 ({dd}): SMH Solo vs SMH x XLV + SGOV Crash History #Shorts"
+        )
+    else:
+        hook_spoken = (
+            f"SMH Fear and Greed reads {sc}, {lbl}, after yesterday's close, {dd} from its peak. "
+            f"Here is how 25 years of semiconductor swings compare to a balanced mix."
+        )
+        yt_title = f"Daily SMH Fear & Greed: {sc}/100 ({lbl}, {dd}) | 2000-2025 History #Shorts"
+
+    # 4~24s Real Close + 7-Factor Gauge + SMH solo vs SMH x XLV + SGOV historical comparison
+    close_sentence = ""
+    if smh_px is not None and xlv_px is not None and qqq_px is not None:
+        close_sentence = f"At the latest close, SMH finished at {float(smh_px):.0f} dollars, healthcare XLV at {float(xlv_px):.0f}, and QQQ at {float(qqq_px):.0f}."
+        if vix_px is not None:
+            close_sentence += f" Market volatility VIX stood at {float(vix_px):.1f}."
+    rot_sentence = (
+        f"Over 20 sessions, semiconductors trailed defensive healthcare by {rot}, pushing all 7 gauge factors deep into stress."
+        if rot else
+        "Our free 7-factor gauge tracks momentum, 52-week drawdown, realized volatility, and defensive healthcare rotation."
+    )
+    history_sentence = (
+        "Across 2000, 2008, and 2022 public market data, holding 100 percent tech took 62 months to recover peak losses. "
+        "Pairing SMH with healthcare XLV and 24 months of short-term Treasury SGOV cut historical recovery to 17 months."
+    )
+    ending_spoken = (
+        "Check today's live 0 to 100 score free. "
+        "Tap our round channel profile below, then tap the top blue link."
+    )
+
+    spoken_script = f"{hook_spoken} {close_sentence} {rot_sentence} {history_sentence} {ending_spoken}".strip()
+    fg_url = build_clean_go_link("TOM", "yt_fg")
+    yt_url = build_clean_go_link("TOM", "yt")
+    sample_url = build_clean_go_link("TOM", "yt_sample")
+    ig_url = build_clean_go_link("TOM", "ig")
+    q_line = pick_rotating_comment_question("TOM", rot_q_seed)
+
+    desc = (
+        f"Check today's live 0-100 SMH Fear & Greed score free: {fg_url}\n"
+        f"Free 2000-2025 Retirement Stress-Test & 2-page sample PDF: {yt_url}\n\n"
+        f"{yt_title}\n\n"
+        f"Latest Market Close ({as_of}): {top_live_banner} | 52w drawdown {dd}\n"
+        f"Independent historical market statistics only (2000-2025 public ETF data) - not personalized investment advice.\n\n"
+        f"{q_line}"
+    )
+    pinned_comment = (
+        f"Live 0-100 SMH Fear & Greed Gauge (updated daily, free): {fg_url}\n"
+        f"2000-2025 Stress-Test & Free 2p Sample PDF: {sample_url}\n\n"
+        f"{q_line}"
+    )
+    ig_caption = (
+        f"{yt_title.replace('#Shorts', '').strip()}\n\n"
+        f"Latest Close ({as_of}): {top_live_banner} | 52w drawdown {dd}.\n"
+        f"{history_sentence}\n\n"
+        f"{q_line}\n\n"
+        f"Tap @truthofmarket profile -> top blue link ({ig_url})"
+    )
+    return {
+        "yt_title": yt_title[:98],
+        "spoken_script": spoken_script,
+        "slide_body": f"{hook_spoken} {close_sentence} {history_sentence}".strip(),
+        "description": desc,
+        "pinned_comment": pinned_comment,
+        "ig_caption": ig_caption,
+        "top_live_banner": top_live_banner,
+        "smh_fg_score": sc_val,
+        "smh_fg_as_of": as_of,
+        "smh_fg_dd52w": dd,
+    }
 
 
 def apply_live_smh_fg_timeliness_hook(
@@ -1518,11 +1738,33 @@ def main() -> int:
         pinned_comment = build_clean_social_comment(div, index_seed=rot_q_seed)
 
         disclosure_footer = f"\n※ {pt['ai_disclosure_line']}\n" if div == "HERO" else ""
-        desc = f"{title}\n\n{slide_body}\n\n{pinned_comment}{disclosure_footer}"
+        line1_prefix_by_div = {
+            "TOM": "Free Daily SMH Fear & Greed Gauge",
+            "KFG": "Free 60-Second US CDC Height Percentile Check",
+            "GBA": "毎日無料の米国半導体・恐怖と強欲指数＆新NISA25年統計",
+            "HERO": "백운호 6곡 완곡 무료 라디오 & 카톡 아침 안부카드 (가입 없음)",
+            "KFK": "광고 없는 1분 무료 질병관리청 예상키·뼈나이 시차 진단",
+        }
+        desc = f"{line1_prefix_by_div.get(div, 'Free guide')}: {utm_yt}\n\n{title}\n\n{slide_body}\n\n{pinned_comment}{disclosure_footer}"
 
-        # Live SMH Fear & Greed Index timeliness hook for TOM & GBA (0 matrix mutation, Hard Gate checked!)
+        # Live SMH Fear & Greed Index timeliness hook:
+        # - TOM: Full 30-second Daily Live SMH Fear & Greed Market Briefing (`0.0s` mobile `/smh-fear-greed` UI + real close!)
+        # - GBA: Live SMH Fear & Greed timeliness hook + `0.0s` mobile `/jp/smh-fear-greed` UI!
         smh_fg_meta: Optional[Dict[str, Any]] = None
-        if div in ("TOM", "GBA"):
+        tom_brief_pkg: Optional[Dict[str, Any]] = None
+        if div == "TOM":
+            live_smh_fg = fetch_live_smh_fg_snapshot()
+            tom_brief_pkg = build_tom_daily_smh_fg_briefing_package(live_smh_fg, slot_id=slot_id, rot_q_seed=rot_q_seed)
+            title = tom_brief_pkg["yt_title"]
+            slide_body = tom_brief_pkg["slide_body"]
+            desc = tom_brief_pkg["description"]
+            pinned_comment = tom_brief_pkg["pinned_comment"]
+            smh_fg_meta = {
+                "smh_fg_score": tom_brief_pkg["smh_fg_score"],
+                "smh_fg_as_of": tom_brief_pkg["smh_fg_as_of"],
+                "smh_fg_dd52w": tom_brief_pkg["smh_fg_dd52w"],
+            }
+        elif div == "GBA":
             live_smh_fg = fetch_live_smh_fg_snapshot()
             title, slide_body, desc, smh_fg_meta = apply_live_smh_fg_timeliness_hook(
                 div=div,
@@ -1533,6 +1775,8 @@ def main() -> int:
                 slot_id=slot_id,
                 smh_fg=live_smh_fg,
             )
+            if not desc.splitlines()[0].strip().endswith(utm_yt) and utm_yt not in desc.splitlines()[0]:
+                desc = f"毎日無料の米国半導体・恐怖と強欲指数＆新NISA25年統計: {utm_yt}\n\n{desc}"
 
         srt_stub = (
             f"1\n00:00:00,000 --> 00:00:04,500\n{title}\n\n"
@@ -1583,7 +1827,7 @@ def main() -> int:
                         f"{utm_yt}\n\n"
                         f"{either_or_q}"
                     )
-                    desc = f"{title}\n\n{slide_body}\n\n{pinned_comment}{disclosure_footer}"
+                    desc = f"백운호 6곡 완곡 무료 라디오 & 카톡 아침 안부카드 (가입 없음): {utm_yt}\n\n{title}\n\n{slide_body}\n\n{pinned_comment}{disclosure_footer}"
                     cues_srt = []
                     _srt_sym_re = re.compile(r"[\U0001F300-\U0001FAFF\U00002600-\U000027BF]")
                     for ci, (a, b, l1, l2) in enumerate(hero_mv_slice.get("cues") or [], start=1):
@@ -1653,33 +1897,47 @@ def main() -> int:
             tts_mp3: Optional[Path] = None
             rendered_mp4: Optional[Path] = None
             if div == "HERO" and hero_mv_song and hero_mv_slice and vocal_track and vocal_track.exists():
+                hero_srt_cues: List[Tuple[float, float, str, str]] = []
                 rendered_mp4, rendered_dur = render_hero_trot_music_short_mp4(
                     song=hero_mv_song,
                     sl=hero_mv_slice,
                     bg_clips=[bg_local_path] if bg_local_path else [],
                     song_mp3=vocal_track,
                     out_mp4=out_mp4,
+                    srt_cues_out=hero_srt_cues,
                 )
+                if hero_srt_cues:
+                    _srt_sym_re2 = re.compile(r"[\U0001F300-\U0001FAFF\U00002600-\U000027BF]")
+                    srt_stub = "\n".join(
+                        f"{ci}\n{_fmt_srt_ts(a)} --> {_fmt_srt_ts(b)}\n"
+                        + (f"{_srt_sym_re2.sub('', l1).strip()}\n{_srt_sym_re2.sub('', l2).strip()}".strip())
+                        + "\n"
+                        for ci, (a, b, l1, l2) in enumerate(hero_srt_cues, start=1)
+                    )
             else:
-                # 2026-11-25 HARD GATE: 1·2·3·5사업부 Zero-AI-Tell Real-UI 30fps Pipeline!
-                # 0~3s pre-cached faceless real stock + Playwright 390x844@2x 30fps Real-UI (<main>>200자 Auto-Gate!)
-                # + HTML motion chart + 2.5s cuts + 1-line safe-zone accent captions + true .srt + SFX 3종 + -26dB ducked BGM
+                # 2026-11-27 HARD GATE: 1·2·3·5사업부 Zero-AI-Tell Direct 0.0s Mobile Real-UI 30fps Pipeline!
+                # Zero unrelated raindrop/coffee/nature stock filler on Cut 0 — opens at 0.0s directly on mobile UI!
+                # + HTML motion chart + 2.5s cuts + 1-line safe-zone captions + Y=1100~1250 ending CTA + true .srt + SFX + -26dB BGM
                 try:
-                    stock_clip = get_cached_faceless_stock_clip(div, seed_idx=doy + (1 if slot_id == "SLOT_B" else 0))
                     ui_mp4 = WORK_DIR / f"{div}_{today_str}_{slot_id}.real_ui.mp4"
                     chart_mp4 = WORK_DIR / f"{div}_{today_str}_{slot_id}.chart.mp4"
-                    record_mobile_real_ui_clip(div, ui_mp4, duration_sec=11.0)
+                    record_mobile_real_ui_clip(div, ui_mp4, duration_sec=12.0 if div == "TOM" else 11.0)
                     record_html_motion_chart_clip(div, chart_mp4, aspect="9:16", duration_sec=4.5)
-                    spoken_script = f"{title}. {slide_body}. {either_or_q}"
+                    spoken_script = (
+                        tom_brief_pkg["spoken_script"]
+                        if (div == "TOM" and tom_brief_pkg)
+                        else f"{title}. {slide_body}. {either_or_q}"
+                    )
                     rendered_mp4, rendered_dur, srt_stub = compose_zero_ai_short(
                         div=div,
                         lang=DIV_LANG_MAP.get(div, "en"),
                         voice_id=pt["voice_id"],
                         spoken_script=spoken_script,
-                        faceless_stock_mp4=stock_clip,
+                        faceless_stock_mp4=None,
                         real_ui_mp4=ui_mp4,
                         motion_chart_mp4=chart_mp4,
                         out_mp4=out_mp4,
+                        top_live_banner=(tom_brief_pkg["top_live_banner"] if (div == "TOM" and tom_brief_pkg) else ""),
                     )
                     ui_mp4.unlink(missing_ok=True)
                     chart_mp4.unlink(missing_ok=True)
@@ -1700,7 +1958,11 @@ def main() -> int:
                 if ig_already:
                     ig_res = {"ok": False, "skipped": "ig_slot_already_done"}
                 else:
-                    ig_caption = f"{title}\n\n{slide_body}\n\n{either_or_q}\n\n{utm_ig}{disclosure_footer}"
+                    ig_caption = (
+                        tom_brief_pkg["ig_caption"]
+                        if (div == "TOM" and tom_brief_pkg)
+                        else f"{title}\n\n{slide_body}\n\n{either_or_q}\n\n{utm_ig}{disclosure_footer}"
+                    )
                     ok_ig_c, ig_c_errs = check_promo_hard_gate(div, ig_caption, surface="ig_caption")
                     if not ok_ig_c:
                         ig_res = {"ok": False, "error": f"ig_caption_hard_gate_blocked:{ig_c_errs}"}

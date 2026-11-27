@@ -89,6 +89,50 @@ DIV_ACCENT_RGB: Dict[str, Tuple[int, int, int]] = {
     "KFK": (110, 231, 183),   # Warm studio mint-emerald
 }
 
+# Unified Single-Path Ending CTA (2026-11-27 Chairman Directive: ZERO dead 'Related Video / 관련 동영상 / 関連動画',
+# safe-zone Y=1100~1250 [bottom: 35%~42%], uses U+2192 `→` verified present in ALL 5 CJK/Latin fonts!)
+ENDING_CTA_SINGLE_PATH_BY_LANG: Dict[str, str] = {
+    "ko": "아래 동그란 채널 프로필 터치 → 맨 위 파란 링크 1번 클릭!",
+    "en": "Tap the round channel profile below → Tap the top blue link!",
+    "ja": "下の丸いチャンネルアイコンをタップ → 一番上の青いリンクをタップ！",
+}
+
+ENDING_CTA_BY_DIV: Dict[str, str] = {
+    "TOM": "Check today's live 0-100 score free — tap channel icon → top link (truthofmarket.com/go/yt-fg)",
+    "KFG": ENDING_CTA_SINGLE_PATH_BY_LANG["en"],
+    "GBA": ENDING_CTA_SINGLE_PATH_BY_LANG["ja"],
+    "HERO": "아래 동그란 백운호 얼굴 터치 → 맨 위 파란 주소 1번 클릭!",
+    "KFK": ENDING_CTA_SINGLE_PATH_BY_LANG["ko"],
+}
+
+HERO_DJ_OUTRO_SPOKEN_KO = (
+    "어머님, 이 노래 3분 완곡과 무료 카톡 꽃카드는 "
+    "화면 아래 동그란 백운호 얼굴 누르시고 맨 위 파란 주소를 누르시면 바로 열립니다."
+)
+
+
+def normalize_japanese_tts_text(text: str) -> str:
+    """
+    Preprocesses Japanese text BEFORE Edge-TTS (`ja-JP-KeitaNeural` / `ja-JP-NanamiNeural`):
+      1. Strips thousands-separator commas inside numbers (`2,000万円` -> `2000万円`, `1,200,000` -> `1200000`)
+         so Edge-TTS NEVER misreads `2,000万円` as `"ニ、レレレマンエン"`!
+      2. Strictly preserves decimal points (`1.5%`, `3.7`, `0.01%`) intact.
+      3. Strips raw URLs/hashtags/emojis so speech stays clean and human.
+    """
+    s = str(text or "")
+    if not s:
+        return ""
+    s = re.sub(r"https?://\S+|#\S+", "", s)
+    s = _EMOJI_RE.sub("", s)
+    # Remove thousands commas inside digits repeatedly (handles 1,200,000 and 2,000万円 cleanly)
+    prev = None
+    while prev != s:
+        prev = s
+        s = re.sub(r"(?<=\d),(?=\d{3}(?!\d))", "", s)
+    # Also collapse any ASCII comma immediately between digits (e.g. malformed numeric grouping)
+    s = re.sub(r"(?<=\d),(?=\d)", "", s)
+    return re.sub(r"\s+", " ", s).strip()
+
 # 1. AI Clichés (KO / EN / JA) — Fail-Closed Regex Patterns
 AI_CLICHE_REGEXES: Tuple[Tuple[str, str], ...] = (
     # Korean
@@ -793,6 +837,8 @@ def split_to_short_subtitle_lines(text: str, lang: str = "ko") -> List[str]:
     Splits spoken script into crisp 1-line subtitle phrases:
       - KO / JA: 10~14 chars target (max 15 chars, zero 3-paragraph walls!)
       - EN: 3~5 words target (max ~24 chars)
+    Strictly protects numeric thousands commas (`2,000万円`, `1,200,000`) and decimal points
+    (`1.5%`, `3.7`, `0.01%`) from ever being split across cues!
     Strips URLs & emojis strictly.
     """
     cleaned = re.sub(r"https?://\S+|#\S+", "", text or "")
@@ -801,13 +847,26 @@ def split_to_short_subtitle_lines(text: str, lang: str = "ko") -> List[str]:
     if not cleaned:
         return []
 
+    # Protect numeric commas (`2,000`, `1,200,000`) and decimal points (`1.5%`, `3.7`) using Private Use Area sentinels
+    _COMMA_GUARD = "\uE001"
+    _DOT_GUARD = "\uE002"
+    guarded = cleaned
+    prev = None
+    while prev != guarded:
+        prev = guarded
+        guarded = re.sub(r"(\d),(\d{3}(?!\d))", rf"\1{_COMMA_GUARD}\2", guarded)
+    guarded = re.sub(r"(\d)\.(\d)", rf"\1{_DOT_GUARD}\2", guarded)
+
+    def _restore(s: str) -> str:
+        return s.replace(_COMMA_GUARD, ",").replace(_DOT_GUARD, ".")
+
     lines: List[str] = []
     if lang in ("ko", "ja"):
-        # Split first on natural clause punctuation
-        clauses = [c.strip() for c in re.split(r"(?<=[.?!。？！,、—–])\s*|\n+", cleaned) if c.strip()]
+        # Split first on natural clause punctuation (protected decimals & numeric commas stay intact!)
+        clauses = [c.strip() for c in re.split(r"(?<=[.?!。？！,、—–])\s*|\n+", guarded) if c.strip()]
         for cl in clauses:
             if len(cl) <= 14:
-                lines.append(cl)
+                lines.append(_restore(cl))
                 continue
             if " " in cl:
                 words = cl.split(" ")
@@ -818,21 +877,33 @@ def split_to_short_subtitle_lines(text: str, lang: str = "ko") -> List[str]:
                         cur = cand
                     else:
                         if cur:
-                            lines.append(cur)
+                            lines.append(_restore(cur))
                         cur = w
                 if cur:
-                    lines.append(cur)
+                    lines.append(_restore(cur))
             else:
-                # Japanese continuous text without spaces: slice cleanly at 12-14 chars avoiding leading punctuation
+                # Japanese continuous text without spaces: slice cleanly at 12-14 chars
+                # WITHOUT ever splitting inside a numeric/decimal/unit token (e.g. `2,000万円`, `1.5%`, `3.7`)!
+                num_spans = [(m.start(), m.end()) for m in re.finditer(r"[+-]?\d[\d\uE001\uE002]*(?:%|万円|円|歳|点|年|ヶ月|倍)?", cl)]
                 pos = 0
                 while pos < len(cl):
                     end = min(len(cl), pos + 13)
+                    # If `end` lands inside a numeric span, pull back before the span (if pos < span_start) or extend to span_end
+                    for ns, ne in num_spans:
+                        if ns < end < ne:
+                            if ns > pos + 3:
+                                end = ns
+                            else:
+                                end = ne
+                            break
                     if end < len(cl) and cl[end] in "。、！？）」』":
                         end += 1
-                    lines.append(cl[pos:end])
+                    if end <= pos:
+                        end = min(len(cl), pos + 14)
+                    lines.append(_restore(cl[pos:end]))
                     pos = end
     else:
-        clauses = [c.strip() for c in re.split(r"(?<=[.?!,;—–])\s+|\n+", cleaned) if c.strip()]
+        clauses = [c.strip() for c in re.split(r"(?<=[.?!,;—–])\s+|\n+", guarded) if c.strip()]
         for cl in clauses:
             words = cl.split(" ")
             cur = ""
@@ -842,10 +913,10 @@ def split_to_short_subtitle_lines(text: str, lang: str = "ko") -> List[str]:
                     cur = cand
                 else:
                     if cur:
-                        lines.append(cur)
+                        lines.append(_restore(cur))
                     cur = w
             if cur:
-                lines.append(cur)
+                lines.append(_restore(cur))
 
     return [ln.strip() for ln in lines if ln.strip()]
 
@@ -1011,4 +1082,15 @@ if __name__ == "__main__":
     assert any("copypaste_template_detected" in e for e in sync_errs), f"Missing copypaste error: {sync_errs}"
     assert any("lyric_on_nonvocal_outro" in e for e in sync_errs), f"Missing nonvocal outro error: {sync_errs}"
 
-    print(f"PROMO_HARD_GATE SELF-TEST PASS: {passed_q}/100 comments verified, {len(bad_cases)}/{len(bad_cases)} text + sync bad cases Fail-Closed blocked.")
+    # Japanese TTS Preprocessor & Decimal Non-Split Unit Tests (2026-11-27 Pain Point 1)
+    assert normalize_japanese_tts_text("2,000万円") == "2000万円"
+    assert normalize_japanese_tts_text("1,200,000") == "1200000"
+    assert normalize_japanese_tts_text("新NISAの1,800万円枠、利回り1.5%と指数3.7点。") == "新NISAの1800万円枠、利回り1.5%と指数3.7点。"
+    ja_split = split_to_short_subtitle_lines("老後2,000万円問題、利回り1.5%と指数3.7点の現実。", lang="ja")
+    assert any("2,000万円" in x for x in ja_split), f"2,000万円 was split! {ja_split}"
+    assert any("1.5%" in x for x in ja_split), f"1.5% was split! {ja_split}"
+    assert any("3.7" in x for x in ja_split), f"3.7 was split! {ja_split}"
+    for d_cta, txt_cta in ENDING_CTA_BY_DIV.items():
+        assert not re.search(r"related\s*video|관련\s*동영상|関連動画", txt_cta, re.I), f"Dead Related Video in {d_cta}: {txt_cta}"
+
+    print(f"PROMO_HARD_GATE SELF-TEST PASS: {passed_q}/100 comments verified, {len(bad_cases)}/{len(bad_cases)} text + sync bad cases + JA TTS/decimal tests PASS.")

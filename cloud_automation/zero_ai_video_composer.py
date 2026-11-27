@@ -46,9 +46,12 @@ if sys.platform == "win32":
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from promo_hard_gate import (  # noqa: E402
     DIV_ACCENT_RGB,
+    ENDING_CTA_BY_DIV,
+    ENDING_CTA_SINGLE_PATH_BY_LANG,
     build_clean_go_link,
     build_synced_srt,
     check_promo_hard_gate,
+    normalize_japanese_tts_text,
     pick_highlight_token,
     split_to_short_subtitle_lines,
 )
@@ -216,11 +219,13 @@ def synthesize_chunked_speech_with_pauses(
 
     async def _gen_all() -> List[Tuple[Path, str, List[str]]]:
         out: List[Tuple[Path, str, List[str]]] = []
+        is_ja = (lang == "ja") or str(voice_id or "").startswith("ja-")
         for idx, (sent_txt, cues) in enumerate(sentences):
             p = work_dir / f"sent_{idx:03d}.mp3"
+            spoken_in = normalize_japanese_tts_text(sent_txt) if is_ja else sent_txt
             for attempt in range(2):
                 try:
-                    comm = edge_tts.Communicate(sent_txt, voice=voice_id, rate="+0%")
+                    comm = edge_tts.Communicate(spoken_in, voice=voice_id, rate="+0%")
                     await comm.save(str(p))
                     if p.exists() and p.stat().st_size > 800:
                         out.append((p, sent_txt, cues))
@@ -277,6 +282,108 @@ def synthesize_chunked_speech_with_pauses(
     return voice_wav, timed_cues, cursor
 
 
+def _wrap_cta_lines(draw: ImageDraw.ImageDraw, text: str, font: ImageFont.FreeTypeFont, max_w: int) -> List[str]:
+    clean = re.sub(r"\s+", " ", (text or "").strip())
+    if not clean:
+        return []
+    if "→" in clean:
+        left, right = [p.strip() for p in clean.split("→", 1)]
+        lbb = draw.textbbox((0, 0), clean, font=font)
+        if (lbb[2] - lbb[0]) <= max_w:
+            return [clean]
+        return [left, f"→ {right}"]
+    if " " in clean:
+        words = clean.split(" ")
+        lines: List[str] = []
+        cur = ""
+        for w in words:
+            cand = f"{cur} {w}".strip() if cur else w
+            if (draw.textbbox((0, 0), cand, font=font)[2]) <= max_w:
+                cur = cand
+            else:
+                if cur:
+                    lines.append(cur)
+                cur = w
+        if cur:
+            lines.append(cur)
+        return lines[:2]
+    # Continuous Japanese fallback split
+    mid = len(clean) // 2
+    return [clean[:mid], clean[mid:]]
+
+
+def draw_safezone_ending_cta_box(
+    draw: ImageDraw.ImageDraw,
+    div: str,
+    lang: str,
+    width: int = 1080,
+    height: int = 1920,
+    cta_text_override: str = "",
+) -> None:
+    """
+    Draws the centered vertical safe-zone Ending CTA yellow callout box + downward vector arrow
+    strictly inside `Y = 1100 ~ 1250` (`bottom: 35% ~ 42%` on 1080x1920) so YouTube Shorts
+    bottom-left title/profile chrome and right-side engagement buttons NEVER obscure it!
+    Uses U+2192 `→` (verified present in all 5 CJK/Latin fonts — zero `□` tofu!).
+    """
+    if height <= width:
+        return
+    div_u = div.upper()
+    raw_cta = (
+        cta_text_override
+        or ENDING_CTA_BY_DIV.get(div_u)
+        or ENDING_CTA_SINGLE_PATH_BY_LANG.get(lang, ENDING_CTA_SINGLE_PATH_BY_LANG["en"])
+    )
+    cta_clean = raw_cta.replace("➔", "→")
+
+    box_x0, box_x1 = 68, width - 68
+    inner_w = (box_x1 - box_x0) - 56
+    font_sz = 34 if lang in ("ko", "ja") else 31
+    font = _pick_font(lang, font_sz)
+    lines = _wrap_cta_lines(draw, cta_clean, font, inner_w)
+    while font_sz >= 22:
+        font = _pick_font(lang, font_sz)
+        lines = _wrap_cta_lines(draw, cta_clean, font, inner_w)
+        if len(lines) <= 2 and all((draw.textbbox((0, 0), ln, font=font)[2] - draw.textbbox((0, 0), ln, font=font)[0]) <= inner_w for ln in lines):
+            break
+        font_sz -= 2
+
+    line_heights = [
+        (draw.textbbox((0, 0), ln, font=font)[3] - draw.textbbox((0, 0), ln, font=font)[1])
+        for ln in lines
+    ]
+    gap = 10 if len(lines) > 1 else 0
+    tot_h = sum(line_heights) + gap
+    box_h = max(92, min(132, tot_h + 36))
+    # Strictly inside Y=1100..1250 (`bottom: 35%~42%` of 1920px height)
+    by0 = 1102
+    by1 = by0 + box_h
+
+    # Drop shadow + high-contrast warm golden-yellow CTA box
+    draw.rounded_rectangle([box_x0 + 4, by0 + 6, box_x1 + 4, by1 + 6], radius=22, fill=(0, 0, 0, 175))
+    draw.rounded_rectangle(
+        [box_x0, by0, box_x1, by1],
+        radius=22,
+        fill=(255, 224, 72, 248),
+        outline=(18, 24, 34, 255),
+        width=5,
+    )
+    y_txt = by0 + (box_h - tot_h) // 2
+    for ln, lh in zip(lines, line_heights):
+        bb = draw.textbbox((0, 0), ln, font=font)
+        tw = bb[2] - bb[0]
+        tx = (width - tw) // 2
+        draw.text((tx, y_txt - bb[1]), ln, font=font, fill=(14, 20, 28, 255))
+        y_txt += lh + gap
+
+    # Centered downward pointer chevron right underneath the box (still strictly <= Y=1262!)
+    cx = width // 2
+    ay0 = by1 + 4
+    arrow_pts = [(cx - 34, ay0), (cx + 34, ay0), (cx, min(1262, ay0 + 24))]
+    draw.polygon([(x + 3, y + 4) for x, y in arrow_pts], fill=(0, 0, 0, 165))
+    draw.polygon(arrow_pts, fill=(255, 224, 72, 255), outline=(18, 24, 34, 255))
+
+
 def render_single_line_subtitle_png(
     div: str,
     lang: str,
@@ -285,11 +392,15 @@ def render_single_line_subtitle_png(
     width: int = 1080,
     height: int = 1920,
     footer_go_url: str = "",
+    show_ending_cta: bool = False,
+    top_live_banner: str = "",
 ) -> Path:
     """
     Renders a single-line 10~14 char (KO/JA) or 3~5 word (EN) transparent caption PNG
     strictly inside the safe zone (Shorts Y=1360..1460, Long-Form Y=930..1020),
-    highlighting 1~2 key words in the division's brand accent color. ZERO 3-paragraph walls!
+    highlighting 1~2 key words in the division's brand accent color.
+    When `show_ending_cta=True` on vertical Shorts, renders the centered safe-zone
+    yellow CTA callout box at `Y=1100~1250` (`bottom: 35%~42%`).
     """
     img = Image.new("RGBA", (width, height), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
@@ -297,6 +408,23 @@ def render_single_line_subtitle_png(
     max_w = 880 if is_vert else 1520
     accent_rgb = DIV_ACCENT_RGB.get(div.upper(), (245, 208, 110))
     hl = pick_highlight_token(line_text, lang=lang)
+
+    # Optional crisp top live market data ticker strip (e.g. TOM live SMH Fear & Greed close strip)
+    if is_vert and top_live_banner:
+        f_top = _pick_font("en" if lang == "en" else lang, 25)
+        t_sz = 25
+        while t_sz >= 18:
+            f_top = _pick_font("en" if lang == "en" else lang, t_sz)
+            tbb = draw.textbbox((0, 0), top_live_banner, font=f_top)
+            if (tbb[2] - tbb[0]) <= 940:
+                break
+            t_sz -= 1
+        tbb = draw.textbbox((0, 0), top_live_banner, font=f_top)
+        tw0, th0 = tbb[2] - tbb[0] + 40, tbb[3] - tbb[1] + 20
+        tx0 = (width - tw0) // 2
+        ty0 = 76
+        draw.rounded_rectangle([tx0, ty0, tx0 + tw0, ty0 + th0], radius=16, fill=(10, 20, 30, 232), outline=(*accent_rgb, 235), width=3)
+        draw.text((tx0 + 20, ty0 + 10 - tbb[1]), top_live_banner, font=f_top, fill=(255, 245, 205, 255))
 
     # Fit single line cleanly inside max_w
     font_sz = 54 if is_vert else 46
@@ -331,12 +459,14 @@ def render_single_line_subtitle_png(
     else:
         draw.text((tx, ty), line_text, font=font, fill=(255, 255, 255, 255), stroke_width=5, stroke_fill=(8, 12, 16, 255))
 
-    if footer_go_url:
-        f_go = _pick_font("en", 28 if is_vert else 24)
+    if is_vert and show_ending_cta:
+        draw_safezone_ending_cta_box(draw, div, lang, width=width, height=height)
+    elif footer_go_url and not is_vert:
+        f_go = _pick_font("en", 24)
         gbb = draw.textbbox((0, 0), footer_go_url, font=f_go)
         gw, gh = gbb[2] - gbb[0] + 34, gbb[3] - gbb[1] + 16
         gx = (width - gw) // 2
-        gy = by + box_h + 18 if is_vert else 42
+        gy = 42
         draw.rounded_rectangle([gx, gy, gx + gw, gy + gh], radius=14, fill=(10, 26, 20, 220), outline=(*accent_rgb, 210), width=2)
         draw.text((gx + 17, gy + 8 - gbb[1]), footer_go_url, font=f_go, fill=(*accent_rgb, 255))
 
@@ -440,13 +570,16 @@ def compose_zero_ai_short(
     real_ui_mp4: Path,
     motion_chart_mp4: Path,
     out_mp4: Path,
+    top_live_banner: str = "",
 ) -> Tuple[Path, float, str]:
     """
     Composes a complete 1080x1920 30fps Zero-AI-Tell vertical Short:
-      - 0.0~3.0s: Pre-cached faceless real-camera stock clip
-      - 3.0~end: 2.5s dynamic cuts from Playwright 390x844@2x real-UI recording + HTML motion chart
-      - 1-line safe-zone accent-highlighted burned-in subtitles + millisecond-synced `.srt`
-      - Natural 0.32s speech pauses + 3 SFX + -26dB sidechaincompress ducked BGM
+      - 0.0s Frame 1 (`TOM`, `GBA`, `KFG`, `KFK`): Opens DIRECTLY on Playwright 390x844@2x
+        mobile real-UI recording (zero unrelated raindrop/coffee/nature stock filler!).
+      - Dynamic 2.5s rhythm cuts alternating live mobile UI + crisp animated HTML motion chart.
+      - 1-line safe-zone accent-highlighted burned-in subtitles + millisecond-synced `.srt`.
+      - Final ~5s centered safe-zone (`Y=1100~1250`, `bottom: 35%~42%`) golden-yellow CTA box + arrow.
+      - Natural 0.32s speech pauses + 3 SFX + -26dB sidechaincompress ducked BGM.
     """
     div_u = div.upper()
     ok_script, script_errs = check_promo_hard_gate(div_u, spoken_script, surface="youtube_desc")
@@ -467,14 +600,15 @@ def compose_zero_ai_short(
         if not ok_srt:
             raise ValueError(f"[HARD GATE BLOCKED SRT] {div_u}: {srt_errs}")
 
-        # Build 2.5s visual rhythm segments (0~3.0s faceless stock -> alternating 2.5s UI cuts -> motion chart)
+        # Build 2.5s visual rhythm segments — 2026-11-27 Chairman Directive:
+        # TOM, GBA, KFG, KFK open at 0.0s directly on mobile real-UI recording (ZERO unrelated stock filler!)
         ui_dur = max(3.0, _probe_dur(real_ui_mp4))
         seg_paths: List[Path] = []
         cut_times: List[float] = []
         elapsed = 0.0
+        direct_ui_divs = {"TOM", "GBA", "KFG", "KFK"}
 
-        # Cut 0 (0.0 ~ 3.0s): Pre-cached faceless real-camera stock clip
-        if faceless_stock_mp4 and faceless_stock_mp4.exists():
+        if (div_u not in direct_ui_divs) and faceless_stock_mp4 and faceless_stock_mp4.exists():
             s0 = wdir / "vseg_00.mp4"
             subprocess.run(
                 [ffmpeg, "-y", "-threads", "2", "-stream_loop", "-1", "-i", str(faceless_stock_mp4),
@@ -486,15 +620,15 @@ def compose_zero_ai_short(
             elapsed += 3.0
             cut_times.append(elapsed)
 
-        # Cuts 1..N (2.5s each): Real-UI segments + HTML motion chart cuts (zero static screen > 5s!)
+        # Cuts 1..N (2.5s each): 0.0s immediate Real-UI segments + HTML motion chart cuts (zero static screen > 5s!)
         seg_idx = 1
         ui_offsets = [0.0, 2.5, 5.0, 7.5, 1.2, 4.0, 6.5]
         while elapsed < total_dur:
             rem = total_dur - elapsed
             seg_len = min(2.5, rem) if rem > 3.2 else rem
             sp_out = wdir / f"vseg_{seg_idx:02d}.mp4"
-            # Insert clean HTML motion chart on cut #3 and final cut
-            use_chart = (seg_idx == 3) or (rem <= 4.2 and seg_idx >= 2)
+            # Cut #1 (0.0~2.5s) is ALWAYS real-UI! Insert clean HTML motion chart on cut #4 and final cut
+            use_chart = (seg_idx == 4) or (rem <= 4.2 and seg_idx >= 3)
             if use_chart and motion_chart_mp4.exists():
                 subprocess.run(
                     [ffmpeg, "-y", "-threads", "2", "-stream_loop", "-1", "-i", str(motion_chart_mp4),
@@ -504,8 +638,8 @@ def compose_zero_ai_short(
                 )
             else:
                 off = ui_offsets[(seg_idx - 1) % len(ui_offsets)] % max(0.5, ui_dur - min(seg_len, ui_dur - 0.1))
-                # Subtle alternate gentle zoom (1.00 vs 1.04) on cuts for lively mobile polish
-                zf = "scale=1124:1998,crop=1080:1920" if (seg_idx % 2 == 0) else "scale=1080:1920"
+                # Cut #1 uses 1.00 clean framing so mobile UI gauge/calculator is immediately legible at 0.0s
+                zf = "scale=1124:1998,crop=1080:1920" if (seg_idx > 1 and seg_idx % 2 == 0) else "scale=1080:1920"
                 subprocess.run(
                     [ffmpeg, "-y", "-threads", "2", "-ss", f"{off:.2f}", "-i", str(real_ui_mp4),
                      "-t", f"{seg_len:.2f}", "-vf", f"{zf},fps=30,format=yuv420p",
@@ -530,15 +664,18 @@ def compose_zero_ai_short(
         # Mix Voice + SFX 3종 + -26dB sidechaincompress BGM
         master_m4a = mix_voice_sfx_and_ducked_bgm(voice_wav, total_dur, cut_times, wdir / "master.m4a")
 
-        # Render 1-line safe-zone subtitle PNGs into a single ultra-fast concat overlay stream (10x faster, low RAM!)
-        go_short = build_clean_go_link(div_u, "yt").replace("https://", "")
+        # Render 1-line safe-zone subtitle PNGs + Safe-Zone Ending CTA Box (`Y=1100~1250`, final ~5s)
+        go_short = build_clean_go_link(div_u, "yt_fg" if div_u == "TOM" else "yt").replace("https://", "")
+        cta_start_t = max(total_dur - 5.2, total_dur * 0.78)
         timed_pngs: List[Tuple[float, float, Path]] = []
         for ci, (t0, t1, ltxt) in enumerate(timed_cues):
-            is_tail = (ci >= len(timed_cues) - 2)
+            is_tail = (t1 >= cta_start_t) or (ci >= len(timed_cues) - 2)
             png_p = render_single_line_subtitle_png(
                 div_u, lang, ltxt, wdir / f"sub_{ci:03d}.png",
                 width=1080, height=1920,
                 footer_go_url=(go_short if is_tail else ""),
+                show_ending_cta=is_tail,
+                top_live_banner=top_live_banner,
             )
             timed_pngs.append((t0, t1, png_p))
         subs_list = _build_concat_subtitle_list(timed_pngs, total_dur, 1080, 1920, wdir)

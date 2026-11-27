@@ -2,28 +2,6 @@
   "schema_version": "faceless-stock-v1",
   "clips": [
     {
-      "clip_id": "stock_rain_window",
-      "div_hint": "TOM",
-      "local_rel": "cloud_automation/assets/faceless_stock/stock_rain_window_9x16_30fps.mp4",
-      "r2_key": "faceless_stock_4k/stock_rain_window_9x16_30fps.mp4",
-      "r2_synced": true,
-      "size_bytes": 1873498,
-      "fps": 30,
-      "duration_sec": 4.0,
-      "source": "mixkit_free_real_camera_faceless_cached_once"
-    },
-    {
-      "clip_id": "stock_coffee_cup",
-      "div_hint": "TOM",
-      "local_rel": "cloud_automation/assets/faceless_stock/stock_coffee_cup_9x16_30fps.mp4",
-      "r2_key": "faceless_stock_4k/stock_coffee_cup_9x16_30fps.mp4",
-      "r2_synced": true,
-      "size_bytes": 2170138,
-      "fps": 30,
-      "duration_sec": 4.0,
-      "source": "mixkit_free_real_camera_faceless_cached_once"
-    },
-    {
       "clip_id": "stock_city_sunset",
       "div_hint": "TOM",
       "local_rel": "cloud_automation/assets/faceless_stock/stock_city_sunset_9x16_30fps.mp4",
@@ -63,17 +41,6 @@
       "r2_key": "faceless_stock_4k/stock_wooden_floor_9x16_30fps.mp4",
       "r2_synced": true,
       "size_bytes": 1954853,
-      "fps": 30,
-      "duration_sec": 4.0,
-      "source": "mixkit_free_real_camera_faceless_cached_once"
-    },
-    {
-      "clip_id": "stock_rain_glass",
-      "div_hint": "GBA",
-      "local_rel": "cloud_automation/assets/faceless_stock/stock_rain_glass_9x16_30fps.mp4",
-      "r2_key": "faceless_stock_4k/stock_rain_glass_9x16_30fps.mp4",
-      "r2_synced": true,
-      "size_bytes": 4027855,
       "fps": 30,
       "duration_sec": 4.0,
       "source": "mixkit_free_real_camera_faceless_cached_once"
