@@ -120,29 +120,29 @@ def refresh_health_and_rss() -> tuple[str, str, str, int, str]:
     insight_items_xml = f"""
     <item>
       <title><![CDATA[Morning Market Data Newsletter ({as_of_date}): Sector Temperature at {fg_score:.1f}/100 ({regime_code}) & SMH × XLV Study]]></title>
-      <link>https://truthofmarket.com/insights/daily-us-quant-regime-brief.html</link>
-      <guid isPermaLink="true">https://truthofmarket.com/insights/daily-us-quant-regime-brief.html</guid>
+      <link>https://truthofmarket.com/insights/daily-us-quant-regime-brief</link>
+      <guid isPermaLink="true">https://truthofmarket.com/insights/daily-us-quant-regime-brief</guid>
       <pubDate>{rfc_now}</pubDate>
       <description><![CDATA[Educational US market data summary as of {as_of_date}: $SMH ${smh_close:.2f} ({smh_dd_pct:.2f}% off 52W high), $SMH × $XLV two-pillar historical case study, and $SGOV US Treasury reserve reference.]]></description>
     </item>
     <item>
       <title><![CDATA[Understanding Moving-Average Confirmation: 2000–2025 Historical Statistical Study]]></title>
-      <link>https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html</link>
-      <guid isPermaLink="true">https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html</guid>
+      <link>https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology</link>
+      <guid isPermaLink="true">https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology</guid>
       <pubDate>{rfc_now}</pubDate>
-      <description><![CDATA[Educational statistical study examining 52-week drawdown recovery, 20-day and 60-day moving average alignment, and 10-day relative volume across liquid US equities.]]></description>
+      <description><![CDATA[Educational statistical study examining 52-week drawdown recovery, 20-day and 60-day moving average alignment, and 10-day relative volume across liquid US sector ETFs.]]></description>
     </item>
     <item>
       <title><![CDATA[Sector Correlation & Review Math: Studying the $SMH and $XLV 2-Pillar Case Study (2000–2025)]]></title>
-      <link>https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html</link>
-      <guid isPermaLink="true">https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html</guid>
+      <link>https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study</link>
+      <guid isPermaLink="true">https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study</guid>
       <pubDate>{rfc_now}</pubDate>
       <description><![CDATA[Empirical educational study of combining Semiconductors ($SMH) with Healthcare ($XLV) under calm semi-annual ratio review.]]></description>
     </item>
     <item>
       <title><![CDATA[The Mathematics of Drawdown Asymmetry: Why Portfolio Cushions Preserve Long-Term Compounding]]></title>
-      <link>https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html</link>
-      <guid isPermaLink="true">https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html</guid>
+      <link>https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math</link>
+      <guid isPermaLink="true">https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math</guid>
       <pubDate>{rfc_now}</pubDate>
       <description><![CDATA[Educational compounding math showing how deep drawdowns require nonlinear recovery gains, and how $XLV and short-term US Treasury ($SGOV) cushions reduce sequence-of-returns risk.]]></description>
     </item>"""
@@ -166,8 +166,8 @@ def refresh_health_and_rss() -> tuple[str, str, str, int, str]:
     </item>
     <item>
       <title><![CDATA[Public Market Weather & Sector Sentiment Gauge ({fg_score:.1f} {regime_code}) — $SMH/$XLV Study]]></title>
-      <link>https://truthofmarket.com/semi-fear-greed.html</link>
-      <guid isPermaLink="true">https://truthofmarket.com/semi-fear-greed.html</guid>
+      <link>https://truthofmarket.com/smh-fear-greed</link>
+      <guid isPermaLink="true">https://truthofmarket.com/smh-fear-greed</guid>
       <pubDate>{rfc_now}</pubDate>
       <description><![CDATA[Self-directed educational sector sentiment gauge ($SMH Close ${smh_close:.2f}, {smh_dd_pct:.2f}% from 52W High as of {as_of_date}) and historical $SMH vs. $XLV statistical study.]]></description>
     </item>
@@ -823,6 +823,7 @@ def main() -> None:
     for stale_rel in [
         "instagram_us_setup.html",
         "pro-swing.html",
+        "semi-fear-greed.html",
         "flow_10_promo_shorts_board.html",
         "flow_10_prompts_studio.html",
         "flow_ep11_20_prompts_studio.html",
@@ -832,6 +833,10 @@ def main() -> None:
         sp = PUB / stale_rel
         if sp.exists():
             sp.unlink()
+    for retired_dir in ("stocks", "compare"):
+        rd = PUB / retired_dir
+        if rd.exists():
+            shutil.rmtree(rd, ignore_errors=True)
 
     for crm_name in ("hq_member_crm_client.js", "hq-mailing-endpoint.json", "tom_payment_waitlist.js"):
         root_crm = ROOT / crm_name
@@ -883,7 +888,8 @@ def main() -> None:
         (target_dir / "static_api" / "health.json").write_text(health_json, encoding="utf-8")
         for stale_rel in [
             "instagram_us_setup.html",
-        "pro-swing.html",
+            "pro-swing.html",
+            "semi-fear-greed.html",
             "flow_10_promo_shorts_board.html",
             "flow_10_prompts_studio.html",
             "flow_ep11_20_prompts_studio.html",
@@ -897,6 +903,10 @@ def main() -> None:
             tp = target_dir / stale_rel
             if tp.exists():
                 tp.unlink()
+        for retired_dir in ("stocks", "compare"):
+            rd = target_dir / retired_dir
+            if rd.exists():
+                shutil.rmtree(rd, ignore_errors=True)
         if target_dir in (DIST, ROOT_DIST) and (target_dir / "samples").exists():
             shutil.rmtree(target_dir / "samples", ignore_errors=True)
 

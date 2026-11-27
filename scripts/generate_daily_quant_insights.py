@@ -709,17 +709,14 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
     unlocked_sorted = sorted(unlocked, key=lambda x: float(x.get("score") or 0), reverse=True)
     top5 = unlocked_sorted[:5]
 
-    rows_html = ""
-    for s in top5:
-        t = str(s.get("ticker")).upper()
-        c = float(s.get("close") or 100.0)
-        sc = int(s.get("score") or 75)
-        dd = float(s.get("dd_from_52w_high_pct") or s.get("dd_high52_pct") or -22.0)
-        vol = float(s.get("vol_surge_10d") or 1.35)
-        rows_html += (
-            f"<tr><td><a href=\"/stocks/{t.lower()}.html\"><strong>${t}</strong></a></td>"
-            f"<td>${c:.2f}</td><td>{sc}/100</td><td>{dd:+.1f}%</td><td>{vol:.2f}x</td></tr>\n"
-        )
+    rows_html = (
+        f"<tr><td><a href=\"/smh-fear-greed\"><strong>$SMH</strong></a> (Semiconductor Growth)</td>"
+        f"<td>${smh_c:.2f}</td><td>{fg:.1f}/100 ({html.escape(regime)})</td><td>{smh_dd:+.1f}%</td><td>RSI {smh_rsi:.1f}</td></tr>\n"
+        f"<tr><td><a href=\"/#tom-retirement-architect\"><strong>$XLV</strong></a> (Healthcare Defense)</td>"
+        f"<td>${xlv_c:.2f}</td><td>Defensive Ballast</td><td>Historical Cushion</td><td>{rec_xlv}% Study Sleeve</td></tr>\n"
+        f"<tr><td><a href=\"/guides/cash-sweep-vs-sgov-treasury-yield\"><strong>$SGOV</strong></a> (0-3M US Treasury)</td>"
+        f"<td>$100.50</td><td>Cash Reserve Cushion</td><td>~0.0% Equity Beta</td><td>24-Month Reserve</td></tr>\n"
+    )
 
     def _build_morning_note_spec(slug_name: str, note_date: str, is_archived: bool = False) -> Dict[str, Any]:
         if is_archived:
@@ -733,13 +730,13 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
                 f"breadth discipline, and $SGOV US Treasury cushion context."
             )
             note_body = f"""
-      <p>In our morning research note recorded on <strong>{html.escape(note_date)}</strong>, attention remains anchored on household portfolio structure rather than short-term headline noise: pairing secular semiconductor innovation (<a href="/stocks/smh.html">$SMH</a>) with non-cyclical US healthcare cash flows (<a href="/stocks/xlv.html">$XLV</a>) and a dedicated short-term US Treasury cushion (<a href="/stocks/sgov.html">$SGOV</a>).</p>
+      <p>In our morning research note recorded on <strong>{html.escape(note_date)}</strong>, attention remains anchored on household portfolio structure rather than short-term headline noise: pairing secular semiconductor innovation (<a href="/smh-fear-greed">$SMH</a>) with non-cyclical US healthcare cash flows (<a href="/guides/smh-alone-vs-xlv-healthcare-ballast">$XLV</a>) and a dedicated short-term US Treasury cushion (<a href="/guides/24-month-treasury-retirement-reserve">$SGOV</a>).</p>
 
-      <p>Numbers on any single session are most useful when they lower the temperature in the room. When technology sentiment compresses into fear, headlines grow urgent even as multi-year valuation dispersion cools; when optimism stretches toward cycle highs, concentration risk quietly builds. Observing <a href="/compare/smh-vs-xlv.html">$SMH and $XLV</a> side by side keeps attention focused on full-portfolio balance (modeled around <strong>{rec_smh}% $SMH : {rec_xlv}% $XLV</strong> in historical deep-compression regimes) rather than intraday fluctuations.</p>
+      <p>Numbers on any single session are most useful when they lower the temperature in the room. When technology sentiment compresses into fear, headlines grow urgent even as multi-year valuation dispersion cools; when optimism stretches toward cycle highs, concentration risk quietly builds. Observing <a href="/guides/smh-alone-vs-xlv-healthcare-ballast">$SMH and $XLV</a> side by side keeps attention focused on full-portfolio balance (modeled around <strong>{rec_smh}% $SMH : {rec_xlv}% $XLV</strong> in historical deep-compression regimes) rather than intraday fluctuations.</p>
 
       <h2>Two-Pillar Discipline &amp; Execution Checklist ({html.escape(note_date)} Archive)</h2>
       <p>Whether reviewing a lifelong 401(k), an IRA, or a taxable brokerage account, three quiet habits protect long-term compounding across market seasons:</p>
-      <p>First, hold unleveraged 1x spot ETFs (<a href="/stocks/smh.html">$SMH</a> and <a href="/stocks/xlv.html">$XLV</a>) free from daily 3x leveraged volatility decay. Second, insulate near-term household spending reserves in 0–3 month US Treasury bills (<a href="/stocks/sgov.html">$SGOV</a>) so equity shares are never sold in a downturn. Third, place limit orders rather than market orders during the opening minutes after 9:30 AM ET. For the latest live session figures, see our <a href="/insights/daily-us-quant-regime-brief.html">current Daily Morning Note</a> or run the <a href="/#tom-retirement-architect">4-Step SMH &times; XLV Sector Balance Survey</a>.</p>
+      <p>First, hold unleveraged 1x spot ETFs (<a href="/smh-fear-greed">$SMH</a> and <a href="/guides/smh-alone-vs-xlv-healthcare-ballast">$XLV</a>) free from daily 3x leveraged volatility decay. Second, insulate near-term household spending reserves in 0–3 month US Treasury bills (<a href="/guides/cash-sweep-vs-sgov-treasury-yield">$SGOV</a>) so equity shares are never sold in a downturn. Third, place limit orders rather than market orders during the opening minutes after 9:30 AM ET. For the latest live session figures, see our <a href="/insights/daily-us-quant-regime-brief">current Daily Morning Note</a> or run the <a href="/#tom-retirement-architect">4-Step SMH &times; XLV Sector Balance Survey</a>.</p>
 """
             note_faqs = [
                 (
@@ -756,22 +753,22 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
             note_sub = f"A calm pre-bell look at $SMH (${smh_c:.2f}), $XLV (${xlv_c:.2f}), and where public breadth indicators sit on {note_date}."
             note_desc = f"Educational morning market note ({note_date}): sector sentiment gauge at {fg:.1f}/100 ({regime}), $SMH ${smh_c:.2f}, $XLV ${xlv_c:.2f}, and historical {rec_smh}:{rec_xlv} SMH × XLV study context."
             note_body = f"""
-      <p>Before the opening bell on {html.escape(note_date)}, our public sector sentiment gauge reads <strong>{fg:.1f} out of 100 ({html.escape(regime)})</strong>. <a href="/stocks/smh.html">$SMH</a> closed the prior session at <strong>${smh_c:.2f}</strong> ({smh_dd:+.2f}% from its trailing 52-week high, with a 14-day RSI of {smh_rsi:.1f}), while <a href="/stocks/xlv.html">$XLV</a> closed at <strong>${xlv_c:.2f}</strong> and <a href="/stocks/qqq.html">$QQQ</a> settled at <strong>${qqq_c:.2f}</strong>.</p>
+      <p>Before the opening bell on {html.escape(note_date)}, our public sector sentiment gauge reads <strong>{fg:.1f} out of 100 ({html.escape(regime)})</strong>. <a href="/smh-fear-greed">$SMH</a> closed the prior session at <strong>${smh_c:.2f}</strong> ({smh_dd:+.2f}% from its trailing 52-week high, with a 14-day RSI of {smh_rsi:.1f}), while <a href="/guides/smh-alone-vs-xlv-healthcare-ballast">$XLV</a> closed at <strong>${xlv_c:.2f}</strong> and $QQQ settled at <strong>${qqq_c:.2f}</strong>.</p>
 
-      <p>Numbers like these are most useful when they lower the temperature in the room. When sentiment compresses into deep fear, headlines grow urgent even though valuation dispersion has already cooled substantially. Conversely, when sentiment stretches above seventy-five or eighty, crowds treat extrapolations as certainties. Observing both <a href="/compare/smh-vs-xlv.html">$SMH and $XLV</a> side by side keeps attention anchored on full-portfolio balance (currently modeled at <strong>{rec_smh}% $SMH : {rec_xlv}% $XLV</strong> in our historical series) rather than intraday noise.</p>
+      <p>Numbers like these are most useful when they lower the temperature in the room. When sentiment compresses into deep fear, headlines grow urgent even though valuation dispersion has already cooled substantially. Conversely, when sentiment stretches above seventy-five or eighty, crowds treat extrapolations as certainties. Observing both <a href="/guides/smh-alone-vs-xlv-healthcare-ballast">$SMH and $XLV</a> side by side keeps attention anchored on full-portfolio balance (currently modeled at <strong>{rec_smh}% $SMH : {rec_xlv}% $XLV</strong> in our historical series) rather than intraday noise.</p>
 
-      <h2>Public US Equity Factor Snapshot ({html.escape(note_date)})</h2>
-      <p>For readers studying individual US companies alongside core sector ETFs, the table below records the top publicly unlocked tickers in our historical moving-average and volume dataset as of {html.escape(note_date)}:</p>
+      <h2>Three-Sleeve ETF Reference Snapshot ({html.escape(note_date)})</h2>
+      <p>The table below summarizes the three non-leveraged ETF sleeves tracked in our 2000&ndash;2025 retirement drawdown study as of {html.escape(note_date)}:</p>
       <table class="data-table">
         <thead>
-          <tr><th>Ticker</th><th>Last Close</th><th>Factor Score</th><th>vs. 52W High</th><th>10D Rel Volume</th></tr>
+          <tr><th>ETF Sleeve</th><th>Last Close</th><th>Regime / Role</th><th>vs. 52W High</th><th>Key Reading</th></tr>
         </thead>
         <tbody>
           {rows_html}
         </tbody>
       </table>
 
-      <p>Whether you are reviewing a lifelong 401(k) or building a taxable brokerage account, patience remains an underrated edge. Place limit orders rather than market orders at the 9:30 AM open, keep near-term cash needs insulated in short-term Treasuries (<a href="/stocks/sgov.html">$SGOV</a>), and let clear arithmetic replace guesswork.</p>
+      <p>Whether you are reviewing a lifelong 401(k) or building a taxable brokerage account, patience remains an underrated edge. Place limit orders rather than market orders at the 9:30 AM open, keep near-term cash needs insulated in short-term Treasuries (<a href="/guides/cash-sweep-vs-sgov-treasury-yield">$SGOV</a>), and let clear arithmetic replace guesswork.</p>
 """
             note_faqs = [
                 (
@@ -835,7 +832,7 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
 
       <p>A portfolio that loses fifty percent requires a one-hundred-percent gain merely to return to its starting dollar balance. A portfolio that loses eighty percent, as pure Nasdaq and semiconductor holders experienced after March 2000, requires a four-hundred-percent climb just to break even. Avoiding the deepest part of the hole matters far more to long-term compounding than squeezing the final few percentage points out of an overheated rally.</p>
 
-      <p>Across public daily data from 2000 through 2026, <a href="/stocks/smh.html">$SMH</a> (semiconductors) and <a href="/stocks/xlv.html">$XLV</a> (US healthcare) moved to remarkably distinct rhythms. Semiconductors captured the secular expansion of personal computing, mobile connectivity, cloud servers, and artificial intelligence, yet periodically endured thirty-five to eighty percent contractions. Healthcare compounded at a quieter pace, supported by demographics and recurring medical demand.</p>
+      <p>Across public daily data from 2000 through 2026, <a href="/smh-fear-greed">$SMH</a> (semiconductors) and <a href="/guides/smh-alone-vs-xlv-healthcare-ballast">$XLV</a> (US healthcare) moved to remarkably distinct rhythms. Semiconductors captured the secular expansion of personal computing, mobile connectivity, cloud servers, and artificial intelligence, yet periodically endured thirty-five to eighty percent contractions. Healthcare compounded at a quieter pace, supported by demographics and recurring medical demand.</p>
 
       <table class="data-table">
         <thead>
@@ -848,7 +845,7 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
         </tbody>
       </table>
 
-      <p>When reviewed calmly a few times per year—or observed alongside public overheating and fear readings—the two sleeves naturally lean against crowd extremes without requiring high-frequency trading. Readers can explore the live historical data series on our <a href="/compare/smh-vs-xlv.html">$SMH vs $XLV factor comparison</a> or test their own baseline preferences in the <a href="/#tom-retirement-architect">4-Step Sector Balance Survey</a>.</p>
+      <p>When reviewed calmly a few times per year—or observed alongside public overheating and fear readings—the two sleeves naturally lean against crowd extremes without requiring high-frequency trading. Readers can explore the live historical data series on our <a href="/guides/smh-alone-vs-xlv-healthcare-ballast">$SMH vs $XLV healthcare ballast study</a> or test their own baseline preferences in the <a href="/#tom-retirement-architect">4-Step Sector Balance Survey</a>.</p>
 """,
             "faqs": [
                 (
@@ -873,18 +870,18 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
             "date": as_of,
             "mins": 6,
             "body": """
-      <p>One of the hardest habits to unlearn in equity investing is anchoring to last year's peak price. When a well-known stock drops thirty-five or forty percent from its high, it looks like a bargain on a one-year chart even if revenue estimates are still falling and institutions are quietly reducing exposure.</p>
+      <p>One of the hardest habits to unlearn in equity investing is anchoring to last year's peak price. When a well-known sector ETF or index drops thirty-five or forty percent from its high, it looks like a bargain on a one-year chart even if earnings revisions are still falling and volatility remains elevated.</p>
 
-      <p>Across our 26.8-year historical archive of liquid US equities (2000–2026), stocks trading beneath declining twenty-day and sixty-day moving averages exhibited noticeably wider downside variance than cohorts that had first stabilized above their medium-term averages on expanding volume.</p>
+      <p>Across our 26.8-year historical archive of liquid US sector ETFs (2000–2026), assets trading beneath declining twenty-day and sixty-day moving averages exhibited noticeably wider downside variance than cohorts that had first stabilized above their medium-term averages on healthy breadth.</p>
 
-      <p>Rather than guessing bottoms in falling single-stock trends, most retirement households anchor core wealth in broad non-leveraged sector pillars (<a href="/stocks/smh.html">$SMH</a> and <a href="/stocks/xlv.html">$XLV</a>) plus short-term US Treasury reserves (<a href="/stocks/sgov.html">$SGOV</a>). For readers who also study individual companies such as <a href="/stocks/msft.html">$MSFT</a> or <a href="/stocks/celh.html">$CELH</a>, our public factor archive records four plain measurements: distance from the trailing 52-week high, stabilization distance above the 52-week low, daily close relative to the 20-day and 60-day moving averages, and 10-day relative volume.</p>
+      <p>Rather than guessing bottoms in falling single-stock trends, most retirement households anchor core wealth in broad non-leveraged sector pillars (<a href="/smh-fear-greed">$SMH</a> and <a href="/guides/smh-alone-vs-xlv-healthcare-ballast">$XLV</a>) plus short-term US Treasury reserves (<a href="/guides/cash-sweep-vs-sgov-treasury-yield">$SGOV</a>). Our public <a href="/smh-fear-greed">SMH Fear &amp; Greed Index</a> tracks four plain measurements: distance from the trailing 52-week high, 125-day trend alignment, relative strength against defensive healthcare, and realized volatility stress.</p>
 
       <p>None of those four numbers predicts the future, and past cohort behavior never guarantees tomorrow's return. What they offer is a calm, repeatable checklist—a way to verify whether a price trend has actually stabilized before committing hard-earned capital.</p>
 """,
             "faqs": [
                 (
-                    "What public inputs are tracked in the TruthOfMarket factor archive?",
-                    "The archive tracks 52-week drawdown context, distance above the 52-week low, 20-day and 60-day moving-average alignment, and 10-day relative volume.",
+                    "What public inputs are tracked in the TruthOfMarket sector archive?",
+                    "The archive tracks 52-week drawdown context, 125-day moving-average alignment, SMH vs. XLV defensive rotation, 14-day RSI, and realized volatility.",
                 ),
                 (
                     "Does historical factor performance guarantee future returns?",
@@ -907,7 +904,7 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
 
       <p>For anyone drawing retirement income—or planning to within the next decade—that asymmetry carries a second consequence known in financial literature as sequence-of-returns risk. Selling depressed shares every month to pay ordinary household bills permanently reduces the number of shares left to recover when sunnier weather returns.</p>
 
-      <p>Holding a dedicated defensive sleeve—combining resilient healthcare cashflows (<a href="/stocks/xlv.html">$XLV</a>) with short-term US Treasury bills (<a href="/stocks/sgov.html">$SGOV</a>) alongside long-term growth (<a href="/stocks/smh.html">$SMH</a>)—changes that equation. When living expenses or defensive reserves sit in liquid Treasury bills earning steady yield, you rarely face pressure to part with quality equity holdings during a temporary panic.</p>
+      <p>Holding a dedicated defensive sleeve—combining resilient healthcare cashflows (<a href="/guides/smh-alone-vs-xlv-healthcare-ballast">$XLV</a>) with short-term US Treasury bills (<a href="/guides/cash-sweep-vs-sgov-treasury-yield">$SGOV</a>) alongside long-term growth (<a href="/smh-fear-greed">$SMH</a>)—changes that equation. When living expenses or defensive reserves sit in liquid Treasury bills earning steady yield, you rarely face pressure to part with quality equity holdings during a temporary panic.</p>
 """,
             "faqs": [
                 (

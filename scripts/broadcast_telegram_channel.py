@@ -226,7 +226,7 @@ def build_inline_keyboard() -> dict:
             [
                 {
                     "text": "📖 Today's Quant Regime Brief (Free)",
-                    "url": "https://truthofmarket.com/insights/daily-us-quant-regime-brief.html?utm_source=telegram_channel",
+                    "url": "https://truthofmarket.com/insights/daily-us-quant-regime-brief?utm_source=telegram_channel",
                 },
                 {
                     "text": "🩺 3-Sec Position Doctor (-9% Stop)",
@@ -250,7 +250,7 @@ def build_inline_keyboard() -> dict:
                 },
                 {
                     "text": "🧭 $SMH Fear & Greed Index",
-                    "url": "https://truthofmarket.com/semi-fear-greed.html",
+                    "url": "https://truthofmarket.com/smh-fear-greed",
                 },
             ],
             [

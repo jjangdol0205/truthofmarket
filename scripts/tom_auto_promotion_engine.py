@@ -117,27 +117,21 @@ def update_llms_txt(semi: dict, stocks: list) -> str:
         f"- **$XLV (Health Care Select Sector SPDR ETF)**: ${xlv_c}",
         f"- **$QQQ (Invesco QQQ Trust)**: ${qqq_c}",
         f"- **Active Barbell Allocation Directive**: {semi.get('historical_study_smh_ratio', 80)}% $SMH : {semi.get('historical_study_xlv_ratio', 20)}% $XLV Contrarian Barbell",
-        "- **Interactive Terminal**: https://truthofmarket.com/semi-fear-greed.html",
-        "- **Daily Editorial Quant Journal**: https://truthofmarket.com/insights/daily-us-quant-regime-brief.html",
+        "- **Interactive SMH Fear & Greed Gauge**: https://truthofmarket.com/smh-fear-greed",
+        "- **Daily Editorial Quant Journal**: https://truthofmarket.com/insights/daily-us-quant-regime-brief",
         "",
-        "## 2. Core Quantitative Rules & Editorial Research (/insights/)",
-        "- **Methodology Deep-Dive**: https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology.html",
-        "- **$SMH:$XLV Barbell Study**: https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study.html",
-        "- **Rule 1 (-9.0% Hard Stop Math)**: https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math.html",
+        "## 2. Core Quantitative Rules & Editorial Research (/insights/ & /guides/)",
+        "- **Methodology Deep-Dive**: https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology",
+        "- **$SMH:$XLV Barbell Study**: https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study",
+        "- **Drawdown Asymmetry & SGOV Math**: https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math",
+        "- **Retirement Guides Hub**: https://truthofmarket.com/guides/",
+        "- **Research Archive**: https://truthofmarket.com/archive",
         "",
-        "## 3. Live US Equity Coverage & Direct Research URLs",
-        "- Main Screener & Position Doctor: https://truthofmarket.com/",
-        "- Quant Insights Archive: https://truthofmarket.com/insights/index.html",
+        "## 3. Core Sector Balance & Retirement Tools",
+        "- 4-Step Retirement Stress Test (SMH × XLV + SGOV): https://truthofmarket.com/",
+        "- Insights Archive: https://truthofmarket.com/insights/",
         "- Live Telegram Quant Channel: https://t.me/truthofmarketss",
     ]
-    for s in free_tickers[:25]:
-        t = s.get("ticker", "")
-        c = s.get("close", "")
-        st = round(float(c) * 0.91, 2) if isinstance(c, (int, float)) else ""
-        tp = round(float(c) * 2.0, 2) if isinstance(c, (int, float)) else ""
-        lines.append(
-            f"- **${t} ({s.get('name', t)})**: Close ${c} | -9% Hard Stop ${st} | +100% Target ${tp} -> https://truthofmarket.com/stocks/{t.lower()}.html"
-        )
 
     content = "\n".join(lines) + "\n"
     for target in [
@@ -161,7 +155,16 @@ def build_url_to_file_map() -> dict[str, Path]:
     locs = re.findall(r"<loc>(https://truthofmarket\.com[^<]*)</loc>", smap.read_text(encoding="utf-8"))
     for u in locs:
         rel = u.replace("https://truthofmarket.com/", "").strip("/")
-        fpath = (ROOT_DIR / "index.html") if not rel else (ROOT_DIR / rel)
+        if not rel:
+            fpath = ROOT_DIR / "index.html"
+        elif (ROOT_DIR / rel).is_file():
+            fpath = ROOT_DIR / rel
+        elif (ROOT_DIR / f"{rel}.html").is_file():
+            fpath = ROOT_DIR / f"{rel}.html"
+        elif (ROOT_DIR / rel / "index.html").is_file():
+            fpath = ROOT_DIR / rel / "index.html"
+        else:
+            continue
         if fpath.exists():
             mapping[u] = fpath
     return mapping
@@ -177,42 +180,46 @@ def run_daily_telegraph_and_syndication(semi: dict, stocks: list, dry_run: bool 
     rec_smh = int(semi.get("historical_study_smh_ratio") or 80)
     rec_xlv = int(semi.get("historical_study_xlv_ratio") or 20)
 
-    valid_stocks = [s for s in stocks if s.get("ticker") and s.get("ticker") != "LOCKED"]
-    top_stocks = sorted(valid_stocks, key=lambda x: float(x.get("score") or 0), reverse=True)[:5]
-    lead = top_stocks[0] if top_stocks else {"ticker": "CELH", "close": 30.04, "score": 88}
-    lead_tkr = str(lead.get("ticker", "CELH")).upper()
-    lead_close = float(lead.get("close") or 30.04)
-    lead_stop = round(lead_close * 0.91, 2)
-    lead_tp1 = round(lead_close * 2.0, 2)
-
     day_ord = datetime.now(timezone.utc).date().toordinal()
     theme = TOM_RETAIL_INVESTOR_THEMES[day_ord % len(TOM_RETAIL_INVESTOR_THEMES)]
     target_slug = theme["slug"]
     if not (ROOT_DIR / "frontend" / "public" / "insights" / target_slug).exists():
         target_slug = "daily-us-quant-regime-brief.html"
-    canonical_url = f"https://truthofmarket.com/insights/{target_slug}"
-    title = f"[US Stock Safety Brief · {as_of}] {theme['angle_title']} ($SMH {fg:.1f}/100 · {regime})"
+    clean_slug = target_slug[:-5] if target_slug.endswith(".html") else target_slug
+    canonical_url = f"https://truthofmarket.com/insights/{clean_slug}"
+    title = f"[US Retirement Sector Brief · {as_of}] {theme['angle_title']} ($SMH {fg:.1f}/100 · {regime})"
 
-    stock_bullets = []
-    md_rows = []
-    for st in top_stocks:
-        t = str(st.get("ticker")).upper()
-        c = float(st.get("close") or 100.0)
-        sc = int(st.get("score") or 75)
-        stp = round(c * 0.91, 2)
-        tp1 = round(c * 2.0, 2)
-        sig_badge = "🟢 Green Uptrend" if sc >= 70 else ("🟡 Yellow Watch" if sc >= 50 else "🔴 Red Caution")
-        stock_bullets.append(
-            {
-                "tag": "li",
-                "children": [
-                    {"tag": "strong", "children": [f"${t} (${c:.2f} · {sig_badge}, Score {sc}/100): "]},
-                    f"🔴 -9% Safety Exit Line ${stp:.2f} | 🎯 +100% Half-Profit Target ${tp1:.2f} — ",
-                    {"tag": "a", "attrs": {"href": f"https://truthofmarket.com/stocks/{t.lower()}.html"}, "children": [f"Check ${t} Safety Card"]},
-                ],
-            }
-        )
-        md_rows.append(f"| **${t}** | ${c:.2f} | {sig_badge} ({sc}/100) | ${stp:.2f} | ${tp1:.2f} | [Safety Card](https://truthofmarket.com/stocks/{t.lower()}.html) |")
+    stock_bullets = [
+        {
+            "tag": "li",
+            "children": [
+                {"tag": "strong", "children": [f"$SMH (${smh_c:.2f} · {smh_dd:+.1f}% vs 52W High): "]},
+                f"Growth sleeve — live 7-Factor Fear & Greed = {fg:.1f}/100 ({regime}). ",
+                {"tag": "a", "attrs": {"href": "https://truthofmarket.com/smh-fear-greed"}, "children": ["View Live SMH Gauge"]},
+            ],
+        },
+        {
+            "tag": "li",
+            "children": [
+                {"tag": "strong", "children": [f"$XLV (${xlv_c:.2f} · Defensive Healthcare Ballast): "]},
+                f"Historical {rec_smh}% $SMH : {rec_xlv}% $XLV study sleeve. ",
+                {"tag": "a", "attrs": {"href": "https://truthofmarket.com/guides/smh-alone-vs-xlv-healthcare-ballast"}, "children": ["Read SMH vs XLV Study"]},
+            ],
+        },
+        {
+            "tag": "li",
+            "children": [
+                {"tag": "strong", "children": ["$SGOV (0-3 Month US Treasury Cash Reserve): "]},
+                "24-month retirement cash buffer designed to avoid selling equities during drawdowns. ",
+                {"tag": "a", "attrs": {"href": "https://truthofmarket.com/#tom-retirement-architect"}, "children": ["Run 30-Second Stress Test"]},
+            ],
+        },
+    ]
+    md_rows = [
+        f"| **$SMH** | ${smh_c:.2f} | {fg:.1f}/100 ({regime}) | {smh_dd:+.1f}% | {rec_smh}% Growth | [Live SMH Gauge](https://truthofmarket.com/smh-fear-greed) |",
+        f"| **$XLV** | ${xlv_c:.2f} | Defensive Ballast | Low Beta | {rec_xlv}% Defense | [SMH vs XLV Guide](https://truthofmarket.com/guides/smh-alone-vs-xlv-healthcare-ballast) |",
+        "| **$SGOV** | ~$100.50 | 0-3M Treasury Reserve | Cash Buffer | 10-20% Cushion | [Stress Test](https://truthofmarket.com/#tom-retirement-architect) |",
+    ]
 
     nodes = [
         {
@@ -263,17 +270,16 @@ def run_daily_telegraph_and_syndication(semi: dict, stocks: list, dry_run: bool 
     # Zero-Shadowban 2-Post Thread (Post #1: <=15-word B2C 3-sec hook, ZERO URLs, max 2 cashtags: $SMH and $XLV!)
     main_hook = (
         f"{theme['lead_hook']}\n\n"
-        f"Chip Fear & Greed sits at {fg:.1f}/100 ({regime}); $SMH is {smh_dd:+.1f}% off highs (${smh_c:.2f}) with an {rec_smh}:{rec_xlv} $XLV cushion.\n"
-        f"Top stock {lead_tkr}: ${lead_close:.2f} (safety stop ${lead_stop:.2f})."
+        f"Chip Fear & Greed sits at {fg:.1f}/100 ({regime}); $SMH is {smh_dd:+.1f}% off highs (${smh_c:.2f}) with a {rec_smh}:{rec_xlv} $XLV healthcare ballast."
     )[:275]
 
     reply_link = (
-        f"☕ Read today's Wall Street Morning Bell Letter & check any US stock's -9% safety line free:\n"
+        f"☕ Read today's Wall Street Morning Bell Letter & run the 30-sec SMH × XLV + SGOV Stress Test free:\n"
         f"{canonical_url}?utm_source=social_thread&utm_medium=organic"
     )
 
     watchlist_table_md = (
-        "| Ticker | Last Close | 3-Color Signal | 🔴 -9% Safety Line | 🎯 +100% Profit Lock | Free Check |\n"
+        "| ETF Sleeve | Last Close | Regime / Role | Context | Study Mix | Free Tool |\n"
         "|---|---|---|---|---|---|\n"
         + "\n".join(md_rows)
     )
@@ -284,58 +290,56 @@ def run_daily_telegraph_and_syndication(semi: dict, stocks: list, dry_run: bool 
         canonical_url=canonical_url,
         empathy_two_lines=[
             "Good morning, friend—if noisy Wall Street headlines had you worrying about your 401(k) or IRA nest egg last night, take a calm breath over your morning coffee first.",
-            "You spent decades building your principal, and our Morning Bell Club desk sits right on your side every morning so a routine -9.0% stop-loss never turns into a painful -50% drawdown.",
+            "You spent decades building your principal, and our Morning Bell Club desk sits right on your side every morning with calm 2000–2025 SMH × XLV + SGOV historical data.",
         ],
         three_insights=[
             f"**Today's Market Weather ({as_of})**: Semiconductor Fear & Greed sits at `{fg:.1f}/100` (**{regime}**), with `$SMH` at `${smh_c:.2f}` (`{smh_dd:+.2f}%` off its 52-week high) balanced against healthcare `$XLV` at `${xlv_c:.2f}` (`{rec_smh}% $SMH : {rec_xlv}% $XLV` cushion).",
-            "**Wait for Right-Side Confirmation (PW-RSI & MA60)**: Instead of catching falling knives in a panic, we wait until institutional volume steps back above the 20-day and 60-day trend lines (MA20 / MA60).",
-            "**The Calm Math of Rule 1 (-9.0% Exit Floor)**: Exiting a failed trade at `-9.0%` takes only a routine `+9.89%` gain to recover, whereas bagholding down `-50%` demands `+100%` just to break even.",
+            "**Two-Pillar Non-Leveraged Structure**: Pairing secular semiconductor growth (`$SMH`) with steady healthcare (`$XLV`) avoids 3x leveraged volatility decay while cushioning major crisis drawdowns.",
+            "**24-Month $SGOV Treasury Buffer**: Keeping near-term household withdrawal reserves in 0–3 month US Treasury bills (`$SGOV`) eliminates forced equity liquidation during downturns.",
         ],
         daily_mission=(
-            f"Before the 9:30 AM opening bell, pick your #1 stock holding (or benchmark `${lead_tkr}` at `${lead_close:.2f}`, safety stop `${lead_stop:.2f}`) "
-            "and jot its -9.0% safety floor on a sticky note—knowing your exit in advance lets you sleep peacefully tonight."
+            f"Before the 9:30 AM opening bell, check today's SMH Fear & Greed score ({fg:.1f}/100) and verify that your near-term living reserves are insulated from equity volatility."
         ),
         gentle_bridge_lines=[
-            f"**Read Today's Full Morning Bell Letter & Stamp Your Daily Check-In**: [{canonical_url}]({canonical_url})",
-            "**Free 3-Second Position Doctor & 1-Field 8:30 AM Club Email**: Check any of our 72 liquid US stocks free at [https://truthofmarket.com/](https://truthofmarket.com/) — zero pressure, always free to start.",
-            "**Optional Pro VIP When You're Ready**: If you ever want all 11 unmasked Top Uptrend Leaders and TradingView Pine v5 alerts, Monthly VIP ($29/mo) and Lifetime Pass ($199) are waiting quietly inside the terminal.",
+            f"**Read Today's Full Morning Bell Letter**: [{canonical_url}]({canonical_url})",
+            "**Free 30-Second Retirement Stress Test (SMH × XLV + SGOV)**: Explore 2000–2025 drawdown history free at [https://truthofmarket.com/](https://truthofmarket.com/) — zero pressure, always free to start.",
+            "**Optional $9 Workbook & Pro VIP**: One-Time $9 14-Page Crash & Tax Allocation Workbook PDF, Monthly VIP ($29/mo), and Annual VIP ($199/yr) are available anytime inside TruthOfMarket.",
         ],
         extra_body_md=watchlist_table_md,
-        footer_disclaimer="*Educational quantitative research from the Wall Street Morning Bell Club (`truthofmarket.com`); not personalized financial or tax advice.*",
+        footer_disclaimer="*Educational quantitative research from TruthOfMarket (`truthofmarket.com`); not personalized financial or tax advice.*",
     )
     tom_letter_check = validate_fandom_editor_letter("TOM", longform_md)
     if not tom_letter_check["passed"]:
         raise RuntimeError(f"TOM Fandom Editor Letter validation failed: {tom_letter_check}")
 
     reddit_md = (
-        f"# [Portfolio Risk Study] Protecting Tech/IRA Gains With a -9% Safety Floor & {rec_smh}:{rec_xlv} $SMH/$XLV Cushion ({as_of})\n\n"
-        f"For fellow self-directed & retirement-account investors holding semiconductors (`$NVDA`, `$AVGO`, `$AMD`, `$SMH`), here is today's post-close risk snapshot from our 26.8-year rules-based study:\n\n"
+        f"# [Portfolio Risk Study] Cushioning Retirement Drawdowns With {rec_smh}:{rec_xlv} $SMH/$XLV + $SGOV ({as_of})\n\n"
+        f"For fellow self-directed & retirement-account investors studying semiconductor exposure (`$SMH`), here is today's post-close historical context from our 2000–2025 dataset:\n\n"
         f"1. **Where Chip Sentiment Stands Today**: `$SMH` closed at `${smh_c:.2f}` (`{smh_dd:+.2f}%` off its 52-week high), putting our 7-factor Semiconductor Fear & Greed gauge at **{fg:.1f}/100 ({regime})**.\n"
-        f"2. **Why an 80:20 Healthcare Cushion Helps You Sleep at Night**: Pairing growth chips (`$SMH`) with steady healthcare (`$XLV` at `${xlv_c:.2f}`) keeps reserve buying power ready during >20% tech pullbacks without leveraged-ETF decay.\n"
-        f"3. **The -9% vs -50% Recovery Math**: A `-9.0%` exit only takes a routine `+9.89%` gain to recover, whereas holding a falling stock down `-50%` requires `+100%` just to break even.\n\n"
-        f"How are other 40s–60s investors here balancing tech exposure vs capital protection heading into next week?"
+        f"2. **Why a Healthcare Ballast Helps You Sleep at Night**: Pairing growth chips (`$SMH`) with steady healthcare (`$XLV` at `${xlv_c:.2f}`) historically cut peak drawdowns in half without leveraged-ETF decay.\n"
+        f"3. **The 24-Month Cash Cushion**: Holding near-term expenses in short-term US Treasuries (`$SGOV`) removes pressure to sell equities during 14–17 month recovery windows.\n\n"
+        f"How are other 50s–70s investors here balancing tech growth vs capital protection?"
     )
 
     substack_md = (
         f"# {title}\n\n"
-        f"> **10-Second Morning Check:** Falling chip stocks trap dip-buyers for years—check any US stock's 🟢 Green / 🟡 Yellow / 🔴 -9% safety line free at [truthofmarket.com](https://truthofmarket.com/).\n\n"
+        f"> **30-Second Retirement Check:** See how pairing $SMH + $XLV + $SGOV cushioned 2000–2025 crashes at [truthofmarket.com](https://truthofmarket.com/).\n\n"
         + longform_md
-        + "\n### Upgrade When Ready: Full 72-Stock Signals & Pro VIP\n"
-        + "- **Free 8:30 AM Safety Email & 3-Second Position Doctor**: https://truthofmarket.com/\n"
-        + "- **Pro VIP ($29/mo) & Lifetime Pass ($199 — One-Time)**: Unlocks all 11 unmasked Top Uptrend Leaders, exact entry/exit alerts, and TradingView Pine v5 indicators.\n"
+        + "\n### Optional Educational Workbook & VIP Passes\n"
+        + "- **Free 30-Second Stress Test & SMH Fear & Greed Gauge**: https://truthofmarket.com/smh-fear-greed\n"
+        + "- **One-Time $9 14-Page Crash & Tax Workbook / Monthly VIP ($29/mo) / Annual VIP ($199/yr)**: https://truthofmarket.com/#pricing\n"
         + "- **Research & Partnership Desk**: `hello@truthofmarket.com`\n"
     )
 
     tradingview_idea_md = (
-        f"TITLE: $SMH Fear & Greed at {fg:.1f}/100 ({regime}) — {rec_smh}:{rec_xlv} $XLV Cushion & -9% Safety Floor ({as_of})\n\n"
+        f"TITLE: $SMH Fear & Greed at {fg:.1f}/100 ({regime}) — {rec_smh}:{rec_xlv} $XLV Cushion & $SGOV Reserve ({as_of})\n\n"
         f"1. PLAIN-ENGLISH MARKET READOUT:\n"
         f"$SMH closed at ${smh_c:.2f} ({smh_dd:+.2f}% off its 52-week high), placing our 7-factor Semiconductor Fear & Greed gauge at {fg:.1f}/100 ({regime}).\n"
-        f"Current capital-protection balance: {rec_smh}% $SMH / {rec_xlv}% $XLV healthcare cushion.\n\n"
-        f"2. 3 CALM RULES FOR INDIVIDUAL & RETIREMENT ACCOUNTS (26.8-YEAR STUDY):\n"
-        f"- Wait for a Green Uptrend: Avoid averaging down below a falling 60-day trend line.\n"
-        f"- Rule 1 (-9.0% Safety Exit): A -9% stop needs only +9.89% to recover, versus +100% needed after a -50% slide.\n"
-        f"- Rule 3 (+100% Half-Lock): Sell half at 2x so remaining shares ride stress-free.\n"
-        f"- Top public showcase stock: ${lead_tkr} at ${lead_close:.2f} (-9% safety floor ${lead_stop:.2f} / 2x target ${lead_tp1:.2f}).\n\n"
+        f"Historical study balance: {rec_smh}% $SMH / {rec_xlv}% $XLV healthcare cushion.\n\n"
+        f"2. 3 CALM RULES FOR RETIREMENT ACCOUNTS (2000–2025 STUDY):\n"
+        f"- Avoid 3x Leveraged Decay: Stick to non-leveraged 1x spot sector ETFs ($SMH and $XLV).\n"
+        f"- Insulate Living Expenses: Hold 10–20% in 0–3 month US Treasury bills ($SGOV).\n"
+        f"- Review Calmly: Use limit orders and semi-annual drift bands instead of daily headlines.\n\n"
         f"(Educational study only, not financial advice. Free 3-Color Stock Checker & 8:30 AM Alert: truthofmarket.com)\n"
     )
 

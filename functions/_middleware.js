@@ -27,14 +27,21 @@ const BLOCKED_PREFIXES = [
   '/api/cloud-sync',
   '/api/auth/',
   '/products/',
+  '/stocks',
+  '/compare',
 ];
 
 export async function onRequest(context) {
   const url = new URL(context.request.url);
   const p = url.pathname.toLowerCase();
 
+  // Permanent 301 redirect from legacy /semi-fear-greed path to canonical /smh-fear-greed
+  if (p === '/semi-fear-greed' || p === '/semi-fear-greed.html' || p === '/semi-fear-greed/') {
+    return Response.redirect('https://truthofmarket.com/smh-fear-greed', 301);
+  }
+
   const isBlockedDotfile = p.startsWith('/.') && !p.startsWith('/.well-known/');
-  const isBlockedPrefix = BLOCKED_PREFIXES.some((pre) => p === pre || p.startsWith(pre));
+  const isBlockedPrefix = BLOCKED_PREFIXES.some((pre) => p === pre || p.startsWith(pre + '/') || (pre.endsWith('/') && p.startsWith(pre)));
   if (BLOCKED_EXACT.has(p) || isBlockedDotfile || isBlockedPrefix) {
     return new Response('410 Gone', {
       status: 410,

@@ -1,3 +1,5 @@
+/semi-fear-greed /smh-fear-greed 301
+/semi-fear-greed.html /smh-fear-greed 301
 /api/health /static_api/health.json 200
 /api/stocks /static_api/stocks_free.json 200
 /api/backtest /static_api/backtest.json 200

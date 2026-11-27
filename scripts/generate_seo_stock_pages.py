@@ -1085,278 +1085,107 @@ def _normalize_canonical_sitemap_loc(raw_loc: str) -> str:
 
 
 def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "index-CaOpdap3.css") -> str:
+    """
+    2026-11-27 SEALED CLEAN-URL SITEMAP & LLMS BUILDER (Zero /stocks/*, Zero /compare/*, Zero /semi-fear-greed).
+    Permanently removes any legacy single-stock / compare / semi-fear-greed files and emits ONLY canonical
+    SMH x XLV + SGOV retirement education Clean URLs into sitemap.xml and llms-full.txt.
+    """
     stocks, semi = load_stocks_and_semi()
-    stocks_dir = PUB / "stocks"
-    stocks_dir.mkdir(parents=True, exist_ok=True)
+    as_of = str(semi.get("date") or datetime.now(timezone.utc).strftime("%Y-%m-%d"))
+    default_lastmod = as_of if len(as_of) == 10 else datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
-    # 1. Generate /semi-fear-greed.html & /pro-swing.html
-    semi_html = generate_semi_fear_greed_page(semi, stocks, js_name, css_name)
-    (PUB / "semi-fear-greed.html").write_text(semi_html, encoding="utf-8")
-
-    pro_swing_html = generate_pro_swing_page(semi, stocks, js_name, css_name)
-    (PUB / "pro-swing.html").write_text(pro_swing_html, encoding="utf-8")
-
-    # 2. Generate 72 stock pages + Retirement 4-Core ETFs + Blue-Chip Dividend & Speculative Risk Profiles
-    smh_close = float(semi.get("smh_close") or 461.90)
-    smh_dd = float(semi.get("smh_dd_pct") or -30.95)
-    smh_rsi = float(semi.get("smh_rsi") or 35.6)
-    xlv_close = float(semi.get("xlv_close") or 187.91)
-    qqq_close = float(semi.get("qqq_close") or 661.75)
-    as_of = str(semi.get("date") or "2026-11-16")
-
-    def _mk_syn(tkr: str, nm: str, sec: str, cp: float, dd: float, rsi: float, sc: int, zn_lbl: str, zc: str = "MA_APPROACH") -> Dict[str, Any]:
-        return {
-            "ticker": tkr,
-            "name_en": nm,
-            "name_kr": nm,
-            "name_jp": nm,
-            "sector": sec,
-            "date": as_of,
-            "close": cp,
-            "low52": round(cp * 0.84, 2),
-            "high52": round(cp / max(0.2, (1.0 + dd / 100.0)), 2),
-            "dd_high52_pct": dd,
-            "prox_low52_pct": 19.0,
-            "ma20_price": round(cp * 0.99, 2),
-            "ma60_price": round(cp * 0.97, 2),
-            "rsi14": rsi,
-            "vol_surge_10d": 1.28,
-            "score": sc,
-            "zone_code": zc,
-            "zone_label_en": zn_lbl,
-            "entry_trigger_price": round(cp * 0.99, 2),
-            "stop_loss_price": round(cp * 0.91, 2),
-            "tp1_2x_price": round(cp * 1.45, 2),
-        }
-
-    etf_synthetics = [
-        _mk_syn("VOO", "Vanguard S&P 500 ETF", "S&P 500 Core Retirement ETF", 548.60, -2.7, 58.4, 96, "RETIREMENT BUCKET 3 · S&P 500 CORE"),
-        _mk_syn("SCHD", "Schwab US Dividend Equity ETF", "US Dividend Growth ETF (~3.5% Yield)", 29.45, -2.3, 56.8, 95, "RETIREMENT BUCKET 2 · DIVIDEND GROWTH"),
-        _mk_syn("JEPI", "JPMorgan Equity Premium Income ETF", "Monthly Dividend Income ETF (~7.4% Yield)", 59.18, -2.0, 54.9, 94, "RETIREMENT BUCKET 2 · MONTHLY PAYCHECK"),
-        _mk_syn("SGOV", "iShares 0-3 Month Treasury Bond ETF", "US T-Bill Cash Cushion ETF (~4.7% Yield)", 100.52, -0.3, 53.2, 97, "RETIREMENT BUCKET 1 · T-BILL CASH SHIELD"),
-        _mk_syn("JNJ", "Johnson & Johnson", "Healthcare Dividend Aristocrat", 156.40, -6.8, 52.4, 88, "DIVIDEND & BLUE-CHIP CORE"),
-        _mk_syn("PG", "Procter & Gamble Co", "Consumer Staples Dividend Aristocrat", 168.90, -4.5, 55.1, 89, "DIVIDEND & BLUE-CHIP CORE"),
-        _mk_syn("KO", "The Coca-Cola Company", "Beverage Dividend Aristocrat", 63.85, -8.2, 50.8, 87, "DIVIDEND & BLUE-CHIP CORE"),
-        _mk_syn("PEP", "PepsiCo Inc", "Consumer Beverage & Snacks Dividend Leader", 161.20, -9.4, 49.5, 85, "DIVIDEND & BLUE-CHIP CORE"),
-        _mk_syn("COST", "Costco Wholesale Corp", "Membership Warehouse Compounder", 918.40, -3.8, 59.2, 91, "DIVIDEND & BLUE-CHIP CORE"),
-        _mk_syn("WMT", "Walmart Inc", "Omnichannel Consumer Staples Leader", 84.60, -2.1, 61.0, 92, "DIVIDEND & BLUE-CHIP CORE"),
-        _mk_syn("V", "Visa Inc", "Global Payment Network Compounder", 310.25, -2.4, 58.6, 90, "DIVIDEND & BLUE-CHIP CORE"),
-        _mk_syn("MA", "Mastercard Inc", "Global Payment Infrastructure Leader", 518.30, -2.9, 57.4, 89, "DIVIDEND & BLUE-CHIP CORE"),
-        _mk_syn("MSFT", "Microsoft Corp", "Enterprise Cloud & Dividend Compounder", 428.50, -8.4, 53.6, 90, "DIVIDEND & BLUE-CHIP CORE"),
-        _mk_syn("AAPL", "Apple Inc", "Consumer Ecosystem & Buyback Leader", 229.80, -4.2, 54.8, 89, "DIVIDEND & BLUE-CHIP CORE"),
-        _mk_syn("JPM", "JPMorgan Chase & Co", "US Money-Center Banking Dividend Leader", 239.10, -3.1, 59.8, 90, "DIVIDEND & BLUE-CHIP CORE"),
-        _mk_syn("UNH", "UnitedHealth Group Inc", "Managed Healthcare Cashflow Leader", 588.40, -5.6, 54.2, 88, "DIVIDEND & BLUE-CHIP CORE"),
-        _mk_syn("HD", "The Home Depot Inc", "Home Improvement Dividend Compounder", 406.50, -4.4, 55.7, 87, "DIVIDEND & BLUE-CHIP CORE"),
-        _mk_syn("ABBV", "AbbVie Inc", "Biopharma Dividend Growth Leader", 176.80, -11.2, 48.6, 86, "DIVIDEND & BLUE-CHIP CORE"),
-        _mk_syn("CVX", "Chevron Corp", "Integrated Energy Dividend Aristocrat", 159.40, -5.9, 53.9, 87, "DIVIDEND & BLUE-CHIP CORE"),
-        _mk_syn("LMT", "Lockheed Martin Corp", "Aerospace & Defense Cashflow Leader", 542.10, -10.5, 49.2, 86, "DIVIDEND & BLUE-CHIP CORE"),
-        _mk_syn("MSTR", "MicroStrategy Inc", "High-Beta Digital Asset Treasury", 342.50, -36.4, 41.2, 58, "VOLATILITY & RISK PROFILE", "WASHOUT_WATCH"),
-        _mk_syn("TQQQ", "ProShares UltraPro QQQ (3x Daily Leveraged)", "3x Leveraged Nasdaq ETF", 78.20, -24.5, 44.8, 60, "VOLATILITY & RISK PROFILE (3X DAILY DECAY)", "WASHOUT_WATCH"),
-        _mk_syn("RIVN", "Rivian Automotive Inc", "Early-Stage EV Manufacturer", 10.65, -45.2, 38.5, 52, "VOLATILITY & RISK PROFILE", "LEFT_SIDE_KNIFE"),
-        {
-            "ticker": "SMH",
-            "name_en": "VanEck Semiconductor ETF",
-            "name_kr": "VanEck Semiconductor ETF",
-            "name_jp": "VanEck Semiconductor ETF",
-            "sector": "Semiconductor ETF",
-            "date": as_of,
-            "close": smh_close,
-            "low52": round(smh_close * 0.82, 2),
-            "high52": round(smh_close / (1.0 + smh_dd / 100.0), 2),
-            "dd_high52_pct": smh_dd,
-            "prox_low52_pct": 18.0,
-            "ma20_price": round(smh_close * 1.03, 2),
-            "ma60_price": round(smh_close * 1.06, 2),
-            "rsi14": smh_rsi,
-            "vol_surge_10d": 1.68,
-            "score": 88,
-            "zone_code": "WASHOUT_WATCH",
-            "zone_label_en": "BARBELL GROWTH SLEEVE (70%-80% MODEL)",
-            "entry_trigger_price": round(smh_close * 1.02, 2),
-            "stop_loss_price": round(smh_close * 0.91, 2),
-            "tp1_2x_price": round(smh_close * 2.0, 2),
-        },
-        {
-            "ticker": "XLV",
-            "name_en": "Health Care Select Sector SPDR ETF",
-            "name_kr": "Health Care Select Sector SPDR ETF",
-            "name_jp": "Health Care Select Sector SPDR ETF",
-            "sector": "Healthcare Defensive ETF",
-            "date": as_of,
-            "close": xlv_close,
-            "low52": round(xlv_close * 0.88, 2),
-            "high52": round(xlv_close * 1.06, 2),
-            "dd_high52_pct": -5.4,
-            "prox_low52_pct": 13.6,
-            "ma20_price": round(xlv_close * 0.99, 2),
-            "ma60_price": round(xlv_close * 0.98, 2),
-            "rsi14": 54.5,
-            "vol_surge_10d": 1.12,
-            "score": 82,
-            "zone_code": "MA_APPROACH",
-            "zone_label_en": "DEFENSIVE HEALTHCARE SLEEVE (20%-30% MODEL)",
-            "entry_trigger_price": round(xlv_close * 0.99, 2),
-            "stop_loss_price": round(xlv_close * 0.91, 2),
-            "tp1_2x_price": round(xlv_close * 1.45, 2),
-        },
-        {
-            "ticker": "SOXL",
-            "name_en": "Direxion Daily Semiconductor Bull 3X Shares",
-            "name_kr": "Direxion Daily Semiconductor Bull 3X Shares",
-            "name_jp": "Direxion Daily Semiconductor Bull 3X Shares",
-            "sector": "3x Leveraged Semiconductor ETF",
-            "date": as_of,
-            "close": 28.40,
-            "low52": 18.50,
-            "high52": 68.90,
-            "dd_high52_pct": -58.8,
-            "prox_low52_pct": 53.5,
-            "ma20_price": 30.10,
-            "ma60_price": 33.80,
-            "rsi14": 36.4,
-            "vol_surge_10d": 1.94,
-            "score": 55,
-            "zone_code": "WASHOUT_WATCH",
-            "zone_label_en": "VOLATILITY & RISK PROFILE (3X DAILY DECAY)",
-            "entry_trigger_price": 31.20,
-            "stop_loss_price": 25.84,
-            "tp1_2x_price": 56.80,
-        },
-        {
-            "ticker": "QQQ",
-            "name_en": "Invesco QQQ Trust (Nasdaq-100 ETF)",
-            "name_kr": "Invesco QQQ Trust (Nasdaq-100 ETF)",
-            "name_jp": "Invesco QQQ Trust (Nasdaq-100 ETF)",
-            "sector": "Nasdaq-100 Benchmark ETF",
-            "date": as_of,
-            "close": qqq_close,
-            "low52": round(qqq_close * 0.81, 2),
-            "high52": round(qqq_close * 1.07, 2),
-            "dd_high52_pct": -6.5,
-            "prox_low52_pct": 23.4,
-            "ma20_price": round(qqq_close * 0.99, 2),
-            "ma60_price": round(qqq_close * 0.97, 2),
-            "rsi14": 51.8,
-            "vol_surge_10d": 1.18,
-            "score": 80,
-            "zone_code": "MA_APPROACH",
-            "zone_label_en": "CORE BENCHMARK TREND",
-            "entry_trigger_price": round(qqq_close * 0.99, 2),
-            "stop_loss_price": round(qqq_close * 0.91, 2),
-            "tp1_2x_price": round(qqq_close * 1.6, 2),
-        },
-    ]
-
-    existing_tickers = {str(s.get("ticker") or "").upper() for s in stocks}
-    combined = list(stocks) + [e for e in etf_synthetics if e["ticker"] not in existing_tickers]
-
-    sitemap_urls: List[tuple[str, str, str]] = [
-        ("https://truthofmarket.com/", "1.0", "daily"),
-        ("https://truthofmarket.com/semi-fear-greed", "0.95", "daily"),
-        ("https://truthofmarket.com/terms", "0.60", "monthly"),
-        ("https://truthofmarket.com/privacy", "0.60", "monthly"),
-        ("https://truthofmarket.com/refund", "0.65", "monthly"),
-        ("https://truthofmarket.com/contact", "0.60", "monthly"),
-    ]
-
-    for item in combined:
-        tkr = str(item.get("ticker") or "").strip().upper()
-        if not tkr or "." in tkr:
+    # 1. Fail-closed cleanup of retired single-stock, compare, semi-fear-greed, and pro-swing artifacts
+    for base_d in (PUB, ROOT / "dist", ROOT / "frontend" / "dist", ROOT):
+        if not base_d.exists():
             continue
-        page_html = generate_single_stock_page(item, semi, stocks, js_name, css_name)
-        out_file = stocks_dir / f"{tkr.lower()}.html"
-        out_file.write_text(page_html, encoding="utf-8")
-        prio = "0.90" if tkr in ("CELH", "NVDA", "TSLA", "AMD", "AVGO", "SMH", "XLV", "QQQ", "MSFT", "AAPL") else "0.80"
-        sitemap_urls.append((f"https://truthofmarket.com/stocks/{tkr.lower()}.html", prio, "daily"))
+        for retired_dir in ("stocks", "compare"):
+            dp = base_d / retired_dir
+            if dp.exists():
+                shutil.rmtree(dp, ignore_errors=True)
+        for retired_file in ("semi-fear-greed.html", "pro-swing.html"):
+            fp = base_d / retired_file
+            if fp.exists():
+                try:
+                    fp.unlink()
+                except Exception:
+                    pass
 
-    # 3. Generate 50 Head-to-Head Comparison SEO pages (/compare/<a-vs-b>.html)
-    compare_dir = PUB / "compare"
-    compare_dir.mkdir(parents=True, exist_ok=True)
-    by_ticker = {str(it.get("ticker") or "").strip().upper(): it for it in combined}
-    compare_count = 0
-    llms_compare_lines = []
-    for t1, t2, theme_label in COMPARE_PAIRS:
-        sa = by_ticker.get(t1) or {"ticker": t1, "name_en": t1, "close": 100.0, "score": 78, "rsi14": 48.0, "vol_surge_10d": 1.3}
-        sb = by_ticker.get(t2) or {"ticker": t2, "name_en": t2, "close": 100.0, "score": 74, "rsi14": 51.0, "vol_surge_10d": 1.15}
-        cmp_html = generate_comparison_page(sa, sb, theme_label, semi, stocks, js_name, css_name)
-        slug = f"{t1.lower()}-vs-{t2.lower()}.html"
-        (compare_dir / slug).write_text(cmp_html, encoding="utf-8")
-        sitemap_urls.append((f"https://truthofmarket.com/compare/{slug}", "0.88", "daily"))
-        compare_count += 1
-        s_a = int(sa.get("score") or 75)
-        s_b = int(sb.get("score") or 72)
-        v_a = float(sa.get("vol_surge_10d") or 1.2)
-        v_b = float(sb.get("vol_surge_10d") or 1.1)
-        win = t1 if (s_a, v_a) >= (s_b, v_b) else t2
-        llms_compare_lines.append(
-            f"- ${t1} vs ${t2} ({theme_label}): Higher Factor Score=${win} | ${t1}={s_a}/100 ({v_a:.2f}x Vol) vs ${t2}={s_b}/100 ({v_b:.2f}x Vol) -> https://truthofmarket.com/compare/{slug}"
-        )
-
-    # 3.5 Generate Editorial Insights (/insights/)
+    # 2. Generate Editorial Insights (/insights/) with zero single-stock links
     from scripts.generate_daily_quant_insights import generate_all_quant_insights
     insight_smap_entries, insight_rss_items = generate_all_quant_insights()
+
+    # 3. Assemble authoritative Clean URL sitemap (ONLY confirmed SMH x XLV + Retirement + Legal pages)
+    sitemap_urls: List[tuple[str, ...]] = [
+        ("https://truthofmarket.com/", "1.0", "daily", default_lastmod),
+        ("https://truthofmarket.com/smh-fear-greed", "0.95", "daily", default_lastmod),
+    ]
+    if (PUB / "archive.html").exists() or (ROOT / "dist" / "archive.html").exists():
+        sitemap_urls.append(("https://truthofmarket.com/archive", "0.85", "weekly", default_lastmod))
+
+    # Guides (/guides/ & /guides/*)
+    guides_candidates = [PUB / "guides", ROOT / "dist" / "guides", ROOT / "guides"]
+    guide_stems: set[str] = set()
+    for gd in guides_candidates:
+        if gd.exists():
+            for gp in sorted(gd.glob("*.html")):
+                if gp.name != "index.html":
+                    guide_stems.add(gp.stem)
+    if guide_stems:
+        sitemap_urls.append(("https://truthofmarket.com/guides/", "0.90", "weekly", default_lastmod))
+        for stem in sorted(guide_stems):
+            sitemap_urls.append((f"https://truthofmarket.com/guides/{stem}", "0.85", "weekly", default_lastmod))
+
+    # Insights (/insights/ & /insights/*)
     for entry in insight_smap_entries:
         sitemap_urls.append(entry)
-    llms_insight_lines = [f"- {it['title']} -> {it['link']}" for it in insight_rss_items]
 
-    # 4. Generate llms-full.txt (clean Educational Calculator Software positioning)
-    llms_stock_lines = []
-    for item in combined:
-        tkr = str(item.get("ticker") or "").strip().upper()
-        if not tkr or "." in tkr:
-            continue
-        nm = str(item.get("name_en") or item.get("name") or tkr)
-        cp = float(item.get("close") or 100.0)
-        sc = int(item.get("score") or 70)
-        rs = float(item.get("rsi14") or 50.0)
-        vs = float(item.get("vol_surge_10d") or 1.1)
-        low_ref = float(item.get("stop_loss_price") or round(cp * 0.91, 2))
-        zn = str(item.get("zone_label_en") or item.get("zone_code") or "WASHOUT_WATCH")
-        llms_stock_lines.append(
-            f"| ${tkr} | {nm} | ${cp:.2f} | {sc}/100 | {rs:.1f} | {vs:.2f}x | ${low_ref:.2f} | {zn} | https://truthofmarket.com/stocks/{tkr.lower()}.html |"
-        )
+    # Legal pages (Clean URLs)
+    sitemap_urls.extend([
+        ("https://truthofmarket.com/terms", "0.60", "monthly", default_lastmod),
+        ("https://truthofmarket.com/privacy", "0.60", "monthly", default_lastmod),
+        ("https://truthofmarket.com/refund", "0.65", "monthly", default_lastmod),
+        ("https://truthofmarket.com/contact", "0.60", "monthly", default_lastmod),
+    ])
 
+    # 4. Generate clean SMH x XLV + SGOV llms-full.txt (Zero /stocks/*, Zero /compare/*, Zero /semi-fear-greed)
+    fg_val = float(semi.get("fg_score") or 3.7)
+    smh_c = float(semi.get("smh_close") or 422.46)
+    xlv_c = float(semi.get("xlv_close") or 183.68)
+    llms_guide_lines = [f"- https://truthofmarket.com/guides/{stem}" for stem in sorted(guide_stems)]
+    llms_insight_lines = [
+        f"- {it['title']} -> {_normalize_canonical_sitemap_loc(it['link'])}"
+        for it in insight_rss_items
+    ]
     llms_full_txt = (
-        f"# TruthOfMarket (https://truthofmarket.com) — Historical SMH × XLV Sector Balance & Market Data Corpus\n"
+        f"# TruthOfMarket (https://truthofmarket.com) — Historical SMH × XLV + SGOV Retirement Research Corpus\n"
         f"> Operated by: Educational Market Data & Quantitative Research Desk (hello@truthofmarket.com)\n"
         f"> Official Channels: https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA | https://www.instagram.com/truthofmarket/\n"
-        f"> Updated: {as_of} | 4-Step Historical SMH × XLV + SGOV Sector Balance Simulator + 76 US Equity Factor Studies\n"
+        f"> Updated: {as_of} | 4-Step Historical SMH × XLV + SGOV Sector Balance Explorer (2000–2025 Dataset)\n"
         f"> {MANDATORY_DISCLAIMER}\n\n"
         f"## 1. Core Sector Balance & Market Weather Tools\n"
-        f"- 4-Step Historical SMH × XLV + SGOV Sector Balance Simulator: https://truthofmarket.com/\n"
-        f"- Market Weather & $SMH:$XLV Barbell Calculator ({float(semi.get('fg_score') or 18.0):.1f}/100): https://truthofmarket.com/semi-fear-greed.html\n"
-        f"- Self-Directed Quantitative Research Archive: https://truthofmarket.com/pro-swing.html\n"
-        f"- Educational Insights Journal: https://truthofmarket.com/insights/\n"
-        f"- Legal Policies: https://truthofmarket.com/terms.html | https://truthofmarket.com/privacy.html | https://truthofmarket.com/refund.html\n\n"
-        f"## 2. 76 US Equity & ETF Public Factor Dataset\n"
-        f"| Ticker | Company | Close | Factor Score | 14D RSI | 10D Vol Ratio | Lower Variance Ref | Regime | Study URL |\n"
-        f"|---|---|---|---|---|---|---|---|---|\n"
-        + "\n".join(llms_stock_lines)
-        + "\n\n## 3. 50 Side-by-Side Quantitative Factor Comparisons (/compare/)\n"
-        + "\n".join(llms_compare_lines)
-        + "\n\n## 4. Educational Market Weather & Allocation Journal (/insights/)\n"
+        f"- 4-Step Retirement Stress Test & SMH × XLV + SGOV Explorer: https://truthofmarket.com/\n"
+        f"- Live 7-Factor SMH Fear & Greed Index ({fg_val:.1f}/100 | SMH ${smh_c:.2f} | XLV ${xlv_c:.2f}): https://truthofmarket.com/smh-fear-greed\n"
+        f"- 2000–2025 Historical Research Archive: https://truthofmarket.com/archive\n"
+        f"- Retirement Drawdown Guides Hub: https://truthofmarket.com/guides/\n"
+        f"- Editorial Insights Journal: https://truthofmarket.com/insights/\n"
+        f"- Legal Policies: https://truthofmarket.com/terms | https://truthofmarket.com/privacy | https://truthofmarket.com/refund | https://truthofmarket.com/contact\n\n"
+        f"## 2. Retirement & Sector Balance Guides (/guides/)\n"
+        + "\n".join(llms_guide_lines)
+        + "\n\n## 3. Educational Market Weather & Allocation Journal (/insights/)\n"
         + "\n".join(llms_insight_lines)
         + "\n"
     )
     (PUB / "llms-full.txt").write_text(llms_full_txt, encoding="utf-8")
 
-    default_lastmod = as_of if len(as_of) == 10 else datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    # 5. Render canonical Clean URL sitemap.xml (strictly blocking any legacy paths)
     seen_locs: set[str] = set()
     url_blocks: List[str] = []
-    # Preserve tool-type pSEO (/guides/*) and /smh-fear-greed in canonical sitemap.xml
-    dist_guides_dir = ROOT / "dist" / "guides"
-    if (ROOT / "dist" / "smh-fear-greed.html").exists():
-        sitemap_urls.append(("https://truthofmarket.com/smh-fear-greed", "0.95", "daily", default_lastmod))
-    if dist_guides_dir.exists():
-        sitemap_urls.append(("https://truthofmarket.com/guides/", "0.90", "weekly", default_lastmod))
-        for gp in sorted(dist_guides_dir.glob("*.html")):
-            if gp.name != "index.html":
-                sitemap_urls.append((f"https://truthofmarket.com/guides/{gp.stem}", "0.85", "weekly", default_lastmod))
-
     for sm_item in sitemap_urls:
         raw_loc, prio, freq = sm_item[0], sm_item[1], sm_item[2]
         item_lastmod = sm_item[3] if len(sm_item) >= 4 and sm_item[3] else default_lastmod
         clean_loc = _normalize_canonical_sitemap_loc(raw_loc)
+        if any(bad in clean_loc for bad in ("/stocks/", "/compare/", "/semi-fear-greed")) or clean_loc.endswith(".html"):
+            continue
         if clean_loc in seen_locs:
             continue
         seen_locs.add(clean_loc)
@@ -1376,20 +1205,20 @@ def generate_all_seo_pages(js_name: str = "index-BIziPp23.js", css_name: str = "
     )
     (PUB / "sitemap.xml").write_text(sitemap_xml, encoding="utf-8")
 
-    # Sync SEO detail directories & files into ./dist, ./frontend/dist, and root without clobbering index.html
+    # Sync clean directories & files into ./dist, ./frontend/dist, and root without clobbering index.html
     for target_dir in [ROOT / "dist", ROOT / "frontend" / "dist", ROOT]:
         if not target_dir.exists():
             continue
-        for sub_d in ("stocks", "compare", "insights"):
+        for sub_d in ("insights", "guides"):
             src_d = PUB / sub_d
             if src_d.exists():
                 shutil.copytree(src_d, target_dir / sub_d, dirs_exist_ok=True)
-        for fname in ("semi-fear-greed.html", "pro-swing.html", "sitemap.xml", "llms-full.txt", "terms.html", "privacy.html", "refund.html", "contact.html"):
+        for fname in ("archive.html", "smh-fear-greed.html", "sitemap.xml", "llms-full.txt", "terms.html", "privacy.html", "refund.html", "contact.html"):
             src_f = PUB / fname
             if src_f.exists() and src_f.resolve() != (target_dir / fname).resolve():
                 shutil.copy2(src_f, target_dir / fname)
 
-    print(f"[SEO] Generated /pro-swing.html + /semi-fear-greed.html + {len(combined)} /stocks/ + {compare_count} /compare/ + /insights/ + canonical sitemap.xml ({len(seen_locs)} URLs)")
+    print(f"[SEO] Generated clean SMH×XLV /guides/ + /insights/ + canonical sitemap.xml ({len(seen_locs)} Clean URLs, 0 stocks/compare/semi-fear-greed)")
     return build_ticker_directory_html(stocks, prefix="/", senior_home_only=True)
 
 

@@ -44,9 +44,9 @@ jobs:
           git config user.name "RightSideAlpha Quant Bot"
           git config user.email "bot@truthofmarket.com"
           python scripts/tom_auto_promotion_engine.py --no-deploy
-          git add frontend/public/ dist/ static_api/ stocks/ compare/ insights/ index.html semi-fear-greed.html smh-fear-greed.html data/smh_fg_latest.json dist/data/smh_fg_latest.json frontend/public/data/smh_fg_latest.json rss.xml feed.xml llms.txt llms-full.txt sitemap.xml
+          git add frontend/public/ dist/ static_api/ guides/ insights/ index.html archive.html smh-fear-greed.html data/smh_fg_latest.json dist/data/smh_fg_latest.json frontend/public/data/smh_fg_latest.json rss.xml feed.xml llms.txt llms-full.txt sitemap.xml
           if ! git diff --cached --quiet; then
-            git commit -m "Auto-sync daily US market close prices, 134+ SEO pages & quant insights"
+            git commit -m "Auto-sync daily US market close prices, SMH×XLV insights & Clean URL sitemap"
             git pull --rebase --autostash origin main || true
             git push origin HEAD:main
           fi
