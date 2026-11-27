@@ -83,7 +83,7 @@
     ]
   }
   </script>
-  <script src="/hq_member_crm_client.js?v=20261123a" defer></script>
+  <script src="/hq_member_crm_client.js?v=20261127nt" defer></script>
   <script src="/tom_payment_waitlist.js?v=20261122fix2" defer></script>
   <script type="module" crossorigin src="./assets/index-BIziPp23.js?v=20261123a"></script>
   <link rel="stylesheet" crossorigin href="./assets/index-CaOpdap3.css?v=20261119whop" />
@@ -117,6 +117,27 @@
           </button>
           <span class="pw-cta-caption">See how 2 simple ETFs cut worst crash losses in half (2000&ndash;2025 data) &middot; No email required</span>
         </div>
+
+        <a href="/smh-fear-greed" id="tomMiniFgGaugeCard" aria-label="Live SMH Fear and Greed Index Details" style="display:block;margin:18px 0 22px;padding:16px 18px;background:#FFFFFF;border:1.5px solid #0F2C22;border-radius:12px;text-decoration:none;color:#0F172A;box-shadow:0 6px 20px rgba(15,44,34,0.06);">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;">
+            <span style="font-size:0.75rem;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:#0F2C22;">LIVE SMH FEAR &amp; GREED MINI-GAUGE</span>
+            <span id="tomMiniFgDate" style="font-size:0.8rem;font-weight:600;color:#475569;font-variant-numeric:tabular-nums;">US Close 2026-11-25</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px;">
+            <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">
+              <strong id="tomMiniFgScore" style="font-size:1.55rem;font-weight:800;color:#991B1B;font-variant-numeric:tabular-nums;">3.7 / 100</strong>
+              <span id="tomMiniFgLabel" style="display:inline-block;padding:3px 10px;border-radius:999px;background:#FEE2E2;color:#991B1B;font-size:0.82rem;font-weight:800;">Extreme Fear</span>
+            </div>
+            <span id="tomMiniFgPrice" style="font-size:0.85rem;font-weight:700;color:#334155;font-variant-numeric:tabular-nums;">SMH $422.46 &middot; XLV $183.68</span>
+          </div>
+          <div style="position:relative;height:10px;border-radius:999px;background:linear-gradient(90deg,#DC2626 0%,#F59E0B 35%,#94A3B8 50%,#10B981 75%,#047857 100%);margin:6px 0 8px;">
+            <span id="tomMiniFgMarker" style="position:absolute;top:50%;left:3.7%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:#0F172A;border:2.5px solid #FFFFFF;box-shadow:0 2px 6px rgba(0,0,0,0.35);"></span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.82rem;color:#475569;">
+            <span>0 Fear &mdash; 100 Greed (7 Public ETF Factors)</span>
+            <strong style="color:#0F2C22;">Open Full Live Gauge &rarr;</strong>
+          </div>
+        </a>
 
         <figure class="pw-editorial-figure">
           <div class="pw-editorial-plate">
@@ -349,16 +370,16 @@
           </div>
 
           <div id="tom-passwordless-club-signup" class="pw-save-summary-box">
-            <div class="pw-kicker" style="margin-bottom:6px;">FREE MORNING RESEARCH NOTES &middot; ZERO PASSWORD</div>
-            <h3 class="pw-save-summary-title">Save My Study Summary &amp; Receive Morning Research Notes (Free)</h3>
+            <div class="pw-kicker" style="margin-bottom:6px;">FREE RESULT SAVE &middot; 2P SAMPLE PDF &middot; NO PASSWORD</div>
+            <h3 class="pw-save-summary-title">Email me my custom SMH&times;XLV numbers + free 2p Sample PDF</h3>
             <p style="margin:0;color:#475569;font-size:0.92rem;">
-              Enter your email to save this historical study summary and receive our calm morning market data newsletter (1-click unsubscribe anytime).
+              Enter your email below to keep your calculated SMH&times;XLV numbers and receive the free 2-page Sample PDF right in your inbox (no password, 1-click unsubscribe anytime).
             </p>
             <form class="pw-email-form" id="pwFreeGateForm" novalidate>
               <input type="text" name="website_hp" id="pwGateHp" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none;" />
               <input type="email" id="pwGateEmailInput" class="pw-email-input" required autocomplete="email" placeholder="Enter your email address" aria-label="Email address" />
               <button type="submit" class="pw-btn-primary pw-btn-emerald" id="btnPwGateSubmit">
-                Save Study Summary (Free) &rarr;
+                Email me my custom SMH&times;XLV numbers + free 2p Sample PDF &rarr;
               </button>
             </form>
             <div id="pwGateStatusMsg" role="status" aria-live="polite" style="display:none;margin-top:10px;font-size:0.88rem;color:#065F46;font-weight:600;"></div>
@@ -387,20 +408,20 @@
         </div>
 
         <div class="pw-tier-grid" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr));">
-          <div class="pw-tier-card">
+          <div class="pw-tier-card is-annual" style="border:2px solid #0F2C22;background:#F8FDF9;">
             <div>
-              <div class="pw-tier-kicker" style="color:#0369A1;">STEP 2 &middot; LOW-TICKET STARTER</div>
-              <h3 class="pw-tier-name">2000&ndash;2025 Crisis Workbook PDF</h3>
+              <div class="pw-tier-kicker" style="color:#065F46;">START HERE &middot; NO SUBSCRIPTION NEEDED</div>
+              <h3 class="pw-tier-name">No Subscription Needed &mdash; One-Time $9 (2000&ndash;2025 Full 14-Page Crash &amp; Tax Allocation Workbook PDF)</h3>
               <div class="pw-tier-price">$9 <span>one-time</span></div>
-              <div class="pw-tier-saving">Zero subscription &middot; Permanent PDF download</div>
+              <div class="pw-tier-saving">Zero recurring billing &middot; Instant permanent PDF download</div>
               <ul class="pw-tier-list">
-                <li><strong>Complete 14-Page 2000&ndash;2025 Historical Statistical Workbook PDF</strong> (Dot-Com, 2008 &amp; 2022 SMH &times; XLV + SGOV case studies)</li>
+                <li><strong>Complete 14-Page 2000&ndash;2025 Crash &amp; Tax Allocation Workbook PDF</strong> (Dot-Com, 2008 &amp; 2022 SMH &times; XLV + SGOV case studies)</li>
                 <li><strong>Self-Serve Custom Dollar Educational Worksheet</strong> &amp; 401(k)/IRA/Taxable bucket reference table</li>
                 <li><strong>Fidelity, Schwab &amp; Vanguard Limit-Order Illustrated Guide</strong></li>
               </ul>
             </div>
-            <a href="https://whop.com/checkout/plan_xIpLzFNR8SlMz" class="pw-btn-primary whop-checkout-button" data-whop-checkout data-whop-plan="starter" data-tom-paid-plan="starter" style="width:100%;background:#FFFFFF;color:#0F2C22;border:1.5px solid #0F2C22;">
-              Get 14p Workbook &mdash; $9 One-Time &rarr;
+            <a href="https://whop.com/checkout/plan_xIpLzFNR8SlMz" class="pw-btn-primary pw-btn-emerald whop-checkout-button" data-whop-checkout data-whop-plan="starter" data-tom-paid-plan="starter" style="width:100%;">
+              Get 14p Workbook PDF &mdash; $9 One-Time (No Subscription) &rarr;
             </a>
           </div>
 
@@ -559,8 +580,8 @@
       </div>
     </div>
   </div>
-  <script defer src="/assets/smh-fg-sync.js?v=20261125"></script>
-  <script defer src="/assets/dc-ux-addons.js?v=20261125"></script>
+  <script defer src="/assets/smh-fg-sync.js?v=20261127nt"></script>
+  <script defer src="/assets/dc-ux-addons.js?v=20261127nt"></script>
   <script defer src="/assets/dc-share-card.js?v=20261125"></script>
 </body>
 </html>

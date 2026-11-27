@@ -740,6 +740,7 @@ def build_seo_article_html(div: str, matrix_db: Dict[str, Any], date_str: str, w
   <script>
     (function(){{
       try{{
+        var _sp0=new URLSearchParams(location.search||'');if(_sp0.get('internal_test')==='1'){{try{{sessionStorage.setItem('dc_internal_test','1');}}catch(_s){{}}return;}}try{{if(sessionStorage.getItem('dc_internal_test')==='1')return;}}catch(_s){{}}if(navigator.webdriver===true||/HeadlessChrome|Playwright|Puppeteer|Selenium/i.test(navigator.userAgent||''))return;
         var sp=new URLSearchParams(location.search);
         var uc=sp.get('utm_content')||'{esc(utm_a)}';
         fetch('https://api.truthofmarket.com/api/analytics/event',{{
