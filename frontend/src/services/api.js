@@ -441,7 +441,7 @@ export async function validateLicense(licenseKey) {
             tier: "free",
             expires_at: null,
             message:
-              "Invalid or unrecognized license key. Please check your Whop receipt or contact beable9489@gmail.com.",
+              "Invalid or unrecognized license key. Please check your Whop receipt or contact hello@truthofmarket.com.",
           };
         }
         const whopResp = await fetch(

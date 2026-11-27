@@ -240,7 +240,7 @@ export function renderDoctorVipUnlockPreview(state) {
         🔒 Whop.com (Global Card / Apple Pay / Google Pay) · Self-Directed Educational Calculator Software · 14-Day Refund Policy
       </div>
       <div style="margin-top:6px; font-size:0.7rem; color:#94a3b8; text-align:center; line-height:1.45;">
-        Support Desk: <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#93c5fd; font-weight:700; text-decoration:underline;">beable9489@gmail.com</a>
+        Support Desk: <a href="mailto:hello@truthofmarket.com?subject=TruthOfMarket%20Educational%20Software%20Support" style="color:#93c5fd; font-weight:700; text-decoration:underline;">hello@truthofmarket.com</a>
       </div>
     `
     : `

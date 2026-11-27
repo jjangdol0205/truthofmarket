@@ -980,6 +980,14 @@ def generate_all_quant_insights() -> Tuple[List[Tuple[str, str, str]], List[Dict
         <div class="hub-byline">By {html.escape(sp['author'])} &middot; <a href="/insights/{sp['slug']}">Read essay &rarr;</a></div>
       </article>"""
 
+    # Preserve additional standalone Stage-2 / pSEO insight HTML files in sitemap.xml
+    known_insight_slugs = {sp["slug"] for sp in all_specs} | {"index.html"}
+    for extra_f in sorted(insights_dir.glob("*.html")):
+        if extra_f.name in known_insight_slugs:
+            continue
+        clean_slug = extra_f.name[:-5] if extra_f.name.endswith(".html") else extra_f.name
+        sitemap_entries.append((f"https://truthofmarket.com/insights/{clean_slug}", "0.88", "weekly", as_of))
+
     hub_html = f"""<!DOCTYPE html>
 <html lang="en" data-tom-theme="light" data-tom-font="18">
 <head>

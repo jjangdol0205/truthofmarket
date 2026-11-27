@@ -323,7 +323,7 @@ def run_daily_telegraph_and_syndication(semi: dict, stocks: list, dry_run: bool 
         + "\n### Upgrade When Ready: Full 72-Stock Signals & Pro VIP\n"
         + "- **Free 8:30 AM Safety Email & 3-Second Position Doctor**: https://truthofmarket.com/\n"
         + "- **Pro VIP ($29/mo) & Lifetime Pass ($199 — One-Time)**: Unlocks all 11 unmasked Top Uptrend Leaders, exact entry/exit alerts, and TradingView Pine v5 indicators.\n"
-        + "- **Research & Partnership Desk**: `beable9489@gmail.com`\n"
+        + "- **Research & Partnership Desk**: `hello@truthofmarket.com`\n"
     )
 
     tradingview_idea_md = (

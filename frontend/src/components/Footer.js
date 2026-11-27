@@ -14,9 +14,9 @@ export function renderFooter(state) {
         <span>·</span>
         <a href="https://www.instagram.com/truthofmarket/" target="_blank" rel="noopener" style="color:#93c5fd; text-decoration:underline;">Instagram @truthofmarket</a>
         <span>·</span>
-        <a href="mailto:beable9489@gmail.com" style="color:#38bdf8; text-decoration:underline;">Support: beable9489@gmail.com</a>
+        <a href="mailto:hello@truthofmarket.com" style="color:#38bdf8; text-decoration:underline;">Support: hello@truthofmarket.com</a>
         <span>·</span>
-        <a href="mailto:beable9489@gmail.com?subject=TruthOfMarket%20Brand%20%26%20Media%20Partnership" style="color:#6ee7b7; text-decoration:underline;">Sponsorship &amp; Media Partnerships: beable9489@gmail.com</a>
+        <a href="mailto:hello@truthofmarket.com?subject=TruthOfMarket%20Brand%20%26%20Media%20Partnership" style="color:#6ee7b7; text-decoration:underline;">Sponsorship &amp; Media Partnerships: hello@truthofmarket.com</a>
       </div>
       <p>${t.disclaimer}</p>
       <p style="margin-top:8px;">${t.copyright}</p>

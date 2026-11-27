@@ -49,7 +49,7 @@
     WHOP_TOM_STARTER_URL: WHOP_TOM_STARTER_URL,
     WHOP_TOM_MONTHLY_URL: WHOP_TOM_MONTHLY_URL,
     WHOP_TOM_ANNUAL_URL: WHOP_TOM_ANNUAL_URL,
-    SUPPORT_EMAIL: "beable9489@gmail.com",
+    SUPPORT_EMAIL: "hello@truthofmarket.com",
   };
 
   if (!window.PAYMENT_CONFIG || typeof window.PAYMENT_CONFIG !== "object") {
@@ -83,7 +83,7 @@
     window.PAYMENT_CONFIG.WHOP_TOM_STARTER_URL = WHOP_TOM_STARTER_URL;
     window.PAYMENT_CONFIG.WHOP_TOM_MONTHLY_URL = WHOP_TOM_MONTHLY_URL;
     window.PAYMENT_CONFIG.WHOP_TOM_ANNUAL_URL = WHOP_TOM_ANNUAL_URL;
-    window.PAYMENT_CONFIG.SUPPORT_EMAIL = window.PAYMENT_CONFIG.SUPPORT_EMAIL || "beable9489@gmail.com";
+    window.PAYMENT_CONFIG.SUPPORT_EMAIL = window.PAYMENT_CONFIG.SUPPORT_EMAIL || "hello@truthofmarket.com";
   }
 
   window.TOM_COPY_MODE = "LIVE_SHARP";
@@ -446,7 +446,7 @@
         banner.innerHTML =
           "<div><strong>Whop Checkout Confirmed &mdash; " +
           planLabel +
-          " Active.</strong> Your Paid Screen 4 Vault &amp; Protected 14-Page PDF are open below (<a href='mailto:beable9489@gmail.com?subject=TOM%207-Day%20Support%20or%20Refund' style='color:#065f46;font-weight:700;text-decoration:underline;'>1-Click Support</a>).</div>" +
+          " Active.</strong> Your Paid Screen 4 Vault &amp; Protected 14-Page PDF are open below (<a href='mailto:hello@truthofmarket.com?subject=TOM%207-Day%20Support%20or%20Refund' style='color:#065f46;font-weight:700;text-decoration:underline;'>1-Click Support</a>).</div>" +
           "<button type='button' id='tomDismissReturnBanner' style='padding:6px 12px;border-radius:6px;border:1px solid #059669;background:#ffffff;color:#064e3b;font-weight:700;cursor:pointer;'>Dismiss</button>";
         document.body.insertBefore(banner, document.body.firstChild);
         var dismissBtn = document.getElementById("tomDismissReturnBanner");
