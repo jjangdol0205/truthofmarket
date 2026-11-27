@@ -1,14 +1,14 @@
 # RightSideAlpha × SemiFearGreed (https://truthofmarket.com)
 
 > Institutional US Equity Post-Washout Right-Side Ignition (PW-RSI) Terminal & 7-Factor Semiconductor ($SMH × $XLV) Fear & Greed Index.
-> Live Daily Closing Snapshot as of 2026-11-25 | 26.8-Year Empirical Backtest (2000–2026): PW-RSI 24.48% CAGR (349.3x vs QQQ 14.3x).
+> Live Daily Closing Snapshot as of 2026-11-27 | 26.8-Year Empirical Backtest (2000–2026): PW-RSI 24.48% CAGR (349.3x vs QQQ 14.3x).
 
 ## 1. Live Macro & Semiconductor Fear & Greed Snapshot
-- **As of Date**: 2026-11-25
-- **7-Factor Semiconductor Fear & Greed Score**: 6.1/100 (Extreme Fear)
-- **$SMH (VanEck Semiconductor ETF)**: $422.46 (-36.84% off 52-week high)
-- **$XLV (Health Care Select Sector SPDR ETF)**: $183.68
-- **$QQQ (Invesco QQQ Trust)**: $633.93
+- **As of Date**: 2026-11-27
+- **7-Factor Semiconductor Fear & Greed Score**: 7.7/100 (Extreme Fear)
+- **$SMH (VanEck Semiconductor ETF)**: $440.06 (-34.21% off 52-week high)
+- **$XLV (Health Care Select Sector SPDR ETF)**: $184.2
+- **$QQQ (Invesco QQQ Trust)**: $650.99
 - **Active Barbell Allocation Directive**: 80% $SMH : 20% $XLV Contrarian Barbell
 - **Interactive SMH Fear & Greed Gauge**: https://truthofmarket.com/smh-fear-greed
 - **Daily Editorial Quant Journal**: https://truthofmarket.com/insights/daily-us-quant-regime-brief

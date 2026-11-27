@@ -1,6 +1,6 @@
 {
-  "date": "2026-11-25",
-  "fg_score": 6.1,
+  "date": "2026-11-27",
+  "fg_score": 7.7,
   "regime_code": "EXTREME_FEAR",
   "regime_en": "Extreme Fear",
   "regime_jp": "極度の恐怖",
@@ -8,17 +8,17 @@
   "action_headline_en": "HISTORICAL EXTREME-FEAR REGIME STUDY (80% SMH : 20% XLV CASE)",
   "action_headline_jp": "極度の恐怖局面・過去統計ケーススタディ (80% SMH : 20% XLV)",
   "action_headline_kr": "HISTORICAL EXTREME-FEAR REGIME STUDY (80% SMH : 20% XLV CASE)",
-  "action_detail_en": "Semiconductor sentiment stands in Extreme Fear (6.1/100) with $SMH -36.84% from its 52-week high. In our 2000–2025 historical statistical workbook, periods below -20% drawdown corresponded to the 80% $SMH / 20% $XLV historical study cohort.",
-  "action_detail_jp": "半導体センチメントは極度の恐怖 (6.1/100)、$SMHは52週高値から -36.84% の水準にあります。2000–2025年の過去統計ワークブック上、-20%超の調整局面における 80% $SMH : 20% $XLV 統計比較ケースに該当します。",
-  "action_detail_kr": "Semiconductor sentiment stands in Extreme Fear (6.1/100) with $SMH -36.84% from its 52-week high. In our 2000–2025 historical statistical workbook, periods below -20% drawdown corresponded to the 80% $SMH / 20% $XLV historical study cohort.",
-  "smh_close": 422.46,
-  "xlv_close": 183.68,
-  "qqq_close": 633.93,
-  "usdkrw": 1339.88,
-  "smh_dd_pct": -36.84,
-  "smh_rsi": 36.9,
-  "vol_ann_pct": 93.4,
-  "natural_smh_weight_pct": 57.1,
+  "action_detail_en": "Semiconductor sentiment stands in Extreme Fear (7.7/100) with $SMH -34.21% from its 52-week high. In our 2000–2025 historical statistical workbook, periods below -20% drawdown corresponded to the 80% $SMH / 20% $XLV historical study cohort.",
+  "action_detail_jp": "半導体センチメントは極度の恐怖 (7.7/100)、$SMHは52週高値から -34.21% の水準にあります。2000–2025年の過去統計ワークブック上、-20%超の調整局面における 80% $SMH : 20% $XLV 統計比較ケースに該当します。",
+  "action_detail_kr": "Semiconductor sentiment stands in Extreme Fear (7.7/100) with $SMH -34.21% from its 52-week high. In our 2000–2025 historical statistical workbook, periods below -20% drawdown corresponded to the 80% $SMH / 20% $XLV historical study cohort.",
+  "smh_close": 440.06,
+  "xlv_close": 184.2,
+  "qqq_close": 650.99,
+  "usdkrw": 1333.9,
+  "smh_dd_pct": -34.21,
+  "smh_rsi": 41.1,
+  "vol_ann_pct": 95.4,
+  "natural_smh_weight_pct": 57.4,
   "comparisons": [
     {
       "key": "prev_close",
@@ -75,8 +75,8 @@
       "order": 1,
       "weight_pct": 20,
       "score": 2.0,
-      "raw_value": -25.43,
-      "raw_display": "-25.43% vs 125D MA",
+      "raw_value": -22.14,
+      "raw_display": "-22.14% vs 125D MA",
       "regime_code": "EXTREME_FEAR",
       "regime_en": "Extreme Fear",
       "regime_jp": "極度の恐怖",
@@ -87,11 +87,10 @@
       "subtitle_en": "$SMH vs. 125-Day Moving Average",
       "subtitle_jp": "$SMH 125日移動平均線からの乖離率",
       "subtitle_kr": "$SMH vs. 125-Day Moving Average",
-      "desc_en": "$SMH is trading -25.43% relative to its 125-day moving average. When $SMH drops below its 6-month trendline, institutional momentum flips to Fear, historically marking high-probability accumulation zones.",
-      "desc_jp": "$SMHは125日移動平均線に対して -25.43% に位置しています。6ヶ月トレンドラインを下回ると機関投資家のモメンタムは「恐怖」領域に入り、長期的な仕込み好機を示唆します。",
-      "desc_kr": "$SMH is trading -25.43% relative to its 125-day moving average. When $SMH drops below its 6-month trendline, institutional momentum flips to Fear, historically marking high-probability accumulation zones.",
+      "desc_en": "$SMH is trading -22.14% relative to its 125-day moving average. When $SMH drops below its 6-month trendline, institutional momentum flips to Fear, historically marking high-probability accumulation zones.",
+      "desc_jp": "$SMHは125日移動平均線に対して -22.14% に位置しています。6ヶ月トレンドラインを下回ると機関投資家のモメンタムは「恐怖」領域に入り、長期的な仕込み好機を示唆します。",
+      "desc_kr": "$SMH is trading -22.14% relative to its 125-day moving average. When $SMH drops below its 6-month trendline, institutional momentum flips to Fear, historically marking high-probability accumulation zones.",
       "sparkline": [
-        54.3,
         56.7,
         45.2,
         41.7,
@@ -150,10 +149,10 @@
         2.0,
         6.4,
         2.0,
+        2.0,
         2.0
       ],
       "sparkline_dates": [
-        "2026-08-20",
         "2026-08-21",
         "2026-08-24",
         "2026-08-25",
@@ -212,7 +211,8 @@
         "2026-11-20",
         "2026-11-23",
         "2026-11-24",
-        "2026-11-25"
+        "2026-11-25",
+        "2026-11-27"
       ]
     },
     {
@@ -220,8 +220,8 @@
       "order": 2,
       "weight_pct": 20,
       "score": 2.0,
-      "raw_value": -36.84,
-      "raw_display": "-36.84% off 52W High",
+      "raw_value": -34.21,
+      "raw_display": "-34.21% off 52W High",
       "regime_code": "EXTREME_FEAR",
       "regime_en": "Extreme Fear",
       "regime_jp": "極度の恐怖",
@@ -232,11 +232,10 @@
       "subtitle_en": "$SMH Drawdown vs. -20% Contrarian Trigger",
       "subtitle_jp": "$SMH 52週高値比ドローダウン (-20%逆張り基準)",
       "subtitle_kr": "$SMH Drawdown vs. -20% Contrarian Trigger",
-      "desc_en": "$SMH is -36.84% below its rolling 252-day high. In our 2000–2025 historical statistical study, drawdowns beyond -20% mark deep-compression observation windows.",
-      "desc_jp": "$SMHは過去52週高値から -36.84% 下落しています。2000–2025年の過去統計研究における深押し局面の観測指標です。",
-      "desc_kr": "$SMH is -36.84% below its rolling 252-day high. In our 2000–2025 historical statistical study, drawdowns beyond -20% mark deep-compression observation windows.",
+      "desc_en": "$SMH is -34.21% below its rolling 252-day high. In our 2000–2025 historical statistical study, drawdowns beyond -20% mark deep-compression observation windows.",
+      "desc_jp": "$SMHは過去52週高値から -34.21% 下落しています。2000–2025年の過去統計研究における深押し局面の観測指標です。",
+      "desc_kr": "$SMH is -34.21% below its rolling 252-day high. In our 2000–2025 historical statistical study, drawdowns beyond -20% mark deep-compression observation windows.",
       "sparkline": [
-        37.2,
         40.4,
         29.0,
         25.6,
@@ -295,10 +294,10 @@
         2.0,
         8.2,
         2.0,
+        2.0,
         2.0
       ],
       "sparkline_dates": [
-        "2026-08-20",
         "2026-08-21",
         "2026-08-24",
         "2026-08-25",
@@ -357,7 +356,8 @@
         "2026-11-20",
         "2026-11-23",
         "2026-11-24",
-        "2026-11-25"
+        "2026-11-25",
+        "2026-11-27"
       ]
     },
     {
@@ -365,8 +365,8 @@
       "order": 3,
       "weight_pct": 15,
       "score": 2.0,
-      "raw_value": -27.78,
-      "raw_display": "-27.78%p (20D Spread)",
+      "raw_value": -21.74,
+      "raw_display": "-21.74%p (20D Spread)",
       "regime_code": "EXTREME_FEAR",
       "regime_en": "Extreme Fear",
       "regime_jp": "極度の恐怖",
@@ -377,11 +377,10 @@
       "subtitle_en": "20-Day Return Difference: $SMH minus $XLV",
       "subtitle_jp": "過去20営業日の収益率格差 ($SMH - $XLV)",
       "subtitle_kr": "20-Day Return Difference: $SMH minus $XLV",
-      "desc_en": "Over the past 20 trading days, $SMH relative return versus Healthcare ($XLV) is -27.78%p, illustrating how non-cyclical healthcare buffers sector dispersion.",
-      "desc_jp": "直近20営業日で$SMHはディフェンシブなヘルスケア($XLV)に対して -27.78%p のスプレッドを記録しています。",
-      "desc_kr": "Over the past 20 trading days, $SMH relative return versus Healthcare ($XLV) is -27.78%p, illustrating how non-cyclical healthcare buffers sector dispersion.",
+      "desc_en": "Over the past 20 trading days, $SMH relative return versus Healthcare ($XLV) is -21.74%p, illustrating how non-cyclical healthcare buffers sector dispersion.",
+      "desc_jp": "直近20営業日で$SMHはディフェンシブなヘルスケア($XLV)に対して -21.74%p のスプレッドを記録しています。",
+      "desc_kr": "Over the past 20 trading days, $SMH relative return versus Healthcare ($XLV) is -21.74%p, illustrating how non-cyclical healthcare buffers sector dispersion.",
       "sparkline": [
-        44.7,
         43.4,
         14.8,
         7.1,
@@ -440,10 +439,10 @@
         2.0,
         12.2,
         2.0,
+        2.0,
         2.0
       ],
       "sparkline_dates": [
-        "2026-08-20",
         "2026-08-21",
         "2026-08-24",
         "2026-08-25",
@@ -502,31 +501,31 @@
         "2026-11-20",
         "2026-11-23",
         "2026-11-24",
-        "2026-11-25"
+        "2026-11-25",
+        "2026-11-27"
       ]
     },
     {
       "id": "f4_rsi",
       "order": 4,
       "weight_pct": 15,
-      "score": 20.2,
-      "raw_value": 36.9,
-      "raw_display": "RSI 36.9 / 100",
-      "regime_code": "EXTREME_FEAR",
-      "regime_en": "Extreme Fear",
-      "regime_jp": "極度の恐怖",
-      "regime_kr": "Extreme Fear",
+      "score": 29.8,
+      "raw_value": 41.1,
+      "raw_display": "RSI 41.1 / 100",
+      "regime_code": "FEAR",
+      "regime_en": "Fear",
+      "regime_jp": "恐怖",
+      "regime_kr": "Fear",
       "title_en": "Barbell Relative Strength (RSI-14)",
       "title_jp": "ポートフォリオ加重 RSI-14 (売られ過ぎ判定)",
       "title_kr": "Barbell Relative Strength (RSI-14)",
       "subtitle_en": "70% $SMH RSI-14 + 30% Barbell Index RSI-14",
       "subtitle_jp": "70% $SMH RSI + 30% ポートフォリオRSI ブレンド",
       "subtitle_kr": "70% $SMH RSI-14 + 30% Barbell Index RSI-14",
-      "desc_en": "Blended 14-day Relative Strength Index stands at 36.9. Readings below 42 reflect short-term momentum compression across semiconductor constituents.",
-      "desc_jp": "14日加重RSIは 36.9 です。42以下の水準は半導体セクターの短期モメンタム低下を示します。",
-      "desc_kr": "Blended 14-day Relative Strength Index stands at 36.9. Readings below 42 reflect short-term momentum compression across semiconductor constituents.",
+      "desc_en": "Blended 14-day Relative Strength Index stands at 41.1. Readings below 42 reflect short-term momentum compression across semiconductor constituents.",
+      "desc_jp": "14日加重RSIは 41.1 です。42以下の水準は半導体セクターの短期モメンタム低下を示します。",
+      "desc_kr": "Blended 14-day Relative Strength Index stands at 41.1. Readings below 42 reflect short-term momentum compression across semiconductor constituents.",
       "sparkline": [
-        53.7,
         57.3,
         40.4,
         36.8,
@@ -585,10 +584,10 @@
         2.0,
         33.0,
         21.6,
-        20.2
+        20.2,
+        29.8
       ],
       "sparkline_dates": [
-        "2026-08-20",
         "2026-08-21",
         "2026-08-24",
         "2026-08-25",
@@ -647,7 +646,8 @@
         "2026-11-20",
         "2026-11-23",
         "2026-11-24",
-        "2026-11-25"
+        "2026-11-25",
+        "2026-11-27"
       ]
     },
     {
@@ -655,8 +655,8 @@
       "order": 5,
       "weight_pct": 10,
       "score": 2.0,
-      "raw_value": 93.4,
-      "raw_display": "93.4% Ann. Vol",
+      "raw_value": 95.4,
+      "raw_display": "95.4% Ann. Vol",
       "regime_code": "EXTREME_FEAR",
       "regime_en": "Extreme Fear",
       "regime_jp": "極度の恐怖",
@@ -667,11 +667,10 @@
       "subtitle_en": "$SMH 20-Day Annualized Volatility vs. 50D Mean",
       "subtitle_jp": "$SMH 20日年率ボラティリティ (対50日平均)",
       "subtitle_kr": "$SMH 20-Day Annualized Volatility vs. 50D Mean",
-      "desc_en": "$SMH 20-day annualized volatility is 93.4%. Pairing Healthcare ($XLV) alongside $SMH historically dampened blended portfolio variance by ~30%.",
-      "desc_jp": "$SMHの20日年率ボラティリティは 93.4% です。$XLVを組み合わせた過去検証では全体の変動幅が抑制されました。",
-      "desc_kr": "$SMH 20-day annualized volatility is 93.4%. Pairing Healthcare ($XLV) alongside $SMH historically dampened blended portfolio variance by ~30%.",
+      "desc_en": "$SMH 20-day annualized volatility is 95.4%. Pairing Healthcare ($XLV) alongside $SMH historically dampened blended portfolio variance by ~30%.",
+      "desc_jp": "$SMHの20日年率ボラティリティは 95.4% です。$XLVを組み合わせた過去検証では全体の変動幅が抑制されました。",
+      "desc_kr": "$SMH 20-day annualized volatility is 95.4%. Pairing Healthcare ($XLV) alongside $SMH historically dampened blended portfolio variance by ~30%.",
       "sparkline": [
-        47.9,
         47.9,
         48.1,
         47.6,
@@ -730,10 +729,10 @@
         23.9,
         2.0,
         2.0,
+        2.0,
         2.0
       ],
       "sparkline_dates": [
-        "2026-08-20",
         "2026-08-21",
         "2026-08-24",
         "2026-08-25",
@@ -792,16 +791,17 @@
         "2026-11-20",
         "2026-11-23",
         "2026-11-24",
-        "2026-11-25"
+        "2026-11-25",
+        "2026-11-27"
       ]
     },
     {
       "id": "f6_leadership",
       "order": 6,
       "weight_pct": 10,
-      "score": 16.1,
-      "raw_value": -12.19,
-      "raw_display": "-12.19% vs QQQ (60D)",
+      "score": 16.8,
+      "raw_value": -11.94,
+      "raw_display": "-11.94% vs QQQ (60D)",
       "regime_code": "EXTREME_FEAR",
       "regime_en": "Extreme Fear",
       "regime_jp": "極度の恐怖",
@@ -812,11 +812,10 @@
       "subtitle_en": "60-Day Relative Alpha: $SMH vs. $QQQ",
       "subtitle_jp": "$SMH 対 $QQQ 60営業日相対パフォーマンス",
       "subtitle_kr": "60-Day Relative Alpha: $SMH vs. $QQQ",
-      "desc_en": "Over the past 60 trading days, $SMH relative performance against $QQQ is -12.19%.",
-      "desc_jp": "過去60営業日の対$QQQ相対スプレッドは -12.19% です。",
-      "desc_kr": "Over the past 60 trading days, $SMH relative performance against $QQQ is -12.19%.",
+      "desc_en": "Over the past 60 trading days, $SMH relative performance against $QQQ is -11.94%.",
+      "desc_jp": "過去60営業日の対$QQQ相対スプレッドは -11.94% です。",
+      "desc_kr": "Over the past 60 trading days, $SMH relative performance against $QQQ is -11.94%.",
       "sparkline": [
-        42.5,
         40.0,
         32.2,
         25.5,
@@ -875,10 +874,10 @@
         9.3,
         28.4,
         15.4,
-        16.1
+        16.1,
+        16.8
       ],
       "sparkline_dates": [
-        "2026-08-20",
         "2026-08-21",
         "2026-08-24",
         "2026-08-25",
@@ -937,7 +936,8 @@
         "2026-11-20",
         "2026-11-23",
         "2026-11-24",
-        "2026-11-25"
+        "2026-11-25",
+        "2026-11-27"
       ]
     },
     {
@@ -945,8 +945,8 @@
       "order": 7,
       "weight_pct": 10,
       "score": 2.0,
-      "raw_value": 57.1,
-      "raw_display": "57.1% SMH (-12.90%p)",
+      "raw_value": 57.4,
+      "raw_display": "57.4% SMH (-12.60%p)",
       "regime_code": "EXTREME_FEAR",
       "regime_en": "Extreme Fear",
       "regime_jp": "極度の恐怖",
@@ -957,11 +957,10 @@
       "subtitle_en": "6-Month Unrebalanced $SMH Weight vs. 70% Target",
       "subtitle_jp": "6ヶ月無調整時の$SMH自然比重 (基準70.0%との差)",
       "subtitle_kr": "6-Month Unrebalanced $SMH Weight vs. 70% Target",
-      "desc_en": "An unadjusted 70:30 historical study mix from 6 months ago stands at 57.1% $SMH (-12.90%p drift).",
-      "desc_jp": "6ヶ月前の70:30基準モデルに対する現在の$SMH自然比重は 57.1% (-12.90%p) です。",
-      "desc_kr": "An unadjusted 70:30 historical study mix from 6 months ago stands at 57.1% $SMH (-12.90%p drift).",
+      "desc_en": "An unadjusted 70:30 historical study mix from 6 months ago stands at 57.4% $SMH (-12.60%p drift).",
+      "desc_jp": "6ヶ月前の70:30基準モデルに対する現在の$SMH自然比重は 57.4% (-12.60%p) です。",
+      "desc_kr": "An unadjusted 70:30 historical study mix from 6 months ago stands at 57.4% $SMH (-12.60%p drift).",
       "sparkline": [
-        71.4,
         73.8,
         65.0,
         54.3,
@@ -1020,10 +1019,10 @@
         2.0,
         2.0,
         2.0,
+        2.0,
         2.0
       ],
       "sparkline_dates": [
-        "2026-08-20",
         "2026-08-21",
         "2026-08-24",
         "2026-08-25",
@@ -1082,7 +1081,8 @@
         "2026-11-20",
         "2026-11-23",
         "2026-11-24",
-        "2026-11-25"
+        "2026-11-25",
+        "2026-11-27"
       ]
     }
   ],
@@ -1095,11 +1095,11 @@
       "role_en": "70% Core Growth Engine (NVDA, TSM, AVGO, ASML, MU)",
       "role_jp": "70% コア成長エンジン (AI・半導体主力25銘柄)",
       "role_kr": "70% Core Growth Engine (NVDA, TSM, AVGO, ASML, MU)",
-      "close": 422.46,
-      "ret_1d_pct": -1.01,
-      "ret_20d_pct": -25.58,
-      "dd_52w_pct": -36.84,
-      "rsi14": 36.9,
+      "close": 440.06,
+      "ret_1d_pct": 4.17,
+      "ret_20d_pct": -21.65,
+      "dd_52w_pct": -34.21,
+      "rsi14": 41.1,
       "target_weight_normal": 70,
       "target_weight_fear": 80
     },
@@ -1111,11 +1111,11 @@
       "role_en": "30% Defensive Cash Vault & Dry Powder (LLY, UNH, JNJ, ABBV)",
       "role_jp": "30% ディフェンシブ緩衝材＆暴落時の買い増し原資",
       "role_kr": "30% Defensive Cash Vault & Dry Powder (LLY, UNH, JNJ, ABBV)",
-      "close": 183.68,
-      "ret_1d_pct": -0.56,
-      "ret_20d_pct": 2.2,
-      "dd_52w_pct": -3.15,
-      "rsi14": 53.4,
+      "close": 184.2,
+      "ret_1d_pct": 0.28,
+      "ret_20d_pct": 0.09,
+      "dd_52w_pct": -2.88,
+      "rsi14": 54.3,
       "target_weight_normal": 30,
       "target_weight_fear": 20
     },
@@ -1127,11 +1127,11 @@
       "role_en": "Benchmark Comparison Index (100% Tech/Growth Baseline)",
       "role_jp": "比較ベンチマーク指数 (100% ナスダック100)",
       "role_kr": "Benchmark Comparison Index (100% Tech/Growth Baseline)",
-      "close": 633.93,
-      "ret_1d_pct": -0.65,
-      "ret_20d_pct": -12.63,
-      "dd_52w_pct": -16.55,
-      "rsi14": 38.6,
+      "close": 650.99,
+      "ret_1d_pct": 2.69,
+      "ret_20d_pct": -9.0,
+      "dd_52w_pct": -14.31,
+      "rsi14": 44.0,
       "target_weight_normal": 0,
       "target_weight_fear": 0
     }

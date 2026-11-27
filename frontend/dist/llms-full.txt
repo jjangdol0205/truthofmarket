@@ -1,12 +1,12 @@
 # TruthOfMarket (https://truthofmarket.com) — Historical SMH × XLV + SGOV Retirement Research Corpus
 > Operated by: Educational Market Data & Quantitative Research Desk (hello@truthofmarket.com)
 > Official Channels: https://www.youtube.com/channel/UCbxWByxJntRqoweWy-4QnqA | https://www.instagram.com/truthofmarket/
-> Updated: 2026-11-25 | 4-Step Historical SMH × XLV + SGOV Sector Balance Explorer (2000–2025 Dataset)
+> Updated: 2026-11-27 | 4-Step Historical SMH × XLV + SGOV Sector Balance Explorer (2000–2025 Dataset)
 > Disclaimer: TruthOfMarket Research is a strictly non-advisory educational publisher providing general market data newsletters and 2000–2025 historical statistical workbooks only. Nothing on this site constitutes personalized investment, financial, legal, or tax advice.
 
 ## 1. Core Sector Balance & Market Weather Tools
 - 4-Step Retirement Stress Test & SMH × XLV + SGOV Explorer: https://truthofmarket.com/
-- Live 7-Factor SMH Fear & Greed Index (6.1/100 | SMH $422.46 | XLV $183.68): https://truthofmarket.com/smh-fear-greed
+- Live 7-Factor SMH Fear & Greed Index (7.7/100 | SMH $440.06 | XLV $184.20): https://truthofmarket.com/smh-fear-greed
 - 2000–2025 Historical Research Archive: https://truthofmarket.com/archive
 - Retirement Drawdown Guides Hub: https://truthofmarket.com/guides/
 - Editorial Insights Journal: https://truthofmarket.com/insights/
@@ -29,6 +29,6 @@
 ## 3. Educational Market Weather & Allocation Journal (/insights/)
 - Why Quiet Barbells Outlast Loud Bull Markets -> https://truthofmarket.com/insights/why-quiet-barbells-outlast-loud-bull-markets
 - Two Clocks in One Portfolio: Twenty-Six Years of $SMH and $XLV -> https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study
-- Morning Note (2026-11-25): Sector Sentiment at 6.1/100 (Extreme Fear) -> https://truthofmarket.com/insights/daily-us-quant-regime-brief
+- Morning Note (2026-11-27): Sector Sentiment at 7.7/100 (Extreme Fear) -> https://truthofmarket.com/insights/daily-us-quant-regime-brief
 - Why Cheap-Looking Charts Keep Falling: Notes on Moving-Average Discipline -> https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology
 - The Quiet Arithmetic of Drawdowns and Treasury Cushions -> https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math
