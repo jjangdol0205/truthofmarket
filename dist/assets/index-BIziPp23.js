@@ -8273,8 +8273,7 @@ function bindPrivateWealthSingleBreathEvents(state) {
     if (state && state.semiOverview) {
       applyOverview(state.semiOverview);
     }
-    fetch("/data/semi_overview.json", { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
+    fetch("/data/smh_fg_latest.json", { cache: "no-store" }).then((r) => (r.ok ? r.json() : Promise.reject())).then((d) => ({ date: d.as_of_date, fg_score: d.score, regime_en: d.label_en })).catch(() => fetch("/data/semi_overview.json", { cache: "no-store" }).then((r) => (r.ok ? r.json() : Promise.reject())))
       .then(applyOverview)
       .catch(() => {
         fetch("/static_api/semi_overview.json", { cache: "no-store" })
@@ -9205,9 +9204,14 @@ function renderApp() {
   if (!appEl) return;
 
   if (!isProSwingOrEquitySubpage() && state.activeView !== "semi" && !initialTickerParam && !initialFilterParam) {
-    appEl.innerHTML = renderPrivateWealthSingleBreathHome(state);
-    bindPrivateWealthSingleBreathEvents(state);
-    bindRsaPolarCheckoutEvents();
+    if (!document.getElementById("tomMiniFgGaugeCard")) {
+      appEl.innerHTML = renderPrivateWealthSingleBreathHome(state);
+    }
+    if (appEl.dataset.pwBound !== "1") {
+      appEl.dataset.pwBound = "1";
+      bindPrivateWealthSingleBreathEvents(state);
+      bindRsaPolarCheckoutEvents();
+    }
     return;
   }
 
