@@ -62,8 +62,11 @@ from outbound_allowlist import (  # noqa: E402
 from promo_hard_gate import (  # noqa: E402
     ENDING_CTA_BY_DIV,
     HERO_DJ_OUTRO_SPOKEN_KO,
+    append_ab_utm_suffix,
+    build_ab_go_link,
     build_clean_go_link,
     build_clean_social_comment,
+    build_ig_caption_with_line1_cta,
     check_hero_lyric_sync_catalog_gate,
     check_promo_hard_gate,
     compute_yt_publish_at_iso,
@@ -71,6 +74,12 @@ from promo_hard_gate import (  # noqa: E402
     normalize_korean_tts_text,
     pick_rotating_comment_question,
     strip_unsupported_yt_api_fields,
+)
+from flow_character_track import (  # noqa: E402
+    build_live_date_badge,
+    check_flow_character_eligibility,
+    compose_flow_character_short,
+    extract_reel_cover_frame,
 )
 from real_ui_mobile_recorder import (  # noqa: E402
     RealUIAutoGateError,
@@ -1285,6 +1294,7 @@ def publish_instagram_reel_via_r2(
         "media_type": "REELS",
         "video_url": video_url,
         "caption": caption[:2100],
+        "thumb_offset": "500",
         "access_token": ig_tok,
     }).encode("utf-8")
     try:
@@ -1502,10 +1512,10 @@ def build_tom_daily_smh_fg_briefing_package(
     )
 
     spoken_script = f"{hook_spoken} {close_sentence} {rot_sentence} {history_sentence} {ending_spoken}".strip()
-    fg_url = build_clean_go_link("TOM", "yt_fg")
-    yt_url = build_clean_go_link("TOM", "yt")
+    fg_url = build_ab_go_link("TOM", "yt_fg", "slot_a_realui")
+    yt_url = build_ab_go_link("TOM", "yt", "slot_a_realui")
     sample_url = build_clean_go_link("TOM", "yt_sample")
-    ig_url = build_clean_go_link("TOM", "ig")
+    ig_url = build_ab_go_link("TOM", "ig", "slot_a_realui")
     q_line = pick_rotating_comment_question("TOM", rot_q_seed)
 
     desc = (
@@ -1522,11 +1532,11 @@ def build_tom_daily_smh_fg_briefing_package(
         f"{q_line}"
     )
     ig_caption = (
+        f"Tap @truthofmarket profile link → {ig_url.replace('https://', '')} (Free Live SMH Gauge: {sc}/100)\n\n"
         f"{yt_title.replace('#Shorts', '').strip()}\n\n"
         f"Latest Close ({as_of}): {top_live_banner} | 52w drawdown {dd}.\n"
         f"{history_sentence}\n\n"
-        f"{q_line}\n\n"
-        f"Tap @truthofmarket profile -> top blue link ({ig_url})"
+        f"{q_line}"
     )
     return {
         "yt_title": yt_title[:98],
@@ -1714,12 +1724,13 @@ def build_natural_spoken_hook(
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--slot", choices=["AUTO", "SLOT_A", "SLOT_B"], default="AUTO")
     args = parser.parse_args()
     dry_run = args.dry_run or (os.getenv("RUN_MODE", "daily").lower() == "dry_run")
 
     now_kst = dt.datetime.now(KST)
     today_str = now_kst.strftime("%Y-%m-%d")
-    slot_id = "SLOT_A" if now_kst.hour < 14 else "SLOT_B"
+    slot_id = ("SLOT_A" if now_kst.hour < 14 else "SLOT_B") if args.slot == "AUTO" else args.slot
     doy = now_kst.timetuple().tm_yday
     weekday = now_kst.weekday()
     hist = load_history()
@@ -1791,19 +1802,41 @@ def main() -> int:
             cta_line = DIV_CONFIGS[div]["open_loop_cta"]
             matrix_meta = {"matrix_id": f"{div}_S1_LOSS", "stage": 1, "hook_type": "loss", "utm_content": utm_content, "ab_arm": "A"}
 
-        # 2026-11-25 Hard Gate: Clean short `/go/yt` & `/go/ig` links ONLY + 20-pattern rotating human questions!
-        utm_yt = build_clean_go_link(div, "yt")
-        utm_ig = build_clean_go_link(div, "ig")
+        # Plan C (2026-11-27): Non-Destructive A/B Track Eligibility & Graceful Fallback!
+        # - SLOT_A (`07:17 KST`): ALWAYS `slot_a_realui` (100% untouched 0.0s mobile real-UI!).
+        # - SLOT_B (`19:23 KST`): WIP=1 KFK Pilot (`FLOW_CHAR_PILOT_DIVS={"KFK"}`); if character_clips/ empty
+        #   or validation fails, gracefully falls back to `slot_a_realui` with explicit `flow_fallback_reason`.
+        episode_key = f"{div}_{today_str}_{slot_id}_{matrix_meta['matrix_id']}"
+        flow_elig = check_flow_character_eligibility(
+            div=div,
+            slot_id=slot_id,
+            episode_key=episode_key,
+            today_kst=now_kst.date(),
+            persist_lru=(not dry_run),
+        )
+        ab_track = str(flow_elig["ab_track"])
+        flow_fallback_reason = str(flow_elig["flow_fallback_reason"])
+        utm_content_ab = append_ab_utm_suffix(utm_content, ab_track)
+        matrix_meta["ab_track"] = ab_track
+        matrix_meta["utm_content_ab"] = utm_content_ab
+
+        # 2026-11-27 Shield 7: A/B separated clean short `/go/yt-a` vs `/go/yt-b` & `/go/ig` vs `/go/ig-b`!
+        utm_yt = build_ab_go_link(div, "yt", ab_track)
+        utm_ig = build_ab_go_link(div, "ig", ab_track)
         rot_q_seed = doy * 2 + (1 if slot_id == "SLOT_B" else 0)
         either_or_q = pick_rotating_comment_question(div, rot_q_seed)
-        pinned_comment = build_clean_social_comment(div, index_seed=rot_q_seed)
+        pinned_comment = build_clean_social_comment(div, index_seed=rot_q_seed, go_url_override=utm_yt)
 
-        disclosure_footer = f"\n※ {pt['ai_disclosure_line']}\n" if div == "HERO" else ""
+        disclosure_footer = (
+            f"\n※ {pt['ai_disclosure_line']}\n"
+            f"※ 홈페이지 내 추천 준비물관은 제휴 활동의 일환으로 일정 수수료를 제공받을 수 있습니다.\n"
+            if div == "HERO" else ""
+        )
         line1_prefix_by_div = {
             "TOM": "Free Daily SMH Fear & Greed Gauge",
             "KFG": "Free 60-Second US CDC Height Percentile Check",
             "GBA": "毎日無料の米国半導体・恐怖と強欲指数＆新NISA25年統計",
-            "HERO": "백운호 6곡 완곡 무료 라디오 & 카톡 아침 안부카드 (가입 없음)",
+            "HERO": "AI 가상가수 백운호 오리지널 곡 · 6곡 완곡 무료 라디오 & 아침 꽃카드",
             "KFK": "광고 없는 1분 무료 질병관리청 예상키·뼈나이 시차 진단",
         }
         desc = f"{line1_prefix_by_div.get(div, 'Free guide')}: {utm_yt}\n\n{title}\n\n{slide_body}\n\n{pinned_comment}{disclosure_footer}"
@@ -1881,14 +1914,14 @@ def main() -> int:
                         title = f"♪ 백운호 〈{hero_mv_song['title']}〉 {hero_mv_slice['label']} · {first_lyric} #백운호 #트로트"[:95]
                     slide_body = f"마음을 노래하는 AI 가상 트로트 가수 백운호의 {hero_mv_song['badge']} 〈{hero_mv_song['title']}〉 ({hero_mv_slice['label']})"
                     either_or_q = pick_rotating_comment_question("HERO", rot_idx)
-                    utm_yt = build_clean_go_link("HERO", "yt")
-                    utm_ig = build_clean_go_link("HERO", "ig")
+                    utm_yt = build_ab_go_link("HERO", "yt", ab_track)
+                    utm_ig = build_ab_go_link("HERO", "ig", ab_track)
                     pinned_comment = (
                         f"백운호 〈{hero_mv_song['title']}〉 포함 6곡 무료 라디오 & 카톡 아침 안부카드:\n"
                         f"{utm_yt}\n\n"
                         f"{either_or_q}"
                     )
-                    desc = f"백운호 6곡 완곡 무료 라디오 & 카톡 아침 안부카드 (가입 없음): {utm_yt}\n\n{title}\n\n{slide_body}\n\n{pinned_comment}{disclosure_footer}"
+                    desc = f"AI 가상가수 백운호 오리지널 곡 · 6곡 완곡 무료 라디오 & 아침 꽃카드 (가입 없음): {utm_yt}\n\n{title}\n\n{slide_body}\n\n{pinned_comment}{disclosure_footer}"
                     cues_srt = []
                     _srt_sym_re = re.compile(r"[\U0001F300-\U0001FAFF\U00002600-\U000027BF]")
                     for ci, (a, b, l1, l2) in enumerate(hero_mv_slice.get("cues") or [], start=1):
@@ -1989,17 +2022,62 @@ def main() -> int:
                         if (div == "TOM" and tom_brief_pkg)
                         else build_natural_spoken_hook(div, title, slide_body, smh_fg_meta, either_or_q)
                     )
-                    rendered_mp4, rendered_dur, srt_stub = compose_zero_ai_short(
-                        div=div,
-                        lang=DIV_LANG_MAP.get(div, "en"),
-                        voice_id=pt["voice_id"],
-                        spoken_script=spoken_script,
-                        faceless_stock_mp4=None,
-                        real_ui_mp4=ui_mp4,
-                        motion_chart_mp4=chart_mp4,
-                        out_mp4=out_mp4,
-                        top_live_banner=(tom_brief_pkg["top_live_banner"] if (div == "TOM" and tom_brief_pkg) else ""),
-                    )
+                    flow_render_meta: Optional[Dict[str, Any]] = None
+                    if (
+                        ab_track == "slot_b_flowchar"
+                        and flow_elig["eligible"]
+                        and flow_elig["clip_path"]
+                        and flow_elig["pip_avatar_png"]
+                    ):
+                        try:
+                            rendered_mp4, rendered_dur, srt_stub, flow_render_meta = compose_flow_character_short(
+                                div=div,
+                                lang=DIV_LANG_MAP.get(div, "ko"),
+                                voice_id=pt["voice_id"],
+                                spoken_script=spoken_script,
+                                speech_bubble_text=title,
+                                character_clip_mp4=Path(flow_elig["clip_path"]),
+                                pip_avatar_png=Path(flow_elig["pip_avatar_png"]),
+                                real_ui_mp4=ui_mp4,
+                                motion_chart_mp4=chart_mp4,
+                                out_mp4=out_mp4,
+                                episode_key=episode_key,
+                                live_badge_text=build_live_date_badge(div, now_kst=now_kst, smh_fg_meta=smh_fg_meta),
+                                zoom_factor=float(flow_elig["zoom_factor"]),
+                                now_kst=now_kst,
+                            )
+                        except Exception as flow_err:
+                            # Graceful Fallback: NEVER crash or fake faces -> fall back seamlessly to proven SLOT_A 0.0s real-UI!
+                            flow_fallback_reason = f"flow_compose_err_fallback:{type(flow_err).__name__}:{str(flow_err)[:100]}"
+                            ab_track = "slot_a_realui"
+                            matrix_meta["ab_track"] = ab_track
+                            matrix_meta["utm_content_ab"] = append_ab_utm_suffix(utm_content, ab_track)
+                            utm_yt = build_ab_go_link(div, "yt", ab_track)
+                            utm_ig = build_ab_go_link(div, "ig", ab_track)
+                            print(f"  [FLOW GRACEFUL FALLBACK -> SLOT_A] {div}: {flow_fallback_reason}", flush=True)
+                            rendered_mp4, rendered_dur, srt_stub = compose_zero_ai_short(
+                                div=div,
+                                lang=DIV_LANG_MAP.get(div, "en"),
+                                voice_id=pt["voice_id"],
+                                spoken_script=spoken_script,
+                                faceless_stock_mp4=None,
+                                real_ui_mp4=ui_mp4,
+                                motion_chart_mp4=chart_mp4,
+                                out_mp4=out_mp4,
+                                top_live_banner=(tom_brief_pkg["top_live_banner"] if (div == "TOM" and tom_brief_pkg) else ""),
+                            )
+                    else:
+                        rendered_mp4, rendered_dur, srt_stub = compose_zero_ai_short(
+                            div=div,
+                            lang=DIV_LANG_MAP.get(div, "en"),
+                            voice_id=pt["voice_id"],
+                            spoken_script=spoken_script,
+                            faceless_stock_mp4=None,
+                            real_ui_mp4=ui_mp4,
+                            motion_chart_mp4=chart_mp4,
+                            out_mp4=out_mp4,
+                            top_live_banner=(tom_brief_pkg["top_live_banner"] if (div == "TOM" and tom_brief_pkg) else ""),
+                        )
                     ui_mp4.unlink(missing_ok=True)
                     chart_mp4.unlink(missing_ok=True)
                 except RealUIAutoGateError as gate_err:
@@ -2022,7 +2100,14 @@ def main() -> int:
                     ig_caption = (
                         tom_brief_pkg["ig_caption"]
                         if (div == "TOM" and tom_brief_pkg)
-                        else f"{title}\n\n{slide_body}\n\n{either_or_q}\n\n{utm_ig}{disclosure_footer}"
+                        else build_ig_caption_with_line1_cta(
+                            div=div,
+                            title=title,
+                            slide_body=slide_body,
+                            either_or_q=either_or_q,
+                            go_ig_url=utm_ig,
+                            disclosure_footer=disclosure_footer,
+                        )
                     )
                     ok_ig_c, ig_c_errs = check_promo_hard_gate(div, ig_caption, surface="ig_caption")
                     if not ok_ig_c:
@@ -2084,12 +2169,20 @@ def main() -> int:
             **(smh_fg_meta or {}),
             "utm_yt": utm_yt,
             "utm_ig": utm_ig,
+            "ab_track": ab_track,
+            "utm_content_ab": matrix_meta["utm_content_ab"],
+            "flow_fallback_reason": flow_fallback_reason,
+            "flow_character_clip_id": (flow_elig.get("selected_clip") or {}).get("clip_id") if ab_track == "slot_b_flowchar" else None,
+            "flow_zoom_factor": flow_elig.get("zoom_factor") if ab_track == "slot_b_flowchar" else None,
+            "ig_thumb_offset_ms": 500,
             "hero_radio_day": hero_radio_day,
             "date": today_str,
             "status": status,
         })
         print(
-            f"  [GATE PASS] {div:4s} | status={status} | flow_bg={flow_bg_meta['flow_clip_id']} "
+            f"  [GATE PASS] {div:4s} | status={status} | track={ab_track}"
+            + (f" (fallback={flow_fallback_reason})" if flow_fallback_reason else "")
+            + f" | flow_bg={flow_bg_meta['flow_clip_id']} "
             f"| yt={yt_res.get('video_id') or yt_res.get('skipped') or yt_res.get('http_error') or 'dry'} "
             f"| ig={ig_res.get('media_id') or ig_res.get('skipped') or ig_res.get('http_error') or 'dry'}"
             + (f" | smh_fg={smh_fg_meta['smh_fg_score']}/100({smh_fg_meta['smh_fg_dd52w']})" if smh_fg_meta else "")

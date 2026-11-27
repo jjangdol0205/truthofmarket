@@ -36,39 +36,60 @@ X_PAID_API_FORBIDDEN = True
 GHA_SLEEP_JITTER_FORBIDDEN = True
 YT_UNSUPPORTED_API_FIELDS = ("containsSyntheticMedia", "relatedVideo", "related_video")
 
-# Clean Short Redirect Endpoints (/go/yt, /go/yt-fg, /go/yt-sample, /go/ig)
+# Clean Short Redirect Endpoints (/go/yt, /go/yt-a, /go/yt-b, /go/yt-fg, /go/yt-fg-a, /go/ig, /go/ig-b)
+# Live probe (2026-11-27): /go/yt-a, /go/yt-b, /go/ig-b all return HTTP 302 to division root on all 5 domains.
+# Note: TOM /go/yt-fg-a currently falls through wildcard to `/` instead of `/smh-fear-greed`; keep
+# `TOM_YT_FG_A_ROUTE_LIVE = False` until `homepage` room deploys dedicated `/go/yt-fg-a -> /smh-fear-greed` mapping!
+TOM_YT_FG_A_ROUTE_LIVE = False
+
 DIV_GO_LINKS: Dict[str, Dict[str, str]] = {
     "TOM": {
         "host": "truthofmarket.com",
         "yt": "https://truthofmarket.com/go/yt",
+        "yt_a": "https://truthofmarket.com/go/yt-a",
+        "yt_b": "https://truthofmarket.com/go/yt-b",
         "yt_fg": "https://truthofmarket.com/go/yt-fg",
+        "yt_fg_a": "https://truthofmarket.com/go/yt-fg-a",
         "yt_sample": "https://truthofmarket.com/go/yt-sample",
         "ig": "https://truthofmarket.com/go/ig",
+        "ig_b": "https://truthofmarket.com/go/ig-b",
     },
     "KFG": {
         "host": "kisfitglobal.com",
         "yt": "https://kisfitglobal.com/go/yt",
+        "yt_a": "https://kisfitglobal.com/go/yt-a",
+        "yt_b": "https://kisfitglobal.com/go/yt-b",
         "yt_sample": "https://kisfitglobal.com/go/yt-sample",
         "ig": "https://kisfitglobal.com/go/ig",
+        "ig_b": "https://kisfitglobal.com/go/ig-b",
     },
     "GBA": {
         "host": "getbreakai.com",
         "yt": "https://getbreakai.com/go/yt",
+        "yt_a": "https://getbreakai.com/go/yt-a",
+        "yt_b": "https://getbreakai.com/go/yt-b",
         "yt_fg": "https://getbreakai.com/go/yt-fg",
         "yt_sample": "https://getbreakai.com/go/yt-sample",
         "ig": "https://getbreakai.com/go/ig",
+        "ig_b": "https://getbreakai.com/go/ig-b",
     },
     "HERO": {
         "host": "paradise-hero.com",
         "yt": "https://paradise-hero.com/go/yt",
+        "yt_a": "https://paradise-hero.com/go/yt-a",
+        "yt_b": "https://paradise-hero.com/go/yt-b",
         "yt_card": "https://paradise-hero.com/go/yt-card",
         "ig": "https://paradise-hero.com/go/ig",
+        "ig_b": "https://paradise-hero.com/go/ig-b",
     },
     "KFK": {
         "host": "kidsfit.co.kr",
         "yt": "https://kidsfit.co.kr/go/yt",
+        "yt_a": "https://kidsfit.co.kr/go/yt-a",
+        "yt_b": "https://kidsfit.co.kr/go/yt-b",
         "yt_sample": "https://kidsfit.co.kr/go/yt-sample",
         "ig": "https://kidsfit.co.kr/go/ig",
+        "ig_b": "https://kidsfit.co.kr/go/ig-b",
     },
 }
 
@@ -236,7 +257,8 @@ DIV_BANNED_REGEXES: Dict[str, Tuple[Tuple[str, str], ...]] = {
         ("jp_trade_timing", r"買い時|売り時|おすすめ銘柄|買いシグナル|売りシグナル|売買タイミング"),
         ("jp_telegram", r"t\.me|telegram"),
         ("jp_legacy_assets", r"オルカン|1489|\bVYM\b|\bSOXL\b|\bTQQQ\b"),
-        ("one_to_one", r"\b1:1\b"),
+        ("one_to_one", r"\b1:1\b|1対1|１対１"),
+        ("jp_efficacy_guarantee", r"元本保証|確実にもうかる|必ず儲かる"),
     ),
     "HERO": (
         ("real_singers", r"황영웅|임영웅|나훈아|영탁|이찬원|김호중|장민호|정동원|박서진"),
@@ -244,7 +266,8 @@ DIV_BANNED_REGEXES: Dict[str, Tuple[Tuple[str, str], ...]] = {
     ),
     "KFK": (
         ("kfk_legacy_banned", r"두뇌발달|K-DST|하브루타|숨은\s*키\s*\+?\s*7cm|진단/처방"),
-        ("kfk_1to1", r"\b1:1\b"),
+        ("kfk_1to1", r"\b1:1\b|1대1"),
+        ("kfk_efficacy_guarantee", r"키\s*성장\s*보장|100%\s*성장|무조건\s*크는|효능\s*보장"),
         ("kfk_sales_hype", r"최저가|할인율|특가|폭탄세일"),
         ("kfk_affiliates", r"쿠팡|네이버페이|쇼핑커넥트|링크프라이스|아이클타임|칼마디|락토바이오"),
     ),
@@ -567,6 +590,79 @@ def build_clean_go_link(div: str, kind: str = "yt") -> str:
     return cfg.get(kind) or cfg["yt"]
 
 
+def append_ab_utm_suffix(base_utm_content: str, ab_track: str) -> str:
+    """
+    Shield 7 Non-Destructive A/B UTM Instrumentation:
+    Preserves the base `utm_content` prefix (`TOM_S1_SELF_v1`, `KFK_S1_LOSS_v1`, etc.)
+    so `ab_evolution_engine.py` parsing NEVER breaks, while cleanly appending the track
+    suffix (`_slot_a_realui` or `_slot_b_flowchar`).
+    """
+    base = str(base_utm_content or "").strip()
+    track = "slot_b_flowchar" if str(ab_track or "").strip().lower() == "slot_b_flowchar" else "slot_a_realui"
+    if not base:
+        return track
+    for old_suf in ("_slot_a_realui", "_slot_b_flowchar"):
+        if base.endswith(old_suf):
+            base = base[: -len(old_suf)]
+    return f"{base}_{track}"
+
+
+def build_ab_go_link(
+    div: str,
+    channel: str = "yt",
+    ab_track: str = "slot_a_realui",
+    tom_yt_fg_a_live: Optional[bool] = None,
+) -> str:
+    """
+    Shield 7 A/B Short-Link Selector (100% live HTTP 302 verified across all 5 domains):
+      - `slot_b_flowchar`: YouTube -> `/go/yt-b`, Instagram -> `/go/ig-b`
+      - `slot_a_realui`:   YouTube -> `/go/yt-a` (or TOM `yt_fg` -> `/go/yt-fg-a` once
+        `homepage` deploys dedicated `/smh-fear-greed` mapping; safely `/go/yt-fg` until then!),
+        Instagram -> `/go/ig`
+    """
+    div_u = div.upper()
+    ch = str(channel or "yt").lower()
+    is_b = str(ab_track or "").strip().lower() == "slot_b_flowchar"
+    cfg = DIV_GO_LINKS[div_u]
+    if ch == "yt_fg":
+        use_fg_a = TOM_YT_FG_A_ROUTE_LIVE if tom_yt_fg_a_live is None else bool(tom_yt_fg_a_live)
+        if (not is_b) and use_fg_a and cfg.get("yt_fg_a"):
+            return cfg["yt_fg_a"]
+        return cfg.get("yt_fg") or cfg["yt"]
+    if ch == "ig":
+        return cfg["ig_b"] if is_b else cfg["ig"]
+    return cfg["yt_b"] if is_b else cfg["yt_a"]
+
+
+def build_ig_caption_with_line1_cta(
+    div: str,
+    title: str,
+    slide_body: str,
+    either_or_q: str,
+    go_ig_url: str,
+    disclosure_footer: str = "",
+) -> str:
+    """
+    Shield 5 IG Caption Line-1 Standard:
+    Places clear profile-link CTA directly on Line 1 (before Instagram's ~125-char fold!)
+    without introducing bot tags, long UTMs, or banned words.
+    """
+    div_u = div.upper()
+    short_link = str(go_ig_url or build_clean_go_link(div_u, "ig")).replace("https://", "")
+    clean_title = re.sub(r"\s*#Shorts\b", "", str(title or ""), flags=re.I).strip()
+    if div_u == "KFK":
+        line1 = f"프로필 링크 → {short_link} (광고 없는 1분 무료 예상키 진단)"
+    elif div_u == "HERO":
+        line1 = f"AI 가상가수 백운호 오리지널 곡 · 프로필 링크 → {short_link}"
+    elif div_u == "GBA":
+        line1 = f"プロフィールのリンク → {short_link}（毎日無料の半導体恐怖指数＆新NISA統計）"
+    elif div_u == "TOM":
+        line1 = f"Tap @truthofmarket profile link → {short_link} (Free Daily SMH Gauge)"
+    else:  # KFG
+        line1 = f"Tap @kisfitglobal profile link → {short_link} (Free 60s US CDC Height Check)"
+    return f"{line1}\n\n{clean_title}\n\n{slide_body}\n\n{either_or_q}{disclosure_footer}"
+
+
 def check_promo_hard_gate(
     div: str,
     text: str,
@@ -819,10 +915,15 @@ def pick_rotating_comment_question(div: str, index_seed: int) -> str:
     return bank[index_seed % len(bank)]
 
 
-def build_clean_social_comment(div: str, index_seed: int, is_longform: bool = False) -> str:
-    """Builds a clean human-tone comment using ONLY short `/go/yt` links and 20-pattern questions."""
+def build_clean_social_comment(
+    div: str,
+    index_seed: int,
+    is_longform: bool = False,
+    go_url_override: str = "",
+) -> str:
+    """Builds a clean human-tone comment using ONLY short `/go/yt` (or `/go/yt-a` / `/go/yt-b`) links and 20-pattern questions."""
     div_u = div.upper()
-    go_url = build_clean_go_link(div_u, "yt")
+    go_url = go_url_override or build_clean_go_link(div_u, "yt")
     q = pick_rotating_comment_question(div_u, index_seed)
     if div_u == "TOM":
         sample_go = build_clean_go_link("TOM", "yt_sample")
