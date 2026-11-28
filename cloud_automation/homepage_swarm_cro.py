@@ -924,7 +924,8 @@ def run_swarm_for_division(div: str, mode: str, no_stagger: bool = False) -> Dic
             f"Target slot: {chosen_zone}/{slot_id}. Hypothesis: {chosen['hypothesis']}\n"
             f"You are given 4 live screenshots in order: 1) BEFORE mobile 390x844, 2) AFTER mobile 390x844, 3) BEFORE desktop 1280x800, 4) AFTER desktop 1280x800.\n"
             f"Score strictly on 100 pts: (1) 3-sec clarity & hook 30pt, (2) mobile readability & above-the-fold balance 25pt, (3) click friction reduction 25pt, (4) brand trust & zero AI feel 20pt.\n"
-            f"Be harsh: reject any clipping, awkward wrapping, verbosity, or weak lift.\n"
+            f"Be harsh on the AFTER images (images 2 & 4): reject any clipping, awkward wrapping, verbosity, or weak lift.\n"
+            f"IMPORTANT: `fatal_flaws` MUST ONLY contain severe defects present in the AFTER images (images 2 & 4). NEVER place flaws from the BEFORE/baseline images in `fatal_flaws`. If the AFTER images have no severe defect, return `fatal_flaws: []`.\n"
             f'Return STRICT JSON: {{"baseline_score":0,"after_score":0,"delta":0,"fatal_flaws":[],"verdict":"APPROVE|REJECT","critique":"short summary"}}'
         )
         critic_res = gemini.generate_json(
