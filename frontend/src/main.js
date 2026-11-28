@@ -361,74 +361,40 @@ function renderApp() {
   const appEl = document.getElementById("app");
   if (!appEl) return;
 
-  if (!isProSwingOrEquitySubpage() && state.activeView !== "semi" && !initialTickerParam && !initialFilterParam) {
-    appEl.innerHTML = renderPrivateWealthSingleBreathHome(state);
-    bindPrivateWealthSingleBreathEvents(state);
-    bindRsaPolarCheckoutEvents();
+  if (state.activeView === "semi" || (window.location.hash || "").toLowerCase().includes("semi")) {
+    window.location.replace("/smh-fear-greed");
     return;
   }
 
-  const t = state.t;
-  const mainBodyHtml =
-    state.activeView === "semi"
-      ? renderSemiFearGreedView(state)
-      : isProSwingOrEquitySubpage()
-      ? renderProSwingArchiveView()
-      : renderHomeRetirementView();
+  // Strip retired V1 SPA query/hash triggers while preserving tracking, payment, and referral params
+  try {
+    const cleanUrl = new URL(window.location.href);
+    let urlChanged = false;
+    ["view", "ticker", "filter", "tool"].forEach((k) => {
+      if (cleanUrl.searchParams.has(k)) {
+        cleanUrl.searchParams.delete(k);
+        urlChanged = true;
+      }
+    });
+    if (/^#(rightside|doctor|positiondoctor|pro-swing|screener)/i.test(cleanUrl.hash || "")) {
+      cleanUrl.hash = "";
+      urlChanged = true;
+    }
+    if (urlChanged && window.history && typeof window.history.replaceState === "function") {
+      window.history.replaceState(null, "", cleanUrl.pathname + cleanUrl.search + cleanUrl.hash);
+    }
+  } catch (_) {}
 
-  appEl.innerHTML = `
-    ${renderHeader(state)}
-    <main class="container">
-      ${mainBodyHtml}
-
-      <footer class="tom-fixed-legal-footer">
-        <div class="tom-footer-top-row">
-          <span class="mono tom-footer-desk-label">EDUCATIONAL MARKET DATA &amp; QUANTITATIVE RESEARCH DESK:</span>
-          <a href="mailto:hello@truthofmarket.com" class="tom-footer-email-link">
-            ✉️ hello@truthofmarket.com
-          </a>
-          <span style="color:var(--border);">|</span>
-          <a href="${state.config.youtube_url || DEFAULT_YOUTUBE_URL}" target="_blank" rel="noopener" class="tom-footer-social">
-            YouTube @TruthOfMarketUS
-          </a>
-          <span style="color:var(--border);">|</span>
-          <a href="${state.config.instagram_url || DEFAULT_INSTAGRAM_URL}" target="_blank" rel="noopener" class="tom-footer-social">
-            Instagram @truthofmarket
-          </a>
-          <span style="color:var(--border);">|</span>
-          <button type="button" class="btn btn-sm" id="btnToggleTomTheme" title="Switch between Daylight Mode and Optional Dark Mode">
-            ${state.uiTheme === "dark" ? "☀️ Daylight Mode" : "🌙 Dark Mode"}
-          </button>
-          <button type="button" class="btn btn-sm" id="btnOpenLicense" title="Restore VIP License Key">
-            🔑 Restore License Key
-          </button>
-        </div>
-        <div class="tom-footer-legal-bar">
-          <a href="/terms.html">Terms of Service</a>
-          <span style="color:var(--border);">&middot;</span>
-          <a href="/privacy.html">Privacy Policy</a>
-          <span style="color:var(--border);">&middot;</span>
-          <a href="/refund.html" class="is-refund">Standard Digital Refund Policy</a>
-          <span style="color:var(--border);">&middot;</span>
-          <a href="/contact.html">Contact Desk</a>
-          <span style="color:var(--border);">&middot;</span>
-          <a href="/insights/">Educational Insights</a>
-          <span style="color:var(--border);">&middot;</span>
-          <a href="/semi-fear-greed.html">Sector Barbell Calculator</a>
-          <span style="color:var(--border);">&middot;</span>
-          <a href="/pro-swing.html">Equity Factor Archive</a>
-          <span style="color:var(--border);">&middot;</span>
-          <a href="mailto:hello@truthofmarket.com" class="is-support">Support: hello@truthofmarket.com</a>
-        </div>
-        <p id="disclaimerText" class="tom-footer-disclaimer">${t.disclaimer}</p>
-        <p class="tom-footer-copyright" id="copyrightText">${t.copyright}</p>
-      </footer>
-    </main>
-    <canvas id="scoreCanvas" width="900" height="500" style="display:none;"></canvas>
-    ${renderModals(state)}
-  `;
-
-  bindEvents();
+  // Hard lock: never render retired V1 Stock Screener / AI Hero SPA over the modern homepage
+  if (!document.getElementById("tomMiniFgGaugeCard")) {
+    appEl.innerHTML = renderPrivateWealthSingleBreathHome(state);
+  }
+  if (appEl.dataset.pwBound !== "1") {
+    appEl.dataset.pwBound = "1";
+    bindPrivateWealthSingleBreathEvents(state);
+    bindRsaPolarCheckoutEvents();
+  }
+  return;
 }
 
 function switchView(targetView) {

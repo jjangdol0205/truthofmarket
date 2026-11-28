@@ -26,9 +26,13 @@ const BLOCKED_PREFIXES = [
   '/api/lemonsqueezy',
   '/api/cloud-sync',
   '/api/auth/',
+  '/api/stocks',
+  '/api/backtest',
+  '/api/research',
   '/products/',
   '/stocks',
   '/compare',
+  '/pro-swing',
 ];
 
 export async function onRequest(context) {

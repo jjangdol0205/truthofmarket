@@ -9203,17 +9203,41 @@ function renderApp() {
   const appEl = document.getElementById("app");
   if (!appEl) return;
 
-  if (!isProSwingOrEquitySubpage() && state.activeView !== "semi" && !initialTickerParam && !initialFilterParam) {
-    if (!document.getElementById("tomMiniFgGaugeCard")) {
-      appEl.innerHTML = renderPrivateWealthSingleBreathHome(state);
-    }
-    if (appEl.dataset.pwBound !== "1") {
-      appEl.dataset.pwBound = "1";
-      bindPrivateWealthSingleBreathEvents(state);
-      bindRsaPolarCheckoutEvents();
-    }
+  if (state.activeView === "semi" || (window.location.hash || "").toLowerCase().includes("semi")) {
+    window.location.replace("/smh-fear-greed");
     return;
   }
+
+  try {
+    const cleanUrl = new URL(window.location.href);
+    let urlChanged = false;
+    ["view", "ticker", "filter", "tool"].forEach((k) => {
+      if (cleanUrl.searchParams.has(k)) {
+        cleanUrl.searchParams.delete(k);
+        urlChanged = true;
+      }
+    });
+    if (/^#(rightside|doctor|positiondoctor|pro-swing|screener)/i.test(cleanUrl.hash || "")) {
+      cleanUrl.hash = "";
+      urlChanged = true;
+    }
+    if (urlChanged && window.history && typeof window.history.replaceState === "function") {
+      window.history.replaceState(null, "", cleanUrl.pathname + cleanUrl.search + cleanUrl.hash);
+    }
+  } catch (_) {}
+
+  if (!document.getElementById("tomMiniFgGaugeCard")) {
+    appEl.innerHTML = renderPrivateWealthSingleBreathHome(state);
+  }
+  if (appEl.dataset.pwBound !== "1") {
+    appEl.dataset.pwBound = "1";
+    bindPrivateWealthSingleBreathEvents(state);
+    bindRsaPolarCheckoutEvents();
+  }
+  return;
+}
+
+function __retiredLegacyRenderAppUnused() {
 
   const t = state.t;
   const mainBodyHtml =
