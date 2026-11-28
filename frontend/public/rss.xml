@@ -1,54 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>TruthOfMarket | Independent Market Data &amp; Educational Research</title>
+    <title>Truth of Market — Calm Retirement &amp; SMH x XLV Historical Research</title>
     <link>https://truthofmarket.com/</link>
+    <description>Daily SMH Fear &amp; Greed Index, IRS Pub 590-B RMD tools, and 2000-2025 retirement drawdown research.</description>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 28 Nov 2026 05:00:00 +0000</lastBuildDate>
     <atom:link href="https://truthofmarket.com/rss.xml" rel="self" type="application/rss+xml" />
-    <atom:link href="https://pubsubhubbub.appspot.com/" rel="hub" />
-    <description>Educational Market Data Newsletter + 2000–2025 Historical Statistical Workbook (SMH × XLV + SGOV 2-Pillar Historical Case Study — Strictly Non-Advisory Educational Publisher).</description>
-    <language>en-US</language>
-    <lastBuildDate>Fri, 27 Nov 2026 21:00:00 +0000</lastBuildDate>
     <item>
-      <title><![CDATA[Morning Market Data Newsletter (2026-11-27): Sector Temperature at 7.7/100 (EXTREME_FEAR) & SMH × XLV Study]]></title>
-      <link>https://truthofmarket.com/insights/daily-us-quant-regime-brief</link>
-      <guid isPermaLink="true">https://truthofmarket.com/insights/daily-us-quant-regime-brief</guid>
-      <pubDate>Fri, 27 Nov 2026 21:00:00 +0000</pubDate>
-      <description><![CDATA[Educational US market data summary as of 2026-11-27: $SMH $440.06 (-34.21% off 52W high), $SMH × $XLV two-pillar historical case study, and $SGOV US Treasury reserve reference.]]></description>
+      <title>2026 Year-End RMD &amp; SGOV Cash Buffer Simulator (IRS Pub 590-B) | Truth of Market</title>
+      <link>https://truthofmarket.com/tools/rmd-sgov-buffer</link>
+      <guid isPermaLink="true">https://truthofmarket.com/tools/rmd-sgov-buffer</guid>
+      <pubDate>Sat, 28 Nov 2026 05:00:00 +0000</pubDate>
+      <description>Free 2026 Required Minimum Distribution calculator using official IRS Publication 590-B Uniform Lifetime Table III divisors (age 73=26.5, 74=25.5, 75=24.6) plus a 24-month SGOV Treasury liquidity buffer check.</description>
     </item>
     <item>
-      <title><![CDATA[Understanding Moving-Average Confirmation: 2000–2025 Historical Statistical Study]]></title>
-      <link>https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology</link>
-      <guid isPermaLink="true">https://truthofmarket.com/insights/pw-rsi-right-side-breakout-methodology</guid>
-      <pubDate>Fri, 27 Nov 2026 21:00:00 +0000</pubDate>
-      <description><![CDATA[Educational statistical study examining 52-week drawdown recovery, 20-day and 60-day moving average alignment, and 10-day relative volume across liquid US sector ETFs.]]></description>
-    </item>
-    <item>
-      <title><![CDATA[Sector Correlation & Review Math: Studying the $SMH and $XLV 2-Pillar Case Study (2000–2025)]]></title>
-      <link>https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study</link>
-      <guid isPermaLink="true">https://truthofmarket.com/insights/smh-xlv-80-20-barbell-drawdown-study</guid>
-      <pubDate>Fri, 27 Nov 2026 21:00:00 +0000</pubDate>
-      <description><![CDATA[Empirical educational study of combining Semiconductors ($SMH) with Healthcare ($XLV) under calm semi-annual ratio review.]]></description>
-    </item>
-    <item>
-      <title><![CDATA[The Mathematics of Drawdown Asymmetry: Why Portfolio Cushions Preserve Long-Term Compounding]]></title>
-      <link>https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math</link>
-      <guid isPermaLink="true">https://truthofmarket.com/insights/rule-1-minus-9-percent-stop-loss-math</guid>
-      <pubDate>Fri, 27 Nov 2026 21:00:00 +0000</pubDate>
-      <description><![CDATA[Educational compounding math showing how deep drawdowns require nonlinear recovery gains, and how $XLV and short-term US Treasury ($SGOV) cushions reduce sequence-of-returns risk.]]></description>
-    </item>
-    <item>
-      <title><![CDATA[TruthOfMarket — Historical Sector Backtest Explorer (As of 2026-11-27)]]></title>
-      <link>https://truthofmarket.com/</link>
-      <guid isPermaLink="true">https://truthofmarket.com/</guid>
-      <pubDate>Fri, 27 Nov 2026 21:00:00 +0000</pubDate>
-      <description><![CDATA[4-Step Historical Sector Backtest Explorer studying non-leveraged Semiconductor Growth ($SMH), Healthcare Defense ($XLV), and 0-3 Month US Treasury Reserves ($SGOV).]]></description>
-    </item>
-    <item>
-      <title><![CDATA[Public Market Weather & Sector Sentiment Gauge (7.7 EXTREME_FEAR) — $SMH/$XLV Study]]></title>
+      <title>SMH Fear &amp; Greed Index Today (4.7/100 Extreme Fear) | Truth of Market</title>
       <link>https://truthofmarket.com/smh-fear-greed</link>
       <guid isPermaLink="true">https://truthofmarket.com/smh-fear-greed</guid>
-      <pubDate>Fri, 27 Nov 2026 21:00:00 +0000</pubDate>
-      <description><![CDATA[Self-directed educational sector sentiment gauge ($SMH Close $440.06, -34.21% from 52W High as of 2026-11-27) and historical $SMH vs. $XLV statistical study.]]></description>
+      <pubDate>Sat, 28 Nov 2026 05:00:00 +0000</pubDate>
+      <description>Free daily SMH Semiconductor Fear &amp; Greed Index (0-100) across 7 public ETF structure factors: 125-day momentum, 52-week drawdown, SMH/XLV rotation, 14-day RSI, volatility, QQQ leadership, and 50/50 weight drift. Educational statistics only.</description>
+    </item>
+    <item>
+      <title>Independent Market Data &amp; Educational Research | TruthOfMarket</title>
+      <link>https://truthofmarket.com/</link>
+      <guid isPermaLink="true">https://truthofmarket.com/</guid>
+      <pubDate>Sat, 28 Nov 2026 05:00:00 +0000</pubDate>
+      <description>Educational Market Data Newsletter + 2000–2025 Historical Statistical Workbook (SMH × XLV + SGOV 2-Pillar Historical Case Study — Strictly Non-Advisory Educational Publisher).</description>
+    </item>
+    <item>
+      <title>How to Size a 24-Month Treasury Reserve Before Entering Retirement | Truth of Market</title>
+      <link>https://truthofmarket.com/guides/24-month-treasury-retirement-reserve</link>
+      <guid isPermaLink="true">https://truthofmarket.com/guides/24-month-treasury-retirement-reserve</guid>
+      <pubDate>Sat, 28 Nov 2026 05:00:00 +0000</pubDate>
+      <description>Multiply your monthly spending gap above Social Security and pensions by 24 to calculate your baseline Treasury runway before retirement.</description>
+    </item>
+    <item>
+      <title>Traditional 60/40 Stock-Bond Mix vs SMH x XLV + SGOV (2022 Stress Test) | Truth of Market</title>
+      <link>https://truthofmarket.com/guides/60-40-vs-smh-xlv-sgov</link>
+      <guid isPermaLink="true">https://truthofmarket.com/guides/60-40-vs-smh-xlv-sgov</guid>
+      <pubDate>Sat, 28 Nov 2026 05:00:00 +0000</pubDate>
+      <description>In 2022, traditional 60/40 portfolios lost ~21% as bonds and stocks fell together; short-term T-bills (SGOV) + XLV cut that drawdown to ~14.6%.</description>
+    </item>
+    <item>
+      <title>Brokerage Cash Sweep (0.01%) vs 0–3 Month T-Bills (SGOV) Yield Math | Truth of Market</title>
+      <link>https://truthofmarket.com/guides/cash-sweep-vs-sgov-treasury-yield</link>
+      <guid isPermaLink="true">https://truthofmarket.com/guides/cash-sweep-vs-sgov-treasury-yield</guid>
+      <pubDate>Sat, 28 Nov 2026 05:00:00 +0000</pubDate>
+      <description>Leaving $100,000 in a default 0.01% bank sweep earns $10/yr, while a 4.0% short-term Treasury yield illustrates ~$4,000/yr in reserve income.</description>
+    </item>
+    <item>
+      <title>$1.5M Retirement Tax-Location &amp; Drawdown Cushion Study | Truth of Market</title>
+      <link>https://truthofmarket.com/guides/retirement-sequence-risk-1500k</link>
+      <guid isPermaLink="true">https://truthofmarket.com/guides/retirement-sequence-risk-1500k</guid>
+      <pubDate>Sat, 28 Nov 2026 05:00:00 +0000</pubDate>
+      <description>At $1.5M across 401(k), Roth IRA, and taxable accounts, separating growth (SMH), defense (XLV), and T-bills (SGOV) clarifies RMD planning.</description>
+    </item>
+    <item>
+      <title>$1M Retirement Drawdown Math: Comparing 2000–2025 Historical Paths | Truth of Market</title>
+      <link>https://truthofmarket.com/guides/retirement-sequence-risk-1m</link>
+      <guid isPermaLink="true">https://truthofmarket.com/guides/retirement-sequence-risk-1m</guid>
+      <pubDate>Sat, 28 Nov 2026 05:00:00 +0000</pubDate>
+      <description>On $1,000,000, a -50.9% S&amp;P 500 drop erases $509K on paper vs -$248K in a balanced SMH x XLV + SGOV historical cohort.</description>
+    </item>
+    <item>
+      <title>$2M Two-Pillar Capital Preservation &amp; Cash Reserve Case Study | Truth of Market</title>
+      <link>https://truthofmarket.com/guides/retirement-sequence-risk-2m</link>
+      <guid isPermaLink="true">https://truthofmarket.com/guides/retirement-sequence-risk-2m</guid>
+      <pubDate>Sat, 28 Nov 2026 05:00:00 +0000</pubDate>
+      <description>With $2M in retirement assets, avoiding a single -$1M drawdown matters far more than chasing hot stocks; a 20% SGOV reserve equals $400K.</description>
+    </item>
+    <item>
+      <title>$500K Retirement Sequence-of-Returns Risk &amp; 24-Month SGOV Buffer | Truth of Market</title>
+      <link>https://truthofmarket.com/guides/retirement-sequence-risk-500k</link>
+      <guid isPermaLink="true">https://truthofmarket.com/guides/retirement-sequence-risk-500k</guid>
+      <pubDate>Sat, 28 Nov 2026 05:00:00 +0000</pubDate>
+      <description>Drawing $20,000/yr from a $500K portfolio during a 50% equity drop sells twice as many shares; a $40K–$75K SGOV reserve prevents forced selling.</description>
+    </item>
+    <item>
+      <title>Why 100% SMH Needed 89 Months to Recover vs 17 Months With XLV | Truth of Market</title>
+      <link>https://truthofmarket.com/guides/smh-alone-vs-xlv-healthcare-ballast</link>
+      <guid isPermaLink="true">https://truthofmarket.com/guides/smh-alone-vs-xlv-healthcare-ballast</guid>
+      <pubDate>Sat, 28 Nov 2026 05:00:00 +0000</pubDate>
+      <description>A 74.6% loss demands a 294% rebound just to break even; cutting that drawdown to 27.8% with XLV cuts the needed rebound to 38.5%.</description>
+    </item>
+    <item>
+      <title>SMH Fear &amp; Greed Index Below 20: Historical Statistical Distribution | Truth of Market</title>
+      <link>https://truthofmarket.com/guides/smh-fear-greed-extreme-fear-history</link>
+      <guid isPermaLink="true">https://truthofmarket.com/guides/smh-fear-greed-extreme-fear-history</guid>
+      <pubDate>Sat, 28 Nov 2026 05:00:00 +0000</pubDate>
+      <description>Historically, SMH spends roughly 11.4% of trading days in Extreme Fear (0–24); tracking 7 objective factors helps replace headline panic with numbers.</description>
+    </item>
+    <item>
+      <title>SMH vs QQQ: Tech Drawdown Depth and Break-Even Timelines | Truth of Market</title>
+      <link>https://truthofmarket.com/guides/smh-vs-qqq-volatility-recovery</link>
+      <guid isPermaLink="true">https://truthofmarket.com/guides/smh-vs-qqq-volatility-recovery</guid>
+      <pubDate>Sat, 28 Nov 2026 05:00:00 +0000</pubDate>
+      <description>Both QQQ and SMH dropped over 70% after 2000; pairing chip exposure with healthcare (XLV) trimmed peak drawdown by more than half.</description>
+    </item>
+    <item>
+      <title>SMH vs SPY Drawdowns and Recovery Months (2000, 2008, 2022) | Truth of Market</title>
+      <link>https://truthofmarket.com/guides/smh-vs-spy-crisis-drawdown</link>
+      <guid isPermaLink="true">https://truthofmarket.com/guides/smh-vs-spy-crisis-drawdown</guid>
+      <pubDate>Sat, 28 Nov 2026 05:00:00 +0000</pubDate>
+      <description>From 2000 through 2025, SMH compounded faster than SPY but fell 74.6% in the dot-com bust; adding XLV cut worst drawdown to 27.8%.</description>
+    </item>
+    <item>
+      <title>VOO Alone vs SMH x XLV + SGOV: 25-Year Risk-Adjusted Study | Truth of Market</title>
+      <link>https://truthofmarket.com/guides/smh-vs-voo-two-pillar-study</link>
+      <guid isPermaLink="true">https://truthofmarket.com/guides/smh-vs-voo-two-pillar-study</guid>
+      <pubDate>Sat, 28 Nov 2026 05:00:00 +0000</pubDate>
+      <description>VOO tracks the broad S&amp;P 500 at 0.16x return-to-drawdown efficiency, while a two-pillar SMH x XLV study logged 0.46x across 2000–2025.</description>
     </item>
   </channel>
 </rss>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 Year-End RMD &amp; SGOV Cash Buffer Simulator (IRS Pub 590-B) | Truth of Market</title>
+  <meta name="description" content="Free 2026 Required Minimum Distribution calculator using official IRS Publication 590-B Uniform Lifetime Table III divisors (age 73=26.5, 74=25.5, 75=24.6) plus a 24-month SGOV Treasury liquidity buffer check." />
+  <link rel="canonical" href="https://truthofmarket.com/tools/rmd-sgov-buffer" />
+  <link rel="alternate" type="application/rss+xml" title="Truth of Market Research RSS" href="https://truthofmarket.com/rss.xml" />
+  <meta name="naver-site-verification" content="" data-slot="naver-search-advisor" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="2026 Year-End RMD &amp; SGOV Cash Buffer Simulator | Truth of Market" />
+  <meta property="og:description" content="Calculate your exact 2026 IRS Pub 590-B RMD and 24-month short-term Treasury cash reserve in 10 seconds — zero login wall." />
+  <meta property="og:url" content="https://truthofmarket.com/tools/rmd-sgov-buffer" />
+  <meta property="og:image" content="https://truthofmarket.com/assets/og/og-tool-rmd-sgov.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://truthofmarket.com/assets/og/og-tool-rmd-sgov.png" />
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "name": "2026 Year-End RMD & SGOV Cash Buffer Simulator", "url": "https://truthofmarket.com/tools/rmd-sgov-buffer", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Free IRS Publication 590-B Uniform Lifetime Table III RMD calculator paired with a 24-month short-term Treasury (SGOV) cash buffer stress-check. Educational mathematics only."}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How is a 2026 Required Minimum Distribution (RMD) calculated at age 73?", "acceptedAnswer": {"@type": "Answer", "text": "Under IRS Publication 590-B Uniform Lifetime Table III, divide your prior December 31 Traditional IRA or 401(k) balance by the distribution period for your age (26.5 at age 73, 25.5 at age 74, 24.6 at age 75)."}}, {"@type": "Question", "name": "Why pair year-end RMD planning with a 24-month SGOV cash buffer?", "acceptedAnswer": {"@type": "Answer", "text": "Ring-fencing 24 months of planned retirement withdrawals inside short-duration US Treasury bills helps retirees avoid liquidating depressed equity shares during bear-market drawdowns."}}]}]}</script>
+  <style>
+    :root { --bg:#FAF7F2; --card:#FFFFFF; --ink:#111827; --muted:#4B5563; --brand:#0F2C22; --line:#E5E0D5; --gold:#B45309; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif; line-height:1.65; }
+    header { background:#FFF; border-bottom:1px solid var(--line); padding:14px 20px; }
+    .hd-in { max-width:960px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+    .brand { font-family:Georgia,serif; font-size:1.2rem; font-weight:700; color:var(--brand); text-decoration:none; }
+    .nav { display:flex; gap:14px; flex-wrap:wrap; align-items:center; font-size:0.92rem; }
+    .nav a { color:var(--muted); text-decoration:none; font-weight:600; }
+    .nav .cta { background:var(--brand); color:#FFF; padding:8px 14px; border-radius:8px; }
+    main { max-width:960px; margin:0 auto; padding:30px 20px 64px; }
+    .eyebrow { display:inline-block; background:#FEF3C7; color:#92400E; padding:4px 12px; border-radius:999px; font-size:0.8rem; font-weight:800; letter-spacing:0.04em; }
+    h1 { font-family:Georgia,serif; font-size:clamp(1.8rem,4vw,2.5rem); color:var(--brand); margin:12px 0 10px; line-height:1.25; }
+    .answer-box { background:#F3F7F5; border-left:4px solid var(--brand); border-radius:10px; padding:16px 18px; margin:18px 0; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:24px; margin:20px 0; box-shadow:0 6px 24px rgba(15,44,34,0.05); }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; }
+    label { display:block; font-weight:700; font-size:0.88rem; color:var(--brand); margin-bottom:6px; }
+    input { width:100%; padding:12px; font-size:1rem; border:1.5px solid #CBD5E1; border-radius:10px; font-variant-numeric:tabular-nums; }
+    .kpi-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:12px; margin-top:20px; }
+    .kpi { background:#FAF7F2; border:1px solid var(--line); border-radius:12px; padding:14px; }
+    .kpi-l { font-size:0.78rem; color:var(--muted); font-weight:700; text-transform:uppercase; }
+    .kpi-v { font-size:1.35rem; font-weight:800; color:var(--brand); margin-top:4px; font-variant-numeric:tabular-nums; }
+    .share-bar { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; background:#0F2C22; color:#FFF; border-radius:14px; padding:16px 20px; margin-bottom:18px; }
+    .btn-share { background:#F59E0B; color:#111827; border:none; border-radius:10px; padding:12px 20px; font-weight:800; font-size:0.98rem; cursor:pointer; min-height:48px; }
+    .btn-primary { display:inline-block; background:#0F2C22; color:#FFF; text-decoration:none; padding:14px 22px; border-radius:10px; font-weight:800; }
+    .btn-secondary { display:inline-block; background:#FFF; color:#0F2C22; border:2px solid #0F2C22; text-decoration:none; padding:12px 20px; border-radius:10px; font-weight:800; }
+    .toast { display:none; margin-top:10px; padding:10px 14px; background:#ECFDF5; color:#065F46; border-radius:8px; font-weight:700; font-size:0.9rem; }
+    table { width:100%; border-collapse:collapse; font-size:0.9rem; margin-top:12px; }
+    th, td { padding:9px 12px; border-bottom:1px solid var(--line); text-align:left; font-variant-numeric:tabular-nums; }
+    th { background:#FAF7F2; color:var(--brand); }
+    .disc { font-size:0.84rem; color:var(--muted); border-top:1px solid var(--line); padding-top:16px; margin-top:28px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="hd-in">
+      <a class="brand" href="/">Truth of Market</a>
+      <nav class="nav">
+        <a href="/">Retirement Stress-Test</a>
+        <a href="/smh-fear-greed">SMH Fear &amp; Greed</a>
+        <a href="/guides/">Research Guides</a>
+        <a class="cta" href="/?utm_source=rmd_tool&amp;utm_medium=nav">Run 30s SMH&times;XLV Study &rarr;</a>
+      </nav>
+    </div>
+  </header>
+  <main id="dcSeasonalToolApp" data-div="TOM">
+    <span class="eyebrow">2026 YEAR-END RETIREMENT MATH &middot; IRS PUB 590-B TABLE III</span>
+    <h1>2026 Year-End RMD &amp; 24-Month SGOV Cash Buffer Simulator</h1>
+    <section class="answer-box">
+      <h2 style="margin:0 0 6px;font-size:1.12rem;color:#0F2C22;">How much must a 73-year-old withdraw before December 31, 2026?</h2>
+      <p style="margin:0;"><strong>Under IRS Publication 590-B Uniform Lifetime Table III, divide your prior December 31 Traditional IRA or 401(k) balance by 26.5 at age 73 (3.77%), 25.5 at age 74 (3.92%), or 24.6 at age 75 (4.07%). Pairing that year-end withdrawal with a dedicated 24-month short-term Treasury (SGOV) buffer prevents forced stock liquidation during downturns.</strong></p>
+    </section>
+
+    <div class="share-bar">
+      <div>
+        <div style="font-weight:800;font-size:1.05rem;">Share This 2026 RMD &amp; Treasury Buffer Card</div>
+        <div style="font-size:0.86rem;color:#D1FAE5;">Send a clean link to your spouse or family checklist (zero login required).</div>
+      </div>
+      <button type="button" id="btnTomSeasonalShare" class="btn-share">Share RMD Snapshot Card &rarr;</button>
+    </div>
+    <div id="tomSeasonalShareToast" class="toast" role="status" aria-live="polite"></div>
+
+    <section class="card" aria-label="RMD and SGOV Buffer Inputs">
+      <div class="grid">
+        <div>
+          <label for="rmdAge">Age Turning in 2026 (72&ndash;95)</label>
+          <input id="rmdAge" type="number" min="72" max="95" value="73" />
+        </div>
+        <div>
+          <label for="rmdBalance">Prior Dec 31 Traditional IRA / 401(k) Balance ($)</label>
+          <input id="rmdBalance" type="number" min="0" step="10000" value="1000000" />
+        </div>
+        <div>
+          <label for="rmdMonthlySpend">Monthly Household Portfolio Withdrawal ($)</label>
+          <input id="rmdMonthlySpend" type="number" min="0" step="250" value="4000" />
+        </div>
+        <div>
+          <label for="rmdCurrentCash">Current Short-Term Treasury / SGOV Cash ($)</label>
+          <input id="rmdCurrentCash" type="number" min="0" step="5000" value="96000" />
+        </div>
+        <div>
+          <label for="rmdSgovYield">Illustrative Short Treasury Yield (%)</label>
+          <input id="rmdSgovYield" type="number" min="0" max="10" step="0.1" value="4.2" />
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-l">IRS Table III Divisor</div><div class="kpi-v" id="outDivisor">26.5 (3.77%)</div></div>
+        <div class="kpi"><div class="kpi-l">Estimated 2026 Annual RMD</div><div class="kpi-v" id="outRmdAnnual">$37,736</div></div>
+        <div class="kpi"><div class="kpi-l">Monthly RMD Equivalent</div><div class="kpi-v" id="outRmdMonthly">$3,145 / mo</div></div>
+        <div class="kpi"><div class="kpi-l">24-Month SGOV Target</div><div class="kpi-v" id="outTarget24">$96,000</div></div>
+        <div class="kpi"><div class="kpi-l">24-Month Buffer Status</div><div class="kpi-v" id="outBufferStatus" style="font-size:1.05rem;">Covered</div></div>
+        <div class="kpi"><div class="kpi-l">Est. Annual Cash Yield</div><div class="kpi-v" id="outSgovInterest">$4,032 / yr</div></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 style="margin-top:0;color:#0F2C22;font-family:Georgia,serif;">IRS Pub 590-B Quick Reference (Ages 73&ndash;85)</h2>
+      <table>
+        <thead><tr><th>Age</th><th>IRS Divisor</th><th>Implied Rate</th><th>RMD per $1,000,000</th></tr></thead>
+        <tbody>
+          <tr><td>73</td><td>26.5</td><td>3.77%</td><td>$37,736</td></tr>
+          <tr><td>74</td><td>25.5</td><td>3.92%</td><td>$39,216</td></tr>
+          <tr><td>75</td><td>24.6</td><td>4.07%</td><td>$40,650</td></tr>
+          <tr><td>78</td><td>22.0</td><td>4.55%</td><td>$45,455</td></tr>
+          <tr><td>80</td><td>20.2</td><td>4.95%</td><td>$49,505</td></tr>
+          <tr><td>85</td><td>16.0</td><td>6.25%</td><td>$62,500</td></tr>
+        </tbody>
+      </table>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:20px;">
+        <a class="btn-primary" href="/?utm_source=rmd_tool&amp;utm_medium=cta#tom-retirement-architect">Run Free 30-Second SMH&times;XLV Crash Stress-Test &rarr;</a>
+        <a class="btn-secondary" href="/smh-fear-greed">Check Live SMH Fear &amp; Greed Index &rarr;</a>
+      </div>
+    </section>
+
+    <p class="disc">
+      <strong>Educational Math Disclaimer:</strong> Built strictly from public IRS Publication 590-B Uniform Lifetime Table III figures for independent educational illustration. Not individualized tax, legal, or investment advice. Consult a qualified CPA or tax advisor for inherited IRAs, spousal age exceptions (10+ years younger), or QCD rules. &middot; <a href="/terms">Terms</a> &middot; <a href="/privacy">Privacy</a>
+    </p>
+  </main>
+  <script defer src="/hq_member_crm_client.js?v=20261128ta"></script>
+  <script defer src="/assets/dc-rmd-sgov-tool.js?v=20261128ta"></script>
+</body>
+</html>

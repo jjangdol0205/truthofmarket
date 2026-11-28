@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-27T09:35:13.197641+00:00",
+  "updatedAt": "2026-11-28T04:44:03.926346+00:00",
   "telegramDedicatedConversationId": "9522c1b0-bae8-447b-8421-e07cf7a526b7",
   "pcDirectConversationId": "876538cc-3cd8-41af-8abe-00937e093957",
   "standingDirectives": [
@@ -228,6 +228,26 @@
   ],
   "recentCommonOrders": [
     {
+      "text": "3. [2사업부 인스타 캐러셀 5장째 고정 CTA 반영]:\n- @kisfitglobal 인스타 캐러셀 템플릿 5장째 슬라이드를 \"Save for Next Pediatrician Visit · Free 3-Sec CDC Calculator in Bio\" 액션 카드로 고정하라.\n\n━━━━━━━━━━━━━━━━━━━━\n[출구 게이트 검증 및 1단계 오너 5분 가이드 제출]\n1. 전 5도메인 /rss.xml 파싱 에러 0건(GBA 구 /rss 오류 해소 확인), 신규 시즌 원페이지 5종 HTTP 200, ?ref= 공유 클릭 시 D1 share_clicks 실계측 작동, ?internal_check=1 및 가격표 성역 무손상(5/5 PASS), 금지어 0건, /live-audit 10/10 PASS를 독립 검증하라.\n2. 4사업부 신규 롱폼 실제 유튜브 게시 URL과 설명란 첫 줄 파란 링크 활성 여부를 확인하라.\n3. 완료 보고서 하단에 내가 브라우저에서 딱 5분 만에 순서대로 복붙·클릭만 하면 끝나는 [1단계 4대 검색엔진 출생신고 5분 치트시트 (GSC 제출할 정확한 sitemap URL 5개 · Bing 1클릭 경로 · 네이버 서치어드바이저 등록 URL 2개 · 다음 검색등록용 최적 제목·설명 복붙 문구)] 를 정리해 6대 자진보고와 함께 보고하라.",
+      "status": "DISPATCHED",
+      "createdAt": "2026-11-28 13:44:03"
+    },
+    {
+      "text": "[총 회장 최종 결정 및 착수 지시 — \"2단계(홈페이지방+홍보방 무인 실행) 즉시 100% 완수 후, 1단계(4대 검색엔진 5분 출생신고) 원클릭 세팅 준비하라\"]\n\n방금 보고한 실측 진단(30일 순수 외부 41 UV · 검색 0명 · 쇼츠 5,057회→30명 · share_clicks=0)과 알파남 23강 마스터플랜에 대한 의사결정이다:\n1) [채택 범위 확정]: 2단계(AI 100% 무인 실행 · $0)를 지금 즉시 홈페이지방·홍보방에 동시 배정해 100% 실서버 배포까지 완수하고, 배포 검증이 끝나는 즉시 내가 5분 만에 클릭만 하면 끝나는 1단계(GSC 5도메인 재제출 · Bing 1클릭 연동 · 네이버 서치어드바이저 KFK/HERO 등록 · 다음 검색등록/핀코드) 실행 체크리스트 및 브라우저 세팅을 띄워 보고하라.\n2) [3단계 및 블랙햇 명확 기각]: 매일 사람이 3분씩 수동 복붙해야 하는 지식인 반자동 답변은 '일일 수동 0분(Human-on-the-Loop)' 원칙 위반이므로 기각(채택 안 함) 한다. 동결 중인 자사 블로그·카페는 본진 4대 검색 색인이 먼저 열린 뒤 추후 판단하며, 지자체 게시판 게릴라·매크로·클로킹·애드센스 전면광고는 영구 금지한다.\n3) [숙성 구간(Day 4/14) 보호 원칙]: 오늘 오전 반영된 자가 진화 3대 장치(taste_evaluator 85점, weekly_hill_climber, ?internal_check=1 영구 제외, 가격표·면책 성역)는 단 1줄도 흔들지 마라. 또한 무분별하게 수백 개 얕은 페이지를 찍어내 도메인 숙성을 해치지 말고, 기존 핵심 페이지 스니펫 개조 + 사업부당 꼭 필요한 12월 시즌 고밀도 기능형 원페이지 딱 1종씩만 정밀 추가하라.\n\n━━━━━━━━━━━━━━━━━━━━\n[트랙 A — 홈페이지방 즉시 무인 구축 명세 ($0)]\n\n1. [4대 검색엔진 출생신고 슬롯 & 표준 /rss.xml 완비 (특히 3사업부 긴급 수리)]:\n- 3사업부(GBA)의 구 /rss 오류를 즉시 제거하고, 전 5개 사이트(truthofmarket.com/rss.xml, kisfitglobal.com/rss.xml, getbreakai.com/jp/rss.xml 및 루트, paradise-hero.com/rss.xml, kidsfit.co.kr/rss.xml)에 네이버·구글·Bing·다음 파서를 100% 통과하는 표준 RSS 2.0 피드(XML 이스케이프·RFC-822 pubDate·HTTP 200 Clean URL 전용)와 <head> RSS 자동 발견 태그를 생성하라.\n- 다음 웹마스터 robots.txt 핀코드 슬롯 및 네이버 서치어드바이저 메타태그 슬롯을 환경변수/설정으로 즉시 주입 가능하게 준비하고, 5개 sitemap.xml(특히 GBA /jp/ 53p 및 KFK 107p)에 리다이렉트·폐기 URL이 0건인지 전수 재검증 후 IndexNow 자동 핑을 발송하라.\n\n2. [네이버·구글 최상단 스니펫 정답 구조 + 상·하단 고대비 계산기 버튼 + JSON-LD 스키마]:\n- 각 사이트의 상위 실검색 타겟 페이지(각 10~15개 핵심 페이지)를 **① 실제 질문형 H2/H3 헤딩 ➔ ② 바로 아래 2줄 <strong> 핵심 단답 요약 ➔ ③ 첫 문단 직후 & 최하단 2곳 고대비 '0초 무료 계산기/라디오 바로가기' 버튼 ➔ ④ 관련 자사 유튜브 영상 임베드 ➔ ⑤ FAQPage 및 WebApplication JSON-LD 스키마** 구조로 업그레이드하라:\n  * 1사업부(TOM): SMH Fear & Greed Index 일일 실측 점수(오늘 4.7/100 등)가 WebApplication/FAQPage 스키마와 SMH fear and greed · SMH vs XLV drawdown 페이지 타이틀·단답에 매일 자동 주입되게 연결.\n  * 2사업부(KFG): bone age height predictor · CDC height percentile calculator 상위 10페이지 최상단에 0초 계산기 직결 버튼 및 스니펫 단답 배치.\n  * 3사업부(GBA): 新NISA 一括 360万円 後悔 · 60代 新NISA ポートフォリオ · 米国半導体 SMH 恐怖と強欲指数 타이틀·스니펫 2줄 단답 최적화.\n  * 4사업부(HERO): 트로트 감상·절기 인사 페이지 상·하단에 큰글씨 무료 라디오·꽃카드 직통 버튼 및 스니펫 설명 보강.\n  * 5사업부(KFK): 네이버 학부모 실검색어(초등 예상키 계산기, 뼈나이 1년 빠름, 초1~초6 평균키 백분위) 중심으로 기존 107p 중 핵심 랜딩 타이틀·메타·스니펫 2줄 단답 및 상·하단 고대비 진단 직통 버튼 일괄 장착.\n\n3. [결과 화면 최상단 '1터치 공유 OG 카드' 탑재 (?ref= & D1 share_clicks 실계측 직결)]:\n- 현재 share_clicks=0인 병목을 깨기 위해 전 5개 사이트 결과·카드 화면 최상단에 모바일 네이티브 공유 시트(navigator.share 1순위 + 클립보드 복사 토스트 2순위 폴백) 버튼을 크게 장착하라.\n- 공유 링크는 반드시 D1 AARRR 기존 추적 규격인 ?ref= 파라미터 및 share_clicks 카운터 이벤트와 정확히 직결하되, 오너의 ?internal_check=1 플래그가 공유 URL에 절대 딸려 나가지 않도록 자동 스트립(strip)하라.\n- 특히 **4사업부 아침·겨울 꽃카드(노래와 꽃카드 카톡방에 함께 보내기 ➔ 수신자 클릭 시 백운호 노래 플레이어 즉시 노출 OG 카드) 와 5·2사업부 예상키 결과 카드(아이 아빠·엄마에게 결과표 보내기), 1·3사업부 SMH 공포지수 카드**의 og:title·og:description·og:image(1200x630) 미리보기를 완벽히 세팅하라.\n\n4. [12월 연말 실검색 흡수용 '고밀도 시즌 기능형 원페이지' 사업부당 딱 1종씩 정밀 추가]:\n- 얕은 페이지 남발 없이 공공 공식 상수 기반 고완성도 시즌 도구 1종씩만 추가해 sitemap.xml·rss.xml에 등록하라:\n  * 1사업부: /tools/rmd-sgov-buffer (미 73세+ 12월 연말 IRS RMD 의무인출액 & SGOV 현금 버퍼 시뮬레이터)\n  * 2사업부: /tools/winter-growth-check (겨울방학 수면 골든타임 & US CDC ft/in·cm 양방향 백분위 체크)\n  * 3사업부: /jp/tools/nisa-year-end (2026年 新NISA 연말 비과세 잔여 한도 & 2027년 매도 한도 부활 계산기)\n  * 4사업부: /winter-cards (12월 한파 · 12/22 동지 · 성탄 · 2027년 정미년 새해 무료 큰글씨 안부 꽃카드 사랑방 — '2027년 정미년' 간지 정확 표기 필수)\n  * 5사업부: /tools/school-ready-growth (2027학년도 초등학교 입학 전 평균키·발달 루틴 체크판 & 영유아검진 개월수 계산기)\n\n━━━━━━━━━━━━━━━━━━━━\n[트랙 B — 홍보방 즉시 무인 구축 명세 ($0)]\n\n1. [4사업부 롱폼 앵커 즉시 실게시 (2,894회 조회수 ➔ 웹 유입 전환 1순위!)]:\n- 현재 0편인 4사업부 유튜브 채널에 백운호 3분 완곡 및 15분 라디오 사랑방 롱폼(16:9) 을 즉시 렌더링·게시하고, **설명란 첫 줄과 고정댓글 최상단에 클릭 가능한 파란 주소(https://paradise-hero.com/radio 또는 /go/yt)** 를 개통하라.\n- 신규 발행되는 백운호 쇼츠의 하단 앵커 유도 및 기존 고조회수 쇼츠 연결 가이드를 즉시 반영하라.\n\n2. [전 5채널 유튜브 커뮤니티 탭 '1초 투표 + 파란 /go/yt 직통 링크' 가동]:\n- 쇼츠 설명란 링크 차단을 우회하기 위해 5개 유튜브 채널 커뮤니티 탭에 타겟 맞춤형 **1초 공감 투표(예: 5사업부 \"우리 아이 밤 몇 시에 잠드나요?\", 1사업부 \"현재 은퇴 계좌 현금·SGOV 비중은?\", 4사업부 \"오늘 저녁 듣고 싶은 백운호 위로곡은?\") + 첫 줄 파란 /go/yt 직통 링크** 포스팅 파이프라인을 가동하라.",
+      "status": "DISPATCHED",
+      "createdAt": "2026-11-28 13:44:00"
+    },
+    {
+      "text": "Https://youtube.com/playlist?list=PLEUyJCb3Acx1Kp_1CbMcDEJV-R1IBR_2e&si=htc7U-lvMsbx54vz\n\n이것도 참고해서 홈페이지 유입 방안 마련해줘",
+      "status": "DISPATCHED",
+      "createdAt": "2026-11-28 12:38:35"
+    },
+    {
+      "text": "각 사업부 홈페이지 유입 증대 방안 없을까?",
+      "status": "DISPATCHED",
+      "createdAt": "2026-11-28 12:34:35"
+    },
+    {
       "text": "내가 직접 안해서 못하는 일들 정리해서 알려주고 안티그래비티 홈페이지 대화창에도 알려줘 오늘 작업할게",
       "status": "DISPATCHED",
       "createdAt": "2026-11-27 18:35:13"
@@ -281,26 +301,6 @@
       "text": "[긴급 SEO 패치] 어제(11/26 23시) Google Search Console에서 kisfitglobal.com, getbreakai.com, paradise-hero.com, kidsfit.co.kr 4개 도메인에 대해 \"사이트맵에 리디렉션이 포함된 페이지 / 적절한 표준 태그가 포함된 대체 페이지\" 색인 경고가 도착했다.\n1) 5개 사이트 sitemap.xml 안의 모든 URL에서 Cloudflare Pages가 308 리다이렉트시키는 .html 확장자(또는 불일치 슬래시)를 제거하고 **최종 HTTP 200 도착 URL(Clean URL)** 만 남겨라.\n2) 각 페이지의 <link rel=\"canonical\"> 주소가 sitemap.xml에 적힌 최종 URL과 글자 하나까지 100% 일치하도록 통일(특히 getbreakai.com/jp/ 하위 페이지가 루트 /를 canonical로 잘못 가리키지 않게 자기 자신 URL로 수정)한 뒤 재배포하라.",
       "status": "DISPATCHED",
       "createdAt": "2026-11-27 07:43:25"
-    },
-    {
-      "text": "https://youtube.com/shorts/FSSRKYAkP98?si=rOc4t0KJmlxWcEvp\n\n노래가사랑 자막 싱크가 안맞아",
-      "status": "DISPATCHED",
-      "createdAt": "2026-11-26 18:11:10"
-    },
-    {
-      "text": "이 의도 확정서대로 실행해줘",
-      "status": "DISPATCHED",
-      "createdAt": "2026-11-26 14:01:56"
-    },
-    {
-      "text": "텔레그램에서도 이런식으로 진행하면 더 명확하게 지시할수있을거 같아",
-      "status": "DISPATCHED",
-      "createdAt": "2026-11-26 09:47:27"
-    },
-    {
-      "text": "첨부 파일(interview-me-antigravity-install.md)의 지침을 정독해 분석하고 해당 전담방에 반영해줘\n[📎 텔레그램 첨부파일 자동 저장 완료]\n• 로컬 경로: D:\\드림컴퍼니\\data\\telegram_uploads\\20261126_094644_interview-me-antigravity-install.md\n• 원본 파일명: interview-me-antigravity-install.md (20,719 bytes)\n※ 위 로컬 파일을 직접 read_file로 열어 전체 내용을 확인한 뒤, 지침에 맞춰 실행 및 전담방 분산 지시를 수행하세요.",
-      "status": "DISPATCHED",
-      "createdAt": "2026-11-26 09:46:45"
     }
   ]
 }
