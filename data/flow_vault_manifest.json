@@ -1,6 +1,6 @@
 {
   "schema_version": "flow-vault-manifest-v1",
-  "updated_at_kst": "2026-11-28 04:32:55 KST",
+  "updated_at_kst": "2026-11-28 12:54:27 KST",
   "r2_bucket": "dreamcompany-flow-vault",
   "starting_credits": 18385,
   "remaining_credits": 0,
@@ -529,8 +529,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_1/TOM_Q22.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 08:17:21 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 08:17:21 KST",
+      "last_used_kst": "2026-11-28 12:54:27 KST"
     },
     {
       "clip_id": "TOM_Q23",
@@ -2423,8 +2424,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_3/GBA_Q21.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-22 14:22:15 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-22 14:22:15 KST",
+      "last_used_kst": "2026-11-28 12:56:40 KST"
     },
     {
       "clip_id": "GBA_Q22",
@@ -3707,9 +3709,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_4/HERO_AB05_SELF_A.mp4",
       "r2_synced": true,
-      "used_count": 1,
+      "used_count": 2,
       "downloaded_at_kst": "2026-11-24 01:01:02 KST",
-      "last_used_kst": "2026-11-24 04:31:08 KST"
+      "last_used_kst": "2026-11-28 12:57:44 KST"
     },
     {
       "clip_id": "HERO_AB06_SELF_B",
@@ -4678,8 +4680,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_5/KFK_AB05_SELF_A.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 11:14:06 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 11:14:06 KST",
+      "last_used_kst": "2026-11-28 12:58:05 KST"
     },
     {
       "clip_id": "KFK_AB06_SELF_B",
@@ -4845,8 +4848,9 @@
       "r2_bucket": "dreamcompany-flow-vault",
       "r2_key": "flow_vault/div_2/KFG_TAIL_01.mp4",
       "r2_synced": true,
-      "used_count": 0,
-      "downloaded_at_kst": "2026-11-24 11:44:49 KST"
+      "used_count": 1,
+      "downloaded_at_kst": "2026-11-24 11:44:49 KST",
+      "last_used_kst": "2026-11-28 12:55:40 KST"
     },
     {
       "clip_id": "GBA_TAIL_01",
