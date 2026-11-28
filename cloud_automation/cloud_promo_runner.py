@@ -2045,6 +2045,11 @@ def main() -> int:
             title, _ = scrub_ai_slop(title, lang=_lg, max_em_dashes=0, is_html=False)
             desc, _ = scrub_ai_slop(desc, lang=_lg, max_em_dashes=1, is_html=False)
             srt_stub, _ = scrub_ai_slop(srt_stub, lang=_lg, max_em_dashes=0, is_html=False)
+            if (title.count("—") + desc.count("—") + srt_stub.count("—")) > 2:
+                _sep = "、" if _lg == "ja" else (", " if _lg == "ko" else " - ")
+                title = title.replace("—", _sep)
+                desc = desc.replace("—", _sep)
+                srt_stub = srt_stub.replace("—", _sep)
 
         ok_txt, errs = check_text_gate(div, title, desc, srt_stub, vocal_highlight_sec=vocal_highlight_sec)
         if not ok_txt:
