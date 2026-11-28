@@ -244,6 +244,105 @@
     });
   }
 
+
+  // Bind Top 1-Line Extreme Alert Form (Above-the-Fold) + 1-Click Nest-Egg Stress Check
+  function bindExtremeAlertForm(formId, inputId, statusId) {
+    var f = document.getElementById(formId);
+    if (!f || f.__dcBound) return;
+    f.__dcBound = true;
+    f.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var emInp = document.getElementById(inputId);
+      var stEl = document.getElementById(statusId);
+      var btn = f.querySelector('button[type="submit"]');
+      var email = String(emInp ? emInp.value : '').trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+        if (stEl) {
+          stEl.style.display = 'block';
+          stEl.style.color = '#991B1B';
+          stEl.textContent = lang === 'ja'
+            ? '有効なメールアドレスをご入力ください。'
+            : 'Please enter a valid email address.';
+        }
+        return;
+      }
+      if (btn) btn.disabled = true;
+      var done = function () {
+        if (btn) btn.disabled = false;
+        if (stEl) {
+          stEl.style.display = 'block';
+          stEl.style.color = '#065F46';
+          stEl.textContent = lang === 'ja'
+            ? '登録が完了しました。極度の恐怖（20以下）または極度の強欲（80以上）到達時に無料メールでお知らせします。'
+            : 'Subscribed. We will email you automatically whenever the SMH Fear & Greed Index enters Extreme Fear (<=20) or Extreme Greed (>=80).';
+        }
+      };
+      if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.registerMember === 'function') {
+        window.DreamCompanyCRM.trackFunnelEvent(divCode, 'fg_alert_signup', { event_meta: formId });
+        window.DreamCompanyCRM.registerMember({
+          div: divCode,
+          email: email,
+          segment: 'smh_fg_extreme_alert',
+          lang: lang === 'ja' ? 'ja-JP' : 'en-US',
+          notes: 'smh_fear_greed_extreme_alert_' + formId
+        }).then(done).catch(done);
+      } else {
+        done();
+      }
+    });
+  }
+  bindExtremeAlertForm('smhFgTopAlertForm', 'smhFgTopAlertEmail', 'smhFgTopAlertStatus');
+
+  var stressBtns = document.querySelectorAll('[data-tom-stress-btn]');
+  if (stressBtns && stressBtns.length) {
+    var fmtUsd = function (n) {
+      return '$' + Math.round(n).toLocaleString('en-US');
+    };
+    stressBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var scale = Number(btn.getAttribute('data-tom-stress-btn')) || 300000;
+        stressBtns.forEach(function (b) { b.classList.toggle('is-active', b === btn); });
+        // Historical 2000-2025 educational case-study comparisons (non-advisory):
+        // S&P 500 (-50.9%), SMH alone (-74.6%), SMH x XLV + SGOV balanced (-27.8%), 24-mo SGOV buffer (8% of portfolio @ 4%/yr withdrawal)
+        var spLoss = scale * 0.509;
+        var mixLoss = scale * 0.278;
+        var savedVsSp = spLoss - mixLoss;
+        var sgov24m = scale * 0.08;
+        var idleCashDragYr = sgov24m * 0.044; // ~4.4% spread vs 0.01% broker sweep reference
+
+        var resWrap = document.getElementById('tomFgStressResult');
+        var hdEl = document.getElementById('tomFgStressHeadline');
+        var gridEl = document.getElementById('tomFgStressGrid');
+        var fullLink = document.getElementById('tomFgStressFullLink');
+
+        if (hdEl) {
+          hdEl.textContent = 'Sample ' + fmtUsd(scale) + ' Historical Case Study (2008 / 2022 Drawdown & 24-Mo SGOV Buffer)';
+        }
+        if (gridEl) {
+          gridEl.innerHTML =
+            '<div class="fg-stress-tile"><span class="fg-stress-tile-k">S&amp;P 500 Worst Crash (-50.9%)</span><strong class="fg-stress-tile-v" style="color:#991B1B;">-' + fmtUsd(spLoss) + '</strong></div>' +
+            '<div class="fg-stress-tile"><span class="fg-stress-tile-k">SMH &times; XLV + SGOV (-27.8%)</span><strong class="fg-stress-tile-v" style="color:#065F46;">-' + fmtUsd(mixLoss) + ' (+' + fmtUsd(savedVsSp) + ' buffered)</strong></div>' +
+            '<div class="fg-stress-tile"><span class="fg-stress-tile-k">24-Month SGOV Cash Buffer (8%)</span><strong class="fg-stress-tile-v">' + fmtUsd(sgov24m) + '</strong></div>' +
+            '<div class="fg-stress-tile"><span class="fg-stress-tile-k">0.01% Broker Sweep vs T-Bill Gap</span><strong class="fg-stress-tile-v">~' + fmtUsd(idleCashDragYr) + '/yr</strong></div>';
+        }
+        if (fullLink) {
+          fullLink.setAttribute('href', '/?start=1&scale=' + String(scale) + '&utm_source=smh_fg&utm_medium=quick_stress');
+        }
+        if (resWrap) resWrap.style.display = 'block';
+
+        try {
+          if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.trackFunnelEvent === 'function') {
+            if (sessionStorage.getItem('dc_quiz_start_TOM') !== '1') {
+              sessionStorage.setItem('dc_quiz_start_TOM', '1');
+              window.DreamCompanyCRM.trackFunnelEvent('TOM', 'quiz_start', { event_meta: 'fg_1click_' + scale });
+            }
+            window.DreamCompanyCRM.trackFunnelEvent('TOM', 'quiz_complete', { event_meta: 'fg_1click_' + scale });
+          }
+        } catch (_) {}
+      });
+    });
+  }
+
   if (window.DreamCompanyCRM && typeof window.DreamCompanyCRM.trackFunnelEvent === 'function') {
     window.DreamCompanyCRM.trackFunnelEvent(divCode, 'fg_view');
   }
