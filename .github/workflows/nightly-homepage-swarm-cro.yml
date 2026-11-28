@@ -1,0 +1,93 @@
+name: Dream Company Cloud Swarm Auto-CRO (Edge SSR + 3-Stage Self-Verification)
+
+on:
+  # Phase 1 Pilot: manual workflow_dispatch first; Phase 2 enables nightly 02:13 KST (`13 17 * * *` UTC) across all 5 divisions.
+  # schedule:
+  #   - cron: "13 17 * * *"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Run mode (dry_run | nightly | rehearsal_promote_rollback)"
+        required: true
+        default: "dry_run"
+        type: choice
+        options:
+          - dry_run
+          - nightly
+          - rehearsal_promote_rollback
+      scope:
+        description: "Division scope (pilot_phase1 = TOM,KFK | all_5div = TOM,KFG,GBA,HERO,KFK)"
+        required: true
+        default: "pilot_phase1"
+        type: choice
+        options:
+          - pilot_phase1
+          - all_5div
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dreamcompany-homepage-swarm-cro
+  cancel-in-progress: false
+
+jobs:
+  resolve-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      divisions: ${{ steps.set_divs.outputs.divisions }}
+    steps:
+      - id: set_divs
+        run: |
+          if [ "${{ github.event.inputs.scope }}" = "all_5div" ] || [ "${{ github.event_name }}" = "schedule" ]; then
+            echo 'divisions=["TOM","KFG","GBA","HERO","KFK"]' >> "$GITHUB_OUTPUT"
+          else
+            echo 'divisions=["TOM","KFK"]' >> "$GITHUB_OUTPUT"
+          fi
+
+  swarm-cro:
+    needs: resolve-matrix
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        div: ${{ fromJson(needs.resolve-matrix.outputs.divisions) }}
+
+    steps:
+      - name: Checkout orchestrator repo (shallow, public unlimited $0)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Cache Playwright Chromium
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.cache/ms-playwright
+          key: dc-cro-pw-v1-${{ runner.os }}
+
+      - name: Install Playwright Chromium
+        run: |
+          python -m pip install --upgrade pip -q
+          pip install -q playwright
+          playwright install chromium
+          playwright install-deps chromium > /dev/null 2>&1 || true
+
+      - name: Run Cloud Swarm Auto-CRO (${{ matrix.div }})
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          WATCHDOG_ADMIN_TOKEN: ${{ secrets.WATCHDOG_ADMIN_TOKEN }}
+          HQ_TELEGRAM_BOT_TOKEN: ${{ secrets.HQ_TELEGRAM_BOT_TOKEN }}
+          HQ_TELEGRAM_CHAT_ID: ${{ secrets.HQ_TELEGRAM_CHAT_ID }}
+        run: |
+          RUN_MODE="${{ github.event.inputs.mode || 'nightly' }}"
+          python -u -X utf8 cloud_automation/homepage_swarm_cro.py --div "${{ matrix.div }}" --mode "$RUN_MODE"
