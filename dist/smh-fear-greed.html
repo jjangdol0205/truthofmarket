@@ -58,21 +58,6 @@
     .fg-btn-light { display:inline-block; padding:12px 18px; border-radius:8px; background:#FFFFFF; color:#0F2C22; font-weight:800; text-decoration:none; font-size:0.95rem; }
     .fg-btn-outline { display:inline-block; padding:12px 18px; border-radius:8px; border:1.5px solid #A7F3D0; color:#ECFDF5; font-weight:700; text-decoration:none; font-size:0.95rem; }
     .fg-disclaimer { margin-top:28px; font-size:0.82rem; color:var(--muted); border-top:1px solid var(--line); padding-top:16px; }
-    .fg-stress-card { background:#FFFFFF; border:2px solid #0F2C22; border-radius:16px; padding:22px 20px; margin:0 0 24px; box-shadow:0 8px 24px rgba(15,44,34,0.06); }
-    .fg-stress-trust { display:inline-block; font-size:0.8rem; font-weight:700; color:#065F46; background:#ECFDF5; border:1px solid #A7F3D0; border-radius:999px; padding:4px 12px; margin-bottom:10px; }
-    .fg-stress-btns { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin:14px 0 12px; }
-    .fg-stress-btn { min-height:50px; padding:10px 8px; border-radius:10px; border:1.5px solid #0F2C22; background:#FAF7F2; color:#0F2C22; font-family:inherit; font-size:1rem; font-weight:800; font-variant-numeric:tabular-nums; cursor:pointer; transition:all 0.15s ease; }
-    .fg-stress-btn:hover, .fg-stress-btn.is-active { background:#0F2C22; color:#FFFFFF; }
-    .fg-stress-result { display:none; margin-top:14px; padding:16px; border-radius:12px; background:#F3F7F5; border:1px solid #C6DFD3; }
-    .fg-stress-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(175px,1fr)); gap:10px; margin:10px 0 12px; }
-    .fg-stress-tile { background:#FFFFFF; border:1px solid #E5E0D5; border-radius:10px; padding:11px 12px; }
-    .fg-stress-tile-k { display:block; font-size:0.76rem; color:#4B5563; font-weight:700; }
-    .fg-stress-tile-v { display:block; font-size:1.12rem; font-weight:800; color:#0F2C22; margin-top:3px; font-variant-numeric:tabular-nums; }
-    .fg-top-alert-box { margin-top:16px; padding-top:16px; border-top:1px solid #E5E0D5; }
-    .fg-top-alert-form { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
-    .fg-top-alert-form input { flex:1 1 220px; min-height:46px; padding:10px 12px; border-radius:8px; border:1px solid #94A3B8; font-size:0.95rem; }
-    .fg-top-alert-form button { min-height:46px; padding:10px 18px; border-radius:8px; border:none; background:#0F2C22; color:#FFFFFF; font-weight:800; font-size:0.92rem; cursor:pointer; }
-    @media (max-width:560px) { .fg-stress-btns { grid-template-columns:repeat(2,minmax(0,1fr)); } }
   </style>
     <link rel="alternate" type="application/rss+xml" title="Truth of Market Research RSS" href="https://truthofmarket.com/rss.xml" />
   <meta property="og:image" content="https://truthofmarket.com/assets/og/og-share-tom-smh.png" />
@@ -87,7 +72,7 @@
         <a href="/smh-fear-greed" style="color:#0F2C22;text-decoration:underline;">SMH Fear &amp; Greed</a>
         <a href="/guides/">Research Guides</a>
         <a href="/assets/downloads/tom_sample_2p.pdf" target="_blank" rel="noopener">Free 2p Sample PDF</a>
-        <a class="fg-nav-cta" href="/?start=1&amp;utm_source=smh_fg&amp;utm_medium=nav">30s Free Stress Test &rarr;</a>
+        <a class="fg-nav-cta" href="/?utm_source=smh_fg&amp;utm_medium=nav">30s Free Stress Test &rarr;</a>
       </nav>
     </div>
   </header>
@@ -99,7 +84,7 @@
 <section class="dc-snippet-answer" style="background:#F3F7F5;border:1px solid #C6DFD3;border-left:4px solid #0F2C22;border-radius:12px;padding:18px 20px;margin:18px 0;color:#111827;" aria-label="Direct Answer Summary">
   <h2 style="margin:0 0 8px;font-size:1.14rem;color:#0F2C22;">What is the live SMH Semiconductor Fear &amp; Greed Index today?</h2>
   <p style="margin:0;"><strong>As of 2026-11-27 US market close, the SMH Fear &amp; Greed Index stands at 4.7/100 (Extreme Fear, SMH $440.06 vs XLV $184.2). Historical 2000-2025 drawdowns show pairing semiconductor growth with healthcare ballast and a 24-month SGOV cash buffer cut severe retirement drawdowns nearly in half.</strong></p>
-  <div><a href="/?start=1&amp;utm_source=snippet&amp;utm_medium=top_cta#tom-retirement-architect" style="display:inline-block;background:#0F2C22;color:#FFFFFF;padding:13px 22px;min-height:48px;font-size:0.98rem;font-weight:800;border-radius:10px;text-decoration:none;margin-top:12px;">Run Free 30-Second SMH x XLV Stress-Test -&gt;</a></div>
+  <div><a href="/?utm_source=snippet&amp;utm_medium=top_cta#tom-retirement-architect" style="display:inline-block;background:#0F2C22;color:#FFFFFF;padding:13px 22px;min-height:48px;font-size:0.98rem;font-weight:800;border-radius:10px;text-decoration:none;margin-top:12px;">Run Free 30-Second SMH x XLV Stress-Test -&gt;</a></div>
 </section>
 <!-- DC_SNIPPET_TOP_END -->
 
@@ -114,37 +99,6 @@
       <div id="smhFgZoneBadge" class="fg-zone-pill">Loading latest US close...</div>
       <div id="smhFgAsOf" class="fg-asof"></div>
       <div id="smhFgCompareRow" class="fg-compare-row"></div>
-    </section>
-
-    <section id="tomFgQuickStressBox" class="fg-stress-card" aria-label="1-Click Nest-Egg Crash and Cash Buffer Check">
-      <div class="fg-stress-trust">No brokerage login &middot; Zero personal data saved &middot; Local browser math only</div>
-      <h2 style="font-family:'Newsreader',Georgia,serif;font-size:1.45rem;margin:0 0 6px;color:#0F2C22;">1-Click Nest-Egg Stress Check: 2008/2022 Crash &amp; 24-Month SGOV Cash Buffer</h2>
-      <p style="margin:0;font-size:0.94rem;color:#334155;">Tap a sample nest-egg band to see historical peak-to-trough drawdown protection (SMH &times; XLV + SGOV vs. S&amp;P 500 &amp; SMH alone) and 0.01% idle brokerage cash drag instantly.</p>
-      <div class="fg-stress-btns" role="group" aria-label="Select Sample Nest-Egg Band">
-        <button type="button" class="fg-stress-btn" data-tom-stress-btn="100000">$100K</button>
-        <button type="button" class="fg-stress-btn" data-tom-stress-btn="300000">$300K</button>
-        <button type="button" class="fg-stress-btn" data-tom-stress-btn="500000">$500K</button>
-        <button type="button" class="fg-stress-btn" data-tom-stress-btn="1000000">$1M</button>
-      </div>
-      <div id="tomFgStressResult" class="fg-stress-result" role="region" aria-live="polite">
-        <div id="tomFgStressHeadline" style="font-weight:800;font-size:1rem;color:#0F2C22;"></div>
-        <div id="tomFgStressGrid" class="fg-stress-grid"></div>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
-          <a id="tomFgStressFullLink" href="/?start=1&amp;scale=300000&amp;utm_source=smh_fg&amp;utm_medium=quick_stress" style="display:inline-block;padding:11px 18px;border-radius:8px;background:#0F2C22;color:#FFFFFF;font-weight:800;text-decoration:none;font-size:0.92rem;">Open Full 4-Step SMH &times; XLV Stress-Test &rarr;</a>
-          <a href="/assets/downloads/tom_sample_2p.pdf" target="_blank" rel="noopener" style="display:inline-block;padding:10px 16px;border-radius:8px;background:#FFFFFF;border:1.5px solid #0F2C22;color:#0F2C22;font-weight:800;text-decoration:none;font-size:0.9rem;">Preview Free 2p Sample PDF &rarr;</a>
-        </div>
-      </div>
-      <div class="fg-top-alert-box">
-        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;">
-          <strong style="font-size:0.92rem;color:#0F2C22;">Free Extreme Fear (&le;20) / Greed (&ge;80) Email Notice</strong>
-          <a href="/assets/downloads/tom_sample_2p.pdf" target="_blank" rel="noopener" style="font-size:0.86rem;font-weight:700;color:#065F46;text-decoration:underline;">Free 2p Sample PDF &rarr;</a>
-        </div>
-        <form id="smhFgTopAlertForm" class="fg-top-alert-form" novalidate>
-          <input type="email" id="smhFgTopAlertEmail" required placeholder="Enter email for quiet extreme-zone alerts (free, 1-click unsubscribe)" aria-label="Email for extreme alerts" />
-          <button type="submit">Send Free Extreme Alerts &rarr;</button>
-        </form>
-        <div id="smhFgTopAlertStatus" role="status" aria-live="polite" style="display:none;margin-top:8px;font-size:0.88rem;font-weight:700;"></div>
-      </div>
     </section>
 
     <h2 class="fg-section-title">7 Public Market-Structure Factors</h2>
@@ -184,7 +138,7 @@
         <a href="https://whop.com/checkout/plan_xIpLzFNR8SlMz" target="_blank" rel="noopener" style="display:inline-block;padding:13px 22px;border-radius:8px;background:#0F2C22;color:#FFFFFF;font-weight:800;text-decoration:none;font-size:0.96rem;">
           Get 14p Workbook PDF &mdash; $9 One-Time (No Subscription) &rarr;
         </a>
-        <a href="/?start=1&amp;utm_source=smh_fg&amp;utm_medium=stress_test&amp;utm_campaign=tom_fg" style="display:inline-block;padding:12px 20px;border-radius:8px;background:#FFFFFF;border:1.5px solid #0F2C22;color:#0F2C22;font-weight:800;text-decoration:none;font-size:0.95rem;">
+        <a href="/?utm_source=smh_fg&amp;utm_medium=stress_test&amp;utm_campaign=tom_fg" style="display:inline-block;padding:12px 20px;border-radius:8px;background:#FFFFFF;border:1.5px solid #0F2C22;color:#0F2C22;font-weight:800;text-decoration:none;font-size:0.95rem;">
           Run 30-Second Free Retirement Stress Test &rarr;
         </a>
         <a href="/assets/downloads/tom_sample_2p.pdf" target="_blank" rel="noopener" style="color:#0F2C22;font-weight:700;font-size:0.9rem;text-decoration:underline;">
@@ -205,7 +159,7 @@
       <div id="smhFgAlertStatus" role="status" aria-live="polite" style="display:none;background:#FFFFFF;padding:10px 14px;border-radius:8px;font-weight:700;font-size:0.92rem;"></div>
 
       <div class="fg-bridge-actions">
-        <a class="fg-btn-light" href="/?start=1&amp;utm_source=smh_fg&amp;utm_medium=bridge&amp;utm_campaign=tom_fg">Run 30-Second Free Retirement Stress Test &rarr;</a>
+        <a class="fg-btn-light" href="/?utm_source=smh_fg&amp;utm_medium=bridge&amp;utm_campaign=tom_fg">Run 30-Second Free Retirement Stress Test &rarr;</a>
         <a class="fg-btn-outline" href="https://whop.com/checkout/plan_xIpLzFNR8SlMz" target="_blank" rel="noopener">Get 14p Workbook &mdash; $9 One-Time (No Subscription) &rarr;</a>
       </div>
     </section>
@@ -229,9 +183,8 @@
 <!-- DC_SNIPPET_BOT_END -->
 </main>
 
-  <script defer src="/hq_member_crm_client.js?v=20261128sw"></script>
-  <script defer src="/assets/smh-fear-greed.js?v=20261128sw"></script>
+  <script defer src="/hq_member_crm_client.js?v=20261128ta"></script>
+  <script defer src="/assets/smh-fear-greed.js?v=20261123"></script>
   <script defer src="/assets/dc-share-card.js?v=20261125"></script>
-  <script defer src="/assets/dc-ux-addons.js?v=20261128ta"></script>
 </body>
 </html>

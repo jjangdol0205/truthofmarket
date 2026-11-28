@@ -1,0 +1,5 @@
+{
+  "version": "2000-2025",
+  "name": "TruthOfMarket Historical Factor Study Formula",
+  "code": "# Educational 2000-2025 Historical Dispersion Study Formula\nma20 = SMA(close, 20)\nma60 = SMA(close, 60)\nlow52 = MIN(low, 252)\nhigh52 = MAX(high, 252)\nvol_ratio_20d = volume / SMA(volume, 20)\nregime_case = (close > ma20) AND (close > ma60) AND (MAX(vol_ratio_20d, 10) >= 1.40)"
+}
