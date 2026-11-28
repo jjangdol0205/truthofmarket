@@ -1,0 +1,47 @@
+{
+  "schema_version": "brand-series-signatures-v1",
+  "updated_at_kst": "2026-11-28 21:20:00 KST",
+  "maturation_protection_until": "2026-12-12",
+  "divisions": {
+    "TOM": {
+      "lang": "en",
+      "series": "SMH 0-100 Daily Calm Check",
+      "ep_fmt": "Ep.{n}",
+      "next_episode": 1,
+      "tagline": "Calm 3-Bucket Retirement Math — No Brokerage Login, Zero Hype.",
+      "club": "Morning Bell Club (truthofmarket.com/go/yt)"
+    },
+    "KFG": {
+      "lang": "en",
+      "series": "KISFIT Weekly Parent Myth-Buster",
+      "ep_fmt": "Ep.{n}",
+      "next_episode": 1,
+      "tagline": "US CDC Growth Charts — Clear Numbers for Parents, Zero Ads.",
+      "club": "Parent Growth Club (kisfitglobal.com/go/yt)"
+    },
+    "GBA": {
+      "lang": "ja",
+      "series": "新NISA 朝の資産守りチェック",
+      "ep_fmt": "第{n}回",
+      "next_episode": 1,
+      "tagline": "日本語・証券口座ログイン不要 — 2000-2025年統計で老後資産を守る。",
+      "club": "朝の資産守り倶楽部 (getbreakai.com/go/yt)"
+    },
+    "HERO": {
+      "lang": "ko",
+      "series": "김쌤 & 가수 백운호의 오늘의 사랑방",
+      "ep_fmt": "제{n}화",
+      "next_episode": 1,
+      "tagline": "어머님 사연에 노래로 답해드리는 백운호 무료 효도 라디오입니다.",
+      "club": "백운호 사랑방 & 아침 꽃카드 (paradise-hero.com/go/yt)"
+    },
+    "KFK": {
+      "lang": "ko",
+      "series": "키즈핏 성장 연구소 1분 체크",
+      "ep_fmt": "제{n}편",
+      "next_episode": 1,
+      "tagline": "질병관리청 공식 데이터 기준 — 광고 없이 숫자로 확인하는 우리 아이 성장.",
+      "club": "키즈핏 성장 클럽 (kidsfit.co.kr/go/yt)"
+    }
+  }
+}

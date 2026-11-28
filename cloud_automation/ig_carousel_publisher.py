@@ -63,6 +63,11 @@ from written_promo_engine import (
     check_written_auto_gate,
     select_article_ab_pair,
 )
+try:
+    from brand_signature import append_brand_signature  # noqa: E402
+except Exception:
+    def append_brand_signature(div: str, base_text: str, channel: str = "ig_carousel", episode: Any = None, path: Any = None, max_total_len: Any = None) -> str:  # type: ignore[misc]
+        return str(base_text or "")
 
 CAROUSEL_EITHER_OR_Q: Dict[str, str] = {
     "TOM": "💬 Quick question: When markets fall -20%, do you prefer 24 months of Treasury cash or staying 100% invested?",
@@ -279,6 +284,7 @@ def render_5slide_carousel(div: str, matrix_db: Dict[str, Any], date_str: str, w
     if q_line:
         parts.append(q_line)
     caption = "\n\n".join(parts)
+    caption = append_brand_signature(div_u, caption, channel="ig_carousel", max_total_len=2150)
     cap_ok, cap_errs = check_promo_hard_gate(div_u, caption, surface="ig_caption")
     if not cap_ok:
         raise RuntimeError(f"Hard Gate blocked IG Carousel caption {div_u}: {cap_errs}")

@@ -42,6 +42,11 @@ if hasattr(sys.stdout, "reconfigure"):
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from promo_hard_gate import check_ai_slop_gate, check_promo_hard_gate, scrub_ai_slop  # noqa: E402
+try:
+    from brand_signature import format_series_header  # noqa: E402
+except Exception:
+    def format_series_header(div: str, episode: Any = None, channel: str = "seo", path: Any = None, allow_em_dash: bool = True, max_len: Any = None) -> str:  # type: ignore[misc]
+        return ""
 
 
 def to_clean_url(url: str) -> str:
@@ -671,6 +676,8 @@ def build_seo_article_html(div: str, matrix_db: Dict[str, Any], date_str: str, w
         else ("このような穏やかな統計レターを無料で受け取る（1クリック解除可）：" if wcfg["lang"] == "ja" else "이런 차분한 실전 레터를 무료로 받아보세요 (비밀번호 없음 · 1클릭 수신거부):")
     )
     nl_btn = "Subscribe Free" if wcfg["lang"] == "en" else ("無料で受け取る" if wcfg["lang"] == "ja" else "무료 구독하기")
+    series_sig_hdr = format_series_header(div_u, channel="seo", allow_em_dash=False)
+    eyebrow_text = f"{wcfg['brand']} · {date_str}" + (f" · {series_sig_hdr}" if series_sig_hdr else "")
 
     html_doc = f"""<!DOCTYPE html>
 <html lang="{wcfg['lang']}">
@@ -715,7 +722,7 @@ def build_seo_article_html(div: str, matrix_db: Dict[str, Any], date_str: str, w
 </head>
 <body data-division="{div_u}" data-matrix-id="{esc(matrix_id)}" data-utm-content="{esc(utm_a)}" data-article-slug="{esc(slug)}">
   <article class="wrap">
-    <div class="eyebrow">{esc(wcfg['brand'])} &middot; {esc(date_str)}</div>
+    <div class="eyebrow">{esc(eyebrow_text)}</div>
     <!-- AB_H1_SLOT_START --><h1>{esc(headline)}</h1><!-- AB_H1_SLOT_END -->
     {empathy_html}
     <h2>{esc(h2_why)}</h2>

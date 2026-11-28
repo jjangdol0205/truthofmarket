@@ -87,6 +87,14 @@ from taste_evaluator import (  # noqa: E402
     PASS_THRESHOLD as TASTE_PASS_THRESHOLD,
     evaluate_and_refine_for_taste,
 )
+try:
+    from brand_signature import append_brand_signature, increment_episode  # noqa: E402
+except Exception:  # fail-open if module absent
+    def append_brand_signature(div: str, base_text: str, channel: str = "yt", episode: Any = None, path: Any = None, max_total_len: Any = None) -> str:  # type: ignore[misc]
+        return str(base_text or "")
+
+    def increment_episode(div: str, dry_run: bool = True, path: Any = None, mirror_div1: bool = True) -> int:  # type: ignore[misc]
+        return 0
 from real_ui_mobile_recorder import (  # noqa: E402
     RealUIAutoGateError,
     record_html_motion_chart_clip,
@@ -2109,6 +2117,9 @@ def main() -> int:
                 vocal_track = select_hero_vocal_track(doy)
                 vocal_highlight_sec = 34.0
 
+        # Optional 1-line fixed Brand Series Signature on YT description (fail-open, em-dash & length guarded)
+        desc = append_brand_signature(div, desc, channel="yt", max_total_len=4900)
+
         # Optional non-destructive Swarm Explore 20% pinned-comment bridge (Hard-Gate verified, preserves URL & disclosures!)
         if swarm_pinned_bridge and hill_climb_quota_mode == "swarm_explore_20":
             ok_sb, _ = check_promo_hard_gate(div, swarm_pinned_bridge, surface="youtube_comment")
@@ -2322,6 +2333,7 @@ def main() -> int:
                             disclosure_footer=disclosure_footer,
                         )
                     )
+                    ig_caption = append_brand_signature(div, ig_caption, channel="ig", max_total_len=2150)
                     ok_ig_c, ig_c_errs = check_promo_hard_gate(div, ig_caption, surface="ig_caption")
                     if not ok_ig_c:
                         ig_res = {"ok": False, "error": f"ig_caption_hard_gate_blocked:{ig_c_errs}"}
@@ -2349,6 +2361,8 @@ def main() -> int:
                     status = "yt_quota_deferred"
                 else:
                     status = "queued_or_awaiting_secrets"
+                if (not dry_run) and (yt_ok or ig_ok):
+                    increment_episode(div, dry_run=False)
                 if (not yt_ok) and (not yt_res.get("skipped")) and (not yt_res.get("quota_exceeded")):
                     alerts.append(f"YT {div}: {yt_res}")
                 if (not ig_ok) and (not ig_res.get("skipped")):
