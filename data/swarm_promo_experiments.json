@@ -1,7 +1,7 @@
 {
   "schema_version": "swarm-promo-overlay-v1",
-  "session_id": "INIT-20261128-00",
-  "updated_at_kst": "2026-11-28 17:32:00 KST",
+  "session_id": "SWARM-20261128-01",
+  "updated_at_kst": "2026-11-28 18:04:10 KST",
   "safety_policy": {
     "max_active_experiments_per_div": 2,
     "max_traffic_allocation_ratio": 0.2,
@@ -11,24 +11,219 @@
   },
   "divisions": {
     "TOM": {
-      "hook_weight_deltas": {},
-      "experiments": []
+      "hook_weight_deltas": {
+        "pattern": 0.25,
+        "proof": 0.1,
+        "self": -0.2,
+        "curiosity": -0.15
+      },
+      "experiments": [
+        {
+          "exp_id": "TOM_SWARM_20261128_01",
+          "status": "active",
+          "expires_at": "2026-12-12",
+          "hook_type": "pattern",
+          "hook_line": "Stop trusting 60/40 bonds at age 60: 2022 crashed stocks and bonds together",
+          "slide_script_body": "Before checking your 401(k) screen tonight, remember 2022 proved classic 60/40 bonds can fall alongside stocks right when retirees draw cash. Across 2000-2025 history, 100% single-sector tech needed 89 months to recover, while a calm SMH, defensive XLV, and 24-month SGOV cash mix cut crash recovery dramatically. See today's live 0-100 SMH Fear and Greed score and calculate your own dollar drawdown free with zero login.",
+          "cta": "Check today's live 0-100 SMH Fear and Greed gauge and your exact 2000-2025 drawdown stress-test free via the top profile link.",
+          "speech_bubble": "60/40 Failed: Check Your Mix",
+          "ending_cta_bridge": "Tap @TruthOfMarketUS below -> top link for today's free 0-100 SMH gauge and your exact dollar crash check.",
+          "pinned_comment_bridge": "Curious where today's live 0-100 SMH Fear & Greed gauge sits and how your nest egg handles a 2008/2022 shock? Free 30-second check (no brokerage login, no email wall): tap @TruthOfMarketUS -> top link (truthofmarket.com/go/yt-fg). Did 2022 change how you split safe cash vs equities?",
+          "success_metric": "48h+ matured avg views >= 35 (vs 14d avg 11.7) and go_yt_ctr >= 2.5% (min >= 2 /go/ clicks) over 14d",
+          "rollback_trigger": "48h+ matured avg views < 10 or 0 /go/ clicks after 2 matured runs",
+          "taste_score": 100,
+          "hard_gate_passed": true
+        },
+        {
+          "exp_id": "TOM_SWARM_20261128_02",
+          "status": "active",
+          "expires_at": "2026-12-12",
+          "hook_type": "proof",
+          "hook_line": "Your broker sweep pays 0.01% on idle IRA cash: $10 a year on $100K vs SGOV",
+          "slide_script_body": "Check your IRA statement tonight before another month slips by. A 0.01% broker sweep pays just $10 a year on $100,000, leaving retirees guessing how much liquid reserve truly protects them in a downturn. Across 2000-2025 retirement data, separating 24 months of SGOV short Treasury bills from a balanced 2-pillar core changes your exact crash runway. Run the free 30-second stress-test and preview our 2-page sample PDF to see your exact dollar bucket.",
+          "cta": "Calculate your free 30-second 2000-2025 cash buffer and retirement stress-test (plus free 2-page sample PDF) via the top profile link.",
+          "speech_bubble": "0.01% Sweep: $10 on $100K",
+          "ending_cta_bridge": "Tap @TruthOfMarketUS below -> top link to test your exact 24-month SGOV cash cushion free in 30 seconds.",
+          "pinned_comment_bridge": "Want to see your exact 24-month SGOV cash buffer and 2008/2022 retirement runway without linking any brokerage account? Free 30-second 2000-2025 stress-test + 2-page sample PDF (zero login): tap @TruthOfMarketUS -> top link (truthofmarket.com/go/yt). What interest rate did your broker sweep pay last month?",
+          "success_metric": "48h+ matured avg views >= 50 (near #1 winner 73) and go_yt_ctr >= 2.8% (min >= 2 /go/ clicks) over 14d",
+          "rollback_trigger": "48h+ matured avg views < 18 or go_yt_ctr < 1.2% after 2 matured runs",
+          "taste_score": 100,
+          "hard_gate_passed": true
+        }
+      ]
     },
     "KFG": {
-      "hook_weight_deltas": {},
-      "experiments": []
+      "hook_weight_deltas": {
+        "pattern": 0.25,
+        "self": 0.15,
+        "curiosity": 0.1,
+        "loss": -0.25,
+        "proof": -0.15
+      },
+      "experiments": [
+        {
+          "exp_id": "KFG_SWARM_20261128_01",
+          "status": "active",
+          "expires_at": "2026-12-12",
+          "hook_type": "pattern",
+          "hook_line": "Marking the hallway doorframe tonight? Stop trusting Mom+Dad average: 25% shifts daily.",
+          "slide_script_body": "Marking the hallway doorframe barefoot tonight, stop assuming Mom and Dad's height average locks in 100%. Two siblings from the same parents can finish 3.5 inches apart when 10 PM bedtimes cut their 25% daily growth lane. Run our free 60-second US CDC height percentile check (zero ads) via the top profile link to see which side of the family range your child sits on.",
+          "cta": "Run your child's free 60-second US CDC height percentile check via the top profile link (zero ads).",
+          "speech_bubble": "Parent Average Misses 3.5 In",
+          "ending_cta_bridge": "Tap @kisfitglobal profile below -> Tap the top blue link for your child's free 60-second US CDC height check (zero ads).",
+          "pinned_comment_bridge": "Curious whether your child sits on the +3.5 in or -3.5 in side of your Mom+Dad midpoint? Tap @kisfitglobal profile -> top blue link for our free 60-second US CDC height check (no email wall, zero supplement ads).",
+          "ig_bio_bridge_line": "Tap @kisfitglobal bio link -> kisfitglobal.com/go/ig (Free 60s US CDC Height Percentile Check, zero ads)",
+          "success_metric": "14d matured (48h+) slot CTR >= 0.80% (>= 2 /go/ clicks on this exp_id) & KFG 14d /go/ clicks 4 -> 8+ (IG UV >= 1), Taste >= 85",
+          "rollback_trigger": "Pause if >= 3 matured (48h+) runs avg < 45 views OR 0 /go/ clicks after >= 300 cumulative views on this exp_id",
+          "taste_score": 100,
+          "hard_gate_passed": true
+        },
+        {
+          "exp_id": "KFG_SWARM_20261128_02",
+          "status": "active",
+          "expires_at": "2026-12-12",
+          "hook_type": "self",
+          "hook_line": "Parents of 3rd graders: check the doorframe tonight — 10 PM bedtimes cut 2.0-in pace.",
+          "slide_script_body": "Parents of kids ages 6 to 12, stop relying on weekend sleep-ins to fix a 10 PM school-night bedtime when healthy kids gain 2.0 to 2.5 inches every year. A rushed 90-second pediatrician visit glances at one dot, yet misses whether yearly growth dropped below pace on the wall chart. Check your child's free 60-second US CDC height percentile (zero ads) via the top profile link tonight.",
+          "cta": "Check your child's free 60-second US CDC height percentile and yearly pace via the top profile link (zero ads).",
+          "speech_bubble": "Weekend Sleep Won't Fix 10 PM",
+          "ending_cta_bridge": "Tap @kisfitglobal profile below -> Tap the top blue link for your child's free 60-second US CDC height check (zero ads).",
+          "pinned_comment_bridge": "Wondering if late 10 PM school nights are slowing your child's 2.0 to 2.5 in/yr growth lane? Tap @kisfitglobal profile -> top blue link for our free 60-second US CDC height percentile check (zero supplement ads, no email wall).",
+          "ig_bio_bridge_line": "Tap @kisfitglobal bio link -> kisfitglobal.com/go/ig (Free 60s US CDC Height & Yearly Pace Check, zero ads)",
+          "success_metric": "14d matured (48h+) slot CTR >= 0.70% (>= 2 /go/ clicks on this exp_id) & engagement rate >= 1.5%, Taste >= 85",
+          "rollback_trigger": "Pause if >= 3 matured (48h+) runs avg < 35 views OR 0 /go/ clicks after >= 250 cumulative views on this exp_id",
+          "taste_score": 100,
+          "hard_gate_passed": true
+        }
+      ]
     },
     "GBA": {
-      "hook_weight_deltas": {},
-      "experiments": []
+      "hook_weight_deltas": {
+        "loss": 0.25,
+        "self": 0.2,
+        "curiosity": 0.1,
+        "pattern": -0.25,
+        "proof": -0.1
+      },
+      "experiments": [
+        {
+          "exp_id": "GBA_SWARM_20261128_01",
+          "status": "active",
+          "expires_at": "2026-12-12",
+          "hook_type": "loss",
+          "hook_line": "新NISAで米国高配当株を買う50代、税金ゼロと思い込む10%の落とし穴と暴落時の手取り差",
+          "slide_script_body": "夜に証券口座で新NISAの配当利回り5%だけを見て選ぶ50代・60代が多いですが、実は米国株の配当には10%の米国課税がかかり、さらに暴落で元本が30%超下落すると手取り差は一気に広がります。ご自身の1,800万円枠で成長柱と医療防衛柱に個人向け国債を添えた過去25年統計の回復月数と下落耐性は、30秒無料で確認できます。",
+          "cta": "プロフィールの一番上の青いリンクから無料30秒・新NISA25年統計バランスと手取り差をチェック",
+          "speech_bubble": "新NISA米国配当10%の罠",
+          "ending_cta_bridge": "下の丸いアイコンをタップ→一番上の青いリンクで新NISA25年統計を30秒無料確認",
+          "pinned_comment_bridge": "【日本語・完全無料・証券口座ログイン不要】ご自身の新NISA1,800万円枠の10%米国課税と暴落時の手取り差を30秒確認：①下の丸い @GetBreakAI アイコンをタップ → ②一番上の青いリンクをタップ。新NISAの安全資金は銀行預金と個人向け国債のどちらを軸にされていますか？",
+          "success_metric": "14日(48h+熟成累積)本スロット /go/yt 系列 CTR >= 0.50%(最小 >= 1〜2件) および GBA全体14日 /go/ 0件->5件+、Taste >= 85点維持",
+          "rollback_trigger": "14日内に48h+熟成 >= 2〜3本(または累積再生 >= 200回)時点で本スロット /go/ クリック0件、または平均再生数が基準線中央値比-30%超過下落時に即時pausedロールバック",
+          "taste_score": 100,
+          "hard_gate_passed": true
+        },
+        {
+          "exp_id": "GBA_SWARM_20261128_02",
+          "status": "active",
+          "expires_at": "2026-12-12",
+          "hook_type": "self",
+          "hook_line": "定年まで10年の50代・60代へ：朝9時に新NISA360万円枠を一括成行する前の落とし穴",
+          "slide_script_body": "朝9時の証券口座で退職金や新NISAの年間360万円枠を一括で成行買いした直後に30%超下落すると、老後資金の回復には何年もかかる事実をご存じですか。過去25年統計では半導体単独の最大下落-74.6%に対し、2本柱と個人向け国債クッションでは回復期間が大きく変わります。本日の米国半導体・恐怖と強欲7指標と無料統計バランスを30秒でチェックしましょう。",
+          "cta": "プロフィールの一番上の青いリンクから本日の無料7指標・恐怖と強欲指数＆25年統計を確認",
+          "speech_bubble": "50代新NISA一括の罠",
+          "ending_cta_bridge": "下の丸いアイコンをタップ→一番上の青いリンクで本日の恐怖指数と25年統計を無料確認",
+          "pinned_comment_bridge": "【日本語・メール登録不要・証券口座ログイン不要】一括購入前に確認したい本日の米国半導体・恐怖と強欲7指標（0〜100点）：①下の丸い @GetBreakAI アイコンをタップ → ②一番上の青いリンクをタップ。50代からの新NISAは一括と毎月積立のどちら派ですか？",
+          "success_metric": "14日(48h+熟成累積)本スロット /go/yt 系列 CTR >= 0.50%(最小 >= 1〜2件) および GBA全体14日 /go/ 0件->5件+・コメント/保存率改善、Taste >= 85点維持",
+          "rollback_trigger": "14日内に48h+熟成 >= 2〜3本(または累積再生 >= 200回)時点で本スロット /go/ クリック0件、または平均再生数が基準線中央値比-30%超過下落時に即時pausedロールバック",
+          "taste_score": 100,
+          "hard_gate_passed": true
+        }
+      ]
     },
     "HERO": {
-      "hook_weight_deltas": {},
-      "experiments": []
+      "hook_weight_deltas": {
+        "self": 0.25,
+        "proof": -0.25
+      },
+      "experiments": [
+        {
+          "exp_id": "HERO_SWARM_20261128_01",
+          "status": "active",
+          "expires_at": "2026-12-12",
+          "hook_type": "self",
+          "hook_line": "밤 10시 텅 빈 거실, 평생 가족 챙기신 어머님 손등을 위로하는 백운호 6곡",
+          "slide_script_body": "밤 10시 텅 빈 거실에서 홀로 계신 어머님 손등을 첫 소절 숨소리로 안아드립니다. 짧은 30초에서 끊기는 아쉬움 대신 광고 0초 백운호 6곡 완곡 무료 라디오를 가입 없음으로 끝까지 이어 들으세요. 돋보기 없는 큰글씨 사랑방에 6곡 완곡이 열려 있습니다.",
+          "cta": "가입 없음으로 듣는 백운호 6곡 완곡 무료 라디오는 아래 동그란 백운호 얼굴 터치 후 맨 위 파란 주소 1번만 누르세요.",
+          "speech_bubble": "30초 대신 6곡 완곡 무료",
+          "pinned_comment_bridge": "① 첫 소절 여운이 짧아 아쉬우셨죠? 광고 없이 이어 듣는 백운호 6곡 완곡 무료 라디오(가입 없음) ② 여는 법: 아래 동그란 백운호 얼굴 터치 후 맨 위 파란 주소 1번만 누르세요.",
+          "ending_cta_bridge": "아래 동그란 백운호 얼굴 터치 후 맨 위 파란 주소에서 6곡 완곡 무료 듣기",
+          "success_metric": "14일(48h+ 숙성 누적) 기준 본 실험 슬롯 /go/ CTR >= 0.40%(최소 >= 2건) 및 HERO 전체 14일 /go/ 4건 -> 8건+ 동반 상승",
+          "rollback_trigger": "48h+ 숙성 2회 실행(또는 누적 조회 >= 400회) 후 본 실험 슬롯 /go/ 클릭 0건이거나 48h 조회수가 채널 중앙값의 60% 미만 시 즉시 paused 롤백",
+          "taste_score": 100,
+          "hard_gate_passed": true
+        },
+        {
+          "exp_id": "HERO_SWARM_20261128_02",
+          "status": "active",
+          "expires_at": "2026-12-12",
+          "hook_type": "curiosity",
+          "hook_line": "왜 아침 7시 단톡방에서 어머님들이 긴 글자 대신 이 꽃카드 1장을 보내실까요?",
+          "slide_script_body": "아침 7시 새벽 부엌에서 따뜻한 차 한 잔 마시며 가족 단톡방 인사가 고민되셨죠. 작은 글씨 힘들게 치는 대신 백운호 노래와 큰글씨 아침 꽃카드 1장을 가입 없음 3초 무료로 보내면 따뜻한 안부가 바로 전해집니다. 오늘 아침 가족에게 따뜻한 안부카드와 6곡 무료 라디오를 선물해 보세요.",
+          "cta": "무료 백운호 아침 꽃카드와 6곡 라디오는 아래 동그란 백운호 얼굴 터치 후 맨 위 파란 주소에서 바로 여세요.",
+          "speech_bubble": "3초 무료 카톡 꽃카드 1장",
+          "pinned_comment_bridge": "① 내일 아침 가족·친구 단톡방에 보낼 백운호 무료 꽃그림 안부카드 1장(가입 없음·평생 무료) ② 여는 법: 아래 동그란 백운호 얼굴 터치 후 맨 위 파란 주소 누르고 상단 무료 선물관 1번 터치(직접 주소: paradise-hero.com/go/yt-card)",
+          "ending_cta_bridge": "아래 동그란 백운호 얼굴 터치 후 맨 위 파란 주소에서 무료 아침 꽃카드 받기",
+          "success_metric": "14일(48h+ 숙성 누적) 기준 본 실험 슬롯 /go/ CTR >= 0.40%(최소 >= 2건) 및 /go/yt-card·gift_download·share_click 합산 >= 2건",
+          "rollback_trigger": "48h+ 숙성 2회 실행(또는 누적 조회 >= 400회) 후 본 실험 슬롯 /go/ 클릭 0건이거나 48h 조회수가 채널 중앙값의 55% 미만 시 즉시 paused 롤백",
+          "taste_score": 100,
+          "hard_gate_passed": true
+        }
+      ]
     },
     "KFK": {
-      "hook_weight_deltas": {},
-      "experiments": []
+      "hook_weight_deltas": {
+        "loss": 0.25,
+        "pattern": 0.15,
+        "curiosity": -0.15,
+        "self": 0.0,
+        "proof": 0.0
+      },
+      "experiments": [
+        {
+          "exp_id": "KFK_SWARM_20261128_01",
+          "status": "active",
+          "expires_at": "2026-12-12",
+          "hook_type": "loss",
+          "hook_line": "새벽마다 이불 차는 아이, 침실 온도 2도 낮춰도 1년 키 5cm 미만이면 놓치는 병목이 다릅니다.",
+          "slide_script_body": "침실 온도 2도를 낮춰 통잠을 재웠는데도 최근 1년 키가 5cm 미만으로 둔해졌다면, 수면이 아니라 밤 10시 이후 소등·저녁 식탁·뼈나이 시계에서 성장이 새고 있을 수 있습니다. 침실 온도만 믿고 안심하는 대신 오늘 밤 질병관리청 기준 우리 아이 또래 백분위와 예상키·생활 병목을 1분 무료로 바로 확인해 보세요.",
+          "cta": "광고 없는 질병관리청 1분 무료 예상키·성장속도 진단 — 아래 프로필 링크에서 바로 확인",
+          "speech_bubble": "온도 2도만으로 부족할 때",
+          "ending_cta_bridge": "아래 동그란 채널 프로필 터치 → 맨 위 파란 링크 1번 클릭!",
+          "pinned_comment_bridge": "① 침실 온도 2도 낮춰도 최근 1년 키가 5cm 미만이라면 진짜 생활 병목부터 점검해 보세요. ② 광고 없는 1분 무료 질병관리청 예상키 확인: 아래 동그란 채널 프로필 터치 → 맨 위 파란 링크 1번 클릭!",
+          "ig_bio_bridge_line": "프로필 링크 → kidsfit.co.kr/go/ig (광고 없는 1분 무료 질병관리청 예상키 진단)",
+          "success_metric": "14일 숙성(48h+) 기준 본 실험 슬롯 /go/ CTR >= 0.60%(최소 >= 2건) 및 KFK 14일 전체 /go/ 4건->8건+ 동반 상승, Taste >= 85점 유지",
+          "rollback_trigger": "48h+ 숙성 3편(또는 누적 조회 >= 300회) 후 조회수 중앙값 < 50회 또는 본 슬롯 /go/ 클릭 0건 시 즉시 paused 롤백",
+          "taste_score": 100,
+          "hard_gate_passed": true
+        },
+        {
+          "exp_id": "KFK_SWARM_20261128_02",
+          "status": "active",
+          "expires_at": "2026-12-12",
+          "hook_type": "pattern",
+          "hook_line": "초등 아이 신발이 반년 만에 두 치수 커졌다면? 오히려 성장판이 일찍 닫히는 신호일 수 있습니다.",
+          "slide_script_body": "초등 고학년 신발이 반년 만에 훌쩍 크고 키가 갑자기 쑥 자라면 안심하기 쉽지만, 사실은 뼈나이가 달력보다 1.5년 빨리 뛰어 성장판이 일찍 닫히는 위험 신호일 수 있습니다. 병원 뼈나이 검사를 안 받았어도, 6개월 전 검사표가 있어도 오늘 기준 질병관리청 성장도표와 예상키를 1분 무료로 바로 확인해 보세요.",
+          "cta": "광고 없는 1분 무료 질병관리청 예상키·뼈나이 시차 진단 — 아래 프로필 링크에서 확인",
+          "speech_bubble": "신발 급성장, 성장판 신호",
+          "ending_cta_bridge": "아래 동그란 채널 프로필 터치 → 맨 위 파란 링크 1번 클릭!",
+          "pinned_comment_bridge": "① 반년 만에 신발이 갑자기 커졌나요? 병원 뼈나이 검사 전이라도 지금 성장 시계부터 확인해 보세요. ② 광고 없는 1분 무료 질병관리청 예상키 확인: 아래 동그란 채널 프로필 터치 → 맨 위 파란 링크 1번 클릭!",
+          "ig_bio_bridge_line": "프로필 링크 → kidsfit.co.kr/go/ig (광고 없는 1분 무료 질병관리청 예상키·뼈나이 시차 진단)",
+          "success_metric": "14일 숙성(48h+) 기준 본 실험 슬롯 /go/ CTR >= 0.70%(최소 >= 2건) 및 저장·공유율 >= 1.2% 달성, Taste >= 85점 유지",
+          "rollback_trigger": "48h+ 숙성 3편(또는 누적 조회 >= 250회) 후 조회수 중앙값 < 40회 또는 본 슬롯 /go/ 클릭 0건 시 즉시 paused 롤백",
+          "taste_score": 100,
+          "hard_gate_passed": true
+        }
+      ]
     }
   }
 }
