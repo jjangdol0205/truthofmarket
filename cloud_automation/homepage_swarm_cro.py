@@ -830,6 +830,8 @@ def run_swarm_for_division(div: str, mode: str, no_stagger: bool = False) -> Dic
             tid = zspec["selector"][1:]
             m = re.search(rf'id=["\']{re.escape(tid)}["\'][^>]*>(.*?)</(?:button|a|h2|p|div)>', raw_html, flags=re.I | re.S)
             cur_text = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", m.group(1))).strip() if m else ""
+        import html as _html_lib
+        cur_text = _html_lib.unescape(cur_text)
     except Exception:
         pass
 
@@ -842,7 +844,7 @@ def run_swarm_for_division(div: str, mode: str, no_stagger: bool = False) -> Dic
         f"Language strictly required: {spec['lang']} (forbid_hangul={spec['forbid_hangul']}).\n"
         f"Weakest AARRR stage: {weakest}. Target Zone: {chosen_zone} (slot_id={slot_id}).\n"
         f"Current live text: {cur_text!r}\n"
-        f"Hard constraints: max_len={zspec.get('max_len', 80)}, plain text ONLY (no HTML tags, no emojis on TOM/KFG/GBA/KFK, no AI clichés, no prices/checkout links).\n"
+        f"Hard constraints: max_len={zspec.get('max_len', 80)}, plain text ONLY (no HTML tags, NEVER use ASCII '->' or '<' or '>' — use Unicode '→' or plain text, no emojis on TOM/KFG/GBA/KFK, no AI clichés, no prices/checkout links).\n"
         f"If slot_id=='density', propose css_preset from ['cro-pad-compact','cro-pad-airy'].\n"
         f"Return STRICT JSON with keys:\n"
         f'{{"tier":"minor_slot","candidates":[{{"proposed_text":"...","css_preset":"","hypothesis":"..."}},{{"proposed_text":"...","css_preset":"","hypothesis":"..."}}],'
@@ -877,7 +879,7 @@ def run_swarm_for_division(div: str, mode: str, no_stagger: bool = False) -> Dic
     valid_cands = []
     stage1_rejects = []
     for c in cands:
-        pt = str(c.get("proposed_text") or "").strip()
+        pt = str(c.get("proposed_text") or "").replace("->", "→").strip()
         cp = str(c.get("css_preset") or "").strip()
         ok1, errs1 = validate_candidate_stage1(div, chosen_zone, slot_id, pt, cp)
         if ok1 and (slot_id == "density" or pt != cur_text):
