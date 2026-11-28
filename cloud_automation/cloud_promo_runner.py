@@ -27,6 +27,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import datetime as dt
+import hashlib
 import json
 import os
 import re
@@ -73,6 +74,7 @@ from promo_hard_gate import (  # noqa: E402
     normalize_japanese_tts_text,
     normalize_korean_tts_text,
     pick_rotating_comment_question,
+    scrub_ai_slop,
     strip_unsupported_yt_api_fields,
 )
 from flow_character_track import (  # noqa: E402
@@ -80,6 +82,10 @@ from flow_character_track import (  # noqa: E402
     check_flow_character_eligibility,
     compose_flow_character_short,
     extract_reel_cover_frame,
+)
+from taste_evaluator import (  # noqa: E402
+    PASS_THRESHOLD as TASTE_PASS_THRESHOLD,
+    evaluate_and_refine_for_taste,
 )
 from real_ui_mobile_recorder import (  # noqa: E402
     RealUIAutoGateError,
@@ -1721,6 +1727,70 @@ def build_natural_spoken_hook(
     return " ".join(p for p in parts if p).strip()
 
 
+def load_topic_hook_weights() -> Dict[str, Any]:
+    """Loads Device 2 Weekly Hill-Climber weights (`data/topic_hook_weights.json`) if available."""
+    for cand in (
+        ROOT / "data" / "topic_hook_weights.json",
+        ROOT.parent / "data" / "topic_hook_weights.json",
+        Path(r"D:\드림컴퍼니\data\topic_hook_weights.json"),
+    ):
+        if cand.exists():
+            try:
+                return json.loads(cand.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+    return {}
+
+
+def select_hill_climbed_cell_80_20(
+    matrix_db: Optional[Dict[str, Any]],
+    div: str,
+    date_str: str,
+    arm_idx: int,
+    weights_db: Dict[str, Any],
+    fallback_selector: Any,
+) -> Tuple[Optional[Dict[str, Any]], str]:
+    """
+    Device 2 80/20 Diversity Quota Cell Selector:
+      - 80% Exploitation (`exploit_80`): prioritizes hook types boosted to `weight >= 1.5` (`2.0x` Top-20% winners)
+        while skipping archived/demoted patterns when active winners exist.
+      - 20% Exploration (`explore_20`): rotates across fresh/baseline hook types so channels never stagnate.
+      - Falls back cleanly to `select_stage12_ab_cell` if `topic_hook_weights.json` is absent.
+    """
+    div_u = div.upper()
+    d_weights = (weights_db.get("divisions") or {}).get(div_u) or {}
+    hook_w = d_weights.get("hook_weights") or {}
+    d_obj = ((matrix_db or {}).get("divisions") or {}).get(div_u) if matrix_db else None
+    cells = [c for c in ((d_obj or {}).get("matrix") or []) if c.get("stage") in (1, 2) and c.get("status", "active") != "paused"]
+
+    if not (cells and hook_w):
+        cell = fallback_selector(matrix_db, div_u, date_str, arm_idx=arm_idx) if (matrix_db and fallback_selector) else None
+        return cell, "matrix_default"
+
+    quotas = weights_db.get("quotas") or {}
+    explore_pct = int(round(float(quotas.get("exploration_quota", 0.20)) * 100))
+    h_int = int(hashlib.md5(f"hc:{div_u}:{date_str}:{arm_idx}".encode("utf-8")).hexdigest()[:8], 16)
+    is_explore = (h_int % 100) < explore_pct
+
+    if is_explore:
+        # 20% Exploration: prefer non-boosted/baseline hook types (still skipping completely zeroed hooks)
+        exp_pool = [c for c in cells if 0.0 < float(hook_w.get(str(c.get("hook_type") or ""), 1.0)) <= 1.2] or cells
+        exp_pool.sort(key=lambda c: hashlib.md5(f"hcexp:{date_str}:{arm_idx}:{c['id']}".encode("utf-8")).hexdigest())
+        return dict(exp_pool[0]), "explore_20"
+
+    # 80% Exploitation: rank by Weekly Hill Climber hook weight (2.0x winners first!), tie-break deterministically
+    ranked = sorted(
+        cells,
+        key=lambda c: (
+            float(hook_w.get(str(c.get("hook_type") or ""), 1.0)),
+            float(c.get("weight", 1.0)),
+            int(hashlib.md5(f"hcwin:{date_str}:{arm_idx}:{c['id']}".encode("utf-8")).hexdigest()[:4], 16) / 65536.0,
+        ),
+        reverse=True,
+    )
+    return dict(ranked[0]), "exploit_80"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true")
@@ -1747,6 +1817,7 @@ def main() -> int:
 
     flow_manifest_path, flow_manifest = load_flow_vault_manifest()
     flow_manifest_dirty = False
+    topic_weights_db = load_topic_hook_weights()
 
     # Build quota-safe idempotency sets:
     # - Single GCP project (10k/day): max 1 Short/div/day (5 x 1,600 = 8,000u)
@@ -1782,7 +1853,9 @@ def main() -> int:
             continue
         pt = PERSONA_TEMPLATES[div]
         tid, fallback_title = pick_next_topic(div, hist, today_str)
-        cell = select_stage12_ab_cell(matrix_db, div, today_str, arm_idx=day_arm) if (matrix_db and select_stage12_ab_cell) else None
+        cell, hill_climb_quota_mode = select_hill_climbed_cell_80_20(
+            matrix_db, div, today_str, arm_idx=day_arm, weights_db=topic_weights_db, fallback_selector=select_stage12_ab_cell
+        )
         if cell:
             title = str(cell["hook_line"]).strip()[:95]
             utm_content = str(cell["utm_content"]).strip()
@@ -1942,6 +2015,37 @@ def main() -> int:
                 vocal_track = select_hero_vocal_track(doy)
                 vocal_highlight_sec = 34.0
 
+        # Device 1 (2026-11-28): `$0` Deterministic Taste Gate (100-pt Rubric, 85-pt Threshold, Max 3 Rewrites)
+        # Evaluates title/script/bubble BEFORE release on BOTH SLOT_A and SLOT_B without touching SLOT_A's 0.0s real-UI video pipeline!
+        pre_taste_spoken = (
+            tom_brief_pkg["spoken_script"]
+            if (div == "TOM" and tom_brief_pkg)
+            else (slide_body if div == "HERO" else build_natural_spoken_hook(div, title, slide_body, smh_fg_meta, either_or_q))
+        )
+        taste_res = evaluate_and_refine_for_taste(
+            div=div,
+            title=title,
+            spoken_script=pre_taste_spoken,
+            speech_bubble="",
+            cta=cta_line,
+        )
+        refined_spoken_override: Optional[str] = None
+        taste_speech_bubble = str(taste_res["candidate"].get("speech_bubble") or "").strip() or title[:15]
+        if taste_res["attempts_used"] > 0 and taste_res["evaluation"]["compliance_ok"]:
+            if div in ("KFG", "GBA", "KFK"):
+                refined_spoken_override = str(taste_res["candidate"]["spoken_script"]).strip()
+                # Apply sharper title ONLY if initial title triggered abstract-intro kill-switch
+                init_b1 = (taste_res["history"][0].get("feedback") or [""])[0] if taste_res.get("history") else ""
+                if "[항목1:0/25]" in init_b1 and len(taste_res["candidate"]["title"]) >= 12:
+                    title = taste_res["candidate"]["title"][:95]
+
+        # Scrub any stacked em-dashes across title+desc+srt_stub (Standing Directive #35: max 2 em-dashes combined) before Hard Gate!
+        if (title.count("—") + desc.count("—") + srt_stub.count("—")) > 2:
+            _lg = DIV_LANG_MAP.get(div, "en")
+            title, _ = scrub_ai_slop(title, lang=_lg, max_em_dashes=0, is_html=False)
+            desc, _ = scrub_ai_slop(desc, lang=_lg, max_em_dashes=1, is_html=False)
+            srt_stub, _ = scrub_ai_slop(srt_stub, lang=_lg, max_em_dashes=0, is_html=False)
+
         ok_txt, errs = check_text_gate(div, title, desc, srt_stub, vocal_highlight_sec=vocal_highlight_sec)
         if not ok_txt:
             print(f"[AUTO-GATE BLOCKED] {div} {tid}: {errs}", flush=True)
@@ -2018,9 +2122,13 @@ def main() -> int:
                     record_mobile_real_ui_clip(div, ui_mp4, duration_sec=12.0 if div == "TOM" else 11.0)
                     record_html_motion_chart_clip(div, chart_mp4, aspect="9:16", duration_sec=4.5)
                     spoken_script = (
-                        tom_brief_pkg["spoken_script"]
-                        if (div == "TOM" and tom_brief_pkg)
-                        else build_natural_spoken_hook(div, title, slide_body, smh_fg_meta, either_or_q)
+                        refined_spoken_override
+                        if refined_spoken_override
+                        else (
+                            tom_brief_pkg["spoken_script"]
+                            if (div == "TOM" and tom_brief_pkg)
+                            else build_natural_spoken_hook(div, title, slide_body, smh_fg_meta, either_or_q)
+                        )
                     )
                     flow_render_meta: Optional[Dict[str, Any]] = None
                     if (
@@ -2035,7 +2143,7 @@ def main() -> int:
                                 lang=DIV_LANG_MAP.get(div, "ko"),
                                 voice_id=pt["voice_id"],
                                 spoken_script=spoken_script,
-                                speech_bubble_text=title,
+                                speech_bubble_text=taste_speech_bubble,
                                 character_clip_mp4=Path(flow_elig["clip_path"]),
                                 pip_avatar_png=Path(flow_elig["pip_avatar_png"]),
                                 real_ui_mp4=ui_mp4,
@@ -2175,6 +2283,13 @@ def main() -> int:
             "flow_character_clip_id": (flow_elig.get("selected_clip") or {}).get("clip_id") if ab_track == "slot_b_flowchar" else None,
             "flow_zoom_factor": flow_elig.get("zoom_factor") if ab_track == "slot_b_flowchar" else None,
             "ig_thumb_offset_ms": 500,
+            "taste_score": taste_res["final_score"],
+            "taste_initial_score": taste_res["initial_score"],
+            "taste_passed": taste_res["passed"],
+            "taste_retries": taste_res["attempts_used"],
+            "taste_low_score_warn": taste_res["low_score_warn"],
+            "speech_bubble": taste_speech_bubble,
+            "hill_climb_quota_mode": hill_climb_quota_mode,
             "hero_radio_day": hero_radio_day,
             "date": today_str,
             "status": status,
@@ -2182,6 +2297,7 @@ def main() -> int:
         print(
             f"  [GATE PASS] {div:4s} | status={status} | track={ab_track}"
             + (f" (fallback={flow_fallback_reason})" if flow_fallback_reason else "")
+            + f" | taste={taste_res['final_score']}/100(r={taste_res['attempts_used']}{',WARN' if taste_res['low_score_warn'] else ''}) | quota={hill_climb_quota_mode}"
             + f" | flow_bg={flow_bg_meta['flow_clip_id']} "
             f"| yt={yt_res.get('video_id') or yt_res.get('skipped') or yt_res.get('http_error') or 'dry'} "
             f"| ig={ig_res.get('media_id') or ig_res.get('skipped') or ig_res.get('http_error') or 'dry'}"

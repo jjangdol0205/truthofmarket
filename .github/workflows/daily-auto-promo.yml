@@ -7,12 +7,14 @@ on:
     - cron: "17 22 * * *"
     # Evening Slot B: 19:23 KST (10:23 UTC) — Runs 2h AFTER 17:00 KST YouTube quota reset for guaranteed catch-up + Slot B!
     - cron: "23 10 * * *"
+    # Weekly Sunday 23:10 KST (Sunday 14:10 UTC) — Anti-Goodhart Hill-Climbing Weight Evolution (48h+ matured, 80/20 quota)
+    - cron: "10 14 * * 0"
     # Weekly Monday 06:11 KST (Sunday 21:11 UTC) — Single-Variable A/B Evolution + 45-day IG token refresh
     - cron: "11 21 * * 0"
   workflow_dispatch:
     inputs:
       mode:
-        description: "Run mode (daily | stage2_yt_reset | token_refresh | written_promo | ab_evolve | dry_run)"
+        description: "Run mode (daily | stage2_yt_reset | token_refresh | written_promo | ab_evolve | hill_climb | dry_run)"
         required: false
         default: "daily"
 
@@ -60,7 +62,7 @@ jobs:
       - name: Run 24/7 Cloud 5-Div Video Render + YouTube Shorts + IG Reels Pipeline
         id: video_promo
         continue-on-error: true
-        if: ${{ github.event.inputs.mode != 'token_refresh' && github.event.inputs.mode != 'ab_evolve' && github.event.inputs.mode != 'stage2_yt_reset' }}
+        if: ${{ github.event.schedule != '10 14 * * 0' && github.event.inputs.mode != 'token_refresh' && github.event.inputs.mode != 'ab_evolve' && github.event.inputs.mode != 'hill_climb' && github.event.inputs.mode != 'stage2_yt_reset' }}
         env:
           RUN_MODE: ${{ github.event.inputs.mode || 'daily' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -98,7 +100,7 @@ jobs:
       - name: Run Stage 2 YouTube Reset, R2 5-Banner Sync, HERO Ep1 & Flagship MV (Post-Quota Priority #2)
         id: yt_stage2
         continue-on-error: true
-        if: ${{ github.event.inputs.mode == 'stage2_yt_reset' || github.event_name == 'schedule' }}
+        if: ${{ github.event.inputs.mode == 'stage2_yt_reset' || (github.event_name == 'schedule' && github.event.schedule != '10 14 * * 0') }}
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -139,7 +141,7 @@ jobs:
       - name: Run Written Promotion Engine (Ch1 SEO+IndexNow 2x/wk · Ch2 IG 5-Slide Carousel 3x/wk · ZERO Threads/LINE)
         id: written_promo
         continue-on-error: true
-        if: ${{ github.event.inputs.mode != 'token_refresh' && github.event.inputs.mode != 'ab_evolve' }}
+        if: ${{ github.event.schedule != '10 14 * * 0' && github.event.inputs.mode != 'token_refresh' && github.event.inputs.mode != 'ab_evolve' && github.event.inputs.mode != 'hill_climb' }}
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -172,6 +174,36 @@ jobs:
               python -u -X utf8 cloud_automation/ig_carousel_publisher.py || true
             fi
           fi
+
+      - name: Run Weekly Hill-Climbing Weight Evolution (Sunday 23:10 KST — 48h Matured Anti-Goodhart 80/20)
+        id: hill_climb
+        continue-on-error: true
+        if: ${{ github.event.schedule == '10 14 * * 0' || github.event.inputs.mode == 'hill_climb' }}
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          WATCHDOG_ADMIN_TOKEN: ${{ secrets.WATCHDOG_ADMIN_TOKEN }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_CLIENT_ID_2: ${{ secrets.YT_CLIENT_ID_2 }}
+          YT_CLIENT_SECRET_2: ${{ secrets.YT_CLIENT_SECRET_2 }}
+          YT_REFRESH_TOKEN_TOM: ${{ secrets.YT_REFRESH_TOKEN_TOM }}
+          YT_REFRESH_TOKEN_KFG: ${{ secrets.YT_REFRESH_TOKEN_KFG }}
+          YT_REFRESH_TOKEN_GBA: ${{ secrets.YT_REFRESH_TOKEN_GBA }}
+          YT_REFRESH_TOKEN_HERO: ${{ secrets.YT_REFRESH_TOKEN_HERO }}
+          YT_REFRESH_TOKEN_KFK: ${{ secrets.YT_REFRESH_TOKEN_KFK }}
+          IG_ACCESS_TOKEN_TOM: ${{ secrets.IG_ACCESS_TOKEN_TOM }}
+          IG_USER_ID_TOM: ${{ secrets.IG_USER_ID_TOM }}
+          IG_ACCESS_TOKEN_KFG: ${{ secrets.IG_ACCESS_TOKEN_KFG }}
+          IG_USER_ID_KFG: ${{ secrets.IG_USER_ID_KFG }}
+          IG_ACCESS_TOKEN_GBA: ${{ secrets.IG_ACCESS_TOKEN_GBA }}
+          IG_USER_ID_GBA: ${{ secrets.IG_USER_ID_GBA }}
+          IG_ACCESS_TOKEN_HERO: ${{ secrets.IG_ACCESS_TOKEN_HERO }}
+          IG_USER_ID_HERO: ${{ secrets.IG_USER_ID_HERO }}
+          IG_ACCESS_TOKEN_KFK: ${{ secrets.IG_ACCESS_TOKEN_KFK }}
+          IG_USER_ID_KFK: ${{ secrets.IG_USER_ID_KFK }}
+        run: |
+          python -u -X utf8 cloud_automation/weekly_hill_climber.py || true
 
       - name: Run Weekly 3-Tier 2-Phase Promo Learning Engine (Monday 06:11 KST — Shadow 14d -> Active 70:30)
         id: ab_evolve
@@ -209,9 +241,9 @@ jobs:
         run: |
           git config user.name "DreamCompany Cloud Bot"
           git config user.email "hello@truthofmarket.com"
-          git add data/promo_history.json data/message_matrix_5div.json data/flow_vault_manifest.json data/written_promo_ledger.json data/indexnow_config.json data/promo_learning_snapshot.json insights/ sitemap.xml rss.xml || true
+          git add data/promo_history.json data/message_matrix_5div.json data/flow_vault_manifest.json data/written_promo_ledger.json data/indexnow_config.json data/promo_learning_snapshot.json data/topic_hook_weights.json insights/ sitemap.xml rss.xml || true
           if ! git diff --cached --quiet; then
-            git commit -m "chore(cloud-promo): update nonstop promo state, matrix & flow_vault [skip ci]"
+            git commit -m "chore(cloud-promo): update nonstop promo state, weights & flow_vault [skip ci]"
             git pull --rebase --autostash origin main || true
             git push origin HEAD:main
           else
@@ -225,6 +257,7 @@ jobs:
           echo "video_promo=${{ steps.video_promo.outcome }}"
           echo "ig_token_refresh=${{ steps.ig_token_refresh.outcome }}"
           echo "written_promo=${{ steps.written_promo.outcome }}"
+          echo "hill_climb=${{ steps.hill_climb.outcome }}"
           echo "ab_evolve=${{ steps.ab_evolve.outcome }}"
           if [ "${{ steps.video_promo.outcome }}" = "failure" ] && [ "${{ steps.written_promo.outcome }}" = "failure" ]; then
             exit 1
