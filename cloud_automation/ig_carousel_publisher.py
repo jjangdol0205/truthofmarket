@@ -82,6 +82,9 @@ CAROUSEL_BIP_NOTE: Dict[str, str] = {
 
 CAROUSEL_OUT_DIR = ROOT / "data" / "carousel_renders"
 
+# Track B (2026-11-28 Chairman Confirmed): Fixed Slide-5 Action CTA for Div 2 KFG (`@kisfitglobal`)
+KFG_FIXED_SLIDE5_CTA = "Save for Next Pediatrician Visit · Free 3-Sec CDC Calculator in Bio"
+
 PALETTES: Dict[str, Dict[str, Tuple[int, int, int]]] = {
     "TOM": {"bg": (15, 44, 34), "card": (252, 252, 250), "accent": (197, 160, 89), "ink": (17, 24, 39), "muted": (75, 85, 99)},
     "KFG": {"bg": (250, 247, 242), "card": (255, 255, 255), "accent": (27, 67, 50), "ink": (28, 35, 33), "muted": (82, 96, 90)},
@@ -245,13 +248,13 @@ def render_5slide_carousel(div: str, matrix_db: Dict[str, Any], date_str: str, w
          [f"1. {p3['external']}", f"2. {p3['internal']}", f"3. {p3['philosophical']}"]),
         (3, False, "VERIFIED DATA CHECK" if lang == "en" else ("過去データの比較" if lang == "ja" else "공식 실데이터 비교"),
          deep["table_caption"],
-         [f"• {r[0]} → {r[1]} ({r[2]})" for r in deep["table_rows"]]),
+         [f"• {r[0]}: {r[1]} ({r[2]})" if lang == "en" else f"• {r[0]} → {r[1]} ({r[2]})" for r in deep["table_rows"]]),
         (4, False, "CALM 3-STEP PLAN" if lang == "en" else ("今日からの3ステップ" if lang == "ja" else "오늘 바로 실천하는 3단계"),
          deep["checklist_title"],
          [f"{i+1}. {it}" for i, it in enumerate(deep["checklist_items"])]),
         (5, True, "NEXT FREE STEP" if lang == "en" else ("無料チェックへ" if lang == "ja" else "부담 없는 무료 시작"),
-         wcfg["radio_label"] if div_u == "HERO" else wcfg["diag_label"],
-         [wcfg["card_label"] if div_u == "HERO" else wcfg["sample_label"], f"→ Link in Bio ({wcfg['host']})"]),
+         KFG_FIXED_SLIDE5_CTA if div_u == "KFG" else (wcfg["radio_label"] if div_u == "HERO" else wcfg["diag_label"]),
+         [wcfg["card_label"] if div_u == "HERO" else wcfg["sample_label"], (f"Tap Link in Bio: {wcfg['host']}/go/ig" if lang == "en" else f"→ Link in Bio ({wcfg['host']}/go/ig)")]),
     ]
 
     png_paths: List[str] = []

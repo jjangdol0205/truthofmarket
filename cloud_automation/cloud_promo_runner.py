@@ -1989,12 +1989,23 @@ def main() -> int:
                     either_or_q = pick_rotating_comment_question("HERO", rot_idx)
                     utm_yt = build_ab_go_link("HERO", "yt", ab_track)
                     utm_ig = build_ab_go_link("HERO", "ig", ab_track)
+                    hero_longform_by_song = {
+                        "01_mothers_spring": "https://www.youtube.com/watch?v=pWAPQDb-KRE",
+                        "03_harbor_light": "https://www.youtube.com/watch?v=DI1YG_yeWYs",
+                    }
+                    matched_mv_url = hero_longform_by_song.get(str(hero_mv_song.get("song_id") or ""), "https://www.youtube.com/watch?v=pWAPQDb-KRE")
+                    radio_ep1_url = "https://www.youtube.com/watch?v=QRMLZZzhtnE"
                     pinned_comment = (
                         f"백운호 〈{hero_mv_song['title']}〉 포함 6곡 무료 라디오 & 카톡 아침 안부카드:\n"
-                        f"{utm_yt}\n\n"
+                        f"{utm_yt}\n"
+                        f"🎬 3분 완곡 무대: {matched_mv_url} | 📻 15분 1화 라디오: {radio_ep1_url}\n\n"
                         f"{either_or_q}"
                     )
-                    desc = f"AI 가상가수 백운호 오리지널 곡 · 6곡 완곡 무료 라디오 & 아침 꽃카드 (가입 없음): {utm_yt}\n\n{title}\n\n{slide_body}\n\n{pinned_comment}{disclosure_footer}"
+                    desc = (
+                        f"AI 가상가수 백운호 오리지널 곡 · 6곡 완곡 무료 라디오 & 아침 꽃카드 (가입 없음): {utm_yt}\n"
+                        f"🎬 3분 완곡 공식 무대: {matched_mv_url} | 📻 15분 사연 라디오 1화: {radio_ep1_url}\n\n"
+                        f"{title}\n\n{slide_body}\n\n{pinned_comment}{disclosure_footer}"
+                    )
                     cues_srt = []
                     _srt_sym_re = re.compile(r"[\U0001F300-\U0001FAFF\U00002600-\U000027BF]")
                     for ci, (a, b, l1, l2) in enumerate(hero_mv_slice.get("cues") or [], start=1):
