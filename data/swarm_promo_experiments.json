@@ -1,0 +1,34 @@
+{
+  "schema_version": "swarm-promo-overlay-v1",
+  "session_id": "INIT-20261128-00",
+  "updated_at_kst": "2026-11-28 17:32:00 KST",
+  "safety_policy": {
+    "max_active_experiments_per_div": 2,
+    "max_traffic_allocation_ratio": 0.2,
+    "baseline_matrix_immutable": true,
+    "auto_expire_days": 14,
+    "min_taste_score": 85
+  },
+  "divisions": {
+    "TOM": {
+      "hook_weight_deltas": {},
+      "experiments": []
+    },
+    "KFG": {
+      "hook_weight_deltas": {},
+      "experiments": []
+    },
+    "GBA": {
+      "hook_weight_deltas": {},
+      "experiments": []
+    },
+    "HERO": {
+      "hook_weight_deltas": {},
+      "experiments": []
+    },
+    "KFK": {
+      "hook_weight_deltas": {},
+      "experiments": []
+    }
+  }
+}

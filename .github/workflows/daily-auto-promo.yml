@@ -241,7 +241,7 @@ jobs:
         run: |
           git config user.name "DreamCompany Cloud Bot"
           git config user.email "hello@truthofmarket.com"
-          git add data/promo_history.json data/message_matrix_5div.json data/flow_vault_manifest.json data/written_promo_ledger.json data/indexnow_config.json data/promo_learning_snapshot.json data/topic_hook_weights.json insights/ sitemap.xml rss.xml || true
+          git add data/promo_history.json data/message_matrix_5div.json data/flow_vault_manifest.json data/written_promo_ledger.json data/indexnow_config.json data/promo_learning_snapshot.json data/topic_hook_weights.json data/swarm_promo_experiments.json insights/ sitemap.xml rss.xml || true
           if ! git diff --cached --quiet; then
             git commit -m "chore(cloud-promo): update nonstop promo state, weights & flow_vault [skip ci]"
             git pull --rebase --autostash origin main || true

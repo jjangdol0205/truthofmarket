@@ -1742,6 +1742,23 @@ def load_topic_hook_weights() -> Dict[str, Any]:
     return {}
 
 
+def load_swarm_promo_overlay() -> Dict[str, Any]:
+    """Loads non-destructive Promo Swarm experiment overlay (`data/swarm_promo_experiments.json`) if present."""
+    for cand in (
+        ROOT / "data" / "swarm_promo_experiments.json",
+        ROOT.parent / "data" / "swarm_promo_experiments.json",
+        Path(r"D:\드림컴퍼니\data\swarm_promo_experiments.json"),
+    ):
+        if cand.exists():
+            try:
+                data = json.loads(cand.read_text(encoding="utf-8"))
+                if isinstance(data, dict) and data.get("schema_version") == "swarm-promo-overlay-v1":
+                    return data
+            except Exception:
+                pass
+    return {}
+
+
 def select_hill_climbed_cell_80_20(
     matrix_db: Optional[Dict[str, Any]],
     div: str,
@@ -1749,28 +1766,84 @@ def select_hill_climbed_cell_80_20(
     arm_idx: int,
     weights_db: Dict[str, Any],
     fallback_selector: Any,
+    swarm_overlay: Optional[Dict[str, Any]] = None,
 ) -> Tuple[Optional[Dict[str, Any]], str]:
     """
-    Device 2 80/20 Diversity Quota Cell Selector:
-      - 80% Exploitation (`exploit_80`): prioritizes hook types boosted to `weight >= 1.5` (`2.0x` Top-20% winners)
-        while skipping archived/demoted patterns when active winners exist.
-      - 20% Exploration (`explore_20`): rotates across fresh/baseline hook types so channels never stagnate.
-      - Falls back cleanly to `select_stage12_ab_cell` if `topic_hook_weights.json` is absent.
+    Device 2 80/20 Diversity Quota Cell Selector + Non-Destructive Promo Swarm Overlay:
+      - 80% Exploitation (`exploit_80`): ALWAYS uses immutable baseline matrix cells ranked by
+        Weekly Hill-Climber hook weights (plus tiny bounded Swarm delta `[-0.25, +0.25]` if present).
+      - 20% Exploration (`explore_20` / `swarm_explore_20`): inside the <=20% Explore slice ONLY,
+        safely tests active, non-expired, Hard-Gate + Taste>=85 verified Swarm experiments
+        (`data/swarm_promo_experiments.json`, max 2/div).
+      - Falls back 100% cleanly to `topic_hook_weights.json` / `select_stage12_ab_cell` if absent.
     """
     div_u = div.upper()
     d_weights = (weights_db.get("divisions") or {}).get(div_u) or {}
-    hook_w = d_weights.get("hook_weights") or {}
+    hook_w = dict(d_weights.get("hook_weights") or {})
     d_obj = ((matrix_db or {}).get("divisions") or {}).get(div_u) if matrix_db else None
     cells = [c for c in ((d_obj or {}).get("matrix") or []) if c.get("stage") in (1, 2) and c.get("status", "active") != "paused"]
 
-    if not (cells and hook_w):
+    ov_div = ((swarm_overlay or {}).get("divisions") or {}).get(div_u) or {}
+    ov_policy = (swarm_overlay or {}).get("safety_policy") or {}
+    ov_deltas = ov_div.get("hook_weight_deltas") or {}
+    for ht_k, dv_raw in ov_deltas.items():
+        if ht_k in ("loss", "curiosity", "self", "pattern", "proof"):
+            try:
+                bounded_dv = max(-0.25, min(0.25, float(dv_raw)))
+                hook_w[ht_k] = round(max(0.10, float(hook_w.get(ht_k, 1.0)) + bounded_dv), 3)
+            except (TypeError, ValueError):
+                pass
+
+    # Active, non-expired, Hard-Gate & Taste>=85 verified Swarm experiments (strictly <= 2/div)
+    valid_swarm_exps: List[Dict[str, Any]] = []
+    for exp in (ov_div.get("experiments") or []):
+        if not isinstance(exp, dict):
+            continue
+        if exp.get("status") != "active":
+            continue
+        if exp.get("hard_gate_passed") is not True or int(exp.get("taste_score") or 0) < TASTE_PASS_THRESHOLD:
+            continue
+        exp_until = str(exp.get("expires_at") or "").strip()
+        if exp_until and exp_until < date_str:
+            continue
+        if str(exp.get("hook_line") or "").strip() and str(exp.get("slide_script_body") or "").strip():
+            valid_swarm_exps.append(exp)
+        if len(valid_swarm_exps) >= 2:
+            break
+
+    if not (cells and hook_w) and not valid_swarm_exps:
         cell = fallback_selector(matrix_db, div_u, date_str, arm_idx=arm_idx) if (matrix_db and fallback_selector) else None
         return cell, "matrix_default"
 
     quotas = weights_db.get("quotas") or {}
     explore_pct = int(round(float(quotas.get("exploration_quota", 0.20)) * 100))
+    swarm_cap_pct = min(explore_pct, int(round(min(0.20, float(ov_policy.get("max_traffic_allocation_ratio", 0.20))) * 100)))
     h_int = int(hashlib.md5(f"hc:{div_u}:{date_str}:{arm_idx}".encode("utf-8")).hexdigest()[:8], 16)
-    is_explore = (h_int % 100) < explore_pct
+    bucket = h_int % 100
+    is_explore = bucket < explore_pct
+
+    if is_explore and valid_swarm_exps and bucket < swarm_cap_pct:
+        chosen = valid_swarm_exps[(h_int // 100) % len(valid_swarm_exps)]
+        exp_id = str(chosen.get("exp_id") or f"{div_u}_SWARM_EXP")
+        return {
+            "id": exp_id,
+            "division": div_u,
+            "stage": 1,
+            "hook_type": str(chosen.get("hook_type") or "proof"),
+            "hook_line": str(chosen["hook_line"]).strip(),
+            "slide_script_body": str(chosen["slide_script_body"]).strip(),
+            "cta": str(chosen.get("cta") or DIV_CONFIGS[div_u]["open_loop_cta"]).strip(),
+            "utm_content": f"{exp_id}_v1",
+            "weight": 1.0,
+            "swarm_exp_id": exp_id,
+            "swarm_speech_bubble": str(chosen.get("speech_bubble") or "").strip(),
+            "swarm_pinned_comment_bridge": str(chosen.get("pinned_comment_bridge") or "").strip(),
+            "swarm_ending_cta_bridge": str(chosen.get("ending_cta_bridge") or "").strip(),
+        }, "swarm_explore_20"
+
+    if not (cells and hook_w):
+        cell = fallback_selector(matrix_db, div_u, date_str, arm_idx=arm_idx) if (matrix_db and fallback_selector) else None
+        return cell, "matrix_default"
 
     if is_explore:
         # 20% Exploration: prefer non-boosted/baseline hook types (still skipping completely zeroed hooks)
@@ -1778,7 +1851,7 @@ def select_hill_climbed_cell_80_20(
         exp_pool.sort(key=lambda c: hashlib.md5(f"hcexp:{date_str}:{arm_idx}:{c['id']}".encode("utf-8")).hexdigest())
         return dict(exp_pool[0]), "explore_20"
 
-    # 80% Exploitation: rank by Weekly Hill Climber hook weight (2.0x winners first!), tie-break deterministically
+    # 80% Exploitation: rank immutable baseline cells by Weekly Hill Climber hook weight (2.0x winners first!)
     ranked = sorted(
         cells,
         key=lambda c: (
@@ -1818,6 +1891,7 @@ def main() -> int:
     flow_manifest_path, flow_manifest = load_flow_vault_manifest()
     flow_manifest_dirty = False
     topic_weights_db = load_topic_hook_weights()
+    swarm_overlay_db = load_swarm_promo_overlay()
 
     # Build quota-safe idempotency sets:
     # - Single GCP project (10k/day): max 1 Short/div/day (5 x 1,600 = 8,000u)
@@ -1854,8 +1928,17 @@ def main() -> int:
         pt = PERSONA_TEMPLATES[div]
         tid, fallback_title = pick_next_topic(div, hist, today_str)
         cell, hill_climb_quota_mode = select_hill_climbed_cell_80_20(
-            matrix_db, div, today_str, arm_idx=day_arm, weights_db=topic_weights_db, fallback_selector=select_stage12_ab_cell
+            matrix_db,
+            div,
+            today_str,
+            arm_idx=day_arm,
+            weights_db=topic_weights_db,
+            fallback_selector=select_stage12_ab_cell,
+            swarm_overlay=swarm_overlay_db,
         )
+        swarm_exp_id = str(cell.get("swarm_exp_id") or "").strip() if cell else ""
+        swarm_speech_bubble = str(cell.get("swarm_speech_bubble") or "").strip() if cell else ""
+        swarm_pinned_bridge = str(cell.get("swarm_pinned_comment_bridge") or "").strip() if cell else ""
         if cell:
             title = str(cell["hook_line"]).strip()[:95]
             utm_content = str(cell["utm_content"]).strip()
@@ -2026,6 +2109,12 @@ def main() -> int:
                 vocal_track = select_hero_vocal_track(doy)
                 vocal_highlight_sec = 34.0
 
+        # Optional non-destructive Swarm Explore 20% pinned-comment bridge (Hard-Gate verified, preserves URL & disclosures!)
+        if swarm_pinned_bridge and hill_climb_quota_mode == "swarm_explore_20":
+            ok_sb, _ = check_promo_hard_gate(div, swarm_pinned_bridge, surface="youtube_comment")
+            if ok_sb and swarm_pinned_bridge not in pinned_comment:
+                pinned_comment = f"{swarm_pinned_bridge}\n{pinned_comment}"
+
         # Device 1 (2026-11-28): `$0` Deterministic Taste Gate (100-pt Rubric, 85-pt Threshold, Max 3 Rewrites)
         # Evaluates title/script/bubble BEFORE release on BOTH SLOT_A and SLOT_B without touching SLOT_A's 0.0s real-UI video pipeline!
         pre_taste_spoken = (
@@ -2037,7 +2126,7 @@ def main() -> int:
             div=div,
             title=title,
             spoken_script=pre_taste_spoken,
-            speech_bubble="",
+            speech_bubble=swarm_speech_bubble,
             cta=cta_line,
         )
         refined_spoken_override: Optional[str] = None
@@ -2306,6 +2395,7 @@ def main() -> int:
             "taste_low_score_warn": taste_res["low_score_warn"],
             "speech_bubble": taste_speech_bubble,
             "hill_climb_quota_mode": hill_climb_quota_mode,
+            "swarm_exp_id": swarm_exp_id or None,
             "hero_radio_day": hero_radio_day,
             "date": today_str,
             "status": status,
@@ -2314,6 +2404,7 @@ def main() -> int:
             f"  [GATE PASS] {div:4s} | status={status} | track={ab_track}"
             + (f" (fallback={flow_fallback_reason})" if flow_fallback_reason else "")
             + f" | taste={taste_res['final_score']}/100(r={taste_res['attempts_used']}{',WARN' if taste_res['low_score_warn'] else ''}) | quota={hill_climb_quota_mode}"
+            + (f" | swarm={swarm_exp_id}" if swarm_exp_id else "")
             + f" | flow_bg={flow_bg_meta['flow_clip_id']} "
             f"| yt={yt_res.get('video_id') or yt_res.get('skipped') or yt_res.get('http_error') or 'dry'} "
             f"| ig={ig_res.get('media_id') or ig_res.get('skipped') or ig_res.get('http_error') or 'dry'}"
