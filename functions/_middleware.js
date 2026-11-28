@@ -49,7 +49,8 @@ const SLOT_SELECTORS_TOM = [
 
 async function fetchCroSlotConfig(div, previewId, bypassCache) {
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), 450);
+  const timeoutMs = (previewId || bypassCache) ? 2500 : 1200;
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
     const targetUrl = previewId
       ? `${R2_CRO_BASE}/${div}_staging_${previewId}.json?nc=${Date.now()}`

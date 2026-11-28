@@ -107,7 +107,7 @@ DIV_SPECS: Dict[str, Dict[str, Any]] = {
         "rehearsal_slot": {
             "zone_id": "zone_2_cta",
             "slot_id": "cta_primary",
-            "text": "Run Free 30-Second 2008 Crash & Cash-Drag Stress Test ->",
+            "text": "Run Free 30-Second 2008 Crash & Cash-Drag Stress Test →",
         },
     },
     "KFG": {
@@ -129,7 +129,7 @@ DIV_SPECS: Dict[str, Dict[str, Any]] = {
         "rehearsal_slot": {
             "zone_id": "zone_2_cta",
             "slot_id": "cta_primary",
-            "text": "Check Instant US CDC Height Percentile Preview (Free) ->",
+            "text": "Check Instant US CDC Height Percentile Preview (Free) →",
         },
     },
     "GBA": {
