@@ -828,7 +828,7 @@ def run_swarm_for_division(div: str, mode: str, no_stagger: bool = False) -> Dic
             cur_text = re.sub(r"<[^>]+>", " ", m.group(1)).strip() if m else ""
         elif zspec["selector"].startswith("#"):
             tid = zspec["selector"][1:]
-            m = re.search(rf'id=["\']{re.escape(tid)}["\'][^>]*>(.*?)</(?:button|a|h2|p|div)>', raw_html, flags=re.I | re.S)
+            m = re.search(rf'id=["\']{re.escape(tid)}["\'][^>]*>(.*?)</(?:button|a|h1|h2|h3|p|div|span)>', raw_html, flags=re.I | re.S)
             cur_text = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", m.group(1))).strip() if m else ""
         import html as _html_lib
         cur_text = _html_lib.unescape(cur_text)

@@ -1,9 +1,9 @@
 name: Dream Company Cloud Swarm Auto-CRO (Edge SSR + 3-Stage Self-Verification)
 
 on:
-  # Phase 1 Pilot: manual workflow_dispatch first; Phase 2 enables nightly 02:13 KST (`13 17 * * *` UTC) across all 5 divisions.
-  # schedule:
-  #   - cron: "13 17 * * *"
+  # Phase 2 Production: nightly 02:13 KST (`13 17 * * *` UTC) across all 5 divisions simultaneously ($0 Public repo).
+  schedule:
+    - cron: "13 17 * * *"
   workflow_dispatch:
     inputs:
       mode:
@@ -16,13 +16,13 @@ on:
           - nightly
           - rehearsal_promote_rollback
       scope:
-        description: "Division scope (pilot_phase1 = TOM,KFK | all_5div = TOM,KFG,GBA,HERO,KFK)"
+        description: "Division scope (all_5div = TOM,KFG,GBA,HERO,KFK | pilot_phase1 = TOM,KFK)"
         required: true
-        default: "pilot_phase1"
+        default: "all_5div"
         type: choice
         options:
-          - pilot_phase1
           - all_5div
+          - pilot_phase1
 
 permissions:
   contents: read
