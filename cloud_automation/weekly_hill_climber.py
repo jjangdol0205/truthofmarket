@@ -671,19 +671,58 @@ def run_weekly_hill_climb(
     }
 
     written_paths: List[str] = []
+    d1_synced = False
     if not dry_run:
         written_paths.append(str(safe_write_rsi_weights(weights_out_path, weights_payload)))
         if mirror_div1_path and mirror_div1_path.parent.exists():
             written_paths.append(str(safe_write_rsi_weights(mirror_div1_path, weights_payload)))
+        d1_synced = _sync_summary_to_watchdog_d1(one_line_summary)
 
     return {
         "ok": True,
         "dry_run": dry_run,
         "written_paths": written_paths,
+        "d1_watchdog_synced": d1_synced,
         "collection_meta": collect_meta,
         "latest_summary": weights_payload["latest_summary"],
         "weights": weights_payload,
     }
+
+
+def _sync_summary_to_watchdog_d1(one_line_summary: str) -> bool:
+    """Best-effort sync of latest weekly Hill-Climber 1-liner to Cloudflare Watchdog D1 (08:00 KST cloud briefing)."""
+    try:
+        rt_env = _load_runtime_env()
+        tok = str(os.environ.get("WATCHDOG_ADMIN_TOKEN") or rt_env.get("WATCHDOG_ADMIN_TOKEN") or "").strip()
+        if not tok:
+            return False
+        clean_line = re.sub(r"^\[🧬\s*자가\s*진화\]\s*", "", str(one_line_summary or "")).strip()
+        if not clean_line:
+            return False
+        if len(clean_line) > 255:
+            clean_line = clean_line[:252].rstrip() + "..."
+        req = urllib.request.Request(
+            "https://hq-watchdog-worker.hq-api-worker.workers.dev/reliability-audit",
+            data=json.dumps({
+                "action": "record",
+                "div_code": "HQ",
+                "event_type": "weekly_hill_climber",
+                "regex_violations": 0,
+                "open_confessions": 0,
+                "summary": clean_line,
+                "is_test": False,
+            }).encode("utf-8"),
+            headers={
+                "Authorization": f"Bearer {tok}",
+                "Content-Type": "application/json",
+                "User-Agent": "DreamCompany-HQ-HillClimber/1.0",
+            },
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=12) as resp:
+            return resp.status == 200
+    except Exception:
+        return False
 
 
 def run_governance_sanctuary_unit_tests() -> None:
